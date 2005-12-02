@@ -17,12 +17,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Hashtable;
+//import java.util.Hashtable;
 
 import org.vast.io.xml.*;
-import org.vast.ows.OWSException;
-import org.vast.ows.sos.SOSRequestWriter;
-import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.scene.DataList;
@@ -48,14 +45,14 @@ import org.w3c.dom.*;
 public class ProjectWriter
 {
 	private DOMWriter dom;
-	private Hashtable<Service, String> serviceIds; // maps Service object to its xml id
-	private Hashtable<Resource, String> resourceIds; // maps Resource object to its xml id
+	//private Hashtable<Service, String> serviceIds; // maps Service object to its xml id
+	//private Hashtable<Resource, String> resourceIds; // maps Resource object to its xml id
 	
 
 	public ProjectWriter()
 	{
-		serviceIds = new Hashtable<Service, String>();
-		resourceIds = new Hashtable<Resource, String>();
+		//serviceIds = new Hashtable<Service, String>();
+		//resourceIds = new Hashtable<Resource, String>();
 	}
 
 
@@ -283,7 +280,7 @@ public class ProjectWriter
 		writeCommonParameters(item, itemElt);
 
 		// TODO dataProvider
-		Element providerElt = dom.addElement(parentElt, "DataItem/dataProvider");
+		//Element providerElt = dom.addElement(parentElt, "DataItem/dataProvider");
 
 		return itemElt;
 	}
