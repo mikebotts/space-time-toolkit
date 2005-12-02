@@ -49,30 +49,7 @@ public class LineStyler extends AbstractStyler
 		point = new PointGraphic();
 		segment = new LineGraphic();
 	}
-	
-//	public void draw()
-//	{
-//		DataNode node = dataProvider.getDataNode();
-//		
-//		for (int i=0; i<node.getComponentCount(); i++)
-//		{
-//			node.getComponent(i).getComponent(0);
-//			DataComponent pointArray = node.getComponent(i).getComponent(1);
-//			
-//			GL.glColor3f(1.0f, 0.0f, 0.0f);
-//			GL.glBegin(GL.GL_LINE_STRIP);
-//			
-//			for (int j=0; j<pointArray.getComponentCount(); j++)
-//			{
-//				DataComponent point = pointArray.getComponent(j);
-//				double x = point.getComponent(1).getData().getDoubleValue();
-//				double y = point.getComponent(0).getData().getDoubleValue();
-//				GL.glVertex2d(x, y);
-//			}
-//			
-//			GL.glEnd();
-//		}
-//	}
+
 	
 	public LineGraphic getSegment(int i)
 	{
