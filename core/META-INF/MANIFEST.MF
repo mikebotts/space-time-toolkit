@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: STT Plug-in
+Bundle-SymbolicName: org.vast.STT; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.vast.stt.apps.STTPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.swt.opengl
+Eclipse-AutoStart: true
+Bundle-ClassPath: D:/Projects/NSSTC/Common/lib/xercesImpl.jar,
+                  D:/Projects/NSSTC/Common/classes,
+                  D:/Projects/NSSTC/DataProcessing/classes,
+                  D:/Projects/NSSTC/SensorML/classes,
+                  D:/Projects/NSSTC/OWS/classes

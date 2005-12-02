@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe" xmlns:stt="http://vast.uah.edu/stt">
+    <!-- Global metadata about the project -->
+    <Identification>
+        <name>New test project</name>
+        <author>Alex Robin</author>
+        <dateCreated>2005-11-02T09:03:00</dateCreated>
+        <description>Description of new test project</description>
+    </Identification>
+    <!-- List of known service endpoints -->
+    <ServiceList>
+        <member>
+            <Service id="WMS_001">
+                <type>WMS</type>
+                <name>Cubewerx Cascaded WMS</name>
+                <url>http://demo.cubewerx.com/ows12/cubeserv/cubeserv.cgi</url>
+                <version>1.1.1</version>
+            </Service>
+        </member>
+        <member>
+            <Service id="WMS_002">
+                <type>WMS</type>
+                <name>Digital Earth Global Data</name>
+                <url>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</url>
+                <version>1.1.1</version>
+            </Service>
+        </member>
+        <member>
+            <Service id="WMS_003">
+                <type>WMS</type>
+                <name>NASA JPL Mosaic</name>
+                <url>http://wms.jpl.nasa.gov/wms.cgi</url>
+                <version>1.1.1</version>
+            </Service>
+        </member>
+        <member>
+            <Service id="SOS_001">
+                <type>SOS</type>
+                <name>UAH Plume Model Data</name>
+                <url>http://vast.uah.edu:8080/ows/plumeSos</url>
+                <version>0.0.31</version>
+            </Service>
+        </member>
+        <member>
+            <Service id="WRS_001">
+                <type>WRS</type>
+                <name>Ionic Catalog</name>
+                <url>http://http://dev.ionicsoft.com:8080/catalog230/wrs/WRS</url>
+                <version>2.0.0</version>
+            </Service>
+        </member>
+    </ServiceList>
+    <!-- List of scenes (separate 2d or 3D view windows) -->
+    <SceneList>
+        <member>
+            <Scene id="SCENE_01">
+                <name>3D ECF View</name>
+                <renderer>OPENGL</renderer>
+                <view>
+                    <ViewSettings>
+                        <backgroundColor>#FFFFFF</backgroundColor>                     
+                        <viewWidth>1000</viewWidth>
+                        <viewHeight>800</viewHeight>
+                        <cameraMode>ORTHO</cameraMode>
+                        <cameraPos>0 0 10</cameraPos>
+                        <targetPos>0 0 0</targetPos>
+                        <upDirection>0 1 0</upDirection>
+                        <orthoWidth>4</orthoWidth>
+                        <orthoHeight>1.67</orthoHeight>
+                        <nearClip>0</nearClip>
+                        <farClip>1e7</farClip>
+                        <zFudgeFactor>1000</zFudgeFactor>
+                    </ViewSettings>
+                </view>
+                <contents>
+                    <DataList>
+                        <name>MyData</name>
+                        <member>
+                            <DataItem enabled="false">
+                                <name>Conus base map</name>
+                                <dataProvider>
+                                    <CompositeProvider>
+                                        <member>
+                                            <WMSDataProvider>
+                                                <name>imageData</name>
+                                                <resource xlink:href="#DATASET_01"/>
+                                                <!-- <cache xlink:href="local file"> -->
+                                                <request getUrl="http://wms.jpl.nasa.gov/wms.cgi">
+                                                    <GetMap service="WMS" version="1.1.1">
+                                                        <StyledLayerDescriptor>
+                                                            <NamedLayer>
+                                                                <Name>global_mosaic</Name>
+                                                            </NamedLayer>
+                                                        </StyledLayerDescriptor>
+                                                        <BoundingBox srsName="EPSG:4326">
+                                                            <gml:coordinates>-124.0,30.27 -98.3,50.71</gml:coordinates>
+                                                        </BoundingBox>
+                                                        <Output>
+                                                            <Format>image/jpeg</Format>
+                                                            <Transparent>TRUE</Transparent>
+                                                            <Size>
+                                                                <Width>1000</Width>
+                                                                <Height>600</Height>
+                                                            </Size>
+                                                        </Output>
+                                                        <Exceptions>application/vnd.ogc.se+xml</Exceptions>
+                                                    </GetMap>
+                                                </request>
+                                            </WMSDataProvider>
+                                        </member>
+                                        <member>
+                                            <MeshProvider>
+                                                <name>meshData</name>
+                                                <resource xlink:href="urn:vast:process:mesh:flat:lla"/>
+                                                <options>
+                                                    <MeshParameters>
+                                                        <bbox>-124.0,30.27 -98.3,50.71</bbox>
+                                                        <width>20</width>
+                                                        <height>20</height>
+                                                    </MeshParameters>
+                                                </options>
+                                            </MeshProvider>
+                                        </member>
+                                    </CompositeProvider>
+                                </dataProvider>
+                                <style>
+                                    <sld:RasterSymbolizer enabled="true">
+                                        <sld:Geometry>
+                                            <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>meshData/lon</ogc:PropertyName>
+                                            </sld:CssParameter>
+                                            <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>meshData/lat</ogc:PropertyName>
+                                            </sld:CssParameter>
+                                            <sld:CssParameter name="geometry-z">
+                                                <ogc:PropertyName>meshData/alt</ogc:PropertyName>
+                                            </sld:CssParameter>
+                                            <!--<sld:CssParameter name="geometry-t"/>-->
+                                            <!--<sld:CssParameter name="geometry-breaks"/>-->
+                                        </sld:Geometry>
+                                        <sld:ChannelSelection>
+                                            <sld:RedChannel>
+                                                <sld:SourceChannelName>imageData/line/pixel/red</sld:SourceChannelName>
+                                            </sld:RedChannel>
+                                            <sld:GreenChannel>
+                                                <sld:SourceChannelName>imageData/line/pixel/green</sld:SourceChannelName>
+                                            </sld:GreenChannel>
+                                            <sld:BlueChannel>
+                                                <sld:SourceChannelName>imageData/line/pixel/blue</sld:SourceChannelName>
+                                            </sld:BlueChannel>
+                                            <sld:GrayChannel>
+                                                <sld:SourceChannelName>imageData/line/pixel/alpha</sld:SourceChannelName>
+                                            </sld:GrayChannel>
+                                        </sld:ChannelSelection>
+                                    </sld:RasterSymbolizer>
+                                </style>
+                            </DataItem>
+                        </member>
+                        <member>
+                            <DataList>
+                                <name>SOS Layers</name>
+                                <member>
+                                    <DataItem enabled="true">
+                                        <name>San Diego Plume</name>
+                                        <time>
+                                            <TimeSettings>
+                                                <lead>18000.0</lead>
+                                                <lag>0.0</lag>
+                                                <offset>0.0</offset>
+                                                <step>0.0</step>
+                                            </TimeSettings>
+                                        </time>
+                                        <dataProvider>
+                                            <SOSDataProvider>
+                                                <name>pointData</name>
+                                                <resource xlink:href="#DATASET_02"/>
+                                                <request postUrl="http://vast.uah.edu:8080/ows/plumeSos">
+                                                    <GetObservation service="SOS" version="0.0.31">
+                                                        <offering>PLUME_DATA</offering>
+                                                        <eventTime>
+                                                            <ogc:During>
+                                                                <gml:TimePeriod>
+                                                                    <gml:beginPosition>2005-09-16T15:00:00Z</gml:beginPosition>
+                                                                    <gml:endPosition>2005-09-16T23:00:00Z</gml:endPosition>
+                                                                </gml:TimePeriod>
+                                                            </ogc:During>
+                                                        </eventTime>
+                                                        <procedure>urn:vast:sensor:plumeModel</procedure>
+                                                        <observedProperty>PARTICLE_LOCATIONS</observedProperty>
+                                                        <resultFormat>application/com-xml</resultFormat>
+                                                        <resultModel>swe:DataValueType</resultModel>
+                                                    </GetObservation>
+                                                </request>
+                                            </SOSDataProvider>
+                                        </dataProvider>
+                                        <style>
+                                            <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                    <sld:CssParameter name="geometry-x">
+                                                        <ogc:PropertyName>plumePoint/lon</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                    <sld:CssParameter name="geometry-y">
+                                                        <ogc:PropertyName>plumePoint/lat</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                    <sld:CssParameter name="geometry-z">
+                                                        <ogc:PropertyName>plumePoint/alt</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                    <sld:Mark>
+                                                        <sld:WellKnownName>circle</sld:WellKnownName>
+                                                        <sld:Fill>
+                                                            <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                                        </sld:Fill>
+                                                    </sld:Mark>
+                                                    <sld:Size>3</sld:Size>
+                                                </sld:Graphic>
+                                            </sld:PointSymbolizer>
+                                        </style>
+                                    </DataItem>
+                               </member>
+                           </DataList>
+                        </member>
+                        <member>
+                            <DataList>
+                                <name>Geographic Data Sets</name>
+                                <member>
+                                    <DataItem enabled="true">
+                                        <name>Country Boundaries</name>
+                                        <dataProvider>
+                                            <SWEDataProvider>
+                                                <name>pointData</name>
+                                                <resource xlink:href="#DATASET_03"/>
+                                            </SWEDataProvider>
+                                        </dataProvider>
+                                        <style>
+                                            <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                    <sld:CssParameter name="geometry-x">
+                                                        <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                    <sld:CssParameter name="geometry-y">
+                                                        <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                    <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                                </sld:Stroke>
+                                            </sld:LineSymbolizer>
+                                        </style>
+                                    </DataItem>
+                                </member>
+                                <member>
+                                    <DataItem enabled="true">
+                                        <name>Coast Lines - 100km</name>
+                                        <dataProvider>
+                                            <SWEDataProvider>
+                                                <name>pointData</name>
+                                                <resource xlink:href="#DATASET_04"/>
+                                            </SWEDataProvider>
+                                        </dataProvider>
+                                        <style>
+                                            <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                    <sld:CssParameter name="geometry-x">
+                                                        <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                    <sld:CssParameter name="geometry-y">
+                                                        <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                                    </sld:CssParameter>
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                    <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                                                </sld:Stroke>
+                                            </sld:LineSymbolizer>
+                                        </style>
+                                    </DataItem>
+                                </member>
+                            </DataList>
+                        </member>
+                    </DataList>
+                </contents>
+            </Scene>
+        </member>
+    </SceneList>
+    <!-- List of data resources (preloaded capabilities) -->
+    <ResourceList>
+        <member>
+            <ResourceList>
+                <!-- = folder -->
+                <name>Base Maps</name>
+                <member>
+                    <ServiceDataSet id="DATASET_01">
+                        <name>Conus Mosaic</name>
+                        <description>Landsat Mosaic Data obtained from 1995 mission</description>
+                        <layerId>us_landsat_wgs84</layerId>
+                        <service xlink:href="#WMS_003"/>
+                        <!--<capabilities xlink:href="file:///D:/Projects/NSSTC/STT2/conf/DATASET_01_caps.xml"/>-->
+                        <capabilities>
+                            <WMT_MS_Capabilities version="1.1.1">
+                                <Capability>
+                                    <Request>
+                                        <GetCapabilities>
+                                            <Format>application/vnd.ogc.wms_xml</Format>
+                                            <DCPType>
+                                                <HTTP>
+                                                    <Get>
+                                                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?"/>
+                                                    </Get>
+                                                </HTTP>
+                                            </DCPType>
+                                        </GetCapabilities>
+                                        <GetMap>
+                                            <Format>image/jpeg</Format>
+                                            <Format>image/png</Format>
+                                            <Format>image/geotiff</Format>
+                                            <Format>image/tiff</Format>
+                                            <DCPType>
+                                                <HTTP>
+                                                    <Get>
+                                                        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.jpl.nasa.gov/wms.cgi?"/>
+                                                    </Get>
+                                                </HTTP>
+                                            </DCPType>
+                                        </GetMap>
+                                    </Request>
+                                    <Exception>
+                                        <Format>application/vnd.ogc.se_xml</Format>
+                                    </Exception>
+                                    <VendorSpecificCapabilities/>
+                                    <UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0"/>
+                                    <Layer queryable="0">
+                                        <Name>us_landsat_wgs84</Name>
+                                        <Title>CONUS mosaic of 1990 MRLC dataset</Title>
+                                        <Abstract> CONUS seamless mosaic of Landsat5 scenes. Maximum resolution is 1 arc-second. The default styles may have gamma, sharpening and saturation filters applied. The source dataset is part of the MRLC 1990 dataset. </Abstract>
+                                        <SRS>EPSG:4326</SRS>
+                                        <SRS>AUTO:42003</SRS>
+                                        <CRS>EPSG:4326</CRS>
+                                        <CRS>AUTO:42003</CRS>
+                                        <LatLonBoundingBox minx="-127" miny="23" maxx="-66" maxy="50"/>
+                                        <Style>
+                                            <Name>pseudo</Name>
+                                            <Title>Pseudo-color image (Uses IR and Visual bands, 542 mapping)</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>visual</Name>
+                                            <Title>Real-color image (Uses the visual bands, 321 mapping)</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>Red</Name>
+                                            <Title>Visual Red band, grayscale</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>Green</Name>
+                                            <Title>Visual Green band, grayscale</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>Blue</Name>
+                                            <Title>Visual Blue band, grayscale</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>IR1</Name>
+                                            <Title> Near IR band 1, (Landsat band 4), grayscale</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>IR2</Name>
+                                            <Title> Near IR band 2, (Landsat band 5), grayscale</Title>
+                                        </Style>
+                                        <Style>
+                                            <Name>IR3</Name>
+                                            <Title> Near IR band 2, (Landsat band 7), grayscale</Title>
+                                        </Style>
+                                        <ScaleHint min="20" max="10000"/>
+                                    </Layer>
+                                </Capability>
+                            </WMT_MS_Capabilities>
+                        </capabilities>
+                    </ServiceDataSet>
+                </member>
+                <member>
+                    <ServiceDataSet id="DATASET_02">
+                        <name>San Diego Factory Plume</name>
+                        <description>Langrangian Plume Model Data for OWS3 demo</description>
+                        <layerId>PLUME_DATA</layerId>
+                        <service xlink:href="#SOS_001"/>
+                        <!--<capabilities xlink:href="file:///D:/Projects/NSSTC/STT2/conf/PlumeSosCaps.xml"/>-->
+                        <capabilities>
+                            <sos:Capabilities version="0.0.31" xmlns:gml="http://www.opengis.net/gml" xmlns:om="http://www.opengis.net/om" xmlns:ows="http://www.opengeospatial.net/ows" xmlns:sos="http://www.opengeospatial.net/sos" xmlns:swe="http://www.opengis.net/swe" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengeospatial.net/sos file:///D:/Projects/NSSTC/OGC%20Schemas/schemas_OGC/sos/0.0.31/sosGetCapabilities.xsd">
+                                <ows:OperationsMetadata>
+                                    <ows:Operation name="GetCapabilities">
+                                        <ows:DCP>
+                                            <ows:HTTP>
+                                                <ows:Get xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                                <ows:Post xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                            </ows:HTTP>
+                                        </ows:DCP>
+                                        <ows:Parameter name="service" use="required">
+                                            <ows:Value>SOS</ows:Value>
+                                        </ows:Parameter>
+                                        <ows:Parameter name="version" use="required">
+                                            <ows:Value>0.0.31</ows:Value>
+                                        </ows:Parameter>
+                                    </ows:Operation>
+                                    <ows:Operation name="GetObservation">
+                                        <ows:DCP>
+                                            <ows:HTTP>
+                                                <ows:Get xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                                <ows:Post xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                            </ows:HTTP>
+                                        </ows:DCP>
+                                        <ows:Parameter name="observedProperty" use="required"/>
+                                        <ows:Parameter name="eventTime" use="required"/>
+                                    </ows:Operation>
+                                </ows:OperationsMetadata>
+                                <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+                                <!-- Observation Offerings -->
+                                <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+                                <sos:Contents>
+                                    <sos:ObservationOfferingList>
+                                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                                        <sos:ObservationOffering gml:id="PLUME_DATA">
+                                            <gml:name>Lagrangian Particle Model Data</gml:name>
+                                            <gml:boundedBy>
+                                                <gml:Envelope>
+                                                    <gml:lowerCorner srsName="urn:ogc:crs:epsg4326">31.6 -116.7</gml:lowerCorner>
+                                                    <gml:upperCorner srsName="urn:ogc:crs:epsg4326">37.3 -109.5</gml:upperCorner>
+                                                </gml:Envelope>
+                                            </gml:boundedBy>
+                                            <sos:eventTime>
+                                                <gml:TimePeriod>
+                                                    <gml:beginPosition>2005-09-16T15:00:00Z</gml:beginPosition>
+                                                    <gml:endPosition>2005-09-17T15:00:00Z</gml:endPosition>
+                                                </gml:TimePeriod>
+                                            </sos:eventTime>
+                                            <sos:procedure xlink:href="urn:vast:sensor:plumeModel"/>
+                                            <sos:observedProperty>
+                                                <swe:CompositePhenomenon gml:id="PARTICLE_LOCATIONS">
+                                                    <gml:name>Particle Model Location</gml:name>
+                                                    <swe:component xlink:href="urn:ogc:phenomenon:latitude"/>
+                                                    <swe:component xlink:href="urn:ogc:phenomenon:longitude"/>
+                                                    <swe:component xlink:href="urn:ogc:phenomenon:altitude"/>
+                                                </swe:CompositePhenomenon>
+                                            </sos:observedProperty>
+                                            <sos:featureOfInterest>
+                                                <sos:GeoReferenceableFeature>
+                                                    <gml:name>PARTICLE DATA</gml:name>
+                                                </sos:GeoReferenceableFeature>
+                                            </sos:featureOfInterest>
+                                            <sos:resultFormat>application/com-xml</sos:resultFormat>
+                                        </sos:ObservationOffering>
+                                    </sos:ObservationOfferingList>
+                                </sos:Contents>
+                            </sos:Capabilities>
+                        </capabilities>
+                    </ServiceDataSet>
+                </member>
+                <member>
+                    <StaticDataSet id="DATASET_03">
+                        <name>World Boundaries</name>
+                        <description>World Country Boundaries</description>
+                        <format>SWE</format>
+                        <data xlink:href="file:///d:/Projects/NSSTC/STT2/data/mapbdy13.xml"/>
+                    </StaticDataSet>
+                </member>
+                <member>
+                    <StaticDataSet id="DATASET_04">
+                        <name>World Coast Lines - 100</name>
+                        <description>World Coast Lines</description>
+                        <format>SWE</format>
+                        <data xlink:href="file:///d:/Projects/NSSTC/STT2/data/mapcil100.xml"/>
+                    </StaticDataSet>
+                </member>
+            </ResourceList>
+        </member>
+    </ResourceList>
+</STTProject>
