@@ -459,7 +459,7 @@
                         <name>World Boundaries</name>
                         <description>World Country Boundaries</description>
                         <format>SWE</format>
-                        <data xlink:href="file:///d:/Projects/NSSTC/STT2/data/mapbdy13.xml"/>
+                        <data xlink:href="http://vast.uah.edu/SWEData/countries/mapbdy13.xml"/>
                     </StaticDataSet>
                 </member>
                 <member>
@@ -467,7 +467,7 @@
                         <name>World Coast Lines - 100</name>
                         <description>World Coast Lines</description>
                         <format>SWE</format>
-                        <data xlink:href="file:///d:/Projects/NSSTC/STT2/data/mapcil100.xml"/>
+                        <data xlink:href="http://vast.uah.edu/SWEData/coastlines//mapcil100.xml"/>
                     </StaticDataSet>
                 </member>
             </ResourceList>
