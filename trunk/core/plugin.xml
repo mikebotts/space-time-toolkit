@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+      <extension id="org.vast.STT" point="org.eclipse.core.runtime.applications">
+            <application>
+                  <run class="org.vast.stt.apps.Application"/>
+            </application>
+      </extension>
+      <extension point="org.eclipse.ui.perspectives">
+            <perspective name="Perspective" class="org.vast.stt.apps.Perspective" id="STT.Perspective"/>
+      </extension>
+      <extension point="org.eclipse.ui.views">
+            <view name="Resources" class="org.vast.stt.gui.views.ResourceTreeView" id="STT.ResourceTreeView"/>
+            <view name="Services" class="org.vast.stt.gui.views.ServiceTreeView" id="STT.ServiceTreeView"/>
+            <view name="Customizer" class="org.vast.stt.gui.views.CustomizerView" id="STT.CustomizerView"/>
+            <view name="Scene" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
+            <view name="Scene" class="org.vast.stt.gui.views.SceneView" id="STT.SceneView" allowMultiple="true"/>
+      </extension>
+      <extension point="org.eclipse.ui.editors">
+            <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="src/icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
+      </extension>
+      <!--~~~~~~~~~~~~~~~~~~~-->
+      <!-- Action Extensions -->
+      <!--~~~~~~~~~~~~~~~~~~~-->
+      <extension point="org.eclipse.ui.actionSets">
+            <actionSet id="STT.MenuBar" label="MenuBar" visible="true">
+                  <!-- Help Menu -->
+                  <menu id="STT.HelpMenu" label="&amp;Help">
+                        <separator name="group1"/>
+                  </menu>
+                  <action class="org.vast.stt.actions.HelpMenu" id="STT.About" label="&amp;About..." menubarPath="STT.HelpMenu/projectGroup"/>
+                  <!-- Project Menu -->
+                  <menu id="STT.ProjectMenu" label="&amp;Project">
+                        <separator name="group1"/>
+                  </menu>
+                  <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenProject" label="&amp;Open Project..." menubarPath="STT.ProjectMenu/group1"/>
+                  <action class="org.vast.stt.actions.ProjectMenu" id="STT.SaveProject" label="&amp;Save Project..." menubarPath="STT.ProjectMenu/group1"/>
+                  <action class="org.vast.stt.actions.ProjectMenu" id="STT.CloseProject" label="&amp;Close Project..." menubarPath="STT.ProjectMenu/group1"/>
+                  <!-- File Menu -->
+                  <menu id="STT.FileMenu" label="&amp;File">
+                        <separator name="group1"/>
+                  </menu>
+                  <action class="org.vast.stt.actions.FileMenu" id="STT.Exit" label="&amp;Exit" menubarPath="STT.FileMenu/group1"/>
+            </actionSet>
+      </extension>
+</plugin>
