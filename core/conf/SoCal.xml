@@ -467,7 +467,7 @@
                         <name>World Coast Lines - 100</name>
                         <description>World Coast Lines</description>
                         <format>SWE</format>
-                        <data xlink:href="http://vast.uah.edu/SWEData/coastlines//mapcil100.xml"/>
+                        <data xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
                     </StaticDataSet>
                 </member>
             </ResourceList>
