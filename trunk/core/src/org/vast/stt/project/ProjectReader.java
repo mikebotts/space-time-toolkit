@@ -32,7 +32,7 @@ import org.vast.stt.data.SWEProvider;
 import org.vast.stt.data.WMSProvider;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
-import org.vast.stt.scene.DataList;
+import org.vast.stt.scene.DataEntryList;
 import org.vast.stt.scene.Scene;
 import org.vast.stt.scene.ViewSettings;
 import org.vast.stt.style.CompositeStyler;
@@ -382,7 +382,7 @@ public class ProjectReader
 		
 		// read data item list
 		Element listElt = dom.getElement(sceneElt, "contents/DataList");
-		DataList dataList = (DataList)readDataEntry(listElt);
+		DataEntryList dataList = (DataEntryList)readDataEntry(listElt);
 		scene.setDataList(dataList);
 		
 		return scene;
@@ -527,11 +527,11 @@ public class ProjectReader
 	 * @param listElt
 	 * @return
 	 */
-	protected DataList readDataList(Element listElt)
+	protected DataEntryList readDataList(Element listElt)
 	{
 		NodeList memberElts = dom.getElements(listElt, "member/*");
 		int listSize = memberElts.getLength();
-		DataList dataList = new DataList(listSize);
+		DataEntryList dataList = new DataEntryList(listSize);
 		
 		// members
 		for (int i=0; i<listSize; i++)

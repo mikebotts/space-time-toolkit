@@ -23,8 +23,6 @@ import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSRequestWriter;
 import org.vast.stt.project.Resource;
 import org.vast.stt.project.ServiceDataSet;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
 
 
 /**
@@ -124,10 +122,25 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 	}
 	
 	
+	protected void updateQuery()
+	{
+		// update time range
+		query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
+		query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+		
+		// update bounding box
+		query.getBbox().setMinX(spatialExtent.getMinX());
+		query.getBbox().setMaxX(spatialExtent.getMaxX());
+		query.getBbox().setMinY(spatialExtent.getMinY());
+		query.getBbox().setMaxY(spatialExtent.getMaxY());
+	}
+	
+	
 	protected void initRequest()
 	{
 		// make sure previous request is cancelled
-		endRequest();	
+		endRequest();
+		//updateQuery();
 		canceled = false;
 		
 		if (cachedData == null)
@@ -181,7 +194,33 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 	public void cancelOperation()
 	{
 		endRequest();
-	}	
+	}
+	
+	
+	@Override
+	public void setResource(Resource resource)
+	{
+		super.setResource(resource);		
+		this.layerCaps = (SOSLayerCapabilities) ((ServiceDataSet)resource).getCapabilities();
+		
+		// set up max spatial extent
+		if (!layerCaps.getBboxList().isEmpty())
+		{
+			this.spatialExtent.setMaxX(layerCaps.getBboxList().get(0).getMaxX());
+			this.spatialExtent.setMaxY(layerCaps.getBboxList().get(0).getMaxY());
+			this.spatialExtent.setMinX(layerCaps.getBboxList().get(0).getMinX());
+			this.spatialExtent.setMinY(layerCaps.getBboxList().get(0).getMinY());
+		}
+		
+		// set up max time extent
+		if (!layerCaps.getTimeList().isEmpty())
+		{
+			double start = layerCaps.getTimeList().get(0).getStartTime();
+			double stop = layerCaps.getTimeList().get(0).getStopTime();
+			this.timeExtent.setBaseTime(start);
+			this.timeExtent.setLagTimeDelta(stop - start);
+		}
+	}
 
 
 	public SOSQuery getQuery()
@@ -193,49 +232,36 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 	public void setQuery(OWSQuery query)
 	{
 		this.query = (SOSQuery)query;
-	}
-	
-	
-	public void updateQuery()
-	{
-		// update time range
-		if (timeExtent != null)
+		
+		// set up spatial extent
+		if (this.query.getBbox() != null)
 		{
-			query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
-			query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+			this.spatialExtent.setMaxX(this.query.getBbox().getMaxX());
+			this.spatialExtent.setMaxY(this.query.getBbox().getMaxY());
+			this.spatialExtent.setMinX(this.query.getBbox().getMinX());
+			this.spatialExtent.setMinY(this.query.getBbox().getMinY());
 		}
 		
-		// update bounding box
-		if (spatialExtent != null)
+		// set up time extent
+		if (this.query.getTime() != null)
 		{
-			query.getBbox().setMinX(spatialExtent.getMinX());
-			query.getBbox().setMaxX(spatialExtent.getMaxX());
-			query.getBbox().setMinY(spatialExtent.getMinY());
-			query.getBbox().setMaxY(spatialExtent.getMaxY());
+			double start = this.query.getTime().getStartTime();
+			double stop = this.query.getTime().getStopTime();
+			this.timeExtent.setBaseTime(start);
+			this.timeExtent.setLagTimeDelta(stop - start);
 		}
 	}
 
 
-	@Override
-	public void setResource(Resource resource)
+	public boolean isSpatialSubsetSupported()
 	{
-		super.setResource(resource);		
-		this.layerCaps = (SOSLayerCapabilities) ((ServiceDataSet)resource).getCapabilities();
+		// TODO isSpatialSubsetSupported() depends on capabilities
+		return true;
 	}
 
 
-	@Override
-	public void setSpatialExtent(SpatialExtent spatialExtent)
+	public boolean isTimeSubsetSupported()
 	{
-		super.setSpatialExtent(spatialExtent);
-		updateQuery();
-	}
-
-
-	@Override
-	public void setTimeExtent(TimeExtent timeExtent)
-	{
-		super.setTimeExtent(timeExtent);
-		updateQuery();	
+		return true;
 	}
 }

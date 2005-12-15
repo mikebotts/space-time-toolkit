@@ -36,7 +36,7 @@ import org.eclipse.ui.IPartListener;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataList;
+import org.vast.stt.scene.DataEntryList;
 import org.vast.stt.scene.Scene;
 
 
@@ -55,7 +55,7 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		@Override
 		public Image getImage(Object element)
 		{
-			if (element instanceof DataList)
+			if (element instanceof DataEntryList)
 			{
 				if (sceneTree.getExpandedState(element))
 					return folderImg;
@@ -87,9 +87,9 @@ public class SceneTreeView extends ViewPart implements IPartListener
 
 		public Object[] getChildren(Object parentElement)
 		{
-			if (parentElement instanceof DataList)
+			if (parentElement instanceof DataEntryList)
 			{
-				return ((DataList)parentElement).toArray();
+				return ((DataEntryList)parentElement).toArray();
 			}
 			return null;
 		}
@@ -101,7 +101,7 @@ public class SceneTreeView extends ViewPart implements IPartListener
 
 		public boolean hasChildren(Object element)
 		{
-			if (element instanceof DataList)
+			if (element instanceof DataEntryList)
 				return true;
 			else
 				return false;

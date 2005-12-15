@@ -72,4 +72,16 @@ public interface DataProvider
 	
 	
 	public void setTimeExtent(TimeExtent timeExtent);
+	
+	
+	public SpatialExtent getMaxSpatialExtent();
+	
+	
+	public TimeExtent getMaxTimeExtent();
+	
+	
+	public boolean isSpatialSubsetSupported();
+	
+	
+	public boolean isTimeSubsetSupported();
 }

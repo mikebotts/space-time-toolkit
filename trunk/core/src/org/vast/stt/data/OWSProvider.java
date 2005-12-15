@@ -40,8 +40,5 @@ public interface OWSProvider
     public void setQuery(OWSQuery query);
     
     
-    public void updateQuery();
-    
-    
     public void createDefaultQuery();
 }

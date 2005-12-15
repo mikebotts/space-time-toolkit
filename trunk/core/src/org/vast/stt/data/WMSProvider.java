@@ -18,10 +18,8 @@ import java.awt.image.renderable.ParameterBlock;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
-
 import org.ogc.cdm.reader.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSQuery;
@@ -29,9 +27,6 @@ import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.stt.project.ServiceDataSet;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
-
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
@@ -52,64 +47,65 @@ import com.sun.media.jai.codec.MemoryCacheSeekableStream;
  */
 public class WMSProvider extends AbstractProvider implements OWSProvider
 {
+	protected WMSLayerCapabilities layerCaps;
 	protected WMSQuery query;
 	protected WMSRequestWriter requestBuilder;
 	protected DataStreamParser dataParser;
-	
+
 
 	public WMSProvider()
 	{
 		requestBuilder = new WMSRequestWriter();
 	}
-	
-	
+
+
 	public void updateData() throws DataException
 	{
 		URL url = null;
-		
+
 		try
 		{
 			initRequest();
-			
+
 			updating = true;
 			String urlString = requestBuilder.buildGetRequest(query);
 			url = new URL(urlString);
-            URLConnection urlCon = url.openConnection();
-            
-            //  Check mime for exception/xml type
-            if(urlCon == null)
-            {
-            	throw new DataException("Connection to " + url + " could be initialized");
-            }
-            
-            //  Check on mimeType catches all three types (blank, inimage, xml)
-            //  of OGC service exceptions
-            String mimeType = urlCon.getContentType();
-            if (mimeType.contains("xml") || mimeType.startsWith("application"))
-            {
-            	OWSExceptionReader reader = new OWSExceptionReader();
-            	reader.parseException(urlCon.getInputStream());
-            }
-            else
-            {
-            	dataStream = new MemoryCacheSeekableStream(url.openStream());
-            	
-            	// Create the ParameterBlock and add the SeekableStream to it.
-            	ParameterBlock pb = new ParameterBlock();
-                pb.add(dataStream);
-                
-                // decode image using JAI
-                RenderedOp rop = JAI.create("stream", pb);
-                RenderedImage renderedImage;
-                if(rop!=null)
-                {
-                    renderedImage = rop.createInstance();
-                    renderedImage.getClass();
-                }
-                
-                // copy image to DataNode
-                
-            }
+			URLConnection urlCon = url.openConnection();
+
+			//  Check mime for exception/xml type
+			if (urlCon == null)
+			{
+				throw new DataException("Connection to " + url + " could be initialized");
+			}
+
+			//  Check on mimeType catches all three types (blank, inimage, xml)
+			//  of OGC service exceptions
+			String mimeType = urlCon.getContentType();
+			if (mimeType.contains("xml") || mimeType.startsWith("application"))
+			{
+				OWSExceptionReader reader = new OWSExceptionReader();
+				reader.parseException(urlCon.getInputStream());
+			}
+			else
+			{
+				dataStream = new MemoryCacheSeekableStream(url.openStream());
+
+				// Create the ParameterBlock and add the SeekableStream to it.
+				ParameterBlock pb = new ParameterBlock();
+				pb.add(dataStream);
+
+				// decode image using JAI
+				RenderedOp rop = JAI.create("stream", pb);
+				RenderedImage renderedImage;
+				if (rop != null)
+				{
+					renderedImage = rop.createInstance();
+					renderedImage.getClass();
+				}
+
+				// copy image to DataNode
+
+			}
 		}
 		catch (Exception e)
 		{
@@ -121,18 +117,33 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 			endRequest();
 			updating = false;
 			canceled = false;
-		}		
+		}
 	}
-	
-	
+
+
+	protected void updateQuery()
+	{
+		// update time range
+		query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
+		query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+
+
+		// update bounding box
+		query.getBbox().setMinX(spatialExtent.getMinX());
+		query.getBbox().setMaxX(spatialExtent.getMaxX());
+		query.getBbox().setMinY(spatialExtent.getMinY());
+		query.getBbox().setMaxY(spatialExtent.getMaxY());
+	}
+
+
 	protected void initRequest()
 	{
 		// make sure previous request is cancelled
-		endRequest();	
+		endRequest();
 		canceled = false;
 	}
-	
-	
+
+
 	protected void endRequest()
 	{
 		try
@@ -143,44 +154,46 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}	
+		}
 	}
-	
-	
+
+
 	public void createDefaultQuery()
 	{
-		WMSLayerCapabilities layerCaps = (WMSLayerCapabilities) ((ServiceDataSet)resource).getCapabilities();
-		if (layerCaps == null) return;
-		
+		WMSLayerCapabilities layerCaps = (WMSLayerCapabilities) ((ServiceDataSet) resource).getCapabilities();
+		if (layerCaps == null)
+			return;
+
 		// create query and set default parameters
-    	query = new WMSQuery();
-    	query.setVersion(layerCaps.getParent().getVersion());
-    	query.setService(layerCaps.getParent().getService());
-    	query.setGetServer(layerCaps.getParent().getGetServers().get("GetMap"));
-        query.setWidth(900);
-        query.setHeight(700);
-        query.setTransparent(true);
-        query.setExceptionType("application/vnd.ogc.se_xml");
-        
-        // try to select EPSG:4326 if available
-        int srsIndex = layerCaps.getSrsList().indexOf("EPSG:4326");
-        if (srsIndex == -1) srsIndex = 0;
-        query.setSrs(layerCaps.getSrsList().get(srsIndex));
-        
-    	// try to select jpg, gif or png if available
-        int formatIndex = layerCaps.getFormatList().indexOf("image/jpg");
-        if (formatIndex == -1)
-        	formatIndex = layerCaps.getFormatList().indexOf("image/jpeg");
-        if (formatIndex == -1)
-        	formatIndex = layerCaps.getFormatList().indexOf("image/gif");
-        if (formatIndex == -1)
-        	formatIndex = layerCaps.getFormatList().indexOf("image/png");
-        if (formatIndex == -1)
-        	formatIndex = 0;
-        query.setFormat(layerCaps.getFormatList().get(formatIndex));
-    	
-    	query.getLayers().add(layerCaps.getId());
-    	query.setBbox(layerCaps.getBboxList().get(0));
+		query = new WMSQuery();
+		query.setVersion(layerCaps.getParent().getVersion());
+		query.setService(layerCaps.getParent().getService());
+		query.setGetServer(layerCaps.getParent().getGetServers().get("GetMap"));
+		query.setWidth(900);
+		query.setHeight(700);
+		query.setTransparent(true);
+		query.setExceptionType("application/vnd.ogc.se_xml");
+
+		// try to select EPSG:4326 if available
+		int srsIndex = layerCaps.getSrsList().indexOf("EPSG:4326");
+		if (srsIndex == -1)
+			srsIndex = 0;
+		query.setSrs(layerCaps.getSrsList().get(srsIndex));
+
+		// try to select jpg, gif or png if available
+		int formatIndex = layerCaps.getFormatList().indexOf("image/jpg");
+		if (formatIndex == -1)
+			formatIndex = layerCaps.getFormatList().indexOf("image/jpeg");
+		if (formatIndex == -1)
+			formatIndex = layerCaps.getFormatList().indexOf("image/gif");
+		if (formatIndex == -1)
+			formatIndex = layerCaps.getFormatList().indexOf("image/png");
+		if (formatIndex == -1)
+			formatIndex = 0;
+		query.setFormat(layerCaps.getFormatList().get(formatIndex));
+
+		query.getLayers().add(layerCaps.getId());
+		query.setBbox(layerCaps.getBboxList().get(0));
 	}
 
 
@@ -192,42 +205,37 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 
 	public void setQuery(OWSQuery query)
 	{
-		this.query = (WMSQuery)query;
-	}
-	
-	
-	public void updateQuery()
-	{
-		// update time range
-		if (timeExtent != null)
+		this.query = (WMSQuery) query;
+
+		// set up spatial extent
+		if (this.query.getBbox() != null)
 		{
-			query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
-			query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+			this.spatialExtent.setMaxX(this.query.getBbox().getMaxX());
+			this.spatialExtent.setMaxY(this.query.getBbox().getMaxY());
+			this.spatialExtent.setMinX(this.query.getBbox().getMinX());
+			this.spatialExtent.setMinY(this.query.getBbox().getMinY());
 		}
 		
-		// update bounding box
-		if (spatialExtent != null)
+		// set up time extent
+		if (this.query.getTime() != null)
 		{
-			query.getBbox().setMinX(spatialExtent.getMinX());
-			query.getBbox().setMaxX(spatialExtent.getMaxX());
-			query.getBbox().setMinY(spatialExtent.getMinY());
-			query.getBbox().setMaxY(spatialExtent.getMaxY());
+			double start = this.query.getTime().getStartTime();
+			double stop = this.query.getTime().getStopTime();
+			this.timeExtent.setBaseTime(start);
+			this.timeExtent.setLagTimeDelta(stop - start);
 		}
 	}
 
 
-	@Override
-	public void setSpatialExtent(SpatialExtent spatialExtent)
+	public boolean isSpatialSubsetSupported()
 	{
-		super.setSpatialExtent(spatialExtent);
-		updateQuery();
+		return true;
 	}
 
 
-	@Override
-	public void setTimeExtent(TimeExtent timeExtent)
+	public boolean isTimeSubsetSupported()
 	{
-		super.setTimeExtent(timeExtent);
-		updateQuery();
+		// TODO support time in WMS
+		return false;
 	}
 }

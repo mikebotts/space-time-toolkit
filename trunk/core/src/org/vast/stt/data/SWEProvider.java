@@ -122,4 +122,16 @@ public class SWEProvider extends AbstractProvider
 		dataParser.stop();
 		super.cancelUpdate();
 	}
+
+
+	public boolean isSpatialSubsetSupported()
+	{
+		return false;
+	}
+
+
+	public boolean isTimeSubsetSupported()
+	{
+		return false;
+	}
 }

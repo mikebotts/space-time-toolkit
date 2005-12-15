@@ -36,10 +36,10 @@ public class DataItemIterator implements Iterator<DataItem>
 {
 	protected DataItemIterator currentChild;
 	protected int currentIndex;
-	protected DataList dataList;
+	protected DataEntryList dataList;
 
 
-	public DataItemIterator(DataList dataList)
+	public DataItemIterator(DataEntryList dataList)
 	{
 		this.dataList = dataList;
 	}
@@ -68,10 +68,10 @@ public class DataItemIterator implements Iterator<DataItem>
 		DataEntry nextEntry = dataList.get(currentIndex);
 		DataItem nextItem = null;
 
-		if (nextEntry instanceof DataList)
+		if (nextEntry instanceof DataEntryList)
 		{
 			if (currentChild == null)
-				currentChild = ((DataList) nextEntry).getItemIterator();
+				currentChild = ((DataEntryList) nextEntry).getItemIterator();
 
 			if (currentChild.hasNext())
 			{
