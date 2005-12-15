@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import org.vast.io.xml.*;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
-import org.vast.stt.scene.DataList;
+import org.vast.stt.scene.DataEntryList;
 import org.vast.stt.scene.Scene;
 import org.vast.util.DateTimeFormat;
 import org.w3c.dom.*;
@@ -214,9 +214,9 @@ public class ProjectWriter
 	{
 		Element entryElt = null;
 
-		if (entry instanceof DataList)
+		if (entry instanceof DataEntryList)
 		{
-			entryElt = writeDataList((DataList) entry, parentElt);
+			entryElt = writeDataList((DataEntryList) entry, parentElt);
 		}
 		else if (entry instanceof DataItem)
 		{
@@ -238,7 +238,7 @@ public class ProjectWriter
 		dom.setElementValue(entryElt, "name", entry.getName());
 
 		// add enabled flag
-		if (!(entry instanceof DataList))
+		if (!(entry instanceof DataEntryList))
 		{
 			String enableText = entry.isEnabled() ? "true" : "false";
 			dom.setAttributeValue(entryElt, "@enabled", enableText);
@@ -251,7 +251,7 @@ public class ProjectWriter
 	 * @param listElt
 	 * @return
 	 */
-	protected Element writeDataList(DataList dataList, Element parentElt)
+	protected Element writeDataList(DataEntryList dataList, Element parentElt)
 	{
 		Element listElt = dom.addElement(parentElt, "DataList");
 		writeCommonParameters(dataList, listElt);

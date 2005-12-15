@@ -38,4 +38,5 @@ public class PointGraphic implements Graphic
 	public float orientation;
 	public int size;
 	public Shape shape;
+	public byte[] icon;
 }

@@ -42,6 +42,10 @@ public class TimeExtent
 	private double absoluteTime;
 	
     // constructors
+	public TimeExtent(){
+    }
+	
+	
     public TimeExtent(double baseJulianTime){
         this.baseTime = baseJulianTime;
     }

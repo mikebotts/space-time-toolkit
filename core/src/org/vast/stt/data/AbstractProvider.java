@@ -42,8 +42,10 @@ public abstract class AbstractProvider implements DataProvider
 	protected boolean canceled = false;
 	protected InputStream dataStream;
 	protected DataNode cachedData;
-	protected TimeExtent timeExtent;
-	protected SpatialExtent spatialExtent;
+	protected TimeExtent timeExtent = new TimeExtent();
+	protected TimeExtent maxTimeExtent = new TimeExtent();
+	protected SpatialExtent spatialExtent = new SpatialExtent();
+	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
 	
 	
 	public abstract void updateData() throws DataException;
@@ -136,5 +138,29 @@ public abstract class AbstractProvider implements DataProvider
 	public void setTimeExtent(TimeExtent timeExtent)
 	{
 		this.timeExtent = timeExtent;		
+	}
+
+
+	public SpatialExtent getMaxSpatialExtent()
+	{
+		return maxSpatialExtent;
+	}
+
+
+	public void setMaxSpatialExtent(SpatialExtent maxSpatialExtent)
+	{
+		this.maxSpatialExtent = maxSpatialExtent;
+	}
+
+
+	public TimeExtent getMaxTimeExtent()
+	{
+		return maxTimeExtent;
+	}
+
+
+	public void setMaxTimeExtent(TimeExtent maxTimeExtent)
+	{
+		this.maxTimeExtent = maxTimeExtent;
 	}
 }

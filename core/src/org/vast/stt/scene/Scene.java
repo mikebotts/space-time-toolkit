@@ -34,16 +34,16 @@ public class Scene
 	protected String name;
 	protected ViewSettings viewSettings;
 	protected TimeSettings timeSettings;
-	protected DataList dataList;
+	protected DataEntryList dataList;
 
 
-	public DataList getDataList()
+	public DataEntryList getDataList()
 	{
 		return dataList;
 	}
 
 
-	public void setDataList(DataList dataList)
+	public void setDataList(DataEntryList dataList)
 	{
 		this.dataList = dataList;
 	}
