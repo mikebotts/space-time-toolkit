@@ -38,6 +38,12 @@ import org.vast.stt.util.SpatialExtent;
  */
 public interface DataStyler
 {
+	public void setName(String name);
+
+
+	public String getName();
+	
+	
 	public void setSymbolizer(Symbolizer sym);
 
 
