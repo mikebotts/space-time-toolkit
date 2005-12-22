@@ -9,16 +9,14 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.data.DataProvider;
+import org.vast.stt.gui.widgets.CalendarSpinner;
 import org.vast.stt.gui.widgets.TimeSpinner;
 import org.vast.stt.gui.widgets.TimeZoneCombo;
 import org.vast.stt.scene.DataEntry;
@@ -47,6 +45,10 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 	public static final String ID = "STT.TimeSettingsView";
 	Label itemLabel;
 	TimeZoneCombo tzCombo;
+	Button useAbsTimeBtn;
+	Button continusUpdateBtn;
+	Button updateNowBtn;
+	TimeSpinner biasSpinner;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -76,7 +78,7 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 		itemLabel.setLayoutData(gridData);
 		
 		//  Create Spinners
-		TimeSpinner biasSpinner = new TimeSpinner(mainGroup, "Time Bias");
+		biasSpinner = new TimeSpinner(mainGroup, "Time Bias");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		biasSpinner.setLayoutData(gridData);
@@ -97,12 +99,12 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 		lagSpinner.setLayoutData(gridData);
 
 		//  Abs Time uses different spinner...
-		TimeSpinner absTimeSpinner = new TimeSpinner(mainGroup, "Absolute Time");
+		CalendarSpinner absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.verticalIndent = 12;
 		absTimeSpinner.setLayoutData(gridData);
-		absTimeSpinner.setEnabled(false);
+		//absTimeSpinner.setEnabled(false);
 		
 		//  Abs Time Zone - may combine with absTimeSpinner into a single class
 		Composite tzComp = new Composite(mainGroup, SWT.NONE);
@@ -120,14 +122,14 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 		tzCombo.addSelectionListener(this);
 		
 		//  Add UseAbsTime toggle
-		Button useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
+		useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
 		useAbsTimeBtn.setText("Use Absolute Time");
 		useAbsTimeBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;   //  not honored???
 		useAbsTimeBtn.setLayoutData(gridData);
 		
-		Button continusUpdateBtn = new Button(mainGroup, SWT.CHECK);
+		continusUpdateBtn = new Button(mainGroup, SWT.CHECK);
 		continusUpdateBtn.setText("Enable Continuous Update");
 		continusUpdateBtn.addSelectionListener(this);
 		gridData = new GridData();
@@ -137,8 +139,9 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 		continusUpdateBtn.setLayoutData(gridData);
 		
 		//  Update now btn
-		Button updateNowBtn = new Button(mainGroup, SWT.PUSH);
+		updateNowBtn = new Button(mainGroup, SWT.PUSH);
 		updateNowBtn.setText("Update Now");
+		updateNowBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;   
 		updateNowBtn.setLayoutData(gridData);
@@ -179,7 +182,15 @@ public class TimeSettingsView extends ViewPart implements ISelectionListener, Se
 
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
-		System.err.println(e);
+		if(e.widget == useAbsTimeBtn){
+			//  item.useAbsTime;
+		} else if (e.widget == continusUpdateBtn) {
+			//  item.enableContUpdate;
+		} else if(e.widget == updateNowBtn){
+			//  item.setUpdateNow;
+		} else {
+			System.err.println(e);
+		}
 	}
 	
 }
