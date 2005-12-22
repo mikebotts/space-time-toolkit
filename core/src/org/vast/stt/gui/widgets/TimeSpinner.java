@@ -2,6 +2,8 @@ package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -25,8 +27,8 @@ import org.eclipse.ui.PlatformUI;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * GUI for holding a Text widget and two arrow buttons.  Arrow buttons may be pressed
- * and held to simulate spinner behavior.
+ * GUI for holding a Text widget and two arrow buttons to allow time step/bias/lead/lag
+ * selection.  Arrow buttons may be pressed and held to simulate spinner behavior.  
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -35,31 +37,42 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  */
 public class TimeSpinner implements TraverseListener, //FocusListener,SelectionListener,  
-									MouseListener, KeyListener //, VerifyListener
+									MouseListener, KeyListener, DisposeListener //, VerifyListener
 {
 	Group mainGroup;
 	StyledText text;
 	Font entryFont;
 	Button upBtn, downBtn;
-	TimeSpinnerModel tsModel;
+	SpinnerModel tsModel;
 	boolean btnDown = false;  //  Used to indicate user is pressing and holding a spinner button
 	
-	public TimeSpinner(Composite parent, String label) {
-		tsModel = new TimeSpinnerModel("YYYY DDD HH:MM:SS");
+	protected TimeSpinner(){
+		//  Added so that CurrentTimeSpinner can extend this class
 		initFont();
+	}
+	
+	public TimeSpinner(Composite parent, String label) {
+		this();
+		tsModel = new TimeSpinnerModel("YYYY DDD HH:mm:SS");
 		initGui(parent, label);
+		//  Should really generate initial data from formatStr, but I don't 
+		//  think it will use this anyway.  In practice, setValue(double) will
+		//  be called at initialization
+		text.setText("0000 000 00:00:00");
+		text.setCaretOffset(13);
+		tsModel.selectField(text);
 	}
 	
 	public void setLayoutData(GridData gridData){
 		mainGroup.setLayoutData(gridData);
 	}
 	
-	public void initFont(){
+	protected void initFont(){
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		entryFont = new Font(display, new FontData("arial", 9, SWT.NORMAL));
 	}
 	
-	public void initGui(Composite parent, String label){
+	protected void initGui(Composite parent, String label){
 		//  Create main group for text and Buttons
 		mainGroup = new Group(parent, SWT.SHADOW_NONE);
 		mainGroup.setText(label);
@@ -69,6 +82,7 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 		gridLayout.marginBottom = -2;
 		gridLayout.marginRight = -3;
 		mainGroup.setLayout(gridLayout);
+		mainGroup.addDisposeListener(this);
 		//  Text widget		
 		text = new StyledText(mainGroup, SWT.RIGHT | SWT.BORDER | SWT.READ_ONLY);
 		//text = new Text(mainGroup, SWT.RIGHT | SWT.BORDER);
@@ -77,9 +91,6 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 		//gridData.heightHint = 18;
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
-		text.setText("0000 000 00:00:00");
-		text.setCaretOffset(13);
-		tsModel.selectField(text);
 		
 		//text.addSelectionListener(this);
 		//text.addModifyListener(this);
@@ -114,54 +125,22 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
     	downBtn.addMouseListener(this);
 	}
 
-	/**
-	 * Override behavior of up-down-left-right arrow keys
-	 */
-	public void keyTraversed(TraverseEvent e) {
-		if(e.keyCode == SWT.ARROW_DOWN) {
-			timeDown();
-		} else if (e.keyCode == SWT.ARROW_UP) {
-			timeUp();
-		} else {
-			tsModel.selectField(text);
-		}
-	}
-	
 	private void timeUp(){
 		int caretPos = text.getCaretOffset();
-		text.setText(tsModel.increment());
+		tsModel.increment();
+		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
 	}
 	
 	private void timeDown(){
 		int caretPos = text.getCaretOffset();
-		text.setText(tsModel.decrement());
+		tsModel.decrement();
+		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
 	}
 
-	public void mouseDoubleClick(MouseEvent e) {
-		//  do nothing...
-	}
-
-	public void mouseDown(MouseEvent e) {
-		if(e.widget == upBtn) {
-			startSpinUpThread();
-		} else if(e.widget == downBtn) {
-			startSpinDownThread();
-		}
-	}
-
-
-	public void mouseUp(MouseEvent e) {
-		btnDown = false;
-		if(e.widget == upBtn || e.widget == downBtn) {
-			stopSpinThread();
-		} else  // e.widget == text
-			tsModel.selectField(text);
-	}
-	
 	Runnable spinUpThread = new Runnable(){
 		public void run(){
 			timeUp();
@@ -209,7 +188,7 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 		Runnable spinThread = new Runnable(){
 			public void run(){
 				try {		
-					Thread.sleep(300l);
+					Thread.sleep(500l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
 					while(btnDown){
 							Thread.sleep(10l);
 							if(!text.isDisposed()) {
@@ -231,10 +210,59 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 	private void stopSpinThread(){
 		btnDown = false;
 		text.setFocus();
-		System.err.println("Value is " + tsModel.getValue());
+		//System.err.println("Value is " + tsModel.getValue());
 		//System.err.println("stopUpThread");
 	}
 
+	public void setEnabled(boolean b){
+		mainGroup.setEnabled(b);
+	}
+
+	public void setValue(double value){
+		tsModel.setValue(new Double(value));
+		text.setText(tsModel.toString());
+		tsModel.selectField(text);
+	}
+	
+	public double getValue(){
+		Double val = (Double)tsModel.getValue();
+		return val.doubleValue();
+	}
+	
+	/**
+	 * Override behavior of up-down-left-right arrow keys
+	 */
+	public void keyTraversed(TraverseEvent e) {
+		if(e.keyCode == SWT.ARROW_DOWN) {
+			timeDown();
+		} else if (e.keyCode == SWT.ARROW_UP) {
+			timeUp();
+		} else {
+			tsModel.selectField(text);
+		}
+	}
+	
+	public void mouseDoubleClick(MouseEvent e) {
+		//  do nothing...
+	}
+
+	public void mouseDown(MouseEvent e) {
+		if(e.widget == upBtn) {
+			startSpinUpThread();
+		} else if(e.widget == downBtn) {
+			startSpinDownThread();
+		}
+	}
+
+
+	public void mouseUp(MouseEvent e) {
+		btnDown = false;
+		if(e.widget == upBtn || e.widget == downBtn) {
+			stopSpinThread();
+		} else  // e.widget == text
+			tsModel.selectField(text);
+	}
+	
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if((e.keyCode<48 || e.keyCode > 57)) { // && e.keyCode!=0) {
@@ -259,8 +287,14 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 			e.doit = false;
 		}
 	}
-	
-	public void setEnabled(boolean b){
-		mainGroup.setEnabled(b);
+
+	/**
+	 *  Added dispose listener to dispose Font I use for the text fields.  If we 
+	 *  implement a FontRegistry, I can get rid of this.  TC 
+	 * @param e
+	 */
+	public void widgetDisposed(DisposeEvent e) {
+		entryFont.dispose();
 	}
+	
 }
