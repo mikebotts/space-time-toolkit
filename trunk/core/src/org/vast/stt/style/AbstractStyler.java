@@ -34,6 +34,7 @@ import org.vast.stt.data.DataProvider;
 public abstract class AbstractStyler implements DataStyler
 {
 	protected DataProvider dataProvider;
+	protected String name;
 	protected boolean enabled;
 	
 	
@@ -90,5 +91,17 @@ public abstract class AbstractStyler implements DataStyler
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+	}
+
+
+	public String getName()
+	{
+		return name;
+	}
+
+
+	public void setName(String name)
+	{
+		this.name = name;		
 	}
 }

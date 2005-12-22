@@ -38,6 +38,7 @@ import org.vast.stt.util.SpatialExtent;
 public class CompositeStyler extends ArrayList<DataStyler> implements DataStyler
 {
 	static final long serialVersionUID = 0;
+	protected String name;
 	protected SpatialExtent bbox;
 	protected double[] centerPoint;
 	
@@ -128,5 +129,17 @@ public class CompositeStyler extends ArrayList<DataStyler> implements DataStyler
 		// loop through all child stylers
 		for (int i=0; i<size(); i++)
 			get(i).setEnabled(enabled);
+	}
+
+
+	public String getName()
+	{
+		return name;
+	}
+
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }
