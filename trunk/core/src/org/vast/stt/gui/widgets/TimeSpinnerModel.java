@@ -8,7 +8,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-
 /**
  * <p><b>Title:</b><br/>
  * TimeSpinnerModel
@@ -26,14 +25,14 @@ import org.eclipse.ui.PlatformUI;
  * @date Dec 20, 2005
  * @version 1.0
  */
-public class TimeSpinnerModel {
+public class TimeSpinnerModel implements SpinnerModel{
 	
 	String formatStr;
 	// position of field in arrays start and len
-    public static int YEAR = -1 , DAY = -1, HOUR = -1, MIN = -1, SEC = -1, FSEC = -1;
-    static int [] start, len; // position of fields in Str
+    protected int YEAR = -1 , MONTH = -1, DAY = -1, HOUR = -1, MIN = -1, SEC = -1, FSEC = -1;
+    int [] start, len; // position of fields in Str
     int yearDigits, dayDigits, fsecDigits;
-    private int years, days, hours, minutes, seconds, fseconds;
+    protected int years, months, days, hours, minutes, seconds, fseconds;
     int maxYears, maxDays, maxFseconds;  //  editor supplies these
     boolean hasFseconds = false;  //  is fraction of seconds present?
     boolean rollEnabled = true;
@@ -52,7 +51,7 @@ public class TimeSpinnerModel {
 	
     public void loadFieldPositionArrays(String formatStr){
         String token;
-        StringTokenizer parser = new StringTokenizer(formatStr," :.", true);
+        StringTokenizer parser = new StringTokenizer(formatStr," :./,", true);
         int numFields = parser.countTokens();
         start = new int[numFields];
         len = new int[numFields];
@@ -68,6 +67,9 @@ public class TimeSpinnerModel {
                         yearDigits = token.length();
                         maxYears = (int)(Math.pow(10.0, (double)yearDigits) - 1);                        
                         break;
+                    case 'M':
+                        MONTH = index;
+                        break;
                     case 'D': case 'd':
                         DAY = index;
                         dayDigits = token.length();
@@ -76,7 +78,7 @@ public class TimeSpinnerModel {
                     case 'H': case 'h':
                         HOUR = index;
                         break;
-                    case 'M': case 'm':
+                    case 'm':
                         MIN = index;
                         break;
                     case 'S': case 's':
@@ -88,9 +90,11 @@ public class TimeSpinnerModel {
                         maxFseconds = (int)(Math.pow(10.0, (double)fsecDigits) - 1);
                         break;
                     case ' ':
-                    case '.':
                     case ':':
-                        where++;
+                    case '.':
+                    case '/':
+                    case ',':
+                        where++;  numFields--;
                         continue;
                     default:
                         System.err.println("TimeStepSpinnerEditor:  Format invalid: " + formatStr);
@@ -116,6 +120,8 @@ public class TimeSpinnerModel {
             years += step;
             if(years<0)  years = maxYears;
             if(years>maxYears)  years = 0;
+		} else if(currentField == MONTH){
+            ;//changeDay(step);
 		} else if(currentField == DAY){
             changeDay(step);
 		} else if(currentField == HOUR){
@@ -131,14 +137,14 @@ public class TimeSpinnerModel {
 			
 	}
 
-	public String increment(){
+	public void increment(){
 		stepCurrentField(1);
-		return toString();
+		//return toString();
 	}
     
-	public String decrement(){
+	public void decrement(){
 		stepCurrentField(-1);
-		return toString();
+		//return toString();
 	}
 	
 	/** 
@@ -262,7 +268,7 @@ public class TimeSpinnerModel {
         currentField = -1;
 	}
 
-    protected double getValue(){
+    public Object getValue(){
         double timeStep = years * SECONDS_PER_YEAR;  // no leap year here.
         timeStep += days * SECONDS_PER_DAY;
         timeStep += hours * SECONDS_PER_HOUR;
@@ -271,6 +277,42 @@ public class TimeSpinnerModel {
         if(hasFseconds)
             timeStep += fseconds/maxFseconds;
 
-        return timeStep;
+        return new Double(timeStep);
     }
+    
+    /**
+     * Sets the spinner value based on number of seconds
+     * @param sec - seconds since 1Jan1970
+     */
+    public void setValue(Object secondsObj){
+    	double sec = ((Double)secondsObj).doubleValue();
+        //  clear all fields
+        years = days = hours = minutes = seconds = fseconds = 0;
+        int isec = (int)sec;
+        if (hasFseconds) {
+            double frac = sec - (double)isec;
+            String fsStr = "" + maxFseconds;
+            int numDigits = fsStr.length();
+            fseconds = (int)(Math.pow(frac, numDigits));
+        }
+        if(isec >= SECONDS_PER_YEAR) {
+            years = isec / (int)SECONDS_PER_YEAR;
+            isec = isec % (int)SECONDS_PER_YEAR;
+        }
+        if(isec >= SECONDS_PER_DAY) {
+            days = isec / (int)SECONDS_PER_DAY;
+            isec = isec % (int)SECONDS_PER_DAY;
+        }
+        if(isec >= SECONDS_PER_HOUR) {
+            hours = isec / (int)SECONDS_PER_HOUR;
+            isec = isec % (int)SECONDS_PER_HOUR;
+        }
+        if(isec >= SECONDS_PER_MINUTE) {
+            minutes = isec / 60;
+            isec = isec % 60;
+        }
+        seconds = isec;
+    }
+
+    
 }
