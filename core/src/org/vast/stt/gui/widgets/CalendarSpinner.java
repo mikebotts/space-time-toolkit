@@ -3,7 +3,6 @@ package org.vast.stt.gui.widgets;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 
 /**
