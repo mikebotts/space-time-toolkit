@@ -7,10 +7,12 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -162,28 +164,27 @@ public class StyleView extends ViewPart implements ISelectionListener, Selection
 		//  optGroup contents to be determined dynamically
 		//  TODO  Create pretty options
 		layout = new GridLayout();
-		layout.numColumns = 1;
+		layout.numColumns = 2;
+		layout.makeColumnsEqualWidth = true;
 		//layout.verticalSpacing = ;
 		optGroup.setLayout(layout);
 		//  Creating points and lines stylers by default for now.  TC
+		Label sizeLabel = new Label(optGroup, 0x0);
+		sizeLabel.setText("Point Size:");
+		Combo sizeCombo = new Combo(optGroup, SWT.DROP_DOWN| SWT.READ_ONLY);
+		sizeCombo.setItems(new String [] {"1", "2", "3", "4", "5", "6", "7", "8", "9"});
+		sizeCombo.select(1);
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.RIGHT;
+		sizeCombo.setLayoutData(gridData);
+		
+		//Combo colorCombo = new Combo(optGroup, SWT.DROP_DOWN);
+		//colorCombo.set
+		
+		
+		//  And be sure to set minSize of Scrolled Composite
 		optSc.setMinSize(optGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
 
-//		final Table table =  new Table(mainGroup,SWT.MULTI|SWT.CHECK|SWT.BORDER);
-//		TableColumn col1 = new TableColumn(table, SWT.CENTER);
-//		col1.setText("Styles:");
-//		col1.setWidth(120);
-//		TableColumn col2 = new TableColumn(table, SWT.RIGHT);
-//		col2.setText("Coloumn 2");
-//		col2.setWidth(80);
-//
-//		TableItem item1 = new TableItem(table, 0);
-//		item1.setText(new String[] { "points" , "Shit", "Fuck"});
-//		TableItem item2 = new TableItem(table, 0);
-//		item2.setText(new String[] { "lines" , "shit", "piss"});
-//
-//		table.setHeaderVisible(true);
-//		table.setLinesVisible(true);
-		
 		// Create Advanced Button
 		Button advancedBtn = new Button(parent, SWT.PUSH);
 		advancedBtn.setText("Advanced...");
@@ -212,12 +213,12 @@ public class StyleView extends ViewPart implements ISelectionListener, Selection
 			if(selectedItem instanceof DataItem) { 
 				System.err.println("item " + selectedItem);
 				//itemLabel.setText(selectedItem.getName());
-				DataProvider prov = ((DataItem)selectedItem).getDataProvider();
-				//  If provider is null, this widget isn't supported.
-				if(prov!=null) {
-				}
+				//DataStyler [] styler = ((DataItem)selectedItem).getDataStylers();
+//				if(stylers != null) {
+//					//  populate styles/options widgets
+//				}
 			} else {
-				//  TODO  support BBox for DataItemList
+				//  May add support for Composite items later
 			}
 		}		
 	}
