@@ -6,6 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,10 +19,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.data.DataProvider;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
+
+import com.sun.org.apache.bcel.internal.generic.PUSH;
 
 /**
  * <p><b>Title:</b><br/>
@@ -37,8 +42,8 @@ import org.vast.stt.scene.DataItem;
  * @date Jan 11, 2006
  * @version 1.0
  * 
- * @TODO  add +/- to Bias
- * @TODO  add control for buttons
+ * @TODO  Modify other scrolled widgets to use the convention here.
+ * @TODO  Try wrapping entire widget in ScrolledComp now
  */
 public class StyleView extends ViewPart implements ISelectionListener, SelectionListener{
 	
@@ -55,56 +60,143 @@ public class StyleView extends ViewPart implements ISelectionListener, Selection
 	
 	public void initView(Composite parent){
 		//  Scrolled Composite to hold everything
-		ScrolledComposite scroller = new ScrolledComposite(parent, SWT.SHADOW_ETCHED_OUT | SWT.V_SCROLL | SWT.H_SCROLL);
-        scroller.setExpandHorizontal(true);
-	    scroller.setExpandVertical(true);
+		///ScrolledComposite scroller = new ScrolledComposite(parent, SWT.SHADOW_ETCHED_OUT | SWT.V_SCROLL | SWT.H_SCROLL);
+        //scroller.setExpandHorizontal(true);
+	    //scroller.setExpandVertical(true);
 
-	    //  Main Group Holds itemLabel, enabled checkbox, styles list, options list, and advanced buttons
-		Group mainGroup = new Group(scroller, SWT.SHADOW_NONE);
-		scroller.setContent(mainGroup);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		layout.verticalSpacing = 9;
-		mainGroup.setLayout(layout);
+		GridLayout mainLayout = new GridLayout(1, false);
+		mainLayout.verticalSpacing = 5;
+		parent.setLayout(mainLayout);
 		
-		//  Create Label
-		itemLabel = new Label(mainGroup, SWT.SHADOW_IN);
+		//  Create Item Label
+		itemLabel = new Label(parent, SWT.SHADOW_IN);
 		itemLabel.setText("DataItem Name Goes Here");
 		GridData gridData = new GridData();
-		gridData.horizontalAlignment = SWT.FILL;
+		gridData.horizontalAlignment = SWT.LEFT;
 		itemLabel.setLayoutData(gridData);
-		
+
 		//  Create enabled cb
-		enableCb = new Button(mainGroup, SWT.CHECK);
+		enableCb = new Button(parent, SWT.CHECK);
 		enableCb.setText("enabled");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.LEFT;
+		gridData.verticalIndent = 5;
 		enableCb.setLayoutData(gridData);
 
-		//  Create Styles Label/Btns/List
-		final Table table =  new Table(mainGroup,SWT.MULTI|SWT.CHECK);
-		TableColumn col1 = new TableColumn(table, SWT.LEFT);
-		col1.setText("Styles:");
-		col1.setWidth(80);
-//		TableColumn col2 = new TableColumn(table, SWT.LEFT);
+		//  Create Styles Label/Btns
+		Composite styleBtnComp = new Composite(parent, 0x0);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 8;
+		layout.makeColumnsEqualWidth = true;
+		styleBtnComp.setLayout(layout);
+		gridData = new GridData();
+		gridData.verticalIndent = 5;
+		gridData.verticalAlignment = SWT.BOTTOM;
+		styleBtnComp.setLayoutData(gridData);
+		
+		Label styleLabel = new Label(styleBtnComp, SWT.SHADOW_IN );
+		styleLabel.setText("Styles:");
+		gridData = new GridData();
+		gridData.horizontalSpan = 6;
+		gridData.verticalAlignment = SWT.BOTTOM;
+		styleLabel.setLayoutData(gridData);
+		Button addBtn = new Button(styleBtnComp, SWT.PUSH | SWT.SHADOW_IN);
+		addBtn.setText("+");
+		addBtn.setToolTipText("Add a style");
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		addBtn.setLayoutData(gridData);	
+		Button subBtn = new Button(styleBtnComp, SWT.PUSH);
+		subBtn.setText("-");
+		subBtn.setToolTipText("Remove a style");
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		gridData.horizontalAlignment = SWT.FILL;
+//		gridData.grabExcessVerticalSpace = true;
+		subBtn.setLayoutData(gridData);	
+		
+		//  ScrolledComp for styles
+		ScrolledComposite styleScroller = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		styleScroller.setExpandHorizontal(true);
+		styleScroller.setExpandVertical(true);
+		//  without setting LayoutData for the ScrolledComposite, I could NOT get the scrollbars to appear when the  
+		//  parent of the scrolledComposite also uses a GridLayout.  Instead, the ScrolledComposite sized up to fit all 
+		//  requested children, and was subsequesntly clipped.  The GridData constructor below is setting horizontal and 
+		//  vertical span to 1, and setting grabExcess*Space to true.  Magic occurs, and this behaves as desired.
+		styleScroller.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));		//styleScroller.setSize(100,100);
+		Composite styleGroup = new Composite(styleScroller, SWT.NONE);
+		styleScroller.setContent(styleGroup);
+		styleGroup.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		//styleGroup.setTe
+		layout = new GridLayout();
+		layout.numColumns = 1;
+		//layout.verticalSpacing = ;
+		styleGroup.setLayout(layout);
+		//  Creating points and lines stylers by default for now.  TC
+		Button styleBtn = new Button(styleGroup, SWT.CHECK);
+		styleBtn.setText("points");
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.FILL;
+		styleBtn.setLayoutData(gridData);
+		//  use this to hilite the Btn when selected (this doesn't fill the width though)
+		styleBtn.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE));
+		styleBtn = new Button(styleGroup, SWT.CHECK);
+		styleBtn.setText("lines");
+		styleScroller.setMinSize(styleGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
+		
+		//  Create Optss Label/Btns/List
+		Label optLabel = new Label(parent, SWT.SHADOW_IN | SWT.LEFT);
+		optLabel.setText("Options:");
+		gridData = new GridData();
+		gridData.verticalIndent = 5;
+		optLabel.setLayoutData(gridData);
+
+		//  ScrolledComp for options
+		ScrolledComposite optSc = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		optSc.setExpandHorizontal(true);
+		optSc.setExpandVertical(true);
+		optSc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));		//styleScroller.setSize(100,100);
+		Composite optGroup = new Composite(optSc, SWT.NONE);
+		optSc.setContent(optGroup);
+		optGroup.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		//  optGroup contents to be determined dynamically
+		//  TODO  Create pretty options
+		layout = new GridLayout();
+		layout.numColumns = 1;
+		//layout.verticalSpacing = ;
+		optGroup.setLayout(layout);
+		//  Creating points and lines stylers by default for now.  TC
+		optSc.setMinSize(optGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
+
+//		final Table table =  new Table(mainGroup,SWT.MULTI|SWT.CHECK|SWT.BORDER);
+//		TableColumn col1 = new TableColumn(table, SWT.CENTER);
+//		col1.setText("Styles:");
+//		col1.setWidth(120);
+//		TableColumn col2 = new TableColumn(table, SWT.RIGHT);
 //		col2.setText("Coloumn 2");
 //		col2.setWidth(80);
-
-		TableItem item1 = new TableItem(table, 0);
-		item1.setText(new String[] { "points" });
-		TableItem item2 = new TableItem(table, 0);
-		item2.setText(new String[] { "lines" });
-
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// Create Options Label and List
+//
+//		TableItem item1 = new TableItem(table, 0);
+//		item1.setText(new String[] { "points" , "Shit", "Fuck"});
+//		TableItem item2 = new TableItem(table, 0);
+//		item2.setText(new String[] { "lines" , "shit", "piss"});
+//
+//		table.setHeaderVisible(true);
+//		table.setLinesVisible(true);
 		
 		// Create Advanced Button
+		Button advancedBtn = new Button(parent, SWT.PUSH);
+		advancedBtn.setText("Advanced...");
+		advancedBtn.setToolTipText("Configure " +
+				"Advanced Options");
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.RIGHT;
+		advancedBtn.setLayoutData(gridData);
 		
 		//  Must give sroller sufficient size
-		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
+		//scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
 	}
+	
 	
 	@Override
 	public void setFocus() {
