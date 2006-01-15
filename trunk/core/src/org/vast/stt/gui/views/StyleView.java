@@ -35,7 +35,7 @@ import com.sun.org.apache.bcel.internal.generic.PUSH;
 
 /**
  * <p><b>Title:</b><br/>
- * TimeSettingsView
+ * StyleView
  * </p>
  *
  * <p><b>Description:</b><br/>
@@ -48,16 +48,11 @@ import com.sun.org.apache.bcel.internal.generic.PUSH;
  * @date Jan 11, 2006
  * @version 1.0
  * 
- * @TODO  Modify other scrolled widgets to use the convention here.
- * @TODO  Try wrapping entire widget in ScrolledComp now
  */
 public class StyleView extends ViewPart implements ISelectionListener{
 	
 	public static final String ID = "STT.StyleView";
 	StyleWidget styleWidget;
-	Label itemLabel;
-	Button enableCb, advancedBtn, colorBtn;
-	Composite parent;
 	
 	@Override
 	public void createPartControl(Composite parent) {
