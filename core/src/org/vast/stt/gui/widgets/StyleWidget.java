@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets;
 
+import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,29 +8,49 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.style.AbstractStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.PointStyler;
 import com.swtdesigner.SWTResourceManager;
-
+ 
 /**
  * <p><b>Title:</b><br/>
  * StyleWidget
@@ -51,9 +72,11 @@ import com.swtdesigner.SWTResourceManager;
  * @TODO  Tie actions to DataItem properties
  * TODO  Mod scrolled widgets to size up when parent is sized up
  */
-public class StyleWidget {
+public class StyleWidget implements ICheckStateListener, ISelectionChangedListener
+		
+{ // implements MouseListener{
 
-	Composite stylesComp;  //  Holds style Checkboxes
+	private Table table;
 	Composite optionsComp;
 	ScrolledComposite stylesSC;
 	Map<Widget,DataStyler> stylesMap;
@@ -113,8 +136,7 @@ public class StyleWidget {
 				addStyle(null);  //  TODO:  popup "styler type" dialog
 			}
 		});
-		addButton.setLayoutData(
-				new GridData(GridData.FILL, GridData.CENTER, false, false));
+		addButton.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		addButton.setText("+");
 
 		final Button delBtn = new Button(stylesLabelComp, SWT.NONE);
@@ -124,97 +146,61 @@ public class StyleWidget {
 				removeStyle(null);  //  remove currently selected row   
 			}
 		});
-		delBtn.setLayoutData(
-				new GridData(GridData.FILL, GridData.CENTER, false, false));
+		delBtn.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		delBtn.setText("-");
 
-		stylesSC = 
-			new ScrolledComposite(mainGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		final GridData gd = new GridData(133, 39);
-		stylesSC.setLayoutData(gd);
-		stylesSC.setMinWidth(100);
-		stylesSC.setMinHeight(100);
-		stylesSC.setExpandVertical(true);
-		stylesSC.setExpandHorizontal(true);
-
-		stylesComp = new Composite(stylesSC, SWT.BORDER);
-		stylesComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		final GridLayout gridLayout_1 = new GridLayout(1, false);
-		stylesComp.setLayout(gridLayout_1);
-		final GridData gd2 = new GridData();
-		gd2.horizontalAlignment = SWT.FILL;
-		gd2.verticalAlignment = SWT.FILL;
-		stylesComp.setLayoutData(gd2);
-		//stylesComp.setLocation(0, 0);
-		//stylesComp.setSize(196, 84);
-		stylesSC.setContent(stylesComp);
-		//
-		//stylesSC.setMinSize(stylesComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		Button btn = new Button(stylesComp, SWT.CHECK);
-		btn.setText("New Style");
-		btn.setBackground(SWTResourceManager.getColor(255, 255, 255));
-
-		btn.addMouseListener(new MouseAdapter() {
-			public void mouseDown(MouseEvent e) 
-			{	
-				Button btn = (Button)e.widget;
-				btn.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED));
-				btn.setForeground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-			}
-		});
-
-		final Composite composite = new Composite(stylesComp, SWT.NONE);
-		composite.setBackground(SWTResourceManager.getColor(255, 128, 64));
-		composite.setLayoutData(new GridData());
-		final GridLayout gridLayout_3 = new GridLayout();
-		gridLayout_3.numColumns = 2;
-		composite.setLayout(gridLayout_3);
-
-		final Button button = new Button(composite, SWT.CHECK);
-
-		final Label testcbcompLabel = new Label(composite, SWT.NONE);
-		testcbcompLabel.addMouseListener(new MouseAdapter() {
-			public void mouseDown(MouseEvent e) {
-				System.err.println("MD2020");
-			}
-		});
-		testcbcompLabel.setBackground(SWTResourceManager.getColor(255, 128, 0));
-		testcbcompLabel.setLayoutData(new GridData(SWT.DEFAULT, 16));
-		testcbcompLabel.setText("TestCbComp");
-
+		//  CheckboxTableViewer for styles
+		final CheckboxTableViewer checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER); 
+		checkboxTableViewer.addCheckStateListener(this);
+		checkboxTableViewer.addSelectionChangedListener(this);
+		table = checkboxTableViewer.getTable();
+		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		final GridData tableGd = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
+		tableGd.minimumWidth = 125;
+		tableGd.minimumHeight = 105;
+		tableGd.widthHint = 125;
+		tableGd.heightHint = 75;
+		table.setLayoutData(tableGd);
+		
+		StyleTableContentProvider tableContentProv = new StyleTableContentProvider();
+		StyleTableLabelProvider tableLabelProv = new StyleTableLabelProvider();
+		checkboxTableViewer.setContentProvider(tableContentProv);
+		checkboxTableViewer.setLabelProvider(tableLabelProv);
+		checkboxTableViewer.setInput(new Object());
 		
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
+		optLabel.setText("Options:");
 		final GridData gridData_4 = 
 			new GridData(GridData.BEGINNING, GridData.END, false, false);
 		gridData_4.verticalIndent = 7;
-		gridData_4.heightHint = 14;
+		gridData_4.heightHint = 16;
 		optLabel.setLayoutData(gridData_4);
-		optLabel.setText("Options:");
-		//new Label(mainGroup, SWT.NONE);
 
-		final ScrolledComposite optionsSC = 
-			new ScrolledComposite(mainGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		final GridData gridData_5 = 
-			new GridData(133, 39);
-		optionsSC.setLayoutData(gridData_5);
-		optionsSC.setMinWidth(100);
-		optionsSC.setMinHeight(100);
-		optionsSC.setExpandVertical(true);
-		optionsSC.setExpandHorizontal(true);
-
-		optionsComp = new Composite(optionsSC, SWT.NONE);
-		optionsComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		optionsComp.setLayout(new GridLayout());
-		optionsComp.setLocation(0, 0);
-		optionsComp.setSize(196, 84);
-		optionsSC.setContent(optionsComp);
+		//	  Options TableViewer for style options/combos/spinners
+		final TableViewer optionsTV = new TableViewer(mainGroup, SWT.BORDER); 
+		//optionsTV.addSelectionChangedListener(this);
+		Table optTable = optionsTV.getTable();
+		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		final GridData optGD = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
+		optGD.minimumWidth = 125;
+		optGD.minimumHeight = 105;
+		optGD.widthHint = 125;
+		optGD.heightHint = 75;
+		optTable.setLayoutData(tableGd);
+		
+		OptTableContentProvider optContentProv = new OptTableContentProvider();
+		OptTableLabelProvider optLabelProv = new OptTableLabelProvider();
+		optionsTV.setContentProvider(optContentProv);
+		optionsTV.setLabelProvider(optLabelProv);
+		//  setInput inits state of Table here
+		optionsTV.setInput(new Object());
 
 		final Button advancedBtn = new Button(mainGroup, SWT.NONE);
 		advancedBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				System.err.println(e);
 			
-			}
+			};
 		});
 		final GridData gridData_6 = 
 			new GridData(GridData.END, GridData.CENTER, false, false);
@@ -225,6 +211,7 @@ public class StyleWidget {
 		mainGroup.setSize(236, 371);
 		mainSC.setContent(mainGroup);
 		mainSC.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
 	}
 	
 	//  TODO  Will this method be polymorhped to accept different stylers?
@@ -232,14 +219,8 @@ public class StyleWidget {
 	private void addStyle(PointStyler styler){
 		//  TODO:  Get to the actual things we want to change here...
 		
-		//  Add Checkbox to styles Map and rerender stylesComp
+		//  Add Checkbox to styles Map and rerender Table
 		//stylesMap.add(styler);
-		Button btn = new Button(stylesComp, SWT.CHECK);
-		btn.setText("PointStyle # " + stylesMap.size());
-		
-		stylesSC.setContent(stylesComp);
-		stylesMap.put(btn, styler);
-		
 		//  Change options panel to show Point options
 	}
 	
@@ -259,11 +240,138 @@ public class StyleWidget {
 				stylesMap.remove(st);  // swap out with method arh 
 				btnTmp.dispose();
 				btnTmp = null;
-				stylesSC.setContent(stylesComp);
 				//stylesMap.remove(st);  // swap out with method arh 
 				break;
 			}
 		}
 	}
+
+	public void setActiveStyle(){
+	}
 	
+	public void enableStyle(){
+	}
+
+	//  enabling checkbox causes ckState AND selChanged events
+	public void checkStateChanged(CheckStateChangedEvent e) {
+		// TODO Auto-generated method stub
+		System.err.println(e);
+		//  set enable on styler
+		
+		//  swap out optTable contents???
+	}
+
+	//  Selecting label causes ONLY selChanged event
+	public void selectionChanged(SelectionChangedEvent e) {
+		// TODO Auto-generated method stub
+		System.err.println(e);
+		//  Swap out optTable contents
+	}
+	
+}
+
+class StyleTableContentProvider implements IStructuredContentProvider{
+
+	public Object[] getElements(Object inputElement) {
+		// TODO Auto-generated method stub
+		return new String [] { "points", "lines", "morePts",
+								"raster", "polygon", "whatece"};
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
+
+class StyleTableLabelProvider implements ILabelProvider {
+
+	public Image getImage(Object element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getText(Object element) {
+		return element.toString();
+	}
+
+	public void addListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isLabelProperty(Object element, String property) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void removeListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+class OptTableContentProvider implements IStructuredContentProvider{
+
+	public Object[] getElements(Object inputElement) {
+		//  switch on inputElement to detrmine which Contents to show
+		
+		//  Subclass ContProv for all different styler types with options
+		
+		return new String [] { "pointSize", "pointColor"};
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
+
+class OptTableLabelProvider implements ILabelProvider {
+
+	public Image getImage(Object element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getText(Object element) {
+		return element.toString();
+	}
+
+	public void addListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isLabelProperty(Object element, String property) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void removeListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
 }
