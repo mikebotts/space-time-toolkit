@@ -28,7 +28,7 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class PointGraphic implements Graphic
+public class PointGraphic implements GraphicObject
 {
 	enum Shape {SQUARE, CIRCLE, TRIANGLE, VECTOR}
 	
