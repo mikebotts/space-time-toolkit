@@ -1,6 +1,6 @@
 package org.vast.stt.style;
 
-public interface Graphic
+public interface GraphicObject
 {
 
 }
