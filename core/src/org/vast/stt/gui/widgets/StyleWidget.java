@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -42,14 +43,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.style.AbstractStyler;
 import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
-import com.swtdesigner.SWTResourceManager;
  
 /**
  * <p><b>Title:</b><br/>
@@ -58,7 +60,7 @@ import com.swtdesigner.SWTResourceManager;
  *
  * <p><b>Description:</b><br/>
  *	Widget for controlling styler options for a DataItem.  Note that I 
- *  used a trial version of SWTDesigner to build this.     
+ *  used a trial version of SWTDesigner to build portions of this widget.     
  *
  * </p>
  *
@@ -73,12 +75,13 @@ import com.swtdesigner.SWTResourceManager;
  * TODO  Mod scrolled widgets to size up when parent is sized up
  */
 public class StyleWidget implements ICheckStateListener, ISelectionChangedListener
-		
-{ // implements MouseListener{
-
+{ 
+	// implements MouseListener{
+	private Combo combo;
 	private Table table;
 	Composite optionsComp;
 	ScrolledComposite stylesSC;
+	StyleOptionChooser optChooser;
 	Map<Widget,DataStyler> stylesMap;
 	
 	public StyleWidget(Composite parent){
@@ -176,25 +179,9 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		gridData_4.heightHint = 16;
 		optLabel.setLayoutData(gridData_4);
 
-		//	  Options TableViewer for style options/combos/spinners
-		final TableViewer optionsTV = new TableViewer(mainGroup, SWT.BORDER); 
-		//optionsTV.addSelectionChangedListener(this);
-		Table optTable = optionsTV.getTable();
-		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		final GridData optGD = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
-		optGD.minimumWidth = 125;
-		optGD.minimumHeight = 105;
-		optGD.widthHint = 125;
-		optGD.heightHint = 75;
-		optTable.setLayoutData(tableGd);
+		//	  OptionsChooser
+		optChooser = new StyleOptionChooser(mainGroup);
 		
-		OptTableContentProvider optContentProv = new OptTableContentProvider();
-		OptTableLabelProvider optLabelProv = new OptTableLabelProvider();
-		optionsTV.setContentProvider(optContentProv);
-		optionsTV.setLabelProvider(optLabelProv);
-		//  setInput inits state of Table here
-		optionsTV.setInput(new Object());
-
 		final Button advancedBtn = new Button(mainGroup, SWT.NONE);
 		advancedBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -261,11 +248,17 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		//  swap out optTable contents???
 	}
 
+	boolean b = true;
 	//  Selecting label causes ONLY selChanged event
 	public void selectionChanged(SelectionChangedEvent e) {
 		// TODO Auto-generated method stub
 		System.err.println(e);
 		//  Swap out optTable contents
+		if(b)
+			optChooser.buildControls(new LineStyler());
+		else
+			optChooser.buildControls(new PointStyler());
+		b = !b;
 	}
 	
 }
@@ -291,60 +284,6 @@ class StyleTableContentProvider implements IStructuredContentProvider{
 }
 
 class StyleTableLabelProvider implements ILabelProvider {
-
-	public Image getImage(Object element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getText(Object element) {
-		return element.toString();
-	}
-
-	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-}
-
-class OptTableContentProvider implements IStructuredContentProvider{
-
-	public Object[] getElements(Object inputElement) {
-		//  switch on inputElement to detrmine which Contents to show
-		
-		//  Subclass ContProv for all different styler types with options
-		
-		return new String [] { "pointSize", "pointColor"};
-	}
-
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-}
-
-class OptTableLabelProvider implements ILabelProvider {
 
 	public Image getImage(Object element) {
 		// TODO Auto-generated method stub
