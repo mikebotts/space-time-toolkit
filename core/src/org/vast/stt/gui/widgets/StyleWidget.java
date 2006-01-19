@@ -1,54 +1,33 @@
 package org.vast.stt.gui.widgets;
 
-import java.awt.Checkbox;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.style.AbstractStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
@@ -81,12 +60,22 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	private Table table;
 	Composite optionsComp;
 	ScrolledComposite stylesSC;
+	CheckboxTableViewer checkboxTableViewer;
 	StyleOptionChooser optChooser;
-	Map<Widget,DataStyler> stylesMap;
+	Set<DataStyler> stylers;
+	DataStyler activeStyler;
 	
 	public StyleWidget(Composite parent){
+		//  Get stylers from DataItem.  For now, just put in some dummy data
+		stylers  = new HashSet<DataStyler>();
+		PointStyler ptStyler = new PointStyler();
+		ptStyler.setName("Points0");
+		LineStyler lineStyler = new LineStyler();
+		lineStyler.setName("Lines0");
+		stylers.add(ptStyler);
+		stylers.add(lineStyler);
+		
 		init(parent);
-		stylesMap = new HashMap<Widget,DataStyler>();
 	}
 	
 	public void init(Composite parent) {
@@ -135,8 +124,10 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		final Button addButton = new Button(stylesLabelComp, SWT.NONE);
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				System.err.println(e);
-				addStyle(null);  //  TODO:  popup "styler type" dialog
+//			  TODO:  popup "styler type" dialog
+				PointStyler styler = new PointStyler();
+				styler.setName("more pts");
+				addStyle(styler);  
 			}
 		});
 		addButton.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
@@ -145,15 +136,15 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		final Button delBtn = new Button(stylesLabelComp, SWT.NONE);
 		delBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				System.err.println(e);
-				removeStyle(null);  //  remove currently selected row   
+				if(activeStyler != null)
+				removeStyle(activeStyler);  //  remove currently selected row   
 			}
 		});
 		delBtn.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		delBtn.setText("-");
 
 		//  CheckboxTableViewer for styles
-		final CheckboxTableViewer checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER); 
+		checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER); 
 		checkboxTableViewer.addCheckStateListener(this);
 		checkboxTableViewer.addSelectionChangedListener(this);
 		table = checkboxTableViewer.getTable();
@@ -169,7 +160,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		StyleTableLabelProvider tableLabelProv = new StyleTableLabelProvider();
 		checkboxTableViewer.setContentProvider(tableContentProv);
 		checkboxTableViewer.setLabelProvider(tableLabelProv);
-		checkboxTableViewer.setInput(new Object());
+		checkboxTableViewer.setInput(stylers);
 		
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
 		optLabel.setText("Options:");
@@ -202,35 +193,17 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	}
 	
 	//  TODO  Will this method be polymorhped to accept different stylers?
-	//  
 	private void addStyle(PointStyler styler){
-		//  TODO:  Get to the actual things we want to change here...
-		
-		//  Add Checkbox to styles Map and rerender Table
-		//stylesMap.add(styler);
+		//  Add Checkbox to stylers Set and rerender Table
+		stylers.add(styler);
 		//  Change options panel to show Point options
+		checkboxTableViewer.setInput(stylers);		
 	}
 	
 	//  FOR test, just take first style out of map
 	private void removeStyle(DataStyler styler){
-		//  Remove the Btn from stylesComp and reset stylesSC content to force redraw
-		//Control btn = stylesMap.get(styler);
-		Iterator<Widget> keysIt = stylesMap.keySet().iterator();
-		Iterator<DataStyler> valuesIt = stylesMap.values().iterator();
-		DataStyler stylerTmp;
-		Widget btnTmp;
-		while(keysIt.hasNext()){
-			btnTmp = keysIt.next();
-			stylerTmp = valuesIt.next();
-			DataStyler st = stylerTmp;
-			if(stylerTmp == st) { //  swap out with method arg
-				stylesMap.remove(st);  // swap out with method arh 
-				btnTmp.dispose();
-				btnTmp = null;
-				//stylesMap.remove(st);  // swap out with method arh 
-				break;
-			}
-		}
+		stylers.remove(styler);
+		checkboxTableViewer.setInput(stylers);
 	}
 
 	public void setActiveStyle(){
@@ -242,43 +215,46 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	//  enabling checkbox causes ckState AND selChanged events
 	public void checkStateChanged(CheckStateChangedEvent e) {
 		// TODO Auto-generated method stub
-		System.err.println(e);
+		//  e.getElement returns checked Styler
+		//System.err.println(e.getElement() + ", checked = " + e.getChecked());
 		//  set enable on styler
-		
-		//  swap out optTable contents???
+		DataStyler styler = (DataStyler)e.getElement();
+		styler.setEnabled(e.getChecked());
 	}
-
-	boolean b = true;
+	
 	//  Selecting label causes ONLY selChanged event
 	public void selectionChanged(SelectionChangedEvent e) {
-		// TODO Auto-generated method stub
-		System.err.println(e);
-		//  Swap out optTable contents
-		if(b)
-			optChooser.buildControls(new LineStyler());
-		else
-			optChooser.buildControls(new PointStyler());
-		b = !b;
+		StructuredSelection selection = (StructuredSelection)e.getSelection();
+		DataStyler styler = (DataStyler)selection.getFirstElement();
+		//  Check to see if selected Styler has really changed
+		if(styler == activeStyler){
+			//System.err.println("Selection not really changed");
+			return;
+		}
+		System.err.println("Selection CHANGED");
+		activeStyler = styler;
+		optChooser.buildControls(styler);
 	}
 	
 }
 
 class StyleTableContentProvider implements IStructuredContentProvider{
 
-	public Object[] getElements(Object inputElement) {
-		// TODO Auto-generated method stub
-		return new String [] { "points", "lines", "morePts",
-								"raster", "polygon", "whatece"};
+	DataStyler[] stylers;
+	
+	public Object [] getElements (Object inputElement){
+		HashSet stylers = (HashSet)inputElement;
+		DataStyler [] stylerArr = (DataStyler [])stylers.toArray(new DataStyler[]{});
+		return stylerArr;
 	}
-
+		
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		// TODO Auto-generated method stub
-		
+		//System.err.println("Input changed for " + viewer);
 	}
 	
 }
@@ -291,7 +267,9 @@ class StyleTableLabelProvider implements ILabelProvider {
 	}
 
 	public String getText(Object element) {
-		return element.toString();
+//		return element.toString();
+		DataStyler styler = (DataStyler)element;
+		return styler.getName();
 	}
 
 	public void addListener(ILabelProviderListener listener) {

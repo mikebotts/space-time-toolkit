@@ -1,19 +1,45 @@
 package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.PlatformUI;
+import org.vast.ows.sld.Graphic;
+import org.vast.ows.sld.GraphicMark;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
+
+/**
+ * <p><b>Title:</b><br/>
+ * StyleOptionChooser
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ *	StyleOptionChooser is a composite that holds label/control pairs for 
+ *  selecting options for a particular Styler type.   
+ *  Currently supports the following Control types:
+ *  	Spinner, Button, Combo    
+ *
+ * </p>
+ *
+ * <p>Copyright (c) 2006</p>
+ * @author Tony Cook
+ * @date Jan 18, 2006
+ * @version 1.0
+ * 
+ */
 
 public class StyleOptionChooser {
 	Composite optComp;
@@ -30,6 +56,7 @@ public class StyleOptionChooser {
 		optComp.setLayout(optLayout);
 		GridData optGd = new GridData(GridData.BEGINNING, GridData.FILL, true, false);
 		optComp.setLayoutData(optGd);
+		optGd.minimumHeight = 100;
 		buildControls(new PointStyler());
 	}
 	
@@ -44,10 +71,10 @@ public class StyleOptionChooser {
 		else
 			System.err.println("Styler not supported yet: " + styler);
 		
-		optComp.layout(true);
+		optComp.layout(true);		
 		optComp.redraw();
-	}
-	
+	}	
+
 	private void removeOldControls(){
 		for(int i=0; i<optionControl.length; i++){
 			optionControl[i].dispose();
@@ -59,15 +86,47 @@ public class StyleOptionChooser {
 	public void buildPointControls(PointStyler styler){
 		optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(optComp);
-		optionControl[0].createSpinner("Point Size:", 1, 10);
+		final Spinner spinner = optionControl[0].createSpinner("Point Size:", 1,10);
+		spinner.setData(styler);
+		spinner.addSelectionListener(
+			new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					System.err.println(e);
+					System.err.println("Sel is " + spinner.getSelection());
+					PointStyler styler = (PointStyler)spinner.getData();
+					//Graphic graphic = (Graphic)spinner.getData();
+					Graphic graphic = styler.getSymbolizer().getGraphic();
+					ScalarParameter size = new ScalarParameter();
+					size.setConstantValue(new Integer(spinner.getSelection()));
+					graphic.setSize(new ScalarParameter());
+				}
+			}
+		);
+
 		optionControl[1] = new OptionControl(optComp);
-		optionControl[1].createButton("Point Color", "...");
+		final Button button = optionControl[1].createButton("Point Color", "...");
+		button.addSelectionListener(
+			new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					System.err.println(e);
+					ColorDialog colorChooser = new ColorDialog(spinner.getShell());
+					RGB color = colorChooser.getRGB();
+					Graphic graphic = (Graphic)spinner.getData();
+//					if(graphic instanceof GraphicMark) {
+//						GraphicMark gm = (GraphicMark)graphic;
+//						Fill = gm.getFill();
+//						
+//					}
+				}
+			}
+		);
 	}
 	
 	public void buildLineControls(LineStyler styler){
 		optionControl = new OptionControl[3];
 		optionControl[0] = new OptionControl(optComp);
-		optionControl[0].createSpinner("LineWidth:", 1, 10);
+		Spinner spinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
+		
 		optionControl[1] = new OptionControl(optComp);
 		optionControl[1].createButton("Line Color", "...");
 		optionControl[2] = new OptionControl(optComp);
@@ -95,6 +154,14 @@ public class StyleOptionChooser {
 			return label;
 		}
 		
+		/**
+		 * creates a spinner with the specified label, min and max
+		 * 
+		 * @param labelTxt
+		 * @param min - note min must be > 0
+		 * @param max
+		 * @return the created Spinner
+		 */
 		public Spinner createSpinner(String labelTxt, int min, int max){
 			createLabel(labelTxt);
 			control = new Spinner(parent, 0x0);
@@ -103,7 +170,6 @@ public class StyleOptionChooser {
 			spinner.setMaximum(max);
 			GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,true);
 			spinner.setLayoutData(gd);
-			
 			return spinner;
 		}
 		
@@ -134,7 +200,6 @@ public class StyleOptionChooser {
 			label = null;
 			control = null;
 		}
-	}
-	
 
+	}
 }
