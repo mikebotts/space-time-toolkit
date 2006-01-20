@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -55,9 +54,8 @@ import org.vast.stt.style.PointStyler;
  */
 public class StyleWidget implements ICheckStateListener, ISelectionChangedListener
 { 
-	// implements MouseListener{
-	private Combo combo;
 	private Table table;
+	Group mainGroup;
 	Composite optionsComp;
 	ScrolledComposite stylesSC;
 	CheckboxTableViewer checkboxTableViewer;
@@ -84,9 +82,10 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		
 		mainSC.setExpandVertical(true);
 		mainSC.setExpandHorizontal(true);
-		mainSC.setLayoutData(new GridData(GridData.CENTER, GridData.FILL, true, true, 1, 1));
+		//  START HERE:  Try this with OptSCroller
+		mainSC.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
 
-		final Group mainGroup = new Group(mainSC, SWT.NONE);
+		mainGroup = new Group(mainSC, SWT.NONE);
 		mainGroup.setText("Item Name");
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
@@ -151,9 +150,9 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		final GridData tableGd = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
 		tableGd.minimumWidth = 125;
-		tableGd.minimumHeight = 105;
+		tableGd.minimumHeight = 75;
 		tableGd.widthHint = 125;
-		tableGd.heightHint = 75;
+		tableGd.heightHint = 55;
 		table.setLayoutData(tableGd);
 		
 		StyleTableContentProvider tableContentProv = new StyleTableContentProvider();
@@ -192,10 +191,19 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 
 	}
 	
+	public void setStylers(DataStyler [] newStylers){
+		stylers = new HashSet<DataStyler>();
+		for(int i=0;i<newStylers.length;i++)
+			stylers.add(newStylers[i]);
+		//  Change options panel to show Point options
+		checkboxTableViewer.setInput(stylers);		
+	}
+	
 	//  TODO  Will this method be polymorhped to accept different stylers?
 	private void addStyle(PointStyler styler){
 		//  Add Checkbox to stylers Set and rerender Table
 		stylers.add(styler);
+		activeStyler = styler;
 		//  Change options panel to show Point options
 		checkboxTableViewer.setInput(stylers);		
 	}
@@ -203,15 +211,15 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	//  FOR test, just take first style out of map
 	private void removeStyle(DataStyler styler){
 		stylers.remove(styler);
+		//  reset activeStyler
+		// ...
 		checkboxTableViewer.setInput(stylers);
 	}
 
-	public void setActiveStyle(){
+	public void setText(String itemName){
+		mainGroup.setText(itemName);
 	}
 	
-	public void enableStyle(){
-	}
-
 	//  enabling checkbox causes ckState AND selChanged events
 	public void checkStateChanged(CheckStateChangedEvent e) {
 		// TODO Auto-generated method stub

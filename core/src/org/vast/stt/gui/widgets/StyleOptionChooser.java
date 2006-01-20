@@ -1,6 +1,9 @@
 package org.vast.stt.gui.widgets;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
@@ -12,11 +15,14 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
+import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.Stroke;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
@@ -30,7 +36,9 @@ import org.vast.stt.style.PointStyler;
  *	StyleOptionChooser is a composite that holds label/control pairs for 
  *  selecting options for a particular Styler type.   
  *  Currently supports the following Control types:
- *  	Spinner, Button, Combo    
+ *  	Spinner, Button, Combo
+ *  Currently supports the following Styler types
+ *  	Point, Line    
  *
  * </p>
  *
@@ -39,6 +47,11 @@ import org.vast.stt.style.PointStyler;
  * @date Jan 18, 2006
  * @version 1.0
  * 
+ * TODO  add chooser/mapping widget when user selects + (add) style
+ * TODO  add support for other Stylers - this may be best done by splitting each
+ * 		 styler into separate "ControlProvider" classes that provide the options
+ *       they allow the user to change and the actionListeneres for changes. 
+ * TODO  support advanced options      
  */
 
 public class StyleOptionChooser {
@@ -50,14 +63,23 @@ public class StyleOptionChooser {
 	}
 
 	public void init(Composite parent){
-		optComp = new Composite(parent, SWT.BORDER);
-		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		ScrolledComposite optScr = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		optScr.setExpandHorizontal(true);
+		optScr.setExpandVertical(true);
+		optComp = new Composite(optScr, SWT.NONE);
+		optScr.setContent(optComp);
+
+		GridData scrollerGD = new GridData(GridData.BEGINNING, GridData.BEGINNING, true, true);
+		scrollerGD.heightHint = 80;
+		scrollerGD.widthHint = 125;
+		optScr.setLayoutData(scrollerGD);
+		
 		GridLayout optLayout = new GridLayout(2, false);
 		optComp.setLayout(optLayout);
-		GridData optGd = new GridData(GridData.BEGINNING, GridData.FILL, true, false);
-		optComp.setLayoutData(optGd);
-		optGd.minimumHeight = 100;
-		buildControls(new PointStyler());
+		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		//buildControls(new LineStyler());
+		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+		//  initial controls should come from DataItem (vie StyleWidget)
 	}
 	
 	public void buildControls(DataStyler styler){
@@ -91,31 +113,35 @@ public class StyleOptionChooser {
 		spinner.addSelectionListener(
 			new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					System.err.println(e);
-					System.err.println("Sel is " + spinner.getSelection());
 					PointStyler styler = (PointStyler)spinner.getData();
-					//Graphic graphic = (Graphic)spinner.getData();
-					Graphic graphic = styler.getSymbolizer().getGraphic();
-					ScalarParameter size = new ScalarParameter();
-					size.setConstantValue(new Integer(spinner.getSelection()));
-					graphic.setSize(new ScalarParameter());
+					//  uncomment when Stylers are working
+//					Graphic graphic = styler.getSymbolizer().getGraphic();
+//					ScalarParameter size = new ScalarParameter();
+//					size.setConstantValue(new Integer(spinner.getSelection()));
+//					graphic.setSize(new ScalarParameter());
 				}
 			}
 		);
 
 		optionControl[1] = new OptionControl(optComp);
-		final Button button = optionControl[1].createButton("Point Color", "...");
+		final Button button = optionControl[1].createButton("Point Color:", "...");
+		button.setData(styler);
 		button.addSelectionListener(
 			new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					System.err.println(e);
-					ColorDialog colorChooser = new ColorDialog(spinner.getShell());
-					RGB color = colorChooser.getRGB();
-					Graphic graphic = (Graphic)spinner.getData();
-//					if(graphic instanceof GraphicMark) {
-//						GraphicMark gm = (GraphicMark)graphic;
-//						Fill = gm.getFill();
-//						
+					ColorDialog colorChooser = new ColorDialog(button.getShell());
+					RGB rgb = colorChooser.open();
+					//  uncomment when Stylers are working
+//					PointStyler styler = (PointStyler)button.getData();
+//					Graphic graphic = styler.getSymbolizer().getGraphic();
+//					List graphicSourceList = graphic.getImages();
+//					if(graphicSourceList == null)  return;
+//					GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
+//					if(graphicSource instanceof GraphicMark) {
+//						GraphicMark gm = (GraphicMark)graphicSource;
+//						ScalarParameter newColor = new ScalarParameter();
+//						newColor.setConstantValue(rgb);
+//						gm.getFill().setColor(newColor);
 //					}
 				}
 			}
@@ -123,14 +149,52 @@ public class StyleOptionChooser {
 	}
 	
 	public void buildLineControls(LineStyler styler){
-		optionControl = new OptionControl[3];
+		//optionControl = new OptionControl[7];
+		optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(optComp);
-		Spinner spinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
-		
+		final Spinner spinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
+		spinner.setData(styler);
+		spinner.addSelectionListener(
+			new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					LineStyler styler = (LineStyler)spinner.getData();
+					//  uncomment when Stylers are working
+//					Stroke stroke = styler.getSymbolizer().getStroke();
+//					ScalarParameter width = new ScalarParameter();
+//					width.setConstantValue(new Integer(spinner.getSelection()));
+//					stroke.setWidth(width);
+				}
+			}
+		);
+			
 		optionControl[1] = new OptionControl(optComp);
-		optionControl[1].createButton("Line Color", "...");
-		optionControl[2] = new OptionControl(optComp);
-		optionControl[2].createCombo("Line Test:", new String [] { "aaa", "bbb", "ccc" } );
+		final Button button = optionControl[1].createButton("Line Color:", "...");
+		button.setData(styler);
+		button.addSelectionListener(
+			new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					ColorDialog colorChooser = new ColorDialog(button.getShell());
+					RGB rgb = colorChooser.open();
+					//  uncomment when Stylers are working
+//					LineStyler styler = (LineStyler)button.getData();
+//					Stroke stroke = styler.getSymbolizer().getStroke();
+//					ScalarParameter newColor = new ScalarParameter();
+//					newColor.setConstantValue(rgb);
+//					stroke.setColor(newColor);
+				}
+			}
+		);
+		//  add a bunch of controls to test scrolling
+//		optionControl[2] = new OptionControl(optComp);
+//		optionControl[2].createCombo("Line Test:", new String [] { "aaa", "bbb", "ccc" } );
+//		optionControl[3] = new OptionControl(optComp);
+//		optionControl[3].createSpinner("LineWidth:", 1, 10);
+//		optionControl[4] = new OptionControl(optComp);
+//		optionControl[4].createSpinner("LineWidth:", 1, 10);
+//		optionControl[5] = new OptionControl(optComp);
+//		optionControl[5].createSpinner("LineWidth:", 1, 10);
+//		optionControl[6] = new OptionControl(optComp);
+//		optionControl[6].createSpinner("LineWidth:", 1, 10);
 	}
 	
 	class OptionControl{
@@ -146,9 +210,9 @@ public class StyleOptionChooser {
 		private Label createLabel(String text){
 			label = new Label(optComp, 0x0);
 			label.setText(text);
-			label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN));
+			//label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN));
 			GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-			gd.widthHint = 90;
+			gd.widthHint = 65;
 			label.setLayoutData(gd);
 			
 			return label;
@@ -168,7 +232,7 @@ public class StyleOptionChooser {
 			Spinner spinner = (Spinner)control;
 			spinner.setMinimum(min);
 			spinner.setMaximum(max);
-			GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,true);
+			GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,false);
 			spinner.setLayoutData(gd);
 			return spinner;
 		}
@@ -179,7 +243,7 @@ public class StyleOptionChooser {
 			Combo combo = (Combo)control;
 			combo.setItems(opts);
 
-			GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,true);
+			GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 			combo.setLayoutData(gd);
 			return combo;
 		}
@@ -190,7 +254,7 @@ public class StyleOptionChooser {
 			Button button = (Button)control;
 			button.setText(text);
 
-			GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,true);
+			GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 			button.setLayoutData(gd);
 			return button;
 		}
