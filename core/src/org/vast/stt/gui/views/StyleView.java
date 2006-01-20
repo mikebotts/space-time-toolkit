@@ -2,36 +2,14 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.vast.stt.data.DataProvider;
 import org.vast.stt.gui.widgets.StyleWidget;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
-
-import com.sun.org.apache.bcel.internal.generic.PUSH;
+import org.vast.stt.style.DataStyler;
 
 /**
  * <p><b>Title:</b><br/>
@@ -79,11 +57,13 @@ public class StyleView extends ViewPart implements ISelectionListener{
 			DataEntry selectedItem = (DataEntry)((IStructuredSelection)selection).getFirstElement();
 			if(selectedItem instanceof DataItem) { 
 				System.err.println("item " + selectedItem);
-				//itemLabel.setText(selectedItem.getName());
-				//DataStyler [] styler = ((DataItem)selectedItem).getDataStylers();
-//				if(stylers != null) {
-//					//  populate styles/options widgets
-//				}
+				styleWidget.setText(selectedItem.getName());
+				DataStyler styler = ((DataItem)selectedItem).getStyler();
+				//  Shouldn't item have an array of stylers?
+				if(styler != null) {
+					//  populate styles/options widgets
+					//styleWidget.setStylers(styler);
+				}
 			} else {
 				//  May add support for Composite items later
 			}
