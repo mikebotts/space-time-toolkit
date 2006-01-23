@@ -16,9 +16,9 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.data.DataProvider;
-import org.vast.stt.gui.widgets.CalendarSpinner;
-import org.vast.stt.gui.widgets.TimeSpinner;
-import org.vast.stt.gui.widgets.TimeZoneCombo;
+import org.vast.stt.gui.widgets.time.CalendarSpinner;
+import org.vast.stt.gui.widgets.time.TimeSpinner;
+import org.vast.stt.gui.widgets.time.TimeZoneCombo;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
 
