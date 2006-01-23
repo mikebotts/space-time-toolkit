@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
-import org.vast.stt.gui.widgets.StyleWidget;
+import org.vast.stt.gui.widgets.styler.StyleWidget;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.DataStyler;
