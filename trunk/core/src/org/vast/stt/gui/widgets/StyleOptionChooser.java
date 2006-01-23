@@ -97,7 +97,7 @@ public class StyleOptionChooser {
 		optComp.redraw();
 	}	
 
-	private void removeOldControls(){
+	public void removeOldControls(){
 		for(int i=0; i<optionControl.length; i++){
 			optionControl[i].dispose();
 		}

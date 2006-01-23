@@ -1,6 +1,7 @@
 package org.vast.stt.gui.widgets;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -8,6 +9,7 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -21,10 +23,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.style.DataStyler;
@@ -60,18 +66,19 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	ScrolledComposite stylesSC;
 	CheckboxTableViewer checkboxTableViewer;
 	StyleOptionChooser optChooser;
-	Set<DataStyler> stylers;
+	HashSet<DataStyler> stylerSet;
 	DataStyler activeStyler;
+	enum StylerType { point, line };
 	
 	public StyleWidget(Composite parent){
 		//  Get stylers from DataItem.  For now, just put in some dummy data
-		stylers  = new HashSet<DataStyler>();
+		stylerSet  = new HashSet<DataStyler>();
 		PointStyler ptStyler = new PointStyler();
 		ptStyler.setName("Points0");
 		LineStyler lineStyler = new LineStyler();
 		lineStyler.setName("Lines0");
-		stylers.add(ptStyler);
-		stylers.add(lineStyler);
+		stylerSet.add(ptStyler);
+		stylerSet.add(lineStyler);
 		
 		init(parent);
 	}
@@ -123,10 +130,28 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		final Button addButton = new Button(stylesLabelComp, SWT.NONE);
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-//			  TODO:  popup "styler type" dialog
-				PointStyler styler = new PointStyler();
-				styler.setName("more pts");
-				addStyle(styler);  
+				AddStylerDialog addStylerDialog = 
+					new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+				int retCode = addStylerDialog.open();
+				if(retCode == SWT.OK){
+					int stylerType = addStylerDialog.getStylerType();
+					DataStyler newStyler;
+					switch(stylerType){
+					case 0:
+						newStyler = new PointStyler();
+						newStyler.setName("More Points");
+						addStyle(newStyler);
+						break;
+					case 1:
+						newStyler = new LineStyler();
+						newStyler.setName("More Lines");
+						addStyle(newStyler);
+						break;
+					default:
+						System.err.println("StylerType note recognized in addStyler()");
+						break;
+					}
+				}
 			}
 		});
 		addButton.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
@@ -136,7 +161,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		delBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if(activeStyler != null)
-				removeStyle(activeStyler);  //  remove currently selected row   
+				removeStyle (activeStyler);  //  remove currently selected row   
 			}
 		});
 		delBtn.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
@@ -159,7 +184,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		StyleTableLabelProvider tableLabelProv = new StyleTableLabelProvider();
 		checkboxTableViewer.setContentProvider(tableContentProv);
 		checkboxTableViewer.setLabelProvider(tableLabelProv);
-		checkboxTableViewer.setInput(stylers);
+		checkboxTableViewer.setInput(stylerSet);
 		
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
 		optLabel.setText("Options:");
@@ -192,28 +217,28 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	}
 	
 	public void setStylers(DataStyler [] newStylers){
-		stylers = new HashSet<DataStyler>();
+		stylerSet = new HashSet<DataStyler>();
 		for(int i=0;i<newStylers.length;i++)
-			stylers.add(newStylers[i]);
+			stylerSet.add(newStylers[i]);
 		//  Change options panel to show Point options
-		checkboxTableViewer.setInput(stylers);		
+		checkboxTableViewer.setInput(stylerSet);		
 	}
 	
-	//  TODO  Will this method be polymorhped to accept different stylers?
-	private void addStyle(PointStyler styler){
+	private void addStyle(DataStyler styler){
 		//  Add Checkbox to stylers Set and rerender Table
-		stylers.add(styler);
+		stylerSet.add(styler);
 		activeStyler = styler;
 		//  Change options panel to show Point options
-		checkboxTableViewer.setInput(stylers);		
+		checkboxTableViewer.setInput(stylerSet);		
 	}
 	
 	//  FOR test, just take first style out of map
 	private void removeStyle(DataStyler styler){
-		stylers.remove(styler);
+		stylerSet.remove(styler);
 		//  reset activeStyler
 		// ...
-		checkboxTableViewer.setInput(stylers);
+		checkboxTableViewer.setInput(stylerSet);
+		StructuredSelection sel = (StructuredSelection)checkboxTableViewer.getSelection();
 	}
 
 	public void setText(String itemName){
@@ -234,6 +259,18 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	public void selectionChanged(SelectionChangedEvent e) {
 		StructuredSelection selection = (StructuredSelection)e.getSelection();
 		DataStyler styler = (DataStyler)selection.getFirstElement();
+		//  Check for empty selection (happens when buildControls() is called)
+		if(styler == null) {
+			Iterator it = stylerSet.iterator();
+			if(!it.hasNext()){
+				//  stylerSet is currently empty
+				optChooser.removeOldControls();
+				return;
+			}
+			styler = stylerSet.iterator().next();
+			StructuredSelection sel = new StructuredSelection(styler);
+			checkboxTableViewer.setSelection(sel);
+		}
 		//  Check to see if selected Styler has really changed
 		if(styler == activeStyler){
 			//System.err.println("Selection not really changed");
