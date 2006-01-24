@@ -57,13 +57,7 @@ public class StyleView extends ViewPart implements ISelectionListener{
 			DataEntry selectedItem = (DataEntry)((IStructuredSelection)selection).getFirstElement();
 			if(selectedItem instanceof DataItem) { 
 				System.err.println("item " + selectedItem);
-				styleWidget.setText(selectedItem.getName());
-				DataStyler styler = ((DataItem)selectedItem).getStyler();
-				//  Shouldn't item have an array of stylers?
-				if(styler != null) {
-					//  populate styles/options widgets
-					//styleWidget.setStylers(styler);
-				}
+				styleWidget.setDataItem((DataItem)selectedItem);
 			} else {
 				//  May add support for Composite items later
 			}
