@@ -18,7 +18,6 @@ import org.eclipse.swt.opengl.GLU;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
-import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.scene.*;
 import org.vast.stt.style.*;
@@ -48,6 +47,7 @@ public class OpenGLRenderer extends Renderer
 	private double [] xData = new double[1];
 	private double [] yData = new double[1];
 	private double [] zData = new double[1];
+	
 	
 	public OpenGLRenderer()
 	{
@@ -168,29 +168,19 @@ public class OpenGLRenderer extends Renderer
 
 	public void visit(LineStyler styler)
 	{
-		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
-		if(widthSP != null){
-			Integer lineWidth = (Integer)widthSP.getConstantValue();
-			//lineWidth
-			GL.glLineWidth((float)lineWidth.intValue());
-		}
-		ScalarParameter colorSP = styler.getSymbolizer().getStroke().getColor();
-		if(colorSP != null){
-			//  need alpha support here
-			Color color = (Color)colorSP.getConstantValue();
-			GL.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-		} else
-			GL.glColor4d(1.0, 0.0, 0.0, 0.0);
-		for (int i=0; i<styler.getSegmentCount(); i++)
+        LinePointGraphic point;
+        
+        for (int i=0; i<styler.getSegmentCount(); i++)
 		{
-			LineGraphic segment = styler.getSegment(i);
+			LineSegmentGraphic segment = styler.getSegment(i);
 			
+            GL.glLineWidth(styler.getPoint(0).width);
 			GL.glBegin(GL.GL_LINE_STRIP);
 			
 			for (int j=0; j<segment.segmentSize; j++)
 			{
-				PointGraphic point = styler.getPoint(j);
-				//GL.glColor4f(point.r, point.g, point.b, point.a);
+                point = styler.getPoint(j);
+				GL.glColor4f(point.r, point.g, point.b, point.a);
 				GL.glVertex3d(point.x, point.y, point.z);
 			}
 			

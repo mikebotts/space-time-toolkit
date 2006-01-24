@@ -15,7 +15,6 @@ package org.vast.stt.style;
 
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.DataNode;
 import org.vast.stt.util.SpatialExtent;
 
 
@@ -38,7 +37,6 @@ public class PointStyler extends AbstractStyler
 {
 	protected PointSymbolizer symbolizer;
 	protected PointGraphic point;
-	protected DataNode node;
 	
 	
 	public PointStyler()
@@ -89,7 +87,7 @@ public class PointStyler extends AbstractStyler
 	public void updateDataMappings()
 	{
 		// TODO Auto-generated method stub
-		
+        node = dataProvider.getDataNode();
 	}
 	
 	
@@ -107,7 +105,7 @@ public class PointStyler extends AbstractStyler
 	
 	public void accept(StylerVisitor visitor)
 	{
-		node = dataProvider.getDataNode();
+        updateDataMappings();
 		visitor.visit(this);		
 	}
 }
