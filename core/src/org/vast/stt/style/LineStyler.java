@@ -48,6 +48,8 @@ public class LineStyler extends AbstractStyler
 	{
 		point = new PointGraphic();
 		segment = new LineGraphic();
+		//  force a default name
+		setName("Line Styler");
 	}
 
 	
