@@ -97,8 +97,8 @@ public class LineStyler extends AbstractStyler
         
         // generate indexing rules for geometry components
         DataNode newNode = dataProvider.getDataNode();
-        if (newNode == node)
-            return;
+        //if (newNode == node)
+        //    return;
         
         node = newNode;
         
@@ -142,7 +142,7 @@ public class LineStyler extends AbstractStyler
         param = this.symbolizer.getStroke().getColor();
         if (param != null)
         {
-            value = param.getConstantValue();            
+            value = param.getConstantValue();
             if (value != null)
             {
                 Color lineColor = (Color)value;
@@ -157,13 +157,13 @@ public class LineStyler extends AbstractStyler
         param = this.symbolizer.getStroke().getWidth();
         if (param != null)
         {
-            value = param.getConstantValue();            
+            value = param.getConstantValue();
             if (value != null)
             {
                 Float lineWidth = (Float)value;
                 point.width = lineWidth.intValue();
             }
-        }     
+        }
     }
     
     
