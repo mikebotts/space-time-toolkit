@@ -67,7 +67,7 @@ public class LineOptionController implements OptionController {
 		if(control == widthSpinner) {
 			Stroke stroke = styler.getSymbolizer().getStroke();
 			ScalarParameter width = new ScalarParameter();
-			width.setConstantValue(new Integer(widthSpinner.getSelection()));
+			width.setConstantValue(new Float(widthSpinner.getSelection()));
 			stroke.setWidth(width);
 			styler.updateDataMappings();
 		} else if (control == colorButton){
