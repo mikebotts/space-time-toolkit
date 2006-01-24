@@ -69,14 +69,16 @@ public class LineOptionController implements OptionController {
 			ScalarParameter width = new ScalarParameter();
 			width.setConstantValue(new Integer(widthSpinner.getSelection()));
 			stroke.setWidth(width);
+			styler.updateDataMappings();
 		} else if (control == colorButton){
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
 			RGB rgb = colorChooser.open();
-			Color color = new Color(rgb.red, rgb.green, rgb.blue, 1.0f);
+			Color color = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			Stroke stroke = styler.getSymbolizer().getStroke();
 			ScalarParameter newColor = new ScalarParameter();
 			newColor.setConstantValue(color);
 			stroke.setColor(newColor);
+			styler.updateDataMappings();
 		}
 	}
 
