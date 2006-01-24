@@ -14,10 +14,11 @@
 package org.vast.stt.style;
 
 import org.ogc.cdm.common.DataComponent;
+import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.util.SpatialExtent;
 
 
 /**
@@ -38,74 +39,134 @@ import org.vast.stt.util.SpatialExtent;
 public class LineStyler extends AbstractStyler
 {
 	protected LineSymbolizer symbolizer;
-	protected PointGraphic point;
-	protected LineGraphic segment;
-	protected DataNode node;
+	protected LinePointGraphic point;
+	protected LineSegmentGraphic segment;
 	protected DataComponent pointArray;
+    protected int[][] segIndices, xIndices, yIndices, zIndices;
 	
 	
 	public LineStyler()
 	{
-		point = new PointGraphic();
-		segment = new LineGraphic();
+		point = new LinePointGraphic();
+		segment = new LineSegmentGraphic();
 		//  force a default name
 		setName("Line Styler");
 	}
 
 	
-	public LineGraphic getSegment(int i)
-	{
-		node.getComponent(i).getComponent(0);
-		pointArray = node.getComponent(i).getComponent(1);
-		segment.segmentSize = pointArray.getComponentCount();
-		segment.width = 1;
-		return segment;
-	}
-	
-	
 	public int getSegmentCount()
 	{
-		return node.getComponentCount();
+		return this.getComponentCount(segIndices);
 	}
+    
+    
+    public LineSegmentGraphic getSegment(int i)
+    {
+        node.getComponent(i).getComponent(0);
+        pointArray = this.getComponent(node, segIndices, i);
+        segment.segmentSize = pointArray.getComponentCount();
+        
+        xIndices[0][1] = segment.segmentSize;
+        yIndices[0][1] = segment.segmentSize;
+        
+        return segment;
+    }
 	
 	
-	public PointGraphic getPoint(int i)
-	{
-		DataComponent pointData = pointArray.getComponent(i);
-		point.x = pointData.getComponent(1).getData().getDoubleValue();
-		point.y = pointData.getComponent(0).getData().getDoubleValue();
-		point.r = 1.0f;
+	public LinePointGraphic getPoint(int i)
+	{      
+		point.x = this.getComponent(pointArray, xIndices, i).getData().getDoubleValue();
+		point.y = this.getComponent(pointArray, yIndices, i).getData().getDoubleValue();
 		return point;
 	}
-	
-	
-	public SpatialExtent getBoundingBox()
-	{
-		return null;
-	}
+    
+    
+    public void updateBoundingBox()
+    {
+        // TODO Auto-generated method stub
+        // compute bounding box by scanning max and min geometry values
+    }
 
 
-	public double[] getCenterPoint()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public void updateBoundingBox()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void updateDataMappings()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+    public void updateDataMappings()
+    {
+        ScalarParameter param;
+        String propertyName;
+        String segmentPropertyName = null;
+        Object value;
+        
+        // generate indexing rules for geometry components
+        DataNode newNode = dataProvider.getDataNode();
+        if (newNode == node)
+            return;
+        
+        node = newNode;
+        
+        // geometry object
+        param = this.symbolizer.getGeometry().getObject();
+        if (param != null)
+        {
+            segmentPropertyName = param.getPropertyName();            
+            if (segmentPropertyName != null)
+                segIndices = computeIndices(null, segmentPropertyName);
+        }
+        
+        // geometry X
+        param = this.symbolizer.getGeometry().getX();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();            
+            if (propertyName != null)
+                xIndices = computeIndices(segmentPropertyName, propertyName);
+        }
+        
+        //geometry Y
+        param = this.symbolizer.getGeometry().getY();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();            
+            if (propertyName != null)
+                yIndices = computeIndices(segmentPropertyName, propertyName);
+        }
+        
+        // geometry Z
+        param = this.symbolizer.getGeometry().getZ();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();            
+            if (propertyName != null)
+                zIndices = computeIndices(segmentPropertyName, propertyName);
+        }
+                
+        // line color
+        param = this.symbolizer.getStroke().getColor();
+        if (param != null)
+        {
+            value = param.getConstantValue();            
+            if (value != null)
+            {
+                Color lineColor = (Color)value;
+                point.r = lineColor.getRed();
+                point.g = lineColor.getGreen();
+                point.b = lineColor.getBlue();
+                point.a = lineColor.getAlpha();
+            }
+        }
+        
+        // line width
+        param = this.symbolizer.getStroke().getWidth();
+        if (param != null)
+        {
+            value = param.getConstantValue();            
+            if (value != null)
+            {
+                Float lineWidth = (Float)value;
+                point.width = lineWidth.intValue();
+            }
+        }     
+    }
+    
+    
 	public LineSymbolizer getSymbolizer()
 	{
 		return symbolizer;
@@ -120,7 +181,7 @@ public class LineStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-		node = dataProvider.getDataNode();
+        updateDataMappings(); //TODO shouldn't be called here -> not too efficient !
 		visitor.visit(this);		
 	}
 }
