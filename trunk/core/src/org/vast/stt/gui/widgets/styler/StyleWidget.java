@@ -79,7 +79,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		setStyler(dataItem.getStyler());
 		enabledButton.setData(dataItem);
 		enabledButton.setSelection(dataItem.isEnabled());
-		
+		System.err.println("SW.setDI(): " +  dataItem.getName());
 	}
 	
 	public void init(Composite parent) {
@@ -235,7 +235,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		if(newStyler instanceof CompositeStyler) 
 			stylerAL = (ArrayList)newStyler;
 		else {  // this is a single DataStyler
-			stylerAL.clear();
+			stylerAL = new ArrayList<DataStyler>();
 			stylerAL.add(newStyler);
 		}
 		//  Change cbTableViewer contents
