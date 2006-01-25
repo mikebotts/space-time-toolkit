@@ -35,8 +35,8 @@ public class LineOptionController implements OptionController {
 
 	public void buildBasicOptions() {
 		// TODO Auto-generated method stub
-		//optionControl = new OptionControl[7];
-		optionControl = new OptionControl[2];
+		optionControl = new OptionControl[7];
+		//optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(parent);
 		widthSpinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
 		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
@@ -58,15 +58,15 @@ public class LineOptionController implements OptionController {
 		colorButton.addSelectionListener(this);
 
 		//  add a bunch of controls to test scrolling
-//		optionControl[2] = new OptionControl(optComp);
+//		optionControl[2] = new OptionControl(parent);
 //		optionControl[2].createCombo("Line Test:", new String [] { "aaa", "bbb", "ccc" } );
-//		optionControl[3] = new OptionControl(optComp);
+//		optionControl[3] = new OptionControl(parent);
 //		optionControl[3].createSpinner("LineWidth:", 1, 10);
-//		optionControl[4] = new OptionControl(optComp);
+//		optionControl[4] = new OptionControl(parent);
 //		optionControl[4].createSpinner("LineWidth:", 1, 10);
-//		optionControl[5] = new OptionControl(optComp);
+//		optionControl[5] = new OptionControl(parent);
 //		optionControl[5].createSpinner("LineWidth:", 1, 10);
-//		optionControl[6] = new OptionControl(optComp);
+//		optionControl[6] = new OptionControl(parent);
 //		optionControl[6].createSpinner("LineWidth:", 1, 10);
 		
 	}

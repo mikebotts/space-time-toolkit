@@ -55,19 +55,23 @@ public class StyleOptionChooser {
 		GridData scrollerGD = new GridData();
         scrollerGD.horizontalSpan = 3;
         scrollerGD.horizontalAlignment = GridData.FILL;
-        scrollerGD.heightHint = 80;
+        scrollerGD.verticalAlignment = GridData.FILL;
+        scrollerGD.grabExcessHorizontalSpace = true;
+        scrollerGD.grabExcessVerticalSpace = true;
+        //scrollerGD.heightHint = 80;
+        scrollerGD.minimumHeight = 80;
 		optScr.setLayoutData(scrollerGD);
 		
 		GridLayout optLayout = new GridLayout(1, false);
 		optComp.setLayout(optLayout);
 		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		//buildControls(new LineStyler());
-		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-		//  initial controls should come from DataItem (vie StyleWidget)
+		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		optComp.layout();
 	}
 	
 	public void buildControls(DataStyler styler){
-		turnOffOldControls();
+		removeOldControls();
 
 		if(styler instanceof PointStyler) {
 			//if(pointOpts == null)
@@ -82,9 +86,9 @@ public class StyleOptionChooser {
 		optComp.redraw();
 	}	
 
-	//  There HAS to be a better way to remove a control from a Composite than to 
-	//  destroy it, but I can't find it.  TC
-	protected void turnOffOldControls(){
+	//  There's no way to remove a Control from a Composite (that I have found)
+	//  Therefore, just dispose and null them, and recreate as needed.  TC
+	protected void removeOldControls(){
 		Control [] controls = optComp.getChildren();
 		for(int i=0; i<controls.length; i++){
 			controls[i].dispose();

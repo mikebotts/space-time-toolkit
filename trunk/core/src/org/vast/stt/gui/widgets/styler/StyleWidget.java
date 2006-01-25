@@ -173,12 +173,11 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		checkboxTableViewer.addSelectionChangedListener(this);
 		table = checkboxTableViewer.getTable();
 		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		final GridData tableGd = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
+		final GridData tableGd = new GridData(GridData.FILL, GridData.FILL, true, true);
 
 		tableGd.minimumHeight = 75;
 		//tableGd.widthHint = 125;
 		tableGd.heightHint = 55;
-        tableGd.horizontalAlignment = GridData.FILL;
         tableGd.horizontalSpan = 3;
 		table.setLayoutData(tableGd);
 
@@ -278,7 +277,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 			Iterator it = stylerAL.iterator();
 			if(!it.hasNext()){
 				//  stylerSet is currently empty
-				optChooser.turnOffOldControls();
+				optChooser.removeOldControls();
 				return;
 			}
 			//  Reset selected to first in Table
