@@ -32,6 +32,7 @@ import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.StylerFactory;
  
 /**
  * <p><b>Title:</b><br/>
@@ -78,6 +79,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		setStyler(dataItem.getStyler());
 		enabledButton.setData(dataItem);
 		enabledButton.setSelection(dataItem.isEnabled());
+		
 	}
 	
 	public void init(Composite parent) {
@@ -91,8 +93,8 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 
 		mainGroup = new Group(mainSC, SWT.NONE);
 		mainGroup.setText("Item Name");
-		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		final GridLayout gridLayout = new GridLayout(6, true);
+		//gridLayout.numColumns = 6;
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setLocation(0, 0);
 
@@ -102,7 +104,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
         final GridData gridData = new GridData();
         gridData.verticalIndent = 7;
         gridData.horizontalAlignment = GridData.BEGINNING;
-        gridData.horizontalSpan = 3;
+        gridData.horizontalSpan = 6;
         enabledButton.setLayoutData(gridData);
         enabledButton.setText("enabled");
 		enabledButton.addSelectionListener(new SelectionAdapter() {
@@ -118,13 +120,16 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
         final GridData gridData_3 = new GridData();
         gridData_3.horizontalAlignment = GridData.BEGINNING;
         gridData_3.grabExcessHorizontalSpace = true;
+        gridData_3.horizontalSpan = 4;
         stylesLabel.setLayoutData(gridData_3);
         stylesLabel.setText("Styles:");
 
         // Add Style Button
 		final Button addButton = new Button(mainGroup, SWT.NONE);
         final GridData gridData_4 = new GridData();
-        gridData_4.horizontalAlignment = GridData.END;
+        gridData_4.horizontalAlignment = GridData.FILL;
+        gridData_4.grabExcessHorizontalSpace = true;
+        gridData_4.horizontalSpan = 1;
         addButton.setLayoutData(gridData_4);
         addButton.setText("+");        
 		addButton.addSelectionListener(new SelectionAdapter() {
@@ -138,6 +143,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 					switch(stylerType){
 					case 0:
 						newStyler = new PointStyler();
+						//newStyler = StylerFactory 
 						newStyler.setName("More Points");
 						addStyle(newStyler);
 						break;
@@ -157,9 +163,11 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
         // Remove Style Button
 		final Button delBtn = new Button(mainGroup, SWT.NONE);
         final GridData gridData_5 = new GridData();
-        gridData_5.horizontalAlignment = GridData.END;
-        addButton.setLayoutData(gridData_5);
-        delBtn.setText(" - ");
+        gridData_5.horizontalAlignment = GridData.FILL;
+        gridData_5.grabExcessHorizontalSpace = true;
+        gridData_5.horizontalSpan = 1;
+        delBtn.setLayoutData(gridData_5);
+        delBtn.setText("-");
 		delBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if(activeStyler != null)
@@ -178,7 +186,8 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		tableGd.minimumHeight = 75;
 		//tableGd.widthHint = 125;
 		tableGd.heightHint = 55;
-        tableGd.horizontalSpan = 3;
+        tableGd.horizontalSpan = 6;
+        tableGd.grabExcessVerticalSpace = true;
 		table.setLayoutData(tableGd);
 
 		StyleTableContentProvider tableContentProv = new StyleTableContentProvider();
@@ -190,7 +199,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
         // Options Label
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
 		final GridData gridData_6 = new GridData();
-        gridData_6.horizontalSpan = 3;
+        gridData_6.horizontalSpan = 6;
         gridData_6.horizontalAlignment = GridData.BEGINNING;
 		optLabel.setLayoutData(gridData_6);
         optLabel.setText("Options:");
@@ -201,7 +210,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
         // Advanced Button
 		final Button advancedBtn = new Button(mainGroup, SWT.NONE);		
 		final GridData gridData_7 = new GridData();
-		gridData_7.horizontalSpan = 3;
+		gridData_7.horizontalSpan = 6;
 		gridData_7.horizontalAlignment = GridData.END;
 		advancedBtn.setLayoutData(gridData_7);
 		advancedBtn.setText("Advanced...");
