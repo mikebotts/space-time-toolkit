@@ -52,9 +52,10 @@ public class StyleOptionChooser {
 		optComp = new Composite(optScr, SWT.NONE);
 		optScr.setContent(optComp);
 
-		GridData scrollerGD = new GridData(GridData.BEGINNING, GridData.BEGINNING, true, true);
-		scrollerGD.heightHint = 80;
-		scrollerGD.widthHint = 125;
+		GridData scrollerGD = new GridData();
+        scrollerGD.horizontalSpan = 3;
+        scrollerGD.horizontalAlignment = GridData.FILL;
+        scrollerGD.heightHint = 80;
 		optScr.setLayoutData(scrollerGD);
 		
 		GridLayout optLayout = new GridLayout(1, false);
