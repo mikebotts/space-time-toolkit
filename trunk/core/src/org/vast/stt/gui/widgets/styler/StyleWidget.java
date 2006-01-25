@@ -92,12 +92,19 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		mainGroup = new Group(mainSC, SWT.NONE);
 		mainGroup.setText("Item Name");
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
+		gridLayout.numColumns = 3;
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setLocation(0, 0);
 
+        // Enabled Button
 		enabledButton = new Button(mainGroup, SWT.CHECK);
 		enabledButton.setData(dataItem);
+        final GridData gridData = new GridData();
+        gridData.verticalIndent = 7;
+        gridData.horizontalAlignment = GridData.BEGINNING;
+        gridData.horizontalSpan = 3;
+        enabledButton.setLayoutData(gridData);
+        enabledButton.setText("enabled");
 		enabledButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				System.err.println("Enable selected");
@@ -105,29 +112,21 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 				item.setEnabled(enabledButton.getSelection());
 			}
 		});
-		final GridData gridData = new GridData();
-		gridData.verticalIndent = 7;
-		enabledButton.setLayoutData(gridData);
-		enabledButton.setText("enabled");
+		
+        // Styles Label
+        final Label stylesLabel = new Label(mainGroup, SWT.NONE);
+        final GridData gridData_3 = new GridData();
+        gridData_3.horizontalAlignment = GridData.BEGINNING;
+        gridData_3.grabExcessHorizontalSpace = true;
+        stylesLabel.setLayoutData(gridData_3);
+        stylesLabel.setText("Styles:");
 
-		final Composite stylesLabelComp = new Composite(mainGroup, SWT.NONE);
-		final GridData gridData_1 = 
-			new GridData(152, 34);
-		stylesLabelComp.setLayoutData(gridData_1);
-		final GridLayout gridLayout_2 = new GridLayout();
-		gridLayout_2.numColumns = 6;
-		gridLayout_2.makeColumnsEqualWidth = true;
-		stylesLabelComp.setLayout(gridLayout_2);
-
-		final Label stylesLabel = new Label(stylesLabelComp, SWT.NONE);
-		final GridData gridData_3 = 
-			new GridData(GridData.BEGINNING, GridData.END, false, false, 3, 1);
-		gridData_3.horizontalIndent = -5;
-		gridData_3.heightHint = 16;
-		stylesLabel.setLayoutData(gridData_3);
-		stylesLabel.setText("Styles:");
-
-		final Button addButton = new Button(stylesLabelComp, SWT.NONE);
+        // Add Style Button
+		final Button addButton = new Button(mainGroup, SWT.NONE);
+        final GridData gridData_4 = new GridData();
+        gridData_4.horizontalAlignment = GridData.END;
+        addButton.setLayoutData(gridData_4);
+        addButton.setText("+");        
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				AddStylerDialog addStylerDialog = 
@@ -154,19 +153,20 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 				}
 			}
 		});
-		addButton.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-		addButton.setText("+");
 
-		final Button delBtn = new Button(stylesLabelComp, SWT.NONE);
+        // Remove Style Button
+		final Button delBtn = new Button(mainGroup, SWT.NONE);
+        final GridData gridData_5 = new GridData();
+        gridData_5.horizontalAlignment = GridData.END;
+        addButton.setLayoutData(gridData_5);
+        delBtn.setText(" - ");
 		delBtn.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if(activeStyler != null)
 				removeStyle (activeStyler);  //  remove currently selected row   
 			}
 		});
-		delBtn.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-		delBtn.setText("-");
-
+		
 		//  CheckboxTableViewer for styles
 		checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER | SWT.SINGLE); 
 		checkboxTableViewer.addCheckStateListener(this);
@@ -174,10 +174,12 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		table = checkboxTableViewer.getTable();
 		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		final GridData tableGd = new GridData(GridData.BEGINNING, GridData.FILL, true, true);
-		tableGd.minimumWidth = 125;
+
 		tableGd.minimumHeight = 75;
-		tableGd.widthHint = 125;
+		//tableGd.widthHint = 125;
 		tableGd.heightHint = 55;
+        tableGd.horizontalAlignment = GridData.FILL;
+        tableGd.horizontalSpan = 3;
 		table.setLayoutData(tableGd);
 
 		StyleTableContentProvider tableContentProv = new StyleTableContentProvider();
@@ -186,31 +188,31 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		checkboxTableViewer.setLabelProvider(tableLabelProv);
 		checkboxTableViewer.setInput(stylerAL);
 		
+        // Options Label
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
-		optLabel.setText("Options:");
-		final GridData gridData_4 = 
-			new GridData(GridData.BEGINNING, GridData.END, false, false);
-		gridData_4.verticalIndent = 7;
-		gridData_4.heightHint = 16;
-		optLabel.setLayoutData(gridData_4);
+		final GridData gridData_6 = new GridData();
+        gridData_6.horizontalSpan = 3;
+        gridData_6.horizontalAlignment = GridData.BEGINNING;
+		optLabel.setLayoutData(gridData_6);
+        optLabel.setText("Options:");
 
-		//	  OptionsChooser
+		// OptionsChooser
 		optChooser = new StyleOptionChooser(mainGroup);
 		
-		final Button advancedBtn = new Button(mainGroup, SWT.NONE);
-		advancedBtn.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				System.err.println(e);
-			
-			};
-		});
-		final GridData gridData_6 = 
-			new GridData(GridData.END, GridData.CENTER, false, false);
-		gridData_6.verticalIndent = 7;
-		advancedBtn.setLayoutData(gridData_6);
+        // Advanced Button
+		final Button advancedBtn = new Button(mainGroup, SWT.NONE);		
+		final GridData gridData_7 = new GridData();
+		gridData_7.horizontalSpan = 3;
+		gridData_7.horizontalAlignment = GridData.END;
+		advancedBtn.setLayoutData(gridData_7);
 		advancedBtn.setText("Advanced...");
+        advancedBtn.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                System.err.println(e);
+            
+            };
+        });
 
-		mainGroup.setSize(236, 371);
 		mainSC.setContent(mainGroup);
 		mainSC.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
