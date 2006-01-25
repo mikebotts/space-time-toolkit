@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
+import org.vast.ows.sld.Color;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.style.PointStyler;
 
 public class PointOptionController implements OptionController{
@@ -35,6 +37,13 @@ public class PointOptionController implements OptionController{
 		sizeSpinner = optionControl[0].createSpinner("Point Size:", 1,10);
 
 		optionControl[1] = new OptionControl(parent);
+//		ScalarParameter colorSP = styler.getSymbolizer().get
+//		Color sldColor;
+//		if(colorSP != null) 
+//			sldColor = (Color)colorSP.getConstantValue();
+//		else 
+//			sldColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		//colorButton = optionControl[1].createColorButton("Point Color:", sldColor);
 		colorButton = optionControl[1].createButton("Point Color:", "...");
 		colorButton.addSelectionListener(this);
 	}

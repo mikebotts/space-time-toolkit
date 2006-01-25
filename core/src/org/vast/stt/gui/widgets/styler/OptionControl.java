@@ -1,13 +1,17 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * <p><b>Title:</b><br/>
@@ -29,16 +33,21 @@ import org.eclipse.swt.widgets.Spinner;
 
 public class OptionControl {
 	Composite parent;
-	Label label;
-	Control control;
+	Composite optRow;
+	Color colorLabelColor;
+	Label colorLabel;
 	
 	public OptionControl(Composite parent){
 		this.parent = parent;
+		optRow = new Composite(parent, 0x0);
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, true);
+		gd.minimumWidth = 140;
+		optRow.setLayoutData(gd);
 	}
 
 	// return Label so caller can modify layoutData, if desired
 	private Label createLabel(String text){
-		label = new Label(parent, 0x0);
+		Label label = new Label(optRow, 0x0);
 		label.setText(text);
 		// label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN));
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
@@ -58,9 +67,11 @@ public class OptionControl {
 	 * @return the created Spinner
 	 */
 	public Spinner createSpinner(String labelTxt, int min, int max){
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		optRow.setLayout(layout);
 		createLabel(labelTxt);
-		control = new Spinner(parent, 0x0);
-		Spinner spinner = (Spinner)control;
+		Spinner spinner = new Spinner(optRow, 0x0);
 		spinner.setMinimum(min);
 		spinner.setMaximum(max);
 		GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,false);
@@ -69,9 +80,11 @@ public class OptionControl {
 	}
 	
 	public Combo createCombo(String labelTxt, String [] opts){
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		optRow.setLayout(layout);
 		createLabel(labelTxt);
-		control = new Combo(parent, 0x0);
-		Combo combo = (Combo)control;
+		Combo combo = new Combo(optRow, 0x0);
 		combo.setItems(opts);
 	
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
@@ -80,9 +93,11 @@ public class OptionControl {
 	}
 	
 	public Button createButton(String labelTxt, String text) { // sellistener
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		optRow.setLayout(layout);
 		createLabel(labelTxt);
-		control = new Button(parent, SWT.PUSH);
-		Button button = (Button)control;
+		Button button = new Button(optRow, SWT.PUSH);
 		button.setText(text);
 
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
@@ -90,11 +105,44 @@ public class OptionControl {
 		return button;
 	}
 
+	public Button createColorButton(String labelTxt, org.vast.ows.sld.Color sldColor) { 
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 3;
+		optRow.setLayout(layout);
+		createLabel(labelTxt);
+		//  Add color label
+		colorLabel = new Label(optRow, 0x0);
+		colorLabel.setText("        ");
+		colorLabelColor = new Color(PlatformUI.getWorkbench().getDisplay(), 
+									(int)(sldColor.getRed()*255), 
+									(int)(sldColor.getGreen()*255), 
+									(int)(sldColor.getBlue()*255));
+		colorLabel.setBackground(colorLabelColor);
+		Button button = new Button(optRow, SWT.PUSH);
+		button.setText("...");
+
+		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
+		button.setLayoutData(gd);
+		return button;
+	}
+
+	public void setColorLabelColor(org.vast.ows.sld.Color sldColor){
+		if(colorLabelColor != null) 
+			colorLabelColor.dispose();
+		colorLabelColor = new Color(PlatformUI.getWorkbench().getDisplay(), 
+				(int)(sldColor.getRed()*255), 
+				(int)(sldColor.getGreen()*255), 
+				(int)(sldColor.getBlue()*255));
+		colorLabel.setBackground(colorLabelColor);		
+	}
+	
 	public void dispose(){
-		label.dispose();
-		control.dispose();
-		label = null;
-		control = null;
+		optRow.dispose();
+		optRow = null;
+		if(colorLabelColor != null) {
+			colorLabelColor.dispose();
+			colorLabelColor = null;
+		}
 	}
 	
 }
