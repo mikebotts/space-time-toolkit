@@ -33,6 +33,10 @@ public class LineOptionController implements OptionController {
 		
 	}
 
+	/**
+	 * build the basic options for lines.  
+	 * ASSert - a valid styler with non-null Stroke
+	 */
 	public void buildBasicOptions() {
 		// TODO Auto-generated method stub
 		optionControl = new OptionControl[7];
@@ -68,7 +72,6 @@ public class LineOptionController implements OptionController {
 //		optionControl[5].createSpinner("LineWidth:", 1, 10);
 //		optionControl[6] = new OptionControl(parent);
 //		optionControl[6].createSpinner("LineWidth:", 1, 10);
-		
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -79,22 +82,38 @@ public class LineOptionController implements OptionController {
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 		if(control == widthSpinner) {
-			Stroke stroke = styler.getSymbolizer().getStroke();
-			ScalarParameter width = new ScalarParameter();
-			width.setConstantValue(new Float(widthSpinner.getSelection()));
-			stroke.setWidth(width);
+			float w = new Float(widthSpinner.getSelection()).floatValue();
+			setLineWidth(w);
 			styler.updateDataMappings();
 		} else if (control == colorButton){
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
 			RGB rgb = colorChooser.open();
-			Color color = new Color(rgb.red, rgb.green, rgb.blue, 255);
-			optionControl[1].setColorLabelColor(color);
-			Stroke stroke = styler.getSymbolizer().getStroke();
-			ScalarParameter newColor = new ScalarParameter();
-			newColor.setConstantValue(color);
-			stroke.setColor(newColor);
+			setLineColor(rgb);
 			styler.updateDataMappings();
 		}
 	}
 
+	/**
+	 * Convenience method to set line width
+	 * @param w - width
+	 */
+	private void setLineWidth(float w){
+		Stroke stroke = styler.getSymbolizer().getStroke();
+		ScalarParameter width = new ScalarParameter();
+		width.setConstantValue(w);
+		stroke.setWidth(width);
+	}
+	
+	/**
+	 * Convenience method to set line color
+	 * @param swtRgb
+	 */
+	private void setLineColor(RGB swtRgb){
+		Color color = new Color(swtRgb.red, swtRgb.green, swtRgb.blue, 255);
+		optionControl[1].setColorLabelColor(color);
+		Stroke stroke = styler.getSymbolizer().getStroke();
+		ScalarParameter newColor = new ScalarParameter();
+		newColor.setConstantValue(color);
+		stroke.setColor(newColor);
+	}
 }
