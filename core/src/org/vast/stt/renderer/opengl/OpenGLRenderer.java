@@ -184,14 +184,14 @@ public class OpenGLRenderer extends Renderer
 				GL.glVertex3d(point.x, point.y, point.z);
 			}
 			
-			GL.glEnd();			
+			GL.glEnd();		
 		}	
 	}
 
 
 	public void visit(PointStyler styler)
 	{
-		GL.glPointSize(2.0f);
+		GL.glPointSize(styler.getPoint(0).size);
 		GL.glBegin(GL.GL_POINTS);
 		
 		for (int i=0; i<styler.getPointCount(); i++)

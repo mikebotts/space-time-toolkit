@@ -30,13 +30,10 @@ package org.vast.stt.style;
  */
 public class PointGraphic implements GraphicObject
 {
-	enum Shape {SQUARE, CIRCLE, TRIANGLE, VECTOR}
-	
-	public double x, y, z;
+    public double x, y, z;
 	public float r, g, b;
 	public float a = 1.0f;
 	public float orientation;
-	public int size;
-	public Shape shape;
+	public int size = 1;
 	public byte[] icon;
 }
