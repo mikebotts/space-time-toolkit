@@ -38,6 +38,7 @@ import org.vast.stt.style.PointStyler;
 
 public class StyleOptionChooser {
 	Composite optComp;
+    ScrolledComposite optScr;
 	PointOptionController pointOpts;
 	LineOptionController lineOpts;
 	
@@ -46,7 +47,7 @@ public class StyleOptionChooser {
 	}
 
 	public void init(Composite parent){
-		ScrolledComposite optScr = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		optScr = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		optScr.setExpandHorizontal(true);
 		optScr.setExpandVertical(true);
 		optComp = new Composite(optScr, SWT.NONE);
@@ -66,7 +67,7 @@ public class StyleOptionChooser {
 		optComp.setLayout(optLayout);
 		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		//buildControls(new LineStyler());
-		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		//optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.layout();
 	}
 	
@@ -82,7 +83,8 @@ public class StyleOptionChooser {
 		} else
 			System.err.println("Styler not supported yet: " + styler);
 		
-		optComp.layout(true);		
+		optComp.layout(true);
+        optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
 

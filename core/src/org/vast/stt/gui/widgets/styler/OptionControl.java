@@ -42,6 +42,7 @@ public class OptionControl {
 		optRow = new Composite(parent, 0x0);
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, true);
 		gd.minimumWidth = 140;
+        gd.minimumHeight = 30;
 		optRow.setLayoutData(gd);
 	}
 
