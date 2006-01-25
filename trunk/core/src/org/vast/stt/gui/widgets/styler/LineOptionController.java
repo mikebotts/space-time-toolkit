@@ -1,7 +1,9 @@
 package org.vast.stt.gui.widgets.styler;
 
+
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -37,10 +39,22 @@ public class LineOptionController implements OptionController {
 		optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(parent);
 		widthSpinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
+		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
+		if(widthSP != null) {
+			int width = ((Float)(widthSP.getConstantValue())).intValue(); //
+			widthSpinner.setSelection(width);
+		}
 		widthSpinner.addSelectionListener(this);
 			
 		optionControl[1] = new OptionControl(parent);
-		colorButton = optionControl[1].createButton("Line Color:", "...");
+		ScalarParameter colorSP = styler.getSymbolizer().getStroke().getColor();
+		Color sldColor;
+		if(colorSP != null) 
+			sldColor = (Color)colorSP.getConstantValue();
+		else 
+			sldColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+			
+		colorButton = optionControl[1].createColorButton("Line Color:", sldColor);
 		colorButton.addSelectionListener(this);
 
 		//  add a bunch of controls to test scrolling
@@ -74,6 +88,7 @@ public class LineOptionController implements OptionController {
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
 			RGB rgb = colorChooser.open();
 			Color color = new Color(rgb.red, rgb.green, rgb.blue, 255);
+			optionControl[1].setColorLabelColor(color);
 			Stroke stroke = styler.getSymbolizer().getStroke();
 			ScalarParameter newColor = new ScalarParameter();
 			newColor.setConstantValue(color);

@@ -1,28 +1,12 @@
 package org.vast.stt.gui.widgets.styler;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.PlatformUI;
-import org.vast.ows.sld.Graphic;
-import org.vast.ows.sld.GraphicMark;
-import org.vast.ows.sld.GraphicSource;
-import org.vast.ows.sld.ScalarParameter;
-import org.vast.ows.sld.Stroke;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
@@ -73,7 +57,7 @@ public class StyleOptionChooser {
 		scrollerGD.widthHint = 125;
 		optScr.setLayoutData(scrollerGD);
 		
-		GridLayout optLayout = new GridLayout(2, false);
+		GridLayout optLayout = new GridLayout(1, false);
 		optComp.setLayout(optLayout);
 		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		//buildControls(new LineStyler());
