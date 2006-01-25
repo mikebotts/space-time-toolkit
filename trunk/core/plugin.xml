@@ -12,7 +12,7 @@
       <extension point="org.eclipse.ui.views">
             <view name="Resources" class="org.vast.stt.gui.views.ResourceTreeView" id="STT.ResourceTreeView"/>
             <view name="Services" class="org.vast.stt.gui.views.ServiceTreeView" id="STT.ServiceTreeView"/>
-            <view name="Customizer" class="org.vast.stt.gui.views.CustomizerView" id="STT.CustomizerView"/>
+            <view name="Style" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
             <view name="Scene" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
             <view name="Scene" class="org.vast.stt.gui.views.SceneView" id="STT.SceneView" allowMultiple="true"/>
       </extension>
