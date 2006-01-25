@@ -40,9 +40,10 @@ public class OptionControl {
 	public OptionControl(Composite parent){
 		this.parent = parent;
 		optRow = new Composite(parent, 0x0);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, true);
+		optRow.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER,false, false);
 		gd.minimumWidth = 140;
-        gd.minimumHeight = 30;
+		gd.minimumHeight = 20;
 		optRow.setLayoutData(gd);
 	}
 
@@ -50,7 +51,7 @@ public class OptionControl {
 	private Label createLabel(String text){
 		Label label = new Label(optRow, 0x0);
 		label.setText(text);
-		// label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN));
+		label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		gd.widthHint = 65;
 		label.setLayoutData(gd);
@@ -121,7 +122,6 @@ public class OptionControl {
 		colorLabel.setBackground(colorLabelColor);
 		Button button = new Button(optRow, SWT.PUSH);
 		button.setText("...");
-
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 		button.setLayoutData(gd);
 		return button;
