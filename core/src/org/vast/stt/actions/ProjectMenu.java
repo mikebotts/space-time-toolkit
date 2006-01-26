@@ -51,7 +51,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
 			public void run()
 			{
 				OpenProject command = new OpenProject();
-				command.setUrl("file:///D:/Projects/NSSTC/STT2/conf/SoCal.xml");
+				command.setUrl("file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml");
 				command.execute();
 				PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
 			}
