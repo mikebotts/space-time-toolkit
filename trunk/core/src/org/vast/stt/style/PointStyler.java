@@ -54,9 +54,15 @@ public class PointStyler extends AbstractStyler
 	
 	public PointGraphic getPoint(int i)
 	{
-        point.x = this.getComponent(node, xIndices, i).getData().getDoubleValue();
-        point.y = this.getComponent(node, yIndices, i).getData().getDoubleValue();
-        point.z = this.getComponent(node, zIndices, i).getData().getDoubleValue() / 1e6;
+        if (xIndices != null)
+            point.x = this.getComponent(node, xIndices, i).getData().getDoubleValue();
+        
+        if (yIndices != null)
+            point.y = this.getComponent(node, yIndices, i).getData().getDoubleValue();
+        
+        if (zIndices != null)
+            point.z = this.getComponent(node, zIndices, i).getData().getDoubleValue() / 1e6;
+        
         return point;
 	}
 	

@@ -143,7 +143,7 @@ public class OpenGLRenderer extends Renderer
 		context.setCurrent();
 		
 		GL.glClearDepth(1.0f);
-		GL.glDepthFunc(GL.GL_LESS);
+		GL.glDepthFunc(GL.GL_LEQUAL);
 		GL.glEnable(GL.GL_DEPTH_TEST);
 		GL.glShadeModel(GL.GL_SMOOTH);
 		GL.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
@@ -193,7 +193,7 @@ public class OpenGLRenderer extends Renderer
 	{
 		GL.glPointSize(styler.getPoint(0).size);
 		GL.glBegin(GL.GL_POINTS);
-		
+        
 		for (int i=0; i<styler.getPointCount(); i++)
 		{
 			PointGraphic point = styler.getPoint(i);

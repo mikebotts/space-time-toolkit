@@ -574,7 +574,7 @@ public class ProjectReader
 			{
 				Element symElt = (Element)symElts.item(i);
 				DataStyler styler = readSymbolizer(provider, symElt);
-				compositeStyler.add(styler);
+				compositeStyler.getStylerList().add(styler);
 			}
 			
 			dataItem.setStyler(compositeStyler);
