@@ -15,6 +15,8 @@ package org.vast.stt.data;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.vast.stt.project.Resource;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -28,7 +30,10 @@ import org.vast.stt.util.TimeExtent;
  * This abstract Composite Provider class is the skeleton
  * for all composite providers. Composite Providers are
  * getting data from several child Data Providers and are
- * usually responsible for synchronization and merging. 
+ * usually responsible for synchronization and merging.
+ * If the behavior of certain methods is not appropriate
+ * for a derived provider, they should be overidden.
+ * (getMaxspatialExtent, getMaxTimeExtent, ...)
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -38,82 +43,142 @@ import org.vast.stt.util.TimeExtent;
  */
 public abstract class CompositeProvider implements DataProvider
 {
-	protected List<DataProvider> providerList;	
-	public abstract DataNode getDataNode();
-	public abstract void setDataNode(DataNode dataNode);
-	
-
-	public CompositeProvider()
-	{
-		providerList = new ArrayList<DataProvider>(2);
-	}
-	
-	
-	public void updateData() throws DataException
-	{
-		for (int i=0; i<providerList.size(); i++)
-			providerList.get(i).updateData();
-	}
+    protected List<DataProvider> providerList;
 
 
-	public boolean isUpdating()
-	{
-		for (int i=0; i<providerList.size(); i++)
-			if (providerList.get(i).isUpdating())
-				return true;
-		
-		return false;
-	}
+    public abstract DataNode getDataNode();
+    public abstract void setDataNode(DataNode dataNode);
 
 
-	public void cancelUpdate()
-	{
-		for (int i=0; i<providerList.size(); i++)
-			providerList.get(i).cancelUpdate();
-	}
+    public CompositeProvider()
+    {
+        providerList = new ArrayList<DataProvider>(2);
+    }
 
 
-	public void clearData()
-	{
-		for (int i=0; i<providerList.size(); i++)
-			providerList.get(i).clearData();
-	}
+    public void updateData() throws DataException
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            providerList.get(i).updateData();
+    }
 
 
-	public SpatialExtent getSpatialExtent()
-	{
-		return providerList.get(0).getSpatialExtent();
-	}
+    public boolean isUpdating()
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            if (providerList.get(i).isUpdating())
+                return true;
+
+        return false;
+    }
 
 
-	public void setSpatialExtent(SpatialExtent spatialExtent)
-	{
-		for (int i=0; i<providerList.size(); i++)
-			providerList.get(i).setSpatialExtent(spatialExtent);
-	}
+    public void cancelUpdate()
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            providerList.get(i).cancelUpdate();
+    }
 
 
-	public TimeExtent getTimeExtent()
-	{
-		return providerList.get(0).getTimeExtent();
-	}
+    public void clearData()
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            providerList.get(i).clearData();
+    }
 
 
-	public void setTimeExtent(TimeExtent timeExtent)
-	{
-		for (int i=0; i<providerList.size(); i++)
-			providerList.get(i).setTimeExtent(timeExtent);
-	}
+    public SpatialExtent getSpatialExtent()
+    {
+        return providerList.get(0).getSpatialExtent();
+    }
+
+
+    public void setSpatialExtent(SpatialExtent spatialExtent)
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            providerList.get(i).setSpatialExtent(spatialExtent);
+    }
+
+
+    public TimeExtent getTimeExtent()
+    {
+        return providerList.get(0).getTimeExtent();
+    }
+
+
+    public void setTimeExtent(TimeExtent timeExtent)
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            providerList.get(i).setTimeExtent(timeExtent);
+    }
+    
+    
+    public SpatialExtent getMaxSpatialExtent()
+    {
+        SpatialExtent bbox = new SpatialExtent();
+        
+        // get intersection of spatial extents of all children
+        for (int i=0; i<providerList.size(); i++)
+        {
+            DataProvider nextProvider = providerList.get(i);
+            SpatialExtent childBox =  nextProvider.getMaxSpatialExtent();
+            
+            if (i == 0)
+                bbox = childBox.copy();
+            else
+                bbox.intersect(childBox);
+        }
+        
+        return bbox;
+    }
+
+
+    public TimeExtent getMaxTimeExtent()
+    {
+        //TODO same as getMaxSpatialExtent
+        return null;
+    }
+
+
+    public boolean isSpatialSubsetSupported()
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            if (!providerList.get(i).isSpatialSubsetSupported())
+                return false;
+
+        return true;
+    }
+    
+    
+    public boolean isTimeSubsetSupported()
+    {
+        for (int i = 0; i < providerList.size(); i++)
+            if (!providerList.get(i).isTimeSubsetSupported())
+                return false;
+
+        return true;
+    }
     
     
     public List<DataProvider> getProviderList()
     {
         return providerList;
     }
-    
-    
+
+
     public void setProviderList(List<DataProvider> providerList)
     {
         this.providerList = providerList;
+    }
+    
+    
+    public Resource getResource()
+    {
+        return null;
+    }
+
+
+    public void setResource(Resource resource)
+    {
     }
 }
