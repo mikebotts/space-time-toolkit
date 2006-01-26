@@ -15,8 +15,6 @@ package org.vast.stt.data;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.vast.stt.project.Resource;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -40,30 +38,28 @@ import org.vast.stt.util.TimeExtent;
  */
 public abstract class CompositeProvider implements DataProvider
 {
-	protected List<DataProvider> childProviders;
-	
-	
+	protected List<DataProvider> providerList;	
 	public abstract DataNode getDataNode();
 	public abstract void setDataNode(DataNode dataNode);
 	
 
 	public CompositeProvider()
 	{
-		childProviders = new ArrayList<DataProvider>(2);
+		providerList = new ArrayList<DataProvider>(2);
 	}
 	
 	
 	public void updateData() throws DataException
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			childProviders.get(i).updateData();
+		for (int i=0; i<providerList.size(); i++)
+			providerList.get(i).updateData();
 	}
 
 
 	public boolean isUpdating()
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			if (childProviders.get(i).isUpdating())
+		for (int i=0; i<providerList.size(); i++)
+			if (providerList.get(i).isUpdating())
 				return true;
 		
 		return false;
@@ -72,51 +68,52 @@ public abstract class CompositeProvider implements DataProvider
 
 	public void cancelUpdate()
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			childProviders.get(i).cancelUpdate();
+		for (int i=0; i<providerList.size(); i++)
+			providerList.get(i).cancelUpdate();
 	}
 
 
 	public void clearData()
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			childProviders.get(i).clearData();
+		for (int i=0; i<providerList.size(); i++)
+			providerList.get(i).clearData();
 	}
 
 
 	public SpatialExtent getSpatialExtent()
 	{
-		return childProviders.get(0).getSpatialExtent();
+		return providerList.get(0).getSpatialExtent();
 	}
 
 
 	public void setSpatialExtent(SpatialExtent spatialExtent)
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			childProviders.get(i).setSpatialExtent(spatialExtent);
+		for (int i=0; i<providerList.size(); i++)
+			providerList.get(i).setSpatialExtent(spatialExtent);
 	}
 
 
 	public TimeExtent getTimeExtent()
 	{
-		return childProviders.get(0).getTimeExtent();
+		return providerList.get(0).getTimeExtent();
 	}
 
 
 	public void setTimeExtent(TimeExtent timeExtent)
 	{
-		for (int i=0; i<childProviders.size(); i++)
-			childProviders.get(i).setTimeExtent(timeExtent);
+		for (int i=0; i<providerList.size(); i++)
+			providerList.get(i).setTimeExtent(timeExtent);
 	}
-	
-	
-	public Resource getResource()
-	{
-		return null;
-	}
-
-
-	public void setResource(Resource resource)
-	{
-	}
+    
+    
+    public List<DataProvider> getProviderList()
+    {
+        return providerList;
+    }
+    
+    
+    public void setProviderList(List<DataProvider> providerList)
+    {
+        this.providerList = providerList;
+    }
 }

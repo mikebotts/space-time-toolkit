@@ -37,7 +37,7 @@ import org.vast.stt.util.SpatialExtent;
 public abstract class AbstractStyler implements DataStyler
 {
 	protected DataProvider dataProvider;
-    protected SpatialExtent boundingBox;
+    protected SpatialExtent bbox;
     protected DataNode node;
 	protected String name;
 	protected boolean enabled;   
@@ -150,14 +150,15 @@ public abstract class AbstractStyler implements DataStyler
     
     protected int getComponentCount(int[][] indexRangeArray)
     {
-        int count = 0;
+        int count = 1;
         
         for (int i=0; i<indexRangeArray.length; i++)
         {
             int min = indexRangeArray[i][0];
             int max = indexRangeArray[i][1];
             int size = max - min;
-            count += size;
+            if (size != 0)
+                count *= size;
         }
         
         return count;
@@ -196,7 +197,7 @@ public abstract class AbstractStyler implements DataStyler
     
     public SpatialExtent getBoundingBox()
     {
-        return boundingBox;
+        return bbox;
     }
 
 
@@ -204,9 +205,9 @@ public abstract class AbstractStyler implements DataStyler
     {
         double[] centerPoint = new double[3];
         
-        centerPoint[0] = (boundingBox.getMaxX() - boundingBox.getMinX()) / 2;
-        centerPoint[1] = (boundingBox.getMaxY() - boundingBox.getMinY()) / 2;
-        centerPoint[2] = (boundingBox.getMaxZ() - boundingBox.getMinZ()) / 2;        
+        centerPoint[0] = (bbox.getMaxX() - bbox.getMinX()) / 2;
+        centerPoint[1] = (bbox.getMaxY() - bbox.getMinY()) / 2;
+        centerPoint[2] = (bbox.getMaxZ() - bbox.getMinZ()) / 2;        
         
         return centerPoint;
     }

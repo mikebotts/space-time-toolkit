@@ -14,9 +14,9 @@
 package org.vast.stt.style;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 
 
@@ -35,42 +35,44 @@ import org.vast.stt.util.SpatialExtent;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class CompositeStyler extends ArrayList<DataStyler> implements DataStyler
+public class CompositeStyler extends AbstractStyler
 {
-	static final long serialVersionUID = 0;
-	protected String name;
-	protected SpatialExtent bbox;
-	protected double[] centerPoint;
+    protected List<DataStyler> stylerList;
 	
 	
 	public CompositeStyler()
 	{
+        stylerList = new ArrayList<DataStyler>(1);
 	}
 	
 	
 	public CompositeStyler(int numStylers)
 	{
-		super(numStylers);
+        stylerList = new ArrayList<DataStyler>(numStylers);
 	}
 	
 	
 	public void accept(StylerVisitor visitor)
 	{
 		// loop through all child stylers
-		for (int i=0; i<size(); i++)
-			get(i).accept(visitor);
+		for (int i=0; i<stylerList.size(); i++)
+            stylerList.get(i).accept(visitor);
 	}
 	
 	
 	public void updateBoundingBox()
 	{
-		// use first symbolizer to compute bounding box
-		// should use the biggest of all child bbox ??
-		if (size() > 0)
+        // compute smallest bbox containing all children bbox
+        for (int i=0; i<stylerList.size(); i++)
 		{
-			get(0).updateBoundingBox();
-			this.bbox = get(0).getBoundingBox();
-			this.centerPoint = get(0).getCenterPoint();
+            DataStyler nextStyler = stylerList.get(i);
+            nextStyler.updateBoundingBox();
+            SpatialExtent childBox =  nextStyler.getBoundingBox();
+			
+            if (i == 0)
+                bbox = childBox.copy();
+            else
+                bbox.add(childBox);
 		}
 	}
 
@@ -78,45 +80,18 @@ public class CompositeStyler extends ArrayList<DataStyler> implements DataStyler
 	public void updateDataMappings()
 	{
 		// loop through all child stylers
-		for (int i=0; i<size(); i++)
-			get(i).updateDataMappings();
-	}
-
-
-	public SpatialExtent getBoundingBox()
-	{
-		return bbox;
-	}
-
-
-	public double[] getCenterPoint()
-	{
-		return centerPoint;
-	}
-
-
-	public void setDataProvider(DataProvider dataProvider)
-	{
-	}
-
-
-	public Symbolizer getSymbolizer()
-	{
-		return null;
-	}
-	
-	
-	public void setSymbolizer(Symbolizer sym)
-	{
+        for (int i=0; i<stylerList.size(); i++)
+            stylerList.get(i).updateDataMappings();
 	}
 
 
 	public boolean isEnabled()
 	{
 		// loop through all child stylers
-		for (int i=0; i<size(); i++)
+        // if one is enabled return enabled
+		for (int i=0; i<stylerList.size(); i++)
 		{
-			if (get(i).isEnabled())
+			if (stylerList.get(i).isEnabled())
 				return true;			
 		}
 		
@@ -127,19 +102,30 @@ public class CompositeStyler extends ArrayList<DataStyler> implements DataStyler
 	public void setEnabled(boolean enabled)
 	{
 		// loop through all child stylers
-		for (int i=0; i<size(); i++)
-			get(i).setEnabled(enabled);
+        for (int i=0; i<stylerList.size(); i++)
+            stylerList.get(i).setEnabled(enabled);
 	}
+    
+    
+    public Symbolizer getSymbolizer()
+    {
+        return null;
+    }
+    
+    
+    public void setSymbolizer(Symbolizer sym)
+    {
+    }
 
 
-	public String getName()
-	{
-		return name;
-	}
+    public List<DataStyler> getStylerList()
+    {
+        return stylerList;
+    }
 
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setStylerList(List<DataStyler> stylerList)
+    {
+        this.stylerList = stylerList;
+    }
 }

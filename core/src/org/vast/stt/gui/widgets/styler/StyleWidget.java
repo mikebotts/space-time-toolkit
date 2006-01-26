@@ -233,7 +233,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	public void setStyler(DataStyler newStyler){
 		//  Check for CompositeStyler first...
 		if(newStyler instanceof CompositeStyler) 
-			stylerAL = (ArrayList)newStyler;
+			stylerAL = ((CompositeStyler)newStyler).getStylerList();
 		else {  // this is a single DataStyler
 			stylerAL = new ArrayList<DataStyler>();
 			stylerAL.add(newStyler);

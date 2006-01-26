@@ -39,6 +39,107 @@ public class SpatialExtent
 	protected double maxZ;
 
 
+    /**
+     * Returns an exact copy of this SpatialExtent
+     * @return
+     */
+    public SpatialExtent copy()
+    {
+        SpatialExtent bbox = new SpatialExtent();
+        
+        bbox.crs = this.crs;
+        bbox.minX = this.minX;
+        bbox.minY = this.minY;
+        bbox.minZ = this.minZ;
+        bbox.maxX = this.maxX;
+        bbox.maxY = this.maxY;
+        bbox.maxZ = this.maxZ;        
+        
+        return bbox;
+    }
+    
+    
+    /**
+     * Combines given extent with this extent
+     * by computing the smallest rectangular
+     * extent that contains both of them. 
+     * @param bbox
+     */
+    public void add(SpatialExtent bbox)
+    {
+        checkCrs(bbox);
+        
+        if (minX > bbox.minX)
+            minX = bbox.minX;        
+        if (minY > bbox.minY)
+            minY = bbox.minY;        
+        if (minZ > bbox.minZ)
+            minZ = bbox.minZ;
+        if (maxX < bbox.maxX)
+            maxX = bbox.maxX;
+        if (maxY < bbox.maxY)
+            maxY = bbox.maxY;
+        if (maxZ < bbox.maxZ)
+            maxZ = bbox.maxZ;
+    }
+    
+    
+    /**
+     * Combines given extent with this extent
+     * by computing the intersection of both.
+     * TODO trim method description
+     * @param bbox
+     */
+    public void intersect(SpatialExtent bbox)
+    {
+        checkCrs(bbox);        
+        //TODO intersect method
+    }
+    
+    
+    /**
+     * Finds out if given extent is included in this one.
+     * Returns true if extent is completely contained
+     * within this extent
+     * @param bbox
+     * @return
+     */
+    public boolean contains(SpatialExtent bbox)
+    {
+        checkCrs(bbox);
+        //TODO contains method
+        return true; 
+    }
+    
+    
+    /**
+     * Finds out if given extent crosses this one
+     * Returns true if so.
+     * @param bbox
+     * @return
+     */
+    public boolean cross(SpatialExtent bbox)
+    {
+        checkCrs(bbox);
+        // TODO cross method
+        return true;
+    }
+    
+    
+    /**
+     * Checks if extents crs are compatible
+     * @throws exception if not
+     * @param bbox
+     * @return
+     */
+    protected void checkCrs(SpatialExtent bbox)
+    {
+        if (crs != null && bbox.crs != null)
+            if (!crs.equals(bbox.crs))
+                throw new IllegalStateException("CRS must match");
+    }
+    
+    
 	public String getCrs()
 	{
 		return crs;
