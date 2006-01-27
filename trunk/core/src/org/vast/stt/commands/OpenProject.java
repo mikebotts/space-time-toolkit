@@ -13,6 +13,8 @@
 
 package org.vast.stt.commands;
 
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.ProjectReader;
@@ -22,6 +24,20 @@ public class OpenProject implements Command
 {
 	private String url = null;
 	
+	Runnable fileDialogThread = new Runnable()
+	{
+		public void run()
+		{
+			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+			String path = fileDialog.open();
+			if(path != null){
+				String url = "file:" + path.replace('\\','/');
+				ProjectReader reader = new ProjectReader();
+				Project project = reader.readProject(url);
+				STTConfig.getInstance().setCurrentProject(project);
+			}
+		}
+	};
 	
 	public void execute()
 	{
@@ -30,6 +46,12 @@ public class OpenProject implements Command
 		STTConfig.getInstance().setCurrentProject(project);
 	}
 
+	//  This works, but I commented it out until I figure out how 'OpenTestProject'
+	//  is being triggered.
+	public void execute(boolean uncommentWhenAboveExecuteIsMovedToOpenTestProject)
+	{
+		PlatformUI.getWorkbench().getDisplay().asyncExec(fileDialogThread);
+	}
 
 	public void unexecute()
 	{
