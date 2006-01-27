@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -15,7 +13,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -49,8 +46,6 @@ import org.vast.stt.style.PointStyler;
  * TODO  Mod scrolled widgets to size up when parent is sized up
  */
 public class StyleWidget extends CheckOptionTable
-	implements ICheckStateListener, ISelectionChangedListener,
-		SelectionListener
 		
 { 
 	java.util.List<DataStyler> stylerAL;
@@ -60,8 +55,10 @@ public class StyleWidget extends CheckOptionTable
 	public StyleWidget(Composite parent){
 		stylerAL  = new ArrayList<DataStyler>();
 		init(parent);
-		super.addSelectionListener(this);
-		super.addCheckboxTableListener(this, this);
+//		addSelectionListener(this);
+//		addCheckboxTableListener(this, this);
+		setCheckboxTableContentProvider(new StyleTableContentProvider());
+		setCheckboxTableLabelProvider(new StyleTableLabelProvider());
 	}
 	
 	public OptionChooser createOptionChooser(Composite parent){
@@ -189,7 +186,8 @@ public class StyleWidget extends CheckOptionTable
 		} else if (control == enabledButton){
 			System.err.println("Enable selected");
 			DataItem item = (DataItem)enabledButton.getData();
-			item.setEnabled(enabledButton.getSelection());
+			if(item != null)
+				item.setEnabled(enabledButton.getSelection());
 		} else if (control == advancedButton){
             System.err.println(e);
   		}
