@@ -38,7 +38,10 @@ import org.vast.stt.scene.DataItem;
  * 
  */
 
-abstract public class CheckOptionTable {
+abstract public class CheckOptionTable 
+implements ICheckStateListener, ISelectionChangedListener,
+	SelectionListener //, IContentProvider, ILabelProvider
+{
 	DataItem dataItem;
 	Table table;
 	Group mainGroup;
@@ -60,7 +63,7 @@ abstract public class CheckOptionTable {
 		mainGroup.setText(item.getName());
 		enabledButton.setData(dataItem);
 		enabledButton.setSelection(dataItem.isEnabled());
-		System.err.println("SW.setDI(): " +  dataItem.getName());
+		System.err.println("COT.setDI(): " +  dataItem.getName());
 	}
 
 	public void init(Composite parent) {
@@ -153,6 +156,10 @@ abstract public class CheckOptionTable {
 
 		mainSC.setContent(mainGroup);
 		mainSC.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+		//  init Listeners
+		addSelectionListener(this);
+		addCheckboxTableListener(this, this);
 	}
 	
 	public void addSelectionListener(SelectionListener sl){
@@ -181,11 +188,11 @@ abstract public class CheckOptionTable {
 		checkboxTableViewer.removeSelectionChangedListener(selectionChangedListener);
 	}
 
-	public void setcheckboxTableContentProvider(IContentProvider tableContentProv){
+	public void setCheckboxTableContentProvider(IContentProvider tableContentProv){
 		checkboxTableViewer.setContentProvider(tableContentProv);
 	}
 
-	public void setcheckboxTableLabelProvider(ILabelProvider tableLabelProv){
+	public void setCheckboxTableLabelProvider(ILabelProvider tableLabelProv){
 		checkboxTableViewer.setLabelProvider(tableLabelProv);
 	}
 }
