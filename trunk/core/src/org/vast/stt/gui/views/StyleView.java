@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.vast.stt.gui.widgets.dataProvider.DataProviderWidget;
 import org.vast.stt.gui.widgets.styler.StyleWidget;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
@@ -30,6 +31,8 @@ public class StyleView extends ViewPart implements ISelectionListener{
 	
 	public static final String ID = "STT.StyleView";
 	StyleWidget styleWidget;
+	//test only
+	DataProviderWidget dpWidget;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -39,8 +42,8 @@ public class StyleView extends ViewPart implements ISelectionListener{
 	}
 	
 	public void initView(Composite parent){
+		//dpWidget = new DataProviderWidget(parent);
 		styleWidget = new StyleWidget(parent);
-		
 	}
 
 		@Override
@@ -56,6 +59,7 @@ public class StyleView extends ViewPart implements ISelectionListener{
 			DataEntry selectedItem = (DataEntry)((IStructuredSelection)selection).getFirstElement();
 			if(selectedItem instanceof DataItem) { 
 				System.err.println("item " + selectedItem);
+				//dpWidget.setDataItem((DataItem)selectedItem);
 				styleWidget.setDataItem((DataItem)selectedItem);
 			} else {
 				//  May add support for Composite items later
