@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -15,24 +14,19 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.gui.widgets.CheckOptionTable;
+import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
-import org.vast.stt.style.StylerFactory;
  
 /**
  * <p><b>Title:</b><br/>
@@ -54,16 +48,11 @@ import org.vast.stt.style.StylerFactory;
  * @TODO  Tie actions to DataItem properties
  * TODO  Mod scrolled widgets to size up when parent is sized up
  */
-public class StyleWidget implements ICheckStateListener, ISelectionChangedListener
+public class StyleWidget extends CheckOptionTable
+	implements ICheckStateListener, ISelectionChangedListener,
+		SelectionListener
+		
 { 
-	DataItem dataItem;
-	Table table;
-	Group mainGroup;
-	Composite optionsComp;
-	Button enabledButton;
-	ScrolledComposite stylesSC;
-	CheckboxTableViewer checkboxTableViewer;
-	StyleOptionChooser optChooser;
 	java.util.List<DataStyler> stylerAL;
 	DataStyler activeStyler;
 	enum StylerType { point, line };
@@ -71,159 +60,19 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 	public StyleWidget(Composite parent){
 		stylerAL  = new ArrayList<DataStyler>();
 		init(parent);
+		super.addSelectionListener(this);
+		super.addCheckboxTableListener(this, this);
 	}
 	
+	public OptionChooser createOptionChooser(Composite parent){
+		return new StyleOptionChooser(parent);
+	}
+
 	public void setDataItem(DataItem item){
-		dataItem = item;
-		mainGroup.setText(item.getName());
-		setStyler(dataItem.getStyler());
-		enabledButton.setData(dataItem);
-		enabledButton.setSelection(dataItem.isEnabled());
-		System.err.println("SW.setDI(): " +  dataItem.getName());
+		super.setDataItem(item);
+		setStyler(item.getStyler());
 	}
 	
-	public void init(Composite parent) {
-		final ScrolledComposite mainSC = new ScrolledComposite(parent,
-				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		
-		mainSC.setExpandVertical(true);
-		mainSC.setExpandHorizontal(true);
-		//  START HERE:  Try this with OptSCroller
-		mainSC.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
-
-		mainGroup = new Group(mainSC, SWT.NONE);
-		mainGroup.setText("Item Name");
-		final GridLayout gridLayout = new GridLayout(6, true);
-		//gridLayout.numColumns = 6;
-		mainGroup.setLayout(gridLayout);
-		mainGroup.setLocation(0, 0);
-
-        // Enabled Button
-		enabledButton = new Button(mainGroup, SWT.CHECK);
-		enabledButton.setData(dataItem);
-        final GridData gridData = new GridData();
-        gridData.verticalIndent = 7;
-        gridData.horizontalAlignment = GridData.BEGINNING;
-        gridData.horizontalSpan = 6;
-        enabledButton.setLayoutData(gridData);
-        enabledButton.setText("enabled");
-		enabledButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				System.err.println("Enable selected");
-				DataItem item = (DataItem)enabledButton.getData();
-				item.setEnabled(enabledButton.getSelection());
-			}
-		});
-		
-        // Styles Label
-        final Label stylesLabel = new Label(mainGroup, SWT.NONE);
-        final GridData gridData_3 = new GridData();
-        gridData_3.horizontalAlignment = GridData.BEGINNING;
-        gridData_3.grabExcessHorizontalSpace = true;
-        gridData_3.horizontalSpan = 4;
-        stylesLabel.setLayoutData(gridData_3);
-        stylesLabel.setText("Styles:");
-
-        // Add Style Button
-		final Button addButton = new Button(mainGroup, SWT.NONE);
-        final GridData gridData_4 = new GridData();
-        gridData_4.horizontalAlignment = GridData.FILL;
-        gridData_4.grabExcessHorizontalSpace = true;
-        gridData_4.horizontalSpan = 1;
-        addButton.setLayoutData(gridData_4);
-        addButton.setText("+");        
-		addButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				AddStylerDialog addStylerDialog = 
-					new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-				int retCode = addStylerDialog.open();
-				if(retCode == SWT.OK){
-					int stylerType = addStylerDialog.getStylerType();
-					DataStyler newStyler;
-					switch(stylerType){
-					case 0:
-						newStyler = new PointStyler();
-						//newStyler = StylerFactory 
-						newStyler.setName("More Points");
-						addStyle(newStyler);
-						break;
-					case 1:
-						newStyler = new LineStyler();
-						newStyler.setName("More Lines");
-						addStyle(newStyler);
-						break;
-					default:
-						System.err.println("StylerType note recognized in addStyler()");
-						break;
-					}
-				}
-			}
-		});
-
-        // Remove Style Button
-		final Button delBtn = new Button(mainGroup, SWT.NONE);
-        final GridData gridData_5 = new GridData();
-        gridData_5.horizontalAlignment = GridData.FILL;
-        gridData_5.grabExcessHorizontalSpace = true;
-        gridData_5.horizontalSpan = 1;
-        delBtn.setLayoutData(gridData_5);
-        delBtn.setText("-");
-		delBtn.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				if(activeStyler != null)
-				removeStyle (activeStyler);  //  remove currently selected row   
-			}
-		});
-		
-		//  CheckboxTableViewer for styles
-		checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER | SWT.SINGLE); 
-		checkboxTableViewer.addCheckStateListener(this);
-		checkboxTableViewer.addSelectionChangedListener(this);
-		table = checkboxTableViewer.getTable();
-		table.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		final GridData tableGd = new GridData(GridData.FILL, GridData.FILL, true, true);
-
-		tableGd.minimumHeight = 75;
-		//tableGd.widthHint = 125;
-		tableGd.heightHint = 55;
-        tableGd.horizontalSpan = 6;
-        tableGd.grabExcessVerticalSpace = true;
-		table.setLayoutData(tableGd);
-
-		StyleTableContentProvider tableContentProv = new StyleTableContentProvider();
-		StyleTableLabelProvider tableLabelProv = new StyleTableLabelProvider();
-		checkboxTableViewer.setContentProvider(tableContentProv);
-		checkboxTableViewer.setLabelProvider(tableLabelProv);
-		checkboxTableViewer.setInput(stylerAL);
-		
-        // Options Label
-		final Label optLabel = new Label(mainGroup, SWT.NONE);
-		final GridData gridData_6 = new GridData();
-        gridData_6.horizontalSpan = 6;
-        gridData_6.horizontalAlignment = GridData.BEGINNING;
-		optLabel.setLayoutData(gridData_6);
-        optLabel.setText("Options:");
-
-		// OptionsChooser
-		optChooser = new StyleOptionChooser(mainGroup);
-		
-        // Advanced Button
-		final Button advancedBtn = new Button(mainGroup, SWT.NONE);		
-		final GridData gridData_7 = new GridData();
-		gridData_7.horizontalSpan = 6;
-		gridData_7.horizontalAlignment = GridData.END;
-		advancedBtn.setLayoutData(gridData_7);
-		advancedBtn.setText("Advanced...");
-        advancedBtn.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                System.err.println(e);
-            
-            };
-        });
-
-		mainSC.setContent(mainGroup);
-		mainSC.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-	}
 	
 	/**
 	 * Make this DataStyler the currently active Styler in the StyleWidget
@@ -286,7 +135,7 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 			Iterator it = stylerAL.iterator();
 			if(!it.hasNext()){
 				//  stylerSet is currently empty
-				optChooser.removeOldControls();
+				optionChooser.removeOldControls();
 				return;
 			}
 			//  Reset selected to first in Table
@@ -301,7 +150,49 @@ public class StyleWidget implements ICheckStateListener, ISelectionChangedListen
 		}
 		System.err.println("Selection CHANGED");
 		activeStyler = styler;
-		optChooser.buildControls(styler);
+		optionChooser.buildControls(styler);
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		Control control = (Control)e.getSource();
+		if(control == addButton){
+			AddStylerDialog addStylerDialog = 
+				new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+			int retCode = addStylerDialog.open();
+			if(retCode == SWT.OK){
+				int stylerType = addStylerDialog.getStylerType();
+				DataStyler newStyler;
+				switch(stylerType){
+				case 0:
+					newStyler = new PointStyler();
+					//newStyler = StylerFactory 
+					newStyler.setName("More Points");
+					addStyle(newStyler);
+					break;
+				case 1:
+					newStyler = new LineStyler();
+					newStyler.setName("More Lines");
+					addStyle(newStyler);
+					break;
+				default:
+					System.err.println("StylerType note recognized in addStyler()");
+					break;
+				}
+			}
+		} else if  (control == deleteButton){
+			if(activeStyler != null)
+				removeStyle (activeStyler);  //  remove currently selected row   
+		} else if (control == enabledButton){
+			System.err.println("Enable selected");
+			DataItem item = (DataItem)enabledButton.getData();
+			item.setEnabled(enabledButton.getSelection());
+		} else if (control == advancedButton){
+            System.err.println(e);
+  		}
 	}
 	
 }

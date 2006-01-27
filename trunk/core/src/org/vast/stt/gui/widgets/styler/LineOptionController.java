@@ -1,9 +1,14 @@
 package org.vast.stt.gui.widgets.styler;
 
 
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -14,7 +19,8 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 import org.vast.stt.style.LineStyler;
 
-public class LineOptionController implements OptionController {
+public class LineOptionController 
+	implements OptionController, ModifyListener, VerifyListener, KeyListener {
 
 	private Composite parent;
 	private LineStyler styler;
@@ -43,35 +49,18 @@ public class LineOptionController implements OptionController {
 		//optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(parent);
 		widthSpinner = optionControl[0].createSpinner("LineWidth:", 1, 10);
-		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
-		if(widthSP != null) {
-			int width = ((Float)(widthSP.getConstantValue())).intValue(); //
-			widthSpinner.setSelection(width);
-		}
+		widthSpinner.setSelection((int)getLineWidth());
 		widthSpinner.addSelectionListener(this);
 			
 		optionControl[1] = new OptionControl(parent);
-		ScalarParameter colorSP = styler.getSymbolizer().getStroke().getColor();
-		Color sldColor;
-		if(colorSP != null) 
-			sldColor = (Color)colorSP.getConstantValue();
-		else 
-			sldColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-			
-		colorButton = optionControl[1].createColorButton("Line Color:", sldColor);
+		colorButton = optionControl[1].createColorButton("Line Color:", getLineColor());
 		colorButton.addSelectionListener(this);
-
-		//  add a bunch of controls to test scrolling
-//		optionControl[2] = new OptionControl(parent);
-//		optionControl[2].createCombo("Line Test:", new String [] { "aaa", "bbb", "ccc" } );
-//		optionControl[3] = new OptionControl(parent);
-//		optionControl[3].createSpinner("LineWidth:", 1, 10);
-//		optionControl[4] = new OptionControl(parent);
-//		optionControl[4].createSpinner("LineWidth:", 1, 10);
-//		optionControl[5] = new OptionControl(parent);
-//		optionControl[5].createSpinner("LineWidth:", 1, 10);
-//		optionControl[6] = new OptionControl(parent);
-//		optionControl[6].createSpinner("LineWidth:", 1, 10);
+		
+//		optionControl[1] = new OptionControl(parent);
+//		Text widthText = optionControl[1].createText("Some Text", "");
+//		widthText.addModifyListener(this);
+//		widthText.addVerifyListener(this);
+//		widthText.addKeyListener(this);
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -93,6 +82,26 @@ public class LineOptionController implements OptionController {
 		}
 	}
 
+	private float getLineWidth(){
+		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
+		if(widthSP == null)
+			return 1.0f;
+		Object widthCon = widthSP.getConstantValue();
+		if(widthCon == null)
+			return 1.0f;
+		return ((Float)widthCon).floatValue();
+	}
+	
+	private org.vast.ows.sld.Color getLineColor(){
+		ScalarParameter colorSP = styler.getSymbolizer().getStroke().getColor();
+		if(colorSP == null)
+			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		Object colorCon = colorSP.getConstantValue();
+		if(colorCon == null)
+			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		return (Color)colorCon;
+	}
+	
 	/**
 	 * Convenience method to set line width
 	 * @param w - width
@@ -116,4 +125,28 @@ public class LineOptionController implements OptionController {
 		newColor.setConstantValue(color);
 		stroke.setColor(newColor);
 	}
+
+	public void modifyText(ModifyEvent e) {
+		// TODO Auto-generated method stub
+		System.err.println(e);
+	}
+
+	public void verifyText(VerifyEvent e) {
+		// TODO Auto-generated method stub
+		System.err.println(e);
+	}
+
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if((e.keyCode<48 || e.keyCode > 57)) { // && e.keyCode!=0) {
+			//System.err.println("NOT A NUMBER");
+			e.doit = false;
+		}
+	}
+
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	
 }

@@ -9,8 +9,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -36,14 +38,15 @@ public class OptionControl {
 	Composite optRow;
 	Color colorLabelColor;
 	Label colorLabel;
+	Display display = PlatformUI.getWorkbench().getDisplay();
 	
 	public OptionControl(Composite parent){
 		this.parent = parent;
 		optRow = new Composite(parent, 0x0);
-		optRow.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER,false, false);
-		gd.minimumWidth = 140;
-		gd.minimumHeight = 20;
+		optRow.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, false);
+		gd.minimumWidth = 125;
+		gd.minimumHeight = 11;
 		optRow.setLayoutData(gd);
 	}
 
@@ -51,9 +54,9 @@ public class OptionControl {
 	private Label createLabel(String text){
 		Label label = new Label(optRow, 0x0);
 		label.setText(text);
-		label.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		label.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-		gd.widthHint = 65;
+		gd.widthHint = 60;
 		label.setLayoutData(gd);
 		
 		return label;
@@ -106,6 +109,22 @@ public class OptionControl {
 		button.setLayoutData(gd);
 		return button;
 	}
+	
+	public Text createText(String labelStr, String defaultText){
+		GridLayout layout = new GridLayout(2, false);
+		optRow.setLayout(layout);
+		createLabel(labelStr);
+		Text text = new Text(optRow, SWT.RIGHT);
+		text.setText(defaultText);
+		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, false,false);
+		gd.widthHint = 50;
+		text.setLayoutData(gd);
+		//  Set limit to 7.  Callers can override this setting by using the return Text object
+		text.setTextLimit(7);
+		//  make bg gray to distinguish it from bg of parent
+		text.setBackground(new Color(display, 210, 210, 210));
+		return text;
+	}
 
 	public Button createColorButton(String labelTxt, org.vast.ows.sld.Color sldColor) { 
 		GridLayout layout = new GridLayout();
@@ -114,8 +133,8 @@ public class OptionControl {
 		createLabel(labelTxt);
 		//  Add color label
 		colorLabel = new Label(optRow, 0x0);
-		colorLabel.setText("        ");
-		colorLabelColor = new Color(PlatformUI.getWorkbench().getDisplay(), 
+		colorLabel.setText("       ");
+		colorLabelColor = new Color(display, 
 									(int)(sldColor.getRed()*255), 
 									(int)(sldColor.getGreen()*255), 
 									(int)(sldColor.getBlue()*255));
@@ -130,7 +149,7 @@ public class OptionControl {
 	public void setColorLabelColor(org.vast.ows.sld.Color sldColor){
 		if(colorLabelColor != null) 
 			colorLabelColor.dispose();
-		colorLabelColor = new Color(PlatformUI.getWorkbench().getDisplay(), 
+		colorLabelColor = new Color(display, 
 				(int)(sldColor.getRed()*255), 
 				(int)(sldColor.getGreen()*255), 
 				(int)(sldColor.getBlue()*255));
