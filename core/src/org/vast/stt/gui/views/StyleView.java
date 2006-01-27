@@ -9,7 +9,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.gui.widgets.styler.StyleWidget;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
-import org.vast.stt.style.DataStyler;
 
 /**
  * <p><b>Title:</b><br/>
