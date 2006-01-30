@@ -29,11 +29,12 @@ public abstract class OptionChooser {
         scrollerGD.verticalAlignment = GridData.FILL;
         scrollerGD.grabExcessHorizontalSpace = true;
         scrollerGD.grabExcessVerticalSpace = true;
-        //scrollerGD.heightHint = 80;
-        scrollerGD.minimumHeight = 80;
+        scrollerGD.heightHint = 60;
+        //scrollerGD.minimumHeight = 80;
 		optScr.setLayoutData(scrollerGD);
 		
 		GridLayout optLayout = new GridLayout(1, false);
+		optLayout.marginHeight = 1;
 		optComp.setLayout(optLayout);
 		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	}
