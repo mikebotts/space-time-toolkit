@@ -12,8 +12,11 @@
       <extension point="org.eclipse.ui.views">
             <view name="Resources" class="org.vast.stt.gui.views.ResourceTreeView" id="STT.ResourceTreeView"/>
             <view name="Services" class="org.vast.stt.gui.views.ServiceTreeView" id="STT.ServiceTreeView"/>
-            <view name="Style" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
-            <view name="Scene" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
+            <view name="Customizer" class="org.vast.stt.gui.views.CustomizerView" id="STT.CustomizerView"/>
+            <view name="Bbox" class="org.vast.stt.gui.views.SpatialExtentView" id="STT.SpatialExtentView"/>
+            <view name="TimeSettings" class="org.vast.stt.gui.views.TimeSettingsView" id="STT.TimeSettingsView"/>
+            <view name="StyleView" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
+            <view name="SceneTree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
             <view name="Scene" class="org.vast.stt.gui.views.SceneView" id="STT.SceneView" allowMultiple="true"/>
       </extension>
       <extension point="org.eclipse.ui.editors">
@@ -34,6 +37,7 @@
                         <separator name="group1"/>
                   </menu>
                   <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenProject" label="&amp;Open Project..." menubarPath="STT.ProjectMenu/group1"/>
+                  <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenTestProject" label="&amp;Open Test Project..." menubarPath="STT.ProjectMenu/group1"/>
                   <action class="org.vast.stt.actions.ProjectMenu" id="STT.SaveProject" label="&amp;Save Project..." menubarPath="STT.ProjectMenu/group1"/>
                   <action class="org.vast.stt.actions.ProjectMenu" id="STT.CloseProject" label="&amp;Close Project..." menubarPath="STT.ProjectMenu/group1"/>
                   <!-- File Menu -->
