@@ -15,9 +15,13 @@ package org.vast.stt.actions;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.*;
+import org.vast.stt.apps.STTConfig;
 import org.vast.stt.commands.*;
 import org.vast.stt.gui.views.SceneView;
+import org.vast.stt.project.Project;
+import org.vast.stt.project.ProjectReader;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
@@ -46,12 +50,28 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
 
 	public void run(IAction action)
 	{
+		String actionId = action.getId();
+		String url = null;
+		
+		if(actionId.endsWith("OpenProject")){
+			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+			String path = fileDialog.open();
+			if(path != null){
+				url = "file:" + path.replace('\\','/');
+				ProjectReader reader = new ProjectReader();
+				Project project = reader.readProject(url);
+				STTConfig.getInstance().setCurrentProject(project);
+			}
+			
+		} else if(actionId.endsWith("OpenTestProject")) {
+			url = "file:///C:/tcook/sttEclipse/stt3/conf/SoCal.xml";
+		}
+		final OpenProject command = new OpenProject();
+		command.setUrl(url);
 		Runnable readProject = new Runnable()
 		{
 			public void run()
 			{
-				OpenProject command = new OpenProject();
-				command.setUrl("file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml");
 				command.execute();
 				PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
 			}
