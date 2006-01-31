@@ -13,8 +13,6 @@
 
 package org.vast.stt.commands;
 
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.ProjectReader;
