@@ -142,7 +142,7 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
 		//STTPlugin.getImageDescriptor("icons/group.gif");
 		folderImg = descriptor.createImage();
-		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Microsoft Sans Serif", 7, SWT.NORMAL);
+		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
 		
 		Action action = new Action()
 		{

@@ -64,7 +64,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
 			}
 			
 		} else if(actionId.endsWith("OpenTestProject")) {
-			url = "file:///C:/tcook/sttEclipse/stt3/conf/SoCal.xml";
+			url = "file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml";
 		}
 		final OpenProject command = new OpenProject();
 		command.setUrl(url);
