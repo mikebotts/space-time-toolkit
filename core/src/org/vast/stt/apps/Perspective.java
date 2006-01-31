@@ -12,17 +12,18 @@ public class Perspective implements IPerspectiveFactory
 	{
 		String resFolderID = "STT.ResourceFolder";
 		String scenesFolderID = "STT.ScenesFolder";
+        String optFolderID = "STT.CustomizerFolder";
 		layout.setEditorAreaVisible(false);
 		layout.setFixed(false);
 
 		IFolderLayout ResourceFolder = layout.createFolder(resFolderID, IPageLayout.LEFT, 1.0f, layout.getEditorArea());
-		IFolderLayout SceneFolder = layout.createFolder(scenesFolderID, IPageLayout.RIGHT, 0.2f, resFolderID);
-		layout.addView(StyleView.ID, IPageLayout.BOTTOM, 0.5f, resFolderID);
-		
-		//ResourceFolder.addView(ResourceTreeView.ID);
+		IFolderLayout SceneFolder = layout.createFolder(scenesFolderID, IPageLayout.RIGHT, 0.25f, resFolderID);
+        IFolderLayout OptFolder = layout.createFolder(optFolderID, IPageLayout.BOTTOM, 0.5f, resFolderID);
+        
 		ResourceFolder.addView(SceneTreeView.ID);
-		//ResourceFolder.addView(ServiceTreeView.ID);
-		
+        OptFolder.addView(StyleView.ID);
+        OptFolder.addView(TimeSettingsView.ID);
+        
 		SceneFolder.addPlaceholder(SceneView.ID + ":*");
 	}
 
