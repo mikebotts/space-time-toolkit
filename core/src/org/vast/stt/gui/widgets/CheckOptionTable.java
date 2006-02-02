@@ -42,7 +42,7 @@ abstract public class CheckOptionTable
 implements ICheckStateListener, ISelectionChangedListener,
 	SelectionListener //, IContentProvider, ILabelProvider
 {
-	DataItem dataItem;
+	protected DataItem dataItem;
 	Table table;
 	Group mainGroup;
 	Composite optionsComp;

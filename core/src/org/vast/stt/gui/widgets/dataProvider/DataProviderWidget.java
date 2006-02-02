@@ -70,6 +70,8 @@ public class DataProviderWidget extends CheckOptionTable
 	 */
 	public void setProvider(DataProvider newProv){
 		//  Check for CompositeStyler first...
+		//  Move this...
+		optionChooser.buildControls(newProv);
 		System.err.println("New Prov is " + newProv);
 		//		if(newStyler instanceof CompositeStyler) 
 //			stylerAL = ((CompositeStyler)newStyler).getStylerList();

@@ -2,6 +2,8 @@ package org.vast.stt.gui.widgets.dataProvider;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.data.DataProvider;
+import org.vast.stt.data.WMSProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 
 /**
@@ -30,10 +32,10 @@ public class DataProviderOptionChooser extends OptionChooser {
 
 	public void buildControls(Object providerObj){
 		removeOldControls();
-
-//		if(styler instanceof PointStyler) {
-//			//if(pointOpts == null)
-//				PointOptionController pointOpts = new PointOptionController(optComp, (PointStyler)styler);
+		
+//		if(providerObj  instanceOf WMSProvider) {
+				//WMSOptionController wmsOpts = new WMSOptionController(optComp, (WMSProvider)providerObj);
+				WMSOptionController wmsOpts = new WMSOptionController(optComp, null);
 //		} else if (styler instanceof LineStyler) {
 //			//if(lineOpts == null)
 //				LineOptionController lineOpts = new LineOptionController(optComp, (LineStyler)styler); 
@@ -44,5 +46,9 @@ public class DataProviderOptionChooser extends OptionChooser {
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
+	
+	public void buildAdvancedControls(Object inputObj){
+		return;
+	}
 
 }

@@ -2,7 +2,6 @@ package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -22,16 +21,14 @@ import org.eclipse.ui.PlatformUI;
  *
  * <p><b>Description:</b><br/>
  *  Currently supports the following Control types:
- *  	Spinner, Button, Combo
+ *  	Spinner, Button, Combo, ColorButton, Text, Checkbox
  * </p>
  *
  * <p>Copyright (c) 2006</p>
  * @author Tony Cook
  * @date Jan 23, 2006
  * @version 1.0
- * 
- * TODO  add support for other Stylers (Polygon, Raster) 
- */
+ */ 
 
 public class OptionControl {
 	Composite parent;
@@ -39,6 +36,7 @@ public class OptionControl {
 	Color colorLabelColor;
 	Label colorLabel;
 	Display display = PlatformUI.getWorkbench().getDisplay();
+	Control control;
 	
 	public OptionControl(Composite parent){
 		this.parent = parent;
@@ -49,7 +47,6 @@ public class OptionControl {
 		gd.minimumHeight = 25;
 		//gd.heightHint = 25;		
 		optRow.setLayoutData(gd);
-
 	}
 
 	// return Label so caller can modify layoutData, if desired

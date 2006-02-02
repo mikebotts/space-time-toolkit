@@ -3,6 +3,7 @@ package org.vast.stt.gui.widgets.styler;
 import java.util.List;
 
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
@@ -14,28 +15,26 @@ import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.style.PointStyler;
 
-public class PointOptionController implements OptionController{
-	
-	private Composite parent;
+public class PointOptionController implements SelectionListener 
+	//extends OptionController
+{
 	private PointStyler styler;
-	private OptionControl[] optionControl;
 	private Spinner sizeSpinner;
 	private Button colorButton;
+	private OptionControl [] optionControl;
 	
-	public PointOptionController(Composite parent, PointStyler styler){
-		this.parent = parent;
+	public PointOptionController(PointStyler styler){
 		this.styler = styler;
-		buildBasicOptions();
 	}
 	
-	public void buildAdvancedOptions() {
-		// TODO Auto-generated method stub
+	public void buildAdvancedControls(Composite parent){
 		
 	}
-
-	public void buildBasicOptions() {
+	
+	public void buildBasicControls(Composite parent) {
 		// TODO Auto-generated method stub
 		optionControl = new OptionControl[2];
 		optionControl[0] = new OptionControl(parent);

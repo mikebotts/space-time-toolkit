@@ -9,13 +9,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
 
 public abstract class OptionChooser {
-	protected Composite optComp;
+	protected Composite optComp;  //  hold onto scroller and composite 
 	protected ScrolledComposite optScr;
 	
 	public OptionChooser(Composite parent){
 		init(parent);
 	}
 
+	abstract public void buildControls(Object inputElement);
+	//abstract public void buildAdvancedControls(Composite parent, DataItem item);
+	
 	public void init(Composite parent){
 		optScr = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		optScr.setExpandHorizontal(true);
@@ -29,8 +32,8 @@ public abstract class OptionChooser {
         scrollerGD.verticalAlignment = GridData.FILL;
         scrollerGD.grabExcessHorizontalSpace = true;
         scrollerGD.grabExcessVerticalSpace = true;
-        scrollerGD.heightHint = 60;
-        //scrollerGD.minimumHeight = 80;
+        //scrollerGD.heightHint = 60;
+        scrollerGD.minimumHeight = 80;
 		optScr.setLayoutData(scrollerGD);
 		
 		GridLayout optLayout = new GridLayout(1, false);
@@ -39,8 +42,6 @@ public abstract class OptionChooser {
 		optComp.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	}
 
-	abstract public void buildControls(Object inputElement);
-	
 	//  There's no way to remove a Control from a Composite (that I have found)
 	//  Therefore, just dispose and null them, and recreate as needed.  TC
 	public void removeOldControls(){
@@ -50,6 +51,4 @@ public abstract class OptionChooser {
 			controls[i] = null;
 		}
 	}
-
-
 }
