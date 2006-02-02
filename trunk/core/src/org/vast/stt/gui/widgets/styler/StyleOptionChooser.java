@@ -34,6 +34,12 @@ import org.vast.stt.style.PointStyler;
 
 public class StyleOptionChooser extends OptionChooser {
 	
+	//  Need to keep controllers in memory and just rebuild their
+	//  controls as needed, so basic and advanced options can
+	//  co-exist and change together
+	PointOptionController pointOptionController;
+	LineOptionController lineOptionController;
+	
 	public StyleOptionChooser(Composite parent) {
 		super(parent);
 	}
@@ -43,11 +49,12 @@ public class StyleOptionChooser extends OptionChooser {
 		removeOldControls();
 
 		if(styler instanceof PointStyler) {
-			//if(pointOpts == null)
-				PointOptionController pointOpts = new PointOptionController(optComp, (PointStyler)styler);
+			//optionController = new PointOptionController((PointStyler)styler);
 		} else if (styler instanceof LineStyler) {
-			//if(lineOpts == null)
-				LineOptionController lineOpts = new LineOptionController(optComp, (LineStyler)styler); 
+			if(lineOptionController == null)
+				lineOptionController = new LineOptionController();
+			lineOptionController.setStyler((LineStyler)stylerObj);
+			lineOptionController.buildControls(optComp);
 		} else
 			System.err.println("Styler not supported yet: " + styler);
 		
@@ -55,5 +62,5 @@ public class StyleOptionChooser extends OptionChooser {
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
-
+	
 }

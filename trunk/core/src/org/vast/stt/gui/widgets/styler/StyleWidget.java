@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
@@ -46,7 +45,6 @@ import org.vast.stt.style.PointStyler;
  * TODO  Mod scrolled widgets to size up when parent is sized up
  */
 public class StyleWidget extends CheckOptionTable
-		
 { 
 	java.util.List<DataStyler> stylerAL;
 	DataStyler activeStyler;
@@ -185,11 +183,13 @@ public class StyleWidget extends CheckOptionTable
 				removeStyle (activeStyler);  //  remove currently selected row   
 		} else if (control == enabledButton){
 			System.err.println("Enable selected");
-			DataItem item = (DataItem)enabledButton.getData();
-			if(item != null)
-				item.setEnabled(enabledButton.getSelection());
+			//DataItem item = (DataItem)enabledButton.getData();
+			if(dataItem != null)
+				dataItem.setEnabled(enabledButton.getSelection());
 		} else if (control == advancedButton){
-            System.err.println(e);
+            //optionChooser.buildAdvancedControls(dataItem);
+			AdvancedStyleDialog asd = 
+				new AdvancedStyleDialog((StyleOptionChooser)optionChooser, dataItem);
   		}
 	}
 	
@@ -200,8 +200,8 @@ class StyleTableContentProvider implements IStructuredContentProvider{
 	DataStyler[] stylers;
 	
 	public Object [] getElements (Object inputElement){
-		ArrayList stylers = (ArrayList)inputElement;
-		DataStyler [] stylerArr = (DataStyler [])stylers.toArray(new DataStyler[]{});
+		ArrayList<DataStyler> stylers = (ArrayList<DataStyler>)inputElement;
+		DataStyler [] stylerArr = stylers.toArray(new DataStyler[]{});
 		return stylerArr;
 	}
 		
@@ -223,7 +223,7 @@ class StyleTableContentProvider implements IStructuredContentProvider{
 	
 }
 
-class StyleTableLabelProvider implements ILabelProvider {
+class StyleTableLabelProvider extends LabelProvider {
 
 	public Image getImage(Object element) {
 		// TODO Auto-generated method stub
@@ -234,25 +234,5 @@ class StyleTableLabelProvider implements ILabelProvider {
 //		return element.toString();
 		DataStyler styler = (DataStyler)element;
 		return styler.getName();
-	}
-
-	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-		
 	}
 }
