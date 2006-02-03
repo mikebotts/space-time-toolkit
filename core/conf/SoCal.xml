@@ -155,6 +155,68 @@
                      </DataItem>
                   </member>
                   <member>
+                     <DataItem enabled="true">
+                        <name>Conus base map 2</name>
+                        <dataProvider>
+                           <WMSDataProvider>
+                              <name>imageData</name>
+                              <resource xlink:href="#DATASET_01"/>
+                              <!-- <cache xlink:href="local file"> -->
+                              <request getUrl="http://wms.jpl.nasa.gov/wms.cgi">
+                                 <GetMap service="WMS" version="1.1.1">
+                                    <StyledLayerDescriptor>
+                                       <NamedLayer>
+                                          <Name>global_mosaic</Name>
+                                       </NamedLayer>
+                                    </StyledLayerDescriptor>
+                                    <BoundingBox srsName="EPSG:4326">
+                                       <gml:coordinates>-124.0,30.27 -98.3,50.71</gml:coordinates>
+                                    </BoundingBox>
+                                    <Output>
+                                       <Format>image/jpeg</Format>
+                                       <Transparent>TRUE</Transparent>
+                                       <Size>
+                                          <Width>1000</Width>
+                                          <Height>600</Height>
+                                       </Size>
+                                    </Output>
+                                    <Exceptions>application/vnd.ogc.se+xml</Exceptions>
+                                 </GetMap>
+                              </request>
+                           </WMSDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:RasterSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>meshData/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>meshData/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>meshData/alt</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:ChannelSelection>
+                                 <sld:RedChannel>
+                                    <sld:SourceChannelName>imageData/line/pixel/red</sld:SourceChannelName>
+                                 </sld:RedChannel>
+                                 <sld:GreenChannel>
+                                    <sld:SourceChannelName>imageData/line/pixel/green</sld:SourceChannelName>
+                                 </sld:GreenChannel>
+                                 <sld:BlueChannel>
+                                    <sld:SourceChannelName>imageData/line/pixel/blue</sld:SourceChannelName>
+                                 </sld:BlueChannel>
+                                 <sld:GrayChannel>
+                                    <sld:SourceChannelName>imageData/line/pixel/alpha</sld:SourceChannelName>
+                                 </sld:GrayChannel>
+                              </sld:ChannelSelection>
+                           </sld:RasterSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
                      <DataList>
                         <name>SOS Layers</name>
                         <member>
@@ -172,7 +234,7 @@
                                  <SOSDataProvider>
                                     <name>pointData</name>
                                     <resource xlink:href="#DATASET_02"/>
-                                    <request postUrl="http://vast.uah.edu:8080/ows/plumeSos">
+                                    <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
                                        <GetObservation service="SOS" version="0.0.31">
                                           <offering>PLUME_DATA</offering>
                                           <eventTime>
@@ -277,8 +339,8 @@
                                        </sld:CssParameter>                                       
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">5</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>
@@ -296,10 +358,31 @@
                                        </sld:CssParameter>                                       
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">5</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>3</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -417,8 +500,8 @@
                            <ows:Operation name="GetCapabilities">
                               <ows:DCP>
                                  <ows:HTTP>
-                                    <ows:Get xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
-                                    <ows:Post xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                    <ows:Get xlink:href="http://vast.uah.edu:8080/ows-dev/plumeSos"/>
+                                    <ows:Post xlink:href="http://vast.uah.edu:8080/ows-dev/plumeSos"/>
                                  </ows:HTTP>
                               </ows:DCP>
                               <ows:Parameter name="service" use="required">
@@ -431,8 +514,8 @@
                            <ows:Operation name="GetObservation">
                               <ows:DCP>
                                  <ows:HTTP>
-                                    <ows:Get xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
-                                    <ows:Post xlink:href="http://vast.uah.edu:8080/ows/plumeSos"/>
+                                    <ows:Get xlink:href="http://vast.uah.edu:8080/ows-dev/plumeSos"/>
+                                    <ows:Post xlink:href="http://vast.uah.edu:8080/ows-dev/plumeSos"/>
                                  </ows:HTTP>
                               </ows:DCP>
                               <ows:Parameter name="observedProperty" use="required"/>
