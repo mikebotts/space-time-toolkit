@@ -50,13 +50,13 @@ public class SWEResourceReader extends CDMReader
 			// parse xml header using DataComponent and DataEncoding readers
 			DOMReader domReader = new DOMReader(streamFilter, false);			
 			Element dataElt = domReader.getBaseElement();
-			Element defElt = domReader.getElement(dataElt, "dataComponents/*");
-			Element encElt = domReader.getElement(dataElt, "encoding/*");
+			Element defElt = domReader.getElement(dataElt, "dataComponents");
+			Element encElt = domReader.getElement(dataElt, "encoding");
 			
 			DataComponentsReader infReader = new DataComponentsReader(domReader);
 			EncodingReader encReader = new EncodingReader(domReader);	
-			this.dataInfo = infReader.readDataComponents(defElt);
-			this.dataEncoding = encReader.readDataEncoding(encElt);
+			this.dataInfo = infReader.readComponentProperty(defElt);
+			this.dataEncoding = encReader.readEncodingProperty(encElt);
 			
 			// read external link if present
 			resultUri = domReader.getAttributeValue(dataElt, "data/externalLink");
