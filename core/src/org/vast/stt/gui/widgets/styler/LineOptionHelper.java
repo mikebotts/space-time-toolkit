@@ -1,12 +1,21 @@
 package org.vast.stt.gui.widgets.styler;
 
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.ColorDialog;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
+import org.vast.stt.gui.widgets.OptionControl;
+import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.LineStyler;
 
-public class LineOptionHelper {
+public class LineOptionHelper implements SelectionListener {
 
+	OptionController optionController;
 	LineStyler styler;
 	//  Need a way to specify all options/types/args so 
 	//  AdvancedOptions can use them also - just repeating
@@ -14,8 +23,11 @@ public class LineOptionHelper {
 	private String [] labels = {"Line Width:", "Line Color:"};
 	private int [] optTypes = { 0, 1}; 
 
-	public LineOptionHelper(LineStyler styler){
-		this.styler = styler;
+	public LineOptionHelper(OptionController loc){
+		optionController = loc;
+		//  styler must not change for this to work
+		
+		styler = (LineStyler)optionController.getStyler();
 	}
 	
 	public float getLineWidth(){
@@ -59,4 +71,32 @@ public class LineOptionHelper {
 		newColor.setConstantValue(color);
 		stroke.setColor(newColor);
 	}
+	
+	public void widgetDefaultSelected(SelectionEvent e){
+		
+	}
+	
+	public void widgetSelected(SelectionEvent e) {
+		Control control = (Control)e.getSource();
+		OptionControl[] basicControl = optionController.getControls();
+
+		if(control == basicControl[0].getControl()) {
+			Spinner widthSpinner = (Spinner)control;
+			float w = new Float(widthSpinner.getSelection()).floatValue();
+			setLineWidth(w);
+			styler.updateDataMappings();
+		} else if (control == basicControl[1].getControl()) {
+			ColorDialog colorChooser = 
+				new ColorDialog(control.getShell());
+			RGB rgb = colorChooser.open();
+			if(rgb == null)
+				return;
+			// TODO:  add alpha support
+			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
+			basicControl[1].setColorLabelColor(sldColor); 
+			setLineColor(sldColor);
+			styler.updateDataMappings();
+		}
+	}
+
 }

@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;

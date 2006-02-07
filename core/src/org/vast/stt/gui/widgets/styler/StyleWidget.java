@@ -49,6 +49,11 @@ public class StyleWidget extends CheckOptionTable
 	java.util.List<DataStyler> stylerAL;
 	DataStyler activeStyler;
 	enum StylerType { point, line };
+	//  Try this
+	BasicLineController basicLineController;
+	AdvancedLineController advancedLineController;
+	//  Or this
+	OptionListener optListener;
 	
 	public StyleWidget(Composite parent){
 		stylerAL  = new ArrayList<DataStyler>();
@@ -60,7 +65,12 @@ public class StyleWidget extends CheckOptionTable
 	}
 	
 	public OptionChooser createOptionChooser(Composite parent){
-		return new StyleOptionChooser(parent);
+		optListener = new OptionListener();
+		StyleOptionChooser basicOptionChooser = new StyleOptionChooser(parent, optListener);
+		//  Go ahead and create OptListener up front
+		//optListener = new OptionListener();
+		//basicOptionChooser.setOptionListener(optListener);
+		return basicOptionChooser;
 	}
 
 	public void setDataItem(DataItem item){
@@ -187,10 +197,23 @@ public class StyleWidget extends CheckOptionTable
 			if(dataItem != null)
 				dataItem.setEnabled(enabledButton.getSelection());
 		} else if (control == advancedButton){
-            //optionChooser.buildAdvancedControls(dataItem);
-			AdvancedStyleDialog asd = 
-				new AdvancedStyleDialog((StyleOptionChooser)optionChooser, dataItem);
-  		}
+			createAdvancedStyleDialog();
+		}
+	}
+	
+	private void createAdvancedStyleDialog(){
+		AdvancedStyleDialog asd = 
+			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
+		//asd.setOptionListener(optListener);
+	}
+	
+	//  Called when parent styleView is closed.  Set basicControls and
+	//  basicStyler to null in OptListener (not sure this is sufficient 
+	//  for the case of StyleView being closed, but AdvancedDialog still 
+	//  open.  Also not sure if optListener will still be valid).
+	public void close(){
+		optListener.setBasicController(null);
+		//optListener.setBasicStyler(null);
 	}
 	
 }
