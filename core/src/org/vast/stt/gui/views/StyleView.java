@@ -25,6 +25,7 @@ import org.vast.stt.scene.DataItem;
  * @author Tony Cook
  * @date Jan 11, 2006
  * @version 1.0
+ *
  * 
  */
 public class StyleView extends ViewPart implements ISelectionListener{
@@ -65,5 +66,11 @@ public class StyleView extends ViewPart implements ISelectionListener{
 				//  May add support for Composite items later
 			}
 		}		
+	}
+	
+	public void dispose(){
+		styleWidget.close();
+		super.dispose();
+		//System.err.println("SV disposed!");
 	}
 }
