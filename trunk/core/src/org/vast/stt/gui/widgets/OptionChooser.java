@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
 
-public abstract class OptionChooser {
+public abstract class OptionChooser {  //  extends Group/ScrolledComp
 	protected Composite optComp;  //  hold onto scroller and composite 
 	protected ScrolledComposite optScr;
 	
@@ -17,7 +17,6 @@ public abstract class OptionChooser {
 	}
 
 	abstract public void buildControls(Object inputElement);
-	//abstract public void buildAdvancedControls(Composite parent, DataItem item);
 	
 	public void init(Composite parent){
 		optScr = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);

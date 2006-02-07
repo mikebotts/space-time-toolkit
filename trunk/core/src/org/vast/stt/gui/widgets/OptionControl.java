@@ -1,6 +1,7 @@
 package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,28 +31,27 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  */ 
 
-public class OptionControl {
-	Composite parent;
-	Composite optRow;
+public class OptionControl extends Composite {
 	Color colorLabelColor;
 	Label colorLabel;
 	Display display = PlatformUI.getWorkbench().getDisplay();
-	Control control;
+	Control activeControl;
+	public static enum ControlType { BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT}; 
+	ControlType controlType;
 	
-	public OptionControl(Composite parent){
-		this.parent = parent;
-		optRow = new Composite(parent, 0x0);
-		optRow.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+	public OptionControl(Composite parent, int styleBits){
+		super(parent, styleBits);
+		setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, false);
 		gd.minimumWidth = 120;
 		gd.minimumHeight = 25;
 		//gd.heightHint = 25;		
-		optRow.setLayoutData(gd);
+		setLayoutData(gd);
 	}
 
 	// return Label so caller can modify layoutData, if desired
 	private Label createLabel(String text){
-		Label label = new Label(optRow, 0x0);
+		Label label = new Label(this, 0x0);
 		label.setText(text);
 		label.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
@@ -74,13 +74,15 @@ public class OptionControl {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		createLabel(labelTxt);
-		Spinner spinner = new Spinner(optRow, 0x0);
+		activeControl = new Spinner(this, 0x0);
+		Spinner spinner = (Spinner)activeControl;
 		spinner.setMinimum(min);
 		spinner.setMaximum(max);
 		GridData gd = new GridData(SWT.RIGHT, SWT.FILL, true,false);
 		spinner.setLayoutData(gd);
+		controlType = ControlType.SPINNER;
 		return spinner;
 	}
 	
@@ -88,14 +90,16 @@ public class OptionControl {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		createLabel(labelTxt);
-		Combo combo = new Combo(optRow, SWT.READ_ONLY);
+		activeControl = new Combo(this, SWT.READ_ONLY);
+		Combo combo = (Combo)activeControl;
 		combo.setItems(opts);
 	
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 		gd.widthHint = 40;
 		combo.setLayoutData(gd);
+		controlType = ControlType.COMBO;
 		return combo;
 	}
 	
@@ -103,13 +107,15 @@ public class OptionControl {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		createLabel(labelTxt);
-		Button button = new Button(optRow, SWT.PUSH);
+		activeControl = new Button(this, SWT.PUSH);
+		Button button = (Button)activeControl;
 		button.setText(text);
 
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 		button.setLayoutData(gd);
+		controlType = ControlType.BUTTON;
 		return button;
 	}
 	
@@ -117,21 +123,24 @@ public class OptionControl {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		createLabel(labelTxt);
-		Button button = new Button(optRow, SWT.CHECK);
+		activeControl = new Button(this, SWT.CHECK);
 
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
+		Button button = (Button)activeControl;
 		button.setLayoutData(gd);
+		controlType = ControlType.BUTTON;
 		return button;
 	}
 	
 	public Text createText(String labelStr, String defaultText){
 		GridLayout layout = new GridLayout(2, false);
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		layout.marginHeight = 0;
 		createLabel(labelStr);
-		Text text = new Text(optRow, SWT.RIGHT);
+		activeControl = new Text(this, SWT.RIGHT);
+		Text text = (Text)activeControl;
 		text.setText(defaultText);
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, false,false);
 		gd.widthHint = 45;
@@ -140,6 +149,7 @@ public class OptionControl {
 		text.setTextLimit(7);
 		//  make bg gray to distinguish it from bg of parent
 		text.setBackground(new Color(display, 210, 210, 210));
+		controlType = ControlType.TEXT;
 		return text;
 	}
 
@@ -147,20 +157,22 @@ public class OptionControl {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		layout.marginHeight = 0;
-		optRow.setLayout(layout);
+		this.setLayout(layout);
 		createLabel(labelTxt);
 		//  Add color label
-		colorLabel = new Label(optRow, 0x0);
+		colorLabel = new Label(this, 0x0);
 		colorLabel.setText("       ");
 		colorLabelColor = new Color(display, 
 									(int)(sldColor.getRed()*255), 
 									(int)(sldColor.getGreen()*255), 
 									(int)(sldColor.getBlue()*255));
 		colorLabel.setBackground(colorLabelColor);
-		Button button = new Button(optRow, SWT.PUSH);
+		activeControl = new Button(this, SWT.PUSH);
+		Button button = (Button)activeControl;
 		button.setText("...");
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
 		button.setLayoutData(gd);
+		controlType = ControlType.COLOR_BUTTON;
 		return button;
 	}
 
@@ -174,13 +186,81 @@ public class OptionControl {
 		colorLabel.setBackground(colorLabelColor);		
 	}
 	
+	public Control getControl(){
+		return activeControl;
+	}
+	
+	public void addSelectionListener(SelectionListener sl){
+		switch(controlType){
+		case BUTTON:
+		case COLOR_BUTTON:
+			((Button)activeControl).addSelectionListener(sl);
+			break;
+		case TEXT:
+			((Text)activeControl).addSelectionListener(sl);
+			break;
+		case SPINNER:
+			((Spinner)activeControl).addSelectionListener(sl);
+			break;
+		case COMBO:
+			((Combo)activeControl).addSelectionListener(sl);
+			break;
+		default:
+			System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
+		}
+	}
+	
+	public void removeSelectionListener(SelectionListener sl){
+		switch(controlType){
+		case BUTTON:
+		case COLOR_BUTTON:
+			((Button)activeControl).removeSelectionListener(sl);
+			break;
+		case TEXT:
+			((Text)activeControl).removeSelectionListener(sl);
+			break;
+		case SPINNER:
+			((Spinner)activeControl).removeSelectionListener(sl);
+			break;
+		case COMBO:
+			((Combo)activeControl).removeSelectionListener(sl);
+			break;
+		default:
+			System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
+		}
+	}
+	
+	//  sets this optControl's selection based on the arg
+	public void setSelection(OptionControl optControl){
+		Control control = optControl.getControl();
+		switch(controlType){
+		case BUTTON:
+			//((Button)activeControl).removeSelectionListener(sl);
+			break;
+		case COLOR_BUTTON:
+			colorLabelColor = optControl.colorLabelColor;
+			colorLabel.setBackground(colorLabelColor);
+			break;
+		case TEXT:
+			//((Text)activeControl).removeSelectionListener(sl);
+			break;
+		case SPINNER:
+			((Spinner)activeControl).setSelection( ((Spinner)control).getSelection());
+			break;
+		case COMBO:
+			//((Combo)activeControl).removeSelectionListener(sl);
+			break;
+		default:
+			System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
+		}
+	}
+	
 	public void dispose(){
-		optRow.dispose();
-		optRow = null;
 		if(colorLabelColor != null) {
 			colorLabelColor.dispose();
 			colorLabelColor = null;
 		}
+		super.dispose();
 	}
 	
 }
