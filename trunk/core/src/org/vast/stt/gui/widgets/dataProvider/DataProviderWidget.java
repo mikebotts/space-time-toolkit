@@ -1,7 +1,6 @@
 package org.vast.stt.gui.widgets.dataProvider;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;

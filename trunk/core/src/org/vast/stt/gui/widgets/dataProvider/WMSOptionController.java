@@ -39,39 +39,39 @@ public class WMSOptionController
 		// TODO Auto-generated method stub
 		optionControl = new OptionControl[6];
 		//  Image Width
-		optionControl[0] = new OptionControl(parent);
+		optionControl[0] = new OptionControl(parent, 0x0);
 		widthText = optionControl[0].createText("Width:", "500");
 		widthText.addKeyListener(this);
 
 		//  Image Height
-		optionControl[1] = new OptionControl(parent);
+		optionControl[1] = new OptionControl(parent,0x0);
 		heightText = optionControl[1].createText("Height:", "500");
 		heightText.addKeyListener(this);
 
 		//  Formats
 		//String [] formatOpts = (String [])provider.getLayerCapabilities().getFormatList().toArray(new String []{});
-		optionControl[2] = new OptionControl(parent);
+		optionControl[2] = new OptionControl(parent,0x0);
 		String [] formatOpts = {"jpg","png","gif"};
 		formatCombo = optionControl[2].createCombo("Format:", formatOpts);
 		formatCombo.addSelectionListener(this);
 
 		//  SRS  
 		//
-		optionControl[3] = new OptionControl(parent);
+		optionControl[3] = new OptionControl(parent, 0x0);
 		String [] srsOpts = {"EPSG:4326","EPSG:4329"};
 		srsCombo = optionControl[3].createCombo("SRS:", srsOpts);
 		srsCombo.addSelectionListener(this);
 
 		//  Styles  
 		//
-		optionControl[4] = new OptionControl(parent);
+		optionControl[4] = new OptionControl(parent, 0x0);
 		String [] styleOpts = {"style1","style2"};
 		styleCombo = optionControl[4].createCombo("Styles:", styleOpts);
 		styleCombo.addSelectionListener(this);
 		
 		// Transparent Checkbox
 		//
-		optionControl[5] = new OptionControl(parent);
+		optionControl[5] = new OptionControl(parent, 0x0);
 		boolean trans = true;
 		checkButton = optionControl[5].createCheckbox("Transparency:", trans);
 		checkButton.addSelectionListener(this);
