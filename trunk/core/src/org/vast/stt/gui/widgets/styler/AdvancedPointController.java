@@ -11,32 +11,19 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 
-/**
- * <p><b>Title:</b><br/>
- * AdvancedLineController
- * </p>
- *
- * <p><b>Description:</b><br/>
- * </p>
- *
- * <p>Copyright (c) 2006</p>
- * @author Tony Cook
- * @date Feb 6, 2006
- * @version 1.0
- * 
- */
-public class AdvancedLineController extends OptionController 
+public class AdvancedPointController extends OptionController 
 	implements SelectionListener {
 	private Composite parent;
-	private LineOptionHelper lineOptionHelper;
+	private PointOptionHelper pointOptionHelper;
 	
-	public AdvancedLineController(Composite parent, LineStyler styler){
+	public AdvancedPointController(Composite parent, DataStyler styler){
 		this.parent = parent;
 		this.styler = styler;
 		
-		lineOptionHelper = new LineOptionHelper(this);
+		pointOptionHelper = new PointOptionHelper(this);
 		buildControls();
 	}
 	
@@ -44,17 +31,17 @@ public class AdvancedLineController extends OptionController
 	public void buildControls(){
 		optionControls = new OptionControl[2];
 		optionControls[0] = new OptionControl(parent, 0x0);
-		Spinner advWidthSpinner = optionControls[0].createSpinner("LineWidth:", 1, 10);
-		advWidthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
+		Spinner advWidthSpinner = optionControls[0].createSpinner("Point Size:", 1, 10);
+		advWidthSpinner.setSelection((int)pointOptionHelper.getPointSize());
 		//  add other controls
 		addMappingControls(parent);
 		
 		optionControls[1] = new OptionControl(parent, 0x0);
-		optionControls[1].createColorButton("Line Color:", lineOptionHelper.getLineColor());
+		optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
 
 		addMappingControls(parent);
 
-		addSelectionListener(lineOptionHelper);
+		addSelectionListener(pointOptionHelper);
 	}
 	
 	//  Always the same: MapTo Label, MapCombo, LUT Button

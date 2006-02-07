@@ -37,11 +37,11 @@ public class StyleOptionChooser extends OptionChooser {
 	//  Need to keep controllers in memory and just rebuild their
 	//  controls as needed, so basic and advanced options can
 	//  co-exist and change together
-	PointOptionController pointOptionController;
-	LineOptionController lineOptionController;
-	
-	public StyleOptionChooser(Composite parent) {
+	private OptionListener optListener;
+
+	public StyleOptionChooser(Composite parent, OptionListener ol) {
 		super(parent);
+		this.optListener = ol;
 	}
 
 	public void buildControls(Object stylerObj){
@@ -49,12 +49,14 @@ public class StyleOptionChooser extends OptionChooser {
 		removeOldControls();
 
 		if(styler instanceof PointStyler) {
-			//optionController = new PointOptionController((PointStyler)styler);
+			BasicPointController pointOptionController = 
+				new BasicPointController(optComp, (PointStyler)styler);
+			optListener.setBasicController(pointOptionController);
 		} else if (styler instanceof LineStyler) {
-			if(lineOptionController == null)
-				lineOptionController = new LineOptionController();
-			lineOptionController.setStyler((LineStyler)stylerObj);
-			lineOptionController.buildControls(optComp);
+			BasicLineController lineOptionController = 
+				new BasicLineController(optComp, (LineStyler)styler);
+			lineOptionController.addSelectionListener(optListener);
+			optListener.setBasicController(lineOptionController);
 		} else
 			System.err.println("Styler not supported yet: " + styler);
 		
@@ -62,5 +64,5 @@ public class StyleOptionChooser extends OptionChooser {
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
-	
+
 }
