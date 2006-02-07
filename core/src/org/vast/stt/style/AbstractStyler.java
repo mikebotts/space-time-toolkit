@@ -106,7 +106,7 @@ public abstract class AbstractStyler implements DataStyler
 //        for (int i=0; i<indices.length; i++)
 //            System.out.print("[" + indices[i][0] + "-" + indices[i][1] + "],");
         
-        System.out.println();
+//        System.out.println();
         return indices;
     }
     
