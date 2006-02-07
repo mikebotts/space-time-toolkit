@@ -47,8 +47,4 @@ public class DataProviderOptionChooser extends OptionChooser {
 		optComp.redraw();
 	}	
 	
-	public void buildAdvancedControls(Object inputObj){
-		return;
-	}
-
 }
