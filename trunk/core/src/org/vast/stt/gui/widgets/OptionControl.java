@@ -34,11 +34,14 @@ import org.eclipse.ui.PlatformUI;
 public class OptionControl extends Composite {
 	Color colorLabelColor;
 	Label colorLabel;
+	Label label;
 	Display display = PlatformUI.getWorkbench().getDisplay();
 	Control activeControl;
 	public static enum ControlType { BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT}; 
 	ControlType controlType;
-	
+	final Color WHITE = display.getSystemColor(SWT.COLOR_WHITE);
+	final Color GRAY = display.getSystemColor(SWT.COLOR_GRAY);
+
 	public OptionControl(Composite parent, int styleBits){
 		super(parent, styleBits);
 		setBackground(display.getSystemColor(SWT.COLOR_WHITE));
@@ -52,9 +55,9 @@ public class OptionControl extends Composite {
 
 	// return Label so caller can modify layoutData, if desired
 	private Label createLabel(String text){
-		Label label = new Label(this, 0x0);
+		label = new Label(this, 0x0);
 		label.setText(text);
-		label.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+		label.setBackground(WHITE);
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		gd.widthHint = 60;
 		label.setLayoutData(gd);
@@ -189,6 +192,18 @@ public class OptionControl extends Composite {
 	
 	public Control getControl(){
 		return activeControl;
+	}
+	
+	public void setEnabled(boolean b){
+		if(b) {
+			this.setBackground(WHITE);
+			this.label.setBackground(WHITE);
+			this.getControl().setEnabled(true);
+		} else {
+			this.setBackground(GRAY);
+			this.label.setBackground(GRAY);
+			this.getControl().setEnabled(false);
+		}
 	}
 	
 	public void addSelectionListener(SelectionListener sl){
