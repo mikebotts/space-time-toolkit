@@ -1,0 +1,80 @@
+package org.vast.stt.gui.widgets.styler;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
+import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.LineStyler;
+import org.vast.stt.style.PointStyler;
+
+public class AdvancedGraphicsTab extends Composite {
+
+	Composite parent;
+	OptionController optionController;
+	private OptionListener optionListener;
+	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
+	
+	public AdvancedGraphicsTab(Composite parent, OptionListener ol){
+		super(parent, SWT.BORDER);
+		this.parent = parent;
+		this.optionListener = ol;
+		init();
+	}
+	
+	public void init(){
+		this.setBackground(WHITE);
+		final GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 3;
+		this.setLayout(gridLayout);
+	}
+	
+	public void buildControls(DataStyler styler){
+		removeOldControls();
+		addTopRow();
+		if(styler instanceof PointStyler){
+			optionController = new AdvancedPointController(this, (PointStyler)styler);
+			optionController.addSelectionListener(optionListener);
+			optionListener.setAdvancedController(optionController);
+		} else if(styler instanceof LineStyler) {
+			optionController = new AdvancedLineController(this, (LineStyler)styler);
+			optionController.addSelectionListener(optionListener);
+			optionListener.setAdvancedController(optionController);
+		} else {
+			
+		}
+		this.layout();
+		this.redraw();
+	}
+
+	public void addTopRow(){
+		//  Add Labels for top row
+		Label toLabel = new Label(this, SWT.LEFT);
+		Label fromLabel = new Label(this, SWT.LEFT);
+		Label lutLabel = new Label(this, SWT.LEFT);
+		toLabel.setText("Map To:");
+		fromLabel.setText("MapFrom:");
+		lutLabel.setText("");
+		toLabel.setBackground(WHITE);
+		fromLabel.setBackground(WHITE);
+		lutLabel.setBackground(WHITE);
+	}
+	
+	public void close(){
+		optionListener.setAdvancedController(null);
+	}
+
+	public void removeOldControls(){
+		Control [] controls = this.getChildren();
+		for(int i=0; i<controls.length; i++){
+			controls[i].dispose();
+			controls[i] = null;
+		}
+	}
+	
+}

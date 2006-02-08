@@ -46,12 +46,12 @@ public class AdvancedPointController extends OptionController
 	
 	//  Always the same: MapTo Label, MapCombo, LUT Button
 	private void addMappingControls(Composite parent){
-		final Label mapToLabel = new Label(parent, SWT.NONE);
-		mapToLabel.setText("Map To:");
+		//final Label mapToLabel = new Label(parent, SWT.NONE);
+		//mapToLabel.setText("Map To:");
 
 		Combo mappingCombo = new Combo(parent, SWT.READ_ONLY);
-		final GridData gridData = new GridData(GridData.END, GridData.CENTER, true, false);
-		gridData.widthHint = 53;
+		final GridData gridData = new GridData(GridData.END, GridData.CENTER, false, false);
+		//gridData.widthHint = 53;
 		mappingCombo.addSelectionListener(this);
 
 		Button lutButton = new Button(parent, SWT.PUSH);

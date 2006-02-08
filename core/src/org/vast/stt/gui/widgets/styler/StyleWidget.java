@@ -23,6 +23,7 @@ import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.StylerFactory;
  
 /**
  * <p><b>Title:</b><br/>
@@ -165,29 +166,7 @@ public class StyleWidget extends CheckOptionTable
 		// TODO Auto-generated method stub
 		Control control = (Control)e.getSource();
 		if(control == addButton){
-			AddStylerDialog addStylerDialog = 
-				new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-			int retCode = addStylerDialog.open();
-			if(retCode == SWT.OK){
-				int stylerType = addStylerDialog.getStylerType();
-				DataStyler newStyler;
-				switch(stylerType){
-				case 0:
-					newStyler = new PointStyler();
-					//newStyler = StylerFactory 
-					newStyler.setName("More Points");
-					addStyle(newStyler);
-					break;
-				case 1:
-					newStyler = new LineStyler();
-					newStyler.setName("More Lines");
-					addStyle(newStyler);
-					break;
-				default:
-					System.err.println("StylerType note recognized in addStyler()");
-					break;
-				}
-			}
+			openAddStyleDialog();
 		} else if  (control == deleteButton){
 			if(activeStyler != null)
 				removeStyle (activeStyler);  //  remove currently selected row   
@@ -205,6 +184,33 @@ public class StyleWidget extends CheckOptionTable
 		AdvancedStyleDialog asd = 
 			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
 		//asd.setOptionListener(optListener);
+	}
+	
+	private void openAddStyleDialog(){
+		AddStylerDialog addStylerDialog = 
+			new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		int retCode = addStylerDialog.open();
+		if(retCode == SWT.OK){
+			int stylerType = addStylerDialog.getStylerType();
+			DataStyler newStyler;
+			switch(stylerType){
+			case 0:
+				//newStyler = new PointStyler();
+				//StylerFactory.
+				newStyler = new PointStyler();
+				newStyler.setName("More Points");
+				addStyle(newStyler);
+				break;
+			case 1:
+				newStyler = new LineStyler();
+				newStyler.setName("More Lines");
+				addStyle(newStyler);
+				break;
+			default:
+				System.err.println("StylerType note recognized in addStyler()");
+				break;
+			}
+		}
 	}
 	
 	//  Called when parent styleView is closed.  Set basicControls and
