@@ -72,6 +72,17 @@ public class AdvancedGeometryTab extends Composite implements SelectionListener{
 			lutButton[i].setBackground(WHITE);
 			lutButton[i].addSelectionListener(this);
 		}
+		//
+		setMappableItems(null);
+	}
+
+	// TODO:  load these based on actual mappable items	
+	public void setMappableItems(String [] _items){
+		String [] items = { "<constant>", "lat", "lon", "alt" }; 
+		for (int i=0; i<mapFromCombo.length; i++) {
+			mapFromCombo[i].setItems(items);
+			mapFromCombo[i].select(0);
+		}
 	}
 	
 	public void close(){
