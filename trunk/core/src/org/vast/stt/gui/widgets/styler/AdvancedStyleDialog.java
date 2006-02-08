@@ -1,6 +1,7 @@
 package org.vast.stt.gui.widgets.styler;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -28,7 +29,8 @@ public class AdvancedStyleDialog implements SelectionListener
 	private Shell shell;
 
 	private DataItem dataItem;
-	private AdvancedOptionChooser advancedOptChooser;
+	private AdvancedGraphicsTab advGraphicsTab;
+	private AdvancedGeometryTab advGeomTab;
 	DataStructureTreeViewer dataStructureTree;
 	private TabItem graphicTabItem;
 	private Button addButton;
@@ -41,12 +43,17 @@ public class AdvancedStyleDialog implements SelectionListener
 	private Button closeButton;
 
 	//  This dialog's dataItem cannot change, unlike StyleWidget
+	//  However, it's list of styles can change if a style is added to the 
+	//  DataItem via the 'add' button, or the 'add' button on the 
+	//  StyleWidget
 	public AdvancedStyleDialog(DataItem item, DataStyler activeStyler, OptionListener ol) {
 		this.dataItem = item;
 		//  init GUI components
 		init(ol);
-		//  Set initial state of tabs and tree
+		//  Set initial state of tabs and tree based on dataItem's styles
 		setStyler(dataItem.getStyler());
+		//  set the currently active non-composite DataStyler based on 
+		//  what was selected in StyleWidget wheb "advanced" button was pressed 
 		setActiveStyler(activeStyler);
 		dataStructureTree.setInput(item.getDataProvider().getDataNode());
 		//  open the dialog
@@ -58,10 +65,10 @@ public class AdvancedStyleDialog implements SelectionListener
 	 */
 	private void init(OptionListener ol) {
 		shell = new Shell();
-		shell.setMinimumSize(new Point(400, 300));
+		shell.setMinimumSize(new Point(480,350));
 		final GridLayout gridLayout_1 = new GridLayout();
 		shell.setLayout(gridLayout_1);
-		shell.setSize(553, 403);
+		shell.setSize(480,350);
 		shell.setText("Advanced Style Options");
 
 		//  Top composite for top row
@@ -79,7 +86,7 @@ public class AdvancedStyleDialog implements SelectionListener
 		stylesCombo = new Combo(topComp, SWT.READ_ONLY);
 		stylesCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		//  enable when I fix stylesChanged 
-		stylesCombo.setEnabled(false);
+		//stylesCombo.setEnabled(false);
 		
 		stylesCombo.addSelectionListener(this);
 		
@@ -115,16 +122,17 @@ public class AdvancedStyleDialog implements SelectionListener
 		graphicTabItem = new TabItem(tabFolder, SWT.NONE);
 		graphicTabItem.setText("Graphic");
 
-		// AdvancedOptionChooser
-		createAdvancedOptionChooser(tabFolder, ol);
-		graphicTabItem.setControl(advancedOptChooser.getGroup());
+		// AdvanceGraphicTab
+		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, ol);
+		graphicTabItem.setControl(advGraphicsTab);
 		
 		//  Geom tab
 		final TabItem geometryTabItem = new TabItem(tabFolder, SWT.NONE);
 		geometryTabItem.setText("Geometry");
 
-		final Group geomGroup = new Group(tabFolder, SWT.NONE);
-		geometryTabItem.setControl(geomGroup);
+		// AdvanceGeomTab
+		advGeomTab = new AdvancedGeometryTab(tabFolder);
+		geometryTabItem.setControl(advGeomTab);
 
 		//  DataStructure TreeViewer (right item of midComp)
 		final Group dataStructureGroup = new Group(midComp, SWT.NONE);
@@ -142,13 +150,9 @@ public class AdvancedStyleDialog implements SelectionListener
 		shell.layout();
 	}
 	
-	public void createAdvancedOptionChooser(Composite parent, OptionListener ol){
-		advancedOptChooser = new AdvancedOptionChooser(parent, ol);
-	}
-	
 	/**
-	 * Make this DataStyler the currently active Styler in the StyleWidget
-	 * 
+	 * Make this DataStyler the currently active Styler in the StyleWidget - 
+	 * can be a compositeStyler
 	 * @param newStyler
 	 */
 	public void setStyler(DataStyler newStyler){
@@ -165,8 +169,32 @@ public class AdvancedStyleDialog implements SelectionListener
 	//  NOTE:  styler should NOT be a composite styler here
 	protected void setActiveStyler(DataStyler styler){
 		//  Change DataTree/MappingTab contents
+		if(activeStyler == null)
+			activeStyler = stylerAL.get(0);
+		if(activeStyler == null)
+			return;
 		activeStyler = styler;
-		advancedOptChooser.buildControls(activeStyler);
+		advGraphicsTab.buildControls(activeStyler);
+		//  Try setting index to activeStyler's pos in ArrayList
+		Iterator<DataStyler> it = stylerAL.iterator();
+		DataStyler styleTmp = null;
+		int index = 0;
+		while(it.hasNext()){
+			styleTmp = it.next();
+			if(styleTmp == activeStyler) {
+				stylesCombo.select(index);
+				return;
+			}
+			index++;
+		}
+		System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
+		System.err.println("NOW WHAT???");
+	}
+	
+	protected void setActiveStyler(int index){
+		activeStyler = stylerAL.get(index);
+		advGraphicsTab.buildControls(activeStyler);
+		//graphicTabItem.setControl()
 	}
 	
 	protected void setStylesComboItems(){
@@ -193,12 +221,11 @@ public class AdvancedStyleDialog implements SelectionListener
 		} else if (e.widget == renameButton) {
 			
 		} else if (e.widget == stylesCombo) {
-			
+			setActiveStyler(stylesCombo.getSelectionIndex());
 		} else if (e.widget == closeButton){
 			//  Remove OptLstnr
-			advancedOptChooser.close();
+			advGraphicsTab.close();
 			shell.close();
-			//shell.dispose();  close() calls dispose()
 		}
 	}
 }

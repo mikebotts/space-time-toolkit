@@ -43,6 +43,7 @@ public class OptionControl extends Composite {
 		super(parent, styleBits);
 		setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, false);
+		gd.minimumWidth = 100;
 		gd.minimumWidth = 120;
 		gd.minimumHeight = 25;
 		//gd.heightHint = 25;		

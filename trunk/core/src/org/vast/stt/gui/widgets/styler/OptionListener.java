@@ -8,6 +8,13 @@ import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 
+/**
+ * OptionListener is a bridge between the basic controls of the StyleWidget 
+ * class and the advanced controls of AdvancedStyleDialog.
+ * 
+ * @author tcook
+ *
+ */
 public class OptionListener implements SelectionListener 
 {
 	OptionController basicController;
