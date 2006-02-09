@@ -16,6 +16,7 @@ package org.vast.stt.scene;
 import java.util.*;
 
 import org.vast.stt.data.DataProvider;
+import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 
 
@@ -72,6 +73,18 @@ public class DataItem implements DataEntry
 	public void setStyler(DataStyler styler)
 	{
 		this.styler = styler;
+	}
+	
+	//  Consider adding addStyler to CompositeStyler class- T, 2/8/06
+	public void addStyler(DataStyler newStyler){
+		if(this.styler instanceof CompositeStyler) {
+			((CompositeStyler)styler).getStylerList().add(newStyler);
+		} else {
+			CompositeStyler compStyler = new CompositeStyler(2);
+			compStyler.getStylerList().add(this.styler);
+			compStyler.getStylerList().add(newStyler);
+			this.styler = compStyler;
+		}
 	}
 
 
