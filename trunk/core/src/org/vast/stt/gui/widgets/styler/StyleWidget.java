@@ -107,6 +107,7 @@ public class StyleWidget extends CheckOptionTable
 	private void addStyle(DataStyler styler){
 		//  Add Checkbox to stylers Set and rerender Table
 		stylerAL.add(styler);
+		dataItem.addStyler(styler);
 		//  I wanted activeStyler to be set to the newly added styler, but that didn't work so well... 
 		//activeStyler = styler;
 		//  ... so I force it to null.  Could use flag to make this work as desired. 
@@ -195,16 +196,17 @@ public class StyleWidget extends CheckOptionTable
 			DataStyler newStyler;
 			switch(stylerType){
 			case 0:
-				//newStyler = new PointStyler();
-				//StylerFactory.
-				newStyler = new PointStyler();
+				newStyler = 
+					StylerFactory.createDefaultPointStyler(dataItem.getDataProvider());
+				//  Hack to set geom
+				newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
 				newStyler.setName("More Points");
+				newStyler.updateDataMappings();
+				newStyler.setEnabled(false);
+
 				addStyle(newStyler);
 				break;
 			case 1:
-				newStyler = new LineStyler();
-				newStyler.setName("More Lines");
-				addStyle(newStyler);
 				break;
 			default:
 				System.err.println("StylerType note recognized in addStyler()");
