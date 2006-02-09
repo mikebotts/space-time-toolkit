@@ -55,4 +55,36 @@ public class StylerFactory
 		
 		return styler;
 	}
+	
+	/**
+	 * Convenience method for constructing a new PointStyler with a default 
+	 * size and color, and the geometry settings of the input DataProvider
+	 * 
+	 * @param provider - the dataProvider to use for the new Styler
+	 * @return PointStyler
+	 */
+	static public PointStyler createDefaultPointStyler(DataProvider provider){
+		PointStyler styler = new PointStyler();
+		styler.setDataProvider(provider);
+
+		PointSymbolizer symbolizer = new PointSymbolizer();
+		styler.setSymbolizer(symbolizer);
+
+		Graphic graphic = new Graphic();
+		ScalarParameter size = new ScalarParameter();
+		size.setConstantValue(new Float(2.0));
+		graphic.setSize(size);
+
+		GraphicMark gm = new GraphicMark();
+		ScalarParameter color = new ScalarParameter();
+		color.setConstantValue(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+		Fill fill = new Fill();
+		fill.setColor(color);
+		gm.setFill(fill);
+		graphic.addGlyph(gm);
+		
+		symbolizer.setGraphic(graphic);
+		
+		return styler;
+	}
 }

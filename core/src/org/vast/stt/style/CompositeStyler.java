@@ -51,12 +51,20 @@ public class CompositeStyler extends AbstractStyler
         stylerList = new ArrayList<DataStyler>(numStylers);
 	}
 	
-	
+	//  Added isEnabled() check in this loop.  I'm not sure if it 
+	//  should be here, or be caught before this point.  
+	//  Renderer.drawScene() calls isEnabled() only on the CompositeStyler,
+	//  though, so all Stylers are either on or off without this check.
+	//  TC, 2/8/06
 	public void accept(StylerVisitor visitor)
 	{
 		// loop through all child stylers
-		for (int i=0; i<stylerList.size(); i++)
-            stylerList.get(i).accept(visitor);
+		DataStyler stylerTmp;
+		for (int i=0; i<stylerList.size(); i++) {
+			stylerTmp = stylerList.get(i);
+			if(stylerTmp.isEnabled())
+				stylerTmp.accept(visitor);
+		}
 	}
 	
 	
