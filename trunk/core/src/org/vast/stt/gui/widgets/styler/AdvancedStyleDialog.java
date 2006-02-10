@@ -20,10 +20,26 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.PlatformUI;
+import org.ogc.cdm.common.DataBlock;
+import org.ogc.cdm.common.DataComponent;
+import org.vast.data.DataArray;
+import org.vast.data.DataGroup;
+import org.vast.data.DataList;
+import org.vast.data.DataValue;
+import org.vast.stt.data.DataNode;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 
+/**
+ * 
+ * @author tcook
+ * @date 2/1/06
+ *
+ * TODO:  Don't allow multiple advancedStyleDialog for a dataStyler - otherwise,
+ * 		  communicating between them will get nasty
+ * 	
+ */
 public class AdvancedStyleDialog implements SelectionListener 
 {
 	private Shell shell;
@@ -123,7 +139,7 @@ public class AdvancedStyleDialog implements SelectionListener
 		graphicTabItem.setText("Graphic");
 
 		// AdvanceGraphicTab
-		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, ol);
+		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem, ol);
 		graphicTabItem.setControl(advGraphicsTab);
 		
 		//  Geom tab
@@ -132,6 +148,7 @@ public class AdvancedStyleDialog implements SelectionListener
 
 		// AdvanceGeomTab
 		advGeomTab = new AdvancedGeometryTab(tabFolder);
+		advGeomTab.setMappableItems(getMappableItems());
 		geometryTabItem.setControl(advGeomTab);
 
 		//  DataStructure TreeViewer (right item of midComp)
@@ -148,6 +165,38 @@ public class AdvancedStyleDialog implements SelectionListener
 		closeButton.addSelectionListener(this);
 		
 		shell.layout();
+	}
+	
+	/**
+	 * 
+	 * @return - the mappable property names for this dataItem
+	 */
+	protected String [] getMappableItems(){
+		List<String> mappableAL = new ArrayList<String>();
+		DataNode node = dataItem.getDataProvider().getDataNode();
+		//DataBlock dataBlock = node.getData();
+		DataComponent dataComp = node.getComponent(0);
+		int numComps = dataComp.getComponentCount();
+		DataComponent dataCompTmp;
+		for(int i=0; i<numComps; i++) {
+			dataCompTmp = dataComp.getComponent(i);
+			if(dataCompTmp instanceof DataGroup){
+				DataGroup group = (DataGroup)dataCompTmp;
+				int numChildren = group.getComponentCount();
+				DataComponent childComp;			
+				for(int j=0; j<numChildren; j++){
+					childComp = group.getComponent(j);
+					mappableAL.add(childComp.getName());
+				}
+			} else if ( dataCompTmp instanceof DataArray ||
+						dataCompTmp instanceof DataList) {
+				mappableAL.add(dataCompTmp.getComponent(0).getName());
+			} else if ( dataCompTmp instanceof DataValue)
+				mappableAL.add(dataCompTmp.getName());
+			
+		}
+		String [] mappables = mappableAL.toArray(new String[]{});
+		return mappables;
 	}
 	
 	/**
@@ -174,7 +223,9 @@ public class AdvancedStyleDialog implements SelectionListener
 		if(activeStyler == null)
 			return;
 		activeStyler = styler;
+		///  Update Graphic and Geom tab
 		advGraphicsTab.buildControls(activeStyler);
+		advGeomTab.setActiveStyler(activeStyler);
 		//  Try setting index to activeStyler's pos in ArrayList
 		Iterator<DataStyler> it = stylerAL.iterator();
 		DataStyler styleTmp = null;
@@ -194,6 +245,7 @@ public class AdvancedStyleDialog implements SelectionListener
 	protected void setActiveStyler(int index){
 		activeStyler = stylerAL.get(index);
 		advGraphicsTab.buildControls(activeStyler);
+		advGeomTab.setActiveStyler(activeStyler);
 		//graphicTabItem.setControl()
 	}
 	

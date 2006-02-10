@@ -1,6 +1,7 @@
 package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.events.SelectionListener;
+import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.DataStyler;
 
 public abstract class OptionController { //implements SelectionListener {
@@ -15,6 +16,7 @@ public abstract class OptionController { //implements SelectionListener {
 		return styler;
 	}
 	
+
 	public void addSelectionListener(SelectionListener sl){
 		for(int i=0; i<optionControls.length; i++)
 			optionControls[i].addSelectionListener(sl);
