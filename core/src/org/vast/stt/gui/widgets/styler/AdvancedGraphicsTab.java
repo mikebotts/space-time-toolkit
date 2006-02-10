@@ -5,10 +5,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
@@ -16,13 +16,15 @@ import org.vast.stt.style.PointStyler;
 public class AdvancedGraphicsTab extends Composite {
 
 	Composite parent;
-	OptionController optionController;
+	DataItem dataItem;
+	AdvancedOptionController optionController;
 	private OptionListener optionListener;
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
 	
-	public AdvancedGraphicsTab(Composite parent, OptionListener ol){
+	public AdvancedGraphicsTab(Composite parent, DataItem item, OptionListener ol){
 		super(parent, SWT.BORDER);
 		this.parent = parent;
+		this.dataItem = item;
 		this.optionListener = ol;
 		init();
 	}

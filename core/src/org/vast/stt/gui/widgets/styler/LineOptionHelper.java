@@ -73,19 +73,18 @@ public class LineOptionHelper implements SelectionListener {
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){
-		
 	}
 	
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
-		OptionControl[] basicControl = optionController.getControls();
+		OptionControl[] optionControl = optionController.getControls();
 
-		if(control == basicControl[0].getControl()) {
+		if(control == optionControl[0].getControl()) {
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			setLineWidth(w);
 			styler.updateDataMappings();
-		} else if (control == basicControl[1].getControl()) {
+		} else if (control == optionControl[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();
@@ -93,7 +92,7 @@ public class LineOptionHelper implements SelectionListener {
 				return;
 			// TODO:  add alpha support
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
-			basicControl[1].setColorLabelColor(sldColor); 
+			optionControl[1].setColorLabelColor(sldColor); 
 			setLineColor(sldColor);
 			styler.updateDataMappings();
 		}

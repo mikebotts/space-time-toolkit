@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.LineStyler;
 
 /**
@@ -28,13 +29,11 @@ import org.vast.stt.style.LineStyler;
  * @version 1.0
  * 
  */
-public class AdvancedLineController extends OptionController 
-	implements SelectionListener {
+public class AdvancedLineController extends AdvancedOptionController { 
+	//implements SelectionListener {
 	private Composite parent;
 	private LineOptionHelper lineOptionHelper;
-	private Combo [] mapFromCombo;
-	private Button [] lutButton;
-	
+
 	public AdvancedLineController(Composite parent, LineStyler styler){
 		this.parent = parent;
 		this.styler = styler;
@@ -63,61 +62,20 @@ public class AdvancedLineController extends OptionController
 		addSelectionListener(lineOptionHelper);
 	}
 	
-	//  Always the same: MapTo Label, MapCombo, LUT Button
-	private void addMappingControls(Composite parent, int index){
-		mapFromCombo[index] = new Combo(parent, SWT.READ_ONLY);
-		final GridData gridData = new GridData(GridData.END, GridData.CENTER, true, false);
-		gridData.widthHint = 53;
-		mapFromCombo[index].addSelectionListener(this);
-
-		lutButton[index] = new Button(parent, SWT.PUSH);
-		lutButton[index].setText("LUT");
-		lutButton[index].addSelectionListener(this);
-	}
-
-	// TODO:  load these based on actual mappable items	
-	public void setMappableItems(String [] _items){
-		String [] items = { "<constant>", "lat", "lon", "alt" }; 
-		for (int i=0; i<mapFromCombo.length; i++) {
-			mapFromCombo[i].setItems(items);
-			mapFromCombo[i].select(0);
-		}
-	}
-
-	public void widgetDefaultSelected(SelectionEvent e){
-		
-	}
-	
-	/**
-	 * This widgetSelected is for events coming from the additional
-	 * mapping controls (LUT and Combo) on the advancedDialog.
-	 * OptionControl events still handled through LineOptionHelper class.  
-	 */
-	public void widgetSelected(SelectionEvent e) {
-		Control source = (Control)e.getSource();
-		for(int i=0; i<lutButton.length; i++){
-			if(source == lutButton[i]) {
-				doLut(i);
-				return;
-			} 
-			if(source == mapFromCombo[i]) {
-				doMapping(i);
-				return;
-			}
-		}
-	}
-	
-	private void doLut(int index){
+	protected void doLut(int index){
 		System.err.println("AdvLinControl:  doLut for " + index);
 	}
 	
-	private void doMapping(int index){
+	protected void doMapping(int index){
 		System.err.println("AdvLinControl:  doMapping for " + index);
 		int selIndex = mapFromCombo[index].getSelectionIndex();
-		if(selIndex == 0) {
-			optionControls[index].setEnabled(true);
-		} else {
-			optionControls[index].setEnabled(false);
+		switch(index){
+		case 0:  // set lineWidth 
+			break;
+		case 1:
+			break;  // set lineColor
+		default:
+			break;
 		}
-	}
+	}		
 }
