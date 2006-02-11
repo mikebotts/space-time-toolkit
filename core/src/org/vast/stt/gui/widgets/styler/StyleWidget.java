@@ -184,7 +184,6 @@ public class StyleWidget extends CheckOptionTable
 	private void createAdvancedStyleDialog(){
 		AdvancedStyleDialog asd = 
 			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
-		//asd.setOptionListener(optListener);
 	}
 	
 	private void openAddStyleDialog(){
@@ -221,7 +220,6 @@ public class StyleWidget extends CheckOptionTable
 	//  open.  Also not sure if optListener will still be valid).
 	public void close(){
 		optListener.setBasicController(null);
-		//optListener.setBasicStyler(null);
 	}
 	
 }

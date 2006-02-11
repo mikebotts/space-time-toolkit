@@ -40,7 +40,6 @@ public class AdvancedLineController extends AdvancedOptionController {
 		
 		lineOptionHelper = new LineOptionHelper(this);
 		buildControls();
-		setMappableItems(null);
 	}
 	
 	
@@ -71,6 +70,7 @@ public class AdvancedLineController extends AdvancedOptionController {
 		int selIndex = mapFromCombo[index].getSelectionIndex();
 		switch(index){
 		case 0:  // set lineWidth 
+			
 			break;
 		case 1:
 			break;  // set lineColor

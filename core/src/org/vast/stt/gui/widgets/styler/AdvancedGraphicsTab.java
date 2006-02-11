@@ -19,6 +19,7 @@ public class AdvancedGraphicsTab extends Composite {
 	DataItem dataItem;
 	AdvancedOptionController optionController;
 	private OptionListener optionListener;
+	String [] mappableItems;
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
 	
 	public AdvancedGraphicsTab(Composite parent, DataItem item, OptionListener ol){
@@ -50,6 +51,7 @@ public class AdvancedGraphicsTab extends Composite {
 		} else {
 			
 		}
+		optionController.setMappableItems(mappableItems);
 		this.layout();
 		this.redraw();
 	}
@@ -66,11 +68,11 @@ public class AdvancedGraphicsTab extends Composite {
 		fromLabel.setBackground(WHITE);
 		lutLabel.setBackground(WHITE);
 	}
-	
-	public void close(){
-		optionListener.setAdvancedController(null);
-	}
 
+	public void setMappableItems(String [] items){
+		mappableItems = items;
+	}
+	
 	public void removeOldControls(){
 		Control [] controls = this.getChildren();
 		for(int i=0; i<controls.length; i++){
@@ -79,4 +81,8 @@ public class AdvancedGraphicsTab extends Composite {
 		}
 	}
 	
+	public void close(){
+		optionListener.setAdvancedController(null);
+	}
+
 }
