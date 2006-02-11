@@ -14,20 +14,24 @@ abstract public class AdvancedOptionController extends OptionController
 		implements SelectionListener {
 	protected Combo [] mapFromCombo;
 	protected Button [] lutButton;
-
+	protected String [] mappableItems;
+	
 	abstract protected void doLut(int i);
 	abstract protected void doMapping(int i);
 	
-	// TODO:  call after combos are built	
-	protected void setMappableItems(String [] _items){
-		String [] item;
-		
-		String [] items = { "<constant>", "lat", "lon", "alt" }; 
-		for (int i=0; i<mapFromCombo.length; i++) {
-			mapFromCombo[i].setItems(items);
+	// TODO:  load these based on actual mappable items	
+	public void setMappableItems(String [] items){
+		this.mappableItems = new String[items.length+1];
+		mappableItems[0] = "<constant>";
+		for(int i=0; i<items.length; i++){
+			mappableItems[i+1] = items[i];
+		}
+		for(int i=0; i<mapFromCombo.length; i++) {
+			mapFromCombo[i].setItems(mappableItems);
 			mapFromCombo[i].select(0);
 		}
 	}
+	
 
 	//  Always the same: MapTo Label, MapCombo, LUT Button
 	protected void addMappingControls(Composite parent, int index){
@@ -37,7 +41,7 @@ abstract public class AdvancedOptionController extends OptionController
 		mapFromCombo[index] = new Combo(parent, SWT.READ_ONLY);
 		//final GridData gridData = new GridData(GridData.END, GridData.CENTER, false, false);
 		mapFromCombo[index].addSelectionListener(this);
-
+		
 		lutButton[index] = new Button(parent, SWT.PUSH);
 		lutButton[index].setText("LUT");
 		lutButton[index].addSelectionListener(this);
@@ -65,21 +69,25 @@ abstract public class AdvancedOptionController extends OptionController
 		}
 	}
 	
-//	public void addSelectionListener(SelectionListener sl){
-//		super.addSelectionListener(sl); 
-//		for(int i=0; i<optionControls.length; i++) {
-//			mapFromCombo[i].addSelectionListener(sl);
-//			lutButton[i].addSelectionListener(sl);
-//		}
-//		
-//	}	
-//
-//	public void removeSelectionListener(SelectionListener sl){
-//		super.addSelectionListener(sl); 
-//		for(int i=0; i<optionControls.length; i++){
-//			mapFromCombo[i].removeSelectionListener(sl);
-//			lutButton[i].removeSelectionListener(sl);
-//		}
-//	}
+	public Combo[] getMapFromCombos(){
+		return mapFromCombo;
+	}
+	
+	public void addSelectionListener(SelectionListener sl){
+		super.addSelectionListener(sl); 
+		for(int i=0; i<optionControls.length; i++) {
+			mapFromCombo[i].addSelectionListener(sl);
+			lutButton[i].addSelectionListener(sl);
+		}
+		
+	}	
+
+	public void removeSelectionListener(SelectionListener sl){
+		super.addSelectionListener(sl); 
+		for(int i=0; i<optionControls.length; i++){
+			mapFromCombo[i].removeSelectionListener(sl);
+			lutButton[i].removeSelectionListener(sl);
+		}
+	}
 	
 }

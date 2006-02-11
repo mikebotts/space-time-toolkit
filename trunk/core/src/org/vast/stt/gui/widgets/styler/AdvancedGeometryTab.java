@@ -118,23 +118,42 @@ public class AdvancedGeometryTab extends Composite
 			System.err.println("AdvancedGeomTab.updateMappings");
 		}
 		Geometry geom = activeStyler.getSymbolizer().getGeometry();
-		String xName = geom.getX().getPropertyName();
-		String yName = geom.getY().getPropertyName();
-		String zName = geom.getZ().getPropertyName();
-		String tName = geom.getT().getPropertyName();
-		int xIndex = findName(mappableItems, xName);
-		int yIndex = findName(mappableItems, yName);
-		int zIndex = findName(mappableItems, zName);
-		int tIndex = findName(mappableItems, tName);
-
-		if(xIndex >=0)
-			mapFromCombo[0].select(xIndex);
-		if(yIndex >=0)
-			mapFromCombo[1].select(yIndex);
-		if(zIndex >=0)
-			mapFromCombo[2].select(zIndex);
-		if(tIndex >=0)
-			mapFromCombo[3].select(tIndex);
+		ScalarParameter xparam = geom.getX();
+		ScalarParameter yparam = geom.getY();
+		ScalarParameter zparam = geom.getZ();
+		ScalarParameter tparam = geom.getT();
+		if(xparam != null) {
+			String xName = geom.getX().getPropertyName();
+			if(xName != null) {
+				int xIndex = findName(mappableItems, xName);
+				if(xIndex >=0)
+					mapFromCombo[0].select(xIndex);
+			}
+		}
+		if(yparam != null) {
+			String name = geom.getY().getPropertyName();
+			if(name != null) {
+				int index = findName(mappableItems, name);
+				if(index >=0)
+					mapFromCombo[1].select(index);
+			}
+		}
+		if(zparam != null) {
+			String name = geom.getZ().getPropertyName();
+			if(name != null) {
+				int index = findName(mappableItems, name);
+				if(index >=0)
+					mapFromCombo[2].select(index);
+			}
+		}
+		if(tparam != null) {
+			String name = geom.getT().getPropertyName();
+			if(name != null) {
+				int index = findName(mappableItems, name);
+				if(index >=0)
+					mapFromCombo[3].select(index);
+			}
+		}
 	}
 	
 	private int findName(String [] srcArr, String target){

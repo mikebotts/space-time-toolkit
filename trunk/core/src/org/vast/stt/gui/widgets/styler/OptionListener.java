@@ -2,6 +2,7 @@ package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
@@ -18,15 +19,17 @@ import org.vast.stt.style.LineStyler;
 public class OptionListener implements SelectionListener 
 {
 	OptionController basicController;
-	OptionController advancedController;
+	AdvancedOptionController advancedController;
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
+		this.getClass();
 	}
  
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 		OptionControl[] basicControls = null;
 		OptionControl[] advancedControls = null;
+		Combo[] mapFromCombos = null;
 		DataStyler basicStyler = null;
 		DataStyler advancedStyler = null;
 		//  Selection can come from either a basic or advancedControl,
@@ -39,6 +42,7 @@ public class OptionListener implements SelectionListener
 		if(advancedController != null) {
 			advancedControls = advancedController.getControls();
 			advancedStyler = advancedController.getStyler();
+			mapFromCombos = advancedController.getMapFromCombos();
 		}
 		if(basicControls != null){
 			for(int i=0; i<basicControls.length; i++){
@@ -64,13 +68,27 @@ public class OptionListener implements SelectionListener
 				}
 			}
 		}
+		if(mapFromCombos != null){
+			for(int i=0; i<mapFromCombos.length; i++){
+				if(control == mapFromCombos[i]){
+					boolean enabled = (mapFromCombos[i].getSelectionIndex() == 0);
+					//  basicStyler must be set to null when StyleView is 
+					//  closed for this to work
+					if(advancedStyler == basicStyler) {
+						basicControls[i].setEnabled(enabled);
+						advancedControls[i].setEnabled(enabled);
+					}
+					return;
+				}
+			}
+		}
 	}
 
 	public void setBasicController(OptionController loc){
 		basicController = loc;
 	}
 	
-	public void setAdvancedController(OptionController alc){
+	public void setAdvancedController(AdvancedOptionController alc){
 		advancedController = alc;
 	}
 	

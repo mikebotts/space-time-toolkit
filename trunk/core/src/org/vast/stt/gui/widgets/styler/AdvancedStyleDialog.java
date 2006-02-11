@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.PlatformUI;
-import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
@@ -70,8 +69,8 @@ public class AdvancedStyleDialog implements SelectionListener
 		setStyler(dataItem.getStyler());
 		//  set the currently active non-composite DataStyler based on 
 		//  what was selected in StyleWidget wheb "advanced" button was pressed 
-		setActiveStyler(activeStyler);
 		dataStructureTree.setInput(item.getDataProvider().getDataNode());
+		setActiveStyler(activeStyler);
 		//  open the dialog
 		shell.open();
 	}
@@ -140,6 +139,7 @@ public class AdvancedStyleDialog implements SelectionListener
 
 		// AdvanceGraphicTab
 		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem, ol);
+		advGraphicsTab.setMappableItems(getMappableItems());
 		graphicTabItem.setControl(advGraphicsTab);
 		
 		//  Geom tab
