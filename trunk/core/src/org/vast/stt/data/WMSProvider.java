@@ -13,14 +13,21 @@
 
 package org.vast.stt.data;
 
-import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
+import java.awt.image.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+
+import org.ogc.cdm.common.DataBlock;
+import org.ogc.cdm.common.DataType;
 import org.ogc.cdm.reader.*;
+import org.vast.data.DataArray;
+import org.vast.data.DataBlockFactory;
+import org.vast.data.DataGroup;
+import org.vast.data.DataValue;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSQuery;
 import org.vast.ows.wms.WMSLayerCapabilities;
@@ -36,7 +43,7 @@ import com.sun.media.jai.codec.MemoryCacheSeekableStream;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Requests Data from an WMS server and fill up a DataNode
+ * Requests Data from a WMS server and fill up a DataNode
  * with it.
  * </p>
  *
@@ -100,11 +107,28 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 				if (rop != null)
 				{
 					renderedImage = rop.createInstance();
-					renderedImage.getClass();
-				}
+                    
+					//renderedImage.getClass();				
 
-				// copy image to DataNode
-
+					// copy image to DataNode
+					byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();                   
+                    
+                    cachedData = new DataNode();
+                    
+                    DataGroup pixelData = new DataGroup(renderedImage.getData().getNumBands());
+                    pixelData.addComponent("blue", new DataValue(DataType.BYTE));
+                    pixelData.addComponent("green", new DataValue(DataType.BYTE));
+                    pixelData.addComponent("red", new DataValue(DataType.BYTE));                    
+                    DataArray rowData = new DataArray(renderedImage.getWidth());
+                    rowData.addComponent(pixelData);                    
+                    DataArray imageData = new DataArray(renderedImage.getHeight());
+                    imageData.addComponent(rowData);                    
+                    cachedData.addComponent("image", imageData);
+                    System.out.println(imageData);
+                    
+                    DataBlock dataBlock = DataBlockFactory.createBlock(data);
+                    cachedData.addData(dataBlock);
+                }
 			}
 		}
 		catch (Exception e)

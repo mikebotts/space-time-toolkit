@@ -13,14 +13,19 @@
 
 package org.vast.stt.style;
 
+import org.ogc.cdm.common.DataType;
+
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * Image Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * Graphic Object used to transfer a whole image to the
+ * renderer. Usually used for efficiency (i.e. cached
+ * in video memory by OpenGL). It is less flexible than
+ * getting pixels one at a time though.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -28,11 +33,15 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LinePointGraphic implements GraphicObject
+public class ImageGraphic implements GraphicObject
 {
-	public double x, y, z;
-	public float r, g, b;
-	public float a = 1.0f;
-    public int width = 1;
-    public boolean lineBreak;
+	enum ImageType {}; // use same as openGL !
+    
+    public int width;
+    public int height;
+    public int depth;
+	public Object data;
+    public DataType dataType;
+    public ImageType imageType;
+    //public ColorMap colorMap;
 }

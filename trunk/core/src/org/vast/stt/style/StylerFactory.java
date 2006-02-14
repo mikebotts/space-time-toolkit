@@ -46,6 +46,9 @@ public class StylerFactory
 		
 		else if (sym instanceof PolygonSymbolizer)
 			styler = new LineStyler();
+        
+        else if (sym instanceof RasterSymbolizer)
+            styler = new RasterStyler();
 		
 		if (styler != null)
 		{
@@ -81,7 +84,7 @@ public class StylerFactory
 		Fill fill = new Fill();
 		fill.setColor(color);
 		gm.setFill(fill);
-		graphic.addGlyph(gm);
+		graphic.getGlyphs().add(gm);
 		
 		symbolizer.setGraphic(graphic);
 		

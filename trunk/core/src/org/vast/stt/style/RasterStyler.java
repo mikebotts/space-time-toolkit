@@ -13,9 +13,9 @@
 
 package org.vast.stt.style;
 
+import org.ogc.cdm.common.DataBlock;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.util.SpatialExtent;
 
 
 /**
@@ -37,48 +37,34 @@ import org.vast.stt.util.SpatialExtent;
 public class RasterStyler extends AbstractStyler
 {
 	protected RasterSymbolizer symbolizer;
-	
+    protected ImageGraphic image;
+    
 	
 	public RasterStyler()
 	{
-		// TEXTURE STUFFS
-//		GL.glEnable(OpenGLDrawer.GL_TEXTURE_TARGET);
-//		
-//		byte[] data = new byte[100*64*3];
-//		for (int i=0; i<data.length; i++)
-//		{
-//			if (i%9 == 0)
-//				data[i] = (byte)0xFF;
-//		}
-//		
-//		GL.glBindTexture(OpenGLDrawer.GL_TEXTURE_TARGET, 1);
-//		
-//		if (GL.glGetError() == GL.GL_INVALID_ENUM)
-//			System.out.println("Invalid texture target");	
-//		
-//		GL.glTexImage2D(OpenGLDrawer.GL_TEXTURE_TARGET, 0, 4, 100, 64, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, data);
-//		
-//		if (GL.glGetError() == GL.GL_INVALID_VALUE)
-//			System.out.println("Invalid texture size");
-//
-//		GL.glTexParameteri(OpenGLDrawer.GL_TEXTURE_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-//        GL.glTexParameteri(OpenGLDrawer.GL_TEXTURE_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        image = new ImageGraphic();
 	}
 	
+    
+    public ImageGraphic getImage(int index)
+    {
+        if (image.data == null)
+        {
+            DataBlock data = node.getComponent(0).getData();
+            int arraySize = data.getAtomCount();
+            byte[] array = new byte[arraySize];
+            image.data = array;       
+        
+            for (int i=0; i<arraySize; i++)
+                array[i] = node.getData().getByteValue(i);
+            
+            image.width = 512;
+            image.height = 256;
+        }
+        
+        return image;
+    }
 	
-	public SpatialExtent getBoundingBox()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public double[] getCenterPoint()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	public void updateBoundingBox()
 	{
@@ -88,7 +74,8 @@ public class RasterStyler extends AbstractStyler
 
 	public void updateDataMappings()
 	{
-		// TODO Auto-generated method stub		
+		node = dataProvider.getDataNode();
+        
 	}
 	
 	
@@ -106,6 +93,7 @@ public class RasterStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-		visitor.visit(this);		
+        updateDataMappings(); //TODO shouldn't be called here -> not too efficient !
+        visitor.visit(this);		
 	}
 }

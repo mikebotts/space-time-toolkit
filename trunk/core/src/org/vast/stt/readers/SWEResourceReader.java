@@ -55,7 +55,7 @@ public class SWEResourceReader extends CDMReader
 			
 			DataComponentsReader infReader = new DataComponentsReader(domReader);
 			EncodingReader encReader = new EncodingReader(domReader);	
-			this.dataInfo = infReader.readComponentProperty(defElt);
+			this.dataComponents = infReader.readComponentProperty(defElt);
 			this.dataEncoding = encReader.readEncodingProperty(encElt);
 			
 			// read external link if present
