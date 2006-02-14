@@ -16,11 +16,11 @@ package org.vast.stt.style;
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * Pixel Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * TODO PixelGraphic Class Description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -28,11 +28,8 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LinePointGraphic implements GraphicObject
+public class PixelGraphic implements GraphicObject
 {
-	public double x, y, z;
 	public float r, g, b;
 	public float a = 1.0f;
-    public int width = 1;
-    public boolean lineBreak;
 }

@@ -16,7 +16,6 @@ package org.vast.stt.data;
 import java.util.Hashtable;
 
 import org.ogc.cdm.common.*;
-import org.ogc.cdm.reader.*;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -89,4 +88,9 @@ public class SWEDataHandler implements DataHandler
 	public void startDataBlock(DataComponent info)
 	{
 	}
+
+
+    public void beginDataAtom(DataComponent info, DataBlock data)
+    {       
+    }
 }

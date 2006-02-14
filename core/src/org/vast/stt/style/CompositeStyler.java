@@ -38,89 +38,86 @@ import org.vast.stt.util.SpatialExtent;
 public class CompositeStyler extends AbstractStyler
 {
     protected List<DataStyler> stylerList;
-	
-	
-	public CompositeStyler()
-	{
+
+
+    public CompositeStyler()
+    {
         stylerList = new ArrayList<DataStyler>(1);
-	}
-	
-	
-	public CompositeStyler(int numStylers)
-	{
+    }
+
+
+    public CompositeStyler(int numStylers)
+    {
         stylerList = new ArrayList<DataStyler>(numStylers);
-	}
-	
-	//  Added isEnabled() check in this loop.  I'm not sure if it 
-	//  should be here, or be caught before this point.  
-	//  Renderer.drawScene() calls isEnabled() only on the CompositeStyler,
-	//  though, so all Stylers are either on or off without this check.
-	//  TC, 2/8/06
-	public void accept(StylerVisitor visitor)
-	{
-		// loop through all child stylers
-		DataStyler stylerTmp;
-		for (int i=0; i<stylerList.size(); i++) {
-			stylerTmp = stylerList.get(i);
-			if(stylerTmp.isEnabled())
-				stylerTmp.accept(visitor);
-		}
-	}
-	
-	
-	public void updateBoundingBox()
-	{
+    }
+
+
+    public void accept(StylerVisitor visitor)
+    {
+        // loop through all child stylers
+        DataStyler stylerTmp;
+        for (int i = 0; i < stylerList.size(); i++)
+        {
+            stylerTmp = stylerList.get(i);
+            if (stylerTmp.isEnabled())
+                stylerTmp.accept(visitor);
+        }
+    }
+
+
+    public void updateBoundingBox()
+    {
         // compute smallest bbox containing all children bbox
-        for (int i=0; i<stylerList.size(); i++)
-		{
+        for (int i = 0; i < stylerList.size(); i++)
+        {
             DataStyler nextStyler = stylerList.get(i);
             nextStyler.updateBoundingBox();
-            SpatialExtent childBox =  nextStyler.getBoundingBox();
-			
+            SpatialExtent childBox = nextStyler.getBoundingBox();
+
             if (i == 0)
                 bbox = childBox.copy();
             else
                 bbox.add(childBox);
-		}
-	}
+        }
+    }
 
 
-	public void updateDataMappings()
-	{
-		// loop through all child stylers
-        for (int i=0; i<stylerList.size(); i++)
+    public void updateDataMappings()
+    {
+        // loop through all child stylers
+        for (int i = 0; i < stylerList.size(); i++)
             stylerList.get(i).updateDataMappings();
-	}
+    }
 
 
-	public boolean isEnabled()
-	{
-		// loop through all child stylers
+    public boolean isEnabled()
+    {
+        // loop through all child stylers
         // if one is enabled return enabled
-		for (int i=0; i<stylerList.size(); i++)
-		{
-			if (stylerList.get(i).isEnabled())
-				return true;			
-		}
-		
-		return false;
-	}
+        for (int i = 0; i < stylerList.size(); i++)
+        {
+            if (stylerList.get(i).isEnabled())
+                return true;
+        }
+
+        return false;
+    }
 
 
-	public void setEnabled(boolean enabled)
-	{
-		// loop through all child stylers
-        for (int i=0; i<stylerList.size(); i++)
+    public void setEnabled(boolean enabled)
+    {
+        // loop through all child stylers
+        for (int i = 0; i < stylerList.size(); i++)
             stylerList.get(i).setEnabled(enabled);
-	}
-    
-    
+    }
+
+
     public Symbolizer getSymbolizer()
     {
         return null;
     }
-    
-    
+
+
     public void setSymbolizer(Symbolizer sym)
     {
     }
