@@ -224,7 +224,8 @@ public class AdvancedStyleDialog implements SelectionListener
 			return;
 		activeStyler = styler;
 		///  Update Graphic and Geom tab
-		advGraphicsTab.buildControls(activeStyler);
+		//advGraphicsTab.buildControls(activeStyler);
+		advGraphicsTab.setActiveStyler(activeStyler);
 		advGeomTab.setActiveStyler(activeStyler);
 		//  Try setting index to activeStyler's pos in ArrayList
 		Iterator<DataStyler> it = stylerAL.iterator();
@@ -244,7 +245,7 @@ public class AdvancedStyleDialog implements SelectionListener
 	
 	protected void setActiveStyler(int index){
 		activeStyler = stylerAL.get(index);
-		advGraphicsTab.buildControls(activeStyler);
+		advGraphicsTab.setActiveStyler(activeStyler);
 		advGeomTab.setActiveStyler(activeStyler);
 		//graphicTabItem.setControl()
 	}

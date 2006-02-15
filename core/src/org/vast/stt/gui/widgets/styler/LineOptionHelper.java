@@ -20,8 +20,8 @@ public class LineOptionHelper implements SelectionListener {
 	//  Need a way to specify all options/types/args so 
 	//  AdvancedOptions can use them also - just repeating
 	//  code for now, and not using the labels/optTypes fields - TC
-	private String [] labels = {"Line Width:", "Line Color:"};
-	private int [] optTypes = { 0, 1}; 
+	//private String [] labels = {"Line Width:", "Line Color:"};
+	//private int [] optTypes = { 0, 1}; 
 
 	public LineOptionHelper(OptionController loc){
 		optionController = loc;

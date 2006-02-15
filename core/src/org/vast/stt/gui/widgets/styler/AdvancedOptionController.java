@@ -7,8 +7,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.scene.DataItem;
 
 abstract public class AdvancedOptionController extends OptionController
 		implements SelectionListener {
@@ -28,18 +28,39 @@ abstract public class AdvancedOptionController extends OptionController
 		}
 		for(int i=0; i<mapFromCombo.length; i++) {
 			mapFromCombo[i].setItems(mappableItems);
-			mapFromCombo[i].select(0);
 		}
 	}
+
+	protected void setOptionState(ScalarParameter scalar, int index){
+		String prop = scalar.getPropertyName();
+		if(prop == null) {
+			mapFromCombo[index].select(0);  // constant
+			optionControls[index].setEnabled(true);
+		}
+		else { // size is mapped
+			int nameIndex = findName(mappableItems, prop);
+			if(nameIndex == -1){
+				System.err.println("PropertyName is" + prop + 
+						"but doesn't match any mappable properties");
+				mapFromCombo[index].select(0);  // constant
+				optionControls[index].setEnabled(true);
+			} else {
+				mapFromCombo[index].select(nameIndex);
+				optionControls[index].setEnabled(false);
+			}
+		} 
+	}
+
+	private int findName(String [] srcArr, String target){
+		for(int i=0; i<srcArr.length; i++){
+			if(srcArr[i].equalsIgnoreCase(target))
+				return i;
+		}
+		return -1;
+	}
 	
-
-	//  Always the same: MapTo Label, MapCombo, LUT Button
 	protected void addMappingControls(Composite parent, int index){
-		//final Label mapToLabel = new Label(parent, SWT.NONE);
-		//mapToLabel.setText("Map To:");
-
 		mapFromCombo[index] = new Combo(parent, SWT.READ_ONLY);
-		//final GridData gridData = new GridData(GridData.END, GridData.CENTER, false, false);
 		mapFromCombo[index].addSelectionListener(this);
 		
 		lutButton[index] = new Button(parent, SWT.PUSH);

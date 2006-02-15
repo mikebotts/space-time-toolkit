@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -21,8 +20,6 @@ import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.LineStyler;
-import org.vast.stt.style.PointStyler;
 import org.vast.stt.style.StylerFactory;
  
 /**
@@ -40,10 +37,6 @@ import org.vast.stt.style.StylerFactory;
  * @date Jan 14, 2006
  * @version 1.0
  * 
- * @TODO  Modify other scrolled widgets to use the convention here.
- * @TODO  Listeners- inline vc. separate?
- * @TODO  Tie actions to DataItem properties
- * TODO  Mod scrolled widgets to size up when parent is sized up
  */
 public class StyleWidget extends CheckOptionTable
 { 
@@ -51,8 +44,8 @@ public class StyleWidget extends CheckOptionTable
 	DataStyler activeStyler;
 	enum StylerType { point, line };
 	//  Try this
-	BasicLineController basicLineController;
-	AdvancedLineController advancedLineController;
+	//BasicLineController basicLineController;
+	//AdvancedLineController advancedLineController;
 	//  Or this
 	OptionListener optListener;
 	
@@ -182,8 +175,7 @@ public class StyleWidget extends CheckOptionTable
 	}
 	
 	private void createAdvancedStyleDialog(){
-		AdvancedStyleDialog asd = 
-			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
+		new AdvancedStyleDialog(dataItem, activeStyler, optListener);
 	}
 	
 	private void openAddStyleDialog(){
