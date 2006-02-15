@@ -176,8 +176,8 @@
                                        <Format>image/jpeg</Format>
                                        <Transparent>TRUE</Transparent>
                                        <Size>
-                                          <Width>1000</Width>
-                                          <Height>600</Height>
+                                          <Width>512</Width>
+                                          <Height>256</Height>
                                        </Size>
                                     </Output>
                                     <Exceptions>application/vnd.ogc.se+xml</Exceptions>
