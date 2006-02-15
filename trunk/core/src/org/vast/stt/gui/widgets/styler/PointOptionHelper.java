@@ -14,31 +14,34 @@ import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.ScalarParameter;
-import org.vast.ows.sld.Stroke;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
 
 public class PointOptionHelper implements SelectionListener {
 
 	OptionController optionController;
 	PointStyler styler;
-	private String [] labels = {"Point Size:", "Point Color:"};
-	private int [] optTypes = { 0, 1}; 
 
 	public PointOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
-		
 		styler = (PointStyler)optionController.getStyler();
 	}
 	
-	public void widgetDefaultSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public ScalarParameter getPointColorScalar(){
+		Graphic graphic = styler.getSymbolizer().getGraphic();
+		List graphicSourceList = graphic.getGlyphs();
+		//if(graphicSourceList == null)  return;
+		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
+		if(graphicSource instanceof GraphicMark) {
+			GraphicMark gm = (GraphicMark)graphicSource;
+			ScalarParameter color = gm.getFill().getColor();
+			return color;
+		}
+		return null;
 	}
-
+		
 	private void setPointSize(float f){
 		Graphic graphic = styler.getSymbolizer().getGraphic();
 		ScalarParameter size = new ScalarParameter();
@@ -75,21 +78,16 @@ public class PointOptionHelper implements SelectionListener {
 	}
 	
 	public org.vast.ows.sld.Color getPointColor(){
-		Graphic graphic = styler.getSymbolizer().getGraphic();
-		List graphicSourceList = graphic.getGlyphs();
-		//if(graphicSourceList == null)  return;
-		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
-		if(graphicSource instanceof GraphicMark) {
-			GraphicMark gm = (GraphicMark)graphicSource;
-			ScalarParameter color = gm.getFill().getColor();
-			if(color == null)
-				return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-			Object val = color.getConstantValue();
-			if(val == null)
-				return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-			return (Color)val;
-		}
-		return new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		ScalarParameter color = getPointColorScalar();
+		if(color == null)
+			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		Object val = color.getConstantValue();
+		if(val == null)
+			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		return (Color)val;
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
 	public void widgetSelected(SelectionEvent e) {

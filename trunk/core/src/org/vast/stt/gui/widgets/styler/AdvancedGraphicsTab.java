@@ -3,11 +3,14 @@ package org.vast.stt.gui.widgets.styler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.gui.widgets.OptionController;
+import org.vast.ows.sld.Geometry;
+import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
@@ -37,6 +40,11 @@ public class AdvancedGraphicsTab extends Composite {
 		this.setLayout(gridLayout);
 	}
 	
+	public void setActiveStyler(DataStyler styler){
+		//  Not making activeStyler a class member yet
+		buildControls(styler);
+	}
+	
 	public void buildControls(DataStyler styler){
 		removeOldControls();
 		addTopRow();
@@ -52,6 +60,7 @@ public class AdvancedGraphicsTab extends Composite {
 			
 		}
 		optionController.setMappableItems(mappableItems);
+		
 		this.layout();
 		this.redraw();
 	}
@@ -72,7 +81,7 @@ public class AdvancedGraphicsTab extends Composite {
 	public void setMappableItems(String [] items){
 		mappableItems = items;
 	}
-	
+
 	public void removeOldControls(){
 		Control [] controls = this.getChildren();
 		for(int i=0; i<controls.length; i++){

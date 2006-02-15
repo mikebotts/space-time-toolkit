@@ -1,13 +1,7 @@
 package org.vast.stt.gui.widgets.styler;
 
 
-import java.util.Arrays;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -28,6 +22,8 @@ import org.vast.stt.style.DataStyler;
  * 
  * @author tcook
  *
+ *
+ * 
  */
 public class AdvancedGeometryTab extends Composite 
 	implements SelectionListener
@@ -112,10 +108,12 @@ public class AdvancedGeometryTab extends Composite
 	/**
 	 * sets the default state of all mapFromCombos
 	 *
+	 *  TODO - support constants, LUTS-
 	 */
 	private void updateMappingCombos(){
 		if(activeStyler == null){
-			System.err.println("AdvancedGeomTab.updateMappings");
+			System.err.println("AdvancedGeomTab.updateMappings - null styler");
+			return;
 		}
 		Geometry geom = activeStyler.getSymbolizer().getGeometry();
 		ScalarParameter xparam = geom.getX();
@@ -195,9 +193,6 @@ public class AdvancedGeometryTab extends Composite
 		activeStyler.updateDataMappings();
 	}
 	
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
 	public void widgetSelected(SelectionEvent e) {
 		Control source = (Control)e.getSource();
 		for(int i=0; i<lutButton.length; i++){
@@ -210,5 +205,8 @@ public class AdvancedGeometryTab extends Composite
 				return;
 			}
 		}
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 }

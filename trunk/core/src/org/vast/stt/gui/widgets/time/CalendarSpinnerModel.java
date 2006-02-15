@@ -2,9 +2,7 @@ package org.vast.stt.gui.widgets.time;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 /**
  * <p><b>Title:</b><br/>

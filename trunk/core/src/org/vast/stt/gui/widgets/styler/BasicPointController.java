@@ -1,6 +1,5 @@
 package org.vast.stt.gui.widgets.styler;
 
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.stt.gui.widgets.OptionControl;
@@ -28,8 +27,7 @@ public class BasicPointController extends OptionController
 		sizeSpinner.setSelection((int)pointOptionHelper.getPointSize());
 		
 		optionControls[1] = new OptionControl(parent, 0x0);
-		Button colorButton = 
-			optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
+		optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
 
 		addSelectionListener(pointOptionHelper);
 	}

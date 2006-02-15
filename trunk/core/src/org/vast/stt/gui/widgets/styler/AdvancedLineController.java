@@ -1,18 +1,11 @@
 package org.vast.stt.gui.widgets.styler;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.LineStyler;
 
 /**
@@ -42,7 +35,6 @@ public class AdvancedLineController extends AdvancedOptionController {
 		buildControls();
 	}
 	
-	
 	public void buildControls(){
 		optionControls = new OptionControl[2];
 		mapFromCombo = new Combo[2];
@@ -57,8 +49,24 @@ public class AdvancedLineController extends AdvancedOptionController {
 		optionControls[1].createColorButton("Line Color:", lineOptionHelper.getLineColor());
 
 		addMappingControls(parent, 1);
-
 		addSelectionListener(lineOptionHelper);
+	}
+	
+	//  Override to set the initial state of the Combos
+	//  TODO:  add support for LUTS
+	//  TODO:  test for mapped size, color
+	//  TODO:  somehow need to mod enabled of basicControls, 
+	//		   if they exist (through OptListener)
+	public void setMappableItems(String [] items){
+		super.setMappableItems(items);
+		//  Width
+		ScalarParameter widthSP = ((LineStyler)styler).getSymbolizer().getStroke().getWidth();
+		if(widthSP != null)  //  is null sometimes.
+			setOptionState(widthSP, 0);
+		//  Color
+		ScalarParameter colorSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor();		
+		if(colorSP != null)
+			setOptionState(colorSP, 1);
 	}
 	
 	protected void doLut(int index){
@@ -70,7 +78,6 @@ public class AdvancedLineController extends AdvancedOptionController {
 		int selIndex = mapFromCombo[index].getSelectionIndex();
 		switch(index){
 		case 0:  // set lineWidth 
-			
 			break;
 		case 1:
 			break;  // set lineColor
