@@ -37,7 +37,8 @@ public class AdvancedPointController extends AdvancedOptionController
 		optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
 
 		addMappingControls(parent, 1);
-
+		//  disable color mapFromCombo (consider just not showing this)
+		mapFromCombo[1].setEnabled(false);
 		addSelectionListener(pointOptionHelper);
 	}
 

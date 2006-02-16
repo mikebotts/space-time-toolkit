@@ -49,6 +49,7 @@ public class AdvancedLineController extends AdvancedOptionController {
 		optionControls[1].createColorButton("Line Color:", lineOptionHelper.getLineColor());
 
 		addMappingControls(parent, 1);
+		mapFromCombo[1].setEnabled(false);
 		addSelectionListener(lineOptionHelper);
 	}
 	
