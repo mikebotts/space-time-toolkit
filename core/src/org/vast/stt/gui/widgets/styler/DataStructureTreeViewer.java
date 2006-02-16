@@ -116,17 +116,16 @@ class DataStructureLabelProvider extends LabelProvider {
 		if(element instanceof DataComponent) {
 			//System.err.println("dataComp is " + element);
 			String name = ((DataComponent)element).getName();
-			if(name != null)
+			if(element instanceof DataArray) {
+				DataArray arr = (DataArray)element;
+				if(arr.isVariableSize())
+					return name + "[?]";
+				return name + "[" + arr.getComponentCount() + "]";
+			} else if(element instanceof DataList) {
+				DataList list = (DataList)element;
+				return name + "[" + list.getComponentCount() + "]";
+			} else
 				return name;
-			if(element instanceof DataGroup)
-				return "DataGroup";
-			if(element instanceof DataArray)
-				return "DataArray";
-			if(element instanceof DataList)
-				return "DataList";
-			if(element instanceof DataValue)
-				return "DataValue";
-			return "whatTheHell";
 		}
 		return "??? - NOT a component";
 	}

@@ -28,12 +28,12 @@ import org.vast.stt.style.DataStyler;
 public class AdvancedGeometryTab extends Composite 
 	implements SelectionListener
 {
-
 	Composite parent;
 	String [] mapToLabel = {	"X Coordinate:",
 							   	"Y Coordinate:",
 							   	"Z Coordinate:",
-								"t coordinate:" };
+								"t coordinate:",
+								"break coordinate"};
 	Combo [] mapFromCombo;
 	Button[] lutButton;
 	DataStyler activeStyler;
@@ -95,7 +95,6 @@ public class AdvancedGeometryTab extends Composite
 		mappableItems = items;
 		for (int i=0; i<mapFromCombo.length; i++) {
 			mapFromCombo[i].setItems(items);
-			//mapFromCombo[i].select(0);
 		}
 	}
 	
@@ -120,8 +119,9 @@ public class AdvancedGeometryTab extends Composite
 		ScalarParameter yparam = geom.getY();
 		ScalarParameter zparam = geom.getZ();
 		ScalarParameter tparam = geom.getT();
+		ScalarParameter breaksParam = geom.getBreaks();
 		if(xparam != null) {
-			String xName = geom.getX().getPropertyName();
+			String xName = xparam.getPropertyName();
 			if(xName != null) {
 				int xIndex = findName(mappableItems, xName);
 				if(xIndex >=0)
@@ -129,7 +129,7 @@ public class AdvancedGeometryTab extends Composite
 			}
 		}
 		if(yparam != null) {
-			String name = geom.getY().getPropertyName();
+			String name = yparam.getPropertyName();
 			if(name != null) {
 				int index = findName(mappableItems, name);
 				if(index >=0)
@@ -137,7 +137,7 @@ public class AdvancedGeometryTab extends Composite
 			}
 		}
 		if(zparam != null) {
-			String name = geom.getZ().getPropertyName();
+			String name = zparam.getPropertyName();
 			if(name != null) {
 				int index = findName(mappableItems, name);
 				if(index >=0)
@@ -145,18 +145,32 @@ public class AdvancedGeometryTab extends Composite
 			}
 		}
 		if(tparam != null) {
-			String name = geom.getT().getPropertyName();
+			String name = tparam.getPropertyName();
 			if(name != null) {
 				int index = findName(mappableItems, name);
 				if(index >=0)
 					mapFromCombo[3].select(index);
 			}
 		}
+		if(breaksParam != null) {
+			String name = breaksParam.getPropertyName();
+			if(name != null) {
+				int index = findName(mappableItems, name);
+				if(index >=0)
+					mapFromCombo[4].select(index);
+			}
+		}
 	}
 	
 	private int findName(String [] srcArr, String target){
+		String stmp;
+		int lastSlashIndex;
 		for(int i=0; i<srcArr.length; i++){
-			if(srcArr[i].equalsIgnoreCase(target))
+			lastSlashIndex = target.lastIndexOf('/');
+			stmp = (lastSlashIndex == -1) ? target 
+			    : target.substring(lastSlashIndex+1);
+					
+			if(stmp.equalsIgnoreCase(srcArr[i]))
 				return i;
 		}
 		return -1;
@@ -186,6 +200,9 @@ public class AdvancedGeometryTab extends Composite
 			break;
 		case 3:
 			geom.setT(sp);
+			break;
+		case 4:
+			geom.setBreaks(sp);
 			break;
 		default:
 			break;

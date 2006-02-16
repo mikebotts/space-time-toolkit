@@ -1,8 +1,10 @@
 package org.vast.stt.gui.widgets.styler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,11 +23,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.PlatformUI;
 import org.ogc.cdm.common.DataComponent;
-import org.vast.data.DataArray;
-import org.vast.data.DataGroup;
-import org.vast.data.DataList;
-import org.vast.data.DataValue;
-import org.vast.stt.data.DataNode;
+import org.vast.data.ScalarIterator;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
@@ -153,7 +151,7 @@ public class AdvancedStyleDialog implements SelectionListener
 
 		//  DataStructure TreeViewer (right item of midComp)
 		final Group dataStructureGroup = new Group(midComp, SWT.NONE);
-		dataStructureGroup.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		//dataStructureGroup.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		dataStructureGroup.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		dataStructureGroup.setText("Data Structure");
 		dataStructureGroup.setLayout(new FillLayout());
@@ -172,31 +170,19 @@ public class AdvancedStyleDialog implements SelectionListener
 	 * @return - the mappable property names for this dataItem
 	 */
 	protected String [] getMappableItems(){
-		List<String> mappableAL = new ArrayList<String>();
-		DataNode node = dataItem.getDataProvider().getDataNode();
-		//DataBlock dataBlock = node.getData();
-		DataComponent dataComp = node.getComponent(0);
-		int numComps = dataComp.getComponentCount();
-		DataComponent dataCompTmp;
-		for(int i=0; i<numComps; i++) {
-			dataCompTmp = dataComp.getComponent(i);
-			if(dataCompTmp instanceof DataGroup){
-				DataGroup group = (DataGroup)dataCompTmp;
-				int numChildren = group.getComponentCount();
-				DataComponent childComp;			
-				for(int j=0; j<numChildren; j++){
-					childComp = group.getComponent(j);
-					mappableAL.add(childComp.getName());
-				}
-			} else if ( dataCompTmp instanceof DataArray ||
-						dataCompTmp instanceof DataList) {
-				mappableAL.add(dataCompTmp.getComponent(0).getName());
-			} else if ( dataCompTmp instanceof DataValue)
-				mappableAL.add(dataCompTmp.getName());
-			
+		Set<String> mappableSet = new HashSet<String>();
+		ScalarIterator it = new ScalarIterator(dataItem.getDataProvider().getDataNode());
+		DataComponent dataCompTmp; 
+		String name;
+		while(it.hasNext()){
+			dataCompTmp = it.next();
+			name = dataCompTmp.getName();
+			//  HACK to filter out segmentSize
+			if(!name.equals("segmentSize")) 
+				mappableSet.add(name);
 		}
-		String [] mappables = mappableAL.toArray(new String[]{});
-		return mappables;
+		
+		return mappableSet.toArray(new String[]{});
 	}
 	
 	/**
