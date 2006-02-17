@@ -220,7 +220,7 @@
                      <DataList>
                         <name>SOS Layers</name>
                         <member>
-                           <DataItem enabled="true">
+                           <DataItem enabled="false">
                               <name>San Diego Plume</name>
                               <time>
                                  <TimeSettings>
@@ -383,6 +383,36 @@
                                        <sld:Size>3</sld:Size>
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>Alabama</name>
+                              <dataProvider>
+                                 <SWEDataProvider>
+                                    <name>lineData</name>
+                                    <resource xlink:href="#DATASET_05"/>
+                                 </SWEDataProvider>
+                              </dataProvider>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-object">
+                                          <ogc:PropertyName>segment</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -578,6 +608,15 @@
                   <description>World Coast Lines</description>
                   <format>SWE</format>
                   <sweData xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
+               </StaticDataSet>
+            </member>
+            <member>
+               <StaticDataSet id="DATASET_05">
+                  <name>Alabama</name>
+                  <description>Alabama State Boundaries</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/states/AL_state.swe"/>
                </StaticDataSet>
             </member>
          </ResourceList>
