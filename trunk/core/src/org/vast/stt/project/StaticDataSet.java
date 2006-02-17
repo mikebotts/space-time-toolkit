@@ -30,20 +30,9 @@ package org.vast.stt.project;
  */
 public class StaticDataSet extends AbstractResource
 {
-	protected String url;
-	protected String format;
-
-
-	public String getUrl()
-	{
-		return url;
-	}
-
-
-	public void setUrl(String url)
-	{
-		this.url = url;
-	}
+	protected String sweDataUrl;
+    protected String rawDataUrl;
+	protected String format;    
 
 
 	public String getFormat()
@@ -56,4 +45,28 @@ public class StaticDataSet extends AbstractResource
 	{
 		this.format = format;
 	}
+
+
+    public String getRawDataUrl()
+    {
+        return rawDataUrl;
+    }
+
+
+    public void setRawDataUrl(String rawDataUrl)
+    {
+        this.rawDataUrl = rawDataUrl;
+    }
+
+
+    public String getSweDataUrl()
+    {
+        return sweDataUrl;
+    }
+
+
+    public void setSweDataUrl(String sweDataUrl)
+    {
+        this.sweDataUrl = sweDataUrl;
+    }
 }

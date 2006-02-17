@@ -263,7 +263,8 @@ public class ProjectReader
 		
 		// format and url
 		staticData.setFormat(dom.getElementValue(dataSetElt, "format"));
-		staticData.setUrl(dom.getAttributeValue(dataSetElt, "data/@href"));
+		staticData.setSweDataUrl(dom.getAttributeValue(dataSetElt, "sweData/@href"));
+        staticData.setRawDataUrl(dom.getAttributeValue(dataSetElt, "rawData/@href"));
 		
 		return staticData;
 	}
