@@ -22,7 +22,7 @@ public class Perspective implements IPerspectiveFactory
         
 		ResourceFolder.addView(SceneTreeView.ID);
         OptFolder.addView(StyleView.ID);
-        OptFolder.addView(TimeSettingsView.ID);
+        OptFolder.addView(TimeExtentView.ID);
         
 		SceneFolder.addPlaceholder(SceneView.ID + ":*");
 	}

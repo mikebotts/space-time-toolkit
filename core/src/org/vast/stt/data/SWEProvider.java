@@ -53,7 +53,7 @@ public class SWEProvider extends AbstractProvider
 	@Override
 	public void updateData() throws DataException
 	{
-		String uri = ((StaticDataSet)resource).getUrl();
+		String uri = ((StaticDataSet)resource).getSweDataUrl();
 		
 		try
 		{
@@ -93,10 +93,15 @@ public class SWEProvider extends AbstractProvider
 			// register the CDM data handler
 			dataHandler.setDataNode(cachedData);
 			dataParser.setDataHandler(dataHandler);
+            
+            // override resultUri if specified in data set
+            String resultUri = ((StaticDataSet)resource).getRawDataUrl();
+            if (resultUri != null)
+                reader.setResultUri(resultUri);
 			
 			// start parsing if not cancelled
 			if (!canceled)
-				dataParser.parse(reader.getDataStream());
+			    dataParser.parse(reader.getDataStream());
 		}
 		catch (CDMException e)
 		{

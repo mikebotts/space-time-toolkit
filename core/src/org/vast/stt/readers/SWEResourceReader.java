@@ -23,8 +23,8 @@ import org.w3c.dom.*;
 
 public class SWEResourceReader extends CDMReader
 {
-	String resultUri;
-	CDMFilter streamFilter;
+	protected String resultUri;
+    protected CDMFilter streamFilter;
 	
 	
 	public void parse(InputStream inputStream) throws CDMException
@@ -90,4 +90,16 @@ public class SWEResourceReader extends CDMReader
 			return streamFilter;
 		}
 	}
+
+
+    public String getResultUri()
+    {
+        return resultUri;
+    }
+
+
+    public void setResultUri(String resultUri)
+    {
+        this.resultUri = resultUri;
+    }
 }
