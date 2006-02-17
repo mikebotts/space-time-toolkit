@@ -14,7 +14,7 @@
             <view name="Services" class="org.vast.stt.gui.views.ServiceTreeView" id="STT.ServiceTreeView"/>
             <view name="Customizer" class="org.vast.stt.gui.views.CustomizerView" id="STT.CustomizerView"/>
             <view name="Bbox" class="org.vast.stt.gui.views.SpatialExtentView" id="STT.SpatialExtentView"/>
-            <view name="TimeSettings" class="org.vast.stt.gui.views.TimeSettingsView" id="STT.TimeSettingsView"/>
+            <view name="TimeExtent" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
             <view name="StyleView" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
             <view name="SceneTree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
             <view name="Scene" class="org.vast.stt.gui.views.SceneView" id="STT.SceneView" allowMultiple="true"/>
