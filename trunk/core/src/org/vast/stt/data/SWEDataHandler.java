@@ -60,18 +60,23 @@ public class SWEDataHandler implements DataHandler
 
 	public void endDataAtom(DataComponent info, DataBlock data)
 	{
-		UnitConverter converter = converters.get(info);
-		
-		if (converter == null)
-		{
-			String uom = (String)info.getProperty(DataComponent.UOM);
-			converter = UnitConversion.createConverterToSI(uom);
-	    	converters.put(info, converter);
-		}
-		
-    	// convert to SI
-		double newVal = converter.convert(data.getDoubleValue());
-		data.setDoubleValue(newVal);
+		DataType dataType = data.getDataType();
+        
+        if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
+        {
+            UnitConverter converter = converters.get(info);
+    		
+    		if (converter == null)
+    		{
+    			String uom = (String)info.getProperty(DataComponent.UOM);
+    			converter = UnitConversion.createConverterToSI(uom);
+    	    	converters.put(info, converter);
+    		}
+    		
+        	// convert to SI
+    		double newVal = converter.convert(data.getDoubleValue());
+    		data.setDoubleValue(newVal);
+        }
 	}
 
 
