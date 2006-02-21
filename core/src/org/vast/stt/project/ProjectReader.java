@@ -106,7 +106,8 @@ public class ProjectReader
 		readMetadata(project, projectElt);
 		
 		listElt = dom.getElement(projectElt, "ServiceList");
-		project.setServiceList(readServiceList(listElt));
+        if (listElt != null)
+            project.setServiceList(readServiceList(listElt));
 		
 		listElt = dom.getElement(projectElt, "ResourceList");
 		project.setResourceList((ResourceList)readResource(listElt));
