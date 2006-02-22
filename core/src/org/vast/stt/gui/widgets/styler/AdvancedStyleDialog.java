@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -137,7 +138,8 @@ public class AdvancedStyleDialog implements SelectionListener
 
 		// AdvanceGraphicTab
 		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem, ol);
-		advGraphicsTab.setMappableItems(getMappableItems());
+		String [] mappableItems = getMappableItems();
+		advGraphicsTab.setMappableItems(mappableItems);
 		graphicTabItem.setControl(advGraphicsTab);
 		
 		//  Geom tab
@@ -146,7 +148,7 @@ public class AdvancedStyleDialog implements SelectionListener
 
 		// AdvanceGeomTab
 		advGeomTab = new AdvancedGeometryTab(tabFolder);
-		advGeomTab.setMappableItems(getMappableItems());
+		advGeomTab.setMappableItems(mappableItems);
 		geometryTabItem.setControl(advGeomTab);
 
 		//  DataStructure TreeViewer (right item of midComp)
@@ -171,12 +173,15 @@ public class AdvancedStyleDialog implements SelectionListener
 	 */
 	protected String [] getMappableItems(){
 		Set<String> mappableSet = new HashSet<String>();
-		ScalarIterator it = new ScalarIterator(dataItem.getDataProvider().getDataNode());
+		ScalarIterator it = 
+			new ScalarIterator(dataItem.getDataProvider().getDataNode().getComponent(0));
 		DataComponent dataCompTmp; 
 		String name;
+		String fullName;
 		while(it.hasNext()){
 			dataCompTmp = it.next();
 			name = dataCompTmp.getName();
+			fullName = it.nextString();
 			//  HACK to filter out segmentSize
 			if(!name.equals("segmentSize")) 
 				mappableSet.add(name);

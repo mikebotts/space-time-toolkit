@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -43,17 +44,11 @@ public class StyleWidget extends CheckOptionTable
 	java.util.List<DataStyler> stylerAL;
 	DataStyler activeStyler;
 	enum StylerType { point, line };
-	//  Try this
-	//BasicLineController basicLineController;
-	//AdvancedLineController advancedLineController;
-	//  Or this
 	OptionListener optListener;
 	
 	public StyleWidget(Composite parent){
 		stylerAL  = new ArrayList<DataStyler>();
 		init(parent);
-//		addSelectionListener(this);
-//		addCheckboxTableListener(this, this);
 		setCheckboxTableContentProvider(new StyleTableContentProvider());
 		setCheckboxTableLabelProvider(new StyleTableLabelProvider());
 	}
@@ -61,9 +56,6 @@ public class StyleWidget extends CheckOptionTable
 	public OptionChooser createOptionChooser(Composite parent){
 		optListener = new OptionListener();
 		StyleOptionChooser basicOptionChooser = new StyleOptionChooser(parent, optListener);
-		//  Go ahead and create OptListener up front
-		//optListener = new OptionListener();
-		//basicOptionChooser.setOptionListener(optListener);
 		return basicOptionChooser;
 	}
 
@@ -95,20 +87,51 @@ public class StyleWidget extends CheckOptionTable
 			stylerTmp = (DataStyler)it.next();
 			checkboxTableViewer.setChecked(stylerTmp, stylerTmp.isEnabled());
 		}
+		checkboxTableViewer.getTable().setSelection(0);
+		ISelection selection = checkboxTableViewer.getSelection();
+		checkboxTableViewer.setSelection(selection);	
 	}
 	
-	private void addStyle(DataStyler styler){
+	void addStyle(DataStyler styler){
 		//  Add Checkbox to stylers Set and rerender Table
 		stylerAL.add(styler);
 		dataItem.addStyler(styler);
-		//  I wanted activeStyler to be set to the newly added styler, but that didn't work so well... 
-		//activeStyler = styler;
-		//  ... so I force it to null.  Could use flag to make this work as desired. 
 		activeStyler = null;
 		//  Change options panel to show Point options
 		checkboxTableViewer.setInput(stylerAL);		
 	}
 	
+	/**
+	 * create a new styler and call addStyle() with it
+	 */
+	public void createNewStyler(String stylerName, int stylerType){
+		DataStyler newStyler = null;
+		switch(stylerType){
+		case 0:
+			newStyler = 
+				StylerFactory.createDefaultPointStyler(dataItem.getDataProvider());
+			//  Hack to set geom
+			newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
+			break;
+		case 1:
+			newStyler = 
+				StylerFactory.createDefaultLineStyler(dataItem.getDataProvider());
+			//  Hack to set geom 
+			newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
+			break;
+		default:
+			System.err.println("StylerType note supported in createNewStyler()");
+			break;
+		}
+		if(newStyler != null) {
+			newStyler.setName(stylerName);
+			newStyler.updateDataMappings();
+			newStyler.setEnabled(false);
+			addStyle(newStyler);
+		}
+		
+	}
+
 	private void removeStyle(DataStyler styler){
 		stylerAL.remove(styler);
 		//  reset activeStyler
@@ -165,8 +188,6 @@ public class StyleWidget extends CheckOptionTable
 			if(activeStyler != null)
 				removeStyle (activeStyler);  //  remove currently selected row   
 		} else if (control == enabledButton){
-			System.err.println("Enable selected");
-			//DataItem item = (DataItem)enabledButton.getData();
 			if(dataItem != null)
 				dataItem.setEnabled(enabledButton.getSelection());
 		} else if (control == advancedButton){
@@ -179,31 +200,7 @@ public class StyleWidget extends CheckOptionTable
 	}
 	
 	private void openAddStyleDialog(){
-		AddStylerDialog addStylerDialog = 
-			new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-		int retCode = addStylerDialog.open();
-		if(retCode == SWT.OK){
-			int stylerType = addStylerDialog.getStylerType();
-			DataStyler newStyler;
-			switch(stylerType){
-			case 0:
-				newStyler = 
-					StylerFactory.createDefaultPointStyler(dataItem.getDataProvider());
-				//  Hack to set geom
-				newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
-				newStyler.setName("More Points");
-				newStyler.updateDataMappings();
-				newStyler.setEnabled(false);
-
-				addStyle(newStyler);
-				break;
-			case 1:
-				break;
-			default:
-				System.err.println("StylerType note recognized in addStyler()");
-				break;
-			}
-		}
+		AddStylerDialog asd = new AddStylerDialog(this);
 	}
 	
 	//  Called when parent styleView is closed.  Set basicControls and
@@ -227,7 +224,6 @@ class StyleTableContentProvider implements IStructuredContentProvider{
 	}
 		
 	public void dispose() {
-		// TODO Auto-generated method stub
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -247,12 +243,10 @@ class StyleTableContentProvider implements IStructuredContentProvider{
 class StyleTableLabelProvider extends LabelProvider {
 
 	public Image getImage(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getText(Object element) {
-//		return element.toString();
 		DataStyler styler = (DataStyler)element;
 		return styler.getName();
 	}
