@@ -1,95 +1,100 @@
 package org.vast.stt.gui.widgets.styler;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
-/**
- * <p><b>Title:</b><br/>
- * AddStylerDialog
- * </p>
- *
- * <p><b>Description:</b><br/>
- *	First cut of widget to select new styler type.  This widget will eventually be 
- *  a tabbedFolder dialog probably, with mapping controls on one tab     
- *
- * </p>
- *
- * <p>Copyright (c) 2006</p>
- * @author Tony Cook
- * @date Jan 22, 2006
- * @version 1.0
- * 
- */
-public class AddStylerDialog extends Dialog {
+public class AddStylerDialog implements SelectionListener {
 
-	private List list;
-	int stylerType = -1;
-	/**
-	 * Create the dialog
-	 * @param parentShell
-	 */
-	public AddStylerDialog(Shell parentShell) {
-		super(parentShell);
+	Shell shell;
+	StyleWidget styleWidget;
+	String [] stylerTypes = { "point", "line", "raster", "label", "polygon" };
+	private Combo typeCombo;
+	private Text nameText;
+	private Button okBtn;
+	private Button cancelBtn;
+	
+	public AddStylerDialog(StyleWidget sw) {
+		this.styleWidget = sw;
+		init(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 	}
 	
-	/**
-	 * Create contents of the dialog
-	 * @param parent
-	 */
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite container = (Composite) super.createDialogArea(parent);
-//		container.setBackground(SWTResourceManager.getColor(192, 192, 192));
-		list = new List(container, SWT.BORDER);
-		list.setItems(new String[] {"Point Styler", "Line Styler"});
-		list.setSelection(0);
-		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		list.setLayoutData(gridData);
-		//
-		return container;
-	}
-
-	/**
-	 * Create contents of the button bar
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-
-	/**
-	 * Return the initial size of the dialog
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(225, 207);
-	}
-
-	@Override
-	protected void cancelPressed() {
-		this.close();
-		//  Any other cleanup needed?
-	}
-
-	@Override
-	protected void okPressed() {
-		stylerType = list.getSelectionIndex();
-		this.setReturnCode(SWT.OK);
-		this.close();
+	private void init(Shell parent){
+		GridData gridData;
+		shell = 
+			new Shell(parent, SWT.APPLICATION_MODAL | SWT.RESIZE | SWT.TITLE | SWT.BORDER | SWT.CLOSE);
+		shell.setText("Add Styler Dialog");
+		shell.setSize(170,150);
+		shell.setMinimumSize(170,150);
+		GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = 14;
+		shell.setLayout(layout);
+		
+		//  Type Combo
+		Label typeLabel = new Label(shell, SWT.LEFT);
+		typeLabel.setText("Styler Type:");
+		
+		typeCombo = new Combo(shell, SWT.READ_ONLY);
+		typeCombo.setItems(stylerTypes);
+		typeCombo.select(0);
+		
+		//  Name textField
+		Label nameLabel = new Label(shell, SWT.LEFT);
+		nameLabel.setText("Name");
+		
+		nameText = new Text(shell, SWT.RIGHT);
+		nameText.setText("     styler");
+		nameText.selectAll();
+		gridData = new GridData();
+		gridData.minimumHeight = 20;
+		gridData.minimumWidth = 60;
+		nameText.setLayoutData(gridData);
+		
+		okBtn = new Button(shell, SWT.PUSH);
+		okBtn.setText("OK");
+		okBtn.addSelectionListener(this);
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.widthHint = 55;
+		okBtn.setLayoutData(gridData);
+		
+		cancelBtn = new Button(shell, SWT.PUSH);
+		cancelBtn.setText("Cancel");
+		cancelBtn.addSelectionListener(this);
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.widthHint = 55;
+		cancelBtn.setLayoutData(gridData);
+		
+		shell.open();
 	}
 
 	public int getStylerType(){
-		return stylerType;
+		return typeCombo.getSelectionIndex();
 	}
+	
+	public String getStylerName(){
+		return nameText.getText().trim();
+	}
+	
+	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		if(e.getSource() == okBtn) { 
+			styleWidget.createNewStyler(getStylerName(), getStylerType());
+		}  //else if(e.getSource() == cancelBtn)
+		
+		shell.dispose();
+	}
+
 }
