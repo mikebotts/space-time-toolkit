@@ -73,11 +73,13 @@ public class StylerFactory
 		PointSymbolizer symbolizer = new PointSymbolizer();
 		styler.setSymbolizer(symbolizer);
 
+		//  size
 		Graphic graphic = new Graphic();
 		ScalarParameter size = new ScalarParameter();
 		size.setConstantValue(new Float(2.0));
 		graphic.setSize(size);
 
+		//  color
 		GraphicMark gm = new GraphicMark();
 		ScalarParameter color = new ScalarParameter();
 		color.setConstantValue(new Color(1.0f, 0.0f, 0.0f, 1.0f));
@@ -90,4 +92,34 @@ public class StylerFactory
 		
 		return styler;
 	}
+
+	/**
+	 * Convenience method for constructing a new LineStyler with a default 
+	 * size and color, and the geometry settings of the input DataProvider
+	 * 
+	 * @param provider - the dataProvider to use for the new Styler
+	 * @return new LineStyler
+	 */
+	static public LineStyler createDefaultLineStyler(DataProvider provider){
+		LineStyler styler = new LineStyler();
+		styler.setDataProvider(provider);
+		
+		LineSymbolizer symbolizer = new LineSymbolizer();
+		styler.setSymbolizer(symbolizer);
+		Stroke stroke = new Stroke();
+		
+		//  width
+		symbolizer.setStroke(stroke);
+		ScalarParameter width = new ScalarParameter();
+		width.setConstantValue(new Float(2.0));
+		stroke.setWidth(width);
+		
+		//color
+		ScalarParameter newColor = new ScalarParameter();
+		newColor.setConstantValue(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+		stroke.setColor(newColor);
+		
+		return styler;
+	}
+
 }
