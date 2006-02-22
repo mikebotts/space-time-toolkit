@@ -2,24 +2,12 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.data.DataProvider;
-import org.vast.stt.gui.widgets.time.CalendarSpinner;
 import org.vast.stt.gui.widgets.time.TimeExtentWidget;
-import org.vast.stt.gui.widgets.time.TimeSpinner;
-import org.vast.stt.gui.widgets.time.TimeZoneCombo;
 import org.vast.stt.scene.DataEntry;
 import org.vast.stt.scene.DataItem;
 
