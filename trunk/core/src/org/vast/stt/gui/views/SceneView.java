@@ -29,6 +29,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.apps.*;
+import org.vast.stt.commands.FitView;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.scene.*;
@@ -116,7 +117,35 @@ public class SceneView extends ViewPart implements PaintListener, ControlListene
 			}
 		};
 		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+		action1.setToolTipText("File this!");
 		site.getActionBars().getToolBarManager().add(action1);
+
+		Action fitViewAction = new Action()
+		{
+			public void run()
+			{
+				FitView fv = new FitView(scene);
+				System.err.println("Execute fitView");
+				fv.execute();
+			}
+		};
+		
+		fitViewAction.setText("Fit View");
+		site.getActionBars().getMenuManager().add(fitViewAction);
+		
+		Action fitItemAction = new Action()
+		{
+			public void run()
+			{
+				//FitView fv = new FitView(scene.getSelectedItem...);
+				FitView fv = new FitView(scene);
+				System.err.println("Execute fitItem");
+				fv.execute();
+			}
+		};
+		
+		fitItemAction.setText("Fit View to Selected Item");
+		site.getActionBars().getMenuManager().add(fitItemAction);
 	}
 	
 	
