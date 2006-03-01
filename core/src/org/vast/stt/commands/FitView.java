@@ -14,7 +14,7 @@ import org.vast.stt.util.SpatialExtent;
  * @date Feb 27, 2006
  * 
  * TODO:  - Need to convert from SpatialExtent to ViewSettings   
- *  
+ *          before this will actually work    
  */
 
 public class FitView implements Command 
@@ -63,8 +63,11 @@ public class FitView implements Command
 			SpatialExtent extTmp;
 			double tminX, tminY, tminZ, tmaxX, tmaxY, tmaxZ;
 			if ((styler != null) && styler.isEnabled()) {
+				extTmp = styler.getBoundingBox();
+				//  Should spatialExtent ever be null here?  It is now.
+				if(extTmp == null)
+					continue;
 				boundsChanged = true;
-				extTmp = styler.getBoundingBox(); 
 				tminX = extTmp.getMinX();
 				tminY = extTmp.getMinY();
 				tminZ = extTmp.getMinZ();
