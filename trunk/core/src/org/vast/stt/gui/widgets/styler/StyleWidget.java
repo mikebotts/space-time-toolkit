@@ -48,6 +48,7 @@ public class StyleWidget extends CheckOptionTable
 	
 	public StyleWidget(Composite parent){
 		stylerAL  = new ArrayList<DataStyler>();
+		checkboxTableLabel = "Styles:";
 		init(parent);
 		setCheckboxTableContentProvider(new StyleTableContentProvider());
 		setCheckboxTableLabelProvider(new StyleTableLabelProvider());

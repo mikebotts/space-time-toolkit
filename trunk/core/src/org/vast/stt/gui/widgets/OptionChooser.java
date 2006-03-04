@@ -11,7 +11,6 @@ import org.eclipse.ui.PlatformUI;
 public abstract class OptionChooser {  //  extends Group/ScrolledComp
 	protected Composite optComp;  //  hold onto scroller and composite 
 	protected ScrolledComposite optScr;
-	
 	public OptionChooser(Composite parent){
 		init(parent);
 	}
@@ -26,7 +25,7 @@ public abstract class OptionChooser {  //  extends Group/ScrolledComp
 		optScr.setContent(optComp);
 
 		GridData scrollerGD = new GridData();
-        scrollerGD.horizontalSpan = 6;
+        scrollerGD.horizontalSpan = 3;
         scrollerGD.horizontalAlignment = GridData.FILL;
         scrollerGD.verticalAlignment = GridData.FILL;
         scrollerGD.grabExcessHorizontalSpace = true;

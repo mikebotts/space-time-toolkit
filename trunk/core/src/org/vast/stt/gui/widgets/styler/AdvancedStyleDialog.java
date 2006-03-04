@@ -181,7 +181,7 @@ public class AdvancedStyleDialog implements SelectionListener
 		while(it.hasNext()){
 			dataCompTmp = it.next();
 			name = dataCompTmp.getName();
-			fullName = it.nextString();
+			//fullName = it.nextString();
 			//  HACK to filter out segmentSize
 			if(!name.equals("segmentSize")) 
 				mappableSet.add(name);
@@ -230,15 +230,14 @@ public class AdvancedStyleDialog implements SelectionListener
 			}
 			index++;
 		}
-		System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
-		System.err.println("NOW WHAT???");
+		//System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
+		//System.err.println("NOW WHAT???");
 	}
 	
 	protected void setActiveStyler(int index){
 		activeStyler = stylerAL.get(index);
 		advGraphicsTab.setActiveStyler(activeStyler);
 		advGeomTab.setActiveStyler(activeStyler);
-		//graphicTabItem.setControl()
 	}
 	
 	protected void setStylesComboItems(){

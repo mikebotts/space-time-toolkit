@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -49,12 +50,14 @@ implements ICheckStateListener, ISelectionChangedListener,
 	ScrolledComposite stylesSC;
 	protected CheckboxTableViewer checkboxTableViewer;
 	protected OptionChooser optionChooser;
+	protected String checkboxTableLabel;
 	
-	boolean allowAddRemove = true;
+	protected boolean allowAddRemove = true;
 	protected Button deleteButton;
 	protected Button addButton;
 	protected Button enabledButton;
 	protected Button advancedButton;
+	int  span = 3;
 	
 	abstract public OptionChooser createOptionChooser(Composite parent);
 	
@@ -79,48 +82,56 @@ implements ICheckStateListener, ISelectionChangedListener,
 
 		mainGroup = new Group(mainSC, SWT.NONE);
 		mainGroup.setText("Item Name");
-		final GridLayout gridLayout = new GridLayout(6, true);
-		//gridLayout.numColumns = 6;
+		final GridLayout gridLayout = new GridLayout(span, false);
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setLocation(0, 0);
 
         // Enabled Button
 		enabledButton = new Button(mainGroup, SWT.CHECK);
 		enabledButton.setData(dataItem);
-        final GridData gridData = new GridData();
+        GridData gridData = new GridData();
         gridData.verticalIndent = 7;
         gridData.horizontalAlignment = GridData.BEGINNING;
-        gridData.horizontalSpan = 6;
+        gridData.horizontalSpan = span;
         enabledButton.setLayoutData(gridData);
         enabledButton.setText("enabled");
 		
         // Styles Label
-        final Label stylesLabel = new Label(mainGroup, SWT.NONE);
-        final GridData gridData_3 = new GridData();
-        gridData_3.horizontalAlignment = GridData.BEGINNING;
-        gridData_3.grabExcessHorizontalSpace = true;
-        gridData_3.horizontalSpan = 4;
-        stylesLabel.setLayoutData(gridData_3);
-        stylesLabel.setText("Styles:");
+        final Label stylesLabel = new Label(mainGroup, SWT.RIGHT);
+        stylesLabel.setText(checkboxTableLabel);
+        gridData = new GridData();
+        gridData.horizontalAlignment = GridData.BEGINNING;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalSpan = span - (allowAddRemove ? 2 : 0);
+       // gridData.widthHint = 55;
+        stylesLabel.setLayoutData(gridData);
 
         // Add Style Button
         if(allowAddRemove) {
 			addButton = new Button(mainGroup, SWT.NONE);
 			final GridData gridData_4 = new GridData();
-	        gridData_4.horizontalAlignment = GridData.FILL;
-	        gridData_4.grabExcessHorizontalSpace = true;
+	        //gridData_4.horizontalAlignment = GridData.FILL;
+	        gridData_4.horizontalAlignment = GridData.END;
+	        gridData_4.grabExcessHorizontalSpace = false;
+	        //gridData_4.grabExcessHorizontalSpace = true;
 	        gridData_4.horizontalSpan = 1;
+	        gridData_4.widthHint = 30;
 	        addButton.setLayoutData(gridData_4);
 	        addButton.setText("+");        
-					
+	        addButton.setToolTipText("Add styler");
+	        
 			deleteButton = new Button(mainGroup, SWT.NONE);
 			final GridData gridData_5 = new GridData();
-	        gridData_5.horizontalAlignment = GridData.FILL;
-	        gridData_5.grabExcessHorizontalSpace = true;
+	        //gridData_5.horizontalAlignment = GridData.FILL;
+	        gridData_5.horizontalAlignment = GridData.END;
+	        //gridData_5.grabExcessHorizontalSpace = true;
+	        gridData_5.grabExcessHorizontalSpace = false;
 	        gridData_5.horizontalSpan = 1;
+	        gridData_5.widthHint = 30;
 	        deleteButton.setLayoutData(gridData_5);
 	        deleteButton.setText("-");
-        }
+	        deleteButton.setToolTipText("Delete styler");
+        } 
 		
 		//  CheckboxTableViewer for styles
 		checkboxTableViewer = CheckboxTableViewer.newCheckList(mainGroup, SWT.BORDER | SWT.SINGLE); 
@@ -131,14 +142,14 @@ implements ICheckStateListener, ISelectionChangedListener,
 		tableGd.minimumHeight = 75;
 		//tableGd.widthHint = 125;
 		tableGd.heightHint = 55;
-        tableGd.horizontalSpan = 6;
+        tableGd.horizontalSpan = span;
         tableGd.grabExcessVerticalSpace = true;
 		table.setLayoutData(tableGd);
 
         // Options Label
 		final Label optLabel = new Label(mainGroup, SWT.NONE);
 		final GridData gridData_6 = new GridData();
-        gridData_6.horizontalSpan = 6;
+        gridData_6.horizontalSpan = span;
         gridData_6.horizontalAlignment = GridData.BEGINNING;
 		optLabel.setLayoutData(gridData_6);
         optLabel.setText("Options:");
@@ -149,7 +160,7 @@ implements ICheckStateListener, ISelectionChangedListener,
         // Advanced Button
 		advancedButton = new Button(mainGroup, SWT.NONE);		
 		final GridData gridData_7 = new GridData();
-		gridData_7.horizontalSpan = 6;
+		gridData_7.horizontalSpan = span;
 		gridData_7.horizontalAlignment = GridData.END;
 		advancedButton.setLayoutData(gridData_7);
 		advancedButton.setText("Advanced...");
@@ -163,15 +174,19 @@ implements ICheckStateListener, ISelectionChangedListener,
 	}
 	
 	public void addSelectionListener(SelectionListener sl){
-		addButton.addSelectionListener(sl);
-		deleteButton.addSelectionListener(sl);
+		if(allowAddRemove) {
+			addButton.addSelectionListener(sl);
+			deleteButton.addSelectionListener(sl);
+		}
 		enabledButton.addSelectionListener(sl);
 		advancedButton.addSelectionListener(sl);
 	}
 	
 	public void removeSelectionListener(SelectionListener sl){
-		addButton.removeSelectionListener(sl);
-		deleteButton.removeSelectionListener(sl);
+		if(allowAddRemove) {
+			addButton.removeSelectionListener(sl);
+			deleteButton.removeSelectionListener(sl);
+		}
 		enabledButton.removeSelectionListener(sl);
 		advancedButton.removeSelectionListener(sl);
 	}

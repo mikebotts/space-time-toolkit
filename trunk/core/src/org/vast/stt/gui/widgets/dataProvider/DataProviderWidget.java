@@ -3,17 +3,14 @@ package org.vast.stt.gui.widgets.dataProvider;
 import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,18 +35,17 @@ import org.vast.stt.scene.DataItem;
  * 
  */
 public class DataProviderWidget extends CheckOptionTable
-	implements ICheckStateListener, ISelectionChangedListener,
-		SelectionListener
-		
 { 
 	java.util.List<DataProvider> providerAL;
 	DataProvider activeProv;
 	
 	public DataProviderWidget(Composite parent){
-		providerAL  = new ArrayList<DataProvider>();
+		providerAL  = new ArrayList<DataProvider>(2);
+		checkboxTableLabel = "Providers:";
+		allowAddRemove = false;
 		init(parent);
-		super.addSelectionListener(this);
-		super.addCheckboxTableListener(this, this);
+		setCheckboxTableContentProvider(new TableContentProvider());
+		setCheckboxTableLabelProvider(new LabelProvider());
 	}
 	
 	public OptionChooser createOptionChooser(Composite parent){
@@ -58,18 +54,25 @@ public class DataProviderWidget extends CheckOptionTable
 
 	public void setDataItem(DataItem item){
 		super.setDataItem(item);
-		setProvider(item.getDataProvider());
+		DataProvider prov = item.getDataProvider();
+		
+		//  TODO:  Rearrange methods so OptChooser controls get removed regardless here.
+		if(prov == null)
+			return;
+		setProvider(prov);
 	}
 	
-	
 	/**
-	 * Make this DataStyler the currently active Styler in the StyleWidget
+	 * Make this DataProvider the currently active Provider
 	 * 
-	 * @param newStyler
+	 * @param newProv
 	 */
-	public void setProvider(DataProvider newProv){
-		//  Check for CompositeStyler first...
-		//  Move this...
+	public void setProvider(DataProvider newProv){		
+		//  Check for CompositeProvider first...
+		//...
+		providerAL.clear();
+		providerAL.add(newProv);
+
 		optionChooser.buildControls(newProv);
 		System.err.println("New Prov is " + newProv);
 		//		if(newStyler instanceof CompositeStyler) 
@@ -79,7 +82,7 @@ public class DataProviderWidget extends CheckOptionTable
 //			stylerAL.add(newStyler);
 //		}
 		//  Change cbTableViewer contents
-//		checkboxTableViewer.setInput(stylerAL);	
+		checkboxTableViewer.setInput(providerAL);	
 //		Iterator it = stylerAL.iterator();
 //		DataStyler stylerTmp;
 //		//  Set init state of checkboxes
@@ -137,6 +140,9 @@ public class DataProviderWidget extends CheckOptionTable
   		}
 	}
 	
+	public void close(){
+		//  TODO: dispose of any resources
+	}
 }
 
 class TableContentProvider implements IStructuredContentProvider{
@@ -144,40 +150,30 @@ class TableContentProvider implements IStructuredContentProvider{
 	DataProvider[] providers;
 	
 	public Object [] getElements (Object inputElement){
-		return null;
+		ArrayList<DataProvider> provs = (ArrayList<DataProvider>)inputElement;
+		DataProvider [] provArr = provs.toArray(new DataProvider[]{});
+		return provArr;
 	}
 		
 	public void dispose() {
-		// TODO Auto-generated method stub
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
 		//System.err.println("Input changed is " + );
 	}
 	
 }
 
-class TableLabelProvider implements ILabelProvider {
+class TableLabelProvider extends LabelProvider {
 
 	public Image getImage(Object element) {
 		return null;
 	}
 
 	public String getText(Object element) {
-		return element.toString();
-	}
-
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	public void dispose() {
-	}
-
-	public boolean isLabelProperty(Object element, String property) {
-		return false;
-	}
-
-	public void removeListener(ILabelProviderListener listener) {
+		if(element == null)
+			System.err.println("???");
+		DataProvider prov = (DataProvider)element;
+		return prov.getClass().getName();
 	}
 }
