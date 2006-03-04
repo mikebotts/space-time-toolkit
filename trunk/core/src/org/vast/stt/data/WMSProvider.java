@@ -262,4 +262,9 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 		// TODO support time in WMS
 		return false;
 	}
+
+	//  This should probably be in OWSProvider interface
+	public WMSLayerCapabilities getCapabilities() {
+		return layerCaps;
+	}
 }
