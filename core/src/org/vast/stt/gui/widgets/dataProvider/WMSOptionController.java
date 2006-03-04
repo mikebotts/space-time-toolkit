@@ -4,6 +4,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.vast.ows.wms.WMSLayerCapabilities;
+import org.vast.ows.wms.WMSQuery;
 import org.vast.stt.data.WMSProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.eclipse.swt.events.KeyListener;
@@ -29,6 +31,7 @@ public class WMSOptionController
 	
 	public WMSOptionController(Composite parent, WMSProvider provider){
 		this.provider = provider;
+		buildBasicControls(parent);
 	}
 
 	public void buildAdvancedControls(Composite parent){
@@ -36,46 +39,56 @@ public class WMSOptionController
 	}
 	
 	public void buildBasicControls(Composite parent) {
+		WMSQuery query = provider.getQuery();
+		WMSLayerCapabilities caps = provider.getCapabilities(); 
+		
 		// TODO Auto-generated method stub
 		optionControl = new OptionControl[6];
 		//  Image Width
 		optionControl[0] = new OptionControl(parent, 0x0);
-		widthText = optionControl[0].createText("Width:", "500");
+		int w = (query != null) ? query.getWidth(): 500;
+		widthText = optionControl[0].createText("Width:", w + "");
 		widthText.addKeyListener(this);
 
 		//  Image Height
 		optionControl[1] = new OptionControl(parent,0x0);
-		heightText = optionControl[1].createText("Height:", "500");
+		int h = (query != null) ? query.getHeight() : 500;
+		heightText = optionControl[1].createText("Height:", h + "");
 		heightText.addKeyListener(this);
 
 		//  Formats
-		//String [] formatOpts = (String [])provider.getLayerCapabilities().getFormatList().toArray(new String []{});
+		String [] formatOpts = new String[]{};
+		if(caps != null)
+			formatOpts = caps.getFormatList().toArray(new String []{});
 		optionControl[2] = new OptionControl(parent,0x0);
-		String [] formatOpts = {"jpg","png","gif"};
 		formatCombo = optionControl[2].createCombo("Format:", formatOpts);
 		formatCombo.addSelectionListener(this);
 
 		//  SRS  
 		//
+		String [] srsOpts = new String [] {};
+		if(caps != null)
+			srsOpts = caps.getFormatList().toArray(new String []{});
 		optionControl[3] = new OptionControl(parent, 0x0);
-		String [] srsOpts = {"EPSG:4326","EPSG:4329"};
 		srsCombo = optionControl[3].createCombo("SRS:", srsOpts);
 		srsCombo.addSelectionListener(this);
 
 		//  Styles  
 		//
+		String [] styleOpts = new String []{};
+		if(caps != null)
+			styleOpts = caps.getStyleList().toArray(new String []{});
 		optionControl[4] = new OptionControl(parent, 0x0);
-		String [] styleOpts = {"style1","style2"};
 		styleCombo = optionControl[4].createCombo("Styles:", styleOpts);
 		styleCombo.addSelectionListener(this);
 		
 		// Transparent Checkbox
 		//
 		optionControl[5] = new OptionControl(parent, 0x0);
-		boolean trans = true;
+		//  Is transparency supported?  No way to tell currently
+		boolean trans = (query != null) ?  query.isTransparent() : true;
 		checkButton = optionControl[5].createCheckbox("Transparency:", trans);
 		checkButton.addSelectionListener(this);
-		
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
