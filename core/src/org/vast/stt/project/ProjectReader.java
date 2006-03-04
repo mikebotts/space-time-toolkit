@@ -313,15 +313,17 @@ public class ProjectReader
 					WMSCapabilitiesReader reader = new WMSCapabilitiesReader();
 					caps = reader.readCapabilities(capsElt);
 				}
-				if (serviceType.equalsIgnoreCase("WFS"))
+				else if (serviceType.equalsIgnoreCase("WFS"))
 				{
 					// TODO WFS layer
 				}
-				if (serviceType.equalsIgnoreCase("WCS"))
+				else if (serviceType.equalsIgnoreCase("WCS"))
 				{
 					// TODO WCS layer 
+					WCSCapabilitiesReader reader = new WCSCapabilitiesReader();
+					caps = reader.readCapabilities(capsElt);
 				}
-				if (serviceType.equalsIgnoreCase("SOS"))
+				else if (serviceType.equalsIgnoreCase("SOS"))
 				{
 					SOSCapabilitiesReader reader = new SOSCapabilitiesReader();
 					caps = reader.readCapabilities(capsElt);
