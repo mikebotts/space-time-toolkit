@@ -13,6 +13,8 @@
 
 package org.vast.stt.renderer.opengl;
 
+import java.util.Hashtable;
+
 import org.eclipse.swt.opengl.GL;
 import org.eclipse.swt.opengl.GLU;
 import org.eclipse.swt.opengl.GLContext;
@@ -48,10 +50,12 @@ public class OpenGLRenderer extends Renderer
     private double[] yData = new double[1];
     private double[] zData = new double[1];
     private int GL_TEXTURE_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//
+    private Hashtable<RasterStyler, Integer> textureTable;
 
 
     public OpenGLRenderer()
     {
+        textureTable = new Hashtable<RasterStyler, Integer>();
     }
 
 
@@ -70,7 +74,7 @@ public class OpenGLRenderer extends Renderer
     {
         // clear back buffer
         Color backColor = view.getBackgroundColor();
-        GL.glClearColor(backColor.getRed(), backColor.getGreen(), backColor.getBlue(), 0.0f);
+        GL.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
         // set up projection
@@ -150,7 +154,7 @@ public class OpenGLRenderer extends Renderer
         GL.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
 
         //GL.glEnable(GL.GL_LINE_SMOOTH);
-        //GL.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        GL.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         GL.glEnable(GL.GL_BLEND);
         GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         GL.glEnable(GL_TEXTURE_TARGET);
@@ -170,39 +174,55 @@ public class OpenGLRenderer extends Renderer
 
     public void visit(LineStyler styler)
     {
-        LinePointGraphic point;
-
-        for (int i = 0; i < styler.getSegmentCount(); i++)
+        boolean allowBreak = false;
+        
+        // get line width of first point
+        styler.reset();
+        LinePointGraphic point = styler.nextPoint();
+        GL.glLineWidth(point.width); 
+        
+        // loop and draw all line points
+        styler.reset();
+        GL.glBegin(GL.GL_LINE_STRIP);        
+        while (styler.hasNext())
         {
-            LineSegmentGraphic segment = styler.getSegment(i);
-
-            GL.glLineWidth(styler.getPoint(0).width);
-            GL.glBegin(GL.GL_LINE_STRIP);
-
-            for (int j = 0; j < segment.segmentSize; j++)
+            point = styler.nextPoint();
+            
+            if (allowBreak)
             {
-                point = styler.getPoint(j);
-                GL.glColor4f(point.r, point.g, point.b, point.a);
-                GL.glVertex3d(point.x, point.y, point.z);
+                if (point.lineBreak)
+                {
+                    GL.glEnd();
+                    GL.glBegin(GL.GL_LINE_STRIP);
+                }
             }
-
-            GL.glEnd();
-        }
+            else
+                allowBreak = true;
+            
+            GL.glColor4f(point.r, point.g, point.b, point.a);
+            GL.glVertex3d(point.x, point.y, point.z);
+        }        
+        GL.glEnd();
     }
 
 
     public void visit(PointStyler styler)
     {
-        GL.glPointSize(styler.getPoint(0).size);
-        GL.glBegin(GL.GL_POINTS);
-
-        for (int i = 0; i < styler.getPointCount(); i++)
+        // get point size from first point
+        styler.reset();
+        PointGraphic point = styler.nextPoint();
+        GL.glPointSize(point.size); 
+        
+        // loop and draw all points
+        styler.reset();
+        GL.glBegin(GL.GL_POINTS);        
+        while (styler.hasNext())
         {
-            PointGraphic point = styler.getPoint(i);
+            point = styler.nextPoint();                
             GL.glColor4f(point.r, point.g, point.b, point.a);
             GL.glVertex3d(point.x, point.y, point.z);
         }
-
+        
         GL.glEnd();
     }
 
@@ -215,40 +235,81 @@ public class OpenGLRenderer extends Renderer
 
     public void visit(RasterStyler styler)
     {
-        ImageGraphic image = styler.getImage(0);
+        int textureNum;        
         
-        //TEXTURE STUFFS
-        if (!GL.glIsEnabled(GL_TEXTURE_TARGET))
-            GL.glEnable(GL_TEXTURE_TARGET);
-
-        GL.glBindTexture(GL_TEXTURE_TARGET, 1);
-        GL.glTexImage2D(GL_TEXTURE_TARGET, 0, GL.GL_RGB, image.width, image.height, 0, GL.GL_BGR_EXT, GL.GL_UNSIGNED_BYTE, (byte[])image.data);
-        GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-        GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        int tileCount = styler.getTileCount();
         
-        GL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-        GL.glPolygonOffset(1.0f, 1.0f);
-        GL.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        GL.glEnable(GL.GL_BLEND);
-        GL.glDisable(GL.GL_CULL_FACE);
+        for (int tileNum=0; tileNum<tileCount; tileNum++)
+        {
+            // retrieve or generate texture name
+            if (textureTable.containsKey(styler))
+            {
+                textureNum = textureTable.get(styler);
+            }
+            else
+            {
+                int[] names = new int[1];
+                GL.glGenTextures(1, names);
+                textureTable.put(styler, names[0]);
+                textureNum = names[0];
+            }        
+            
+            // set current texture in GL
+            GL.glBindTexture(GL_TEXTURE_TARGET, textureNum);
+            
+            // get first image
+            RasterImageGraphic image = styler.getImage(tileNum);
+            
+            // reload the texture if needed
+            if (image.updated)
+            {
+                GL.glTexImage2D(GL_TEXTURE_TARGET, 0, GL.GL_RGB, image.width, image.height, 0, GL.GL_BGR_EXT, GL.GL_UNSIGNED_BYTE, (byte[])image.data);
+                GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+                GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+                image.updated = false;
+            }
+            
+            // setup white background color and offsets
+            GL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
+            GL.glPolygonOffset(1.0f, 1.0f);
+            GL.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+            GL.glEnable(GL.GL_BLEND);
+            GL.glDisable(GL.GL_CULL_FACE);
+            
+            RasterGridGraphic gridPatch = styler.getGrid(tileNum);
+            GridRowGraphic row1 = null;
+            GridRowGraphic row2 = null;
+            
+            // loop through all rows
+            while (styler.hasMoreRows())
+            {
+                if (row1 == null)
+                    row1 = styler.nextGridRow();
+                else
+                    row1 = row2;
+                
+                row2 = styler.nextGridRow();
+                
+                // loop and draw quads
+                GL.glBegin(GL.GL_QUAD_STRIP);
+                for (int i=0; i<gridPatch.width; i++)
+                {
+                    GridPointGraphic point2 = row2.gridPoints[i];                    
+                    GL.glColor4f(point2.r, point2.g, point2.b, point2.a);
+                    GL.glTexCoord2f(point2.texX, point2.texY);
+                    GL.glVertex3d(point2.x, point2.y, point2.z);
+                    
+                    GridPointGraphic point1 = row1.gridPoints[i];                    
+                    GL.glColor4f(point1.r, point1.g, point1.b, point1.a);
+                    GL.glTexCoord2f(point1.texX, point1.texY);
+                    GL.glVertex3d(point1.x, point1.y, point1.z);
+                }
+                GL.glEnd();
+            }
+        }
         
-        GL.glBindTexture(GL_TEXTURE_TARGET, 1);
-        GL.glBegin(GL.GL_QUADS);
-        
-        GL.glTexCoord2f(0, 0);
-        GL.glVertex3d(-1, 1, 0);
-        
-        GL.glTexCoord2f(1, 0);
-        GL.glVertex3d(1, 1, 0);
-        
-        GL.glTexCoord2f(1, 1);
-        GL.glVertex3d(1, -1, 0);
-        
-        GL.glTexCoord2f(0, 1);
-        GL.glVertex3d(-1, -1, 0);
-
-        GL.glEnd();
+        // back to no texture for next renderings
         GL.glBindTexture(GL_TEXTURE_TARGET, 0);
     }
 }

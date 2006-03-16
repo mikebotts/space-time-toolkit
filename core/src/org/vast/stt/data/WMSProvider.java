@@ -127,7 +127,7 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
                     System.out.println(imageData);
                     
                     DataBlock dataBlock = DataBlockFactory.createBlock(data);
-                    cachedData.addData(dataBlock);
+                    ((DataNode)cachedData).addData(dataBlock);
                 }
 			}
 		}

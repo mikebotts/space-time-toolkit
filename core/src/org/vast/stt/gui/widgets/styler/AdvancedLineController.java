@@ -65,9 +65,18 @@ public class AdvancedLineController extends AdvancedOptionController {
 		if(widthSP != null)  //  is null sometimes.
 			setOptionState(widthSP, 0);
 		//  Color
-		ScalarParameter colorSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor();		
-		if(colorSP != null)
-			setOptionState(colorSP, 1);
+		ScalarParameter redSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getRed();		
+		if(redSP != null)
+			setOptionState(redSP, 1);
+        ScalarParameter greenSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getGreen();       
+        if(redSP != null)
+            setOptionState(greenSP, 1);
+        ScalarParameter blueSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getBlue();       
+        if(redSP != null)
+            setOptionState(blueSP, 1);
+        ScalarParameter alphaSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getAlpha();       
+        if(redSP != null)
+            setOptionState(alphaSP, 1);
 	}
 	
 	protected void doLut(int index){

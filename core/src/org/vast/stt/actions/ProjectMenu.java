@@ -17,82 +17,83 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.*;
-import org.vast.stt.apps.STTConfig;
 import org.vast.stt.commands.*;
 import org.vast.stt.gui.views.SceneView;
-import org.vast.stt.project.Project;
-import org.vast.stt.project.ProjectReader;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
 {
-	Runnable openSceneView = new Runnable()
-	{
-		public void run()
-		{
-			try
-			{
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				page.showView(SceneView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
-			}
-			catch (PartInitException e)
-			{
-				e.printStackTrace();
-			}
-		}
-	};
-	
-	
-	public ProjectMenu()
-	{
-	}
+    Runnable openSceneView = new Runnable()
+    {
+        public void run()
+        {
+            try
+            {
+                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                IViewReference view = page.findViewReference(SceneView.ID, "000");
+                if (view != null)
+                    page.hideView(view);
+                page.showView(SceneView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
+            }
+            catch (PartInitException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    };
 
 
-	public void run(IAction action)
-	{
-		String actionId = action.getId();
-		String url = null;
-		
-		if(actionId.endsWith("OpenProject")){
-			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-			String path = fileDialog.open();
-			if(path != null){
-				url = "file:" + path.replace('\\','/');
-				ProjectReader reader = new ProjectReader();
-				Project project = reader.readProject(url);
-				STTConfig.getInstance().setCurrentProject(project);
-			}
-			
-		} else if(actionId.endsWith("OpenTestProject")) {
-			url = "file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml";
-		}
-		final OpenProject command = new OpenProject();
-		command.setUrl(url);
-		Runnable readProject = new Runnable()
-		{
-			public void run()
-			{
-				command.execute();
-				PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
-			}
-		};
-		
-		Thread thread = new Thread(readProject);
-		thread.start();	
-	}
+    public ProjectMenu()
+    {
+    }
 
 
-	public void selectionChanged(IAction action, ISelection selection)
-	{
-	}
+    public void run(IAction action)
+    {
+        String actionId = action.getId();
+        String url = null;
+
+        // open file chooser window
+        if (actionId.endsWith("OpenProject"))
+        {
+            FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+            String path = fileDialog.open();
+            if (path != null)
+                url = "file:///" + path.replace('\\', '/');
+        }
+        else if (actionId.endsWith("OpenTestProject"))
+        {
+            url = "file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml";
+        }
+
+        // launch OpenProject command in separate thread
+        final OpenProject command = new OpenProject();
+        command.setUrl(url);
+        Runnable readProject = new Runnable()
+        {
+            public void run()
+            {
+                command.execute();
+                PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
+            }
+        };
+
+        Thread thread = new Thread(readProject);
+        thread.start();
+    }
 
 
-	public void dispose()
-	{
-	}
+    public void selectionChanged(IAction action, ISelection selection)
+    {
+    }
 
 
-	public void init(IWorkbenchWindow window)
-	{
-	}
+    public void dispose()
+    {
+    }
+
+
+    public void init(IWorkbenchWindow window)
+    {
+    }
 }

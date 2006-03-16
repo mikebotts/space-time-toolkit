@@ -81,10 +81,8 @@ public class StylerFactory
 
 		//  color
 		GraphicMark gm = new GraphicMark();
-		ScalarParameter color = new ScalarParameter();
-		color.setConstantValue(new Color(1.0f, 0.0f, 0.0f, 1.0f));
 		Fill fill = new Fill();
-		fill.setColor(color);
+		fill.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
 		gm.setFill(fill);
 		graphic.getGlyphs().add(gm);
 		
@@ -115,9 +113,7 @@ public class StylerFactory
 		stroke.setWidth(width);
 		
 		//color
-		ScalarParameter newColor = new ScalarParameter();
-		newColor.setConstantValue(new Color(1.0f, 0.0f, 0.0f, 1.0f));
-		stroke.setColor(newColor);
+		stroke.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
 		
 		return styler;
 	}

@@ -13,6 +13,7 @@
 
 package org.vast.stt.data;
 
+import org.ogc.cdm.common.DataComponent;
 import org.vast.stt.project.Resource;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
@@ -42,6 +43,12 @@ public interface DataProvider
 	
 	
 	public boolean isUpdating();
+    
+    
+    public UpdateMonitor getUpdateMonitor();
+    
+    
+    public void setUpdateMonitor(UpdateMonitor updateMonitor);
 	
 	
 	public void cancelUpdate();
@@ -50,7 +57,7 @@ public interface DataProvider
 	public void clearData();
 
 
-	public DataNode getDataNode();
+	public DataComponent getDataNode();
 	
 	
 	public void setDataNode(DataNode dataNode);

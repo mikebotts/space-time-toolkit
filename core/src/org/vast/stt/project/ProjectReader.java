@@ -25,19 +25,12 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sos.*;
 import org.vast.ows.wms.*;
 import org.vast.ows.wcs.*;
-import org.vast.stt.data.DataProvider;
-import org.vast.stt.data.OWSProvider;
-import org.vast.stt.data.SOSProvider;
-import org.vast.stt.data.SWEProvider;
-import org.vast.stt.data.WMSProvider;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataItem;
-import org.vast.stt.scene.DataEntryList;
-import org.vast.stt.scene.Scene;
-import org.vast.stt.scene.ViewSettings;
-import org.vast.stt.style.CompositeStyler;
-import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.StylerFactory;
+import org.vast.sensorML.SMLException;
+import org.vast.sensorML.reader.ProcessLoader;
+import org.vast.sensorML.reader.SystemReader;
+import org.vast.stt.data.*;
+import org.vast.stt.scene.*;
+import org.vast.stt.style.*;
 import org.vast.util.*;
 import org.w3c.dom.*;
 import org.vast.process.*;
@@ -63,17 +56,17 @@ public class ProjectReader
 {
 	private DOMReader dom;
 	private Hashtable<String, Service> serviceIds;
-	private Hashtable<String, Resource> resourceIds;
 	private StylerFactory stylerFactory;
 	private SLDReader sldReader;
+    private DataProviderReader providerReader;
 	
 	
 	public ProjectReader()
 	{
 		serviceIds = new Hashtable<String, Service>();
-		resourceIds = new Hashtable<String, Resource>();
 		stylerFactory = new StylerFactory();
 		sldReader = new SLDReader();
+        providerReader = new DataProviderReader();
 	}
 	
 	
@@ -238,12 +231,16 @@ public class ProjectReader
 		{
 			resource = readStaticDataSet(resourceElt);
 		}
+        else if (resourceName.equals("SensorMLProcess"))
+        {
+            resource = readSensorMLProcess(resourceElt);
+        }
 		else
 			return null;
 				
-		// if id is present, add ref to hashtable
-		if (dom.existAttribute(resourceElt, "id"))
-			resourceIds.put(dom.getAttributeValue(resourceElt, "id"), resource);
+		// add ref to hashtable
+        if (dom.existAttribute(resourceElt, "id"))
+            providerReader.getResourceIds().put(dom.getAttributeValue(resourceElt, "id"), resource);
 		
 		// name & description
 		resource.setName(dom.getElementValue(resourceElt, "name"));
@@ -340,6 +337,34 @@ public class ProjectReader
 		
 		return serviceLayer;
 	}
+    
+    
+    /**
+     * Reads a SensorML Process description
+     * @param dataSetElt
+     * @return
+     */
+    protected SensorMLProcess readSensorMLProcess(Element resourceElt)
+    {
+        SensorMLProcess smlProcess = new SensorMLProcess();
+        
+        try
+        {
+            Element processElt = dom.getElement(resourceElt, "process");
+            SystemReader systemReader = new SystemReader(dom);
+            systemReader.setReadMetadata(false);
+            systemReader.setCreateExecutableProcess(true);
+            ProcessLoader.reloadMaps("file:///d:/Projects/NSSTC/SensorML/src/org/vast/test/ProcessMap.xml");
+            DataProcess process = systemReader.readProcessProperty(processElt);
+            smlProcess.setInternalProcess(process);
+        }
+        catch (SMLException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return smlProcess;
+    }
 	
 	
 	/**
@@ -562,7 +587,7 @@ public class ProjectReader
 						
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
-		DataProvider provider = readDataProvider(providerElt);
+		DataProvider provider = providerReader.readProvider(dom, providerElt);
 		dataItem.setDataProvider(provider);
 		
 		// style/symbolizer list
@@ -583,7 +608,7 @@ public class ProjectReader
 			
 			dataItem.setStyler(compositeStyler);
 		}
-		else
+		else if (listSize > 0)
 		{
 			// read only one styler
 			Element symElt = (Element)symElts.item(0);
@@ -615,106 +640,6 @@ public class ProjectReader
 		}
 		
 		return styler;
-	}
-	
-	
-	/**
-	 * Reads a DataProvider description and instantiate the appropriate object
-	 * Also parses the specified request if any (for OWS Data Providers) 
-	 * @param providerElt
-	 * @return
-	 */
-	protected DataProvider readDataProvider(Element providerElt)
-	{
-		OWSRequestReader requestReader = null;
-		DataProvider provider = null;
-		
-		// find out which provider to instantiate
-		if (providerElt.getLocalName().equals("SOSDataProvider"))
-		{
-			provider = new SOSProvider();							
-			requestReader = new SOSRequestReader();
-		}
-		else if (providerElt.getLocalName().equals("WMSDataProvider"))
-		{
-			provider = new WMSProvider();							
-			requestReader = new WMSRequestReader();
-		}
-		else if (providerElt.getLocalName().equals("SWEDataProvider"))
-		{
-			provider = new SWEProvider();							
-		}
-		else
-			return null;
-		
-		// parse or link to resource
-		Resource resource = null;
-		if (dom.existAttribute(providerElt, "resource/@href"))
-		{
-			String resId = dom.getAttributeValue(providerElt, "resource/@href").substring(1); 
-			resource = resourceIds.get(resId);
-		}
-		else
-		{
-			Element resourceElt = dom.getElement(providerElt, "resource/*");
-			resource = readResource(resourceElt);
-		}
-		provider.setResource(resource);
-		
-		// request			
-		if (dom.existElement(providerElt, "request"))
-		{
-			Element requestElt = dom.getElement(providerElt, "request/*");
-			try
-			{
-				OWSQuery query = requestReader.readRequestXML(dom, requestElt);
-				((OWSProvider)provider).setQuery(query);
-				query.setGetServer(dom.getAttributeValue(providerElt, "request/@getUrl"));
-				query.setPostServer(dom.getAttributeValue(providerElt, "request/@postUrl"));
-			}
-			catch (OWSException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return provider;		
-	}
-	
-	
-	/**
-	 * Reads the right query depending on service attrubute
-	 * @param requestElt
-	 * @return
-	 */
-	protected OWSQuery readServiceRequest(Element requestElt)
-	{
-		try
-		{
-			String serviceType = dom.getAttributeValue(requestElt, "service");
-			OWSRequestReader reader = null;
-			
-			if (serviceType.equalsIgnoreCase("WMS"))
-				reader = new WMSRequestReader();
-			
-			else if (serviceType.equalsIgnoreCase("WCS"))
-				reader = new WCSRequestReader();
-			
-			else if (serviceType.equalsIgnoreCase("SOS"))
-				reader = new SOSRequestReader();
-			
-			else
-				return null;
-			
-			OWSQuery query = reader.readRequestXML(dom, requestElt);			
-			return query;
-		}
-		catch (OWSException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} 
 	}
 	
 	
