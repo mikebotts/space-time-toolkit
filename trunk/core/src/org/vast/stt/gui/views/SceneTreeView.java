@@ -126,7 +126,7 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		sceneTree = new TreeViewer(parent, SWT.SINGLE);
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
-		sceneTree.getTree().setFont(treeFont);
+		//sceneTree.getTree().setFont(treeFont);
 		getSite().setSelectionProvider(sceneTree);
 	}
 	

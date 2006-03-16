@@ -15,6 +15,7 @@ package org.vast.stt.style;
 
 import org.ogc.cdm.common.DataBlock;
 import org.vast.ows.sld.RasterSymbolizer;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 
 
@@ -37,36 +38,137 @@ import org.vast.ows.sld.Symbolizer;
 public class RasterStyler extends AbstractStyler
 {
 	protected RasterSymbolizer symbolizer;
-    protected ImageGraphic image;
+    protected RasterImageGraphic image;
+    protected RasterPixelGraphic pixel;
+    protected RasterGridGraphic grid;
+    protected GridRowGraphic gridRow;
+    protected DataIndexer redData, greenData, blueData, alphaData;
     
 	
 	public RasterStyler()
 	{
-        image = new ImageGraphic();
+        image = new RasterImageGraphic();
+        pixel = new RasterPixelGraphic();
+        grid = new RasterGridGraphic();
+        gridRow = new GridRowGraphic();
 	}
+    
+    
+    /**
+     * Returns the number of tiles, that is the number of
+     * image/grid pairs to use for texture mapping.
+     * @return
+     */
+    public int getTileCount()
+    {
+        return 1;
+    }
 	
     
-    public ImageGraphic getImage(int index)
+    public RasterImageGraphic getImage(int index)
     {
         if (image.data == null)
         {
-            DataBlock data = node.getComponent(0).getData();
+            DataBlock data = currentData.getComponent(0).getData();
             int arraySize = data.getAtomCount();
             byte[] array = new byte[arraySize];
             image.data = array;       
         
             for (int i=0; i<arraySize; i++)
-                array[i] = node.getData().getByteValue(i);
+                array[i] = currentData.getData().getByteValue(i);
             
             image.width = 512;
             image.height = 256;
+            image.updated = true;
         }
         
         return image;
     }
-	
-
-	public void updateBoundingBox()
+    
+    
+    public RasterPixelGraphic getPixel(int x, int y, int z)
+    {
+        return pixel;
+    }
+    
+    
+    public RasterGridGraphic getGrid(int gridIndex)
+    {
+        grid.width = 10;
+        grid.length = 10;
+        return grid;
+    }
+    
+    
+    public boolean hasMoreRows()
+    {
+        return xData.hasNext();
+    }
+    
+    
+    public GridRowGraphic nextGridRow()
+    {
+        if (grid.updated = true)
+        {
+            gridRow.gridPoints = new GridPointGraphic[grid.width];
+            grid.updated = false;
+        }
+        
+        for (int i=0; i<grid.width; i++)
+        {
+            int linearIndex;
+            
+            if (xData != null)
+            {
+                linearIndex = xData.nextIndex();
+                gridRow.gridPoints[i].x = xData.dataBlock.getDoubleValue(linearIndex);
+            }
+            
+            if (yData != null)
+            {
+                linearIndex = yData.nextIndex();
+                gridRow.gridPoints[i].y = yData.dataBlock.getDoubleValue(linearIndex);
+            }
+            
+            if (zData != null)
+            {
+                linearIndex = zData.nextIndex();
+                gridRow.gridPoints[i].z = zData.dataBlock.getDoubleValue(linearIndex);
+            }
+            
+            if (redData != null)
+            {
+                linearIndex = redData.nextIndex();
+                gridRow.gridPoints[i].r = redData.dataBlock.getFloatValue(linearIndex);
+            }
+            
+            if (greenData != null)
+            {
+                linearIndex = greenData.nextIndex();
+                gridRow.gridPoints[i].g = greenData.dataBlock.getFloatValue(linearIndex);
+            }
+            
+            if (blueData != null)
+            {
+                linearIndex = blueData.nextIndex();
+                gridRow.gridPoints[i].b = blueData.dataBlock.getFloatValue(linearIndex);
+            }
+            
+            if (alphaData != null)
+            {
+                linearIndex = alphaData.nextIndex();
+                gridRow.gridPoints[i].a = alphaData.dataBlock.getFloatValue(linearIndex);
+            }
+            
+            // also computes texture coordinates
+            
+        }
+        
+        return gridRow;
+    }
+    
+    
+    public void updateBoundingBox()
 	{
 		// TODO Auto-generated method stub
 	}
@@ -74,8 +176,46 @@ public class RasterStyler extends AbstractStyler
 
 	public void updateDataMappings()
 	{
-		node = dataProvider.getDataNode();
+        ScalarParameter param;
+        String propertyName = null;   
         
+        // generate indexing rules for geometry components        
+        
+        // geometry X
+        param = this.symbolizer.getGeometry().getX();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                xData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(xData);                
+            }
+        }
+        
+        //geometry Y
+        param = this.symbolizer.getGeometry().getY();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                yData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(yData);                
+            }
+        }
+        
+        // geometry Z
+        param = this.symbolizer.getGeometry().getZ();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                zData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(zData);                
+            }
+        }
 	}
 	
 	
@@ -93,7 +233,14 @@ public class RasterStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-        updateDataMappings(); //TODO shouldn't be called here -> not too efficient !
-        visitor.visit(this);		
+        currentData = dataProvider.getDataNode();
+
+        if (currentData != null)
+        {
+            if ((xData == null) && (yData == null) && (zData == null))
+                updateDataMappings();
+            
+            visitor.visit(this);
+        }		
 	}
 }

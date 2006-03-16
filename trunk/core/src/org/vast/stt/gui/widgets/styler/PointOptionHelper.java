@@ -29,17 +29,19 @@ public class PointOptionHelper implements SelectionListener {
 		styler = (PointStyler)optionController.getStyler();
 	}
 	
-	public ScalarParameter getPointColorScalar(){
+	public Color getPointColor(){
 		Graphic graphic = styler.getSymbolizer().getGraphic();
 		List graphicSourceList = graphic.getGlyphs();
 		//if(graphicSourceList == null)  return;
 		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
 		if(graphicSource instanceof GraphicMark) {
 			GraphicMark gm = (GraphicMark)graphicSource;
-			ScalarParameter color = gm.getFill().getColor();
+			Color color = gm.getFill().getColor();
+            if (color == null)
+                return new Color(1.0f, 0.0f, 0.0f, 1.0f);
 			return color;
 		}
-		return null;
+		return new Color(1.0f, 0.0f, 0.0f, 1.0f);
 	}
 		
 	private void setPointSize(float f){
@@ -60,9 +62,7 @@ public class PointOptionHelper implements SelectionListener {
 		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
 		if(graphicSource instanceof GraphicMark) {
 			GraphicMark gm = (GraphicMark)graphicSource;
-			ScalarParameter newColor = new ScalarParameter();
-			newColor.setConstantValue(sldColor);
-			gm.getFill().setColor(newColor);
+			gm.getFill().setColor(sldColor);
 		}
 	}
 	
@@ -76,17 +76,8 @@ public class PointOptionHelper implements SelectionListener {
 			return 1.0f;
 		return ((Float)val).floatValue();
 	}
-	
-	public org.vast.ows.sld.Color getPointColor(){
-		ScalarParameter color = getPointColorScalar();
-		if(color == null)
-			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-		Object val = color.getConstantValue();
-		if(val == null)
-			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-		return (Color)val;
-	}
 
+    
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 

@@ -27,6 +27,7 @@ public class OpenProject implements Command
 		ProjectReader reader = new ProjectReader();
 		Project project = reader.readProject(url);
 		STTConfig.getInstance().setCurrentProject(project);
+        System.gc();
 	}
 
 	public void unexecute()

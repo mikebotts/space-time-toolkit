@@ -175,16 +175,24 @@ public class AdvancedStyleDialog implements SelectionListener
 		Set<String> mappableSet = new HashSet<String>();
 		ScalarIterator it = 
 			new ScalarIterator(dataItem.getDataProvider().getDataNode().getComponent(0));
-		DataComponent dataCompTmp; 
-		String name;
-		String fullName;
+        
 		while(it.hasNext()){
-			dataCompTmp = it.next();
-			name = dataCompTmp.getName();
-			//fullName = it.nextString();
+            StringBuffer fullName = new StringBuffer();
+            
+            DataComponent[] componentPath = it.nextPath();          
+            for (int i=0; i<componentPath.length; i++)
+            {
+                if (i != 0)
+                    fullName.append('/');
+                
+                fullName.append(componentPath[i].getName());
+            }
+
+            String path = fullName.toString();
+            
 			//  HACK to filter out segmentSize
-			if(!name.equals("segmentSize")) 
-				mappableSet.add(name);
+			if(!path.contains("segmentSize")) 
+				mappableSet.add(path);
 		}
 		
 		return mappableSet.toArray(new String[]{});
@@ -230,14 +238,15 @@ public class AdvancedStyleDialog implements SelectionListener
 			}
 			index++;
 		}
-		//System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
-		//System.err.println("NOW WHAT???");
+		System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
+		System.err.println("NOW WHAT???");
 	}
 	
 	protected void setActiveStyler(int index){
 		activeStyler = stylerAL.get(index);
 		advGraphicsTab.setActiveStyler(activeStyler);
 		advGeomTab.setActiveStyler(activeStyler);
+		//graphicTabItem.setControl()
 	}
 	
 	protected void setStylesComboItems(){

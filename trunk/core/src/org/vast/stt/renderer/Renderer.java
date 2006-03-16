@@ -50,6 +50,9 @@ public abstract class Renderer implements StylerVisitor
 			
 			if (!item.isEnabled())
 				continue;
+            
+            if (item.getDataProvider().isUpdating())
+                continue;
 			
 			DataStyler styler = item.getStyler();
 			if ((styler != null) && styler.isEnabled())

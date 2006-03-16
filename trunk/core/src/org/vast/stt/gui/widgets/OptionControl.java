@@ -167,9 +167,9 @@ public class OptionControl extends Composite {
 		colorLabel = new Label(this, 0x0);
 		colorLabel.setText("       ");
 		colorLabelColor = new Color(display, 
-									(int)(sldColor.getRed()*255), 
-									(int)(sldColor.getGreen()*255), 
-									(int)(sldColor.getBlue()*255));
+									(int)(sldColor.getRedValue()*255), 
+									(int)(sldColor.getGreenValue()*255), 
+									(int)(sldColor.getBlueValue()*255));
 		colorLabel.setBackground(colorLabelColor);
 		activeControl = new Button(this, SWT.PUSH);
 		Button button = (Button)activeControl;
@@ -184,9 +184,9 @@ public class OptionControl extends Composite {
 		if(colorLabelColor != null) 
 			colorLabelColor.dispose();
 		colorLabelColor = new Color(display, 
-				(int)(sldColor.getRed()*255), 
-				(int)(sldColor.getGreen()*255), 
-				(int)(sldColor.getBlue()*255));
+				(int)(sldColor.getRedValue()*255), 
+				(int)(sldColor.getGreenValue()*255), 
+				(int)(sldColor.getBlueValue()*255));
 		colorLabel.setBackground(colorLabelColor);		
 	}
 	

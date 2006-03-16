@@ -30,10 +30,10 @@ package org.vast.stt.style;
  */
 public class GridPointGraphic implements GraphicObject
 {
-	public double x, y, z;
-	public float r, g, b;
+    public double x, y, z;
+    public float r, g, b;
 	public float a = 1.0f;
-    public double texX[];
-    public double texY[];
-    public double texZ[];
+    public float texX;
+    public float texY;
+    public float texZ;
 }

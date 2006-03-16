@@ -13,10 +13,20 @@
 
 package org.vast.stt.data;
 
+import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataList;
 
 
 public class DataNode extends DataList
 {
-
+    public DataComponent getStructure()
+    {
+        return this.getComponent(0);
+    }
+    
+    public void clear()
+    {
+        this.removeAllComponents();
+        System.gc();
+    }
 }

@@ -16,11 +16,12 @@ package org.vast.stt.style;
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * Grid Patch Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * Represents a patch of a grid. A patch is the individual
+ * piece of a composite grid.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -28,12 +29,10 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LinePointGraphic implements GraphicObject
+public class RasterGridGraphic implements GraphicObject
 {
-    public double x, y, z;
-    public float r, g, b;
-	public float a = 1.0f;
-    public int width = 1;
-    public boolean lineBreak;
-    public boolean smooth = false;
+	public int width = 0;
+    public int length = 0;
+    public int depth = 0;
+    public boolean updated;
 }

@@ -41,13 +41,10 @@ public class LineOptionHelper implements SelectionListener {
 	}
 	
 	public org.vast.ows.sld.Color getLineColor(){
-		ScalarParameter colorSP = styler.getSymbolizer().getStroke().getColor();
+		Color colorSP = styler.getSymbolizer().getStroke().getColor();
 		if(colorSP == null)
 			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-		Object colorCon = colorSP.getConstantValue();
-		if(colorCon == null)
-			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
-		return (Color)colorCon;
+		return colorSP;
 	}
 	
 	/**
@@ -67,9 +64,7 @@ public class LineOptionHelper implements SelectionListener {
 	 */
 	public void setLineColor(Color color) {
 		Stroke stroke = styler.getSymbolizer().getStroke();
-		ScalarParameter newColor = new ScalarParameter();
-		newColor.setConstantValue(color);
-		stroke.setColor(newColor);
+		stroke.setColor(color);
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){

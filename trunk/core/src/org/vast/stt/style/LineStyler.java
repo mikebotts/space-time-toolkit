@@ -13,12 +13,9 @@
 
 package org.vast.stt.style;
 
-import org.ogc.cdm.common.DataComponent;
-import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.DataNode;
 
 
 /**
@@ -28,7 +25,7 @@ import org.vast.stt.data.DataNode;
  *
  * <p><b>Description:</b><br/>
  * Converts source data to a sequence of LineGraphic objects
- * that the renderer can access and render sequentially. 
+ * that the renderer can access and render sequentially.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -40,44 +37,106 @@ public class LineStyler extends AbstractStyler
 {
 	protected LineSymbolizer symbolizer;
 	protected LinePointGraphic point;
-	protected LineSegmentGraphic segment;
-	protected DataComponent pointArray;
-    protected int[][] segIndices, xIndices, yIndices, zIndices;
-	
+    protected LineSegmentGraphic segment;
+    protected DataIndexer redData, greenData, blueData, alphaData;
+    protected DataIndexer widthData;
+    protected int breakRuleIndex;
+    
 	
 	public LineStyler()
 	{
 		point = new LinePointGraphic();
-		segment = new LineSegmentGraphic();
+        segment = new LineSegmentGraphic();
+
 		//  force a default name
 		setName("Line Styler");
 	}
+    
+    
+    public boolean hasNext()
+    {
+        return xData.hasNext();
+    }
+    
+    
+    public LinePointGraphic nextPoint()
+    {
+        point.lineBreak = false;
+                        
+        if (xData != null)
+        {
+            int linearIndex = xData.nextIndex();
+            point.x = xData.dataBlock.getDoubleValue(linearIndex);
+            
+            // take care of breaks
+            if (xData.indexRules[breakRuleIndex].newItem)
+            {
+                point.lineBreak = true;
+                xData.indexRules[breakRuleIndex].newItem = false;
+            }
+        }
+        
+        if (yData != null)
+        {
+            int linearIndex = yData.nextIndex();
+            point.y = yData.dataBlock.getDoubleValue(linearIndex);
+        }
+        
+        if (zData != null)
+        {
+            int linearIndex = zData.nextIndex();
+            point.z = zData.dataBlock.getDoubleValue(linearIndex);
+        }
+        
+        if (redData != null)
+        {
+            int linearIndex = redData.nextIndex();
+            point.r = redData.dataBlock.getFloatValue(linearIndex);
+        }
+        
+        if (greenData != null)
+        {
+            int linearIndex = greenData.nextIndex();
+            point.g = greenData.dataBlock.getFloatValue(linearIndex);
+        }
+        
+        if (blueData != null)
+        {
+            int linearIndex = blueData.nextIndex();
+            point.b = blueData.dataBlock.getFloatValue(linearIndex);
+        }
+        
+        if (alphaData != null)
+        {
+            int linearIndex = alphaData.nextIndex();
+            point.a = alphaData.dataBlock.getFloatValue(linearIndex);
+        }
+        
+        if (widthData != null)
+        {
+            int linearIndex = widthData.nextIndex();
+            point.width = widthData.dataBlock.getIntValue(linearIndex);
+        }
+        
+        return point;
+    }
+    
+    
+    public int getSegmentCount()
+    {
+        return currentData.getComponentCount();
+    }
+    
+    
+    public LineSegmentGraphic getLineSegment(int segmentIndex)
+    {
+        return null;
+    }
 
 	
-	public int getSegmentCount()
-	{
-		return this.getComponentCount(segIndices);
-	}
-    
-    
-    public LineSegmentGraphic getSegment(int i)
-    {
-        node.getComponent(i).getComponent(0);
-        pointArray = this.getComponent(node, segIndices, i);
-        segment.segmentSize = pointArray.getComponentCount();
-        
-        xIndices[0][1] = segment.segmentSize;
-        yIndices[0][1] = segment.segmentSize;
-        
-        return segment;
-    }
-	
-	
-	public LinePointGraphic getPoint(int i)
+    public LinePointGraphic getLinePoint(int pointIndex)
 	{      
-		point.x = this.getComponent(pointArray, xIndices, i).getData().getDoubleValue();
-		point.y = this.getComponent(pointArray, yIndices, i).getData().getDoubleValue();
-		return point;
+        return null;
 	}
     
     
@@ -91,65 +150,146 @@ public class LineStyler extends AbstractStyler
     public void updateDataMappings()
     {
         ScalarParameter param;
-        String propertyName;
-        String segmentPropertyName = null;
+        String propertyName = null;
         Object value;
         
-        // generate indexing rules for geometry components
-        DataNode newNode = dataProvider.getDataNode();
-        //if (newNode == node)
-        //    return;
         
-        node = newNode;
+        // generate indexing rules for geometry components        
         
-        // geometry object
+        // segment object
         param = this.symbolizer.getGeometry().getObject();
         if (param != null)
         {
-            segmentPropertyName = param.getPropertyName();            
-            if (segmentPropertyName != null)
-                segIndices = computeIndices(null, segmentPropertyName);
+            propertyName = param.getPropertyName();
+            DataIndexer segData = new DataIndexer(currentData, propertyName);
+            breakRuleIndex = segData.indexRules.length-1;
         }
         
         // geometry X
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
+            propertyName = param.getPropertyName();
             if (propertyName != null)
-                xIndices = computeIndices(segmentPropertyName, propertyName);
+            {
+                xData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(xData);                
+            }
         }
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
+            propertyName = param.getPropertyName();
             if (propertyName != null)
-                yIndices = computeIndices(segmentPropertyName, propertyName);
+            {
+                yData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(yData);                
+            }
         }
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
+            propertyName = param.getPropertyName();
             if (propertyName != null)
-                zIndices = computeIndices(segmentPropertyName, propertyName);
+            {
+                zData = new DataIndexer(currentData, propertyName);
+                dataHelpers.add(zData);                
+            }
         }
-                
-        // line color
-        param = this.symbolizer.getStroke().getColor();
+        
+        // color - red 
+        param = this.symbolizer.getStroke().getColor().getRed();
         if (param != null)
         {
-            value = param.getConstantValue();
-            if (value != null)
+            if (param.isConstant())
             {
-                Color lineColor = (Color)value;
-                point.r = lineColor.getRed();
-                point.g = lineColor.getGreen();
-                point.b = lineColor.getBlue();
-                point.a = lineColor.getAlpha();
+                value = param.getConstantValue();
+                point.r = (Float)value;
+            }
+            else
+            {
+                if (!param.isMapped())
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        redData = new DataIndexer(currentData, propertyName);
+                        dataHelpers.add(redData);                
+                    }
+                }
+            }
+        }
+        
+        // color - green 
+        param = this.symbolizer.getStroke().getColor().getGreen();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.g = (Float)value;
+            }
+            else
+            {
+                if (!param.isMapped())
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        greenData = new DataIndexer(currentData, propertyName);
+                        dataHelpers.add(greenData);                
+                    }
+                }
+            }
+        }
+        
+        // color - blue 
+        param = this.symbolizer.getStroke().getColor().getBlue();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.b = (Float)value;
+            }
+            else
+            {
+                if (!param.isMapped())
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        blueData = new DataIndexer(currentData, propertyName);
+                        dataHelpers.add(blueData);                
+                    }
+                }
+            }
+        }
+        
+        // color - alpha 
+        param = this.symbolizer.getStroke().getColor().getAlpha();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.a = (Float)value;
+            }
+            else
+            {
+                if (!param.isMapped())
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        alphaData = new DataIndexer(currentData, propertyName);
+                        dataHelpers.add(alphaData);                
+                    }
+                }
             }
         }
         
@@ -164,6 +304,9 @@ public class LineStyler extends AbstractStyler
                 point.width = lineWidth.intValue();
             }
         }
+        
+        // optimize rules
+        yData.optimizeIndexRules(xData);
     }
     
     
@@ -181,7 +324,14 @@ public class LineStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-        updateDataMappings(); //TODO shouldn't be called here -> not too efficient !
-		visitor.visit(this);		
+        currentData = dataProvider.getDataNode();
+
+        if (currentData != null)
+        {
+            if ((xData == null) && (yData == null) && (zData == null))
+                updateDataMappings();
+            
+    		visitor.visit(this);
+        }
 	}
 }

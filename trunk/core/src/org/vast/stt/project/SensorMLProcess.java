@@ -11,29 +11,39 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.project;
+
+import org.vast.process.DataProcess;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * SensorML Process Descriptor
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * Encapslate a SensorML ProcessModel or ProcessChain
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Feb 28, 2006
  * @version 1.0
  */
-public class LinePointGraphic implements GraphicObject
+public class SensorMLProcess extends AbstractResource
 {
-    public double x, y, z;
-    public float r, g, b;
-	public float a = 1.0f;
-    public int width = 1;
-    public boolean lineBreak;
-    public boolean smooth = false;
+    protected DataProcess internalProcess;
+
+
+    public DataProcess getInternalProcess()
+    {
+        return internalProcess;
+    }
+
+
+    public void setInternalProcess(DataProcess internalProcess)
+    {
+        this.internalProcess = internalProcess;
+    }
+
 }

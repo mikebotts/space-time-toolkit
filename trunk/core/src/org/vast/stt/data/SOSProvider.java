@@ -103,7 +103,7 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
         	
 			// register the CDM data handler
         	//SWEDataNodeHandler dataNodeHandler = new SWEDataNodeHandler(dataInfo, node);
-        	dataHandler.setDataNode(cachedData);
+        	dataHandler.setDataNode((DataNode)cachedData);
         	dataParser.setDataHandler(dataHandler);
         	
         	// start parsing if not cancelled
@@ -146,7 +146,7 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 		if (cachedData == null)
 			cachedData = new DataNode();
 		else
-			cachedData.removeAllComponents();
+			((DataNode)cachedData).removeAllComponents();
 	}
 	
 	

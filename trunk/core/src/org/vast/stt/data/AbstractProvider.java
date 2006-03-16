@@ -15,6 +15,8 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.ogc.cdm.common.DataComponent;
 import org.vast.stt.project.Resource;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
@@ -40,8 +42,10 @@ public abstract class AbstractProvider implements DataProvider
 	protected Resource resource;
 	protected boolean updating = false;
 	protected boolean canceled = false;
+    protected boolean forceUpdate = true;
+    protected UpdateMonitor updateMonitor;
 	protected InputStream dataStream;
-	protected DataNode cachedData;
+	protected DataComponent cachedData;
 	protected TimeExtent timeExtent = new TimeExtent();
 	protected TimeExtent maxTimeExtent = new TimeExtent();
 	protected SpatialExtent spatialExtent = new SpatialExtent();
@@ -51,17 +55,31 @@ public abstract class AbstractProvider implements DataProvider
 	public abstract void updateData() throws DataException;
 	
 	
-	public DataNode getDataNode()
+	public DataComponent getDataNode()
 	{
-		try
-		{
-			if (cachedData == null)
-				updateData();
-		}
-		catch (DataException e)
-		{
-			e.printStackTrace();
-		}
+        if (!updating && forceUpdate)
+        {
+            Runnable runnable = new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        updating = true;
+                        updateData();
+                        updating = false;
+                    }
+                    catch (DataException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            Thread thread = new Thread(runnable);
+            thread.start();
+            forceUpdate = false;
+        }
 		
 		return cachedData;
 	}
@@ -77,8 +95,9 @@ public abstract class AbstractProvider implements DataProvider
 	{
 		if (cachedData != null)
 		{
-			cachedData.removeAllComponents();
+			//TODO cachedData.removeAllComponents();
 			//System.gc();
+            forceUpdate = true;
 		}		
 	}
 	
@@ -125,7 +144,8 @@ public abstract class AbstractProvider implements DataProvider
 	
 	public void setSpatialExtent(SpatialExtent spatialExtent)
 	{
-		this.spatialExtent = spatialExtent;		
+		this.forceUpdate = true;
+        this.spatialExtent = spatialExtent;		
 	}
 
 
@@ -137,7 +157,8 @@ public abstract class AbstractProvider implements DataProvider
 
 	public void setTimeExtent(TimeExtent timeExtent)
 	{
-		this.timeExtent = timeExtent;		
+        this.forceUpdate = true;
+        this.timeExtent = timeExtent;		
 	}
 
 
@@ -163,4 +184,16 @@ public abstract class AbstractProvider implements DataProvider
 	{
 		this.maxTimeExtent = maxTimeExtent;
 	}
+
+
+    public UpdateMonitor getUpdateMonitor()
+    {
+        return updateMonitor;
+    }
+
+
+    public void setUpdateMonitor(UpdateMonitor updateMonitor)
+    {
+        this.updateMonitor = updateMonitor;
+    }
 }

@@ -11,29 +11,30 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.event;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * STT Event Producer
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * General Interface for all event producers
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Mar 1, 2006
  * @version 1.0
  */
-public class LinePointGraphic implements GraphicObject
+public interface STTEventProducer
 {
-    public double x, y, z;
-    public float r, g, b;
-	public float a = 1.0f;
-    public int width = 1;
-    public boolean lineBreak;
-    public boolean smooth = false;
+	public void addListener(STTEventListener listener);
+    
+    
+    public void removeListener(STTEventListener listener);
+    
+    
+    public void removeAllListeners();
 }

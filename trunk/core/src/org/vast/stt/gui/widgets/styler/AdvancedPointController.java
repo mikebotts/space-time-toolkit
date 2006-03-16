@@ -54,9 +54,9 @@ public class AdvancedPointController extends AdvancedOptionController
 		//if(sizeSP != null)
 		setOptionState(sizeSP, 0);
 		//  Color
-		ScalarParameter colorSP = pointOptionHelper.getPointColorScalar();
+		//ScalarParameter colorSP = pointOptionHelper.getPointColorScalar();
 		//if(colorSP != null)
-		setOptionState(colorSP, 1);
+		//setOptionState(colorSP, 1);
 	}
 	
 	protected void doLut(int index){
