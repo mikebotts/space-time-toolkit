@@ -13,7 +13,7 @@ import org.vast.stt.scene.DataItem;
 
 /**
  * <p><b>Title:</b><br/>
- * TimeSettingsView
+ * TimeExtentView
  * </p>
  *
  * <p><b>Description:</b><br/>
@@ -26,8 +26,6 @@ import org.vast.stt.scene.DataItem;
  * @date Dec 19, 2005
  * @version 1.0
  * 
- * @TODO  add +/- to Bias
- * @TODO  add control for buttons
  */
 public class TimeExtentView extends ViewPart implements ISelectionListener
 {	
@@ -42,7 +40,6 @@ public class TimeExtentView extends ViewPart implements ISelectionListener
 	}
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 	}
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
