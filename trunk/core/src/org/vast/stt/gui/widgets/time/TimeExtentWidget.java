@@ -1,4 +1,4 @@
- package org.vast.stt.gui.widgets.time;
+package org.vast.stt.gui.widgets.time;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.vast.stt.data.DataException;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.util.TimeExtent;
 
@@ -18,11 +19,15 @@ public class TimeExtentWidget implements SelectionListener
 	Label itemLabel;
 	TimeZoneCombo tzCombo;
 	Button useAbsTimeBtn;
-	Button continusUpdateBtn;
+	Button continuousUpdateBtn;
 	Button updateNowBtn;
 	TimeSpinner biasSpinner;
 	private DataItem dataItem;
 	private Group mainGroup;
+	private TimeSpinner stepSpinner;
+	private TimeSpinner leadSpinner;
+	private TimeSpinner lagSpinner;
+	private CalendarSpinner absTimeSpinner;
 	
 	public TimeExtentWidget(Composite parent) {
 		init(parent);
@@ -50,23 +55,22 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalAlignment = SWT.RIGHT;
 		biasSpinner.setLayoutData(gridData);
 
-		TimeSpinner stepSpinner = new TimeSpinner(mainGroup, "Time Step");
+		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		stepSpinner.setLayoutData(gridData);
 
-		TimeSpinner leadSpinner = new TimeSpinner(mainGroup, "Delta Lead");
+		leadSpinner = new TimeSpinner(mainGroup, "Delta Lead");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		leadSpinner.setLayoutData(gridData);
 
-		TimeSpinner lagSpinner = new TimeSpinner(mainGroup, "Delta Lag");
+		lagSpinner = new TimeSpinner(mainGroup, "Delta Lag");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		lagSpinner.setLayoutData(gridData);
 
-		//  Abs Time uses different spinner...
-		CalendarSpinner absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time");
+		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.verticalIndent = 10;
@@ -96,14 +100,14 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalAlignment = SWT.RIGHT;   //  not honored???
 		useAbsTimeBtn.setLayoutData(gridData);
 		
-		continusUpdateBtn = new Button(mainGroup, SWT.CHECK);
-		continusUpdateBtn.setText("Enable Continuous Update");
-		continusUpdateBtn.addSelectionListener(this);
+		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
+		continuousUpdateBtn.setText("Enable Continuous Update");
+		continuousUpdateBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;   
 		gridData.verticalIndent = 10;
 		//gridData.verticalSpan = 2;
-		continusUpdateBtn.setLayoutData(gridData);
+		continuousUpdateBtn.setLayoutData(gridData);
 		
 		//  Update now btn
 		updateNowBtn = new Button(mainGroup, SWT.PUSH);
@@ -121,8 +125,19 @@ public class TimeExtentWidget implements SelectionListener
 	public void setDataItem(DataItem item){
 		this.dataItem = item;
 		mainGroup.setText(item.getName());
-		//TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-		//timeExtent.
+		//  set the fields 
+		TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+		if(timeExtent == null)
+			return;
+		biasSpinner.setValue(timeExtent.getTimeBias());
+		leadSpinner.setValue(timeExtent.getLeadTimeDelta());
+		lagSpinner.setValue(timeExtent.getLagTimeDelta());
+		stepSpinner.setValue(timeExtent.getTimeStep());
+		absTimeSpinner.setValue(timeExtent.getAbsoluteTime());
+		useAbsTimeBtn.setSelection(timeExtent.getUseAbsoluteTime());
+		//timeExtent.getAbsoluteTimeZone();
+		//  
+		//continuousUpdateBtn.setSelection(timeExtent.getContinuousUpdate());
 	}
 	
 
@@ -134,11 +149,25 @@ public class TimeExtentWidget implements SelectionListener
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.widget == useAbsTimeBtn){
-			//  item.useAbsTime;
-		} else if (e.widget == continusUpdateBtn) {
-			//  item.enableContUpdate;
+			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+			timeExtent.setUseAbsoluteTime(useAbsTimeBtn.getSelection());
+		} else if (e.widget == continuousUpdateBtn) {
+			boolean contUp = continuousUpdateBtn.getSelection();
+			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+			if(contUp) {
+				//timeExtent.setContinuousUpdate(true);
+				updateNowBtn.setEnabled(false);
+			} else {
+				//timeExtent.setContinuousUpdate(false);
+				updateNowBtn.setEnabled(true);
+			}
 		} else if(e.widget == updateNowBtn){
-			//  item.setUpdateNow;
+			try {
+				dataItem.getDataProvider().updateData();
+			} catch (DataException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else {
 			System.err.println(e);
 		}
