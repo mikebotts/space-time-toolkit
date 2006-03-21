@@ -91,13 +91,13 @@
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-object">
-                                          <ogc:PropertyName>segment</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
@@ -121,13 +121,13 @@
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-object">
-                                          <ogc:PropertyName>segment</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
@@ -151,13 +151,13 @@
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-object">
-                                          <ogc:PropertyName>segment</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
@@ -181,13 +181,13 @@
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-object">
-                                          <ogc:PropertyName>segment</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>segment/point/lon</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>segment/point/lat</ogc:PropertyName>
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
