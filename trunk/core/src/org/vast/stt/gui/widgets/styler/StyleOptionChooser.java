@@ -6,6 +6,7 @@ import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.RasterStyler;
 
 /**
  * <p><b>Title:</b><br/>
@@ -57,6 +58,11 @@ public class StyleOptionChooser extends OptionChooser {
 				new BasicLineController(optComp, (LineStyler)styler);
 			lineOptionController.addSelectionListener(optListener);
 			optListener.setBasicController(lineOptionController);
+		} else if (styler instanceof RasterStyler) {
+			BasicRasterController rasterOptionController = 
+				new BasicRasterController(optComp, (RasterStyler)styler);
+			rasterOptionController.addSelectionListener(optListener);
+			optListener.setBasicController(rasterOptionController);
 		} else
 			System.err.println("Styler not supported yet: " + styler);
 		
