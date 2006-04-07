@@ -11,48 +11,30 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project;
+package org.vast.stt.style;
+
 
 /**
  * <p><b>Title:</b><br/>
- * DataSetDescriptor
+ * Label Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Abstract class for all Dataset Descriptors
+ * TODO LabelGraphic Class Description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 2, 2005
+ * @date Nov 15, 2005
  * @version 1.0
  */
-public abstract class AbstractResource implements Resource
+public class LabelGraphic extends PrimitiveGraphic
 {
-	protected String name;
-	protected String description;
-
-
-	public String getDescription()
-	{
-		return description;
-	}
-
-
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
-
-	public String getName()
-	{
-		return name;
-	}
-
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public float orientation = 0;
+    public int size = 10;
+    public int anchorX = 0;
+    public int anchorY = 0;
+    public int offsetX = 0;
+    public int offsetY = 10;
+    public String text = "Text";
 }

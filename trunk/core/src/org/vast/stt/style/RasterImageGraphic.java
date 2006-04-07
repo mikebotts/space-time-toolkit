@@ -33,7 +33,7 @@ import org.ogc.cdm.common.DataType;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class RasterImageGraphic implements GraphicObject
+public class RasterImageGraphic extends GraphicObject
 {
 	enum ImageType {}; // use same as openGL !
     

@@ -28,8 +28,7 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class RasterPixelGraphic implements GraphicObject
+public class RasterPixelGraphic extends PrimitiveGraphic
 {
-	public float r, g, b;
-	public float a = 1.0f;
+
 }

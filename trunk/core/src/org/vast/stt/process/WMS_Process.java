@@ -34,15 +34,14 @@ import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 
+import org.ogc.cdm.common.DataType;
 import org.ogc.cdm.reader.DataStreamParser;
 import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
-import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.process.*;
-import org.vast.stt.data.DataException;
 
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
@@ -69,7 +68,6 @@ public class WMS_Process extends DataProcess
     protected DataValue outputWidth, outputHeight;
     protected DataArray outputImage;
     protected InputStream dataStream;
-    protected WMSLayerCapabilities layerCaps;
     protected WMSQuery query;
     protected WMSRequestWriter requestBuilder;
     protected DataStreamParser dataParser;
@@ -78,6 +76,7 @@ public class WMS_Process extends DataProcess
     public WMS_Process()
     {
         query = new WMSQuery();
+        requestBuilder = new WMSRequestWriter();
     }
 
 
@@ -87,15 +86,38 @@ public class WMS_Process extends DataProcess
      */
     public void init() throws ProcessException
     {
+        int width, height;
+        
         try
         {
-            // I/O mappings
-            outputImage = (DataArray)outputData.getComponent("outputImage").getComponent("image");
-            outputWidth = (DataValue)outputData.getComponent("outputImage").getComponent("width");
-            outputHeight = (DataValue)outputData.getComponent("outputImage").getComponent("height");
+            // Input mappings
+            DataGroup input = (DataGroup)inputData.getComponent("bbox");
+            bboxLat1 = (DataValue)input.getComponent("corner1").getComponent(0);
+            bboxLon1 = (DataValue)input.getComponent("corner1").getComponent(1);
+            bboxLat2 = (DataValue)input.getComponent("corner2").getComponent(0);
+            bboxLon2 = (DataValue)input.getComponent("corner2").getComponent(1);
+            input.assignNewDataBlock();
             
+            // Output mappings
+            DataGroup output = (DataGroup)outputData.getComponent("outputImage");
+            outputImage = (DataArray)output.getComponent("image");
+            outputWidth = (DataValue)output.getComponent("width");
+            outputHeight = (DataValue)output.getComponent("height");
+            
+            // image data type
+            DataGroup pixelData = (DataGroup)outputImage.getComponent(0).getComponent(0);
+            for (int i=0; i<pixelData.getComponentCount(); i++)
+                ((DataValue)pixelData.getComponent(i)).type = DataType.BYTE;
+        }
+        catch (Exception e)
+        {
+            throw new ProcessException("Invalid I/O structure", e);
+        }
+        
+        try
+        {
             // Read parameter values (must be fixed!)
-            DataGroup wmsParams = (DataGroup)paramData.getComponent(0);
+            DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
             
             // service end point url
             String url = wmsParams.getComponent("endPoint").getData().getStringValue();
@@ -118,21 +140,31 @@ public class WMS_Process extends DataProcess
             query.setFormat(format);
             
             // image width
-            int width = wmsParams.getComponent("imageWidth").getData().getIntValue();
+            width = wmsParams.getComponent("imageWidth").getData().getIntValue();
             query.setWidth(width);
             
             // image height
-            int height = wmsParams.getComponent("imageHeight").getData().getIntValue();
+            height = wmsParams.getComponent("imageHeight").getData().getIntValue();
             query.setHeight(height);
             
             // image transparency
             boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
             query.setTransparent(transparent);
+            
+            query.setSrs("EPSG:4326");
+            query.setExceptionType("application/vnd.ogc.se+xml");
         }
-        catch (ClassCastException e)
+        catch (Exception e)
         {
-            throw new ProcessException("Invalid I/O data", e);
+            throw new ProcessException("Invalid Parameters", e);
         }
+        
+        // adjust output width and height and generate output blocks
+        outputWidth.getData().setIntValue(width);
+        outputHeight.getData().setIntValue(height);
+        outputImage.setSize(height);
+        ((DataArray)outputImage.getComponent(0)).setSize(width);
+        outputImage.assignNewDataBlock();
     }
 
 
@@ -151,12 +183,6 @@ public class WMS_Process extends DataProcess
             url = new URL(urlString);
             URLConnection urlCon = url.openConnection();
 
-            //  Check mime for exception/xml type
-            if (urlCon == null)
-            {
-                throw new DataException("Connection to " + url + " could be initialized");
-            }
-
             //  Check on mimeType catches all three types (blank, inimage, xml)
             //  of OGC service exceptions
             String mimeType = urlCon.getContentType();
@@ -167,6 +193,7 @@ public class WMS_Process extends DataProcess
             }
             else
             {
+                // use JAI MemorySeekableStream for better performance
                 dataStream = new MemoryCacheSeekableStream(url.openStream());
 
                 // Create the ParameterBlock and add the SeekableStream to it.
@@ -179,29 +206,10 @@ public class WMS_Process extends DataProcess
                 if (rop != null)
                 {
                     renderedImage = rop.createInstance();
-                    
-                    //renderedImage.getClass();             
 
-                    // copy image to DataNode
+                    // put data buffer in output datablock
                     byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
-                    
-                    /*
-                    DataGroup pixelData = new DataGroup(renderedImage.getData().getNumBands());
-                    pixelData.addComponent("blue", new DataValue(DataType.BYTE));
-                    pixelData.addComponent("green", new DataValue(DataType.BYTE));
-                    pixelData.addComponent("red", new DataValue(DataType.BYTE));                    
-                    DataArray rowData = new DataArray(renderedImage.getWidth());
-                    rowData.addComponent(pixelData);                    
-                    DataArray imageData = new DataArray(renderedImage.getHeight());
-                    imageData.addComponent(rowData);                    
-                    cachedData.addComponent("image", imageData);
-                    System.out.println(imageData);
-                    */
-                    
-                    AbstractDataBlock dataBlock = DataBlockFactory.createBlock(data);
-                    outputImage.setData(dataBlock);
-                    outputWidth.getData().setIntValue(renderedImage.getWidth());
-                    outputHeight.getData().setIntValue(renderedImage.getHeight());
+                    ((DataBlockByte)outputImage.getData()).setUnderlyingObject(data);
                 }
             }
         }
@@ -220,6 +228,22 @@ public class WMS_Process extends DataProcess
     {
         // make sure previous request is cancelled
         endRequest();
+        
+        // read lat/lon bbox
+        double lon1 = bboxLon1.getData().getDoubleValue()/Math.PI*180;
+        double lat1 = bboxLat1.getData().getDoubleValue()/Math.PI*180;
+        double lon2 = bboxLon2.getData().getDoubleValue()/Math.PI*180;
+        double lat2 = bboxLat2.getData().getDoubleValue()/Math.PI*180;
+                
+        double minX = Math.min(lon1, lon2);
+        double maxX = Math.max(lon1, lon2);
+        double minY = Math.min(lat1, lat2);
+        double maxY = Math.max(lat1, lat2);
+        
+        query.getBbox().setMinX(minX);
+        query.getBbox().setMaxX(maxX);
+        query.getBbox().setMinY(minY);
+        query.getBbox().setMaxY(maxY);
     }
     
     
@@ -229,6 +253,8 @@ public class WMS_Process extends DataProcess
         {
             if (dataStream != null)
                 dataStream.close();
+            
+            dataStream = null;
         }
         catch (IOException e)
         {

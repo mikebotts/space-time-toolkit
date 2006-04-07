@@ -35,6 +35,8 @@ public interface StylerVisitor
 	public void visit(LineStyler styler);
 	
 	public void visit(PolygonStyler styler);
+    
+    public void visit(LabelStyler styler);
 	
 	public void visit(RasterStyler styler);
 }

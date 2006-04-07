@@ -17,12 +17,11 @@ import java.io.*;
 import org.ogc.cdm.common.*;
 import org.ogc.cdm.reader.*;
 import org.vast.ows.OWSQuery;
+import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSObservationReader;
 import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSRequestWriter;
-import org.vast.stt.project.Resource;
-import org.vast.stt.project.ServiceDataSet;
 
 
 /**
@@ -40,9 +39,9 @@ import org.vast.stt.project.ServiceDataSet;
  * @date Nov 11, 2005
  * @version 1.0
  */
-public class SOSProvider extends AbstractProvider implements OWSProvider
+public class SOSProvider extends OWSProvider
 {
-	protected SOSLayerCapabilities layerCaps;
+    protected SOSLayerCapabilities layerCaps;
 	protected SOSQuery query;
 	protected SOSRequestWriter requestBuilder;
 	protected DataStreamParser dataParser;
@@ -95,7 +94,8 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
         	System.out.println("--- " + dataInfo.getName() + " ---");
         	System.out.println(dataInfo);
         	System.out.println(dataEnc);
-        	cachedData.addComponent(dataInfo);
+            cachedData.removeAllComponents();
+        	cachedData.createList(dataInfo);
 			
         	// reset node - HACK
         	//DataNode node = item.getNode();
@@ -103,7 +103,7 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
         	
 			// register the CDM data handler
         	//SWEDataNodeHandler dataNodeHandler = new SWEDataNodeHandler(dataInfo, node);
-        	dataHandler.setDataNode((DataNode)cachedData);
+            dataHandler.setDataList(cachedData, cachedData.getList(0));
         	dataParser.setDataHandler(dataHandler);
         	
         	// start parsing if not cancelled
@@ -169,8 +169,15 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 			e.printStackTrace();
 		}
 	}
+    
+    
+    public void cancelOperation()
+    {
+        endRequest();
+    }
 	
 	
+    @Override
 	public void createDefaultQuery()
 	{
 		if (layerCaps == null) return;
@@ -189,46 +196,16 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 		query.getTime().setStartTime(layerCaps.getTimeList().get(0).getStartTime());
 		query.getTime().setStopTime(query.getTime().getStartTime());		
 	}
-	
-	
-	public void cancelOperation()
-	{
-		endRequest();
-	}
-	
-	
-	@Override
-	public void setResource(Resource resource)
-	{
-		super.setResource(resource);		
-		this.layerCaps = (SOSLayerCapabilities) ((ServiceDataSet)resource).getCapabilities();
-		
-		// set up max spatial extent
-		if (!layerCaps.getBboxList().isEmpty())
-		{
-			this.spatialExtent.setMaxX(layerCaps.getBboxList().get(0).getMaxX());
-			this.spatialExtent.setMaxY(layerCaps.getBboxList().get(0).getMaxY());
-			this.spatialExtent.setMinX(layerCaps.getBboxList().get(0).getMinX());
-			this.spatialExtent.setMinY(layerCaps.getBboxList().get(0).getMinY());
-		}
-		
-		// set up max time extent
-		if (!layerCaps.getTimeList().isEmpty())
-		{
-			double start = layerCaps.getTimeList().get(0).getStartTime();
-			double stop = layerCaps.getTimeList().get(0).getStopTime();
-			this.timeExtent.setBaseTime(start);
-			this.timeExtent.setLagTimeDelta(stop - start);
-		}
-	}
 
-
+    
+    @Override
 	public SOSQuery getQuery()
 	{
 		return query;
 	}
 
 
+    @Override
 	public void setQuery(OWSQuery query)
 	{
 		this.query = (SOSQuery)query;
@@ -253,15 +230,47 @@ public class SOSProvider extends AbstractProvider implements OWSProvider
 	}
 
 
-	public boolean isSpatialSubsetSupported()
-	{
-		// TODO isSpatialSubsetSupported() depends on capabilities
-		return true;
-	}
+    @Override
+    public void setServiceCapabilities(OWSServiceCapabilities caps)
+    {
+        this.layerCaps = (SOSLayerCapabilities)caps.getLayers().get(0);
+        
+        // set up max spatial extent
+        if (!layerCaps.getBboxList().isEmpty())
+        {
+            this.spatialExtent.setMaxX(layerCaps.getBboxList().get(0).getMaxX());
+            this.spatialExtent.setMaxY(layerCaps.getBboxList().get(0).getMaxY());
+            this.spatialExtent.setMinX(layerCaps.getBboxList().get(0).getMinX());
+            this.spatialExtent.setMinY(layerCaps.getBboxList().get(0).getMinY());
+        }
+        
+        // set up max time extent
+        if (!layerCaps.getTimeList().isEmpty())
+        {
+            double start = layerCaps.getTimeList().get(0).getStartTime();
+            double stop = layerCaps.getTimeList().get(0).getStopTime();
+            this.timeExtent.setBaseTime(start);
+            this.timeExtent.setLagTimeDelta(stop - start);
+        }        
+    }
+    
+    
+    @Override
+    public SOSLayerCapabilities getLayerCapabilities()
+    {
+        return this.layerCaps;
+    }
+    
+    
+    public boolean isSpatialSubsetSupported()
+    {
+        // TODO isSpatialSubsetSupported() depends on capabilities
+        return true;
+    }
 
 
-	public boolean isTimeSubsetSupported()
-	{
-		return true;
-	}
+    public boolean isTimeSubsetSupported()
+    {
+        return true;
+    }
 }

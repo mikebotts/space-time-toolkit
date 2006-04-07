@@ -13,24 +13,31 @@
 
 package org.vast.stt.style;
 
+import org.ogc.cdm.common.DataBlock;
+import org.vast.stt.util.SpatialExtent;
+import org.vast.stt.util.TimeExtent;
 
 /**
  * <p><b>Title:</b><br/>
- * Line Point Graphic
+ * Block Info
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LinePointGraphic Class Description
+ * TODO BlockInfo type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 1, 2006
  * @version 1.0
  */
-public class LinePointGraphic extends PrimitiveGraphic
+public class BlockInfo
 {
-    public int width = 1;
-    public boolean lineBreak;
-    public boolean smooth = false;
+    public BlockInfo nextBlock;
+    
+    public SpatialExtent bbox;
+    public TimeExtent timeRange;
+    public double meanStep;
+    
+    public DataBlock[] arrayBlocks;
 }

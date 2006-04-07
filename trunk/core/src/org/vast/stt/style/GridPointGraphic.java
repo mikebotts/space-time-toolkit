@@ -28,7 +28,7 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class GridPointGraphic implements GraphicObject
+public class GridPointGraphic extends GraphicObject
 {
     public double x, y, z;
     public float r, g, b;

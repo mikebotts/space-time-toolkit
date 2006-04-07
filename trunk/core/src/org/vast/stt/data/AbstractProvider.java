@@ -16,8 +16,7 @@ package org.vast.stt.data;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.ogc.cdm.common.DataComponent;
-import org.vast.stt.project.Resource;
+import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -39,13 +38,14 @@ import org.vast.stt.util.TimeExtent;
  */
 public abstract class AbstractProvider implements DataProvider
 {
-	protected Resource resource;
-	protected boolean updating = false;
+    protected String name;
+    protected String description;
+    protected boolean updating = false;
 	protected boolean canceled = false;
     protected boolean forceUpdate = true;
     protected UpdateMonitor updateMonitor;
 	protected InputStream dataStream;
-	protected DataComponent cachedData;
+	protected DataNode cachedData;
 	protected TimeExtent timeExtent = new TimeExtent();
 	protected TimeExtent maxTimeExtent = new TimeExtent();
 	protected SpatialExtent spatialExtent = new SpatialExtent();
@@ -55,7 +55,7 @@ public abstract class AbstractProvider implements DataProvider
 	public abstract void updateData() throws DataException;
 	
 	
-	public DataComponent getDataNode()
+	public DataNode getDataNode()
 	{
         if (!updating && forceUpdate)
         {
@@ -115,18 +115,6 @@ public abstract class AbstractProvider implements DataProvider
 		{
 			e.printStackTrace();
 		}		
-	}
-	
-	
-	public Resource getResource()
-	{
-		return resource;
-	}
-
-
-	public void setResource(Resource resource)
-	{
-		this.resource = resource;
 	}
 	
 	
@@ -195,5 +183,29 @@ public abstract class AbstractProvider implements DataProvider
     public void setUpdateMonitor(UpdateMonitor updateMonitor)
     {
         this.updateMonitor = updateMonitor;
+    }
+    
+    
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+
+    public String getName()
+    {
+        return name;
+    }
+
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 }

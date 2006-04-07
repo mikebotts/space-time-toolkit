@@ -29,7 +29,7 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class RasterGridGraphic implements GraphicObject
+public class RasterGridGraphic extends GraphicObject
 {
 	public int width = 0;
     public int length = 0;

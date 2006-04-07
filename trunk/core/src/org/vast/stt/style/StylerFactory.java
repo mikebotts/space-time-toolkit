@@ -14,7 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.*;
-import org.vast.stt.data.DataProvider;
+import org.vast.stt.project.DataProvider;
 
 
 /**
@@ -45,7 +45,10 @@ public class StylerFactory
 			styler = new LineStyler();
 		
 		else if (sym instanceof PolygonSymbolizer)
-			styler = new LineStyler();
+			styler = new PolygonStyler();
+        
+        else if (sym instanceof TextSymbolizer)
+            styler = new LabelStyler();
         
         else if (sym instanceof RasterSymbolizer)
             styler = new RasterStyler();

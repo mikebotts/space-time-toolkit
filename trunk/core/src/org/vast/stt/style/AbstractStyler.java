@@ -13,9 +13,16 @@
 
 package org.vast.stt.style;
 
-import java.util.ArrayList;
-import org.ogc.cdm.common.DataComponent;
-import org.vast.stt.data.DataProvider;
+import java.util.Hashtable;
+import java.util.ListIterator;
+
+import org.vast.data.AbstractDataBlock;
+import org.vast.data.DataBlockList;
+import org.vast.data.DataIndexer;
+import org.vast.data.DataList;
+import org.vast.data.IndexerTreeBuilder;
+import org.vast.stt.data.DataNode;
+import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 
 
@@ -35,21 +42,31 @@ import org.vast.stt.util.SpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
-	protected DataProvider dataProvider;
+    protected String name;
+    protected boolean enabled;
+    protected DataProvider dataProvider;
     protected SpatialExtent bbox;
-    protected DataComponent currentData;
-	protected String name;
-	protected boolean enabled;
-    protected ArrayList<DataIndexer> dataHelpers;
-    protected DataIndexer xData, yData, zData, tData;
+    protected DataNode dataNode;
+    protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
+    protected ListInfo[] dataLists;
+        
     
-	
-	public AbstractStyler()
-	{
-        dataHelpers = new ArrayList<DataIndexer>();
-	}
+    public abstract void updateBoundingBox();
     
     
+    public AbstractStyler()
+    {
+        treeBuilders = new Hashtable<String, IndexerTreeBuilder>();
+        dataLists = new ListInfo[0];
+    }
+    
+    
+    public DataNode getDataNode()
+    {
+        return this.dataNode;
+    }
+    
+        
     public void setDataProvider(DataProvider dataProvider)
 	{
 		this.dataProvider = dataProvider;
@@ -98,210 +115,88 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    public void updateBoundingBox()
+    public void addPropertyMapper(String componentPath, PropertyMapper newMapper)
     {
+        // figure out which list it is
+        String listName = componentPath.substring(0, componentPath.indexOf('/'));
         
+        // retrieve previously created builder or create a new one
+        IndexerTreeBuilder builder = treeBuilders.get(listName);
+        if (builder == null)
+        {
+            DataList list = dataNode.getList(listName);
+            builder = new IndexerTreeBuilder(list.getComponent(0));
+            treeBuilders.put(listName, builder);
+            builder.addVisitor(componentPath, newMapper);
+                       
+            // resize indexer array
+            ListInfo[] oldDataLists = dataLists;
+            dataLists = new ListInfo[oldDataLists.length + 1];
+            System.arraycopy(oldDataLists, 0, dataLists, 0, oldDataLists.length);
+            dataLists[oldDataLists.length] = new ListInfo(list, builder.getRootIndexer());
+        }
+        else
+        {
+            builder.addVisitor(componentPath, newMapper);
+        }
+    }
+    
+       
+    public void clearAllMappers()
+    {
+        dataLists = new ListInfo[0];
+        treeBuilders.clear();
     }
     
     
     /**
-     * Reset all data helpers
+     * Reset the block counter used for the block iterator
      */
     public void reset()
     {
-        for (int i=0; i<dataHelpers.size(); i++)
-            dataHelpers.get(i).reset();
+        // reset all list iterators
+        for (int i = 0; i < dataLists.length; i++)
+        {
+            ListInfo info = dataLists[i];
+            info.blockIterator = info.blockList.blockIterator();
+        }
+    }
+    
+    
+    /**
+     * Load data for next block so that it is updated
+     * for all array mappers. Also update block property mappers.
+     */
+    public boolean nextBlock()
+    {
+        for (int i = 0; i < dataLists.length; i++)
+        {
+            ListInfo info = dataLists[i]; 
+            DataIndexer nextIndexer = info.rootIndexer;
+                        
+            if (!info.blockIterator.hasNext())
+                return false;
+            
+            AbstractDataBlock nextBlock = info.blockIterator.next();
+            nextIndexer.reset();
+            nextIndexer.setData(nextBlock);
+        }           
+                        
+        return true;
     }
 }
-    
-    
-//    protected int getComponentCount(IndexedData indexedData)
-//    {
-//        return 8000;
-//        int blockCount = node.getComponentCount();
-//        
-//        int count = 1;
-//        IndexRule[] indexRules = indexedData.indexRules;
-//        for (int i=0; i<indexRules.length; i++)
-//            count *= indexRules[i].arraySize;
-//        
-//        if (count > 0)
-//            count *= blockCount;
-//        else
-//        {
-//            count = 0;
-//            DataBlockList nodeData = (DataBlockList)node.getData();
-//            
-//            for (int i=0; i<blockCount; i++)
-//            {
-//                DataBlock nextDataBlock = nodeData.get(i);
-//                count += nextDataBlock.getIntValue(sizeDataOffset);
-//            }
-//        }
-//        
-//        return count;
-//    }
-    
-    
-//    protected int getDataIndex(IndexedData indexedData, int componentIndex)
-//    {
-//        int linearIndex = 0;
-//        int blockIndex;
-//        int currentIndex = componentIndex;
-//        IndexRule[] indexRules = indexedData.indexRules;       
-//        int totalInBlock = 0;
-//        
-//        if (componentIndex > indexedData.lastComponentIndex)
-//        {
-//            currentIndex -= indexedData.lastComponentIndex;
-//            blockIndex = indexedData.lastBlockIndex;
-//        }
-//        else
-//            blockIndex = -1;
-//        
-//        DataBlockList nodeData = (DataBlockList)node.getData();
-//        DataBlock nextDataBlock;
-//        
-//        do
-//        {
-//            blockIndex++;
-//            currentIndex -= totalInBlock;
-//            nextDataBlock = nodeData.get(blockIndex);
-//            totalInBlock = nextDataBlock.getIntValue(0);
-//            //System.err.println("-> " + componentIndex + "/" + currentIndex + "/" + totalInBlock);
-//        }
-//        while (currentIndex >= totalInBlock);
-//        //System.err.println("END");
-//        indexedData.dataBlock = nextDataBlock;
-//        indexedData.lastComponentIndex = componentIndex - currentIndex;
-//        indexedData.lastBlockIndex = blockIndex-1;
-//        
-//        // then apply index rules
-//        for (int i=0; i<indexRules.length; i++)
-//        {
-//            linearIndex += indexRules[i].contentSize*(currentIndex) + indexRules[i].offset;
-//        }
-//
-//        return linearIndex;
-//    }
-    
-    
-//    protected IndexedData buildIndexRules(String baseComponentName, String componentName)
-//    {
-//        ArrayList<IndexRule> ruleList = new ArrayList<IndexRule>();
-//        IndexedData indexedData = new IndexedData();
-//        
-//        // first find base component using '/' separated name
-//        DataComponent baseComponent = node;        
-//        if (baseComponentName != null)
-//        {
-//            String[] baseNames = baseComponentName.split("/");
-//            for (int i=0; i<baseNames.length; i++)
-//            {
-//                baseComponent = baseComponent.getComponent(baseNames[i]);
-//                
-//                if (baseComponent == null)
-//                    throw new IllegalStateException("Data Component " + baseComponentName + " was not found");
-//            }
-//            
-//            // remove baseComponentName from componentName
-//            componentName = componentName.substring(baseComponentName.length()+1);
-//        }
-//        
-//        // build component tree using component '/' separated fullName
-//        String[] names = componentName.split("/");
-//        DataComponent[] componentTree = new DataComponent[names.length];        
-//        DataComponent component = baseComponent;
-//        for (int i=0; i<names.length; i++)
-//        {
-//            component = component.getComponent(names[i]);
-//            componentTree[i] = component;
-//            
-//            if (component == null)
-//                throw new IllegalStateException("Data Component " + componentName + " was not found");
-//        }
-//        
-//        // loop through component tree and create appropriate rules
-//        DataComponent parentComponent;      
-//        int offset = 0;
-//        for (int i=componentTree.length-1; i>=0; i--)
-//        {
-//            component = componentTree[i];
-//            
-//            if (i != 0)
-//                parentComponent = componentTree[i-1];
-//            else
-//                parentComponent = baseComponent;            
-//            
-//            if (parentComponent instanceof DataGroup)
-//            {
-//                offset += parentComponent.getComponentIndex(names[i]);
-//            }
-//            else if (parentComponent instanceof DataArray)
-//            {
-//                IndexRule indexRule = new IndexRule();
-//                
-//                if (!((DataArray)parentComponent).isVariableSize())
-//                    indexRule.arraySize = parentComponent.getComponentCount();
-//                else
-//                    indexRule.varSize = true;
-//                
-//                indexRule.contentSize = component.getData().getAtomCount();
-//                indexRule.offset = offset;            
-//                ruleList.add(indexRule);
-//                offset = 0;
-//            }
-//            
-//            // case of DataList (we should be at the top here)
-//            else if (parentComponent instanceof DataList)
-//            {
-//                IndexRule indexRule;
-//                int listSize = ruleList.size();
-//                
-//                if (listSize > 0)
-//                    indexRule = ruleList.get(listSize - 1);
-//                else
-//                {
-//                    indexRule = new IndexRule();
-//                    indexRule.contentSize = 0;
-//                    indexRule.arraySize = 0;
-//                }
-//                
-//                indexRule.offset += offset;                 
-//                offset = 0;
-//            }
-//        }
-//
-//        indexedData.dataBlock = baseComponent.getComponent(0).getData();
-//        indexedData.indexRules = ruleList.toArray(new IndexRule[0]);
-//        
-//        return indexedData;
-//    }
 
 
-//class IndexedData
-//{
-//    public DataBlock dataBlock;
-//    public IndexRule[] indexRules;
-//    public int lastComponentIndex;
-//    public int lastBlockIndex;
-//    public int currentRuleIndex = 0;
-//}
-//
-//
-//class IndexRule
-//{
-//    public int arraySize = -1;
-//    public int contentSize = -1;
-//    public int offset = 0;    
-//    public boolean varContent;
-//    public boolean varSize;
-//    public int sizeDataOffset = 0;
-//    public IndexRule targetRule;
-//    public IndexRule masterRule;
-//    public IndexedData masterData;
-//    public int currentIndex = -1;
-//    public int currentLinearIndex = 0;
-//    public boolean newItem = false;
-//    public DataComponent dataComponent;
-//}
+class ListInfo
+{
+    protected DataBlockList blockList;
+    protected ListIterator<AbstractDataBlock> blockIterator;
+    protected DataIndexer rootIndexer;
+    
+    
+    public ListInfo(DataList dataList, DataIndexer dataIndexer)
+    {
+        this.rootIndexer = dataIndexer;
+        this.blockList = (DataBlockList)dataList.getData();
+    }
+}

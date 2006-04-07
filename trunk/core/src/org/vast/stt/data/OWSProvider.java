@@ -13,7 +13,10 @@
 
 package org.vast.stt.data;
 
+import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSQuery;
+import org.vast.ows.OWSServiceCapabilities;
+import org.vast.stt.project.Service;
 
 
 /**
@@ -22,7 +25,7 @@ import org.vast.ows.OWSQuery;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Common interface for all data providers implementing a
+ * Common abstract class for all data providers implementing a
  * client for OGC/OWS data services (WMS, WFS, WCS, SOS).
  * </p>
  *
@@ -31,14 +34,51 @@ import org.vast.ows.OWSQuery;
  * @date Nov 21, 2005
  * @version 1.0
  */
-public interface OWSProvider
+public abstract class OWSProvider extends AbstractProvider
 {
-    
-	public OWSQuery getQuery();
-    
-    
-    public void setQuery(OWSQuery query);
+    protected String layerID;
+    protected Service service;
+    protected OWSServiceCapabilities serviceCaps;
     
     
-    public void createDefaultQuery();
+	public abstract OWSQuery getQuery();
+    public abstract void setQuery(OWSQuery query);
+    public abstract void createDefaultQuery();
+    public abstract OWSLayerCapabilities getLayerCapabilities();
+    
+    
+    public OWSServiceCapabilities getServiceCapabilities()
+    {
+        return this.serviceCaps;
+    }
+    
+    
+    public void setServiceCapabilities(OWSServiceCapabilities serviceCaps)
+    {
+        this.serviceCaps = serviceCaps;
+    }
+    
+
+    public String getLayerID()
+    {
+        return this.layerID;
+    }
+
+
+    public void setLayerID(String layerID)
+    {
+        this.layerID = layerID;
+    }
+
+
+    public Service getService()
+    {
+        return this.service;
+    }
+
+
+    public void setService(Service service)
+    {
+        this.service = service;
+    }
 }

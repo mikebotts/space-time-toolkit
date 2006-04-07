@@ -51,7 +51,7 @@ public class OpenGLRenderer extends Renderer
     private double[] zData = new double[1];
     private int GL_TEXTURE_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//
     private Hashtable<RasterStyler, Integer> textureTable;
-
+    
 
     public OpenGLRenderer()
     {
@@ -171,68 +171,135 @@ public class OpenGLRenderer extends Renderer
         }
     }
 
-
+    
+    /**
+     * Renders all data passed by a line styler
+     */
     public void visit(LineStyler styler)
     {
-        boolean allowBreak = false;
-        
-        // get line width of first point
-        styler.reset();
-        LinePointGraphic point = styler.nextPoint();
-        GL.glLineWidth(point.width); 
-        
-        // loop and draw all line points
-        styler.reset();
-        GL.glBegin(GL.GL_LINE_STRIP);        
-        while (styler.hasNext())
-        {
-            point = styler.nextPoint();
-            
-            if (allowBreak)
-            {
-                if (point.lineBreak)
-                {
-                    GL.glEnd();
-                    GL.glBegin(GL.GL_LINE_STRIP);
-                }
-            }
-            else
-                allowBreak = true;
-            
-            GL.glColor4f(point.r, point.g, point.b, point.a);
-            GL.glVertex3d(point.x, point.y, point.z);
-        }        
-        GL.glEnd();
-    }
-
-
-    public void visit(PointStyler styler)
-    {
-        // get point size from first point
-        styler.reset();
-        PointGraphic point = styler.nextPoint();
-        GL.glPointSize(point.size); 
+        LinePointGraphic point = styler.point;
+        boolean begin = false;
+        styler.reset();        
+        GL.glLineWidth(point.width);
         
         // loop and draw all points
-        styler.reset();
-        GL.glBegin(GL.GL_POINTS);        
-        while (styler.hasNext())
+        while (styler.nextBlock())
         {
-            point = styler.nextPoint();                
-            GL.glColor4f(point.r, point.g, point.b, point.a);
-            GL.glVertex3d(point.x, point.y, point.z);
+            int oldWidth = -1;
+            
+            while (styler.nextPoint())
+            {
+                if (point.width != oldWidth)
+                {
+                    if (begin)
+                    {
+                        GL.glEnd();
+                        begin = false;
+                    }
+                    GL.glLineWidth(point.width);
+                    oldWidth = point.width;
+                    GL.glBegin(GL.GL_LINE_STRIP);                 
+                }
+                
+                if (point.lineBreak && begin)
+                {
+                    GL.glEnd();
+                    GL.glBegin(GL.GL_LINE_STRIP);                    
+                }
+                
+                point.lineBreak = false;
+                begin = true;
+                GL.glColor4f(point.r, point.g, point.b, point.a);
+                GL.glVertex3d(point.x, point.y, point.z);
+            }
         }
         
         GL.glEnd();
     }
 
 
-    public void visit(PolygonStyler styler)
-    {
-        // TODO Auto-generated method stub		
+    /**
+     * Renders all data passed by a point styler
+     */
+    public void visit(PointStyler styler)
+    {       
+        PointGraphic point = styler.point;
+        boolean begin = false;
+        int oldSize = -1;
+        styler.reset();        
+        
+        // loop and draw all points
+        while (styler.nextBlock())
+        {
+            while (styler.nextPoint())
+            {
+                if (point.size != oldSize)
+                {
+                    if (begin) GL.glEnd();
+                    GL.glPointSize(point.size);
+                    oldSize = point.size;
+                    GL.glBegin(GL.GL_POINTS);
+                    begin = true;
+                }
+                
+                GL.glColor4f(point.r, point.g, point.b, point.a);
+                GL.glVertex3d(point.x, point.y, point.z);
+            }
+        }
+        
+        GL.glEnd();
     }
 
 
+    /**
+     * Renders all data passed by a polygon styler
+     */
+    public void visit(PolygonStyler styler)
+    {
+        PolygonPointGraphic point = styler.point;
+        boolean begin = false;
+        styler.reset();        
+        
+        // setup polygon offset
+        GL.glPolygonOffset(1.0f, 1.0f);
+        GL.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        
+        // loop and draw all points
+        GL.glBegin(GL.GL_POLYGON);
+        
+        while (styler.nextBlock())
+        {
+            while (styler.nextPoint())
+            {
+                if (point.polyBreak && begin)
+                {
+                    GL.glEnd();
+                    GL.glBegin(GL.GL_POLYGON);                    
+                }
+                
+                point.polyBreak = false;
+                begin = true;
+                GL.glColor4f(point.r, point.g, point.b, point.a);
+                GL.glVertex3d(point.x, point.y, point.z);
+            }
+        }
+        
+        GL.glEnd();		
+    }
+    
+    
+    /**
+     * Renders all data passed by a polygon styler
+     */
+    public void visit(LabelStyler styler)
+    {
+        // TODO Auto-generated method stub      
+    }
+
+
+    /**
+     * Renders all data passed by a raster styler
+     */
     public void visit(RasterStyler styler)
     {
         int textureNum;        
@@ -282,7 +349,7 @@ public class OpenGLRenderer extends Renderer
             GridRowGraphic row2 = null;
             
             // loop through all rows
-            while (styler.hasMoreRows())
+            while (styler.nextBlock())
             {
                 if (row1 == null)
                     row1 = styler.nextGridRow();

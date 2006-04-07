@@ -37,90 +37,27 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class PointStyler extends AbstractStyler
 {
-	protected PointSymbolizer symbolizer;
-	protected PointGraphic point;
-    protected DataIndexer redData, greenData, blueData, alphaData;
-    protected DataIndexer pointSizeData;
+    public PointGraphic point;
+    protected PointSymbolizer symbolizer;	
     	
 	
 	public PointStyler()
 	{
 		point = new PointGraphic();
-		//  force a default name
 		setName("Point Styler");
 	}
     
     
-    public boolean hasNext()
+    public boolean nextPoint()
     {
-        return xData.hasNext();
+        if (dataLists[0].rootIndexer.hasNext)
+        {
+            dataLists[0].rootIndexer.getNext();
+            return true;
+        }
+        
+        return false;
     }
-    
-    
-    public PointGraphic nextPoint()
-    {
-        if (xData != null)
-        {
-            int linearIndex = xData.nextIndex();
-            point.x = xData.dataBlock.getDoubleValue(linearIndex);
-        }
-        
-        if (yData != null)
-        {
-            int linearIndex = yData.nextIndex();
-            point.y = yData.dataBlock.getDoubleValue(linearIndex);
-        }
-        
-        if (zData != null)
-        {
-            int linearIndex = zData.nextIndex();
-            point.z = zData.dataBlock.getDoubleValue(linearIndex) / 1e6; //TODO remove scale factor hack;
-        }
-        
-        if (redData != null)
-        {
-            int linearIndex = redData.nextIndex();
-            point.r = redData.dataBlock.getFloatValue(linearIndex);
-        }
-        
-        if (greenData != null)
-        {
-            int linearIndex = greenData.nextIndex();
-            point.g = greenData.dataBlock.getFloatValue(linearIndex);
-        }
-        
-        if (blueData != null)
-        {
-            int linearIndex = blueData.nextIndex();
-            point.b = blueData.dataBlock.getFloatValue(linearIndex);
-        }
-        
-        if (alphaData != null)
-        {
-            int linearIndex = alphaData.nextIndex();
-            point.a = alphaData.dataBlock.getFloatValue(linearIndex);
-        }
-        
-        if (pointSizeData != null)
-        {
-            int linearIndex = pointSizeData.nextIndex();
-            point.size = pointSizeData.dataBlock.getIntValue(linearIndex);
-        }
-        
-        return point;
-    }
-	
-	
-	public PointGraphic getPoint(int pointIndex)
-	{
-	    return null;
-	}
-	
-	
-	public int getPointCount()
-	{
-	    return 0;
-	}
 
 
 	public void updateBoundingBox()
@@ -136,8 +73,10 @@ public class PointStyler extends AbstractStyler
         String propertyName;
         Object value;
         
-        // generate indexing rules for geometry components
-        
+        // reset all parameters
+        point = new PointGraphic();
+        this.clearAllMappers();
+               
         // geometry X
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
@@ -145,8 +84,7 @@ public class PointStyler extends AbstractStyler
             propertyName = param.getPropertyName();          
             if (propertyName != null)
             {
-                xData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(xData);                
+                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
             }
         }
         
@@ -157,8 +95,7 @@ public class PointStyler extends AbstractStyler
             propertyName = param.getPropertyName();            
             if (propertyName != null)
             {
-                yData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(yData);                
+                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));                
             }
         }
         
@@ -169,11 +106,10 @@ public class PointStyler extends AbstractStyler
             propertyName = param.getPropertyName();            
             if (propertyName != null)
             {
-                zData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(zData);                
+                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));                
             }
         }
-                
+        
         // simple graphic mark
         GraphicSource glyph = this.symbolizer.getGraphic().getGlyphs().get(0);
         if (glyph instanceof GraphicMark)
@@ -189,14 +125,10 @@ public class PointStyler extends AbstractStyler
                 }
                 else
                 {
-                    if (!param.isMapped())
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
                     {
-                        propertyName = param.getPropertyName();
-                        if (propertyName != null)
-                        {
-                            redData = new DataIndexer(currentData, propertyName);
-                            dataHelpers.add(redData);                
-                        }
+                        addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));              
                     }
                 }
             }
@@ -212,14 +144,10 @@ public class PointStyler extends AbstractStyler
                 }
                 else
                 {
-                    if (!param.isMapped())
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
                     {
-                        propertyName = param.getPropertyName();
-                        if (propertyName != null)
-                        {
-                            greenData = new DataIndexer(currentData, propertyName);
-                            dataHelpers.add(greenData);                
-                        }
+                        addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));               
                     }
                 }
             }
@@ -235,14 +163,10 @@ public class PointStyler extends AbstractStyler
                 }
                 else
                 {
-                    if (!param.isMapped())
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
                     {
-                        propertyName = param.getPropertyName();
-                        if (propertyName != null)
-                        {
-                            blueData = new DataIndexer(currentData, propertyName);
-                            dataHelpers.add(blueData);                
-                        }
+                        addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));             
                     }
                 }
             }
@@ -258,14 +182,10 @@ public class PointStyler extends AbstractStyler
                 }
                 else
                 {
-                    if (!param.isMapped())
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
                     {
-                        propertyName = param.getPropertyName();
-                        if (propertyName != null)
-                        {
-                            alphaData = new DataIndexer(currentData, propertyName);
-                            dataHelpers.add(alphaData);                
-                        }
+                        addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));              
                     }
                 }
             }
@@ -282,13 +202,31 @@ public class PointStyler extends AbstractStyler
             }
             else
             {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new PointSizeMapper(point, param.getMappingFunction()));              
+                }
+            }
+        }
+        
+        // point orientation
+        param = this.symbolizer.getGraphic().getRotation();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.orientation = (Float)value;
+            }
+            else
+            {
                 if (!param.isMapped())
                 {
                     propertyName = param.getPropertyName();
                     if (propertyName != null)
                     {
-                        pointSizeData = new DataIndexer(currentData, propertyName);
-                        dataHelpers.add(pointSizeData);               
+                        addPropertyMapper(propertyName, new PointOrientationMapper(point, param.getMappingFunction()));              
                     }
                 }
             }
@@ -310,13 +248,13 @@ public class PointStyler extends AbstractStyler
 	
 	public void accept(StylerVisitor visitor)
 	{
-        currentData = dataProvider.getDataNode();
+        dataNode = dataProvider.getDataNode();
         
-        if (currentData != null)
+        if (dataNode != null)
         {
-            if ((xData == null) && (yData == null) && (zData == null))
+            if (dataLists.length == 0)
                 updateDataMappings();
-            
+                        
     		visitor.visit(this);
         }
 	}

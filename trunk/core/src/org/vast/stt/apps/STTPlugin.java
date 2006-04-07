@@ -1,8 +1,12 @@
 package org.vast.stt.apps;
 
+import java.util.Enumeration;
+
 import org.eclipse.ui.plugin.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
+import org.vast.sensorML.SMLException;
+import org.vast.sensorML.reader.ProcessLoader;
 
 
 /**
@@ -30,6 +34,18 @@ public class STTPlugin extends AbstractUIPlugin
 	public void start(BundleContext context) throws Exception
 	{
 		super.start(context);
+        try
+        {
+            String fileLocation = null;
+            Enumeration e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
+            if (e.hasMoreElements())
+                fileLocation = (String)e.nextElement().toString();
+            ProcessLoader.reloadMaps(fileLocation);
+        }
+        catch (SMLException e)
+        {
+            e.printStackTrace();
+        }
 	}
 
 

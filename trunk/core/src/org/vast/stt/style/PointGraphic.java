@@ -28,12 +28,9 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class PointGraphic implements GraphicObject
+public class PointGraphic extends PrimitiveGraphic
 {
-    public double x, y, z;
-	public float r, g, b;
-	public float a = 1.0f;
-	public float orientation;
+    public float orientation;
 	public int size = 1;
 	public byte[] icon;
 }

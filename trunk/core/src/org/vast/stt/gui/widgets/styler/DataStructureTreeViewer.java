@@ -52,7 +52,7 @@ class DataStructureContentProvider implements ITreeContentProvider {
 			}
 			return children;
 		} else if (parentElement instanceof DataArray) {
-			return new Object [] {((DataArray)parentElement).getComponent(0)};
+			return new Object [] {((DataComponent)parentElement).getComponent(0)};
 		} else if (parentElement instanceof DataList) {
 			return new Object[] {((DataComponent)parentElement).getComponent(0)};
 		} else {
