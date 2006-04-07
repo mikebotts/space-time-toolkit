@@ -35,7 +35,7 @@ public class GenericZMapper extends PropertyMapper
 
     public void mapData(DataBlock data)
     {
-        graphic.z = data.getDoubleValue() / 1e6;
+        graphic.z = data.getDoubleValue();
         
         if (useMappingFunction)
             graphic.z = mappingFunction.compute(graphic.z);    
