@@ -66,7 +66,7 @@ public class SOSProvider extends OWSProvider
 			
 			// select request type (post or get)
 			boolean usePost = true;
-			String url = layerCaps.getParent().getPostServers().get("GetObservation");
+			String url = query.getPostServer();
 			if (url != null)
 			{
 				query.setPostServer(url);
