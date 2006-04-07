@@ -76,7 +76,7 @@ public class DataProviderReader
         {
             provider = readSWEProvider(dom, providerElt);                           
         }
-        else if (providerElt.getLocalName().equals("SensorMLDataProvider"))
+        else if (providerElt.getLocalName().equals("SensorMLProvider"))
         {
             provider = readSensorMLProvider(dom, providerElt);                           
         }

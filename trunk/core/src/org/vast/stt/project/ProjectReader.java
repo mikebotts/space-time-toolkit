@@ -568,7 +568,7 @@ public class ProjectReader
     {
         String id = dom.getAttributeValue(objElt, "id");
         
-        if (id != null)
+        if ((id != null) && (obj != null))
             objectIds.put(id, obj);
     }
 	
