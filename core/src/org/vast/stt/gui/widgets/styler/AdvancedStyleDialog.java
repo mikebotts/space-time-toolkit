@@ -1,12 +1,8 @@
 package org.vast.stt.gui.widgets.styler;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,9 +18,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.PlatformUI;
-import org.ogc.cdm.common.DataComponent;
-import org.vast.data.ScalarIterator;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
@@ -171,31 +164,9 @@ public class AdvancedStyleDialog implements SelectionListener
 	 * 
 	 * @return - the mappable property names for this dataItem
 	 */
-	protected String [] getMappableItems(){
-		Set<String> mappableSet = new HashSet<String>();
-		ScalarIterator it = 
-			new ScalarIterator(dataItem.getDataProvider().getDataNode().getComponent(0));
-        
-		while(it.hasNext()){
-            StringBuffer fullName = new StringBuffer();
-            
-            DataComponent[] componentPath = it.nextPath();          
-            for (int i=0; i<componentPath.length; i++)
-            {
-                if (i != 0)
-                    fullName.append('/');
-                
-                fullName.append(componentPath[i].getName());
-            }
-
-            String path = fullName.toString();
-            
-			//  HACK to filter out segmentSize
-			if(!path.contains("segmentSize")) 
-				mappableSet.add(path);
-		}
-		
-		return mappableSet.toArray(new String[]{});
+	protected String [] getMappableItems(){     
+        List<String> mappingList = dataItem.getDataProvider().getDataNode().getPossibleScalarMappings();	
+		return mappingList.toArray(new String[0]);
 	}
 	
 	/**

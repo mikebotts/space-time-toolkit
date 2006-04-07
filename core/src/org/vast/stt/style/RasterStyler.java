@@ -42,7 +42,6 @@ public class RasterStyler extends AbstractStyler
     protected RasterPixelGraphic pixel;
     protected RasterGridGraphic grid;
     protected GridRowGraphic gridRow;
-    protected DataIndexer redData, greenData, blueData, alphaData;
     
 	
 	public RasterStyler()
@@ -69,14 +68,14 @@ public class RasterStyler extends AbstractStyler
     {
         if (image.data == null)
         {
-            DataBlock data = currentData.getComponent(0).getData();
+            DataBlock data = dataNode.getComponent(0).getData();
             int arraySize = data.getAtomCount();
             byte[] array = new byte[arraySize];
             image.data = array;       
-        
+
             for (int i=0; i<arraySize; i++)
-                array[i] = currentData.getData().getByteValue(i);
-            
+                array[i] = dataNode.getData().getByteValue(i);
+
             image.width = 512;
             image.height = 256;
             image.updated = true;
@@ -100,71 +99,9 @@ public class RasterStyler extends AbstractStyler
     }
     
     
-    public boolean hasMoreRows()
-    {
-        return xData.hasNext();
-    }
-    
-    
     public GridRowGraphic nextGridRow()
     {
-        if (grid.updated = true)
-        {
-            gridRow.gridPoints = new GridPointGraphic[grid.width];
-            grid.updated = false;
-        }
-        
-        for (int i=0; i<grid.width; i++)
-        {
-            int linearIndex;
-            
-            if (xData != null)
-            {
-                linearIndex = xData.nextIndex();
-                gridRow.gridPoints[i].x = xData.dataBlock.getDoubleValue(linearIndex);
-            }
-            
-            if (yData != null)
-            {
-                linearIndex = yData.nextIndex();
-                gridRow.gridPoints[i].y = yData.dataBlock.getDoubleValue(linearIndex);
-            }
-            
-            if (zData != null)
-            {
-                linearIndex = zData.nextIndex();
-                gridRow.gridPoints[i].z = zData.dataBlock.getDoubleValue(linearIndex);
-            }
-            
-            if (redData != null)
-            {
-                linearIndex = redData.nextIndex();
-                gridRow.gridPoints[i].r = redData.dataBlock.getFloatValue(linearIndex);
-            }
-            
-            if (greenData != null)
-            {
-                linearIndex = greenData.nextIndex();
-                gridRow.gridPoints[i].g = greenData.dataBlock.getFloatValue(linearIndex);
-            }
-            
-            if (blueData != null)
-            {
-                linearIndex = blueData.nextIndex();
-                gridRow.gridPoints[i].b = blueData.dataBlock.getFloatValue(linearIndex);
-            }
-            
-            if (alphaData != null)
-            {
-                linearIndex = alphaData.nextIndex();
-                gridRow.gridPoints[i].a = alphaData.dataBlock.getFloatValue(linearIndex);
-            }
-            
-            // also computes texture coordinates
-            
-        }
-        
-        return gridRow;
+        return null;
     }
     
     
@@ -188,8 +125,7 @@ public class RasterStyler extends AbstractStyler
             propertyName = param.getPropertyName();
             if (propertyName != null)
             {
-                xData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(xData);                
+                addPropertyMapper(propertyName, new GenericXMapper(pixel, null));
             }
         }
         
@@ -200,8 +136,7 @@ public class RasterStyler extends AbstractStyler
             propertyName = param.getPropertyName();
             if (propertyName != null)
             {
-                yData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(yData);                
+                addPropertyMapper(propertyName, new GenericYMapper(pixel, null));
             }
         }
         
@@ -212,8 +147,7 @@ public class RasterStyler extends AbstractStyler
             propertyName = param.getPropertyName();
             if (propertyName != null)
             {
-                zData = new DataIndexer(currentData, propertyName);
-                dataHelpers.add(zData);                
+                addPropertyMapper(propertyName, new GenericZMapper(pixel, null));
             }
         }
 	}
@@ -233,13 +167,13 @@ public class RasterStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-        currentData = dataProvider.getDataNode();
+        dataNode = dataProvider.getDataNode();
 
-        if (currentData != null)
+        if (dataNode != null)
         {
-            if ((xData == null) && (yData == null) && (zData == null))
+            if (dataLists.length == 0)
                 updateDataMappings();
-            
+                        
             visitor.visit(this);
         }		
 	}

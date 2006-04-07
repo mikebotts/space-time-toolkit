@@ -13,19 +13,19 @@
 
 package org.vast.stt.style;
 
-import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.ows.sld.TextSymbolizer;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Line Styler
+ * Label Styler
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Converts source data to a sequence of LineGraphic objects
- * that the renderer can access and render sequentially.
+ * Converts source data to a sequence of LabelGraphic objects
+ * that the renderer can access and render sequentially. 
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -33,18 +33,16 @@ import org.vast.ows.sld.Symbolizer;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LineStyler extends AbstractStyler
+public class LabelStyler extends AbstractStyler
 {
-    public LinePointGraphic point;
-    public LineSegmentGraphic segment;
-    protected LineSymbolizer symbolizer;	
-        
+    public LabelGraphic label;
+    protected TextSymbolizer symbolizer;	
+    	
 	
-	public LineStyler()
+	public LabelStyler()
 	{
-		point = new LinePointGraphic();
-        segment = new LineSegmentGraphic();
-		setName("Line Styler");
+        label = new LabelGraphic();
+		setName("Label Styler");
 	}
     
     
@@ -58,54 +56,33 @@ public class LineStyler extends AbstractStyler
         
         return false;
     }
-    
-    
-    public void updateBoundingBox()
-    {
-        // TODO Auto-generated method stub
-        // compute bounding box by scanning max and min geometry values
-    }
 
 
-    public void updateDataMappings()
-    {
+	public void updateBoundingBox()
+	{
+		// TODO Auto-generated method stub
+	    // compute bounding box by scanning max and min geometry values
+	}
+
+
+	public void updateDataMappings()
+	{
         ScalarParameter param;
-        String propertyName = null;
+        String propertyName;
         Object value;
         
         // reset all parameters
-        point = new LinePointGraphic();
-        segment = new LineSegmentGraphic();
+        label = new LabelGraphic();
         this.clearAllMappers();
-        
-        // segment object
-//        param = this.symbolizer.getGeometry().getObject();
-//        if (param != null)
-//        {
-//            propertyName = param.getPropertyName();
-//            DataIndexer segData = new DataIndexer(currentData, propertyName);
-//            breakRuleIndex = segData.indexRules.length-1;
-//        }
-        
-        // geometry breaks
-        param = this.symbolizer.getGeometry().getBreaks();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new LineBreakMapper(point));               
-            }
-        }
-        
+               
         // geometry X
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
         {
-            propertyName = param.getPropertyName();
+            propertyName = param.getPropertyName();          
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
+                addPropertyMapper(propertyName, new GenericXMapper(label, param.getMappingFunction()));                
             }
         }
         
@@ -113,10 +90,10 @@ public class LineStyler extends AbstractStyler
         param = this.symbolizer.getGeometry().getY();
         if (param != null)
         {
-            propertyName = param.getPropertyName();
+            propertyName = param.getPropertyName();            
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericYMapper(label, param.getMappingFunction()));                
             }
         }
         
@@ -124,111 +101,133 @@ public class LineStyler extends AbstractStyler
         param = this.symbolizer.getGeometry().getZ();
         if (param != null)
         {
-            propertyName = param.getPropertyName();
+            propertyName = param.getPropertyName();            
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericZMapper(label, param.getMappingFunction()));                
             }
         }
         
         // color - red 
-        param = this.symbolizer.getStroke().getColor().getRed();
+        param = symbolizer.getFill().getColor().getRed();
         if (param != null)
         {
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.r = (Float)value;
+                label.r = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new GenericRedMapper(label, param.getMappingFunction()));              
                 }
             }
         }
         
         // color - green 
-        param = this.symbolizer.getStroke().getColor().getGreen();
+        param = symbolizer.getFill().getColor().getGreen();
         if (param != null)
         {
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.g = (Float)value;
+                label.g = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new GenericGreenMapper(label, param.getMappingFunction()));               
                 }
             }
         }
         
         // color - blue 
-        param = this.symbolizer.getStroke().getColor().getBlue();
+        param = symbolizer.getFill().getColor().getBlue();
         if (param != null)
         {
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.b = (Float)value;
+                label.b = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new GenericBlueMapper(label, param.getMappingFunction()));             
                 }
             }
         }
         
         // color - alpha 
-        param = this.symbolizer.getStroke().getColor().getAlpha();
+        param = symbolizer.getFill().getColor().getAlpha();
         if (param != null)
         {
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.a = (Float)value;
+                label.a = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new GenericAlphaMapper(label, param.getMappingFunction()));              
+                }
+            }
+        }        
+        
+        // text size
+        param = this.symbolizer.getFont().getSize();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                label.size = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new LabelSizeMapper(label, param.getMappingFunction()));              
                 }
             }
         }
         
-        // line width
-        param = this.symbolizer.getStroke().getWidth();
+        // label orientation
+        param = this.symbolizer.getPlacement().getRotation();
         if (param != null)
         {
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.width = ((Float)value).intValue();
+                label.orientation = (Float)value;
             }
             else
             {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
+                if (!param.isMapped())
                 {
-                    addPropertyMapper(propertyName, new LineWidthMapper(point, param.getMappingFunction()));
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        addPropertyMapper(propertyName, new LabelOrientationMapper(label, param.getMappingFunction()));              
+                    }
                 }
             }
         }
-    }
-    
-    
-	public LineSymbolizer getSymbolizer()
+	}
+	
+	
+	public TextSymbolizer getSymbolizer()
 	{
 		return symbolizer;
 	}
@@ -236,19 +235,19 @@ public class LineStyler extends AbstractStyler
 
 	public void setSymbolizer(Symbolizer sym)
 	{
-		this.symbolizer = (LineSymbolizer)sym;
+		this.symbolizer = (TextSymbolizer)sym;
 	}
-
-
+	
+	
 	public void accept(StylerVisitor visitor)
 	{
         dataNode = dataProvider.getDataNode();
-
+        
         if (dataNode != null)
         {
             if (dataLists.length == 0)
                 updateDataMappings();
-            
+                        
     		visitor.visit(this);
         }
 	}

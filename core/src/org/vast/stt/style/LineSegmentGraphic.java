@@ -28,7 +28,7 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LineSegmentGraphic implements GraphicObject
+public class LineSegmentGraphic extends GraphicObject
 {
 	public int segmentSize;
 }

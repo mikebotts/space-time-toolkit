@@ -16,6 +16,7 @@ package org.vast.stt.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.Resource;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;

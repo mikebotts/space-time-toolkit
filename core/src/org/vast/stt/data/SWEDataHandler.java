@@ -16,6 +16,7 @@ package org.vast.stt.data;
 import java.util.Hashtable;
 
 import org.ogc.cdm.common.*;
+import org.vast.data.DataList;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -38,6 +39,7 @@ public class SWEDataHandler implements DataHandler
 {
 	protected Hashtable<DataComponent, UnitConverter> converters;
 	protected DataNode dataNode;
+    protected DataList dataList;
 	
 
 	public SWEDataHandler()
@@ -46,15 +48,16 @@ public class SWEDataHandler implements DataHandler
 	}
 	
 	
-	public void setDataNode(DataNode dataNode)
+	public void setDataList(DataNode dataNode, DataList dataList)
 	{
 		this.dataNode = dataNode;
+        this.dataList = dataList;
 	}
 	
 	
 	public void endData(DataComponent info, DataBlock data)
 	{
-		dataNode.addData(data);
+        dataNode.addData(dataList, data);
 	}
 
 

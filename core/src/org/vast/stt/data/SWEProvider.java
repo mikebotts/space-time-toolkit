@@ -20,7 +20,6 @@ import org.ogc.cdm.common.DataComponent;
 import org.ogc.cdm.common.DataEncoding;
 import org.ogc.cdm.reader.DataStreamParser;
 import org.vast.cdm.reader.URIStreamHandler;
-import org.vast.stt.project.StaticDataSet;
 import org.vast.stt.readers.SWEResourceReader;
 
 
@@ -40,7 +39,10 @@ import org.vast.stt.readers.SWEResourceReader;
  */
 public class SWEProvider extends AbstractProvider
 {
-	protected DataStreamParser dataParser;
+    protected String sweDataUrl;
+    protected String rawDataUrl;
+    protected String format; 
+    protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
 	
 	
@@ -53,7 +55,7 @@ public class SWEProvider extends AbstractProvider
 	@Override
 	public void updateData() throws DataException
 	{
-		String uri = ((StaticDataSet)resource).getSweDataUrl();
+		String uri = sweDataUrl;
 		
 		try
 		{
@@ -65,7 +67,6 @@ public class SWEProvider extends AbstractProvider
 		}
 		
 		// check that format is 'SWE'
-		String format = ((StaticDataSet)resource).getFormat();
 		if (!format.equalsIgnoreCase("SWE"))
 			throw new DataException("Invalid format: " + format);
 		
@@ -87,15 +88,15 @@ public class SWEProvider extends AbstractProvider
 				cachedData = new DataNode();
 			
 			// clean up old data			
-            ((DataNode)cachedData).removeAllComponents();
-            cachedData.addComponent(dataInfo);
+            cachedData.removeAllComponents();
+            cachedData.createList(dataInfo);
 			
 			// register the CDM data handler
-			dataHandler.setDataNode((DataNode)cachedData);
+			dataHandler.setDataList(cachedData, cachedData.getList(0));
 			dataParser.setDataHandler(dataHandler);
             
             // override resultUri if specified in data set
-            String resultUri = ((StaticDataSet)resource).getRawDataUrl();
+            String resultUri = rawDataUrl;
             if (resultUri != null)
                 reader.setResultUri(resultUri);
 			
@@ -105,7 +106,7 @@ public class SWEProvider extends AbstractProvider
 		}
 		catch (CDMException e)
 		{
-			throw new DataException("Error while parsing resource stream: " + uri);
+			throw new DataException("Error while parsing resource stream: " + uri, e);
 		}
 		finally
 		{
@@ -139,4 +140,40 @@ public class SWEProvider extends AbstractProvider
 	{
 		return false;
 	}
+    
+    
+    public String getFormat()
+    {
+        return format;
+    }
+
+
+    public void setFormat(String format)
+    {
+        this.format = format;
+    }
+
+
+    public String getRawDataUrl()
+    {
+        return rawDataUrl;
+    }
+
+
+    public void setRawDataUrl(String rawDataUrl)
+    {
+        this.rawDataUrl = rawDataUrl;
+    }
+
+
+    public String getSweDataUrl()
+    {
+        return sweDataUrl;
+    }
+
+
+    public void setSweDataUrl(String sweDataUrl)
+    {
+        this.sweDataUrl = sweDataUrl;
+    }
 }

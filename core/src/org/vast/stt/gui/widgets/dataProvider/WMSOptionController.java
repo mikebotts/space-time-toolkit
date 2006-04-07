@@ -40,7 +40,7 @@ public class WMSOptionController
 	
 	public void buildBasicControls(Composite parent) {
 		WMSQuery query = provider.getQuery();
-		WMSLayerCapabilities caps = provider.getCapabilities(); 
+		WMSLayerCapabilities caps = provider.getLayerCapabilities(); 
 		
 		// TODO Auto-generated method stub
 		optionControl = new OptionControl[6];

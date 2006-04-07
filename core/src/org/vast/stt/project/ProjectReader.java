@@ -18,17 +18,9 @@ import java.util.*;
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
 import org.vast.math.Vector3D;
-import org.vast.ows.*;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.ows.sos.*;
-import org.vast.ows.wms.*;
-import org.vast.ows.wcs.*;
-import org.vast.sensorML.SMLException;
-import org.vast.sensorML.reader.ProcessLoader;
-import org.vast.sensorML.reader.SystemReader;
-import org.vast.stt.data.*;
 import org.vast.stt.scene.*;
 import org.vast.stt.style.*;
 import org.vast.util.*;
@@ -55,7 +47,7 @@ import org.vast.process.*;
 public class ProjectReader
 {
 	private DOMReader dom;
-	private Hashtable<String, Service> serviceIds;
+    private Hashtable<String, Object> objectIds;
 	private StylerFactory stylerFactory;
 	private SLDReader sldReader;
     private DataProviderReader providerReader;
@@ -63,7 +55,7 @@ public class ProjectReader
 	
 	public ProjectReader()
 	{
-		serviceIds = new Hashtable<String, Service>();
+        objectIds = new Hashtable<String, Object>();
 		stylerFactory = new StylerFactory();
 		sldReader = new SLDReader();
         providerReader = new DataProviderReader();
@@ -171,12 +163,38 @@ public class ProjectReader
 		service.setUrl(dom.getElementValue(serviceElt, "url"));
 		service.setVersion(dom.getElementValue(serviceElt, "version"));
 		
-		// if id is present, add ref to hashtable
-		if (dom.existAttribute(serviceElt, "id"))
-			serviceIds.put(dom.getAttributeValue(serviceElt, "id"), service);
-		
+		// add this new instance to the table
+        registerObjectID(serviceElt, service);
+        
 		return service;
 	}
+    
+    
+    /**
+     * Reads a Resource and create corresponding Resource object.
+     * This methods decides the right specific method to call.
+     * @param resourceElt
+     * @return
+     */
+    protected Resource readResource(Element resourceElt)
+    {
+        if (resourceElt == null)
+            return null;
+        
+        String resourceName = resourceElt.getLocalName();
+        Resource resource = null;
+        
+        if (resourceName.equals("ResourceList"))
+            resource = readResourceList(resourceElt);
+        else
+            resource = readDataProvider(resourceElt);
+        
+        // name & description
+        resource.setName(dom.getElementValue(resourceElt, "name"));
+        resource.setDescription(dom.getElementValue(resourceElt, "description"));
+        
+        return resource;
+    }
 	
 	
 	/**
@@ -203,167 +221,32 @@ public class ProjectReader
 		
 		return resourceList;
 	}
-	
-	
-	/**
-	 * Reads a Resource and create corresponding Resource object.
-	 * This methods decides the right specific method to call.
-	 * @param resourceElt
-	 * @return
-	 */
-	protected Resource readResource(Element resourceElt)
-	{
-		if (resourceElt == null)
-			return null;
-		
-		String resourceName = resourceElt.getLocalName();
-		Resource resource = null;
-		
-		if (resourceName.equals("ResourceList"))
-		{
-			resource = readResourceList(resourceElt);
-		}
-		else if (resourceName.equals("ServiceDataSet"))
-		{
-			resource = readServiceDataSet(resourceElt);
-		}
-		else if (resourceName.equals("StaticDataSet"))
-		{
-			resource = readStaticDataSet(resourceElt);
-		}
-        else if (resourceName.equals("SensorMLProcess"))
-        {
-            resource = readSensorMLProcess(resourceElt);
-        }
-		else
-			return null;
-				
-		// add ref to hashtable
-        if (dom.existAttribute(resourceElt, "id"))
-            providerReader.getResourceIds().put(dom.getAttributeValue(resourceElt, "id"), resource);
-		
-		// name & description
-		resource.setName(dom.getElementValue(resourceElt, "name"));
-		resource.setDescription(dom.getElementValue(resourceElt, "description"));
-		
-		return resource;
-	}
-	
-	
-	/**
-	 * Reads a Static Data Set description
-	 * @param dataSetElt
-	 * @return
-	 */
-	protected StaticDataSet readStaticDataSet(Element dataSetElt)
-	{
-		StaticDataSet staticData = new StaticDataSet();
-		
-		// format and url
-		staticData.setFormat(dom.getElementValue(dataSetElt, "format"));
-		staticData.setSweDataUrl(dom.getAttributeValue(dataSetElt, "sweData/@href"));
-        staticData.setRawDataUrl(dom.getAttributeValue(dataSetElt, "rawData/@href"));
-		
-		return staticData;
-	}
-	
-	
-	/**
-	 * Reads a Service Data Set description
-	 * @param dataSetElt
-	 * @return
-	 */
-	protected ServiceDataSet readServiceDataSet(Element dataSetElt)
-	{
-		ServiceDataSet serviceLayer = new ServiceDataSet();
-		
-		// parse layerId
-		serviceLayer.setLayerID(dom.getElementValue(dataSetElt, "layerId"));
-		
-		// parse or link to Service EndPoint description
-		String serviceRef = dom.getAttributeValue(dataSetElt, "service/href");
-		if (dom.existAttribute(dataSetElt, "service/href") && serviceRef.startsWith("#"))
-		{
-			String id = serviceRef.substring(1);
-			serviceLayer.setService(serviceIds.get(id));
-		}
-		else
-		{
-			Element serviceElt = dom.getElement(dataSetElt, "service/Service");
-			Service service = readService(serviceElt);
-			serviceLayer.setService(service);
-		}
-		
-		// parse service layer capabilities
-		try
-		{
-			OWSServiceCapabilities caps = null;
-			Element capsElt = dom.getElement(dataSetElt, "capabilities/*");
-			
-			if (capsElt != null)
-			{			
-				String serviceType = serviceLayer.getService().getType();	
-				
-				// use right capabilities parser based on service type
-				if (serviceType.equalsIgnoreCase("WMS"))
-				{
-					WMSCapabilitiesReader reader = new WMSCapabilitiesReader();
-					caps = reader.readCapabilities(capsElt);
-				}
-				else if (serviceType.equalsIgnoreCase("WFS"))
-				{
-					// TODO WFS layer
-				}
-				else if (serviceType.equalsIgnoreCase("WCS"))
-				{
-					// TODO WCS layer 
-					WCSCapabilitiesReader reader = new WCSCapabilitiesReader();
-					caps = reader.readCapabilities(capsElt);
-				}
-				else if (serviceType.equalsIgnoreCase("SOS"))
-				{
-					SOSCapabilitiesReader reader = new SOSCapabilitiesReader();
-					caps = reader.readCapabilities(capsElt);
-				}
-				
-				serviceLayer.setCapabilities(caps.getLayers().get(0));
-			}
-		}
-		catch (OWSException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return serviceLayer;
-	}
     
     
     /**
-     * Reads a SensorML Process description
-     * @param dataSetElt
+     * Reads a DataProvider description
+     * @param providerElt
      * @return
      */
-    protected SensorMLProcess readSensorMLProcess(Element resourceElt)
+    protected DataProvider readDataProvider(Element providerElt)
     {
-        SensorMLProcess smlProcess = new SensorMLProcess();
+        DataProvider provider = null;
         
-        try
+        // try to get the provider from the list
+        Object obj = findExistingObject(providerElt);
+        if (obj != null)
         {
-            Element processElt = dom.getElement(resourceElt, "process");
-            SystemReader systemReader = new SystemReader(dom);
-            systemReader.setReadMetadata(false);
-            systemReader.setCreateExecutableProcess(true);
-            ProcessLoader.reloadMaps("file:///d:/Projects/NSSTC/SensorML/src/org/vast/test/ProcessMap.xml");
-            DataProcess process = systemReader.readProcessProperty(processElt);
-            smlProcess.setInternalProcess(process);
-        }
-        catch (SMLException e)
-        {
-            e.printStackTrace();
+            provider = (DataProvider)obj;
         }
         
-        return smlProcess;
+        // otherwise instantiate a new one
+        else
+        {
+            provider = providerReader.readProvider(dom, providerElt);
+            registerObjectID(providerElt, provider);
+        }
+        
+        return provider;
     }
 	
 	
@@ -425,9 +308,14 @@ public class ProjectReader
 	 */
 	protected ViewSettings readViewSettings(Element viewSettingsElt)
 	{
-		String val;
+	    // try to get it from the table
+        Object obj = findExistingObject(viewSettingsElt);
+        if (obj != null)
+            return (ViewSettings)obj;
+                
+        String val;
 		ViewSettings viewSettings = new ViewSettings();
-		
+		        
 		// background color
 		String colorText = dom.getElementValue(viewSettingsElt, "backgroundColor");
 		if (colorText != null)
@@ -491,6 +379,9 @@ public class ProjectReader
 			viewSettings.setZDepthFudgeFactor(zFudge);
 		}
 		
+		// add this new instance to the table
+        registerObjectID(viewSettingsElt, viewSettings);
+        
 		return viewSettings;
 	}
 	
@@ -525,6 +416,12 @@ public class ProjectReader
 	{
 		DataEntry dataEntry = null;
 		
+        // try to get it from the table
+        Object obj = findExistingObject(dataEntryElt);
+        if (obj != null)
+            return (DataEntry)obj;
+        
+        // if not found parse and instantiate a new one        
 		if (dataEntryElt.getLocalName().equals("DataList"))
 			dataEntry = readDataList(dataEntryElt);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
@@ -547,6 +444,9 @@ public class ProjectReader
 			}
 		}
 		
+		// add this new instance to the table
+        registerObjectID(dataEntryElt, dataEntry);
+        
 		return dataEntry;
 	}
 	
@@ -583,12 +483,12 @@ public class ProjectReader
 	 */
 	protected DataItem readDataItem(Element dataItemElt)
 	{
-		DataItem dataItem = new DataItem();
+        DataItem dataItem = new DataItem();
 						
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
-		DataProvider provider = providerReader.readProvider(dom, providerElt);
-		dataItem.setDataProvider(provider);
+        DataProvider provider = readDataProvider(providerElt);
+        dataItem.setDataProvider(provider);
 		
 		// style/symbolizer list
 		NodeList symElts = dom.getElements(dataItemElt, "style/*");
@@ -615,7 +515,7 @@ public class ProjectReader
 			DataStyler styler = readSymbolizer(provider, symElt);
 			dataItem.setStyler(styler);
 		}		
-		
+        
 		return dataItem;
 	}
 	
@@ -641,6 +541,36 @@ public class ProjectReader
 		
 		return styler;
 	}
+    
+    
+    /**
+     * Try to retrieve an object that has already been parsed
+     * and should be referenced instead of creating a new instance.
+     * @param objElt
+     * @return
+     */
+    protected Object findExistingObject(Element objElt)
+    {
+        Object obj = null;
+        String id = dom.getAttributeValue(objElt, "id");
+        if (id != null)
+            obj = objectIds.get(id);
+        return obj;
+    }
+    
+    
+    /**
+     * Add an object to the id->object map table
+     * @param objElt
+     * @param obj
+     */
+    protected void registerObjectID(Element objElt, Object obj)
+    {
+        String id = dom.getAttributeValue(objElt, "id");
+        
+        if (id != null)
+            objectIds.put(id, obj);
+    }
 	
 	
 	protected ArrayList<DataProcess> readProcessList(Element listElt)

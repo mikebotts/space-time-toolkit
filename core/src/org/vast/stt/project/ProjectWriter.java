@@ -149,15 +149,8 @@ public class ProjectWriter
 	{
 		Element resourceElt = null;
 		
-		if (resource instanceof ServiceDataSet)
-		{
-			
-		}
-		else if (resource instanceof StaticDataSet)
-		{
-			
-		}
-		
+		// TODO writeResource method
+        
 		return resourceElt;
 	}
 	

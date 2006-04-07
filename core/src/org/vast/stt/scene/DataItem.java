@@ -15,7 +15,7 @@ package org.vast.stt.scene;
 
 import java.util.*;
 
-import org.vast.stt.data.DataProvider;
+import org.vast.stt.project.DataProvider;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 

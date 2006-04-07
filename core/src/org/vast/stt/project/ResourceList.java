@@ -18,11 +18,11 @@ import java.util.*;
 
 /**
  * <p><b>Title:</b><br/>
- * Data Set Group
+ * Resource List
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Group of Resrouces (can be use to group resources in folders)
+ * Group of Resources (can be use to group resources in folders)
  * </p>
  *
  * <p>Copyright (c) 2005</p>

@@ -11,39 +11,26 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project;
-
-import org.vast.process.DataProcess;
+package org.vast.stt.style;
 
 
 /**
  * <p><b>Title:</b><br/>
- * SensorML Process Descriptor
+ * Primitive Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Encapslate a SensorML ProcessModel or ProcessChain
+ * TODO PrimitiveGraphic type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Feb 28, 2006
+ * @date Mar 31, 2006
  * @version 1.0
  */
-public class SensorMLProcess extends AbstractResource
+public abstract class PrimitiveGraphic extends GraphicObject
 {
-    protected DataProcess internalProcess;
-
-
-    public DataProcess getInternalProcess()
-    {
-        return internalProcess;
-    }
-
-
-    public void setInternalProcess(DataProcess internalProcess)
-    {
-        this.internalProcess = internalProcess;
-    }
-
+    public double x, y, z, t;
+    public float r, g, b;
+    public float a = 1.0f;
 }

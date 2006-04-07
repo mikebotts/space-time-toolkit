@@ -15,12 +15,9 @@ package org.vast.stt.data;
 
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
-import org.ogc.cdm.common.DataType;
 import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.process.DataProcess;
-import org.vast.process.ProcessChain;
-import org.vast.stt.project.SensorMLProcess;
 
 
 /**
@@ -186,4 +183,16 @@ public class SensorMLProvider extends AbstractProvider
         
         return false;
 	}
+
+
+    public DataProcess getProcess()
+    {
+        return process;
+    }
+
+
+    public void setProcess(DataProcess process)
+    {
+        this.process = process;
+    }
 }

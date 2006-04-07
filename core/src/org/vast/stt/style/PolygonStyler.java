@@ -14,8 +14,8 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.PolygonSymbolizer;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.util.SpatialExtent;
 
 
 /**
@@ -24,7 +24,8 @@ import org.vast.stt.util.SpatialExtent;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * 
+ * Converts source data to a sequence of PolygonPointGraphic objects
+ * that the renderer can access and render sequentially.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -34,26 +35,27 @@ import org.vast.stt.util.SpatialExtent;
  */
 public class PolygonStyler extends AbstractStyler
 {
-	protected PolygonSymbolizer symbolizer;
+    public PolygonPointGraphic point;
+    protected PolygonSymbolizer symbolizer;    
 	
 	
 	public PolygonStyler()
 	{
+        point = new PolygonPointGraphic();
+        setName("Polygon Styler");
 	}
-	
-	
-	public SpatialExtent getBoundingBox()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public double[] getCenterPoint()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
+    
+    public boolean nextPoint()
+    {
+        if (dataLists[0].rootIndexer.hasNext)
+        {
+            dataLists[0].rootIndexer.getNext();
+            return true;
+        }
+        
+        return false;
+    }
 
 
 	public void updateBoundingBox()
@@ -65,8 +67,134 @@ public class PolygonStyler extends AbstractStyler
 
 	public void updateDataMappings()
 	{
-		// TODO Auto-generated method stub
-		
+        ScalarParameter param;
+        String propertyName = null;
+        Object value;
+        
+        // reset all parameters
+        point = new PolygonPointGraphic();
+        this.clearAllMappers();
+        
+        
+        // geometry breaks
+        param = this.symbolizer.getGeometry().getBreaks();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new PolygonBreakMapper(point));               
+            }
+        }
+        
+        // geometry X
+        param = this.symbolizer.getGeometry().getX();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
+            }
+        }
+        
+        //geometry Y
+        param = this.symbolizer.getGeometry().getY();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
+            }
+        }
+        
+        // geometry Z
+        param = this.symbolizer.getGeometry().getZ();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
+            }
+        }
+        
+        // color - red 
+        param = this.symbolizer.getFill().getColor().getRed();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.r = (Float)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+        
+        // color - green 
+        param = this.symbolizer.getFill().getColor().getGreen();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.g = (Float)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+        
+        // color - blue 
+        param = this.symbolizer.getFill().getColor().getBlue();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.b = (Float)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+        
+        // color - alpha 
+        param = this.symbolizer.getFill().getColor().getAlpha();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                point.a = (Float)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
 	}
 	
 	
@@ -84,6 +212,14 @@ public class PolygonStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-		visitor.visit(this);		
+	    dataNode = dataProvider.getDataNode();
+        
+        if (dataNode != null)
+        {
+            if (dataLists.length == 0)
+                updateDataMappings();
+                        
+            visitor.visit(this);
+        }		
 	}
 }

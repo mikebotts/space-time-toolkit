@@ -93,6 +93,7 @@ public class STTEventManager implements Runnable
 			{
 				queueEnd.next = evt;
 				queueEnd = evt;
+                // queue = evt; //does it improve perf for redraw events?
 			}
 
 			// If we wanted to coalesce duplicate event types,

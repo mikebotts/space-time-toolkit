@@ -30,10 +30,10 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSQuery;
+import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
-import org.vast.stt.project.ServiceDataSet;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
@@ -52,7 +52,7 @@ import com.sun.media.jai.codec.MemoryCacheSeekableStream;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class WMSProvider extends AbstractProvider implements OWSProvider
+public class WMSProvider extends OWSProvider
 {
 	protected WMSLayerCapabilities layerCaps;
 	protected WMSQuery query;
@@ -122,12 +122,13 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
                     DataArray rowData = new DataArray(renderedImage.getWidth());
                     rowData.addComponent(pixelData);                    
                     DataArray imageData = new DataArray(renderedImage.getHeight());
-                    imageData.addComponent(rowData);                    
-                    cachedData.addComponent("image", imageData);
+                    imageData.addComponent(rowData);
+                    imageData.setName("image");
+                    cachedData.createList(imageData);
                     System.out.println(imageData);
                     
                     DataBlock dataBlock = DataBlockFactory.createBlock(data);
-                    ((DataNode)cachedData).addData(dataBlock);
+                    cachedData.addData(cachedData.getList(0), dataBlock);
                 }
 			}
 		}
@@ -182,9 +183,9 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 	}
 
 
+    @Override
 	public void createDefaultQuery()
 	{
-		WMSLayerCapabilities layerCaps = (WMSLayerCapabilities) ((ServiceDataSet) resource).getCapabilities();
 		if (layerCaps == null)
 			return;
 
@@ -221,12 +222,14 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 	}
 
 
+    @Override
 	public WMSQuery getQuery()
 	{
 		return query;
 	}
 
 
+    @Override
 	public void setQuery(OWSQuery query)
 	{
 		this.query = (WMSQuery) query;
@@ -251,20 +254,47 @@ public class WMSProvider extends AbstractProvider implements OWSProvider
 	}
 
 
-	public boolean isSpatialSubsetSupported()
-	{
-		return true;
-	}
+    @Override
+    public void setServiceCapabilities(OWSServiceCapabilities caps)
+    {
+        this.layerCaps = (WMSLayerCapabilities)caps.getLayers().get(0);
+        
+        // set up max spatial extent
+        if (!layerCaps.getBboxList().isEmpty())
+        {
+            this.spatialExtent.setMaxX(layerCaps.getBboxList().get(0).getMaxX());
+            this.spatialExtent.setMaxY(layerCaps.getBboxList().get(0).getMaxY());
+            this.spatialExtent.setMinX(layerCaps.getBboxList().get(0).getMinX());
+            this.spatialExtent.setMinY(layerCaps.getBboxList().get(0).getMinY());
+        }
+        
+        // set up max time extent
+        if (!layerCaps.getTimeList().isEmpty())
+        {
+            double start = layerCaps.getTimeList().get(0).getStartTime();
+            double stop = layerCaps.getTimeList().get(0).getStopTime();
+            this.timeExtent.setBaseTime(start);
+            this.timeExtent.setLagTimeDelta(stop - start);
+        }        
+    }
+    
+    
+    @Override
+    public WMSLayerCapabilities getLayerCapabilities()
+    {
+        return this.layerCaps;
+    }
+    
+    
+    public boolean isSpatialSubsetSupported()
+    {
+        return true;
+    }
 
 
-	public boolean isTimeSubsetSupported()
-	{
-		// TODO support time in WMS
-		return false;
-	}
-
-	//  This should probably be in OWSProvider interface
-	public WMSLayerCapabilities getCapabilities() {
-		return layerCaps;
-	}
+    public boolean isTimeSubsetSupported()
+    {
+        // TODO support time in WMS
+        return false;
+    }
 }

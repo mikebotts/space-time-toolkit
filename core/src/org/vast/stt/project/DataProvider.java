@@ -11,10 +11,11 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
+package org.vast.stt.project;
 
-import org.ogc.cdm.common.DataComponent;
-import org.vast.stt.project.Resource;
+import org.vast.stt.data.DataException;
+import org.vast.stt.data.DataNode;
+import org.vast.stt.data.UpdateMonitor;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -36,7 +37,7 @@ import org.vast.stt.util.TimeExtent;
  * @date Nov 21, 2005
  * @version 1.0
  */
-public interface DataProvider
+public interface DataProvider extends Resource
 {
 
 	public void updateData() throws DataException;
@@ -57,16 +58,10 @@ public interface DataProvider
 	public void clearData();
 
 
-	public DataComponent getDataNode();
+	public DataNode getDataNode();
 	
 	
 	public void setDataNode(DataNode dataNode);
-
-
-	public Resource getResource();
-
-
-	public void setResource(Resource resource);
 	
 	
 	public SpatialExtent getSpatialExtent();
