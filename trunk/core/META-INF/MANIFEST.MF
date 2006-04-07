@@ -13,5 +13,6 @@ Bundle-ClassPath: D:/Projects/NSSTC/Common/lib/xercesImpl.jar,
                   D:/Projects/NSSTC/Common/classes,
                   D:/Projects/NSSTC/DataProcessing/classes,
                   D:/Projects/NSSTC/SensorML/classes,
+                  D:/Projects/NSSTC/ProcessModels/classes,
                   D:/Projects/NSSTC/OWS/classes
 Bundle-Vendor: UAH VAST
