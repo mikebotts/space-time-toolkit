@@ -57,10 +57,10 @@
                                           <ogc:PropertyName>plumeData/latitude</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-z">
-                                          <ogc:PropertyName>plumeData/altitude</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-t">
-                                          <ogc:PropertyName>time</ogc:PropertyName>
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>plumeData/altitude</ogc:PropertyName>
+                                             <Gain>1e-6</Gain>
+                                          </LinearAdjustment>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Graphic>
