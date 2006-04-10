@@ -166,10 +166,7 @@ public class OptionControl extends Composite {
 		//  Add color label
 		colorLabel = new Label(this, 0x0);
 		colorLabel.setText("       ");
-		colorLabelColor = new Color(display, 
-									(int)(sldColor.getRedValue()*255), 
-									(int)(sldColor.getGreenValue()*255), 
-									(int)(sldColor.getBlueValue()*255));
+		setColorLabelColor(sldColor);
 		colorLabel.setBackground(colorLabelColor);
 		activeControl = new Button(this, SWT.PUSH);
 		Button button = (Button)activeControl;
@@ -183,10 +180,13 @@ public class OptionControl extends Composite {
 	public void setColorLabelColor(org.vast.ows.sld.Color sldColor){
 		if(colorLabelColor != null) 
 			colorLabelColor.dispose();
-		colorLabelColor = new Color(display, 
-				(int)(sldColor.getRedValue()*255), 
-				(int)(sldColor.getGreenValue()*255), 
-				(int)(sldColor.getBlueValue()*255));
+		if(sldColor.isConstant())
+			colorLabelColor = new Color(display, 
+					(int)(sldColor.getRedValue()*255), 
+					(int)(sldColor.getGreenValue()*255), 
+					(int)(sldColor.getBlueValue()*255));
+		else
+			colorLabelColor = new Color(display, 100,100,100);
 		colorLabel.setBackground(colorLabelColor);		
 	}
 	
