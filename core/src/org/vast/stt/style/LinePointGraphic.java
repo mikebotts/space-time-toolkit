@@ -30,7 +30,7 @@ package org.vast.stt.style;
  */
 public class LinePointGraphic extends PrimitiveGraphic
 {
-    public int width = 1;
+    public float width = 1.0f;
     public boolean lineBreak;
     public boolean smooth = false;
 }

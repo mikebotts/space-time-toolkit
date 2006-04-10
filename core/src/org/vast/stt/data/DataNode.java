@@ -14,12 +14,12 @@
 package org.vast.stt.data;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
-import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
-import org.vast.data.DataList;
 import org.vast.data.DataValue;
 
 
@@ -37,43 +37,54 @@ import org.vast.data.DataValue;
  * @date Apr 1, 2006
  * @version 1.0
  */
-public class DataNode extends DataGroup
+public class DataNode
 {
     protected List<String> possibleScalarMappings;
     protected List<String> possibleBlockMappings;
+    protected Hashtable<String, BlockList> listMap;
     
     
     public DataNode()
     {
         possibleScalarMappings = new ArrayList<String>();
         possibleBlockMappings = new ArrayList<String>();
+        listMap = new Hashtable<String, BlockList>(1);
     }
     
     
-    public void createList(DataComponent component)
+    public BlockList createList(DataComponent component)
     {
-        DataList newList = new DataList();
-        newList.addComponent(component);
-        super.addComponent(component.getName(), newList);
+        BlockList newList = new BlockList();
+        newList.setBlockStructure(component);
+        listMap.put(component.getName(), newList);
         rebuildMappings(component);
+        return newList;
     }
     
     
-    public DataList getList(String name)
+    public BlockList getList(String name)
     {
-        return (DataList)getComponent(name);
+        return listMap.get(name);
     }
     
     
-    public DataList getList(int index)
+    public void removeList(String name)
     {
-        return (DataList)getComponent(index);        
+        listMap.remove(name);
     }
     
     
-    public void addData(DataList dataList, DataBlock data)
+    public void clearList(String name)
     {
-        dataList.addData(data);
+        listMap.get(name).clear();
+    }
+    
+    
+    public void clearAll()
+    {
+        Enumeration<BlockList> lists = listMap.elements();
+        while (lists.hasMoreElements())
+            lists.nextElement().clear();
     }
     
     

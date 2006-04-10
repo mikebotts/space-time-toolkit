@@ -88,11 +88,11 @@ public class SWEProvider extends AbstractProvider
 				cachedData = new DataNode();
 			
 			// clean up old data			
-            cachedData.removeAllComponents();
-            cachedData.createList(dataInfo);
+            cachedData.clearAll();
+            BlockList blockList = cachedData.createList(dataInfo);
 			
 			// register the CDM data handler
-			dataHandler.setDataList(cachedData, cachedData.getList(0));
+			dataHandler.setBlockList(blockList);
 			dataParser.setDataHandler(dataHandler);
             
             // override resultUri if specified in data set

@@ -94,8 +94,8 @@ public class SOSProvider extends OWSProvider
         	System.out.println("--- " + dataInfo.getName() + " ---");
         	System.out.println(dataInfo);
         	System.out.println(dataEnc);
-            cachedData.removeAllComponents();
-        	cachedData.createList(dataInfo);
+            cachedData.clearAll();
+        	BlockList blockList = cachedData.createList(dataInfo);
 			
         	// reset node - HACK
         	//DataNode node = item.getNode();
@@ -103,7 +103,7 @@ public class SOSProvider extends OWSProvider
         	
 			// register the CDM data handler
         	//SWEDataNodeHandler dataNodeHandler = new SWEDataNodeHandler(dataInfo, node);
-            dataHandler.setDataList(cachedData, cachedData.getList(0));
+            dataHandler.setBlockList(blockList);
         	dataParser.setDataHandler(dataHandler);
         	
         	// start parsing if not cancelled
@@ -146,7 +146,7 @@ public class SOSProvider extends OWSProvider
 		if (cachedData == null)
 			cachedData = new DataNode();
 		else
-			((DataNode)cachedData).removeAllComponents();
+			((DataNode)cachedData).clearAll();
 	}
 	
 	

@@ -31,6 +31,6 @@ package org.vast.stt.style;
 public class PointGraphic extends PrimitiveGraphic
 {
     public float orientation;
-	public int size = 1;
+	public float size = 1.0f;
 	public byte[] icon;
 }

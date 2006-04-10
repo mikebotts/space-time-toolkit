@@ -38,9 +38,9 @@ public class PointSizeMapper extends PropertyMapper
         if (useMappingFunction)
         {
             double val = data.getDoubleValue();
-            point.size = (int)mappingFunction.compute(val);
+            point.size = (float)mappingFunction.compute(val);
         }
         else
-            point.size = data.getIntValue();
+            point.size = data.getFloatValue();
     }    
 }

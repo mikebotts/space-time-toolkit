@@ -38,9 +38,9 @@ public class LineWidthMapper extends PropertyMapper
         if (useMappingFunction)
         {
             double val = data.getDoubleValue();
-            linePoint.width = (int)mappingFunction.compute(val);
+            linePoint.width = (float)mappingFunction.compute(val);
         }
         else
-            linePoint.width = data.getIntValue();
+            linePoint.width = data.getFloatValue();
     }    
 }

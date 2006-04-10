@@ -80,7 +80,8 @@ public class SensorMLProvider extends AbstractProvider
             
             // put process output in the node
             cachedData = new DataNode();
-            cachedData.addComponent(process.getOutputList().getComponent(0));
+            //BlockList blockList = 
+            cachedData.createList(process.getOutputList().getComponent(0));
         }
         catch (ProcessException e)
         {

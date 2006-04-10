@@ -24,6 +24,7 @@ import javax.media.jai.RenderedOp;
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataType;
 import org.ogc.cdm.reader.*;
+import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataArray;
 import org.vast.data.DataBlockFactory;
 import org.vast.data.DataGroup;
@@ -124,11 +125,11 @@ public class WMSProvider extends OWSProvider
                     DataArray imageData = new DataArray(renderedImage.getHeight());
                     imageData.addComponent(rowData);
                     imageData.setName("image");
-                    cachedData.createList(imageData);
+                    BlockList blockList = cachedData.createList(imageData);
                     System.out.println(imageData);
                     
                     DataBlock dataBlock = DataBlockFactory.createBlock(data);
-                    cachedData.addData(cachedData.getList(0), dataBlock);
+                    blockList.addBlock((AbstractDataBlock)dataBlock);
                 }
 			}
 		}

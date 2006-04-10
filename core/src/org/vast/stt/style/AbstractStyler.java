@@ -14,13 +14,10 @@
 package org.vast.stt.style;
 
 import java.util.Hashtable;
-import java.util.ListIterator;
-
 import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataBlockList;
 import org.vast.data.DataIndexer;
-import org.vast.data.DataList;
 import org.vast.data.IndexerTreeBuilder;
+import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
@@ -124,8 +121,8 @@ public abstract class AbstractStyler implements DataStyler
         IndexerTreeBuilder builder = treeBuilders.get(listName);
         if (builder == null)
         {
-            DataList list = dataNode.getList(listName);
-            builder = new IndexerTreeBuilder(list.getComponent(0));
+            BlockList list = dataNode.getList(listName);
+            builder = new IndexerTreeBuilder(list.getBlockStructure());
             treeBuilders.put(listName, builder);
             builder.addVisitor(componentPath, newMapper);
                        
@@ -158,7 +155,7 @@ public abstract class AbstractStyler implements DataStyler
         for (int i = 0; i < dataLists.length; i++)
         {
             ListInfo info = dataLists[i];
-            info.blockIterator = info.blockList.blockIterator();
+            info.blockList.reset();
         }
     }
     
@@ -174,10 +171,10 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i]; 
             DataIndexer nextIndexer = info.rootIndexer;
                         
-            if (!info.blockIterator.hasNext())
+            if (!info.blockList.hasNext)
                 return false;
             
-            AbstractDataBlock nextBlock = info.blockIterator.next();
+            AbstractDataBlock nextBlock = info.blockList.next();
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
         }           
@@ -189,14 +186,13 @@ public abstract class AbstractStyler implements DataStyler
 
 class ListInfo
 {
-    protected DataBlockList blockList;
-    protected ListIterator<AbstractDataBlock> blockIterator;
+    protected BlockList blockList;
     protected DataIndexer rootIndexer;
     
     
-    public ListInfo(DataList dataList, DataIndexer dataIndexer)
+    public ListInfo(BlockList blockList, DataIndexer dataIndexer)
     {
         this.rootIndexer = dataIndexer;
-        this.blockList = (DataBlockList)dataList.getData();
+        this.blockList = blockList;
     }
 }

@@ -14,7 +14,6 @@
 package org.vast.stt.renderer.opengl;
 
 import java.util.Hashtable;
-
 import org.eclipse.swt.opengl.GL;
 import org.eclipse.swt.opengl.GLU;
 import org.eclipse.swt.opengl.GLContext;
@@ -99,6 +98,11 @@ public class OpenGLRenderer extends Renderer
         double upY = view.getUpDirection().getY();
         double upZ = view.getUpDirection().getZ();
         GLU.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+        
+        // save projection matrices
+        GL.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM);
+        GL.glGetDoublev(GL.GL_PROJECTION_MATRIX, projM);
+        GL.glGetIntegerv(GL.GL_VIEWPORT, viewPort);
     }
 
 
@@ -185,7 +189,7 @@ public class OpenGLRenderer extends Renderer
         // loop and draw all points
         while (styler.nextBlock())
         {
-            int oldWidth = -1;
+            float oldWidth = -1.0f;
             
             while (styler.nextPoint())
             {
@@ -225,7 +229,7 @@ public class OpenGLRenderer extends Renderer
     {       
         PointGraphic point = styler.point;
         boolean begin = false;
-        int oldSize = -1;
+        float oldSize = -1.0f;
         styler.reset();        
         
         // loop and draw all points
@@ -293,7 +297,25 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(LabelStyler styler)
     {
-        // TODO Auto-generated method stub      
+        LabelGraphic label = styler.label;
+        styler.reset();        
+        
+        GL.glPixelTransferi(GL.GL_MAP_COLOR, 1);
+        
+        int[] pixels = new int[25];
+        for (int i=0; i<25; i++)
+            pixels[i] = Integer.MAX_VALUE;
+        
+        while (styler.nextBlock())
+        {
+            while (styler.nextPoint())
+            {                
+                GLU.gluProject(label.x, label.y, label.z, modelM, projM, viewPort, xData, yData, zData);
+                GL.glRasterPos2d(xData[0], yData[0]+100);
+                GL.glColor4f(label.r, label.g, label.b, label.a);
+                GL.glDrawPixels(5, 5, GL.GL_RED, GL.GL_INT, pixels);
+            }
+        }
     }
 
 

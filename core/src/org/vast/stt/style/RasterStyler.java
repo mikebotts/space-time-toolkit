@@ -66,20 +66,20 @@ public class RasterStyler extends AbstractStyler
     
     public RasterImageGraphic getImage(int index)
     {
-        if (image.data == null)
-        {
-            DataBlock data = dataNode.getComponent(0).getData();
-            int arraySize = data.getAtomCount();
-            byte[] array = new byte[arraySize];
-            image.data = array;       
-
-            for (int i=0; i<arraySize; i++)
-                array[i] = dataNode.getData().getByteValue(i);
-
-            image.width = 512;
-            image.height = 256;
-            image.updated = true;
-        }
+//        if (image.data == null)
+//        {
+//            DataBlock data = dataNode.getComponent(0).getData();
+//            int arraySize = data.getAtomCount();
+//            byte[] array = new byte[arraySize];
+//            image.data = array;       
+//
+//            for (int i=0; i<arraySize; i++)
+//                array[i] = dataNode.getData().getByteValue(i);
+//
+//            image.width = 512;
+//            image.height = 256;
+//            image.updated = true;
+//        }
         
         return image;
     }
