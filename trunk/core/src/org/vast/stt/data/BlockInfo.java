@@ -11,11 +11,9 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.data;
 
-import org.ogc.cdm.common.DataBlock;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
+import org.vast.data.AbstractDataBlock;
 
 /**
  * <p><b>Title:</b><br/>
@@ -33,11 +31,32 @@ import org.vast.stt.util.TimeExtent;
  */
 public class BlockInfo
 {
+    public AbstractDataBlock data;    
     public BlockInfo nextBlock;
+    public BlockInfo prevBlock;
     
-    public SpatialExtent bbox;
-    public TimeExtent timeRange;
+    public double minX, maxX;
+    public double minY, maxY;
+    public double minZ, maxZ;
+    public double minT, maxT;
     public double meanStep;
     
-    public DataBlock[] arrayBlocks;
+    public boolean data_updated;
+    public boolean info_updated;
+    
+    // public BlockInfo[] subBlocks; // use if needed
+    
+    
+    public BlockInfo(AbstractDataBlock data, BlockInfo prevBlock, BlockInfo nextBlock)
+    {
+        this.data = data;
+        this.prevBlock = prevBlock;
+        this.nextBlock = nextBlock;
+        
+        if (prevBlock != null)
+            prevBlock.nextBlock = this;
+        
+        if (nextBlock != null)
+            nextBlock.prevBlock = this;
+    }
 }

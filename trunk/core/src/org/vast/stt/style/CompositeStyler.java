@@ -59,7 +59,7 @@ public class CompositeStyler extends AbstractStyler
         for (int i = 0; i < stylerList.size(); i++)
         {
             stylerTmp = stylerList.get(i);
-            if (stylerTmp.isEnabled())
+            if ((stylerTmp != null) && (stylerTmp.isEnabled()))
                 stylerTmp.accept(visitor);
         }
     }

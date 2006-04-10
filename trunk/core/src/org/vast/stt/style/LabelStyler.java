@@ -36,7 +36,9 @@ import org.vast.ows.sld.TextSymbolizer;
 public class LabelStyler extends AbstractStyler
 {
     public LabelGraphic label;
-    protected TextSymbolizer symbolizer;	
+    protected TextSymbolizer symbolizer;
+    protected int labelDensity = 10;
+    protected int labelSpacing;
     	
 	
 	public LabelStyler()
@@ -204,7 +206,7 @@ public class LabelStyler extends AbstractStyler
         }
         
         // label orientation
-        param = this.symbolizer.getPlacement().getRotation();
+        param = null;//this.symbolizer.getPlacement().getRotation();
         if (param != null)
         {
             if (param.isConstant())
