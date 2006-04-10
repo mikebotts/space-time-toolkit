@@ -15,6 +15,7 @@ import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.PolygonStyler;
 
 public class AdvancedGraphicsTab extends Composite {
 
@@ -50,17 +51,22 @@ public class AdvancedGraphicsTab extends Composite {
 		addTopRow();
 		if(styler instanceof PointStyler){
 			optionController = new AdvancedPointController(this, (PointStyler)styler);
-			optionController.addSelectionListener(optionListener);
-			optionListener.setAdvancedController(optionController);
+//			optionController.addSelectionListener(optionListener);
+//			optionListener.setAdvancedController(optionController);
 		} else if(styler instanceof LineStyler) {
 			optionController = new AdvancedLineController(this, (LineStyler)styler);
-			optionController.addSelectionListener(optionListener);
-			optionListener.setAdvancedController(optionController);
-		} else {
+//			optionController.addSelectionListener(optionListener);
+//			optionListener.setAdvancedController(optionController);
+		} else if(styler instanceof PolygonStyler){
 			
 		}
-		optionController.setMappableItems(mappableItems);
 		
+		//  can remove null check when all Stlyer types are supported
+		if(optionController != null) {
+			optionController.addSelectionListener(optionListener);
+			optionListener.setAdvancedController(optionController);
+			optionController.setMappableItems(mappableItems);
+		}
 		this.layout();
 		this.redraw();
 	}
