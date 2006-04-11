@@ -34,7 +34,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.scene.*;
 import org.vast.stt.renderer.*;
-import org.vast.stt.renderer.opengl.OpenGLRenderer;
+import org.vast.stt.renderer.opengl.*;
 
 
 public class SceneView extends ViewPart implements PaintListener, ControlListener, STTEventListener
@@ -66,7 +66,7 @@ public class SceneView extends ViewPart implements PaintListener, ControlListene
 		this.setPartName(scene.getName());
 		this.scene = scene;
 		
-		renderer = new OpenGLRenderer();
+		renderer = new JOGLRenderer();//new OpenGLRenderer();
 		renderer.setCanvas(canvas);
 		renderer.init();
 		
