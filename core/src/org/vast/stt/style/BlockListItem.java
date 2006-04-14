@@ -11,17 +11,17 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
+package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
 
 /**
  * <p><b>Title:</b><br/>
- * Block Info
+ * Block List Item
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO BlockInfo type description
+ * TODO BlockListItem type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -29,25 +29,15 @@ import org.vast.data.AbstractDataBlock;
  * @date Apr 1, 2006
  * @version 1.0
  */
-public class BlockInfo
+public class BlockListItem
 {
-    public AbstractDataBlock data;    
-    public BlockInfo nextBlock;
-    public BlockInfo prevBlock;
-    
-    public double minX, maxX;
-    public double minY, maxY;
-    public double minZ, maxZ;
-    public double minT, maxT;
-    public double meanStep;
-    
-    public boolean data_updated;
-    public boolean info_updated;
-    
-    // public BlockInfo[] subBlocks; // use if needed
+    protected AbstractDataBlock data;
+    protected boolean processed = false;
+    protected BlockListItem nextBlock;
+    protected BlockListItem prevBlock;    
     
     
-    public BlockInfo(AbstractDataBlock data, BlockInfo prevBlock, BlockInfo nextBlock)
+    public BlockListItem(AbstractDataBlock data, BlockListItem prevBlock, BlockListItem nextBlock)
     {
         this.data = data;
         this.prevBlock = prevBlock;

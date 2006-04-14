@@ -6,11 +6,11 @@ import org.vast.ows.sld.MappingFunction;
 
 /**
  * <p><b>Title:</b><br/>
- * T Coordinate Mapper
+ * Alpha Color Component Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * This transfers a value from the DataNode to the T (time) coordinate value.
+ * This transfers a value from the DataNode to the Alpha Component value.
  * It will use a mapping function if provided.
  * </p>
  *
@@ -19,12 +19,12 @@ import org.vast.ows.sld.MappingFunction;
  * @date Apr 3, 2006
  * @version 1.0
  */
-public class GenericTimeMapper extends PropertyMapper
+public class GenericGrayMapper extends PropertyMapper
 {
     PrimitiveGraphic graphic;
     
     
-    public GenericTimeMapper(PrimitiveGraphic graphic, MappingFunction mappingFunction)
+    public GenericGrayMapper(PrimitiveGraphic graphic, MappingFunction mappingFunction)
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
@@ -38,9 +38,17 @@ public class GenericTimeMapper extends PropertyMapper
         if (useMappingFunction)
         {
             double val = data.getDoubleValue();
-            graphic.t = mappingFunction.compute(val);
+            float grayVal = (float)mappingFunction.compute(val);
+            graphic.r = grayVal;
+            graphic.g = grayVal;
+            graphic.b = grayVal;
         }
         else
-            graphic.t = data.getDoubleValue();     
+        {
+            float val = data.getFloatValue();
+            graphic.r = val;
+            graphic.g = val;
+            graphic.b = val;
+        }
     }    
 }

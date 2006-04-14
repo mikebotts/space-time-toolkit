@@ -6,11 +6,11 @@ import org.vast.ows.sld.MappingFunction;
 
 /**
  * <p><b>Title:</b><br/>
- * Point Orientation Mapper
+ * Label Orientation Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * This transfers a value from the DataNode and use it as point orientation.
+ * This transfers a value from the DataNode and use it as label orientation.
  * It will use a mapping function if provided.
  * </p>
  *

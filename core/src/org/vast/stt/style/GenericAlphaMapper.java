@@ -35,9 +35,12 @@ public class GenericAlphaMapper extends PropertyMapper
     
     public void mapData(DataBlock data)
     {
-        graphic.a = data.getFloatValue();
-        
         if (useMappingFunction)
-            graphic.a = (float)mappingFunction.compute(graphic.a);
+        {
+            double val = data.getDoubleValue();
+            graphic.a = (float)mappingFunction.compute(val);
+        }
+        else
+            graphic.a = data.getFloatValue();
     }    
 }

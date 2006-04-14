@@ -11,24 +11,10 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
 
+package org.vast.stt.renderer;
 
-/**
- * <p><b>Title:</b><br/>
- * Grid Row Graphic
- * </p>
- *
- * <p><b>Description:</b><br/>
- * TODO GridRowGraphic Class Description
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Nov 15, 2005
- * @version 1.0
- */
-public class GridRowGraphic extends GraphicObject
+public interface RendererInfo
 {
-    public GridPointGraphic[] gridPoints;
+
 }

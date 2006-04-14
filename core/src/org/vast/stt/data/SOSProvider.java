@@ -22,6 +22,7 @@ import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSObservationReader;
 import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSRequestWriter;
+import org.vast.stt.style.BlockList;
 
 
 /**

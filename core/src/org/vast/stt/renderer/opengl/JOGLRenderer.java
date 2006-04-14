@@ -13,12 +13,10 @@
 
 package org.vast.stt.renderer.opengl;
 
-import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.GLDrawableFactory;
 import com.sun.opengl.util.GLUT;
-
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
@@ -44,22 +42,22 @@ import org.vast.stt.style.*;
  */
 public class JOGLRenderer extends Renderer
 {
-    private GLContext SWTContext;
-    private javax.media.opengl.GLContext JOGLContext;
-    private GL gl;
-    private GLU glu;
-    private GLUT glut;
-    private int[] viewPort = new int[4];
-    private double[] modelM = new double[16];
-    private double[] projM = new double[16];
-    private double[] coords = new double[3];
-    private int GL_TEXTURE_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//
-    private Hashtable<RasterStyler, Integer> textureTable;
-    
+    protected GLContext SWTContext;
+    protected javax.media.opengl.GLContext JOGLContext;
+    protected GL gl;
+    protected GLU glu;
+    protected GLUT glut;
+    protected int[] viewPort = new int[4];
+    protected double[] modelM = new double[16];
+    protected double[] projM = new double[16];
+    protected double[] coords = new double[3];
+    protected int[] boolResult = new int[1];
+    protected TextureManager textureManager;
+
 
     public JOGLRenderer()
     {
-        textureTable = new Hashtable<RasterStyler, Integer>();
+        
     }
 
 
@@ -78,7 +76,7 @@ public class JOGLRenderer extends Renderer
         // clear back buffer
         Color backColor = view.getBackgroundColor();
         gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
@@ -102,7 +100,7 @@ public class JOGLRenderer extends Renderer
         double upY = view.getUpDirection().getY();
         double upZ = view.getUpDirection().getZ();
         glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
-        
+
         // save projection matrices
         gl.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM, 0);
         gl.glGetDoublev(GL.GL_PROJECTION_MATRIX, projM, 0);
@@ -149,23 +147,38 @@ public class JOGLRenderer extends Renderer
         SWTContext.setCurrent();
         JOGLContext = GLDrawableFactory.getFactory().createExternalGLContext();
         JOGLContext.makeCurrent();
-        
+
         gl = JOGLContext.getGL();
         glu = new GLU();
         glut = new GLUT();
+        textureManager = new TextureManager(gl, glu);
+        
+        // find out which texture 2D target to use
+        String glExtensions = gl.glGetString(GL.GL_EXTENSIONS);
+        if (glu.gluCheckExtension("GL_ARB_texture_rectangle", glExtensions) ||
+            glu.gluCheckExtension("GL_EXT_texture_rectangle", glExtensions))
+        {
+            OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_RECTANGLE_EXT;
+            System.err.println("--> NPOT textures supported <--");
+        }
+        else
+        {
+            OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;
+            System.err.println("--> NPOT textures NOT supported <--");
+        }
 
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-
-        //gl.glEnable(GL.GL_LINE_SMOOTH);
+        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        gl.glEnable(GL.GL_POLYGON_OFFSET_LINE);
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        gl.glEnable(GL_TEXTURE_TARGET);
-        
+        gl.glEnable(OpenGLCaps.TEXTURE_2D_TARGET);
+
         JOGLContext.release();
     }
 
@@ -182,24 +195,31 @@ public class JOGLRenderer extends Renderer
         }
     }
 
-    
+
     /**
      * Renders all data passed by a line styler
      */
     public void visit(LineStyler styler)
     {
-        LinePointGraphic point = styler.point;
+        LinePointGraphic point;
         boolean begin = false;
-        styler.reset();        
-        gl.glLineWidth(point.width);
-        
+        float oldWidth = -1.0f;
+        styler.reset();
+
         // loop and draw all points
         while (styler.nextBlock())
         {
-            float oldWidth = -1.0f;
-            
-            while (styler.nextPoint())
+            while ((point = styler.nextPoint()) != null)
             {
+                if (!begin)
+                {
+                    // enable line smooth if needed        
+                    if (point.smooth)
+                        gl.glEnable(GL.GL_LINE_SMOOTH);
+                    else
+                        gl.glDisable(GL.GL_LINE_SMOOTH);
+                }
+                
                 if (point.width != oldWidth)
                 {
                     if (begin)
@@ -209,15 +229,15 @@ public class JOGLRenderer extends Renderer
                     }
                     gl.glLineWidth(point.width);
                     oldWidth = point.width;
-                    gl.glBegin(GL.GL_LINE_STRIP);                 
+                    gl.glBegin(GL.GL_LINE_STRIP);
                 }
-                
+
                 if (point.lineBreak && begin)
                 {
                     gl.glEnd();
-                    gl.glBegin(GL.GL_LINE_STRIP);                    
+                    gl.glBegin(GL.GL_LINE_STRIP);
                 }
-                
+
                 point.lineBreak = false;
                 begin = true;
                 gl.glColor4f(point.r, point.g, point.b, point.a);
@@ -225,7 +245,8 @@ public class JOGLRenderer extends Renderer
             }
         }
         
-        gl.glEnd();
+        if (begin)
+            gl.glEnd();
     }
 
 
@@ -233,31 +254,32 @@ public class JOGLRenderer extends Renderer
      * Renders all data passed by a point styler
      */
     public void visit(PointStyler styler)
-    {       
-        PointGraphic point = styler.point;
+    {
+        PointGraphic point;
         boolean begin = false;
         float oldSize = -1.0f;
-        styler.reset();        
-        
+        styler.reset();
+
         // loop and draw all points
         while (styler.nextBlock())
         {
-            while (styler.nextPoint())
+            while ((point = styler.nextPoint()) != null)
             {
                 if (point.size != oldSize)
                 {
-                    if (begin) gl.glEnd();
+                    if (begin)
+                        gl.glEnd();
                     gl.glPointSize(point.size);
                     oldSize = point.size;
                     gl.glBegin(GL.GL_POINTS);
                     begin = true;
                 }
-                
+
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }
         }
-        
+
         gl.glEnd();
     }
 
@@ -267,60 +289,174 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PolygonStyler styler)
     {
-        PolygonPointGraphic point = styler.point;
+        PolygonPointGraphic point;
         boolean begin = false;
-        styler.reset();        
-        
+        styler.reset();
+
         // setup polygon offset
         gl.glPolygonOffset(1.0f, 1.0f);
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        
+
         // loop and draw all points
         gl.glBegin(GL.GL_POLYGON);
-        
+
         while (styler.nextBlock())
         {
-            while (styler.nextPoint())
+            while ((point = styler.nextPoint()) != null)
             {
                 if (point.polyBreak && begin)
                 {
                     gl.glEnd();
-                    gl.glBegin(GL.GL_POLYGON);                    
+                    gl.glBegin(GL.GL_POLYGON);
                 }
-                
+
                 point.polyBreak = false;
                 begin = true;
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }
         }
-        
-        gl.glEnd();		
+
+        gl.glEnd();
     }
-    
-    
+
+
     /**
-     * Renders all data passed by a polygon styler
+     * Renders all data passed by a label styler
      */
     public void visit(LabelStyler styler)
     {
-        LabelGraphic label = styler.label;
-        styler.reset();        
-        
+        LabelGraphic label;
+        styler.reset();
+        int minDist = 100;
+        byte[] buf = new byte[1];
+        buf[0] = (byte) 0x01;
+
+        gl.glEnable(GL.GL_STENCIL_TEST);
+
         while (styler.nextBlock())
         {
-            while (styler.nextPoint())
-            {                
-                glu.gluProject(label.x, label.y, label.z, modelM, 0, projM, 0, viewPort, 0, coords, 0);
-                gl.glRasterPos2d(coords[0], coords[1]);
-                gl.glColor4f(label.r, label.g, label.b, label.a);
-                glut.glutBitmapString(GLUT.BITMAP_9_BY_15, label.text);
-                
-                // skip 50 points
-                for (int i=0; i<50; i++)
-                    styler.nextPoint();
+            while ((label = styler.nextPoint()) != null)
+            {
+                double x1 = label.x;
+                double y1 = label.y;
+                double z1 = label.z;
+
+                // get projected coordinates
+                glu.gluProject(x1, y1, z1, modelM, 0, projM, 0, viewPort, 0, coords, 0);
+                double xw1 = coords[0];
+                double yw1 = coords[1];
+
+                // get the first far enough point
+                while ((label = styler.nextPoint()) != null)
+                {
+                    double x2 = label.x;
+                    double y2 = label.y;
+                    double z2 = label.z;
+
+                    // get projected coordinates                    
+                    glu.gluProject(x2, y2, z2, modelM, 0, projM, 0, viewPort, 0, coords, 0);
+                    double xw2 = coords[0];
+                    double yw2 = coords[1];
+
+                    // compute distance between two points
+                    double dx = Math.abs(xw1 - xw2);
+                    double dy = Math.abs(yw1 - yw2);
+                    double dist = dx + dy;
+
+                    // print label only if points are more than minDist pixels appart
+                    if (dist > minDist)
+                    {
+                        gl.glColor4f(label.r, label.g, label.b, label.a);
+                        gl.glWindowPos2d((xw1 + xw2) / 2 + label.offsetX, (yw1 + yw2) / 2 + label.offsetY);
+
+                        gl.glGetIntegerv(GL.GL_CURRENT_RASTER_POSITION_VALID, boolResult, 0);
+                        if (boolResult[0] != 0)
+                        {
+                            // draw label
+//                            gl.glStencilFunc(GL.GL_EQUAL, 0x0, 0x1);
+//                            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+                            glut.glutBitmapString(GLUT.BITMAP_8_BY_13, label.text);
+
+                            // draw mask
+//                            int length = glut.glutBitmapLength(GLUT.BITMAP_8_BY_13, label.text);
+//                            gl.glViewport(viewPort[0] + label.offsetX + length / 2 - 50, viewPort[1] + label.offsetY - 44, viewPort[2], viewPort[3]);
+//                            gl.glRasterPos3d(label.x, label.y, label.z);
+//                            gl.glPixelZoom(100, 100);
+//                            gl.glStencilFunc(GL.GL_ALWAYS, 0x1, 0x1);
+//                            gl.glStencilOp(GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
+//                            gl.glDrawPixels(1, 1, GL.GL_STENCIL_INDEX, GL.GL_BYTE, ByteBuffer.wrap(buf));
+
+                            break;
+                        }
+                    }
+                }
             }
         }
+
+        gl.glDisable(GL.GL_STENCIL_TEST);
+    }
+
+
+    /**
+     * Renders all data passed by a texture mapping styler
+     */
+    public void visit(TextureMappingStyler styler)
+    {
+        TexturePatchInfo patch;
+        GridPointGraphic point;
+        styler.reset();
+        textureManager.setStyler(styler);
+
+        // loop through all tiles
+        while ((patch = styler.nextTile()) != null)
+        {
+            RasterTileGraphic tex = patch.getTexture();
+            GridPatchGraphic grid = patch.getGrid();
+
+            // bind texture and load in GL if needed
+            textureManager.bindTexture(tex);
+
+            if (grid.fill)
+                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
+            else
+                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
+            
+            gl.glPolygonOffset(1.0f, 1.0f);
+            gl.glEnable(GL.GL_BLEND);
+            gl.glDisable(GL.GL_CULL_FACE);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+            gl.glTexParameterf(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+            
+            gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
+            gl.glBegin(GL.GL_TRIANGLE_STRIP);
+            
+            for (int y = 0; y < grid.length-1; y++)
+            {
+                for (int x = 0; x < grid.width; x++)
+                {
+                    point = styler.getGridPoint(x, y, false);
+                    gl.glTexCoord2f(point.tx, point.ty);
+                    gl.glVertex3d(point.x, point.y, point.z);
+                    
+                    point = styler.getGridPoint(x, y+1, false);
+                    gl.glTexCoord2f(point.tx, point.ty);
+                    gl.glVertex3d(point.x, point.y, point.z);
+                }
+                
+                if (y < grid.length-2)
+                {
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_TRIANGLE_STRIP);
+                }                
+            }
+            
+            gl.glEnd();
+        }
+        
+        // reload the void texture
+        gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, 0);
     }
 
 
@@ -329,81 +465,6 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(RasterStyler styler)
     {
-        int textureNum;        
-        
-        int tileCount = styler.getTileCount();
-        
-        for (int tileNum=0; tileNum<tileCount; tileNum++)
-        {
-            // retrieve or generate texture name
-            if (textureTable.containsKey(styler))
-            {
-                textureNum = textureTable.get(styler);
-            }
-            else
-            {
-                int[] names = new int[1];
-                gl.glGenTextures(1, names, 0);
-                textureTable.put(styler, names[0]);
-                textureNum = names[0];
-            }        
-            
-            // set current texture in GL
-            gl.glBindTexture(GL_TEXTURE_TARGET, textureNum);
-            
-            // get first image
-            RasterImageGraphic image = styler.getImage(tileNum);
-            
-            // reload the texture if needed
-            if (image.updated)
-            {
-                //gl.glTexImage2D(GL_TEXTURE_TARGET, 0, GL.GL_RGB, image.width, image.height, 0, GL.GL_BGR, GL.GL_UNSIGNED_BYTE, (byte[])image.data);
-                gl.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-                gl.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
-                image.updated = false;
-            }
-            
-            // setup white background color and offsets
-            gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-            gl.glPolygonOffset(1.0f, 1.0f);
-            gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-            gl.glEnable(GL.GL_BLEND);
-            gl.glDisable(GL.GL_CULL_FACE);
-            
-            RasterGridGraphic gridPatch = styler.getGrid(tileNum);
-            GridRowGraphic row1 = null;
-            GridRowGraphic row2 = null;
-            
-            // loop through all rows
-            while (styler.nextBlock())
-            {
-                if (row1 == null)
-                    row1 = styler.nextGridRow();
-                else
-                    row1 = row2;
-                
-                row2 = styler.nextGridRow();
-                
-                // loop and draw quads
-                gl.glBegin(GL.GL_QUAD_STRIP);
-                for (int i=0; i<gridPatch.width; i++)
-                {
-                    GridPointGraphic point2 = row2.gridPoints[i];                    
-                    gl.glColor4f(point2.r, point2.g, point2.b, point2.a);
-                    gl.glTexCoord2f(point2.texX, point2.texY);
-                    gl.glVertex3d(point2.x, point2.y, point2.z);
-                    
-                    GridPointGraphic point1 = row1.gridPoints[i];                    
-                    gl.glColor4f(point1.r, point1.g, point1.b, point1.a);
-                    gl.glTexCoord2f(point1.texX, point1.texY);
-                    gl.glVertex3d(point1.x, point1.y, point1.z);
-                }
-                gl.glEnd();
-            }
-        }
-        
-        // back to no texture for next renderings
-        gl.glBindTexture(GL_TEXTURE_TARGET, 0);
+
     }
 }

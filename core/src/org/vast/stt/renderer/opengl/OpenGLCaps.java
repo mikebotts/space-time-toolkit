@@ -11,31 +11,27 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.renderer.opengl;
+
+import javax.media.opengl.GL;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Label Graphic
+ * OpenGL Capabilities
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LabelGraphic Class Description
+ * Store OpenGL Capabilities and Extensions supported
+ * by the local OpenGL implementation.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 13, 2006
  * @version 1.0
  */
-public class LabelGraphic extends PrimitiveGraphic
+public class OpenGLCaps
 {
-    public float orientation = 0;
-    public int size = 10;
-    public int anchorX = 0;
-    public int anchorY = 0;
-    public int offsetX = 10;
-    public int offsetY = 10;
-    public String text = "A";
-    public boolean lineBreak;
+    public static int TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//;
 }

@@ -35,6 +35,8 @@ import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
+import org.vast.stt.style.BlockList;
+
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 

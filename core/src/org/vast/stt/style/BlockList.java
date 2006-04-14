@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
+package org.vast.stt.style;
 
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
@@ -33,13 +33,19 @@ import org.vast.data.AbstractDataBlock;
  */
 public class BlockList
 {
+    protected int size;
     protected DataComponent blockStructure;
-    protected BlockInfo currentBlock;
-    protected BlockInfo firstBlock;
-    protected BlockInfo lastBlock;
-    //protected BlockInfo[] fastAccessBlocks; // use if random access needed
+    protected BlockListItem currentBlock;
+    protected BlockListItem firstBlock;
+    protected BlockListItem lastBlock;
+    //protected BlockListItem[] fastAccessBlocks; // use if random access needed
     public boolean hasNext;
+        
     
+    public BlockList()
+    {
+        this.clear();        
+    }
     
     public boolean hasNext()
     {
@@ -47,23 +53,13 @@ public class BlockList
     }
     
     
-    public BlockInfo nextInfo()
+    public BlockListItem next()
     {
-        BlockInfo block = currentBlock;
+        BlockListItem block = currentBlock;
         currentBlock = currentBlock.nextBlock;
         if (currentBlock == null)
             hasNext = false;
         return block;
-    }
-    
-    
-    public AbstractDataBlock next()
-    {
-        BlockInfo block = currentBlock;
-        currentBlock = currentBlock.nextBlock;
-        if (currentBlock == null)
-            hasNext = false;
-        return block.data;
     }
     
     
@@ -81,6 +77,7 @@ public class BlockList
     {
         firstBlock = null;
         lastBlock = null;
+        size = 0;
     }
     
     
@@ -89,21 +86,25 @@ public class BlockList
         currentBlock.prevBlock.nextBlock = currentBlock.nextBlock;
         currentBlock.nextBlock.prevBlock = currentBlock.prevBlock;
         currentBlock = currentBlock.nextBlock;
+        size--;
     }
     
     
     public void insertBlock(AbstractDataBlock dataBlock)
     {
-        currentBlock = new BlockInfo(dataBlock, currentBlock, currentBlock.nextBlock);
+        currentBlock = new BlockListItem(dataBlock, currentBlock, currentBlock.nextBlock);
+        size++;
     }
     
     
     public void addBlock(AbstractDataBlock dataBlock)
     {
-        lastBlock = new BlockInfo(dataBlock, lastBlock, null);
+        lastBlock = new BlockListItem(dataBlock, lastBlock, null);
         
         if (firstBlock == null)
             firstBlock = lastBlock;
+        
+        size++;
     }
 
 
@@ -116,5 +117,11 @@ public class BlockList
     public void setBlockStructure(DataComponent blockStructure)
     {
         this.blockStructure = blockStructure;
+    }
+
+
+    public int getSize()
+    {
+        return size;
     }
 }

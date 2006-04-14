@@ -13,26 +13,31 @@
 
 package org.vast.stt.style;
 
+import org.vast.stt.renderer.RendererInfo;
+import org.vast.stt.util.SpatialExtent;
+import org.vast.stt.util.TimeExtent;
 
 /**
  * <p><b>Title:</b><br/>
- * Grid Patch Graphic
+ * Block Info
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Represents a patch of a grid. A patch is the individual
- * piece of a composite grid.
+ * TODO BlockInfo type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 1, 2006
  * @version 1.0
  */
-public class RasterGridGraphic extends GraphicObject
+public class BasicBlockInfo implements BlockInfo
 {
-	public int width = 0;
-    public int length = 0;
-    public int depth = 0;
-    public boolean updated;
+    public RendererInfo rendererInfo;
+    public SpatialExtent spatialExtent;  // Stores bbox of this block for filtering
+    public TimeExtent timeExtent;        // 
+    public double geometryStepAverage;
+    public double geometryStepVariance;
+    
+    // public BlockInfo[] subBlocks; // use for block hierarchy when needed
 }

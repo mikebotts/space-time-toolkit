@@ -16,26 +16,19 @@ package org.vast.stt.style;
 
 /**
  * <p><b>Title:</b><br/>
- * Label Graphic
+ * Block Info
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LabelGraphic Class Description
+ * Basic Block Info interface.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 1, 2006
  * @version 1.0
  */
-public class LabelGraphic extends PrimitiveGraphic
-{
-    public float orientation = 0;
-    public int size = 10;
-    public int anchorX = 0;
-    public int anchorY = 0;
-    public int offsetX = 10;
-    public int offsetY = 10;
-    public String text = "A";
-    public boolean lineBreak;
+public interface BlockInfo
+{ 
+   
 }

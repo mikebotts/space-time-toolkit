@@ -35,9 +35,12 @@ public class GenericXMapper extends PropertyMapper
 
     public void mapData(DataBlock data)
     {
-        graphic.x = data.getDoubleValue();
-        
         if (useMappingFunction)
-            graphic.x = mappingFunction.compute(graphic.x);     
+        {
+            double val = data.getDoubleValue();
+            graphic.x = mappingFunction.compute(val);
+        }
+        else
+            graphic.x = data.getDoubleValue();     
     }    
 }

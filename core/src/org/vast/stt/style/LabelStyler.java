@@ -35,7 +35,7 @@ import org.vast.ows.sld.TextSymbolizer;
  */
 public class LabelStyler extends AbstractStyler
 {
-    public LabelGraphic label;
+    protected LabelGraphic label;
     protected TextSymbolizer symbolizer;
     protected int labelDensity = 10;
     protected int labelSpacing;
@@ -48,15 +48,15 @@ public class LabelStyler extends AbstractStyler
 	}
     
     
-    public boolean nextPoint()
+    public LabelGraphic nextPoint()
     {
-        if (dataLists[0].rootIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext)
         {
-            dataLists[0].rootIndexer.getNext();
-            return true;
+            dataLists[0].blockIndexer.getNext();
+            return label;
         }
         
-        return false;
+        return null;
     }
 
 
@@ -184,7 +184,26 @@ public class LabelStyler extends AbstractStyler
                     addPropertyMapper(propertyName, new GenericAlphaMapper(label, param.getMappingFunction()));              
                 }
             }
-        }        
+        }
+        
+        // label text
+        param = this.symbolizer.getLabel();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                label.text = (String)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new LabelTextMapper(label, param.getMappingFunction()));              
+                }
+            }
+        }
         
         // text size
         param = this.symbolizer.getFont().getSize();

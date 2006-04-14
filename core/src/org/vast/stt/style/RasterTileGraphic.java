@@ -13,19 +13,17 @@
 
 package org.vast.stt.style;
 
-import org.ogc.cdm.common.DataType;
+import java.nio.Buffer;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Image Graphic
+ * Raster Tile Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Graphic Object used to transfer a whole image to the
- * renderer. Usually used for efficiency (i.e. cached
- * in video memory by OpenGL). It is less flexible than
- * getting pixels one at a time though.
+ * Represents a tile of a raster. A tile is the atomic piece
+ * of a composite tiled raster.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -33,16 +31,19 @@ import org.ogc.cdm.common.DataType;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class RasterImageGraphic extends GraphicObject
+public class RasterTileGraphic extends GraphicObject
 {
-	enum ImageType {}; // use same as openGL !
+	public int tileNumber;
     
-    public int width;
-    public int height;
-    public int depth;
-	public Object data;
-    public DataType dataType;
-    public ImageType imageType;
-    public boolean updated;
-    //public ColorMap colorMap;
+    public int width = 0;
+    public int height = 0;
+    public float opacity = 1.0f;
+    
+    public Buffer rasterData;
+    public Buffer colorMapData;
+
+    public boolean hasRasterData;
+    public boolean hasColorMapData;
+    
+    public boolean updated = true;
 }
