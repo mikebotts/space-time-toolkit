@@ -127,10 +127,49 @@
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>3</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>  
+                              <style>
+                                 <sld:TextSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Label>
+                                       <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
+                                    </sld:Label>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:TextSymbolizer>
+                              </style>
                            </DataItem>
                         </member>
                         <member>
-                           <DataItem enabled="true">
+                           <DataItem enabled="false">
                               <name>AL Highways</name>
                               <dataProvider xlink:href="#AL_HIGHWAYS"/>
                               <style>

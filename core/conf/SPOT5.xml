@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe" xmlns:stt="http://vast.uah.edu/stt">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>SPOT5 Demo Project</name>
+      <author>Alex Robin</author>
+      <dateCreated>2006-02-28T22:23:00</dateCreated>
+      <description>Data from SPOT5 scene of Huntsville acquired using HRG instrument in Supermode</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>3D ECF View</name>
+            <renderer>OPENGL</renderer>
+            <view>
+               <ViewSettings>
+                  <backgroundColor>#FFFFFF</backgroundColor>
+                  <viewWidth>1000</viewWidth>
+                  <viewHeight>800</viewHeight>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>0 0 10</cameraPos>
+                  <targetPos>0 0 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>4</orthoWidth>
+                  <orthoHeight>1.67</orthoHeight>
+                  <nearClip>0</nearClip>
+                  <farClip>1e7</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>SPOT5 Project</name>
+                  <member>
+                     <DataItem enabled="true">
+                        <name>SPOT5 Imagery</name>
+                        <dataProvider xlink:href="#SPOT_CHAIN"/>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>arrayGroup/array/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>arrayGroup/array/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>circle</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>2</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style>
+                        <style>
+                           <sld:RasterSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>arrayGroup/array/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>arrayGroup/array/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Opacity>1.0</sld:Opacity>
+                              <sld:ChannelSelection>
+                                 <sld:RedChannel>
+                                    <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                 </sld:RedChannel>
+                                 <sld:GreenChannel>
+                                    <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                 </sld:GreenChannel>
+                                 <sld:BlueChannel>
+                                    <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                 </sld:BlueChannel>
+                              </sld:ChannelSelection>
+                           </sld:RasterSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Geographic Data</name>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>Coast Lines - 100km</name>
+                              <dataProvider xlink:href="#DATASET_04"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>                             
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>Boundaries</name>
+                              <dataProvider xlink:href="#DATASET_03"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources (preloaded capabilities) -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            <member>
+               <SWEDataProvider id="DATASET_03">
+                  <name>World Boundaries - 13</name>
+                  <description>World Country Boundaries</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/countries/mapbdy13.xml"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="DATASET_04">
+                  <name>World Coast Lines - 100</name>
+                  <description>World Coast Lines</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="SPOT_CHAIN">
+                  <name>SPOT-5 Geolocation Chain</name>
+                  <description>SPOT-5 Imagery Geolocation to WGS84 Ellipsoid</description>
+                  <process xlink:href="file:///D:/Projects/NSSTC/SensorML/examples/Process/SPOT5_Supermode_GeoLocation.xml#SPOT5_GEOLOCATION_CHAIN"/>
+               </SensorMLProvider>
+            </member>
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
