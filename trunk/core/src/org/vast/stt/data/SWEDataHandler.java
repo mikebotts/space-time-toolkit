@@ -17,6 +17,7 @@ import java.util.Hashtable;
 
 import org.ogc.cdm.common.*;
 import org.vast.data.AbstractDataBlock;
+import org.vast.stt.style.BlockList;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 

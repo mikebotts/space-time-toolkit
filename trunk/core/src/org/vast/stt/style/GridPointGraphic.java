@@ -28,12 +28,10 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class GridPointGraphic extends GraphicObject
+public class GridPointGraphic extends PrimitiveGraphic
 {
-    public double x, y, z;
-    public float r, g, b;
-	public float a = 1.0f;
-    public float texX;
-    public float texY;
-    public float texZ;
+    public float tx;
+    public float ty;
+    public float tz;
+    public boolean normalizedTexCoords;
 }

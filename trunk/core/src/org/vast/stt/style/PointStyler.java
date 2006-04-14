@@ -37,7 +37,7 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class PointStyler extends AbstractStyler
 {
-    public PointGraphic point;
+    protected PointGraphic point;
     protected PointSymbolizer symbolizer;	
     	
 	
@@ -48,15 +48,15 @@ public class PointStyler extends AbstractStyler
 	}
     
     
-    public boolean nextPoint()
+    public PointGraphic nextPoint()
     {
-        if (dataLists[0].rootIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext)
         {
-            dataLists[0].rootIndexer.getNext();
-            return true;
+            dataLists[0].blockIndexer.getNext();
+            return point;
         }
         
-        return false;
+        return null;
     }
 
 

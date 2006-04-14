@@ -11,37 +11,33 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.renderer.opengl;
 
-import org.ogc.cdm.common.DataType;
+import org.vast.stt.renderer.RendererInfo;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Image Graphic
+ * OpenGLInfo
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Graphic Object used to transfer a whole image to the
- * renderer. Usually used for efficiency (i.e. cached
- * in video memory by OpenGL). It is less flexible than
- * getting pixels one at a time though.
+ * Class for storing OpenGL specific options.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 13, 2006
  * @version 1.0
  */
-public class ImageGraphic extends GraphicObject
+public class OpenGLInfo implements RendererInfo
 {
-	enum ImageType {}; // use same as openGL !
+    public int programNumber = -1;   // OpenGL shader program number (-1 if none)
+    public int objectID = -1;        // OpenGL name for texture, vertex buffer or display list (-1 if none)
+    public int indexBufferID = -1;   // OpenGL name for additional Index Buffer Object (-1 if none)
     
-    public int width;
-    public int height;
-    public int depth;
-	public Object data;
-    public DataType dataType;
-    public ImageType imageType;
-    //public ColorMap colorMap;
+    
+    public OpenGLInfo()
+    {        
+    }
 }

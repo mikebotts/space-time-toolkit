@@ -17,7 +17,6 @@ import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
@@ -122,6 +121,7 @@ public abstract class AbstractStyler implements DataStyler
         if (builder == null)
         {
             BlockList list = dataNode.getList(listName);
+            if (list == null) return;
             builder = new IndexerTreeBuilder(list.getBlockStructure());
             treeBuilders.put(listName, builder);
             builder.addVisitor(componentPath, newMapper);
@@ -169,12 +169,15 @@ public abstract class AbstractStyler implements DataStyler
         for (int i = 0; i < dataLists.length; i++)
         {
             ListInfo info = dataLists[i]; 
-            DataIndexer nextIndexer = info.rootIndexer;
+            DataIndexer nextIndexer = info.blockIndexer;
                         
             if (!info.blockList.hasNext)
                 return false;
             
-            AbstractDataBlock nextBlock = info.blockList.next();
+            AbstractDataBlock nextBlock = info.blockList.next().data;
+            
+            // TODO implement block filtering here
+            
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
         }           
@@ -187,12 +190,12 @@ public abstract class AbstractStyler implements DataStyler
 class ListInfo
 {
     protected BlockList blockList;
-    protected DataIndexer rootIndexer;
+    protected DataIndexer blockIndexer;
     
     
     public ListInfo(BlockList blockList, DataIndexer dataIndexer)
     {
-        this.rootIndexer = dataIndexer;
+        this.blockIndexer = dataIndexer;
         this.blockList = blockList;
     }
 }

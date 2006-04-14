@@ -13,7 +13,7 @@
 
 package org.vast.stt.style;
 
-import org.ogc.cdm.common.DataBlock;
+import java.util.ArrayList;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -38,18 +38,14 @@ import org.vast.ows.sld.Symbolizer;
 public class RasterStyler extends AbstractStyler
 {
 	protected RasterSymbolizer symbolizer;
-    protected RasterImageGraphic image;
+    protected ArrayList<RasterTileGraphic> tiles;
     protected RasterPixelGraphic pixel;
-    protected RasterGridGraphic grid;
-    protected GridRowGraphic gridRow;
     
 	
 	public RasterStyler()
 	{
-        image = new RasterImageGraphic();
         pixel = new RasterPixelGraphic();
-        grid = new RasterGridGraphic();
-        gridRow = new GridRowGraphic();
+        tiles = new ArrayList<RasterTileGraphic>();
 	}
     
     
@@ -60,48 +56,19 @@ public class RasterStyler extends AbstractStyler
      */
     public int getTileCount()
     {
-        return 1;
+        return tiles.size();
     }
-	
     
-    public RasterImageGraphic getImage(int index)
+    
+    public RasterTileGraphic nextTile()
     {
-//        if (image.data == null)
-//        {
-//            DataBlock data = dataNode.getComponent(0).getData();
-//            int arraySize = data.getAtomCount();
-//            byte[] array = new byte[arraySize];
-//            image.data = array;       
-//
-//            for (int i=0; i<arraySize; i++)
-//                array[i] = dataNode.getData().getByteValue(i);
-//
-//            image.width = 512;
-//            image.height = 256;
-//            image.updated = true;
-//        }
-        
-        return image;
+        return tiles.get(0);
     }
-    
+	   
     
     public RasterPixelGraphic getPixel(int x, int y, int z)
     {
         return pixel;
-    }
-    
-    
-    public RasterGridGraphic getGrid(int gridIndex)
-    {
-        grid.width = 10;
-        grid.length = 10;
-        return grid;
-    }
-    
-    
-    public GridRowGraphic nextGridRow()
-    {
-        return null;
     }
     
     
@@ -115,8 +82,11 @@ public class RasterStyler extends AbstractStyler
 	{
         ScalarParameter param;
         String propertyName = null;   
-        
-        // generate indexing rules for geometry components        
+
+        // reset all parameters
+        tiles.clear();
+        pixel = new RasterPixelGraphic();
+        this.clearAllMappers();
         
         // geometry X
         param = this.symbolizer.getGeometry().getX();

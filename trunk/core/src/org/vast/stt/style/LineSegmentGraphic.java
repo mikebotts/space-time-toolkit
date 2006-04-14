@@ -13,14 +13,16 @@
 
 package org.vast.stt.style;
 
+import java.nio.Buffer;
+
 
 /**
  * <p><b>Title:</b><br/>
- * Line Graphic
+ * Line Segment Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LineGraphic Class Description
+ * Represents a segment of a 3D line.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -30,5 +32,10 @@ package org.vast.stt.style;
  */
 public class LineSegmentGraphic extends GraphicObject
 {
-	public int segmentSize;
+	public int segmentNumber;    
+    public int segmentSize = 0;    
+    public Buffer lineData;
+    public boolean hasLineData;
+    
+    public boolean lineUpdated;
 }

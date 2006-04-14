@@ -35,9 +35,12 @@ public class GenericYMapper extends PropertyMapper
     
     public void mapData(DataBlock data)
     {
-        graphic.y = data.getDoubleValue();
-        
         if (useMappingFunction)
-            graphic.y = mappingFunction.compute(graphic.y);     
+        {
+            double val = data.getDoubleValue();
+            graphic.y = mappingFunction.compute(val);
+        }
+        else
+            graphic.y = data.getDoubleValue();     
     }    
 }

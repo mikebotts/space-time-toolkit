@@ -13,14 +13,17 @@
 
 package org.vast.stt.style;
 
+import java.nio.Buffer;
+
 
 /**
  * <p><b>Title:</b><br/>
- * Label Graphic
+ * Grid Patch Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO LabelGraphic Class Description
+ * Represents a patch of a 3D grid. A patch is the atomic piece
+ * of a composite grid.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -28,14 +31,17 @@ package org.vast.stt.style;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LabelGraphic extends PrimitiveGraphic
+public class GridPatchGraphic extends GraphicObject
 {
-    public float orientation = 0;
-    public int size = 10;
-    public int anchorX = 0;
-    public int anchorY = 0;
-    public int offsetX = 10;
-    public int offsetY = 10;
-    public String text = "A";
-    public boolean lineBreak;
+	public int tileNumber;
+    
+    public int width = 0;
+    public int length = 0;
+    public int depth = 1;
+    public boolean fill = true;
+    
+    public Buffer vertexData;
+    public boolean hasGridData;
+    
+    public boolean updated = true;
 }

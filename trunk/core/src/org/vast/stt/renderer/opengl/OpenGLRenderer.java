@@ -13,7 +13,6 @@
 
 package org.vast.stt.renderer.opengl;
 
-import java.util.Hashtable;
 import org.eclipse.swt.opengl.GL;
 import org.eclipse.swt.opengl.GLU;
 import org.eclipse.swt.opengl.GLContext;
@@ -49,12 +48,10 @@ public class OpenGLRenderer extends Renderer
     private double[] yData = new double[1];
     private double[] zData = new double[1];
     private int GL_TEXTURE_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//
-    private Hashtable<RasterStyler, Integer> textureTable;
     
 
     public OpenGLRenderer()
     {
-        textureTable = new Hashtable<RasterStyler, Integer>();
     }
 
 
@@ -181,17 +178,15 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(LineStyler styler)
     {
-        LinePointGraphic point = styler.point;
+        LinePointGraphic point;
         boolean begin = false;
-        styler.reset();        
-        GL.glLineWidth(point.width);
+        float oldWidth = -1.0f;
+        styler.reset();
         
         // loop and draw all points
         while (styler.nextBlock())
-        {
-            float oldWidth = -1.0f;
-            
-            while (styler.nextPoint())
+        {           
+            while ((point = styler.nextPoint()) != null)
             {
                 if (point.width != oldWidth)
                 {
@@ -227,7 +222,7 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(PointStyler styler)
     {       
-        PointGraphic point = styler.point;
+        PointGraphic point;
         boolean begin = false;
         float oldSize = -1.0f;
         styler.reset();        
@@ -235,7 +230,7 @@ public class OpenGLRenderer extends Renderer
         // loop and draw all points
         while (styler.nextBlock())
         {
-            while (styler.nextPoint())
+            while ((point = styler.nextPoint()) != null)
             {
                 if (point.size != oldSize)
                 {
@@ -260,7 +255,7 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(PolygonStyler styler)
     {
-        PolygonPointGraphic point = styler.point;
+        PolygonPointGraphic point;
         boolean begin = false;
         styler.reset();        
         
@@ -273,7 +268,7 @@ public class OpenGLRenderer extends Renderer
         
         while (styler.nextBlock())
         {
-            while (styler.nextPoint())
+            while ((point = styler.nextPoint()) != null)
             {
                 if (point.polyBreak && begin)
                 {
@@ -297,25 +292,16 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(LabelStyler styler)
     {
-        LabelGraphic label = styler.label;
-        styler.reset();        
+
+    }
+    
+    
+    /**
+     * Renders all data passed by a texture mapping styler
+     */
+    public void visit(TextureMappingStyler styler)
+    {
         
-        GL.glPixelTransferi(GL.GL_MAP_COLOR, 1);
-        
-        int[] pixels = new int[25];
-        for (int i=0; i<25; i++)
-            pixels[i] = Integer.MAX_VALUE;
-        
-        while (styler.nextBlock())
-        {
-            while (styler.nextPoint())
-            {                
-                GLU.gluProject(label.x, label.y, label.z, modelM, projM, viewPort, xData, yData, zData);
-                GL.glRasterPos2d(xData[0], yData[0]+100);
-                GL.glColor4f(label.r, label.g, label.b, label.a);
-                GL.glDrawPixels(5, 5, GL.GL_RED, GL.GL_INT, pixels);
-            }
-        }
     }
 
 
@@ -324,81 +310,5 @@ public class OpenGLRenderer extends Renderer
      */
     public void visit(RasterStyler styler)
     {
-        int textureNum;        
-        
-        int tileCount = styler.getTileCount();
-        
-        for (int tileNum=0; tileNum<tileCount; tileNum++)
-        {
-            // retrieve or generate texture name
-            if (textureTable.containsKey(styler))
-            {
-                textureNum = textureTable.get(styler);
-            }
-            else
-            {
-                int[] names = new int[1];
-                GL.glGenTextures(1, names);
-                textureTable.put(styler, names[0]);
-                textureNum = names[0];
-            }        
-            
-            // set current texture in GL
-            GL.glBindTexture(GL_TEXTURE_TARGET, textureNum);
-            
-            // get first image
-            RasterImageGraphic image = styler.getImage(tileNum);
-            
-            // reload the texture if needed
-            if (image.updated)
-            {
-                GL.glTexImage2D(GL_TEXTURE_TARGET, 0, GL.GL_RGB, image.width, image.height, 0, GL.GL_BGR_EXT, GL.GL_UNSIGNED_BYTE, (byte[])image.data);
-                GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-                GL.glTexParameteri(GL_TEXTURE_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
-                image.updated = false;
-            }
-            
-            // setup white background color and offsets
-            GL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            GL.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-            GL.glPolygonOffset(1.0f, 1.0f);
-            GL.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-            GL.glEnable(GL.GL_BLEND);
-            GL.glDisable(GL.GL_CULL_FACE);
-            
-            RasterGridGraphic gridPatch = styler.getGrid(tileNum);
-            GridRowGraphic row1 = null;
-            GridRowGraphic row2 = null;
-            
-            // loop through all rows
-            while (styler.nextBlock())
-            {
-                if (row1 == null)
-                    row1 = styler.nextGridRow();
-                else
-                    row1 = row2;
-                
-                row2 = styler.nextGridRow();
-                
-                // loop and draw quads
-                GL.glBegin(GL.GL_QUAD_STRIP);
-                for (int i=0; i<gridPatch.width; i++)
-                {
-                    GridPointGraphic point2 = row2.gridPoints[i];                    
-                    GL.glColor4f(point2.r, point2.g, point2.b, point2.a);
-                    GL.glTexCoord2f(point2.texX, point2.texY);
-                    GL.glVertex3d(point2.x, point2.y, point2.z);
-                    
-                    GridPointGraphic point1 = row1.gridPoints[i];                    
-                    GL.glColor4f(point1.r, point1.g, point1.b, point1.a);
-                    GL.glTexCoord2f(point1.texX, point1.texY);
-                    GL.glVertex3d(point1.x, point1.y, point1.z);
-                }
-                GL.glEnd();
-            }
-        }
-        
-        // back to no texture for next renderings
-        GL.glBindTexture(GL_TEXTURE_TARGET, 0);
     }
 }

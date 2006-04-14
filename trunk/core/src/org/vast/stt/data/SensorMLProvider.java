@@ -13,11 +13,12 @@
 
 package org.vast.stt.data;
 
-import org.ogc.cdm.common.DataBlock;
-import org.ogc.cdm.common.DataComponent;
+import org.ogc.cdm.common.DataType;
 import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.process.DataProcess;
+import org.vast.process.ProcessChain;
+import org.vast.stt.style.BlockList;
 
 
 /**
@@ -45,7 +46,7 @@ public class SensorMLProvider extends AbstractProvider
 
 	}
 	
-    
+    /*
     @Override
     public void updateData() throws DataException
     {
@@ -87,81 +88,79 @@ public class SensorMLProvider extends AbstractProvider
         {
             e.printStackTrace();
         }
-    }
+    }*/
     
 	
-//	@Override
-//	public void updateData() throws DataException
-//	{
-//        try
-//        {
-//            // TODO first check if we already have this data in dataNode
-//            
-//            // TODO load data in input queues (BBOX and Time Range)
-//            //internalProcess.start();            
-//            
-//            if (cachedData == null)
-//                cachedData = new DataNode();
-//            
-//            DataGroup arrayGroup = new DataGroup();
-//            DataArray array = new DataArray();
-//            DataGroup pointGroup = new DataGroup(2);
-//            pointGroup.addComponent("lat", new DataValue(DataType.DOUBLE));
-//            pointGroup.addComponent("lon", new DataValue(DataType.DOUBLE));
-//            pointGroup.assignNewDataBlock();
-//            DataBlock pointData = pointGroup.getData();
-//            array.addComponent("point", pointGroup);
-//            array.setSize(5);
-//            arrayGroup.addComponent("time1", new DataValue(DataType.DOUBLE));
-//            arrayGroup.addComponent("time2", new DataValue(DataType.DOUBLE));
-//            arrayGroup.addComponent("array", array);
-//            cachedData.addComponent("arrayGroup", arrayGroup);
-//            
-//            process = ((SensorMLProcess)resource).getInternalProcess();
-//            
-//            if (process instanceof ProcessChain)
-//                ((ProcessChain)process).setChildrenThreadsOn(false);
-//            
-//            process.init();
-//            arrayGroup.assignNewDataBlock();
-//            
-//            for (int i=0; i<24000; i+=500)
-//            {
-//                process.getInputList().getComponent("lineIndex").getData().setIntValue(i+1);
-//                int count=4;
-//                for (int j=0; j<24000; j+=500)
-//                {
-//                    process.getInputList().getComponent("pixelIndex").getData().setIntValue(j+1);
-//                    process.execute();
-//                    //DataBlock newPoint = pointData.clone();
-//                    double lat = process.getOutputList().getComponent("sampleLocation").getComponent(0).getData().getDoubleValue();
-//                    double lon = process.getOutputList().getComponent("sampleLocation").getComponent(1).getData().getDoubleValue();
-//                    
-//                    if (lon > Math.PI)
-//                        lon -= 2*Math.PI;
-//                    
-//                    arrayGroup.getData().setDoubleValue(2*count+2, lat);
-//                    arrayGroup.getData().setDoubleValue(2*count+3, lon);
-//                    count--;
-//                    
-//                    if (count == -1)
-//                    {
-//                        cachedData.addData(arrayGroup.getData());
-//                        arrayGroup.renewDataBlock();
-//                        count = 4;
-//                    }
-//                                                                                
-//                    //cachedData.addData(newPoint);
-//                    //System.out.print(lat * 180.0 / Math.PI + ",");
-//                    //System.out.print(lon * 180.0 / Math.PI + "\n");
-//                }
-//            }
-//        }
-//        catch (ProcessException e)
-//        {
-//            e.printStackTrace();
-//        }
-//	}
+	@Override
+	public void updateData() throws DataException
+	{
+        try
+        {
+            // TODO first check if we already have this data in dataNode
+            
+            // TODO load data in input queues (BBOX and Time Range)
+            //internalProcess.start();            
+            
+            if (cachedData == null)
+                cachedData = new DataNode();
+            
+            int arraySize = 101;
+            
+            DataGroup arrayGroup = new DataGroup();
+            DataArray array = new DataArray();
+            DataGroup pointGroup = new DataGroup(2);
+            pointGroup.addComponent("lat", new DataValue(DataType.DOUBLE));
+            pointGroup.addComponent("lon", new DataValue(DataType.DOUBLE));
+            pointGroup.assignNewDataBlock();
+            array.addComponent("point", pointGroup);
+            array.setSize(arraySize);
+            arrayGroup.addComponent("time1", new DataValue(DataType.DOUBLE));
+            arrayGroup.addComponent("time2", new DataValue(DataType.DOUBLE));
+            arrayGroup.addComponent("array", array);
+            arrayGroup.setName("arrayGroup");
+            BlockList dataList = cachedData.createList(arrayGroup);
+            
+            if (process instanceof ProcessChain)
+                ((ProcessChain)process).setChildrenThreadsOn(false);
+            
+            process.init();
+            arrayGroup.assignNewDataBlock();
+            int inc = 23999/(arraySize-1);
+            
+            for (int i=0; i<24000; i+=inc)
+            {
+                process.getInputList().getComponent("lineIndex").getData().setIntValue(i+1);
+                int count = 0;
+                
+                for (int j=0; j<24000; j+=inc)
+                {
+                    process.getInputList().getComponent("pixelIndex").getData().setIntValue(j+1);
+                    process.execute();
+                    //DataBlock newPoint = pointData.clone();
+                    double lat = process.getOutputList().getComponent("sampleLocation").getComponent(0).getData().getDoubleValue();
+                    double lon = process.getOutputList().getComponent("sampleLocation").getComponent(1).getData().getDoubleValue();
+                    
+                    if (lon > Math.PI)
+                        lon -= 2*Math.PI;
+                    
+                    arrayGroup.getData().setDoubleValue(2*count+2, lat);
+                    arrayGroup.getData().setDoubleValue(2*count+3, lon);
+                    count++;
+                    
+                    if (count == arraySize)
+                    {
+                        dataList.addBlock((AbstractDataBlock)arrayGroup.getData());
+                        arrayGroup.renewDataBlock();
+                        count = 0;
+                    }
+                }
+            }
+        }
+        catch (ProcessException e)
+        {
+            e.printStackTrace();
+        }
+	}
 	
 	
 	@Override

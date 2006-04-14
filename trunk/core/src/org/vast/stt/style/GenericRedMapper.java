@@ -35,9 +35,12 @@ public class GenericRedMapper extends PropertyMapper
     
     public void mapData(DataBlock data)
     {
-        graphic.r = data.getFloatValue();
-        
         if (useMappingFunction)
-            graphic.r = (float)mappingFunction.compute(graphic.r);     
+        {
+            double val = data.getDoubleValue();
+            graphic.r = (float)mappingFunction.compute(val);
+        }
+        else
+            graphic.r = data.getFloatValue();     
     }    
 }

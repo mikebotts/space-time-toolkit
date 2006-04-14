@@ -10,7 +10,7 @@ import org.vast.ows.sld.MappingFunction;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * This transfers a value from the DataNode and use it as text size.
+ * This transfers a value from the DataNode and use it as label size.
  * It will use a mapping function if provided.
  * </p>
  *

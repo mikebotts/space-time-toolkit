@@ -21,6 +21,7 @@ import org.ogc.cdm.common.DataEncoding;
 import org.ogc.cdm.reader.DataStreamParser;
 import org.vast.cdm.reader.URIStreamHandler;
 import org.vast.stt.readers.SWEResourceReader;
+import org.vast.stt.style.BlockList;
 
 
 /**

@@ -50,8 +50,11 @@ public class StylerFactory
         else if (sym instanceof TextSymbolizer)
             styler = new LabelStyler();
         
+        //else if (sym instanceof RasterSymbolizer)
+        //    styler = new RasterStyler();
+        
         else if (sym instanceof RasterSymbolizer)
-            styler = new RasterStyler();
+            styler = new TextureMappingStyler();
 		
 		if (styler != null)
 		{

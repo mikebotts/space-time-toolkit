@@ -33,4 +33,5 @@ public class PointGraphic extends PrimitiveGraphic
     public float orientation;
 	public float size = 1.0f;
 	public byte[] icon;
+    public boolean smooth = false;
 }

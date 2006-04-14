@@ -35,28 +35,26 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class LineStyler extends AbstractStyler
 {
-    public LinePointGraphic point;
-    public LineSegmentGraphic segment;
+    protected LinePointGraphic point;
     protected LineSymbolizer symbolizer;	
         
 	
 	public LineStyler()
 	{
 		point = new LinePointGraphic();
-        segment = new LineSegmentGraphic();
 		setName("Line Styler");
 	}
     
     
-    public boolean nextPoint()
+    public LinePointGraphic nextPoint()
     {
-        if (dataLists[0].rootIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext)
         {
-            dataLists[0].rootIndexer.getNext();
-            return true;
+            dataLists[0].blockIndexer.getNext();
+            return point;
         }
         
-        return false;
+        return null;
     }
     
     
@@ -75,17 +73,8 @@ public class LineStyler extends AbstractStyler
         
         // reset all parameters
         point = new LinePointGraphic();
-        segment = new LineSegmentGraphic();
         this.clearAllMappers();
         
-        // segment object
-//        param = this.symbolizer.getGeometry().getObject();
-//        if (param != null)
-//        {
-//            propertyName = param.getPropertyName();
-//            DataIndexer segData = new DataIndexer(currentData, propertyName);
-//            breakRuleIndex = segData.indexRules.length-1;
-//        }
         
         // geometry breaks
         param = this.symbolizer.getGeometry().getBreaks();

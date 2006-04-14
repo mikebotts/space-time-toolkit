@@ -30,5 +30,5 @@ package org.vast.stt.style;
  */
 public class RasterPixelGraphic extends PrimitiveGraphic
 {
-
+    public boolean normalizedCoords;
 }

@@ -6,11 +6,11 @@ import org.vast.ows.sld.MappingFunction;
 
 /**
  * <p><b>Title:</b><br/>
- * T Coordinate Mapper
+ * Label Text Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * This transfers a value from the DataNode to the T (time) coordinate value.
+ * This transfers a value from the DataNode and use it as a label text.
  * It will use a mapping function if provided.
  * </p>
  *
@@ -19,14 +19,14 @@ import org.vast.ows.sld.MappingFunction;
  * @date Apr 3, 2006
  * @version 1.0
  */
-public class GenericTimeMapper extends PropertyMapper
+public class LabelTextMapper extends PropertyMapper
 {
-    PrimitiveGraphic graphic;
+    LabelGraphic label;
     
     
-    public GenericTimeMapper(PrimitiveGraphic graphic, MappingFunction mappingFunction)
+    public LabelTextMapper(LabelGraphic label, MappingFunction mappingFunction)
     {
-        this.graphic = graphic;
+        this.label = label;
         this.mappingFunction = mappingFunction;
         if (mappingFunction != null)
             this.useMappingFunction = true;
@@ -38,9 +38,9 @@ public class GenericTimeMapper extends PropertyMapper
         if (useMappingFunction)
         {
             double val = data.getDoubleValue();
-            graphic.t = mappingFunction.compute(val);
+            label.text = String.valueOf(mappingFunction.compute(val));
         }
         else
-            graphic.t = data.getDoubleValue();     
+            label.text = data.getStringValue();
     }    
 }
