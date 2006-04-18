@@ -59,6 +59,7 @@ public class SensorMLProvider extends AbstractProvider
             process.init();
             cachedData = new DataNode();
             blockList = cachedData.createList(process.getOutputList().getComponent(0));
+            blockList.sendUpdates = true;
             
             int tileCountX = 5;
             int tileCountY = 5;

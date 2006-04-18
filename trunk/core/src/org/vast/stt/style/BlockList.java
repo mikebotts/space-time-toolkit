@@ -43,7 +43,8 @@ public class BlockList
     protected BlockListItem lastBlock;
     //protected BlockListItem[] fastAccessBlocks; // use if random access needed
     public boolean hasNext;
-        
+    public boolean sendUpdates;
+    
     
     public BlockList()
     {
@@ -110,8 +111,11 @@ public class BlockList
         size++;
         
         // TODO handle redraw events in a better way !!
-        ViewSettings viewSettings = STTConfig.getInstance().getCurrentProject().getSceneList().get(0).getViewSettings();
-        STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
+        if (sendUpdates)
+        {
+            ViewSettings viewSettings = STTConfig.getInstance().getCurrentProject().getSceneList().get(0).getViewSettings();
+            STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
+        }
     }
 
 
