@@ -181,8 +181,8 @@ public class JOGLRenderer extends Renderer
         
         // set up a light
 //        gl.glEnable(GL.GL_LIGHTING);
-//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, FloatBuffer.wrap(new float[] {1.0f, 1.0f, 1.0f, 1.0f}));
-//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_DIFFUSE, FloatBuffer.wrap(new float[] {1.0f, 1.0f, 1.0f, 1.0f}));
+//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, FloatBuffer.wrap(new float[] {0.5f, 0.5f, 0.5f, 1.0f}));
+//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_DIFFUSE, FloatBuffer.wrap(new float[] {0.5f, 0.5f, 0.5f, 1.0f}));
 //        gl.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, FloatBuffer.wrap(new float[] {0.0f, 0.0f, -2.0f, 1.0f}));
 //        gl.glEnable(GL.GL_LIGHT1);
         
