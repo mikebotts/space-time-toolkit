@@ -1,7 +1,5 @@
 package org.vast.stt.style;
 
-import org.vast.stt.renderer.RendererInfo;
-
 
 /**
  * <p><b>Title:</b><br/>
@@ -19,6 +17,5 @@ import org.vast.stt.renderer.RendererInfo;
  */
 public abstract class GraphicObject
 {
-    public RendererInfo rendererInfo; // Renderer specific info object
-    public boolean hasRendererInfo;
+    public BlockInfo info;
 }

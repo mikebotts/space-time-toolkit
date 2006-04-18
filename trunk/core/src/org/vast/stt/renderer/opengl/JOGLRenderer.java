@@ -178,7 +178,14 @@ public class JOGLRenderer extends Renderer
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glEnable(OpenGLCaps.TEXTURE_2D_TARGET);
-
+        
+        // set up a light
+//        gl.glEnable(GL.GL_LIGHTING);
+//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, FloatBuffer.wrap(new float[] {1.0f, 1.0f, 1.0f, 1.0f}));
+//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_DIFFUSE, FloatBuffer.wrap(new float[] {1.0f, 1.0f, 1.0f, 1.0f}));
+//        gl.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, FloatBuffer.wrap(new float[] {0.0f, 0.0f, -2.0f, 1.0f}));
+//        gl.glEnable(GL.GL_LIGHT1);
+        
         JOGLContext.release();
     }
 
@@ -396,6 +403,68 @@ public class JOGLRenderer extends Renderer
 
         gl.glDisable(GL.GL_STENCIL_TEST);
     }
+    
+    
+    /**
+     * Renders all data passed by a grid styler
+     */
+    public void visit(GridStyler styler)
+    {
+        GridPatchGraphic patch = null;
+        GridPointGraphic point = null;
+        styler.reset();
+
+        // loop through all tiles
+        while ((patch = styler.nextPatch()) != null)
+        {
+            if (patch.info.rendererParams != null)
+            {
+                OpenGLInfo info = (OpenGLInfo)patch.info.rendererParams;
+                gl.glCallList(info.objectID);
+                continue;
+            }
+            
+            // create and start list recording
+            int listNum = gl.glGenLists(1);
+            gl.glNewList(listNum, GL.GL_COMPILE_AND_EXECUTE);
+            
+            // select fill or wireframe
+            if (patch.fill)
+                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
+            else
+                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
+
+            gl.glLineWidth(patch.lineWidth);
+            gl.glPolygonOffset(1.0f, 1.0f);
+            gl.glDisable(GL.GL_CULL_FACE);            
+            
+            // loop through all grid points
+            for (int v = 0; v < patch.length-1; v++)
+            {
+                gl.glBegin(GL.GL_QUAD_STRIP);
+                
+                for (int u = 0; u < patch.width; u++)
+                {
+                    point = styler.getGridPoint(u, v, false);
+                    gl.glColor4f(point.r, point.g, point.b, point.a);
+                    gl.glVertex3d(point.x, point.y, point.z);
+                    
+                    point = styler.getGridPoint(u, v+1, false);
+                    gl.glColor4f(point.r, point.g, point.b, point.a);
+                    gl.glVertex3d(point.x, point.y, point.z);
+                }
+                
+                gl.glEnd();
+            }
+            
+            gl.glEndList();
+            
+            // add list number to renderer info block
+            OpenGLInfo glInfo = new OpenGLInfo();
+            glInfo.objectID = listNum;
+            patch.info.rendererParams = glInfo;
+        }
+    }
 
 
     /**
@@ -406,7 +475,6 @@ public class JOGLRenderer extends Renderer
         TexturePatchInfo patch;
         GridPointGraphic point;
         styler.reset();
-        textureManager.setStyler(styler);
 
         // loop through all tiles
         while ((patch = styler.nextTile()) != null)
@@ -415,8 +483,9 @@ public class JOGLRenderer extends Renderer
             GridPatchGraphic grid = patch.getGrid();
 
             // bind texture and load in GL if needed
-            textureManager.bindTexture(tex);
-
+            textureManager.bindTexture(styler, tex);
+            
+            // select fill or wireframe
             if (grid.fill)
                 gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
             else
@@ -427,10 +496,9 @@ public class JOGLRenderer extends Renderer
             gl.glDisable(GL.GL_CULL_FACE);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-            gl.glTexParameterf(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
             
             gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
-            gl.glBegin(GL.GL_TRIANGLE_STRIP);
+            gl.glBegin(GL.GL_QUAD_STRIP);
             
             for (int y = 0; y < grid.length-1; y++)
             {
@@ -445,10 +513,10 @@ public class JOGLRenderer extends Renderer
                     gl.glVertex3d(point.x, point.y, point.z);
                 }
                 
-                if (y < grid.length-2)
+                if (y != grid.length-2)
                 {
                     gl.glEnd();
-                    gl.glBegin(GL.GL_TRIANGLE_STRIP);
+                    gl.glBegin(GL.GL_QUAD_STRIP);
                 }                
             }
             

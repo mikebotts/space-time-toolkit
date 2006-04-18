@@ -43,7 +43,6 @@ import org.vast.stt.style.TextureMappingStyler;
  */
 public class TextureManager
 {
-    protected DataStyler styler;
     protected GL gl;
     protected GLU glu;
     
@@ -61,18 +60,18 @@ public class TextureManager
      * @param tex
      * @return
      */
-    public void bindTexture(RasterTileGraphic tex)
+    public void bindTexture(DataStyler styler, RasterTileGraphic tex)
     {
         int textureID = 0;
                 
         // create OpenGLInfo object if needed
         OpenGLInfo info;
-        if (tex.hasRendererInfo)
-            info = (OpenGLInfo)tex.rendererInfo;
+        if (tex.info.rendererParams != null)
+            info = (OpenGLInfo)tex.info.rendererParams;
         else
         {
             info = new OpenGLInfo();
-            tex.rendererInfo = info;
+            tex.info.rendererParams = info;
         }
         
         // delete old texture if it has been updated, otherwise just get ID
@@ -84,7 +83,7 @@ public class TextureManager
         // create texture if no ID was found
         if (textureID <= 0)
         {
-            fillRGBAData(tex);
+            fillRGBAData(styler, tex);
             
             if (tex.hasRasterData)
             {
@@ -97,7 +96,6 @@ public class TextureManager
                 
                 // save the texture ID
                 info.objectID = textureID;
-                tex.hasRendererInfo = true;
                 tex.updated = false;
             }                    
         }
@@ -109,12 +107,12 @@ public class TextureManager
     }
     
     
-    protected void fillRGBData(RasterTileGraphic texture)
+    protected void fillRGBData(DataStyler styler, RasterTileGraphic texture)
     {
     }
     
     
-    protected void fillRGBAData(RasterTileGraphic tex)
+    protected void fillRGBAData(DataStyler styler, RasterTileGraphic tex)
     {
         int width = tex.width;
         int height = tex.height;
@@ -149,11 +147,5 @@ public class TextureManager
     protected void fillTestRGBAData(RasterTileGraphic tex)
     {
         
-    }
-    
-    
-    public void setStyler(DataStyler styler)
-    {
-        this.styler = styler;
     }
 }

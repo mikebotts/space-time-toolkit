@@ -32,7 +32,7 @@ import org.vast.stt.util.TimeExtent;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class TexturePatchInfo implements BlockInfo
+public class TexturePatchInfo extends BlockInfo
 {
     protected GridPatchGraphic grid;
     protected RasterTileGraphic texture;

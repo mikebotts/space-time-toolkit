@@ -13,6 +13,8 @@
 
 package org.vast.stt.style;
 
+import org.vast.stt.renderer.RendererInfo;
+
 
 /**
  * <p><b>Title:</b><br/>
@@ -28,7 +30,7 @@ package org.vast.stt.style;
  * @date Apr 1, 2006
  * @version 1.0
  */
-public interface BlockInfo
+public abstract class BlockInfo
 { 
-   
+    public RendererInfo rendererParams;
 }

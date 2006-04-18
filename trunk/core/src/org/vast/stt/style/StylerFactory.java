@@ -50,6 +50,9 @@ public class StylerFactory
         else if (sym instanceof TextSymbolizer)
             styler = new LabelStyler();
         
+        else if (sym instanceof GridSymbolizer)
+            styler = new GridStyler();
+        
         //else if (sym instanceof RasterSymbolizer)
         //    styler = new RasterStyler();
         

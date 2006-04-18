@@ -38,6 +38,8 @@ public interface StylerVisitor
     
     public void visit(LabelStyler styler);
 	
+    public void visit(GridStyler styler);
+    
 	public void visit(RasterStyler styler);    
     
     public void visit(TextureMappingStyler styler);
