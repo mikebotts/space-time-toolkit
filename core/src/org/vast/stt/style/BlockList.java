@@ -33,7 +33,7 @@ import org.vast.data.AbstractDataBlock;
  */
 public class BlockList
 {
-    protected int size;
+    protected int size = 0;
     protected DataComponent blockStructure;
     protected BlockListItem currentBlock;
     protected BlockListItem firstBlock;

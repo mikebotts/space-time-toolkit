@@ -297,6 +297,15 @@ public class OpenGLRenderer extends Renderer
     
     
     /**
+     * Renders all data passed by a grid styler
+     */
+    public void visit(GridStyler styler)
+    {
+        
+    }
+    
+    
+    /**
      * Renders all data passed by a texture mapping styler
      */
     public void visit(TextureMappingStyler styler)

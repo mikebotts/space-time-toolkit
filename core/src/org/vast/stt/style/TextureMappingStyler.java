@@ -16,6 +16,7 @@ package org.vast.stt.style;
 import java.util.ArrayList;
 import java.util.List;
 import org.vast.data.AbstractDataBlock;
+import org.vast.data.DataIndexer;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.ScalarParameter;
@@ -45,6 +46,11 @@ public class TextureMappingStyler extends AbstractStyler
     protected GridPointGraphic point;
     protected ListInfo[] imageLists;
     protected ListInfo[] gridLists;
+    protected int gridIndex1 = -1;
+    protected int gridIndex2 = -1;
+    protected DataIndexer blockIndexer1 = null;
+    protected DataIndexer blockIndexer2 = null;
+    protected BlockListItem[] gridBlocks = new BlockListItem[401];
     
 	
 	public TextureMappingStyler()
@@ -95,23 +101,48 @@ public class TextureMappingStyler extends AbstractStyler
     }
     
     
-    public GridPointGraphic getGridPoint(int x, int y, boolean normalize)
+    public GridPointGraphic getGridPoint(int u, int v, boolean normalize)
     {
         // figure out which block to read from
         // for now assume that blocks cover the whole grid width
-        int blockIndex = y/patch.gridBlockLength;
-        int yLocal = y%patch.gridBlockLength;
+        int blockIndex = v/patch.gridBlockLength;
+        int vLocal = v%patch.gridBlockLength;
         
-        BlockListItem block = patch.firstGridBlock;
-        for (int i=0; i<blockIndex; i++)
-            block = block.nextBlock;
+        BlockListItem block = gridBlocks[blockIndex];
+        //BlockListItem block = patch.firstGridBlock;
+        //for (int i=0; i<blockIndex; i++)
+        //    block = block.nextBlock;
         
-        AbstractDataBlock dataBlock = block.data;
-        dataLists[0].blockIndexer.setData(dataBlock); //TODO optimize by keeping two mapper copies?
-        dataLists[0].blockIndexer.getData(x, yLocal, 0);
+        DataIndexer blockIndexer = null;
+        if (blockIndex == gridIndex1)
+        {
+            blockIndexer = this.blockIndexer1;
+        }
+        else if (blockIndex == gridIndex2)
+        {
+            blockIndexer = this.blockIndexer2;
+        }
+        else
+        {
+            AbstractDataBlock dataBlock = block.data;
+            
+            if (u % 2 == 0)
+            {
+                blockIndexer = this.blockIndexer1;
+                blockIndexer.setData(dataBlock);
+                gridIndex1 = blockIndex;
+            }
+            else
+            {
+                blockIndexer = this.blockIndexer2;
+                blockIndexer.setData(dataBlock);
+                gridIndex2 = blockIndex;
+            }
+        }
         
-        point.tx = (float)x / (float)patch.grid.width * (float)patch.texture.width;
-        point.ty = (float)y / (float)patch.grid.length * (float)patch.texture.height;
+        blockIndexer.getData(u, vLocal, 0);
+        point.tx = (float)u / (float)patch.grid.width * (float)patch.texture.width;
+        point.ty = (float)v / (float)patch.grid.length * (float)patch.texture.height;
         
         return point;
     }
@@ -131,15 +162,22 @@ public class TextureMappingStyler extends AbstractStyler
         // if list item has not been processed, generate tile for it
         
         TexturePatchInfo newPatch = new TexturePatchInfo();
-        newPatch.grid.length = 101;
-        newPatch.grid.width = 101;
+        newPatch.grid.length = 401;
+        newPatch.grid.width = 401;
         newPatch.gridBlockLength = 1;
-        newPatch.gridBlockWidth = 101;
+        newPatch.gridBlockWidth = 401;
         newPatch.firstGridBlock = dataLists[0].blockList.firstBlock;
-        newPatch.gridBlockCount = 101;
+        newPatch.gridBlockCount = 401;
         
         newPatch.texture.height = 10;
         newPatch.texture.width = 10;
+        
+        BlockListItem block = newPatch.firstGridBlock;
+        for (int i=0; i<401; i++)
+        {
+            gridBlocks[i] = block;
+            block = block.nextBlock;
+        }        
         
         tiles.add(newPatch);
     }
@@ -270,6 +308,9 @@ public class TextureMappingStyler extends AbstractStyler
                 }
             }
         }
+        
+        blockIndexer1 = dataLists[0].blockIndexer.copy();
+        blockIndexer2 = dataLists[0].blockIndexer.copy();
 	}
 	
 	

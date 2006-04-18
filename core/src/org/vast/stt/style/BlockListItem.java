@@ -31,6 +31,7 @@ import org.vast.data.AbstractDataBlock;
  */
 public class BlockListItem
 {
+    protected BlockInfo info;
     protected AbstractDataBlock data;
     protected boolean processed = false;
     protected BlockListItem nextBlock;

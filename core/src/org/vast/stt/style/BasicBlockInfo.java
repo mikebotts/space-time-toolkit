@@ -13,7 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.stt.renderer.RendererInfo;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -31,9 +30,8 @@ import org.vast.stt.util.TimeExtent;
  * @date Apr 1, 2006
  * @version 1.0
  */
-public class BasicBlockInfo implements BlockInfo
+public class BasicBlockInfo extends BlockInfo
 {
-    public RendererInfo rendererInfo;
     public SpatialExtent spatialExtent;  // Stores bbox of this block for filtering
     public TimeExtent timeExtent;        // 
     public double geometryStepAverage;

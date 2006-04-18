@@ -63,7 +63,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         }
         else if (actionId.endsWith("OpenTestProject"))
         {
-            url = "file:///D:/Projects/NSSTC/STT3/conf/SoCal.xml";
+            url = "file:///D:/Projects/NSSTC/STT3/projects/SoCal.xml";
         }
 
         // launch OpenProject command in separate thread
