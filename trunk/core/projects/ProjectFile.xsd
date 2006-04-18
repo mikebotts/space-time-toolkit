@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="_DataEntry" abstract="true" type="_DataEntryType">
+	</xsd:element>
+	<xsd:element name="_Resource" type="_ResourceType" abstract="true"/>
+	<xsd:element name="STTProject">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Identification">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="name"/>
+							<xsd:element ref="description"/>
+							<xsd:element name="dateCreated" type="xsd:dateTime"/>
+							<xsd:element name="author" type="xsd:token"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="SceneList">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="member" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element ref="Scene">
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="ResourceList">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="member" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element ref="_Resource"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="ServiceList" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="member" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element ref="Service"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Scene" type="SceneType"/>
+	<xsd:element name="DataItem" substitutionGroup="_DataEntry" type="DataItemType">
+	</xsd:element>
+	<xsd:element name="DataList" substitutionGroup="_DataEntry" type="DataListType">
+	</xsd:element>
+	<xsd:element name="ServiceDataSet" type="ServiceResourceType" substitutionGroup="_Resource"/>
+	<xsd:element name="StaticDataSet" type="StaticResourceType" substitutionGroup="_Resource"/>
+	<xsd:element name="Service" type="ServiceType">
+	</xsd:element>
+	<xsd:element name="name" type="xsd:string"/>
+	<xsd:element name="description" type="xsd:string"/>
+	<xsd:complexType name="SceneType">
+		<xsd:sequence>
+			<xsd:element ref="name"/>
+			<xsd:element ref="description" minOccurs="0"/>
+			<xsd:element name="view">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ViewSettings"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="time">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TimeSettings"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="contents">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="DataList"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:ID" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="_DataEntryType">
+		<xsd:sequence>
+			<xsd:element ref="name"/>
+			<xsd:element ref="description" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:ID" use="optional"/>
+		<xsd:attribute name="enabled" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:complexType name="DataListType">
+		<xsd:complexContent>
+			<xsd:extension base="_DataEntryType">
+				<xsd:sequence>
+					<xsd:element name="member" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element ref="_DataEntry"/>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="DataItemType">
+		<xsd:complexContent>
+			<xsd:extension base="_DataEntryType">
+				<xsd:sequence>
+					<xsd:element name="dataProvider"/>
+					<xsd:element name="style" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:any/>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="_ResourceType" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="name"/>
+			<xsd:element ref="description"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:ID" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceResourceType">
+		<xsd:complexContent>
+			<xsd:extension base="_ResourceType">
+				<xsd:sequence>
+					<xsd:element name="layerID" type="xsd:token"/>
+					<xsd:element name="service">
+						<xsd:complexType>
+							<xsd:sequence maxOccurs="0">
+								<xsd:element ref="Service"/>
+							</xsd:sequence>
+							<xsd:attribute name="href"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="capabilities" minOccurs="0">
+						<xsd:complexType>
+							<xsd:sequence maxOccurs="0">
+								<xsd:any/>
+							</xsd:sequence>
+							<xsd:attribute name="href"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="StaticResourceType">
+		<xsd:complexContent>
+			<xsd:extension base="_ResourceType">
+				<xsd:sequence>
+					<xsd:element name="format" type="xsd:token"/>
+					<xsd:element name="headerData" minOccurs="0">
+						<xsd:complexType>
+							<xsd:attribute name="href"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="rawData" minOccurs="0">
+						<xsd:complexType>
+							<xsd:attribute name="href"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="_DataProviderType" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="name"/>
+			<xsd:element name="resource">
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="0">
+						<xsd:element ref="_Resource"/>
+					</xsd:sequence>
+					<xsd:attribute name="href"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceType">
+		<xsd:sequence>
+			<xsd:element ref="name"/>
+			<xsd:element ref="description" minOccurs="0"/>
+			<xsd:element name="type" type="xsd:token"/>
+			<xsd:element name="url" type="xsd:token">
+			</xsd:element>
+			<xsd:element name="version" type="xsd:token"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" use="required"/>
+	</xsd:complexType>
+</xsd:schema>
