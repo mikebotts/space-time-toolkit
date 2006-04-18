@@ -15,6 +15,9 @@ package org.vast.stt.style;
 
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
+import org.vast.stt.apps.STTConfig;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.scene.ViewSettings;
 
 
 /**
@@ -105,6 +108,10 @@ public class BlockList
             firstBlock = lastBlock;
         
         size++;
+        
+        // TODO handle redraw events in a better way !!
+        ViewSettings viewSettings = STTConfig.getInstance().getCurrentProject().getSceneList().get(0).getViewSettings();
+        STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
     }
 
 
