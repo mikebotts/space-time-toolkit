@@ -43,6 +43,4 @@ public class GridPatchGraphic extends GraphicObject
     
     public Buffer vertexData;
     public boolean hasGridData;
-    
-    public boolean updated = true;
 }

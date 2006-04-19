@@ -86,6 +86,8 @@ public class TextureMappingStyler extends AbstractStyler
         patch.getGrid().info = nextGrid.info;
         patch.getTexture().info = nextTexture.info;
         
+        // TODO scan and compute block BBOX and Time Range
+        
         return patch;
     }
 	   
@@ -99,11 +101,21 @@ public class TextureMappingStyler extends AbstractStyler
     }
     
     
-    public GridPointGraphic getGridPoint(int u, int v, boolean normalize)
+    public GridPointGraphic getGridPoint(int u, int v, float uScale, float vScale, boolean normalize)
     {
         dataLists[0].blockIndexer.getData(v, u, 0);
-        point.tx = (float)u / (float)patch.grid.width * (float)patch.texture.width;
-        point.ty = (float)v / (float)patch.grid.length * (float)patch.texture.height;        
+        
+        if (normalize)
+        {
+            point.tx = (float)u / (float)(patch.grid.width-1) * uScale;
+            point.ty = (float)v / (float)(patch.grid.length-1) * vScale;
+        }
+        else
+        {
+            point.tx = (float)u / (float)(patch.grid.width-1) * ((float)patch.texture.width-1);
+            point.ty = (float)v / (float)(patch.grid.length-1) * ((float)patch.texture.height-1);
+        }
+        
         return point;
     }
     
@@ -124,7 +136,7 @@ public class TextureMappingStyler extends AbstractStyler
         // reset all parameters
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
-        this.clearAllMappers();      
+        this.clearAllMappers();   
         
         // grid geometry X
         param = this.symbolizer.getGrid().getGeometry().getX();
