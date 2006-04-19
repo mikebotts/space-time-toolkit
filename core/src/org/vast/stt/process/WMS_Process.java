@@ -67,6 +67,7 @@ public class WMS_Process extends DataProcess
     protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
     protected DataValue outputWidth, outputHeight;
     protected DataArray outputImage;
+    protected DataGroup output;
     protected InputStream dataStream;
     protected WMSQuery query;
     protected WMSRequestWriter requestBuilder;
@@ -99,7 +100,7 @@ public class WMS_Process extends DataProcess
             input.assignNewDataBlock();
             
             // Output mappings
-            DataGroup output = (DataGroup)outputData.getComponent("outputImage");
+            output = (DataGroup)outputData.getComponent("imageData");
             outputImage = (DataArray)output.getComponent("image");
             outputWidth = (DataValue)output.getComponent("width");
             outputHeight = (DataValue)output.getComponent("height");
@@ -174,7 +175,8 @@ public class WMS_Process extends DataProcess
     public void execute() throws ProcessException
     {
         URL url = null;
-
+        RenderedImage renderedImage = null;
+        
         try
         {
             initRequest();
@@ -202,7 +204,7 @@ public class WMS_Process extends DataProcess
 
                 // decode image using JAI
                 RenderedOp rop = JAI.create("stream", pb);
-                RenderedImage renderedImage;
+                
                 if (rop != null)
                 {
                     renderedImage = rop.createInstance();
@@ -212,6 +214,20 @@ public class WMS_Process extends DataProcess
                     ((DataBlockByte)outputImage.getData()).setUnderlyingObject(data);
                 }
             }
+            
+            // adjust width and height of the output
+            int width = 0;
+            int height = 0;
+            
+            if (renderedImage != null)
+            {
+                width = renderedImage.getWidth();
+                height = renderedImage.getHeight();
+            }
+            
+            outputWidth.getData().setIntValue(width);
+            outputHeight.getData().setIntValue(height);
+            output.combineDataBlocks();
         }
         catch (Exception e)
         {
@@ -228,12 +244,14 @@ public class WMS_Process extends DataProcess
     {
         // make sure previous request is cancelled
         endRequest();
+        outputWidth.renewDataBlock();
+        outputHeight.renewDataBlock();
         
         // read lat/lon bbox
-        double lon1 = bboxLon1.getData().getDoubleValue()/Math.PI*180;
-        double lat1 = bboxLat1.getData().getDoubleValue()/Math.PI*180;
-        double lon2 = bboxLon2.getData().getDoubleValue()/Math.PI*180;
-        double lat2 = bboxLat2.getData().getDoubleValue()/Math.PI*180;
+        double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;
+        double lat1 = bboxLat1.getData().getDoubleValue();///Math.PI*180;
+        double lon2 = bboxLon2.getData().getDoubleValue();///Math.PI*180;
+        double lat2 = bboxLat2.getData().getDoubleValue();///Math.PI*180;
                 
         double minX = Math.min(lon1, lon2);
         double maxX = Math.max(lon1, lon2);

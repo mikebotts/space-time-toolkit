@@ -13,11 +13,14 @@
 
 package org.vast.stt.data;
 
+import java.util.ArrayList;
+
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
 import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.process.DataProcess;
+import org.vast.process.ProcessChain;
 import org.vast.stt.style.BlockList;
 
 
@@ -39,15 +42,12 @@ import org.vast.stt.style.BlockList;
 public class SensorMLProvider extends AbstractProvider
 {
     protected DataProcess process;
-    protected BlockList blockList;
+    protected ArrayList<BlockList> blockListArray;
     
     
 	public SensorMLProvider()
-	{
-	    this.spatialExtent.setMinX(-87.2);
-        this.spatialExtent.setMinY(34.4);
-        this.spatialExtent.setMaxX(-86.3);
-        this.spatialExtent.setMaxY(35.0);        
+	{      
+        blockListArray = new ArrayList<BlockList>();
 	}
 	
     
@@ -56,13 +56,35 @@ public class SensorMLProvider extends AbstractProvider
     {
         try
         {
+            if (process instanceof ProcessChain)
+                ((ProcessChain)process).setChildrenThreadsOn(false);
+            
             process.init();
             cachedData = new DataNode();
-            blockList = cachedData.createList(process.getOutputList().getComponent(0));
-            blockList.sendUpdates = true;
             
-            int tileCountX = 5;
-            int tileCountY = 5;
+            DataComponent outputs = process.getOutputList();
+            int outputCount = outputs.getComponentCount();
+            
+            for (int i=0; i<outputCount; i++)
+            {
+                BlockList blockList = cachedData.createList(outputs.getComponent(i));
+                blockList.sendUpdates = true;
+                blockListArray.add(blockList);
+            }
+            
+            int tileCountX;
+            int tileCountY;
+            
+            if (this.spatialExtent.isTilingEnabled())
+            {
+                tileCountX = this.spatialExtent.getXTiles();
+                tileCountY = this.spatialExtent.getYTiles();
+            }
+            else
+            {
+                tileCountX = 1;
+                tileCountY = 1;
+            }
                         
             for (int i=0; i<tileCountX; i++)
             {
@@ -81,8 +103,14 @@ public class SensorMLProvider extends AbstractProvider
                         timeInput.setData(timeData);
                     }
                     
-                    process.execute();            
-                    blockList.addBlock((AbstractDataBlock)process.getOutputList().getComponent(0).getData());
+                    process.execute();
+                    
+                    // transfer block for each output
+                    for (int c=0; c<outputCount; c++)
+                    {
+                        BlockList blockList = blockListArray.get(c);
+                        blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                    }                    
                 }
             }
         }
@@ -107,93 +135,20 @@ public class SensorMLProvider extends AbstractProvider
         DataComponent bboxInput = process.getInputList().getComponent("bbox");
         if (bboxInput != null)
         {
-            DataBlock bboxData = new DataBlockDouble(4);
-            bboxData.setDoubleValue(0, minY);
-            bboxData.setDoubleValue(1, minX);
-            bboxData.setDoubleValue(2, maxY);
-            bboxData.setDoubleValue(3, maxX);
-            bboxInput.setData(bboxData);
+            DataComponent corner1 = bboxInput.getComponent("corner1");
+            DataComponent lat1 = corner1.getComponent("lat");
+            lat1.getData().setDoubleValue(0, minY);
+            DataComponent lon1 = corner1.getComponent("lon");
+            lon1.getData().setDoubleValue(0, minX);
+            
+            DataComponent corner2 = bboxInput.getComponent("corner2");
+            DataComponent lat2 = corner2.getComponent("lat");
+            lat2.getData().setDoubleValue(0, maxY);
+            DataComponent lon2 = corner2.getComponent("lon");
+            lon2.getData().setDoubleValue(0, maxX);
         }
     }
-    
-    
-	/*
-	@Override
-	public void updateData() throws DataException
-	{
-        try
-        {
-            // TODO first check if we already have this data in dataNode
-            
-            // TODO load data in input queues (BBOX and Time Range)
-            //internalProcess.start();            
-            
-            if (cachedData == null)
-                cachedData = new DataNode();
-            
-            int arraySize = 401;
-            
-            DataGroup arrayGroup = new DataGroup();
-            DataArray array = new DataArray();
-            DataGroup pointGroup = new DataGroup(2);
-            pointGroup.addComponent("lat", new DataValue(DataType.DOUBLE));
-            pointGroup.addComponent("lon", new DataValue(DataType.DOUBLE));
-            array.addComponent("point", pointGroup);
-            array.setSize(arraySize);
-            arrayGroup.addComponent("time1", new DataValue(DataType.DOUBLE));
-            arrayGroup.addComponent("time2", new DataValue(DataType.DOUBLE));
-            arrayGroup.addComponent("array", array);
-            arrayGroup.setName("arrayGroup");
-            //BlockList dataList = cachedData.createList(arrayGroup);
-            BlockList dataList = cachedData.createList(array);
-            
-            if (process instanceof ProcessChain)
-                ((ProcessChain)process).setChildrenThreadsOn(false);
-            
-            process.init();
-            //arrayGroup.assignNewDataBlock();
-            array.assignNewDataBlock();
-            double inc = 23999.0/(double)(arraySize-1);
-            
-            for (double i=0; i<24000; i+=inc)
-            {
-                process.getInputList().getComponent("lineIndex").getData().setDoubleValue(i+1);
-                int count = 0;
-                
-                for (double j=0; j<24000; j+=inc)
-                {
-                    process.getInputList().getComponent("pixelIndex").getData().setDoubleValue(j+1);
-                    process.execute();
-                    //DataBlock newPoint = pointData.clone();
-                    double lat = process.getOutputList().getComponent("sampleLocation").getComponent(0).getData().getDoubleValue();
-                    double lon = process.getOutputList().getComponent("sampleLocation").getComponent(1).getData().getDoubleValue();
-                    
-                    if (lon > Math.PI)
-                        lon -= 2*Math.PI;
-                    
-                    //arrayGroup.getData().setDoubleValue(2*count+2, lat);
-                    //arrayGroup.getData().setDoubleValue(2*count+3, lon);
-                    array.getData().setDoubleValue(2*count, lat);
-                    array.getData().setDoubleValue(2*count+1, lon);
-                    count++;
-                    
-                    if (count == arraySize)
-                    {
-                        //dataList.addBlock((AbstractDataBlock)arrayGroup.getData());
-                        //arrayGroup.renewDataBlock();
-                        dataList.addBlock((AbstractDataBlock)array.getData());
-                        array.renewDataBlock();
-                        count = 0;
-                    }
-                }
-            }
-        }
-        catch (ProcessException e)
-        {
-            e.printStackTrace();
-        }
-	}
-	*/
+
 	
 	@Override
 	public void cancelUpdate()
@@ -203,17 +158,19 @@ public class SensorMLProvider extends AbstractProvider
 
 	public boolean isSpatialSubsetSupported()
 	{
-		// TODO if it has one or more vector location inputs, YES...
-        
-        return false;
+        if (process.getInputList().getComponent("bbox") != null)
+            return true;
+        else
+            return false;
 	}
 
 
 	public boolean isTimeSubsetSupported()
 	{
-		// TODO if it has one or more time onputs, YES
-        
-        return false;
+		if (process.getInputList().getComponent("time") != null)
+            return true;
+        else
+            return false;
 	}
 
 

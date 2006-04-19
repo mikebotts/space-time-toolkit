@@ -74,7 +74,7 @@ public class FlatGridGenerator_Process extends DataProcess
             input.assignNewDataBlock();
             
             // Output mappings
-            DataGroup output = (DataGroup)outputData.getComponent("outputGrid");
+            DataGroup output = (DataGroup)outputData.getComponent("gridData");
             outputGrid = (DataArray)output.getComponent("grid");
             outputWidth = (DataValue)output.getComponent("width");
             outputLength = (DataValue)output.getComponent("length");
@@ -107,10 +107,10 @@ public class FlatGridGenerator_Process extends DataProcess
      */
     public void execute() throws ProcessException
     {
-        double lon1 = bboxLon1.getData().getDoubleValue();
-        double lat1 = bboxLat1.getData().getDoubleValue();
-        double lon2 = bboxLon2.getData().getDoubleValue();
-        double lat2 = bboxLat2.getData().getDoubleValue();
+        double lon1 = bboxLon1.getData().getDoubleValue() * Math.PI/180;
+        double lat1 = bboxLat1.getData().getDoubleValue() * Math.PI/180;
+        double lon2 = bboxLon2.getData().getDoubleValue() * Math.PI/180;
+        double lat2 = bboxLat2.getData().getDoubleValue() * Math.PI/180;
                 
         double minX = Math.min(lon1, lon2);
         double maxX = Math.max(lon1, lon2);
@@ -137,5 +137,9 @@ public class FlatGridGenerator_Process extends DataProcess
                 pointNum++;
             }
         }
+        
+        // adjust width and height of the output
+        outputWidth.getData().setIntValue(width);
+        outputLength.getData().setIntValue(length);
     }
 }

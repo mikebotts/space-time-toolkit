@@ -28,6 +28,7 @@ import org.vast.process.DataProcess;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.SystemReader;
 import org.vast.stt.data.*;
+import org.vast.stt.util.SpatialExtent;
 import org.w3c.dom.*;
 
 
@@ -83,8 +84,74 @@ public class DataProviderReader
         else
             return null;
         
+        // read spatial extent
+        Element spElt = dom.getElement(providerElt, "spatialExtent");
+        readSpatialExtent(provider, dom, spElt);
+        
+        // read time extent
+        Element timeElt = dom.getElement(providerElt, "timeExtent");
+        readTimeExtent(provider, dom, timeElt);
+        
         return provider;
 	}
+    
+    
+    /**
+     * Reads the provider spatial extent data
+     * @param provider
+     * @param dom
+     * @param spElt
+     */
+    public void readSpatialExtent(DataProvider provider, DOMReader dom, Element spElt)
+    {
+         if (spElt != null)
+         {
+             SpatialExtent spatialExtent = provider.getSpatialExtent();
+             
+             // read bbox
+             String coordText = dom.getElementValue(spElt, "BoundingBox/coordinates");
+             String [] coords = coordText.split(" |,");
+             
+             double minX = Double.parseDouble(coords[0]);
+             double minY = Double.parseDouble(coords[1]);
+             double maxX = Double.parseDouble(coords[2]);
+             double maxY = Double.parseDouble(coords[3]);
+             
+             spatialExtent.setMinX(minX);
+             spatialExtent.setMinY(minY);
+             spatialExtent.setMaxX(maxX);
+             spatialExtent.setMaxY(maxY);
+             
+             // read tiling info
+             String tileDims = dom.getAttributeValue(spElt, "tiling");
+             if (tileDims != null)
+             {
+                 String[] dims = tileDims.split("x");
+                 
+                 int tileX = Integer.parseInt(dims[0]);
+                 int tileY = Integer.parseInt(dims[1]);
+                 
+                 spatialExtent.setXTiles(tileX);
+                 spatialExtent.setYTiles(tileY);
+                 spatialExtent.setTilingEnabled(true);
+             }
+         }
+    }
+    
+    
+    /**
+     * Reads the provider time extent data
+     * @param provider
+     * @param dom
+     * @param spElt
+     */
+    public void readTimeExtent(DataProvider provider, DOMReader dom, Element timeElt)
+    {
+        if (timeElt != null)
+        {
+            // TODO read time extent info
+        }
+    }
     
     
     /**
