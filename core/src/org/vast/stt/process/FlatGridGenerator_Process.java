@@ -127,7 +127,7 @@ public class FlatGridGenerator_Process extends DataProcess
             for (int i=0; i<width; i++)
             {
                 double x = minX + xStep * i;
-                double y = minY + yStep * j;
+                double y = maxY - yStep * j;
                 
                 gridData.setDoubleValue(pointNum, x);
                 pointNum++;
