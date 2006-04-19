@@ -191,8 +191,6 @@
                <SWEDataProvider id="DATASET_03">
                   <name>World Boundaries - 13</name>
                   <description>World Country Boundaries</description>
-                  <spatialExtent/>
-                  <timeExtent/>
                   <format>SWE</format>
                   <sweData xlink:href="http://vast.uah.edu/SWEData/countries/mapbdy13.xml"/>
                </SWEDataProvider>
