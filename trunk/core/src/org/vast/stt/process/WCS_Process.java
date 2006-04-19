@@ -178,11 +178,6 @@ public class WCS_Process extends DataProcess implements DataHandler
           
             dataParser = reader.getDataParser();
             DataComponent dataInfo = dataParser.getDataComponents();
-            //DataEncoding dataEnc = dataParser.getDataEncoding();
-            //System.out.println("--- " + dataInfo.getName() + " ---");
-            //System.out.println(dataInfo);
-            //System.out.println(dataEnc);
-            
             dataParser.setDataHandler(this);            
             dataParser.parse(reader.getDataStream());
             
@@ -190,31 +185,6 @@ public class WCS_Process extends DataProcess implements DataHandler
             int length = dataInfo.getComponentCount();                
             outputWidth.getData().setIntValue(width);
             outputLength.getData().setIntValue(length);
-            outputCoverage.setSize(length);
-            ((DataArray)outputCoverage.getComponent(0)).setSize(width);
-            
-            /*int width = 500;
-            int length = 200;
-            
-            outputCoverage.setSize(length);
-            ((DataArray)outputCoverage.getComponent(0)).setSize(width);
-            output.renewDataBlock();            
-            outputWidth.getData().setIntValue(width);
-            outputLength.getData().setIntValue(length);
-            
-            int index = 0;
-            for (double v=0; v<length; v++)
-            {
-                for (double u=0; u<width; u++)
-                {
-                    outputCoverage.getData().setDoubleValue(index, -45.0 + 90.0*v/(double)length);
-                    index++;
-                    outputCoverage.getData().setDoubleValue(index, -90.0 + 180.0*u/(double)width);
-                    index++;
-                    outputCoverage.getData().setDoubleValue(index, 1e5*Math.sin(u/(double)width*12));
-                    index++;
-                }
-            }*/
         }
         catch (Exception e)
         {
@@ -231,6 +201,8 @@ public class WCS_Process extends DataProcess implements DataHandler
     {
         // make sure previous request is cancelled
         endRequest();
+        outputWidth.renewDataBlock();
+        outputLength.renewDataBlock();
         
         // read lat/lon bbox
         double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;

@@ -31,7 +31,7 @@
       </sml:inputs>
       <sml:outputs>
          <sml:OutputList>
-            <sml:output name="outputImage">
+            <sml:output name="imageData">
                <swe:DataGroup id="OUTPUT_IMAGE">
                   <swe:component name="width">
                      <swe:Count id="IMAGE_WIDTH"/>

@@ -13,14 +13,11 @@
 
 package org.vast.stt.style;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataIndexer;
-import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.ows.sld.TextureSymbolizer;
 
 
 /**
@@ -39,111 +36,74 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class TextureMappingStyler extends AbstractStyler
 {
-	protected RasterSymbolizer symbolizer;
-    protected List<TexturePatchInfo> tiles;
-    protected TexturePatchInfo patch;
+	protected TextureSymbolizer symbolizer;
+    protected TexturePatchGraphic patch;
     protected RasterPixelGraphic pixel;
     protected GridPointGraphic point;
-    protected ListInfo[] imageLists;
-    protected ListInfo[] gridLists;
-    protected int gridIndex1 = -1;
-    protected int gridIndex2 = -1;
-    protected DataIndexer blockIndexer1 = null;
-    protected DataIndexer blockIndexer2 = null;
-    protected BlockListItem[] gridBlocks = new BlockListItem[401];
     
 	
 	public TextureMappingStyler()
 	{
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
-        tiles = new ArrayList<TexturePatchInfo>();
+        patch = new TexturePatchGraphic();
         setName("Texture Styler");
 	}
     
     
-    public TexturePatchInfo nextTile()
+    public TexturePatchGraphic nextTile()
     {
-        if (patch == null)
-        {
-            patch = tiles.get(0);
-            return patch;
-        }
+        ListInfo gridBlocks = dataLists[0]; 
+        ListInfo texBlocks = dataLists[1];
         
-        return null;
-    }
-    
-    
-    @ Override
-    public void reset()
-    {
-        super.reset();
-        patch = null;
+        // if no more items one of the lists, just return null
+        if (!(gridBlocks.blockList.hasNext && texBlocks.blockList.hasNext))
+            return null;
+        
+        // otherwise get blocks for next tile
+        BlockListItem nextGrid = gridBlocks.blockList.next();
+        BlockListItem nextTexture = texBlocks.blockList.next();
+        
+        // TODO implement block filtering here
+        
+        // setup grid indexer with new data 
+        AbstractDataBlock nextGridBlock = nextGrid.data;
+        gridBlocks.blockIndexer.setData(nextGridBlock);
+        gridBlocks.blockIndexer.reset();
+        gridBlocks.blockIndexer.getData(0,0,0);
+        if (nextGrid.info == null)
+            nextGrid.info = new BasicBlockInfo();
+        
+        // setup texture indexer with new data 
+        AbstractDataBlock nextTexBlock = nextTexture.data;
+        texBlocks.blockIndexer.setData(nextTexBlock);
+        texBlocks.blockIndexer.reset();
+        texBlocks.blockIndexer.getData(0,0,0);
+        if (nextTexture.info == null)
+            nextTexture.info = new BasicBlockInfo();
+        
+        // copy current item info blocks in the patch object
+        patch.getGrid().info = nextGrid.info;
+        patch.getTexture().info = nextTexture.info;
+        
+        return patch;
     }
 	   
     
     public RasterPixelGraphic getPixel(int x, int y)
     {
-        // figure out which block to read from
-        // for now assume that blocks cover the whole grid width
-        /*
-        int blockIndex = y/patch.imageBlockHeight;
-        int yLocal = y%patch.imageBlockHeight;
-        
-        AbstractDataBlock dataBlock = patch.imageBlocks[blockIndex].data;
-        imageLists[0].blockIndexer.setData(dataBlock); //TODO optimize by keeping two mapper copies?
-        imageLists[0].blockIndexer.getData(x, yLocal, 0);
-        */
-        pixel.r = (float)x / (float)patch.texture.width;
-        pixel.g = (float)y / (float)patch.texture.height;
-        
+        //pixel.r = (float)x / (float)patch.texture.width;
+        //pixel.g = (float)y / (float)patch.texture.height;
+        dataLists[1].blockIndexer.getData(y, x, 0);
         return pixel;
     }
     
     
     public GridPointGraphic getGridPoint(int u, int v, boolean normalize)
     {
-        // figure out which block to read from
-        // for now assume that blocks cover the whole grid width
-        int blockIndex = v/patch.gridBlockLength;
-        int vLocal = v%patch.gridBlockLength;
-        
-        BlockListItem block = gridBlocks[blockIndex];
-        //BlockListItem block = patch.firstGridBlock;
-        //for (int i=0; i<blockIndex; i++)
-        //    block = block.nextBlock;
-        
-        DataIndexer blockIndexer = null;
-        if (blockIndex == gridIndex1)
-        {
-            blockIndexer = this.blockIndexer1;
-        }
-        else if (blockIndex == gridIndex2)
-        {
-            blockIndexer = this.blockIndexer2;
-        }
-        else
-        {
-            AbstractDataBlock dataBlock = block.data;
-            
-            if (u % 2 == 0)
-            {
-                blockIndexer = this.blockIndexer1;
-                blockIndexer.setData(dataBlock);
-                gridIndex1 = blockIndex;
-            }
-            else
-            {
-                blockIndexer = this.blockIndexer2;
-                blockIndexer.setData(dataBlock);
-                gridIndex2 = blockIndex;
-            }
-        }
-        
-        blockIndexer.getData(u, vLocal, 0);
+        dataLists[0].blockIndexer.getData(v, u, 0);
         point.tx = (float)u / (float)patch.grid.width * (float)patch.texture.width;
-        point.ty = (float)v / (float)patch.grid.length * (float)patch.texture.height;
-        
+        point.ty = (float)v / (float)patch.grid.length * (float)patch.texture.height;        
         return point;
     }
     
@@ -152,35 +112,6 @@ public class TextureMappingStyler extends AbstractStyler
 	{
 		// TODO Auto-generated method stub
 	}
-    
-    
-    public void updateTiles()
-    {
-        // TODO scan new blocks and prepare new tiles
-        
-        // scan grid blocks
-        // if list item has not been processed, generate tile for it
-        
-        TexturePatchInfo newPatch = new TexturePatchInfo();
-        newPatch.grid.length = 401;
-        newPatch.grid.width = 401;
-        newPatch.gridBlockLength = 1;
-        newPatch.gridBlockWidth = 401;
-        newPatch.firstGridBlock = dataLists[0].blockList.firstBlock;
-        newPatch.gridBlockCount = 401;
-        
-        newPatch.texture.height = 10;
-        newPatch.texture.width = 10;
-        
-        BlockListItem block = newPatch.firstGridBlock;
-        for (int i=0; i<401; i++)
-        {
-            gridBlocks[i] = block;
-            block = block.nextBlock;
-        }        
-        
-        tiles.add(newPatch);
-    }
 
 
 	public void updateDataMappings()
@@ -193,11 +124,10 @@ public class TextureMappingStyler extends AbstractStyler
         // reset all parameters
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
-        tiles.clear();
         this.clearAllMappers();      
         
-        // geometry X
-        param = this.symbolizer.getGeometry().getX();
+        // grid geometry X
+        param = this.symbolizer.getGrid().getGeometry().getX();
         if (param != null)
         {
             propertyName = param.getPropertyName();
@@ -207,8 +137,8 @@ public class TextureMappingStyler extends AbstractStyler
             }
         }
         
-        //geometry Y
-        param = this.symbolizer.getGeometry().getY();
+        // grid geometry Y
+        param = this.symbolizer.getGrid().getGeometry().getY();
         if (param != null)
         {
             propertyName = param.getPropertyName();
@@ -218,8 +148,8 @@ public class TextureMappingStyler extends AbstractStyler
             }
         }
         
-        // geometry Z
-        param = this.symbolizer.getGeometry().getZ();
+        // grid geometry Z
+        param = this.symbolizer.getGrid().getGeometry().getZ();
         if (param != null)
         {
             propertyName = param.getPropertyName();
@@ -229,8 +159,30 @@ public class TextureMappingStyler extends AbstractStyler
             }
         }
         
+        // grid width
+        param = this.symbolizer.getGrid().getDimensions().getWidth();
+        if (param != null)       
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GridWidthMapper(patch.grid, param.getMappingFunction()));
+            }
+        }
+        
+        // grid length
+        param = this.symbolizer.getGrid().getDimensions().getLength();
+        if (param != null)       
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GridLengthMapper(patch.grid, param.getMappingFunction()));
+            }
+        }
+        
         // global texture opacity
-        param = this.symbolizer.getOpacity();
+        param = this.symbolizer.getImagery().getOpacity();
         if (param != null)
         {
             if (param.isConstant())
@@ -249,7 +201,7 @@ public class TextureMappingStyler extends AbstractStyler
         }
         
         // pixel red
-        channel = this.symbolizer.getRedChannel();
+        channel = this.symbolizer.getImagery().getRedChannel();
         if (channel != null)       
         {
             colors = true;
@@ -261,7 +213,7 @@ public class TextureMappingStyler extends AbstractStyler
         }
         
         // pixel green
-        channel = this.symbolizer.getGreenChannel();
+        channel = this.symbolizer.getImagery().getGreenChannel();
         if (channel != null)
         {
             colors = true;
@@ -273,7 +225,7 @@ public class TextureMappingStyler extends AbstractStyler
         }
         
         // pixel blue
-        channel = this.symbolizer.getBlueChannel();
+        channel = this.symbolizer.getImagery().getBlueChannel();
         if (channel != null)
         {
             colors = true;
@@ -285,7 +237,7 @@ public class TextureMappingStyler extends AbstractStyler
         }
         
         // pixel alpha
-        channel = this.symbolizer.getAlphaChannel();
+        channel = this.symbolizer.getImagery().getAlphaChannel();
         if (channel != null)
         {
             propertyName = channel.getChannelName().getPropertyName();
@@ -298,7 +250,7 @@ public class TextureMappingStyler extends AbstractStyler
         // pixel gray
         if (!colors)
         {
-            channel = this.symbolizer.getGrayChannel();
+            channel = this.symbolizer.getImagery().getGrayChannel();
             if (channel != null)
             {
                 propertyName = channel.getChannelName().getPropertyName();
@@ -309,12 +261,31 @@ public class TextureMappingStyler extends AbstractStyler
             }
         }
         
-        blockIndexer1 = dataLists[0].blockIndexer.copy();
-        blockIndexer2 = dataLists[0].blockIndexer.copy();
+        // image width
+        param = this.symbolizer.getImagery().getDimensions().getWidth();
+        if (param != null)       
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new RasterWidthMapper(patch.texture, param.getMappingFunction()));
+            }
+        }
+        
+        // image height
+        param = this.symbolizer.getImagery().getDimensions().getLength();
+        if (param != null)       
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new RasterHeightMapper(patch.texture, param.getMappingFunction()));
+            }
+        }
 	}
 	
 	
-	public RasterSymbolizer getSymbolizer()
+	public TextureSymbolizer getSymbolizer()
 	{
 		return symbolizer;
 	}
@@ -322,7 +293,7 @@ public class TextureMappingStyler extends AbstractStyler
 
 	public void setSymbolizer(Symbolizer sym)
 	{
-		this.symbolizer = (RasterSymbolizer)sym;
+		this.symbolizer = (TextureSymbolizer)sym;
 	}
 
 
@@ -335,7 +306,6 @@ public class TextureMappingStyler extends AbstractStyler
             if (dataLists.length == 0)
                 updateDataMappings();
                 
-            updateTiles();
             visitor.visit(this);
         }		
 	}

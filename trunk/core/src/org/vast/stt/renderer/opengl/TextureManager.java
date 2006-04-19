@@ -65,20 +65,20 @@ public class TextureManager
         int textureID = 0;
                 
         // create OpenGLInfo object if needed
-        OpenGLInfo info;
+        OpenGLInfo glInfo;
         if (tex.info.rendererParams != null)
-            info = (OpenGLInfo)tex.info.rendererParams;
+            glInfo = (OpenGLInfo)tex.info.rendererParams;
         else
         {
-            info = new OpenGLInfo();
-            tex.info.rendererParams = info;
+            glInfo = new OpenGLInfo();
+            tex.info.rendererParams = glInfo;
         }
         
         // delete old texture if it has been updated, otherwise just get ID
-        if (tex.updated && info.objectID != -1)
-            gl.glDeleteTextures(1, new int[] {info.objectID}, 0);
+        if (tex.updated && glInfo.objectID != -1)
+            gl.glDeleteTextures(1, new int[] {glInfo.objectID}, 0);
         else
-            textureID = info.objectID;
+            textureID = glInfo.objectID;
         
         // create texture if no ID was found
         if (textureID <= 0)
@@ -95,7 +95,7 @@ public class TextureManager
                                 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, tex.rasterData);
                 
                 // save the texture ID
-                info.objectID = textureID;
+                glInfo.objectID = textureID;
                 tex.updated = false;
             }                    
         }
@@ -104,6 +104,9 @@ public class TextureManager
             // just bind previously loaded texture
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, textureID);
         }
+        
+        gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+        gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     }
     
     
@@ -126,13 +129,13 @@ public class TextureManager
                 for (int i=0; i<width; i++)
                 {
                     RasterPixelGraphic pixel = ((TextureMappingStyler)styler).getPixel(i, j);
-                    buffer[index] = (byte)(255.0 * pixel.r);
+                    buffer[index] = (byte)pixel.r;
                     index++;
-                    buffer[index] = (byte)(255.0 * pixel.g);
+                    buffer[index] = (byte)pixel.g;
                     index++;
-                    buffer[index] = (byte)(255.0 * pixel.b);
+                    buffer[index] = (byte)pixel.b;
                     index++;
-                    buffer[index] = (byte)(255.0 * pixel.a);
+                    buffer[index] = -1;//(byte)pixel.a;
                     index++;
                 }
             }

@@ -13,9 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
-
 
 /**
  * <p><b>Title:</b><br/>
@@ -24,7 +21,7 @@ import org.vast.stt.util.TimeExtent;
  *
  * <p><b>Description:</b><br/>
  * Represents a patch of a mapped texture. A tile is composed of a grid and/or an image
- * to be textured on the grid. It is the atomic piece of a composite raster.
+ * to be textured on the grid.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -32,25 +29,13 @@ import org.vast.stt.util.TimeExtent;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class TexturePatchInfo extends BlockInfo
+public class TexturePatchGraphic extends GraphicObject
 {
     protected GridPatchGraphic grid;
     protected RasterTileGraphic texture;
-    protected SpatialExtent spatialExtent;
-    protected TimeExtent timeExtent;
-    
-    protected BlockListItem firstImageBlock; // blocks are always ordered along width, then height, then depth
-    protected int imageBlockCount;
-    protected int imageBlockWidth;
-    protected int imageBlockHeight;
-    
-    protected BlockListItem firstGridBlock; // blocks are always ordered along width, then length, then depth
-    protected int gridBlockCount;
-    protected int gridBlockWidth;
-    protected int gridBlockLength;
     
     
-    public TexturePatchInfo()
+    public TexturePatchGraphic()
     {
         grid = new GridPatchGraphic();
         texture = new RasterTileGraphic();
@@ -66,17 +51,5 @@ public class TexturePatchInfo extends BlockInfo
     public RasterTileGraphic getTexture()
     {
         return texture;
-    }
-
-
-    public SpatialExtent getSpatialExtent()
-    {
-        return spatialExtent;
-    }
-
-
-    public TimeExtent getTimeExtent()
-    {
-        return timeExtent;
     }
 }

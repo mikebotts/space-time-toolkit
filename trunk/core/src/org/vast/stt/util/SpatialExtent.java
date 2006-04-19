@@ -37,6 +37,10 @@ public class SpatialExtent
 	protected double maxY;
 	protected double minZ;
 	protected double maxZ;
+    protected boolean tilingEnabled;
+    protected int xTiles = 1;
+    protected int yTiles = 1;
+    protected int zTiles = 1;
 
 
     /**
@@ -222,4 +226,52 @@ public class SpatialExtent
 	{
 		this.minZ = minZ;
 	}
+
+
+    public boolean isTilingEnabled()
+    {
+        return tilingEnabled;
+    }
+
+
+    public void setTilingEnabled(boolean tilingEnabled)
+    {
+        this.tilingEnabled = tilingEnabled;
+    }
+
+
+    public int getXTiles()
+    {
+        return xTiles;
+    }
+
+
+    public void setXTiles(int tiles)
+    {
+        xTiles = tiles;
+    }
+
+
+    public int getYTiles()
+    {
+        return yTiles;
+    }
+
+
+    public void setYTiles(int tiles)
+    {
+        yTiles = tiles;
+    }
+
+
+    public int getZTiles()
+    {
+        return zTiles;
+    }
+
+
+    public void setZTiles(int tiles)
+    {
+        zTiles = tiles;
+    }
 }

@@ -53,10 +53,10 @@ public class StylerFactory
         else if (sym instanceof GridSymbolizer)
             styler = new GridStyler();
         
-        //else if (sym instanceof RasterSymbolizer)
-        //    styler = new RasterStyler();
-        
         else if (sym instanceof RasterSymbolizer)
+            styler = new RasterStyler();
+        
+        else if (sym instanceof TextureSymbolizer)
             styler = new TextureMappingStyler();
 		
 		if (styler != null)
