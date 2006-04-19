@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe" xmlns:stt="http://vast.uah.edu/stt">
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx">
    <!-- Global metadata about the project -->
    <Identification>
       <name>SPOT5 Demo Project</name>
@@ -58,33 +58,165 @@
                            </sld:PointSymbolizer>
                         </style>
                         <style>
-                           <sld:RasterSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>array/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>array/point/lat</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sld:Opacity>1.0</sld:Opacity>
-                              <sld:ChannelSelection>
-                                 <sld:RedChannel>
-                                    <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
-                                 </sld:RedChannel>
-                                 <sld:GreenChannel>
-                                    <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
-                                 </sld:GreenChannel>
-                                 <sld:BlueChannel>
-                                    <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
-                                 </sld:BlueChannel>
-                              </sld:ChannelSelection>
-                           </sld:RasterSymbolizer>
+                           <sldx:TextureSymbolizer enabled="true">
+                              <sldx:GridSymbolizer>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <ogc:PropertyName>array/point/lon</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <ogc:PropertyName>array/point/lat</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>coverageData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>coverageData/length</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sldx:GridSymbolizer>
+                              <sld:RasterSymbolizer>
+                                 <sld:Opacity>1.0</sld:Opacity>
+                                 <sld:ChannelSelection>
+                                    <sld:RedChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                    </sld:RedChannel>
+                                    <sld:GreenChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                    </sld:GreenChannel>
+                                    <sld:BlueChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                    </sld:BlueChannel>
+                                 </sld:ChannelSelection>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>coverageData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>coverageData/length</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sld:RasterSymbolizer>
+                           </sldx:TextureSymbolizer>
                         </style>
                      </DataItem>
                   </member>
                   <member>
                      <DataItem enabled="true">
+                        <name>Landsat Imagery (On Topo)</name>
+                        <dataProvider xlink:href="#WMS_CHAIN"/>
+                        <style>
+                           <sldx:TextureSymbolizer enabled="true">
+                              <sldx:GridSymbolizer>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>gridData/coverage/row/point/longitude</ogc:PropertyName>
+                                          <Gain>0.017453292519943295769236907684886</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>gridData/coverage/row/point/latitude</ogc:PropertyName>
+                                          <Gain>0.017453292519943295769236907684886</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-z">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>gridData/coverage/row/point/elevation</ogc:PropertyName>
+                                          <Gain>5e-7</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>gridData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>gridData/length</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sldx:GridSymbolizer>
+                              <sld:RasterSymbolizer>
+                                 <sld:Opacity>1.0</sld:Opacity>
+                                 <sld:ChannelSelection>
+                                    <sld:RedChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                    </sld:RedChannel>
+                                    <sld:GreenChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                    </sld:GreenChannel>
+                                    <sld:BlueChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                    </sld:BlueChannel>
+                                 </sld:ChannelSelection>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>imageData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>imageData/height</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sld:RasterSymbolizer>
+                           </sldx:TextureSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
+                     <DataItem enabled="true">
+                        <name>Landsat Imagery (Flat)</name>
+                        <dataProvider xlink:href="#WMS_CHAIN2"/>
+                        <style>
+                           <sldx:TextureSymbolizer enabled="true">
+                              <sldx:GridSymbolizer>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>gridData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>gridData/length</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sldx:GridSymbolizer>
+                              <sld:RasterSymbolizer>
+                                 <sld:Opacity>1.0</sld:Opacity>
+                                 <sld:ChannelSelection>
+                                    <sld:RedChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                    </sld:RedChannel>
+                                    <sld:GreenChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                    </sld:GreenChannel>
+                                    <sld:BlueChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                    </sld:BlueChannel>
+                                 </sld:ChannelSelection>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>imageData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>imageData/height</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sld:RasterSymbolizer>
+                           </sldx:TextureSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
+                     <DataItem enabled="false">
                         <name>SRTM Data</name>
                         <dataProvider xlink:href="#SRTM_CHAIN"/>
                         <style>
@@ -109,37 +241,14 @@
                                     </LinearAdjustment>
                                  </sld:CssParameter>
                               </sld:Geometry>
-                              <sld:Dimensions>
+                              <sldx:Dimensions>
                                  <sld:CssParameter name="width">
                                     <ogc:PropertyName>coverageData/width</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="length">
                                     <ogc:PropertyName>coverageData/length</ogc:PropertyName>
                                  </sld:CssParameter>
-                              </sld:Dimensions>
-                              <!--<sld:Stroke>
-                                 <sld:CssParameter name="stroke-red">
-                                    <LinearAdjustment>
-                                       <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                                       <Gain>0.0025</Gain>
-                                       <Offset>-0.5</Offset>
-                                    </LinearAdjustment>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="stroke-blue">
-                                    <LinearAdjustment>
-                                       <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                                       <Gain>-0.0025</Gain>
-                                       <Offset>1.5</Offset>
-                                    </LinearAdjustment>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="stroke-green">
-                                    <LinearAdjustment>
-                                       <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                                       <Gain>-0.0025</Gain>
-                                       <Offset>1.0</Offset>
-                                    </LinearAdjustment>
-                                 </sld:CssParameter>
-                              </sld:Stroke>-->
+                              </sldx:Dimensions>
                               <sld:Fill>
                                  <sld:CssParameter name="fill-red">
                                     <LinearAdjustment>
@@ -252,6 +361,12 @@
                <SensorMLProvider id="SPOT_CHAIN">
                   <name>SPOT-5 Geolocation Chain</name>
                   <description>SPOT-5 Imagery Geolocation to WGS84 Ellipsoid</description>
+                  <timeExtent>
+                     <gml:TimePeriod>
+                        <gml:beginPosition>2003-11-05T19:18:58-08:00</gml:beginPosition>
+                        <gml:endPosition>2003-11-05T19:20:58-08:00</gml:endPosition>
+                     </gml:TimePeriod>
+                  </timeExtent>
                   <process xlink:href="file:///D:/Projects/NSSTC/SensorML/examples/Process/SPOT5_Supermode_GeoLocation.xml#SPOT5_GEOLOCATION_CHAIN"/>
                </SensorMLProvider>
             </member>
@@ -259,7 +374,36 @@
                <SensorMLProvider id="SRTM_CHAIN">
                   <name>SRTM DEM</name>
                   <description>SRTM Digital Elevation Model</description>
+                  <spatialExtent tiling="5x5">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
                   <process xlink:href="file:///D:/Projects/NSSTC/STT3/projects/SRTM_Process.xml#WCS_PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="WMS_CHAIN">
+                  <name>WMS+SRTM</name>
+                  <description>Landsat Data on top of SRTM grid</description>
+                  <spatialExtent tiling="2x2">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="file:///D:/Projects/NSSTC/STT3/projects/WMS_SRTM_Process.xml#PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="WMS_CHAIN2">
+                  <name>WMS+SRTM</name>
+                  <description>Landsat Data on top of SRTM grid</description>
+                  <spatialExtent tiling="2x2">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="file:///D:/Projects/NSSTC/STT3/projects/WMS_FlatGrid_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
          </ResourceList>
