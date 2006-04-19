@@ -129,8 +129,8 @@
             <!--=====================-->
             <!--=====================-->
             <!--=====================-->
-            <sml:process name="flatGridGenerator">
-               <sml:ProcessModel id="GRID_GENERATOR">
+            <sml:process name="wcsProcess">
+               <sml:ProcessModel id="WCS_PROCESS">
                   <sml:inputs>
                      <sml:InputList>
                         <sml:input name="bbox" xlink:href="#INPUT_BBOX"/>
@@ -138,50 +138,69 @@
                   </sml:inputs>
                   <sml:outputs>
                      <sml:OutputList>
-                        <sml:output name="gridData">
+                        <sml:output name="coverageData">
                            <swe:DataGroup id="OUTPUT_GRID">
                               <swe:component name="width">
-                                 <swe:Count id="GRID_WIDTH"/>
+                                 <swe:Count id="GRID_WIDTH">10</swe:Count>
                               </swe:component>
                               <swe:component name="length">
-                                 <swe:Count id="GRID_LENGTH"/>
-                              </swe:component>
-                              <swe:component name="grid">
+                                 <swe:Count id="GRID_LENGTH">10</swe:Count>
+                              </swe:component>                  
+                              <swe:component name="coverage">
                                  <swe:DataArray arraySize="#GRID_LENGTH">
                                     <swe:component name="row">
                                        <swe:DataArray arraySize="#GRID_WIDTH">
                                           <swe:component name="point">
-                                             <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
-                                                <swe:coordinate name="lon">
-                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
-                                                </swe:coordinate>
-                                                <swe:coordinate name="lat">
-                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
-                                                </swe:coordinate>
-                                                <swe:coordinate name="alt">
-                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:altitude" uom="urn:ogc:def:unit:meter"/>
-                                                </swe:coordinate>
-                                             </swe:Vector>
+                                             <swe:DataGroup>
+                                                <swe:component name="latitude">
+                                                   <swe:Time definition="urn:ogc:phenomenon:latitude" uom="urn:ogc:unit:degree"/>
+                                                </swe:component>
+                                                <swe:component name="longitude">                                       
+                                                   <swe:Quantity definition="urn:ogc:phenomenon:longitude" uom="urn:ogc:unit:degree"/>
+                                                </swe:component>
+                                                <swe:component name="elevation">
+                                                   <swe:Quantity definition="urn:ogc:phenomenon:elevation" uom="urn:ogc:unit:meter"/>
+                                                </swe:component>
+                                             </swe:DataGroup>
                                           </swe:component>
                                        </swe:DataArray>
-                                    </swe:component>
+                                    </swe:component>                        
                                  </swe:DataArray>
                               </swe:component>
-                           </swe:DataGroup>
+                           </swe:DataGroup>                           
                         </sml:output>
                      </sml:OutputList>
                   </sml:outputs>
                   <sml:parameters>
                      <sml:ParameterList>
-                        <sml:parameter name="gridWidth">
-                           <swe:Count>10</swe:Count>
-                        </sml:parameter>
-                        <sml:parameter name="gridLength">
-                           <swe:Count>10</swe:Count>
+                        <sml:parameter name="wcsOptions">
+                           <swe:DataGroup fixed="true">
+                              <swe:component name="endPoint">
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu:8080/ows-dev/srtmWcs</swe:Category>
+                              </swe:component>
+                              <swe:component name="requestMethod">
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
+                              </swe:component>
+                              <swe:component name="layer">
+                                 <swe:Category>SRTM</swe:Category>
+                              </swe:component>
+                              <swe:component name="format">
+                                 <swe:Category definition="urn:ogc:def:identifier:mimeType">application/com-binary-base64</swe:Category>
+                              </swe:component>
+                              <swe:component name="version">
+                                 <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
+                              </swe:component>
+                              <swe:component name="skipX">
+                                 <swe:Count>5</swe:Count>
+                              </swe:component>
+                              <swe:component name="skipY">
+                                 <swe:Count>5</swe:Count>
+                              </swe:component>
+                           </swe:DataGroup>
                         </sml:parameter>
                      </sml:ParameterList>
                   </sml:parameters>
-                  <sml:method xlink:href="urn:ogc:def:process:flatGridGenerator:1.0"/>
+                  <sml:method xlink:href="urn:ogc:def:process:WCS:1.0"/>
                </sml:ProcessModel>
             </sml:process>
          </sml:ProcessList>
@@ -200,7 +219,7 @@
             <sml:connection>
                <sml:Link>
                   <sml:source ref="this/inputs/bbox"/>
-                  <sml:destination ref="flatGridGenerator/inputs/bbox"/>
+                  <sml:destination ref="wcsProcess/inputs/bbox"/>
                </sml:Link>
             </sml:connection>
             <sml:connection>
@@ -211,7 +230,7 @@
             </sml:connection>
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="flatGridGenerator/outputs/gridData"/>
+                  <sml:source ref="wcsProcess/outputs/coverageData"/>
                   <sml:destination ref="this/outputs/gridData"/>
                </sml:Link>
             </sml:connection>
