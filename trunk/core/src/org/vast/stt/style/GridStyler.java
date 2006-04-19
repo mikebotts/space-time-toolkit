@@ -71,6 +71,8 @@ public class GridStyler extends AbstractStyler
         if (nextItem.info == null)
             nextItem.info = new BasicBlockInfo();
         
+        // TODO scan and compute block BBOX and Time Range
+        
         // copy current item info in the patch object
         patch.info = nextItem.info;
         return patch;

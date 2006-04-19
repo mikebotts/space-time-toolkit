@@ -53,6 +53,8 @@ public class JOGLRenderer extends Renderer
     protected double[] coords = new double[3];
     protected int[] boolResult = new int[1];
     protected TextureManager textureManager;
+    protected DisplayListManager displayListManager;
+    protected boolean normalizeCoords;
 
 
     public JOGLRenderer()
@@ -152,21 +154,9 @@ public class JOGLRenderer extends Renderer
         glu = new GLU();
         glut = new GLUT();
         textureManager = new TextureManager(gl, glu);
+        displayListManager = new DisplayListManager(gl, glu);
+        normalizeCoords = textureManager.isNormalizationRequired();
         
-        // find out which texture 2D target to use
-        String glExtensions = gl.glGetString(GL.GL_EXTENSIONS);
-        if (glu.gluCheckExtension("GL_ARB_texture_rectangle", glExtensions) ||
-            glu.gluCheckExtension("GL_EXT_texture_rectangle", glExtensions))
-        {
-            OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_RECTANGLE_EXT;
-            System.err.println("--> NPOT textures supported <--");
-        }
-        else
-        {
-            OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;
-            System.err.println("--> NPOT textures NOT supported <--");
-        }
-
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glEnable(GL.GL_DEPTH_TEST);
@@ -177,7 +167,6 @@ public class JOGLRenderer extends Renderer
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        gl.glEnable(OpenGLCaps.TEXTURE_2D_TARGET);
         
         // set up a light
 //        gl.glEnable(GL.GL_LIGHTING);
@@ -202,21 +191,32 @@ public class JOGLRenderer extends Renderer
             JOGLContext = null;
         }
     }
-
-
+    
+    
     /**
      * Renders all data passed by a line styler
      */
     public void visit(LineStyler styler)
     {
+        BlockInfo blockInfo;
         LinePointGraphic point;
         boolean begin = false;
+        boolean checkList = true;
         float oldWidth = -1.0f;
         styler.reset();
-
+        
+        
         // loop and draw all points
-        while (styler.nextBlock())
+        while ((blockInfo = styler.nextLineBlock()) != null)
         {
+            if (checkList)
+            {
+                OpenGLInfo glInfo = (OpenGLInfo)blockInfo.rendererParams;            
+                boolean skip = displayListManager.useDisplayList(blockInfo, glInfo);
+                if (skip) break;
+                checkList = false;
+            }
+            
             while ((point = styler.nextPoint()) != null)
             {
                 if (!begin)
@@ -255,6 +255,8 @@ public class JOGLRenderer extends Renderer
         
         if (begin)
             gl.glEnd();
+        
+        gl.glEndList();        
     }
 
 
@@ -418,17 +420,9 @@ public class JOGLRenderer extends Renderer
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {
-            // call display list if available 
-            if (patch.info.rendererParams != null)
-            {
-                OpenGLInfo info = (OpenGLInfo)patch.info.rendererParams;
-                gl.glCallList(info.objectID);
-                continue;
-            }
-            
-            // create and start list recording
-            int listNum = gl.glGenLists(1);
-            gl.glNewList(listNum, GL.GL_COMPILE_AND_EXECUTE);
+            OpenGLInfo glInfo = (OpenGLInfo)patch.info.rendererParams;            
+            boolean skip = displayListManager.useDisplayList(patch.info, glInfo);
+            if (skip) continue;
             
             // select fill or wireframe
             if (patch.fill)
@@ -460,11 +454,6 @@ public class JOGLRenderer extends Renderer
             }
             
             gl.glEndList();
-            
-            // add list number to renderer info block
-            OpenGLInfo glInfo = new OpenGLInfo();
-            glInfo.objectID = listNum;
-            patch.info.rendererParams = glInfo;
         }
     }
 
@@ -476,6 +465,8 @@ public class JOGLRenderer extends Renderer
     {
         TexturePatchGraphic patch;
         GridPointGraphic point;
+        float uScale = 0.0f;
+        float vScale = 0.0f;
         styler.reset();
 
         // loop through all tiles
@@ -485,19 +476,12 @@ public class JOGLRenderer extends Renderer
             GridPatchGraphic grid = patch.getGrid();
             
             // bind texture and load in GL if needed
-            textureManager.bindTexture(styler, tex);
+            textureManager.useTexture(styler, tex);            
             
             // call display list if available 
-            if (grid.info.rendererParams != null)
-            {
-                OpenGLInfo info = (OpenGLInfo)grid.info.rendererParams;
-                gl.glCallList(info.objectID);
-                continue;
-            }
-            
-            // create and start list recording
-            int listNum = gl.glGenLists(1);
-            gl.glNewList(listNum, GL.GL_COMPILE_AND_EXECUTE);
+            OpenGLInfo glInfo = (OpenGLInfo)grid.info.rendererParams;            
+            boolean skip = displayListManager.useDisplayList(grid.info, glInfo);
+            if (skip) continue;
             
             // select fill or wireframe
             if (grid.fill)
@@ -510,6 +494,14 @@ public class JOGLRenderer extends Renderer
             gl.glDisable(GL.GL_CULL_FACE);            
             gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
             
+            // compute tex coordinate scale (for padded textures)
+            GLTextureInfo texInfo = (GLTextureInfo)tex.info.rendererParams;
+            if (texInfo.widthPadding != 0 || texInfo.heightPadding != 0)
+            {
+                uScale = (float)tex.width / (float)(tex.width + texInfo.widthPadding);
+                vScale = (float)tex.height / (float)(tex.height + texInfo.heightPadding);
+            }
+            
             // loop through all grid points
             for (int v = 0; v < grid.length-1; v++)
             {
@@ -517,11 +509,11 @@ public class JOGLRenderer extends Renderer
                 
                 for (int u = 0; u < grid.width; u++)
                 {
-                    point = styler.getGridPoint(u, v, false);
+                    point = styler.getGridPoint(u, v, uScale, vScale, normalizeCoords);
                     gl.glTexCoord2f(point.tx, point.ty);
                     gl.glVertex3d(point.x, point.y, point.z);
                     
-                    point = styler.getGridPoint(u, v+1, false);
+                    point = styler.getGridPoint(u, v+1, uScale, vScale, normalizeCoords);
                     gl.glTexCoord2f(point.tx, point.ty);
                     gl.glVertex3d(point.x, point.y, point.z);
                 }
@@ -530,11 +522,6 @@ public class JOGLRenderer extends Renderer
             }
             
             gl.glEndList();
-            
-            // add list number to renderer info block
-            OpenGLInfo glInfo = new OpenGLInfo();
-            glInfo.objectID = listNum;
-            grid.info.rendererParams = glInfo;
         }
         
         // reload the void texture

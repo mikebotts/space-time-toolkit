@@ -22,7 +22,7 @@ import org.vast.stt.renderer.RendererInfo;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Basic Block Info interface.
+ * Base Block Info.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -30,7 +30,8 @@ import org.vast.stt.renderer.RendererInfo;
  * @date Apr 1, 2006
  * @version 1.0
  */
-public abstract class BlockInfo
+public class BlockInfo
 { 
     public RendererInfo rendererParams;
+    public boolean updated = true;
 }

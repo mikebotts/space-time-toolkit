@@ -13,6 +13,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -36,14 +37,50 @@ import org.vast.ows.sld.Symbolizer;
 public class LineStyler extends AbstractStyler
 {
     protected LinePointGraphic point;
-    protected LineSymbolizer symbolizer;	
+    protected LineSymbolizer symbolizer;
+    protected BlockInfo lineInfo;
+    protected int oldBlockCount = 0; 
         
 	
 	public LineStyler()
 	{
 		point = new LinePointGraphic();
+        lineInfo = new BlockInfo();
 		setName("Line Styler");
 	}
+    
+    
+    public BlockInfo nextLineBlock()    
+    {
+        ListInfo listInfo = dataLists[0]; 
+        
+        // if no more items in the list, just return null
+        if (!listInfo.blockList.hasNext)
+            return null;
+        
+        // otherwise get the next item
+        BlockListItem nextItem = listInfo.blockList.next();
+        
+        // TODO implement block filtering here
+        
+        // setup indexer with new data 
+        AbstractDataBlock nextBlock = nextItem.data;
+        listInfo.blockIndexer.setData(nextBlock);
+        listInfo.blockIndexer.reset();
+        
+        // add a block info if not present
+        if (nextItem.info == null)
+            nextItem.info = new BasicBlockInfo();
+        
+        // TODO scan and compute block BBOX and Time Range
+        
+        if (listInfo.blockList.size != oldBlockCount)
+            lineInfo.updated = true;
+        
+        oldBlockCount = listInfo.blockList.size;
+        
+        return lineInfo;
+    }
     
     
     public LinePointGraphic nextPoint()

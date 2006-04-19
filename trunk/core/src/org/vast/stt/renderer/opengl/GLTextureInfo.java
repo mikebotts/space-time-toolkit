@@ -13,16 +13,14 @@
 
 package org.vast.stt.renderer.opengl;
 
-import org.vast.stt.renderer.RendererInfo;
-
 
 /**
  * <p><b>Title:</b><br/>
- * OpenGLInfo
+ * GLTexture Info
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Class for storing OpenGL specific options.
+ * Class for storing GL Texture specific options.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -30,16 +28,14 @@ import org.vast.stt.renderer.RendererInfo;
  * @date Apr 13, 2006
  * @version 1.0
  */
-public class OpenGLInfo implements RendererInfo
+public class GLTextureInfo extends OpenGLInfo
 {
-    public int programNumber = -1;   // OpenGL shader program number (-1 if none)
-    public int objectID = -1;        // OpenGL name for texture, vertex buffer or display list (-1 if none)
-    public int indexBufferID = -1;   // OpenGL name for additional Index Buffer Object (-1 if none)
+    public int textureID = -1;
     public int widthPadding = 0;
     public int heightPadding = 0;
     
     
-    public OpenGLInfo()
+    public GLTextureInfo()
     {        
     }
 }

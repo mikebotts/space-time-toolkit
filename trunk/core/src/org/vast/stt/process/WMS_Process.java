@@ -72,6 +72,9 @@ public class WMS_Process extends DataProcess
     protected WMSQuery query;
     protected WMSRequestWriter requestBuilder;
     protected DataStreamParser dataParser;
+    protected int originalWidth;
+    protected int originalHeight;
+    protected boolean preserveAspectRatio = true;
     
 
     public WMS_Process()
@@ -87,8 +90,6 @@ public class WMS_Process extends DataProcess
      */
     public void init() throws ProcessException
     {
-        int width, height;
-        
         try
         {
             // Input mappings
@@ -141,31 +142,24 @@ public class WMS_Process extends DataProcess
             query.setFormat(format);
             
             // image width
-            width = wmsParams.getComponent("imageWidth").getData().getIntValue();
-            query.setWidth(width);
+            originalWidth = wmsParams.getComponent("imageWidth").getData().getIntValue();
+            query.setWidth(originalWidth);
             
             // image height
-            height = wmsParams.getComponent("imageHeight").getData().getIntValue();
-            query.setHeight(height);
+            originalHeight = wmsParams.getComponent("imageHeight").getData().getIntValue();
+            query.setHeight(originalHeight);
             
             // image transparency
             boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
             query.setTransparent(transparent);
             
             query.setSrs("EPSG:4326");
-            query.setExceptionType("application/vnd.ogc.se+xml");
+            query.setExceptionType("application/vnd.ogc.se_xml");
         }
         catch (Exception e)
         {
             throw new ProcessException("Invalid Parameters", e);
         }
-        
-        // adjust output width and height and generate output blocks
-        outputWidth.getData().setIntValue(width);
-        outputHeight.getData().setIntValue(height);
-        outputImage.setSize(height);
-        ((DataArray)outputImage.getComponent(0)).setSize(width);
-        outputImage.assignNewDataBlock();
     }
 
 
@@ -262,6 +256,22 @@ public class WMS_Process extends DataProcess
         query.getBbox().setMaxX(maxX);
         query.getBbox().setMinY(minY);
         query.getBbox().setMaxY(maxY);
+        
+        // adjust widht/height to match aspect ratio
+        if (preserveAspectRatio)
+        {
+            int width = originalWidth;
+            int height = originalHeight;
+            
+            // use smaller measure as reference
+            if (width <= height)
+                height = (int)(width * (maxY - minY) / (maxX - minX));
+            else
+                width = (int)(height * (maxX - minX) / (maxY - minY));
+            
+            query.setWidth(width);
+            query.setHeight(height);
+        }
     }
     
     
