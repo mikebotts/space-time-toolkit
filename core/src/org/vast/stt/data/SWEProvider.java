@@ -114,6 +114,7 @@ public class SWEProvider extends AbstractProvider
 			try
 			{
 				dataStream.close();
+                dataParser = null;
 			}
 			catch (IOException e)
 			{
@@ -127,6 +128,7 @@ public class SWEProvider extends AbstractProvider
 	public void cancelUpdate()
 	{
 		dataParser.stop();
+        dataParser = null;
 		super.cancelUpdate();
 	}
 

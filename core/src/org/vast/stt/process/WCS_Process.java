@@ -230,6 +230,7 @@ public class WCS_Process extends DataProcess implements DataHandler
                 dataStream.close();
             
             dataStream = null;
+            dataParser = null;
         }
         catch (IOException e)
         {

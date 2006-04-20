@@ -120,7 +120,8 @@ public class TextureManager
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, GL.GL_RGBA,
                             tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
                             0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, tex.rasterData);
-                        
+            
+            tex.rasterData = null;
             tex.info.updated = false;
         }
         

@@ -155,15 +155,17 @@ public class SOSProvider extends OWSProvider
 	{
 		canceled = true;
 		
-		// stop parser
-		if (dataParser != null)
-			dataParser.stop();
-		
 		// close stream(s)
 		try
 		{
-			if (dataStream != null)
+            if (dataParser != null)
+                dataParser.stop();
+            
+            if (dataStream != null)
 				dataStream.close();
+            
+            dataStream = null;
+            dataParser = null;
 		}
 		catch (IOException e)
 		{

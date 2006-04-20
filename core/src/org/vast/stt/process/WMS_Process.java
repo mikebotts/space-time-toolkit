@@ -30,19 +30,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
-
 import org.ogc.cdm.common.DataType;
-import org.ogc.cdm.reader.DataStreamParser;
 import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.process.*;
-
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
@@ -71,7 +67,6 @@ public class WMS_Process extends DataProcess
     protected InputStream dataStream;
     protected WMSQuery query;
     protected WMSRequestWriter requestBuilder;
-    protected DataStreamParser dataParser;
     protected int originalWidth;
     protected int originalHeight;
     protected boolean preserveAspectRatio = true;

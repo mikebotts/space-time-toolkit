@@ -33,6 +33,7 @@ import org.vast.stt.commands.FitView;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.scene.*;
+import org.vast.stt.project.Project;
 import org.vast.stt.renderer.*;
 import org.vast.stt.renderer.opengl.*;
 
@@ -43,7 +44,8 @@ public class SceneView extends ViewPart implements PaintListener, ControlListene
 	private Canvas canvas;
 	private Renderer renderer;
 	private Scene scene;
-	
+	private SceneViewController controller;
+    
 	
 	Runnable renderExec = new Runnable()
 	{
@@ -59,48 +61,85 @@ public class SceneView extends ViewPart implements PaintListener, ControlListene
 		canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
 		canvas.addControlListener(this);
 		canvas.addPaintListener(this);
-		
-		String id = ((IViewSite)this.getSite()).getSecondaryId();
-		int sceneIndex = Integer.parseInt(id);
-		Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(sceneIndex);
-		this.setPartName(scene.getName());
-		this.scene = scene;
-		
-		renderer = new JOGLRenderer();//new OpenGLRenderer();
-		renderer.setCanvas(canvas);
-		renderer.init();
-		
-		ViewSettings viewSettings = scene.getViewSettings();		
-		if (viewSettings instanceof ViewSettings)
-		{
-			new SceneViewController(this);
-		}	
-		
+		this.reset();
 		STTConfig.getInstance().getEventManager().addSceneViewListener(this);
 	}
+    
+    
+    public void clear()
+    {
+        if (scene != null)
+        {
+            scene = null;
+            renderer = null;
+            controller.setViewSettings(null);
+            canvas.removeMouseListener(controller);
+            canvas.removeMouseMoveListener(controller);
+            canvas.removeListener(SWT.MouseWheel , controller);
+            canvas.redraw();
+            setPartName("Nothing Open");
+        }
+    }
+    
+    
+    public void reset()
+    {
+        String id = ((IViewSite)this.getSite()).getSecondaryId();
+        int sceneIndex = Integer.parseInt(id);
+        Project currentProject = STTConfig.getInstance().getCurrentProject();
+        
+        if (currentProject != null)
+        {
+            // retrieve project scene
+            scene = currentProject.getSceneList().get(sceneIndex);
+            setPartName(scene.getName());
+            
+            // create the renderer
+            renderer = new JOGLRenderer();
+            renderer.setCanvas(canvas);
+            renderer.init();
+            
+            // init size
+            Rectangle clientArea = canvas.getClientArea();
+            renderer.resizeView(clientArea.width, clientArea.height);
+            scene.getViewSettings().setViewHeight(clientArea.height);
+            scene.getViewSettings().setViewWidth(clientArea.width);
+            
+            // set and register view controller
+            controller.setViewSettings(scene.getViewSettings());
+            canvas.addMouseListener(controller);
+            canvas.addMouseMoveListener(controller);
+            canvas.addListener(SWT.MouseWheel , controller);
+        }
+    }
 	
 	
 	public void paintControl(PaintEvent e)
 	{
-		renderer.drawScene(scene);
+		if (scene != null)
+		    renderer.drawScene(scene);
 	}
 	
 	
 	public void controlResized(ControlEvent e)
 	{
-		Rectangle clientArea = canvas.getClientArea();
-		renderer.resizeView(clientArea.width, clientArea.height);
-		scene.getViewSettings().setViewHeight(clientArea.height);
-		scene.getViewSettings().setViewWidth(clientArea.width);
+        if (scene != null)
+        {
+            Rectangle clientArea = canvas.getClientArea();
+    		renderer.resizeView(clientArea.width, clientArea.height);
+    		scene.getViewSettings().setViewHeight(clientArea.height);
+    		scene.getViewSettings().setViewWidth(clientArea.width);
+        }
 	}
 	
 	
 	public void handleEvent(STTEvent e)
 	{
-		if (e.getSource() == scene.getViewSettings())
-		{
-			canvas.getDisplay().asyncExec(renderExec);
-		}
+		if (scene != null)
+            if (e.getSource() == scene.getViewSettings())
+    		{
+    			canvas.getDisplay().asyncExec(renderExec);
+    		}
 	}
 	
 	
@@ -146,6 +185,8 @@ public class SceneView extends ViewPart implements PaintListener, ControlListene
 		
 		fitItemAction.setText("Fit View to Selected Item");
 		site.getActionBars().getMenuManager().add(fitItemAction);
+        
+        controller = new SceneViewController(this);
 	}
 	
 	
