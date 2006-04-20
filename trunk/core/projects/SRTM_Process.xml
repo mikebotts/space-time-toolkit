@@ -84,10 +84,10 @@
                      <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
                   </swe:component>
                   <swe:component name="skipX">
-                     <swe:Count>5</swe:Count>
+                     <swe:Count>2</swe:Count>
                   </swe:component>
                   <swe:component name="skipY">
-                     <swe:Count>5</swe:Count>
+                     <swe:Count>2</swe:Count>
                   </swe:component>
                </swe:DataGroup>
             </sml:parameter>
