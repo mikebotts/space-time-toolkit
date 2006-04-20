@@ -158,37 +158,47 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		// register listener
 		getSite().getPage().addPartListener(this);
 	}
+    
+    
+    public void clear()
+    {
+        sceneTree.setInput(null);
+    }
+    
+    
+    public void refresh()
+    {
+        if (sceneTree == null)
+            return;
+        
+//        Runnable updateTree = new Runnable()
+//        {
+//            public void run()
+//            {
+                int sceneID = 0;
+                ArrayList<Scene> sceneList = STTConfig.getInstance().getCurrentProject().getSceneList();
+                Scene currentScene = sceneList.get(sceneID);
+                
+                // save previous expanded state
+                expandedItems = sceneTree.getVisibleExpandedElements();
+                
+                // load new data
+                sceneTree.setInput(currentScene);
+                
+                // restore expanded elements
+                for (int i=0; i<expandedItems.length; i++)
+                    sceneTree.expandToLevel(expandedItems[i], 1);
+//            }
+//        };
+//        
+//        sceneTree.getTree().getDisplay().asyncExec(updateTree);
+    }
 	
 	
 	public void partActivated(IWorkbenchPart part)
 	{
-		if (sceneTree == null)
-			return;
-		
-		if (!(part instanceof SceneView))
-			return;
-		
-		Runnable updateTree = new Runnable()
-		{
-			public void run()
-			{
-				int sceneID = 0;
-				ArrayList<Scene> sceneList = STTConfig.getInstance().getCurrentProject().getSceneList();
-				Scene currentScene = sceneList.get(sceneID);
-				
-				// save previous expanded state
-				expandedItems = sceneTree.getVisibleExpandedElements();
-				
-				// load new data
-				sceneTree.setInput(currentScene);
-				
-				// restore expanded elements
-				for (int i=0; i<expandedItems.length; i++)
-					sceneTree.expandToLevel(expandedItems[i], 1);
-			}
-		};
-		
-		sceneTree.getTree().getDisplay().asyncExec(updateTree);		
+        if (part instanceof SceneView)
+            refresh();
 	}
 	
 	

@@ -19,7 +19,6 @@ import org.vast.stt.apps.STTConfig;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.scene.ViewSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -59,13 +58,7 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 
 	public SceneViewController(SceneView sceneView)
 	{
-		this.sceneView = sceneView;
-		this.viewSettings = sceneView.getScene().getViewSettings();
-		
-		Canvas canvas = sceneView.getCanvas();
-		canvas.addMouseListener(this);
-		canvas.addMouseMoveListener(this);
-		canvas.addListener(SWT.MouseWheel , this);
+		this.sceneView = sceneView;	
 	}
 	
 	
@@ -242,4 +235,10 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	{
 		this.enableZoom = enableZoom;
 	}
+
+
+    public void setViewSettings(ViewSettings viewSettings)
+    {
+        this.viewSettings = viewSettings;
+    }
 }
