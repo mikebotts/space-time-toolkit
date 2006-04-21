@@ -37,7 +37,7 @@ public class OptionControl extends Composite {
 	Label label;
 	Display display = PlatformUI.getWorkbench().getDisplay();
 	Control activeControl;
-	public static enum ControlType { BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT}; 
+	public static enum ControlType { BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT, CHECKBOX}; 
 	ControlType controlType;
 	final Color WHITE = display.getSystemColor(SWT.COLOR_WHITE);
 	final Color GRAY = display.getSystemColor(SWT.COLOR_GRAY);
@@ -123,6 +123,22 @@ public class OptionControl extends Composite {
 		return button;
 	}
 	
+	public Button createCheckbox(String labelTxt, String text) { // sellistener
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginHeight = 0;
+		this.setLayout(layout);
+		createLabel(labelTxt);
+		activeControl = new Button(this, SWT.CHECK);
+		Button button = (Button)activeControl;
+		button.setText(text);
+
+		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
+		button.setLayoutData(gd);
+		controlType = ControlType.CHECKBOX;
+		return button;
+	}
+
 	public Button createCheckbox(String labelTxt, boolean enabled){
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -185,7 +201,7 @@ public class OptionControl extends Composite {
 					(int)(sldColor.getRedValue()*255), 
 					(int)(sldColor.getGreenValue()*255), 
 					(int)(sldColor.getBlueValue()*255));
-		else
+		else  //  at least one of rgba channels is mapped
 			colorLabelColor = new Color(display, 100,100,100);
 		colorLabel.setBackground(colorLabelColor);		
 	}
@@ -209,6 +225,7 @@ public class OptionControl extends Composite {
 	public void addSelectionListener(SelectionListener sl){
 		switch(controlType){
 		case BUTTON:
+		case CHECKBOX:
 		case COLOR_BUTTON:
 			((Button)activeControl).addSelectionListener(sl);
 			break;
@@ -229,6 +246,7 @@ public class OptionControl extends Composite {
 	public void removeSelectionListener(SelectionListener sl){
 		switch(controlType){
 		case BUTTON:
+		case CHECKBOX:
 		case COLOR_BUTTON:
 			((Button)activeControl).removeSelectionListener(sl);
 			break;
@@ -251,6 +269,7 @@ public class OptionControl extends Composite {
 		Control control = optControl.getControl();
 		switch(controlType){
 		case BUTTON:
+		case CHECKBOX:
 			//((Button)activeControl).removeSelectionListener(sl);
 			break;
 		case COLOR_BUTTON:
