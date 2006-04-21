@@ -3,7 +3,10 @@ package org.vast.stt.gui.widgets.styler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionChooser;
+import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.GridStyler;
+import org.vast.stt.style.LabelStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
 import org.vast.stt.style.RasterStyler;
@@ -49,23 +52,25 @@ public class StyleOptionChooser extends OptionChooser {
 		DataStyler styler = (DataStyler) stylerObj;
 		removeOldControls();
 
+		OptionController optionController = null;
 		if(styler instanceof PointStyler) {
-			BasicPointController pointOptionController = 
-				new BasicPointController(optComp, (PointStyler)styler);
-			optListener.setBasicController(pointOptionController);
+			optionController = new BasicPointController(optComp, (PointStyler)styler);
 		} else if (styler instanceof LineStyler) {
-			BasicLineController lineOptionController = 
-				new BasicLineController(optComp, (LineStyler)styler);
-			lineOptionController.addSelectionListener(optListener);
-			optListener.setBasicController(lineOptionController);
+			optionController = new BasicLineController(optComp, (LineStyler)styler);
+		} else if (styler instanceof GridStyler) {
+			optionController = new BasicGridController(optComp, (GridStyler)styler);
 		} else if (styler instanceof RasterStyler) {
-			BasicRasterController rasterOptionController = 
-				new BasicRasterController(optComp, (RasterStyler)styler);
-			rasterOptionController.addSelectionListener(optListener);
-			optListener.setBasicController(rasterOptionController);
-		} else
+			optionController = new BasicRasterController(optComp, (RasterStyler)styler);
+		} else if (styler instanceof LabelStyler) {
+			optionController = new BasicLabelController(optComp, (LabelStyler)styler);
+		} else 
 			System.err.println("Styler not supported yet: " + styler);
 		
+		if(optionController == null)
+			return;
+		optionController.addSelectionListener(optListener);
+		optListener.setBasicController(optionController);
+
 		optComp.layout(true);		
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
