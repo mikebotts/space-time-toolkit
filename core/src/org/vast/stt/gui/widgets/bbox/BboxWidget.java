@@ -204,7 +204,6 @@ public class BboxWidget implements SelectionListener
 	
 	public void setDataItem(DataItem item){
 		this.dataItem = item;
-		System.err.println("item " + item);
 		mainGroup.setText(item.getName());
 		DataProvider prov = item.getDataProvider();
 		//  If provider is null, this widget isn't supported.

@@ -123,6 +123,7 @@ public class TimeExtentWidget implements SelectionListener
 	}
 
 	public void setDataItem(DataItem item){
+		mainGroup.setText(item.getName());
 		this.dataItem = item;
 		mainGroup.setText(item.getName());
 		//  set the fields 

@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FontDialog;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
+import org.vast.ows.sld.Font;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
@@ -54,6 +55,19 @@ public class LabelOptionHelper implements SelectionListener {
 		fill.setColor(c);
 	}
 		
+	private void setFont(FontData fontData) {
+		System.err.println("Font is: " + 
+				fontData.getName() + "," + fontData.getHeight() + ", " + fontData.getStyle());
+		
+		//  TODO  map fontData to SLD Font parameters
+		//   Need to get available system fonts from JOGL
+		//  also may need to know how GL uses font atts
+		
+		Font newFont = new Font();
+		//newFont.setFamily();
+		styler.getSymbolizer().setFont(newFont);
+	}
+
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
@@ -68,6 +82,7 @@ public class LabelOptionHelper implements SelectionListener {
 			FontData fontData = fontChooser.open();
 			if(fontData == null)
 				return;
+			setFont(fontData);
 		} else if (control == optionControl[2].getControl()) { // Label Color
 			ColorDialog colorChooser = new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();

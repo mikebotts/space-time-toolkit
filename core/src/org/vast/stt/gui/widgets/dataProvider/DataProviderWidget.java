@@ -55,6 +55,8 @@ public class DataProviderWidget extends CheckOptionTable
 	public void setDataItem(DataItem item){
 		super.setDataItem(item);
 		DataProvider prov = item.getDataProvider();
+		//  Here, I'm getting either a SWEDataProv or SensorMLDataProv
+		//  Are these the only supported provider types now?
 		
 		//  TODO:  Rearrange methods so OptChooser controls get removed regardless here.
 		if(prov == null)
@@ -68,11 +70,16 @@ public class DataProviderWidget extends CheckOptionTable
 	 * @param newProv
 	 */
 	public void setProvider(DataProvider newProv){		
+		
+		
 		//  Check for CompositeProvider first...
 		//...
 		providerAL.clear();
 		providerAL.add(newProv);
 
+		
+		
+		
 		optionChooser.buildControls(newProv);
 		System.err.println("New Prov is " + newProv);
 		//		if(newStyler instanceof CompositeStyler) 

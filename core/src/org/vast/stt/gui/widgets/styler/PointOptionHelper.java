@@ -13,6 +13,7 @@ import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
+import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
@@ -22,15 +23,16 @@ public class PointOptionHelper implements SelectionListener {
 
 	OptionController optionController;
 	PointStyler styler;
+	PointSymbolizer symbolizer;
 
 	public PointOptionHelper(OptionController loc){
 		optionController = loc;
-		//  styler must not change for this to work
 		styler = (PointStyler)optionController.getStyler();
+		symbolizer = styler.getSymbolizer();
 	}
 	
 	public Color getPointColor(){
-		Graphic graphic = styler.getSymbolizer().getGraphic();
+		Graphic graphic = symbolizer.getGraphic();
 		List graphicSourceList = graphic.getGlyphs();
 		//if(graphicSourceList == null)  return;
 		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
@@ -45,7 +47,7 @@ public class PointOptionHelper implements SelectionListener {
 	}
 		
 	private void setPointSize(float f){
-		Graphic graphic = styler.getSymbolizer().getGraphic();
+		Graphic graphic = symbolizer.getGraphic();
 		ScalarParameter size = new ScalarParameter();
 		size.setConstantValue(f);
 		graphic.setSize(size);
@@ -56,7 +58,7 @@ public class PointOptionHelper implements SelectionListener {
 	 * @param swtRgb
 	 */
 	private void setPointColor(org.vast.ows.sld.Color sldColor){
-		Graphic graphic = styler.getSymbolizer().getGraphic();
+		Graphic graphic = symbolizer.getGraphic();
 		List graphicSourceList = graphic.getGlyphs();
 		if(graphicSourceList == null)  return;
 		GraphicSource graphicSource = (GraphicSource)graphicSourceList.get(0);
@@ -67,7 +69,7 @@ public class PointOptionHelper implements SelectionListener {
 	}
 	
 	public float getPointSize(){
-		Graphic graphic = styler.getSymbolizer().getGraphic();
+		Graphic graphic = symbolizer.getGraphic();
 		ScalarParameter size = graphic.getSize();
 		if(size == null)
 			return 1.0f;
@@ -89,6 +91,7 @@ public class PointOptionHelper implements SelectionListener {
 			Spinner sizeSpinner = (Spinner)control;
 			float size = (float)sizeSpinner.getSelection();
 			setPointSize(size);
+  		    
 			styler.updateDataMappings();
 		} else if(control == optionControls[1].getControl()) {
 			Button colorButton = (Button)control;
