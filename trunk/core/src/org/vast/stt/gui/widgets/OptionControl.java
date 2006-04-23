@@ -59,7 +59,8 @@ public class OptionControl extends Composite {
 		label.setText(text);
 		label.setBackground(WHITE);
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
-		gd.widthHint = 60;
+		gd.minimumWidth = 60;
+		//gd.widthHint = 60;
 		label.setLayoutData(gd);
 		
 		return label;

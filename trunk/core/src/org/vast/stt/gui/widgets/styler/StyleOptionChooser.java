@@ -10,6 +10,7 @@ import org.vast.stt.style.LabelStyler;
 import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
 import org.vast.stt.style.RasterStyler;
+import org.vast.stt.style.TextureMappingStyler;
 
 /**
  * <p><b>Title:</b><br/>
@@ -63,6 +64,8 @@ public class StyleOptionChooser extends OptionChooser {
 			optionController = new BasicRasterController(optComp, (RasterStyler)styler);
 		} else if (styler instanceof LabelStyler) {
 			optionController = new BasicLabelController(optComp, (LabelStyler)styler);
+		} else if (styler instanceof TextureMappingStyler) {
+			optionController = new BasicTextureController(optComp, (TextureMappingStyler)styler);
 		} else 
 			System.err.println("Styler not supported yet: " + styler);
 		

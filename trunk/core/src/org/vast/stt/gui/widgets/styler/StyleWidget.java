@@ -71,7 +71,7 @@ public class StyleWidget extends CheckOptionTable
 	 * 
 	 * @param newStyler
 	 */
-	public void setStyler(DataStyler newStyler){
+	private void setStyler(DataStyler newStyler){
 		//  Check for CompositeStyler first...
 		if(newStyler instanceof CompositeStyler) 
 			stylerAL = ((CompositeStyler)newStyler).getStylerList();
@@ -135,7 +135,7 @@ public class StyleWidget extends CheckOptionTable
 
 	private void removeStyle(DataStyler styler){
 		stylerAL.remove(styler);
-		//  reset activeStyler
+		//  reset activeStyler\
 		// ...
 		//TableItem [] items = checkboxTableViewer.getTable().getItems();
 		checkboxTableViewer.setInput(stylerAL);

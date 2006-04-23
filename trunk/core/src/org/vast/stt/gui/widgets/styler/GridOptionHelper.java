@@ -1,41 +1,45 @@
 package org.vast.stt.gui.widgets.styler;
 
-import java.util.List;
-
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
-import org.vast.ows.sld.Graphic;
-import org.vast.ows.sld.GraphicMark;
-import org.vast.ows.sld.GraphicSource;
+import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridStyler;
-import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.TextureMappingStyler;
 
 public class GridOptionHelper implements SelectionListener {
 
 	OptionController optionController;
-	GridStyler styler;
-
+	DataStyler styler;
+	GridSymbolizer symbolizer;
+	
 	public GridOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
-		styler = (GridStyler)optionController.getStyler();
+		styler = optionController.getStyler();
+		//  a bit of hackery so I can reuse GridOptionHelper for Textures
+		//  rethink this logic...
+		if(styler instanceof GridStyler)
+			symbolizer = (GridSymbolizer)styler.getSymbolizer();
+		else if (styler instanceof TextureMappingStyler) {
+			TextureSymbolizer symTmp= (TextureSymbolizer)styler.getSymbolizer();
+			symbolizer = symTmp.getGrid();
+		}
 	}
 	
 	public Color getFillColor(){
-		Fill fill = styler.getSymbolizer().getFill();
+		Fill fill = symbolizer.getFill();
 		if(fill == null) {
 			System.err.println("Fill is NULL.  Do what now?");
-			return null;
+			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
+			//return null;
 		}
 		Color fillColor = fill.getColor();
 		ScalarParameter redSP = fillColor.getRed();
@@ -52,7 +56,7 @@ public class GridOptionHelper implements SelectionListener {
 	}
 		
 	public int getGridWidth(){
-		ScalarParameter widthSP = styler.getSymbolizer().getDimensions().getWidth();
+		ScalarParameter widthSP = symbolizer.getDimensions().getWidth();
 		//  for SRTM width,length,depth are all properties taken from coverageData/width...
 		//  how to get these values?
 		if(widthSP == null)
@@ -63,7 +67,7 @@ public class GridOptionHelper implements SelectionListener {
 	}
 	
 	public int getGridLength(){
-		ScalarParameter lengthSP = styler.getSymbolizer().getDimensions().getLength();
+		ScalarParameter lengthSP = symbolizer.getDimensions().getLength();
 		if(lengthSP == null)
 			return -1;
 		if(lengthSP.isConstant())
@@ -72,7 +76,7 @@ public class GridOptionHelper implements SelectionListener {
 	}
 	
 	public int getGridDepth(){
-		ScalarParameter depthSP = styler.getSymbolizer().getDimensions().getDepth();
+		ScalarParameter depthSP = symbolizer.getDimensions().getDepth();
 		if(depthSP == null)
 			return -1;
 		if(depthSP.isConstant())
