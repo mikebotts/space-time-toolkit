@@ -111,6 +111,7 @@ public class LineStyler extends AbstractStyler
         // reset all parameters
         point = new LinePointGraphic();
         this.clearAllMappers();
+        lineInfo.updated = true;
         
         
         // geometry breaks
