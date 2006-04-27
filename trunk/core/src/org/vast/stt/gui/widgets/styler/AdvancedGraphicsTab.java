@@ -37,7 +37,7 @@ public class AdvancedGraphicsTab extends Composite {
 	public void init(){
 		this.setBackground(WHITE);
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		gridLayout.numColumns = 5;
 		this.setLayout(gridLayout);
 	}
 	
@@ -51,12 +51,8 @@ public class AdvancedGraphicsTab extends Composite {
 		addTopRow();
 		if(styler instanceof PointStyler){
 			optionController = new AdvancedPointController(this, (PointStyler)styler);
-//			optionController.addSelectionListener(optionListener);
-//			optionListener.setAdvancedController(optionController);
 		} else if(styler instanceof LineStyler) {
 			optionController = new AdvancedLineController(this, (LineStyler)styler);
-//			optionController.addSelectionListener(optionListener);
-//			optionListener.setAdvancedController(optionController);
 		} else if(styler instanceof PolygonStyler){
 			
 		}
@@ -75,12 +71,18 @@ public class AdvancedGraphicsTab extends Composite {
 		//  Add Labels for top row
 		Label toLabel = new Label(this, SWT.LEFT);
 		Label fromLabel = new Label(this, SWT.LEFT);
+		Label gainLabel = new Label(this, SWT.LEFT);
+		Label offsetLabel = new Label(this, SWT.LEFT);
 		Label lutLabel = new Label(this, SWT.LEFT);
 		toLabel.setText("Map To:");
 		fromLabel.setText("MapFrom:");
+		gainLabel.setText("Gain");
+		offsetLabel.setText("Offset");
 		lutLabel.setText("");
 		toLabel.setBackground(WHITE);
 		fromLabel.setBackground(WHITE);
+		gainLabel.setBackground(WHITE);
+		offsetLabel.setBackground(WHITE);
 		lutLabel.setBackground(WHITE);
 	}
 

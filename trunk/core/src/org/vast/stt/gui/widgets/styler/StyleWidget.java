@@ -3,6 +3,7 @@ package org.vast.stt.gui.widgets.styler;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -196,8 +197,16 @@ public class StyleWidget extends CheckOptionTable
 		}
 	}
 	
+	//  TODO:  Disable Advanced Button until Data is in DataNode?
 	private void createAdvancedStyleDialog(){
-		new AdvancedStyleDialog(dataItem, activeStyler, optListener);
+		try {
+			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
+		} catch (Exception e){
+			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					"STT Warning",
+					"Advanced Style Dialog could not be opened.\n" +   "" +
+					"DataNode is  probably still empty.");
+		}
 	}
 	
 	private void openAddStyleDialog(){
