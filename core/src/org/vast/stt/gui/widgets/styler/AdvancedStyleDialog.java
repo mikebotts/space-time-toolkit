@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.vast.stt.data.DataNode;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
@@ -29,6 +30,8 @@ import org.vast.stt.style.DataStyler;
  *
  * TODO:  Don't allow multiple advancedStyleDialog for a dataStyler - otherwise,
  * 		  communicating between them will get nasty
+ * TODO:  Fix NPEs for non DataItems that try to instantiate AdvancedStyleDialog (this 
+ * 		  will need to be done upstream somewhere)
  * 	
  */
 public class AdvancedStyleDialog implements SelectionListener 
@@ -53,7 +56,8 @@ public class AdvancedStyleDialog implements SelectionListener
 	//  However, it's list of styles can change if a style is added to the 
 	//  DataItem via the 'add' button, or the 'add' button on the 
 	//  StyleWidget
-	public AdvancedStyleDialog(DataItem item, DataStyler activeStyler, OptionListener ol) {
+	//  NOTE:  For now, if anything causes Dialog to fail, throw exception
+	public AdvancedStyleDialog(DataItem item, DataStyler activeStyler, OptionListener ol) throws Exception {
 		this.dataItem = item;
 		//  init GUI components
 		init(ol);
@@ -75,7 +79,7 @@ public class AdvancedStyleDialog implements SelectionListener
 		shell.setMinimumSize(new Point(480,350));
 		final GridLayout gridLayout_1 = new GridLayout();
 		shell.setLayout(gridLayout_1);
-		shell.setSize(480,350);
+		shell.setSize(750,350);
 		shell.setText("Advanced Style Options");
 
 		//  Top composite for top row
@@ -164,8 +168,13 @@ public class AdvancedStyleDialog implements SelectionListener
 	 * 
 	 * @return - the mappable property names for this dataItem
 	 */
-	protected String [] getMappableItems(){     
-        List<String> mappingList = dataItem.getDataProvider().getDataNode().getPossibleScalarMappings();	
+	protected String [] getMappableItems(){
+		DataNode node = dataItem.getDataProvider().getDataNode();
+		if(node == null) {
+			System.err.println("ASD.getMappables():  Node is still null (probably not yet enabled.");
+			return null;
+		}
+        List<String> mappingList = node.getPossibleScalarMappings();	
 		return mappingList.toArray(new String[0]);
 	}
 	
