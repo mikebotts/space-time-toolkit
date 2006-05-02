@@ -24,7 +24,6 @@
 package org.vast.stt.process;
 
 import org.ogc.cdm.common.DataBlock;
-import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.process.*;
 

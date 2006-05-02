@@ -30,7 +30,6 @@ import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
 import org.ogc.cdm.common.DataHandler;
 import org.ogc.cdm.reader.DataStreamParser;
-import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;

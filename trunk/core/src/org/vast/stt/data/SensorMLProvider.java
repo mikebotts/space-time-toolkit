@@ -17,10 +17,10 @@ import java.util.ArrayList;
 
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
-import org.ogc.process.ProcessException;
 import org.vast.data.*;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
+import org.vast.process.ProcessException;
 import org.vast.stt.style.BlockList;
 
 
@@ -60,6 +60,7 @@ public class SensorMLProvider extends AbstractProvider
                 ((ProcessChain)process).setChildrenThreadsOn(false);
             
             process.init();
+            process.createNewInputBlocks();
             cachedData = new DataNode();
             
             DataComponent outputs = process.getOutputList();

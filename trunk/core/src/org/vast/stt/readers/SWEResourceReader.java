@@ -33,20 +33,7 @@ public class SWEResourceReader extends CDMReader
 		{
 			streamFilter = new CDMFilter(inputStream);
 			streamFilter.setDataElementName("data");
-			
-//			int val;
-//			try
-//			{
-//				do
-//				{
-//					val = streamFilter.read();
-//					System.out.print((char)val);				
-//				}
-//				while (val != -1);
-//			}
-//			catch (IOException e){}
-//			System.exit(0);
-			
+					
 			// parse xml header using DataComponent and DataEncoding readers
 			DOMReader domReader = new DOMReader(streamFilter, false);			
 			Element dataElt = domReader.getBaseElement();
