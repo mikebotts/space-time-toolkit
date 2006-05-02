@@ -34,10 +34,10 @@
             <sml:output name="coverageData">
                <swe:DataGroup>
                   <swe:component name="width">
-                     <swe:Count id="GRID_WIDTH">10</swe:Count>
+                     <swe:Count id="GRID_WIDTH"/>
                   </swe:component>
                   <swe:component name="length">
-                     <swe:Count id="GRID_LENGTH">10</swe:Count>
+                     <swe:Count id="GRID_LENGTH"/>
                   </swe:component>                  
                   <swe:component name="coverage">
                      <swe:DataArray arraySize="#GRID_LENGTH">
