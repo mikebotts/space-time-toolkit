@@ -82,7 +82,7 @@ public class SWEProvider extends AbstractProvider
 			DataComponent dataInfo = dataParser.getDataComponents();
 			DataEncoding dataEnc = dataParser.getDataEncoding();
 			System.out.println(dataInfo);
-			System.out.println(dataEnc);			
+			System.out.println(dataEnc);
 			
 			// create data node if needed
 			if (cachedData == null)
