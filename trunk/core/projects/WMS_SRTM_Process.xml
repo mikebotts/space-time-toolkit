@@ -38,7 +38,7 @@
       <sml:outputs>
          <sml:OutputList>
             <sml:output name="imageData" xlink:href="#OUTPUT_IMAGE"/>
-            <sml:output name="gridData" xlink:href="#OUTPUT_GRID"/>          
+            <sml:output name="gridData" xlink:href="#OUTPUT_GRID"/>
          </sml:OutputList>
       </sml:outputs>
       <!--~~~~~~~~~~~~~~~~~~-->
@@ -141,10 +141,10 @@
                         <sml:output name="coverageData">
                            <swe:DataGroup id="OUTPUT_GRID">
                               <swe:component name="width">
-                                 <swe:Count id="GRID_WIDTH">10</swe:Count>
+                                 <swe:Count id="GRID_WIDTH"/>
                               </swe:component>
                               <swe:component name="length">
-                                 <swe:Count id="GRID_LENGTH">10</swe:Count>
+                                 <swe:Count id="GRID_LENGTH"/>
                               </swe:component>                  
                               <swe:component name="coverage">
                                  <swe:DataArray arraySize="#GRID_LENGTH">
