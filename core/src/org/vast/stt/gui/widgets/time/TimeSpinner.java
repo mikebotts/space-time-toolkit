@@ -264,7 +264,6 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 		if((e.keyCode<48 || e.keyCode > 57)) { // && e.keyCode!=0) {
 			//System.err.println("NOT A NUMBER");
 			//e.doit = false;
