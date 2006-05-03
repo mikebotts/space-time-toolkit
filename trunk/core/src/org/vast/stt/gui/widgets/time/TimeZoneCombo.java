@@ -7,7 +7,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-public class TimeZoneCombo{
+public class TimeZoneCombo {
     Combo tzCombo;
     //  String [] for timeZones as offsets from GMT.  Could make this prettier by adding
     //  some specific tz's. likt CST, PST.  See Javadoc for TimeZone class and notes on
@@ -39,5 +39,13 @@ public class TimeZoneCombo{
                 tz[j] = "GMT" + sign + i;
         }
         return tz;
+    }
+    
+    public void setLayoutData(Object ld){
+    	tzCombo.setLayoutData(ld);
+    }
+    
+    public Combo getCombo(){
+    	return tzCombo;
     }
 }
