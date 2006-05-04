@@ -17,6 +17,7 @@ public class TimeZoneCombo {
 
     public TimeZoneCombo(Composite mainGroup){
     	tzCombo = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+    	tzCombo.setTextLimit(6);
     	gmtTimeZones = getTimeZones();
     	tzCombo.setItems(gmtTimeZones);
     	tzCombo.select(14);

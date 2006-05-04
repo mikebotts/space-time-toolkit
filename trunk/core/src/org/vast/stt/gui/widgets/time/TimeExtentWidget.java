@@ -4,12 +4,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
 import org.vast.stt.scene.DataItem;
 import org.vast.stt.util.TimeExtent;
@@ -28,7 +31,12 @@ public class TimeExtentWidget implements SelectionListener
 	private TimeSpinner leadSpinner;
 	private TimeSpinner lagSpinner;
 	private CalendarSpinner absTimeSpinner;
-	
+	private Combo biasCombo;
+	final Color BLUE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
+	final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
+	final Color RED = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
+	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
+
 	public TimeExtentWidget(Composite parent) {
 		init(parent);
 	}
@@ -45,59 +53,70 @@ public class TimeExtentWidget implements SelectionListener
 		mainGroup.setText("itemName");
 		scroller.setContent(mainGroup);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 6;
+		layout.makeColumnsEqualWidth = false;
 		mainGroup.setLayout(layout);
 		
-		//  Create Spinners
+		//  Spinners
+		biasCombo = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		biasCombo.setItems(new String[]{"+", "-"});
+		biasCombo.select(0);
+		//biasCombo.setTextLimit(1);
+		biasCombo.setForeground(BLUE);
+		biasCombo.addSelectionListener(this);
+		GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gridData.horizontalIndent = 20;
+		biasCombo.setLayoutData(gridData);
 		biasSpinner = new TimeSpinner(mainGroup, "Time Bias");
-		GridData gridData = new GridData();
+		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gridData.horizontalAlignment = SWT.RIGHT;
+		//biasSpinner.setBackground(GREEN);
 		biasSpinner.setLayoutData(gridData);
-
+		
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.horizontalSpan = 2;
 		stepSpinner.setLayoutData(gridData);
 
 		leadSpinner = new TimeSpinner(mainGroup, "Delta Lead");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.horizontalSpan = 2;
 		leadSpinner.setLayoutData(gridData);
 
 		lagSpinner = new TimeSpinner(mainGroup, "Delta Lag");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.horizontalSpan = 2;
 		lagSpinner.setLayoutData(gridData);
 
-		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time");
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;
+		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.VERTICAL);
+		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		gridData.verticalIndent = 10;
 		absTimeSpinner.setLayoutData(gridData);
 		//absTimeSpinner.setEnabled(false);
+//		//  Time Zone
+//		Label tzLabel = new Label(mainGroup, SWT.NONE);
+//		tzLabel.setText("Time Zone:");
+//		tzLabel.setText("Absolute Time Zone:");
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = SWT.RIGHT;   
+//		tzLabel.setLayoutData(gridData);
 		
-		//  Abs Time Zone - may combine with absTimeSpinner into a single class
-		Composite tzComp = new Composite(mainGroup, SWT.NONE);
-		layout = new GridLayout();
-		layout.numColumns = 2;
-		tzComp.setLayout(layout);
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;   //  not honored???
-		tzComp.setLayoutData(gridData);
-		
-		Label tzLabel = new Label(tzComp, SWT.NONE);
-		tzLabel.setText("Absolute Time Zone:");
-		
-		tzCombo = new TimeZoneCombo(tzComp);
-		tzCombo.addSelectionListener(this);
-		
+//		tzCombo = new TimeZoneCombo(mainGroup);
+//		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
+//		tzCombo.setLayoutData(gridData);
+//		tzCombo.addSelectionListener(this);
+
 		//  Add UseAbsTime toggle
 		useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
 		useAbsTimeBtn.setText("Use Absolute Time");
 		useAbsTimeBtn.addSelectionListener(this);
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;   //  not honored???
+		gridData.horizontalAlignment = SWT.RIGHT;  
+		gridData.horizontalSpan = 2;
 		useAbsTimeBtn.setLayoutData(gridData);
 		
 		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
@@ -105,8 +124,8 @@ public class TimeExtentWidget implements SelectionListener
 		continuousUpdateBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;   
+		gridData.horizontalSpan = 2;
 		gridData.verticalIndent = 10;
-		//gridData.verticalSpan = 2;
 		continuousUpdateBtn.setLayoutData(gridData);
 		
 		//  Update now btn
@@ -115,9 +134,10 @@ public class TimeExtentWidget implements SelectionListener
 		updateNowBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;  
+		gridData.horizontalSpan = 2;
 		gridData.verticalIndent = 8;
 		updateNowBtn.setLayoutData(gridData);
-		
+
 		//  Must give sroller sufficient size
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
 	}
@@ -169,6 +189,10 @@ public class TimeExtentWidget implements SelectionListener
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		} else if(e.widget == biasCombo){
+			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
+			timeExtent.setTimeBias(timeExtent.getTimeBias() * sense);
 		} else {
 			System.err.println(e);
 		}

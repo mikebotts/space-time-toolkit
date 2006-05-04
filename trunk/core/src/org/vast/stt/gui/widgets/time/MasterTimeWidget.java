@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.vast.stt.util.TimeExtent;
 
 public final class MasterTimeWidget implements SelectionListener { //, ValueChangedListener {
 	Group mainGroup;
@@ -40,17 +39,19 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 		layout.verticalSpacing = 6;
 		mainGroup.setLayout(layout);
 		
+		//  MastermTime
 		absTimeSpinner = new CalendarSpinner(mainGroup, "Master Time");
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.horizontalSpan = 2;
 		absTimeSpinner.setLayoutData(gridData);
 		
 		//  Master Time Zone
-		tzCombo = new TimeZoneCombo(mainGroup);
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.LEFT;   
-		tzCombo.setLayoutData(gridData);
-		tzCombo.addSelectionListener(this);
+//		tzCombo = new TimeZoneCombo(mainGroup);
+//		gridData = new GridData();
+//		gridData.horizontalAlignment = SWT.LEFT;   
+//		tzCombo.setLayoutData(gridData);
+//		tzCombo.addSelectionListener(this);
 
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
 		gridData = new GridData();
@@ -60,20 +61,16 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 		setBtn = new Button(mainGroup, SWT.PUSH);
 		setBtn.setText("Set");
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.LEFT;
+		gridData.horizontalAlignment = SWT.CENTER;
 		setBtn.setLayoutData(gridData);
 		setBtn.addSelectionListener(this);
 		
 		//  RT toggle
-		Label rtLabel = new Label(mainGroup, 0x0);
-		rtLabel.setText("Real Time mode");
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;
-		rtLabel.setLayoutData(gridData);
-		
 		rtBtn = new Button(mainGroup, SWT.CHECK);
+		rtBtn.setText("Real Time mode");
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.LEFT;
+		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.horizontalSpan = 2;
 		rtBtn.setLayoutData(gridData);
 		rtBtn.addSelectionListener(this);
 		
