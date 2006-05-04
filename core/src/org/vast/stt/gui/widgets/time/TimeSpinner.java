@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.apps.STTConfig;
+import org.vast.stt.event.STTEvent;
 
 /**
  * <p><b>Title:</b><br/>
@@ -36,8 +38,8 @@ import org.eclipse.ui.PlatformUI;
  * @date Dec 19, 2005
  * @version 1.0
  */
-public class TimeSpinner implements TraverseListener, //FocusListener,SelectionListener,  
-									MouseListener, KeyListener, DisposeListener //, VerifyListener
+public class TimeSpinner 
+	implements TraverseListener, MouseListener, KeyListener, DisposeListener 
 {
 	Group mainGroup;
 	StyledText text;
@@ -45,6 +47,7 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 	Button upBtn, downBtn;
 	SpinnerModel tsModel;
 	boolean btnDown = false;  //  Used to indicate user is pressing and holding a spinner button
+	// List timeListeners;
 	
 	protected TimeSpinner(){
 		//  Added so that CurrentTimeSpinner can extend this class
@@ -131,6 +134,8 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
+		//  TODO  publish "timeChanged" event - should this use STTEventManager or just local Listeners?
+		//STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
 	}
 	
 	private void timeDown(){
@@ -139,6 +144,7 @@ public class TimeSpinner implements TraverseListener, //FocusListener,SelectionL
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
+		//  TODO  publish "timeChanged" event
 	}
 
 	Runnable spinUpThread = new Runnable(){
