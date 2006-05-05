@@ -65,7 +65,7 @@ public class TimeExtentWidget implements SelectionListener
 		//biasCombo.setTextLimit(1);
 		biasCombo.setForeground(BLUE);
 		biasCombo.addSelectionListener(this);
-		GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gridData.horizontalIndent = 20;
 		biasCombo.setLayoutData(gridData);
 		biasSpinner = new TimeSpinner(mainGroup, "Time Bias");
@@ -92,23 +92,10 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalSpan = 2;
 		lagSpinner.setLayoutData(gridData);
 
-		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.VERTICAL);
+		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.HORIZONTAL);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		gridData.verticalIndent = 10;
 		absTimeSpinner.setLayoutData(gridData);
-		//absTimeSpinner.setEnabled(false);
-//		//  Time Zone
-//		Label tzLabel = new Label(mainGroup, SWT.NONE);
-//		tzLabel.setText("Time Zone:");
-//		tzLabel.setText("Absolute Time Zone:");
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = SWT.RIGHT;   
-//		tzLabel.setLayoutData(gridData);
-		
-//		tzCombo = new TimeZoneCombo(mainGroup);
-//		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
-//		tzCombo.setLayoutData(gridData);
-//		tzCombo.addSelectionListener(this);
 
 		//  Add UseAbsTime toggle
 		useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
@@ -118,6 +105,9 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalAlignment = SWT.RIGHT;  
 		gridData.horizontalSpan = 2;
 		useAbsTimeBtn.setLayoutData(gridData);
+		//  TODO  init with real dataItem
+		//setUseAbsoluteTime(dataItem.getDataProvider().getTimeExtent().getUseAbsoluteTime());
+		setUseAbsoluteTime(false);
 		
 		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
 		continuousUpdateBtn.setText("Enable Continuous Update");
@@ -142,6 +132,13 @@ public class TimeExtentWidget implements SelectionListener
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
 	}
 
+	private void setUseAbsoluteTime(boolean b){
+		//TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+		//timeExtent.setUseAbsoluteTime(b);
+		absTimeSpinner.setEnabled(b);
+		//absTimeSpinner.setBackground()
+	}
+	
 	public void setDataItem(DataItem item){
 		mainGroup.setText(item.getName());
 		this.dataItem = item;
@@ -170,8 +167,7 @@ public class TimeExtentWidget implements SelectionListener
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.widget == useAbsTimeBtn){
-			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-			timeExtent.setUseAbsoluteTime(useAbsTimeBtn.getSelection());
+			setUseAbsoluteTime(useAbsTimeBtn.getSelection());
 		} else if (e.widget == continuousUpdateBtn) {
 			boolean contUp = continuousUpdateBtn.getSelection();
 			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();

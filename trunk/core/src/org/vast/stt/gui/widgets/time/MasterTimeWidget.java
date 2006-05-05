@@ -46,13 +46,7 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 		gridData.horizontalSpan = 2;
 		absTimeSpinner.setLayoutData(gridData);
 		
-		//  Master Time Zone
-//		tzCombo = new TimeZoneCombo(mainGroup);
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = SWT.LEFT;   
-//		tzCombo.setLayoutData(gridData);
-//		tzCombo.addSelectionListener(this);
-
+		//  Time Step
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
@@ -61,7 +55,7 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 		setBtn = new Button(mainGroup, SWT.PUSH);
 		setBtn.setText("Set");
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.horizontalAlignment = SWT.LEFT;
 		setBtn.setLayoutData(gridData);
 		setBtn.addSelectionListener(this);
 		
