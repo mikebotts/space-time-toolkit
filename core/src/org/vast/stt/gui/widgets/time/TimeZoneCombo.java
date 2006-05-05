@@ -4,6 +4,7 @@ package org.vast.stt.gui.widgets.time;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -44,6 +45,10 @@ public class TimeZoneCombo {
     
     public void setLayoutData(Object ld){
     	tzCombo.setLayoutData(ld);
+    }
+    
+    public void setBackground(Color bg){
+    	tzCombo.setBackground(bg);
     }
     
     public Combo getCombo(){

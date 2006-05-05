@@ -11,6 +11,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
@@ -43,11 +44,15 @@ public class TimeSpinner
 {
 	Group mainGroup;
 	StyledText text;
+	String formatStr;
 	Font entryFont;
 	Button upBtn, downBtn;
 	SpinnerModel tsModel;
 	boolean btnDown = false;  //  Used to indicate user is pressing and holding a spinner button
 	// List timeListeners;
+	final Color DARK_GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
+	final Color GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
+	Color activeBackground = null;
 	
 	protected TimeSpinner(){
 		//  Added so that CurrentTimeSpinner can extend this class
@@ -56,6 +61,7 @@ public class TimeSpinner
 	
 	public TimeSpinner(Composite parent, String label) {
 		this();
+		formatStr = "YYYY DDD HH:mm:SS";
 		tsModel = new TimeSpinnerModel("YYYY DDD HH:mm:SS");
 		initGui(parent, label);
 		//  Should really generate initial data from formatStr, but I don't 
@@ -94,6 +100,8 @@ public class TimeSpinner
 		//gridData.heightHint = 18;
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
+		text.setToolTipText(formatStr);
+		activeBackground = text.getBackground();
 		
 		//text.addSelectionListener(this);
 		//text.addModifyListener(this);
@@ -126,6 +134,16 @@ public class TimeSpinner
 		gridData.heightHint = 15;
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
+	}
+
+	public void setEnabled(boolean b){
+		mainGroup.setEnabled(b);
+		if(b)
+//			mainGroup.setBackground(mainGroup.getBackground());
+			text.setBackground(activeBackground);
+		else 
+			//mainGroup.setBackground(DARK_GRAY);
+			text.setBackground(DARK_GRAY);
 	}
 
 	private void timeUp(){
@@ -218,10 +236,6 @@ public class TimeSpinner
 		text.setFocus();
 		//System.err.println("Value is " + tsModel.getValue());
 		//System.err.println("stopUpThread");
-	}
-
-	public void setEnabled(boolean b){
-		mainGroup.setEnabled(b);
 	}
 
 	public void setValue(double value){

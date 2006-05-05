@@ -28,9 +28,12 @@ import org.eclipse.swt.widgets.Group;
  */
 public class CalendarSpinner extends TimeSpinner {
 
+	private TimeZoneCombo tzCombo;
+
 	public CalendarSpinner(Composite parent, String label, int orientation) {
 		super();
-		tsModel = new CalendarSpinnerModel("MMM dd, yyyy HH:mm:ss");
+		formatStr = "MMM dd, yyyy HH:mm:ss";
+		tsModel = new CalendarSpinnerModel(formatStr);
 		initGui(parent, label, orientation);
 
 		//  Set initial time elsewhere
@@ -61,6 +64,8 @@ public class CalendarSpinner extends TimeSpinner {
 		//gridData.heightHint = 18;
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
+		text.setToolTipText(formatStr);
+
 		
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
@@ -90,13 +95,20 @@ public class CalendarSpinner extends TimeSpinner {
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
 
-    	//  TimeZone Combo
-		TimeZoneCombo tzCombo = new TimeZoneCombo(mainGroup);
+    	tzCombo = new TimeZoneCombo(mainGroup);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		tzCombo.setLayoutData(gridData);
 		//tzCombo.addSelectionListener(this);
 	}
 
+	public void setEnabled(boolean b){
+		super.setEnabled(b);
+		if(b)
+			tzCombo.setBackground(activeBackground);
+		else
+			tzCombo.setBackground(DARK_GRAY);
+	}
+	
 
 	public void setValue(Calendar value){
 		tsModel.setValue(value);
