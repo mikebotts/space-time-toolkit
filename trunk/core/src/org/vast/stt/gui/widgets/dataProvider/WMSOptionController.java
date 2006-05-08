@@ -1,122 +1,86 @@
 package org.vast.stt.gui.widgets.dataProvider;
 
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.vast.ows.wms.WMSLayerCapabilities;
-import org.vast.ows.wms.WMSQuery;
-import org.vast.stt.data.WMSProvider;
+import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
+import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.process.WMS_Process;
 
-public class WMSOptionController 
-	implements SelectionListener, ModifyListener, VerifyListener, KeyListener 
+public class WMSOptionController extends OptionController
+	implements KeyListener 
 {
-	private WMSProvider provider;
-	private OptionControl[] optionControl;
-	private Button checkButton;
-	private Combo styleCombo;
-	private Combo srsCombo;
-	private Combo formatCombo;
-	private Text heightText;
-	private Text widthText;
+	//private WMSProvider provider;
+	private SensorMLProvider provider;
+	private WMSOptionHelper optionHelper;
 	
-	public WMSOptionController(Composite parent, WMSProvider provider){
-		this.provider = provider;
+//	public WMSOptionController(Composite parent, SensorMLProvider provider){
+	public WMSOptionController(Composite parent, WMS_Process wmsProc){
+		//this.provider = provider;
+		optionHelper = new WMSOptionHelper(this, wmsProc);
 		buildBasicControls(parent);
 	}
 
-	public void buildAdvancedControls(Composite parent){
-		
-	}
-	
 	public void buildBasicControls(Composite parent) {
-		WMSQuery query = provider.getQuery();
-		WMSLayerCapabilities caps = provider.getLayerCapabilities(); 
-		
 		// TODO Auto-generated method stub
-		optionControl = new OptionControl[6];
+		optionControls = new OptionControl[7];
 		//  Image Width
-		optionControl[0] = new OptionControl(parent, 0x0);
-		int w = (query != null) ? query.getWidth(): 500;
-		widthText = optionControl[0].createText("Width:", w + "");
+		optionControls[0] = new OptionControl(parent, 0x0);
+		int w = optionHelper.getInputImageWidth();
+		Text widthText = optionControls[0].createText("Width:", w + "");
 		widthText.addKeyListener(this);
 
 		//  Image Height
-		optionControl[1] = new OptionControl(parent,0x0);
-		int h = (query != null) ? query.getHeight() : 500;
-		heightText = optionControl[1].createText("Height:", h + "");
+		optionControls[1] = new OptionControl(parent,0x0);
+		int h = optionHelper.getInputImageWidth();
+		Text heightText = optionControls[1].createText("Height:", h + "");
 		heightText.addKeyListener(this);
 
-		//  Formats
+		//  Formats -
+		//  WHERE will these come from now?  WMSProcess is completely decoupled from Caps
 		String [] formatOpts = new String[]{};
-		if(caps != null)
-			formatOpts = caps.getFormatList().toArray(new String []{});
-		optionControl[2] = new OptionControl(parent,0x0);
-		formatCombo = optionControl[2].createCombo("Format:", formatOpts);
-		formatCombo.addSelectionListener(this);
+//		if(caps != null)
+//			formatOpts = caps.getFormatList().toArray(new String []{});
+		optionControls[2] = new OptionControl(parent,0x0);
+		optionControls[2].createCombo("Format:", formatOpts);
 
 		//  SRS  
 		//
 		String [] srsOpts = new String [] {};
-		if(caps != null)
-			srsOpts = caps.getFormatList().toArray(new String []{});
-		optionControl[3] = new OptionControl(parent, 0x0);
-		srsCombo = optionControl[3].createCombo("SRS:", srsOpts);
-		srsCombo.addSelectionListener(this);
+//		if(caps != null)
+//			srsOpts = caps.getFormatList().toArray(new String []{});
+		optionControls[3] = new OptionControl(parent, 0x0);
+		optionControls[3].createCombo("SRS:", srsOpts);
 
 		//  Styles  
 		//
 		String [] styleOpts = new String []{};
-		if(caps != null)
-			styleOpts = caps.getStyleList().toArray(new String []{});
-		optionControl[4] = new OptionControl(parent, 0x0);
-		styleCombo = optionControl[4].createCombo("Styles:", styleOpts);
-		styleCombo.addSelectionListener(this);
+//		if(caps != null)
+//			styleOpts = caps.getStyleList().toArray(new String []{});
+		optionControls[4] = new OptionControl(parent, 0x0);
+		optionControls[4].createCombo("Styles:", styleOpts);
 		
 		// Transparent Checkbox
 		//
-		optionControl[5] = new OptionControl(parent, 0x0);
+		optionControls[5] = new OptionControl(parent, 0x0);
 		//  Is transparency supported?  No way to tell currently
-		boolean trans = (query != null) ?  query.isTransparent() : true;
-		checkButton = optionControl[5].createCheckbox("Transparency:", trans);
-		checkButton.addSelectionListener(this);
+		//boolean trans = (query != null) ?  query.isTransparent() : true;
+		optionControls[5].createCheckbox("Transparency:", false);
+
+		//  Keep Aspect checkbox
+		optionControls[6] = new OptionControl(parent, 0x0);
+		optionControls[6].createCheckbox("Maintain Aspect:", false);
+		
+		addSelectionListener(optionHelper);
 	}
 	
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
-	public void widgetSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		System.err.println(e);
-	}
-
-	public void modifyText(ModifyEvent e) {
-		// TODO Auto-generated method stub
-		System.err.println(e);
-	}
-
-	public void verifyText(VerifyEvent e) {
-		// TODO Auto-generated method stub
-		System.err.println(e);
-	}
-
 	public void keyPressed(KeyEvent e) {
 		//  if e.control == numericText
 		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
 	}
 
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
-
-
 }

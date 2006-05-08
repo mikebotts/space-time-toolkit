@@ -92,7 +92,7 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalSpan = 2;
 		lagSpinner.setLayoutData(gridData);
 
-		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.HORIZONTAL);
+		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.VERTICAL);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		gridData.verticalIndent = 10;
 		absTimeSpinner.setLayoutData(gridData);
