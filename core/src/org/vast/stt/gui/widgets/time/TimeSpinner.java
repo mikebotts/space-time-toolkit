@@ -139,11 +139,10 @@ public class TimeSpinner
 	public void setEnabled(boolean b){
 		mainGroup.setEnabled(b);
 		if(b)
-//			mainGroup.setBackground(mainGroup.getBackground());
 			text.setBackground(activeBackground);
 		else 
-			//mainGroup.setBackground(DARK_GRAY);
 			text.setBackground(DARK_GRAY);
+			//text.setBackground(STTColorManager.getInstance().get("textBackground"));
 	}
 
 	private void timeUp(){

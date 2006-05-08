@@ -13,6 +13,7 @@ public abstract class OptionController { //implements SelectionListener {
 		return optionControls;
 	}
 	
+	//  TODO:  Remove Styler (requires fix to OptionListener)
 	public DataStyler getStyler(){
 		return styler;
 	}
