@@ -202,6 +202,7 @@ public class StyleWidget extends CheckOptionTable
 		try {
 			new AdvancedStyleDialog(dataItem, activeStyler, optListener);
 		} catch (Exception e){
+			e.printStackTrace();
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					"STT Warning",
 					"Advanced Style Dialog could not be opened.\n" +   "" +

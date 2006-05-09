@@ -2,6 +2,7 @@ package org.vast.stt.gui.widgets.styler;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -12,6 +13,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
@@ -27,10 +29,11 @@ import org.vast.stt.style.DataStyler;
  *
  * 
  */
-public class AdvancedGeometryTab extends Composite 
+public class AdvancedGeometryTab extends ScrolledComposite 
 	implements SelectionListener
 {
-	Composite parent;
+	//Composite parent;
+	Composite mainGroup;
 	String [] mapToLabel = {	"X Coordinate:",
 							   	"Y Coordinate:",
 							   	"Z Coordinate:",
@@ -46,30 +49,38 @@ public class AdvancedGeometryTab extends Composite
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
 						
 	public AdvancedGeometryTab(Composite parent){
-		super(parent, SWT.BORDER);
-		this.parent = parent;
+		super(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		init();
 	}
 	
 	public void init(){
+		this.setExpandVertical(true);
+		this.setExpandHorizontal(true);
+		//  ??
+		this.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
 		this.setBackground(WHITE);
+		
+	    mainGroup = new Composite(this, 0x0);
+		this.setContent(mainGroup);
+			
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 5;
-//		gridLayout.horizontalSpacing = 10;
-		this.setLayout(gridLayout);
+		mainGroup.setLayout(gridLayout);
+		mainGroup.setBackground(WHITE);
 		addTopRow();
 		addMappingRows();
+		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	public void addTopRow(){
 		//  Add Labels for top row
-		Label toLabel = new Label(this, SWT.LEFT);
-		Label fromLabel = new Label(this, SWT.LEFT);
-		Label gainLabel = new Label(this, SWT.LEFT);
-		Label offsetLabel = new Label(this, SWT.LEFT);
-		Label lutLabel = new Label(this, SWT.LEFT);
+		Label toLabel = new Label(mainGroup, SWT.LEFT);
+		Label fromLabel = new Label(mainGroup, SWT.LEFT);
+		Label gainLabel = new Label(mainGroup, SWT.LEFT);
+		Label offsetLabel = new Label(mainGroup, SWT.LEFT);
+		Label lutLabel = new Label(mainGroup, SWT.LEFT);
 		toLabel.setText("Map To:");
-		fromLabel.setText("MapFrom:");
+		fromLabel.setText("Map From:");
 		gainLabel.setText("Gain");
 		offsetLabel.setText("Offset");
 		lutLabel.setText("");
@@ -86,20 +97,24 @@ public class AdvancedGeometryTab extends Composite
 		offsetText = new Text[mapToLabel.length];
 		lutButton = new Button[mapToLabel.length];
 		for(int i=0; i<mapToLabel.length; i++){
-			Label label = new Label(this, SWT.LEFT);
+			Label label = new Label(mainGroup, SWT.LEFT);
 			label.setText(mapToLabel[i]);
 			label.setBackground(WHITE);
-			GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
-			gd.minimumWidth = 120;
+			GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+			gd.minimumWidth = 100;
 			//gd.widthHint = 120;
 			label.setLayoutData(gd);
-			mapFromCombo[i] = new Combo(this, SWT.READ_ONLY);
+			mapFromCombo[i] = new Combo(mainGroup, SWT.READ_ONLY | SWT.LEFT);
 			mapFromCombo[i].setBackground(WHITE);
+			mapFromCombo[i].setTextLimit(20);
 			mapFromCombo[i].addSelectionListener(this);
 			gd = new GridData();
+			//gd.widthHint = 30;
+			mapFromCombo[i].setLayoutData(gd);
+			gd = new GridData();
 			gd.widthHint = 30;
-			gainText[i] = new Text(this,SWT.RIGHT );
-			offsetText[i] = new Text(this, SWT.RIGHT);
+			gainText[i] = new Text(mainGroup,SWT.RIGHT );
+			offsetText[i] = new Text(mainGroup, SWT.RIGHT);
 			gainText[i].setTextLimit(7);
 			gainText[i].setLayoutData(gd);
 			//  make bg gray to distinguish it from bg of parent
@@ -113,7 +128,7 @@ public class AdvancedGeometryTab extends Composite
 
 			//  set inititial vals for gain, offset
 			//  set enabled state
-			lutButton[i] = new Button(this, SWT.PUSH);
+			lutButton[i] = new Button(mainGroup, SWT.PUSH);
 			lutButton[i].setText("LUT");
 			lutButton[i].setBackground(WHITE);
 			lutButton[i].addSelectionListener(this);
@@ -125,6 +140,7 @@ public class AdvancedGeometryTab extends Composite
 		mappableItems = items;
 		for (int i=0; i<mapFromCombo.length; i++) {
 			mapFromCombo[i].setItems(items);
+			mapFromCombo[i].setTextLimit(20);
 		}
 	}
 	
@@ -132,6 +148,8 @@ public class AdvancedGeometryTab extends Composite
 	public void setActiveStyler(DataStyler styler){
 		this.activeStyler = styler;
 		updateMappingCombos();
+		//  recompute scroller minSize, as it may have changed
+		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	/**

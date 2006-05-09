@@ -1,7 +1,9 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -17,9 +19,9 @@ import org.vast.stt.style.LineStyler;
 import org.vast.stt.style.PointStyler;
 import org.vast.stt.style.PolygonStyler;
 
-public class AdvancedGraphicsTab extends Composite {
+public class AdvancedGraphicsTab extends  ScrolledComposite  {
 
-	Composite parent;
+	Composite mainGroup;
 	DataItem dataItem;
 	AdvancedOptionController optionController;
 	private OptionListener optionListener;
@@ -27,18 +29,26 @@ public class AdvancedGraphicsTab extends Composite {
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
 	
 	public AdvancedGraphicsTab(Composite parent, DataItem item, OptionListener ol){
-		super(parent, SWT.BORDER);
-		this.parent = parent;
+		super(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.dataItem = item;
 		this.optionListener = ol;
 		init();
 	}
 	
 	public void init(){
+		this.setExpandVertical(true);
+		this.setExpandHorizontal(true);
+		//  ??
+		this.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
 		this.setBackground(WHITE);
+
+	    mainGroup = new Composite(this, 0x0);
+		this.setContent(mainGroup);
+			
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 5;
-		this.setLayout(gridLayout);
+		mainGroup.setLayout(gridLayout);
+		mainGroup.setBackground(WHITE);
 	}
 	
 	public void setActiveStyler(DataStyler styler){
@@ -50,9 +60,9 @@ public class AdvancedGraphicsTab extends Composite {
 		removeOldControls();
 		addTopRow();
 		if(styler instanceof PointStyler){
-			optionController = new AdvancedPointController(this, (PointStyler)styler);
+			optionController = new AdvancedPointController(mainGroup, (PointStyler)styler);
 		} else if(styler instanceof LineStyler) {
-			optionController = new AdvancedLineController(this, (LineStyler)styler);
+			optionController = new AdvancedLineController(mainGroup, (LineStyler)styler);
 		} else if(styler instanceof PolygonStyler){
 			
 		}
@@ -64,16 +74,17 @@ public class AdvancedGraphicsTab extends Composite {
 			optionController.setMappableItems(mappableItems);
 		}
 		this.layout();
+		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		this.redraw();
 	}
 
 	public void addTopRow(){
 		//  Add Labels for top row
-		Label toLabel = new Label(this, SWT.LEFT);
-		Label fromLabel = new Label(this, SWT.LEFT);
-		Label gainLabel = new Label(this, SWT.LEFT);
-		Label offsetLabel = new Label(this, SWT.LEFT);
-		Label lutLabel = new Label(this, SWT.LEFT);
+		Label toLabel = new Label(mainGroup, SWT.LEFT);
+		Label fromLabel = new Label(mainGroup, SWT.LEFT);
+		Label gainLabel = new Label(mainGroup, SWT.LEFT);
+		Label offsetLabel = new Label(mainGroup, SWT.LEFT);
+		Label lutLabel = new Label(mainGroup, SWT.LEFT);
 		toLabel.setText("Map To:");
 		fromLabel.setText("MapFrom:");
 		gainLabel.setText("Gain");
@@ -91,7 +102,7 @@ public class AdvancedGraphicsTab extends Composite {
 	}
 
 	public void removeOldControls(){
-		Control [] controls = this.getChildren();
+		Control [] controls = mainGroup.getChildren();
 		for(int i=0; i<controls.length; i++){
 			controls[i].dispose();
 			controls[i] = null;
