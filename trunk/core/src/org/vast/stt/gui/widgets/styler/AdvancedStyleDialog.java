@@ -52,6 +52,8 @@ public class AdvancedStyleDialog implements SelectionListener
 
 	private Button closeButton;
 
+	private Button okButton;
+
 	//  This dialog's dataItem cannot change, unlike StyleWidget
 	//  However, it's list of styles can change if a style is added to the 
 	//  DataItem via the 'add' button, or the 'add' button on the 
@@ -76,18 +78,16 @@ public class AdvancedStyleDialog implements SelectionListener
 	 */
 	private void init(OptionListener ol) {
 		shell = new Shell();
-		shell.setMinimumSize(new Point(480,350));
-		final GridLayout gridLayout_1 = new GridLayout();
-		shell.setLayout(gridLayout_1);
-		shell.setSize(750,350);
+		shell.setMinimumSize(new Point(400,250));
+		shell.setLayout(new GridLayout(1, false));
+		shell.setSize(600,350);
 		shell.setText("Advanced Style Options");
-
+		
 		//  Top composite for top row
 		final Composite topComp = new Composite(shell, SWT.NONE);
 		topComp.setLayoutData(new GridData(GridData.CENTER, GridData.CENTER, false, false));
-		final GridLayout topLayout = new GridLayout();
 		//  GridLayout w/5 columns
-		topLayout.numColumns = 5;
+		final GridLayout topLayout = new GridLayout(5, false);
 		topComp.setLayout(topLayout);
 
 		//  Top "Row" of combo and buttons
@@ -118,17 +118,12 @@ public class AdvancedStyleDialog implements SelectionListener
 		final Composite midComp = new Composite(shell, SWT.NONE);
 		final GridData gridData_1 = new GridData(GridData.FILL, GridData.FILL, true, true);
 		midComp.setLayoutData(gridData_1);
-		final GridLayout midLayout = new GridLayout();
-		midLayout.makeColumnsEqualWidth = true;
-		//  GridLayout w/2 columns
-		midLayout.numColumns = 3;
-		midComp.setLayout(midLayout);
+		midComp.setLayout(new GridLayout(3, true));
 
-		//  Tab Folder (left item of midComp)
+		//  Tab Folder (left 2 columns of midComp)
 		final TabFolder tabFolder = new TabFolder(midComp, SWT.NONE);
-		//tabFolder.setLayoutData(new GridData(277, 209));
 		tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 2, 1));
-
+		
 		//  Graphic TabItem
 		graphicTabItem = new TabItem(tabFolder, SWT.NONE);
 		graphicTabItem.setText("Graphic");
@@ -156,8 +151,22 @@ public class AdvancedStyleDialog implements SelectionListener
 		dataStructureGroup.setLayout(new FillLayout());
 		dataStructureTree = new DataStructureTreeViewer(dataStructureGroup, SWT.BORDER);
 		
-		closeButton = new Button(shell, SWT.NONE);
-		closeButton.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+//		//  Bottom composite for OK/Cancel Btns 
+		final Composite bottomComp = new Composite(shell, SWT.NONE);
+		bottomComp.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+		bottomComp.setLayout(new GridLayout(2, true));
+		
+		okButton = new Button(bottomComp, SWT.CENTER);
+		GridData gd =  new GridData(SWT.END, SWT.CENTER, false, false);
+		gd.widthHint = 60;
+		okButton.setLayoutData(gd);
+		okButton.setText("OK");
+		okButton.addSelectionListener(this);
+
+		closeButton = new Button(bottomComp, SWT.CENTER);
+		gd =  new GridData(GridData.END, GridData.CENTER, false, false);
+		gd.widthHint = 60;
+		closeButton.setLayoutData(gd);
 		closeButton.setText("Close");
 		closeButton.addSelectionListener(this);
 		
@@ -165,7 +174,6 @@ public class AdvancedStyleDialog implements SelectionListener
 	}
 	
 	/**
-	 * 
 	 * @return - the mappable property names for this dataItem
 	 */
 	protected String [] getMappableItems(){
