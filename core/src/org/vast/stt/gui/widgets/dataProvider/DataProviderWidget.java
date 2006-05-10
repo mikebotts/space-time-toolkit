@@ -1,6 +1,7 @@
 package org.vast.stt.gui.widgets.dataProvider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -14,8 +15,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.vast.process.DataProcess;
+import org.vast.process.ProcessChain;
+import org.vast.stt.data.SWEProvider;
+import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
+import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.scene.DataItem;
  
@@ -32,7 +38,7 @@ import org.vast.stt.scene.DataItem;
  * @author Tony Cook
  * @date Jan 26, 2006
  * @version 1.0
- * 
+ *   
  */
 public class DataProviderWidget extends CheckOptionTable
 { 
@@ -56,7 +62,6 @@ public class DataProviderWidget extends CheckOptionTable
 		super.setDataItem(item);
 		DataProvider prov = item.getDataProvider();
 		//  Here, I'm getting either a SWEDataProv or SensorMLDataProv
-		//  Are these the only supported provider types now?
 		
 		//  TODO:  Rearrange methods so OptChooser controls get removed regardless here.
 		if(prov == null)
@@ -70,68 +75,25 @@ public class DataProviderWidget extends CheckOptionTable
 	 * @param newProv
 	 */
 	public void setProvider(DataProvider newProv){		
-		
-		
-		//  Check for CompositeProvider first...
-		//...
 		providerAL.clear();
 		providerAL.add(newProv);
-
 		
-		
-		
-		optionChooser.buildControls(newProv);
-		System.err.println("New Prov is " + newProv);
-		//		if(newStyler instanceof CompositeStyler) 
-//			stylerAL = ((CompositeStyler)newStyler).getStylerList();
-//		else {  // this is a single DataStyler
-//			stylerAL = new ArrayList<DataStyler>();
-//			stylerAL.add(newStyler);
-//		}
-		//  Change cbTableViewer contents
-		checkboxTableViewer.setInput(providerAL);	
-//		Iterator it = stylerAL.iterator();
-//		DataStyler stylerTmp;
-//		//  Set init state of checkboxes
-//		while(it.hasNext()){
-//			stylerTmp = (DataStyler)it.next();
-//			checkboxTableViewer.setChecked(stylerTmp, stylerTmp.isEnabled());
-//		}
+		if (newProv instanceof SWEProvider) {
+			System.err.println("DataProvWidget:  Provider type not supported yet: " + newProv);
+		} else 
+			System.err.println("DataProvWidget:  Provider type not recognized: " + newProv);
+				
+		//optionChooser.buildControls(newProv);
 	}
+	
 	//  enabling checkbox causes ckState AND selChanged events
 	public void checkStateChanged(CheckStateChangedEvent e) {
 		// TODO Auto-generated method stub
-		//  e.getElement returns checked Styler
-//		DataStyler styler = (DataStyler)e.getElement();
-//		styler.setEnabled(e.getChecked());
 	}
 	
 	//  Selecting label causes ONLY selChanged event
 	public void selectionChanged(SelectionChangedEvent e) {
 		System.err.println("sel source is" + e.getSource());
-		StructuredSelection selection = (StructuredSelection)e.getSelection();
-//		DataStyler styler = (DataStyler)selection.getFirstElement();
-//		//  Check for empty selection (happens when buildControls() is called)
-//		if(styler == null) {
-//			Iterator it = stylerAL.iterator();
-//			if(!it.hasNext()){
-//				//  stylerSet is currently empty
-//				optionChooser.removeOldControls();
-//				return;
-//			}
-//			//  Reset selected to first in Table
-//			checkboxTableViewer.getTable().setSelection(0);			
-//			selection = (StructuredSelection)checkboxTableViewer.getSelection();
-//			styler = (DataStyler)selection.getFirstElement();
-//		}
-//		//  Check to see if selected Styler has really changed
-//		if(styler == activeStyler){
-//			System.err.println("Selection not really changed");
-//			return;
-//		}
-//		System.err.println("Selection CHANGED");
-//		activeStyler = styler;
-//		optionChooser.buildControls(styler);
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {

@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.vast.stt.gui.widgets.DataProcess.DataProcessWidget;
 import org.vast.stt.gui.widgets.dataProvider.DataProviderWidget;
 import org.vast.stt.gui.widgets.styler.StyleWidget;
 import org.vast.stt.scene.DataEntry;
@@ -31,7 +32,8 @@ import org.vast.stt.scene.DataItem;
 public class DataProviderView extends ViewPart implements ISelectionListener{
 	
 	public static final String ID = "STT.DataProviderView";
-	DataProviderWidget dpWidget;
+//	DataProviderWidget dpWidget;
+	DataProcessWidget procWidget;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -41,7 +43,7 @@ public class DataProviderView extends ViewPart implements ISelectionListener{
 	}
 	
 	public void initView(Composite parent){
-		dpWidget = new DataProviderWidget(parent);
+		procWidget = new DataProcessWidget(parent);
 	}
 
 		@Override
@@ -56,7 +58,7 @@ public class DataProviderView extends ViewPart implements ISelectionListener{
 			if(selectedItem instanceof DataItem) { 
 				System.err.println("item " + selectedItem);
 				//dpWidget.setDataItem((DataItem)selectedItem);
-				dpWidget.setDataItem((DataItem)selectedItem);
+				procWidget.setDataItem((DataItem)selectedItem);
 			} else {
 				//  May add support for Composite items later
 			}
@@ -64,7 +66,7 @@ public class DataProviderView extends ViewPart implements ISelectionListener{
 	}
 	
 	public void dispose(){
-		dpWidget.close();
+		procWidget.close();
 		super.dispose();
 		//System.err.println("SV disposed!");
 	}
