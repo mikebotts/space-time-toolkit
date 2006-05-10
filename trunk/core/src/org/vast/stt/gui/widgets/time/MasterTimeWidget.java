@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.vast.stt.apps.STTConfig;
+import org.vast.stt.scene.Scene;
 
 public final class MasterTimeWidget implements SelectionListener { //, ValueChangedListener {
 	Group mainGroup;
@@ -21,6 +23,8 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 	
 	public MasterTimeWidget(Composite parent) {
 		init(parent);
+		//  TODO  mod, support multiple Scenes (after Scene is inited)
+		//Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
 	}
 
 	public void init(Composite parent){

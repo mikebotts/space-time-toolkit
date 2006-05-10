@@ -1,14 +1,7 @@
-package org.vast.stt.gui.widgets.dataProvider;
-
-import java.util.List;
+package org.vast.stt.gui.widgets.DataProcess;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.vast.process.DataProcess;
-import org.vast.process.ProcessChain;
-import org.vast.stt.data.SWEProvider;
-import org.vast.stt.data.SensorMLProvider;
-import org.vast.stt.data.WMSProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.process.WCS_Process;
 import org.vast.stt.process.WMS_Process;
@@ -31,24 +24,25 @@ import org.vast.stt.process.WMS_Process;
  * TODO  support advanced options      
  */
 
-public class DataProviderOptionChooser extends OptionChooser {
+public class DataProcessOptionChooser extends OptionChooser {
 	
-	public DataProviderOptionChooser(Composite parent) {
+	public DataProcessOptionChooser(Composite parent) {
 		super(parent);
 	}
 
-	public void buildControls(Object providerObj){
+	public void buildControls(Object processObj){
 		removeOldControls();
 		
-		//  TODO add support for SWEProvider...
-		if (providerObj instanceof SWEProvider) {
-			System.err.println("OptionChooser:  Provider type not supported yet: " + providerObj);
-		} else 
-			System.err.println("OptionChooser:  Provider type not recognized: " + providerObj);
+		if(processObj instanceof WMS_Process) {
+			WMSOptionController wmsOpts = 
+				new WMSOptionController(optComp, (WMS_Process)processObj);
+		} else if(processObj instanceof WCS_Process){
+			//  WCSOptionController...
+		} else
+			System.err.println("OptionChooser:  Process type not supported yet: " + processObj);
 		
 		optComp.layout(true);		
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
-	
 }
