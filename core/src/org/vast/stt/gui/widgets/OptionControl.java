@@ -1,6 +1,8 @@
 package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -31,13 +33,15 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  */ 
 
-public class OptionControl extends Composite {
+public class OptionControl extends Composite implements KeyListener 
+{
 	Color colorLabelColor;
 	Label colorLabel;
 	Label label;
 	Display display = PlatformUI.getWorkbench().getDisplay();
 	Control activeControl;
-	public static enum ControlType { BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT, CHECKBOX}; 
+	public static enum ControlType 
+		{ BUTTON, COLOR_BUTTON, SPINNER, COMBO, TEXT, NUMERIC_TEXT, CHECKBOX}; 
 	ControlType controlType;
 	final Color WHITE = display.getSystemColor(SWT.COLOR_WHITE);
 	final Color GRAY = display.getSystemColor(SWT.COLOR_GRAY);
@@ -173,6 +177,12 @@ public class OptionControl extends Composite {
 		return text;
 	}
 
+	public Text createNumericText(String labelStr, String defaultText){
+		Text numText = createText(labelStr, defaultText);
+		numText.addKeyListener(this);
+		return numText;
+	}
+	
 	public Button createColorButton(String labelTxt, org.vast.ows.sld.Color sldColor) { 
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
@@ -230,6 +240,7 @@ public class OptionControl extends Composite {
 			((Button)activeControl).addSelectionListener(sl);
 			break;
 		case TEXT:
+		case NUMERIC_TEXT:
 			((Text)activeControl).addSelectionListener(sl);
 			break;
 		case SPINNER:
@@ -288,6 +299,14 @@ public class OptionControl extends Composite {
 		default:
 			System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
 		}
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		//  if e.control == numericText
+		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
+	}
+
+	public void keyReleased(KeyEvent e) {
 	}
 	
 	public void dispose(){

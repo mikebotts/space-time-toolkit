@@ -2,6 +2,7 @@ package org.vast.stt.gui.widgets.DataProcess;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.process.WCS_Process;
 import org.vast.stt.process.WMS_Process;
@@ -26,6 +27,8 @@ import org.vast.stt.process.WMS_Process;
 
 public class DataProcessOptionChooser extends OptionChooser {
 	
+	SensorMLProvider provider;
+	
 	public DataProcessOptionChooser(Composite parent) {
 		super(parent);
 	}
@@ -35,9 +38,10 @@ public class DataProcessOptionChooser extends OptionChooser {
 		
 		if(processObj instanceof WMS_Process) {
 			WMSOptionController wmsOpts = 
-				new WMSOptionController(optComp, (WMS_Process)processObj);
+				new WMSOptionController(optComp, (WMS_Process)processObj, provider);
 		} else if(processObj instanceof WCS_Process){
-			//  WCSOptionController...
+			WCSOptionController wcsOpts = 
+				new WCSOptionController(optComp, (WCS_Process)processObj, provider);
 		} else
 			System.err.println("OptionChooser:  Process type not supported yet: " + processObj);
 		
@@ -45,4 +49,8 @@ public class DataProcessOptionChooser extends OptionChooser {
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		optComp.redraw();
 	}	
+	
+	public void setProvider(SensorMLProvider prov){
+		this.provider = prov;
+	}
 }
