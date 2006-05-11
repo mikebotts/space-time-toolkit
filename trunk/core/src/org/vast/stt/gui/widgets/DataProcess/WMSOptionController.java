@@ -9,34 +9,47 @@ import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.process.WMS_Process;
 
+/**
+ * <p><b>Title:</b><br/>
+ * WMSOptionController
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ *	Widget for controlling WMS_Process options for a DataItem.       
+ * </p>
+ *
+ * <p>Copyright (c) 2006</p>
+ * @author Tony Cook
+ * @date May 10, 2006
+ * @version 1.0
+ */
+
 public class WMSOptionController extends OptionController
-	implements KeyListener 
 {
 	//private WMSProvider provider;
 	private SensorMLProvider provider;
 	private WMSOptionHelper optionHelper;
 	
 //	public WMSOptionController(Composite parent, SensorMLProvider provider){
-	public WMSOptionController(Composite parent, WMS_Process wmsProc){
-		//this.provider = provider;
-		optionHelper = new WMSOptionHelper(this, wmsProc);
+	public WMSOptionController(Composite parent, WMS_Process wmsProc, SensorMLProvider provider){
+		this.provider = provider;
+		optionHelper = new WMSOptionHelper(this, wmsProc, provider);
 		buildBasicControls(parent);
 	}
 
+	//  TODO  possible add request type toggle and server
 	public void buildBasicControls(Composite parent) {
 		// TODO Auto-generated method stub
 		optionControls = new OptionControl[7];
 		//  Image Width
 		optionControls[0] = new OptionControl(parent, 0x0);
 		int w = optionHelper.getInputImageWidth();
-		Text widthText = optionControls[0].createText("Width:", w + "");
-		widthText.addKeyListener(this);
+		optionControls[0].createNumericText("Width:", w + "");
 
 		//  Image Height
 		optionControls[1] = new OptionControl(parent,0x0);
 		int h = optionHelper.getInputImageWidth();
-		Text heightText = optionControls[1].createText("Height:", h + "");
-		heightText.addKeyListener(this);
+		optionControls[1].createNumericText("Height:", h + "");
 
 		//  Formats -
 		//  WHERE will these come from now?  WMSProcess is completely decoupled from Caps
@@ -74,13 +87,5 @@ public class WMSOptionController extends OptionController
 		optionControls[6].createCheckbox("Maintain Aspect:", false);
 		
 		addSelectionListener(optionHelper);
-	}
-	
-	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
-	}
-
-	public void keyReleased(KeyEvent e) {
 	}
 }

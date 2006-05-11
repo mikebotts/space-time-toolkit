@@ -7,7 +7,7 @@ import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.LabelStyler;
 
-public class BasicLabelController extends OptionController implements KeyListener  
+public class BasicLabelController extends OptionController  
 {
 	private Composite parent;
 	private LabelOptionHelper labelOptionHelper;
@@ -42,14 +42,4 @@ public class BasicLabelController extends OptionController implements KeyListene
 		
 		addSelectionListener(labelOptionHelper);
 	}
-
-	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
-	}
-
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-	
 }

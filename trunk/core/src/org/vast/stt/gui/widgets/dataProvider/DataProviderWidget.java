@@ -102,9 +102,7 @@ public class DataProviderWidget extends CheckOptionTable
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		Control control = (Control)e.getSource();
-		if(control == addButton){
-		} else if  (control == deleteButton){
-		} else if (control == enabledButton){
+		if (control == enabledButton){
 		} else if (control == advancedButton){
   		}
 	}

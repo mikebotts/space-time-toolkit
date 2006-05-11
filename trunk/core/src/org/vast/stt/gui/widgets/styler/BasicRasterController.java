@@ -18,7 +18,6 @@ import org.vast.stt.style.RasterStyler;
  */
 
 public class BasicRasterController extends OptionController
-	implements KeyListener 
 {
 	private Composite parent;
 	private RasterOptionHelper rasterOptionHelper;
@@ -36,24 +35,13 @@ public class BasicRasterController extends OptionController
 		//  Image Width
 		optionControls[0] = new OptionControl(parent, 0x0);
 		//  get width from styler
-		Text widthText = optionControls[0].createText("Width:", "" + rasterOptionHelper.getWidth());
-		widthText.addKeyListener(this);
+		optionControls[0].createNumericText("Width:", "" + rasterOptionHelper.getWidth());
 
 		//  Image Height
 		optionControls[1] = new OptionControl(parent,0x0);
 		//  get height from styler
-		Text heightText = optionControls[1].createText("Height:", "" + rasterOptionHelper.getHeight());
-		heightText.addKeyListener(this);
+		optionControls[1].createNumericText("Height:", "" + rasterOptionHelper.getHeight());
 
 		addSelectionListener(rasterOptionHelper);
-	}
-
-	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
-	}
-
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
 }

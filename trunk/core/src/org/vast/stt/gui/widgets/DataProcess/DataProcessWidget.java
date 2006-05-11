@@ -44,6 +44,8 @@ import org.vast.stt.style.DataStyler;
  * 
  * TODO  CkBoxTableViewer really only needs to be a list here, I think.
  *       Processes can't be turned on and off?
+ * TODO  Should this GUI have an enable button?  If not, make it optional 
+ *       in super class       
  * 
  */
 public class DataProcessWidget extends CheckOptionTable
@@ -82,6 +84,9 @@ public class DataProcessWidget extends CheckOptionTable
 	 */
 	public void setProvider(SensorMLProvider newProv){		
 		DataProcess process = ((SensorMLProvider)newProv).getProcess();
+		//  The provider needs to be propagated down so updateData() can be called
+		//  when options are changed
+		((DataProcessOptionChooser)optionChooser).setProvider(newProv);
 		processAL.clear();
 		if(process instanceof ProcessChain){
 			//  Hack for now to test WMS Options
@@ -95,7 +100,8 @@ public class DataProcessWidget extends CheckOptionTable
 			processAL.add(process);
 		}
 
-		optionChooser.buildControls(newProv);
+		//  Display first process options initially
+		optionChooser.buildControls(processAL.get(0));
 		//  Change cbTableViewer contents
 		checkboxTableViewer.setInput(processAL);	
 		Iterator it = processAL.iterator();
@@ -151,9 +157,7 @@ public class DataProcessWidget extends CheckOptionTable
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		Control control = (Control)e.getSource();
-		if(control == addButton){
-		} else if  (control == deleteButton){
-		} else if (control == enabledButton){
+		if (control == enabledButton){
 		} else if (control == advancedButton){
   		}
 	}
@@ -192,7 +196,6 @@ class TableLabelProvider extends LabelProvider {
 		if(element == null)
 			System.err.println("???");
 		DataProcess proc = (DataProcess)element;
-		//  Using type here.  Name is long and complex
 		return proc.getName();
 	}
 }

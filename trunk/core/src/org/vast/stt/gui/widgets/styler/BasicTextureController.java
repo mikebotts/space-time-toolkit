@@ -20,7 +20,6 @@ import org.vast.stt.style.TextureMappingStyler;
  */
 
 public class BasicTextureController extends OptionController
-	implements KeyListener 
 {
 	private Composite parent;
 	private RasterOptionHelper rasterOptionHelper;
@@ -40,29 +39,24 @@ public class BasicTextureController extends OptionController
 		//  Image Width
 		optionControls[0] = new OptionControl(parent, 0x0);
 		//  get width from styler
-		Text widthText = optionControls[0].createText("Width:", "" + rasterOptionHelper.getWidth());
-		widthText.addKeyListener(this);
+		optionControls[0].createNumericText("Width:", "" + rasterOptionHelper.getWidth());
 
 		//  Image Height
 		optionControls[1] = new OptionControl(parent,0x0);
 		//  get height from styler
-		Text heightText = optionControls[1].createText("Height:", "" + rasterOptionHelper.getHeight());
-		heightText.addKeyListener(this);
+		optionControls[1].createNumericText("Height:", "" + rasterOptionHelper.getHeight());
 
 		optionControls[2] = new OptionControl(parent, 0x0);
 		int width = gridOptionHelper.getGridWidth();
-		Text gridWidthText = optionControls[2].createText("Grid Width:", "" + width);
-		gridWidthText.addKeyListener(this);
+		optionControls[2].createNumericText("Grid Width:", "" + width);
 
 		optionControls[3] = new OptionControl(parent, 0x0);
 		int length = gridOptionHelper.getGridLength();
-		Text lengthText = optionControls[3].createText("Grid Length:", "" + length);
-		lengthText.addKeyListener(this);
+		optionControls[3].createNumericText("Grid Length:", "" + length);
 
 		optionControls[4] = new OptionControl(parent, 0x0);
 		int depth = gridOptionHelper.getGridDepth();
-		Text depthText = optionControls[4].createText("Grid Depth:", "" + depth);
-		depthText.addKeyListener(this);
+		optionControls[4].createNumericText("Grid Depth:", "" + depth);
 		
 		//  Disallow fill options for Texture?
 //		optionControls[3] = new OptionControl(parent, 0x0);
@@ -82,14 +76,5 @@ public class BasicTextureController extends OptionController
 
 		addSelectionListener(gridOptionHelper);
 		addSelectionListener(rasterOptionHelper);
-	}
-
-	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
-	}
-
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
 }

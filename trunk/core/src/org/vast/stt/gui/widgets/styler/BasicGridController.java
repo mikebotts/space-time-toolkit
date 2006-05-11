@@ -9,7 +9,7 @@ import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.GridStyler;
 
-public class BasicGridController extends OptionController implements KeyListener  
+public class BasicGridController extends OptionController 
 {
 	private Composite parent;
 	private GridOptionHelper gridOptionHelper;
@@ -28,18 +28,15 @@ public class BasicGridController extends OptionController implements KeyListener
 		
 		optionControls[0] = new OptionControl(parent, 0x0);
 		int width = gridOptionHelper.getGridWidth();
-		Text widthText = optionControls[0].createText("Grid Width:", "" + width);
-		widthText.addKeyListener(this);
+		optionControls[0].createNumericText("Grid Width:", "" + width);
 
 		optionControls[1] = new OptionControl(parent, 0x0);
 		int length = gridOptionHelper.getGridLength();
-		Text lengthText = optionControls[1].createText("Grid Length:", "" + length);
-		lengthText.addKeyListener(this);
+		optionControls[1].createNumericText("Grid Length:", "" + length);
 
 		optionControls[2] = new OptionControl(parent, 0x0);
 		int depth = gridOptionHelper.getGridDepth();
-		Text depthText = optionControls[2].createText("Grid Depth:", "" + depth);
-		depthText.addKeyListener(this);
+		optionControls[2].createNumericText("Grid Depth:", "" + depth);
 		
 		optionControls[3] = new OptionControl(parent, 0x0);
 		//boolean fillEnabled = gridOptionHelper.getFillEnabled();
@@ -59,14 +56,4 @@ public class BasicGridController extends OptionController implements KeyListener
 
 		addSelectionListener(gridOptionHelper);
 	}
-
-	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
-	}
-
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
-	
 }
