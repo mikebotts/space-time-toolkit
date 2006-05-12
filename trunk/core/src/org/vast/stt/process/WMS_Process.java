@@ -284,4 +284,14 @@ public class WMS_Process extends DataProcess
             e.printStackTrace();
         }
     }
+
+
+	public boolean getPreserveAspectRatio() {
+		return preserveAspectRatio;
+	}
+
+
+	public void setPreserveAspectRatio(boolean preserveAspectRatio) {
+		this.preserveAspectRatio = preserveAspectRatio;
+	}
 }
