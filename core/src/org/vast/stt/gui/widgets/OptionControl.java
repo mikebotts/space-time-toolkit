@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
  *
  * <p><b>Description:</b><br/>
  *  Currently supports the following Control types:
- *  	Spinner, Button, Combo, ColorButton, Text, Checkbox
+ *  	Spinner, Button, Combo, ColorButton, Text, NumericText, Checkbox
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -57,6 +57,54 @@ public class OptionControl extends Composite implements KeyListener
 		setLayoutData(gd);
 	}
 
+	public static OptionControl[] createControls(Composite parent, OptionParams[] params){
+		int numParams = params.length;
+		OptionControl [] controls = new OptionControl[numParams];
+		String label;
+		ControlType type;
+		Object data;
+		for(int i=0; i<numParams; i++){
+			controls[i] = new OptionControl(parent, 0x0);
+			type = params[i].getType();
+			label = params[i].getLabel();
+			data = params[i].getData();
+			
+			try {
+				switch(type){
+				case BUTTON:
+					controls[i].createButton(label, (String)data);
+					break;
+				case CHECKBOX:
+					boolean enabled = ((Boolean)data).booleanValue();
+					controls[i].createCheckbox(label, enabled);
+					break;
+				case COLOR_BUTTON:
+					controls[i].createColorButton(label, (org.vast.ows.sld.Color)data);
+					break;
+				case TEXT:
+					controls[i].createText(label, (String)data);
+					break;
+				case NUMERIC_TEXT:
+					controls[i].createNumericText(label, (String)data);
+					break;
+				case SPINNER:
+					int [] minMax = (int [])data;
+					controls[i].createSpinner(label, minMax[0], minMax[1]);
+					break;
+				case COMBO:
+					controls[i].createCombo(label, (String[])data);
+					break;
+				default:
+					System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
+				}
+			} catch (ClassCastException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return controls;
+	}
+	
 	// return Label so caller can modify layoutData, if desired
 	private Label createLabel(String text){
 		label = new Label(this, 0x0);
@@ -111,7 +159,7 @@ public class OptionControl extends Composite implements KeyListener
 		return combo;
 	}
 	
-	public Button createButton(String labelTxt, String text) { // sellistener
+	public Button createButton(String labelTxt, String text) { 
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
@@ -127,22 +175,6 @@ public class OptionControl extends Composite implements KeyListener
 		return button;
 	}
 	
-	public Button createCheckbox(String labelTxt, String text) { // sellistener
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.marginHeight = 0;
-		this.setLayout(layout);
-		createLabel(labelTxt);
-		activeControl = new Button(this, SWT.CHECK);
-		Button button = (Button)activeControl;
-		button.setText(text);
-
-		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
-		button.setLayoutData(gd);
-		controlType = ControlType.CHECKBOX;
-		return button;
-	}
-
 	public Button createCheckbox(String labelTxt, boolean enabled){
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -180,6 +212,7 @@ public class OptionControl extends Composite implements KeyListener
 	public Text createNumericText(String labelStr, String defaultText){
 		Text numText = createText(labelStr, defaultText);
 		numText.addKeyListener(this);
+		controlType = ControlType.NUMERIC_TEXT;
 		return numText;
 	}
 	
@@ -261,6 +294,7 @@ public class OptionControl extends Composite implements KeyListener
 		case COLOR_BUTTON:
 			((Button)activeControl).removeSelectionListener(sl);
 			break;
+		case NUMERIC_TEXT:
 		case TEXT:
 			((Text)activeControl).removeSelectionListener(sl);
 			break;
@@ -288,6 +322,7 @@ public class OptionControl extends Composite implements KeyListener
 			colorLabel.setBackground(colorLabelColor);
 			break;
 		case TEXT:
+		case NUMERIC_TEXT:
 			//((Text)activeControl).removeSelectionListener(sl);
 			break;
 		case SPINNER:

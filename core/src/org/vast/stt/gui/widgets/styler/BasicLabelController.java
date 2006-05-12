@@ -1,45 +1,35 @@
 package org.vast.stt.gui.widgets.styler;
 
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.gui.widgets.OptionParams;
 import org.vast.stt.style.LabelStyler;
 
 public class BasicLabelController extends OptionController  
 {
-	private Composite parent;
 	private LabelOptionHelper labelOptionHelper;
 	
 	public BasicLabelController(Composite parent, LabelStyler styler){
-		this.parent = parent;
 		this.styler = styler;
 
 		labelOptionHelper = new LabelOptionHelper(this);
-		buildControls();
+		buildControls(parent);
 	}
 	
-	public void buildControls() {
+	public void buildControls(Composite parent){
 		// TODO populate widgets with current Font's values
-		optionControls = new OptionControl[3];
-		
-		optionControls[0] = new OptionControl(parent, 0x0);
-		optionControls[0].createText("Label Text:", "dummy");
-		
-		optionControls[1] = new OptionControl(parent, 0x0);
-		optionControls[1].createButton("Font:", "FontName");
-		
-		optionControls[2] = new OptionControl(parent, 0x0);
-		optionControls[2].createColorButton("Font Color", labelOptionHelper.getLabelColor());
-		
-		//  ARE we going to provide user control of these params?
-		// rotation
-		
-		//  anchor x,y
-		
-		//  displacement x,y
-		
+		OptionParams[] params = 
+		{
+			new OptionParams(OptionControl.ControlType.TEXT, "Label Text:", "Dummy"),	
+			new OptionParams(OptionControl.ControlType.BUTTON, "Font:", "..."),	
+			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Font Color:",
+					labelOptionHelper.getLabelColor())	
+			//  rotation
+			//  anchor x,y
+			//  displacement x,y
+		};
+		optionControls = OptionControl.createControls(parent, params);
 		addSelectionListener(labelOptionHelper);
 	}
 }

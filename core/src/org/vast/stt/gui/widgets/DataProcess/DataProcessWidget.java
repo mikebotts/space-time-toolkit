@@ -68,13 +68,16 @@ public class DataProcessWidget extends CheckOptionTable
 
 	public void setDataItem(DataItem item){
 		super.setDataItem(item);
-		//  Provider should be a SensorMLProvider
-		SensorMLProvider  prov = (SensorMLProvider)item.getDataProvider();
-		
-		//  TODO:  Rearrange methods so OptChooser controls get removed regardless here.
+		DataProvider prov = item.getDataProvider();
 		if(prov == null)
 			return;
-		setProvider(prov);
+		//  Provider should be a SensorMLProvider
+		if(!(prov instanceof SensorMLProvider)) {
+			System.err.println("SWE Provider not yer supported");
+			return;
+		}
+		
+		setProvider((SensorMLProvider)prov);
 	}
 	
 	/**
