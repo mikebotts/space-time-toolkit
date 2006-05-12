@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
+import org.vast.stt.process.FlatGridGenerator_Process;
 import org.vast.stt.process.WCS_Process;
 import org.vast.stt.process.WMS_Process;
 
@@ -37,11 +38,11 @@ public class DataProcessOptionChooser extends OptionChooser {
 		removeOldControls();
 		
 		if(processObj instanceof WMS_Process) {
-			WMSOptionController wmsOpts = 
-				new WMSOptionController(optComp, (WMS_Process)processObj, provider);
+			new WMSOptionController(optComp, (WMS_Process)processObj, provider);
 		} else if(processObj instanceof WCS_Process){
-			WCSOptionController wcsOpts = 
-				new WCSOptionController(optComp, (WCS_Process)processObj, provider);
+			new WCSOptionController(optComp, (WCS_Process)processObj, provider);
+		} else if(processObj instanceof FlatGridGenerator_Process){
+			//;new FlatGridGeneratorController(optComp, (FlatGridGenerator_Process)processObj, provider);
 		} else
 			System.err.println("OptionChooser:  Process type not supported yet: " + processObj);
 		

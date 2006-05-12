@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.gui.widgets.OptionParams;
 import org.vast.stt.style.LineStyler;
 
 /**
@@ -15,31 +16,25 @@ import org.vast.stt.style.LineStyler;
  * @version 1.0
  */
 public class BasicLineController extends OptionController {
-	private Composite parent;
 	private LineOptionHelper lineOptionHelper;
 	
 	public BasicLineController(Composite parent, LineStyler styler){
-		this.parent = parent;
 		this.styler = styler;
 		
 		lineOptionHelper = new LineOptionHelper(this);
-		buildControls();
+		buildControls(parent);
 	}
-
-	/**
-	 * build the basic options for lines.  
-	 * ASSert - a valid styler with non-null Stroke
-	 */
-	public void buildControls(){
-		optionControls = new OptionControl[2];
-		optionControls[0] = new OptionControl(parent, 0x0);
-		Spinner widthSpinner = optionControls[0].createSpinner("LineWidth:", 1, 10);
+	
+	public void buildControls(Composite parent){
+		OptionParams[] params = 
+		{
+			new OptionParams(OptionControl.ControlType.SPINNER, "Line Width:", new int[] {1, 10}),	
+			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",
+					lineOptionHelper.getLineColor())
+		};
+		optionControls = OptionControl.createControls(parent, params);
+		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
 		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
-		
-		optionControls[1] = new OptionControl(parent, 0x0);
-		optionControls[1].createColorButton("Line Color:", lineOptionHelper.getLineColor());
-		
 		addSelectionListener(lineOptionHelper);
 	}
-
 }
