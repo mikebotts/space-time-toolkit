@@ -4,7 +4,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.GridStyler;
 import org.vast.stt.style.PolygonStyler;
 
 public class BasicPolygonController extends OptionController 

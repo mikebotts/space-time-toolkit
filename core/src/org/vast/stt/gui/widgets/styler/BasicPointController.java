@@ -21,7 +21,6 @@ public class BasicPointController extends OptionController
 	
 	public void buildControls(Composite parent){
 		//  get current size, color from styler
-		float size = pointOptionHelper.getPointSize();
 		Color c = pointOptionHelper.getPointColor();
 		OptionParams[] params = 
 		{
