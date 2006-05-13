@@ -5,17 +5,12 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
-import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
-import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.GridStyler;
-import org.vast.stt.style.LineStyler;
-import org.vast.stt.style.TextureMappingStyler;
 
 public class PolygonOptionHelper implements SelectionListener {
 

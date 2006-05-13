@@ -2,7 +2,6 @@ package org.vast.stt.gui.widgets.DataProcess;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -12,7 +11,6 @@ import org.vast.stt.data.DataException;
 import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.process.WCS_Process;
-import org.vast.stt.process.WMS_Process;
 
 /**
  * <p><b>Title:</b><br/>
