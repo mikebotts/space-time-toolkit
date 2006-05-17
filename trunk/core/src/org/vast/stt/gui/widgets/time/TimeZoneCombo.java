@@ -1,7 +1,5 @@
 package org.vast.stt.gui.widgets.time;
 
-//import java.util.TimeZone;
-
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
@@ -29,8 +27,6 @@ public class TimeZoneCombo {
     	tzCombo.addSelectionListener(sl);
     }
     
-    //  Create String array of GMT timeZone IDs.  Could use TimeZone.getAvailableIDs(),
-    //  but that returns an exhaustive list (557 in my test).
     private String [] getTimeZones(){
         String [] tz = new String[27];
         String sign;
@@ -59,5 +55,10 @@ public class TimeZoneCombo {
     public TimeZone getTimeZone(){
     	TimeZone tz = TimeZone.getTimeZone(tzCombo.getText());
     	return tz;
+    }
+    
+    public int getZoneOffset(){
+    	int sel = tzCombo.getSelectionIndex();
+    	return sel - 14;  
     }
 }
