@@ -5,6 +5,8 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -18,7 +20,7 @@ import org.eclipse.swt.widgets.Group;
  *
  * <p><b>Description:</b><br/>
  *  Extension of TimeSpinner which allows Month display and behaves like 
- *  a calendar 
+ *  a calendar
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -26,7 +28,7 @@ import org.eclipse.swt.widgets.Group;
  * @date Dec 21, 2005
  * @version 1.0
  */
-public class CalendarSpinner extends TimeSpinner {
+public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 
 	private TimeZoneCombo tzCombo;
 
@@ -65,7 +67,6 @@ public class CalendarSpinner extends TimeSpinner {
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
 		text.setToolTipText(formatStr);
-
 		
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
@@ -98,7 +99,8 @@ public class CalendarSpinner extends TimeSpinner {
     	tzCombo = new TimeZoneCombo(mainGroup);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		tzCombo.setLayoutData(gridData);
-		//tzCombo.addSelectionListener(this);
+		((CalendarSpinnerModel)tsModel).setTimeZone(tzCombo.getTimeZone());
+		tzCombo.addSelectionListener(this);
 	}
 
 	public void setEnabled(boolean b){
@@ -123,4 +125,17 @@ public class CalendarSpinner extends TimeSpinner {
 		text.setText(tsModel.toString());
 		tsModel.selectField(text);
 	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		if(e.widget == tzCombo.getCombo()){
+			//  change displayed time, but no need to issue updateData() calls
+			((CalendarSpinnerModel)tsModel).setTimeZone(tzCombo.getTimeZone());
+			text.setText(tsModel.toString());
+			//tsModel.selectField(text);
+		}
+	}
+	
 }

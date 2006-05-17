@@ -9,22 +9,24 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.vast.stt.apps.STTConfig;
+import org.vast.stt.data.DataException;
+import org.vast.stt.project.DataProvider;
+import org.vast.stt.scene.DataEntryList;
+import org.vast.stt.scene.DataItem;
+import org.vast.stt.scene.DataItemIterator;
 import org.vast.stt.scene.Scene;
 
-public final class MasterTimeWidget implements SelectionListener { //, ValueChangedListener {
+public final class MasterTimeWidget implements SelectionListener, TimeListener
+{
 	Group mainGroup;
 	private CalendarSpinner absTimeSpinner;
-	private TimeZoneCombo tzCombo;
 	private TimeSpinner stepSpinner;
 	private Button rtBtn;
 	private Button setBtn;
 	
 	public MasterTimeWidget(Composite parent) {
 		init(parent);
-		//  TODO  mod, support multiple Scenes (after Scene is inited)
-		//Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
 	}
 
 	public void init(Composite parent){
@@ -49,6 +51,7 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		absTimeSpinner.setLayoutData(gridData);
+		absTimeSpinner.addTimeListener(this);
 		
 		//  Time Step
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
@@ -80,13 +83,36 @@ public final class MasterTimeWidget implements SelectionListener { //, ValueChan
 	}
 
 	public void widgetSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.widget == tzCombo.getCombo()){
-			//
-		} else if (e.widget == rtBtn) {
+		if (e.widget == rtBtn) {
 			//  start/stop realtime mode
 		} else if (e.widget == setBtn) {
 			//  popup setTimeStep Spinner
+		}
+		//  TODO  mod, support multiple Scenes (after Scene is inited)
+	}
+
+	public void timeChanged(double newTime) {
+		Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
+		//  Do I need to reset scene's TimeSettings here?
+		//scene.setTimeSettings();
+		//
+		DataEntryList dataList = scene.getDataList();
+		DataItemIterator dit = dataList.getItemIterator();
+		DataItem itemTmp = null;
+		DataProvider provTmp = null;
+		while(dit.hasNext()){
+			itemTmp = dit.next();
+			provTmp = itemTmp.getDataProvider();
+			provTmp.getTimeExtent().setBaseTime(newTime);
+			if(provTmp.isTimeSubsetSupported() && itemTmp.isEnabled()) {
+				System.err.println("New Time for: " + itemTmp.getName() + " = " + newTime);
+				try {
+					provTmp.updateData();
+				} catch (DataException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

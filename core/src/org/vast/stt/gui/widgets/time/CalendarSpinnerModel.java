@@ -3,6 +3,7 @@ package org.vast.stt.gui.widgets.time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * <p><b>Title:</b><br/>
@@ -31,10 +32,13 @@ import java.util.GregorianCalendar;
 public class CalendarSpinnerModel extends TimeSpinnerModel {
 	
 	SimpleDateFormat dateFormat;
+    TimeZone timeZone;  //  Offset in hours (from GMT) to account for timeZone
 	
 	public CalendarSpinnerModel(String formatStr){
 		super(formatStr);
 		dateFormat = new SimpleDateFormat(formatStr);
+		//   TODO  add mechanism to set initial Time Zone
+		timeZone = TimeZone.getTimeZone("GMT");
 	}
 	
 	public String toString(){
@@ -43,6 +47,7 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 		calendar.setTimeInMillis(0);  // fseconds
 		calendar.set(years, months, days, hours, minutes, seconds);			
 		//calendar.setTimeZone(TimeZone.getTimeZone("GMT-5")); //  see DateTimeFormat
+		calendar.setTimeZone(timeZone); //  see DateTimeFormat
 		return dateFormat.format(calendar.getTime());
 	}
 
@@ -65,12 +70,30 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
     	minutes = cal.get(Calendar.MINUTE);
     	seconds = cal.get(Calendar.SECOND);
     	//  fseconds = ...
+    	int zoneOff = cal.get(Calendar.ZONE_OFFSET);
+    	String zoneOffStr;
+    	if(zoneOff == 0){
+    		zoneOffStr = "";
+    	} else if (zoneOff > 0)
+    		zoneOffStr = "+" + zoneOff;
+    	else 
+    		zoneOffStr = "-" + zoneOff;
+    	timeZone = TimeZone.getTimeZone("GMT" + zoneOffStr);
     }
     
+    public Object getValue(){
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTimeInMillis(0);  // add fseconds, but BEWEARE fracSecond bug in Calendar
+		calendar.set(years, months, days, hours, minutes, seconds);
+		calendar.setTimeZone(timeZone); //  see DateTimeFormat
+		return new Double(((double)calendar.getTimeInMillis()) / 1000.0); // + fseconds;
+    }
+
     public void increment(){
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTimeInMillis(0);  // fseconds
 		calendar.set(years, months, days, hours, minutes, seconds);
+		calendar.setTimeZone(timeZone); //  see DateTimeFormat
 		stepCurrentField(calendar, true);
     }
     
@@ -78,6 +101,7 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTimeInMillis(0);  // add fseconds, but BEWEARE fracSecond bug in Calendar
 		calendar.set(years, months, days, hours, minutes, seconds);
+		calendar.setTimeZone(timeZone); //  see DateTimeFormat
 		stepCurrentField(calendar, false);
     }
     
@@ -103,11 +127,12 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 		setValue(cal);
 	}
 
-    public Object getValue(){
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTimeInMillis(0);  // add fseconds, but BEWEARE fracSecond bug in Calendar
-		calendar.set(years, months, days, hours, minutes, seconds);
-		return new Double(((double)calendar.getTimeInMillis()) / 1000.0); // + fseconds;
-    }
-    
+	public TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
+	}
+
 }

@@ -1,5 +1,8 @@
 package org.vast.stt.gui.widgets.time;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
@@ -21,8 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.apps.STTConfig;
-import org.vast.stt.event.STTEvent;
 
 /**
  * <p><b>Title:</b><br/>
@@ -53,10 +54,12 @@ public class TimeSpinner
 	final Color DARK_GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 	final Color GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	Color activeBackground = null;
+	List<TimeListener> timeListeners;
 	
 	protected TimeSpinner(){
 		//  Added so that CurrentTimeSpinner can extend this class
 		initFont();
+		timeListeners = new ArrayList<TimeListener>();
 	}
 	
 	public TimeSpinner(Composite parent, String label) {
@@ -151,8 +154,8 @@ public class TimeSpinner
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
-		//  TODO  publish "timeChanged" event - should this use STTEventManager or just local Listeners?
-		//STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
+		//  TODO  publish "timeChanged" event 
+		publishTimeChanged();
 	}
 	
 	private void timeDown(){
@@ -163,7 +166,24 @@ public class TimeSpinner
 		tsModel.selectField(text);
 		//  TODO  publish "timeChanged" event
 	}
+	
+	private void publishTimeChanged(){
+		TimeListener tsTmp = null;
+		double t = getValue();
+		for(int i=0; i<timeListeners.size(); i++){
+			tsTmp = timeListeners.get(i);
+			tsTmp.timeChanged(t);
+		}
+	}
 
+	public void addTimeListener(TimeListener tl){
+		timeListeners.add(tl);
+	}
+	
+	public void removeTimeListener(TimeListener tl){
+		timeListeners.remove(tl);
+	}
+	
 	Runnable spinUpThread = new Runnable(){
 		public void run(){
 			timeUp();
