@@ -2,6 +2,8 @@ package org.vast.stt.gui.widgets.time;
 
 //import java.util.TimeZone;
 
+import java.util.TimeZone;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -14,7 +16,6 @@ public class TimeZoneCombo {
     //  some specific tz's. likt CST, PST.  See Javadoc for TimeZone class and notes on
     //  3 letter timeZone issues with internationalization
     String [] gmtTimeZones;
-    //TimeZone tz;
 
     public TimeZoneCombo(Composite mainGroup){
     	tzCombo = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -53,5 +54,10 @@ public class TimeZoneCombo {
     
     public Combo getCombo(){
     	return tzCombo;
+    }
+    
+    public TimeZone getTimeZone(){
+    	TimeZone tz = TimeZone.getTimeZone(tzCombo.getText());
+    	return tz;
     }
 }
