@@ -99,7 +99,6 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
     	tzCombo = new TimeZoneCombo(mainGroup);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		tzCombo.setLayoutData(gridData);
-		((CalendarSpinnerModel)tsModel).setTimeZone(tzCombo.getTimeZone());
 		tzCombo.addSelectionListener(this);
 	}
 
@@ -132,7 +131,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 	public void widgetSelected(SelectionEvent e) {
 		if(e.widget == tzCombo.getCombo()){
 			//  change displayed time, but no need to issue updateData() calls
-			((CalendarSpinnerModel)tsModel).setTimeZone(tzCombo.getTimeZone());
+			((CalendarSpinnerModel)tsModel).setZoneOffset(tzCombo.getZoneOffset());
 			text.setText(tsModel.toString());
 			//tsModel.selectField(text);
 		}
