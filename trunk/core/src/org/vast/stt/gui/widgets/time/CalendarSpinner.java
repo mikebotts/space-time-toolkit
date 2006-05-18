@@ -1,8 +1,5 @@
 package org.vast.stt.gui.widgets.time;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +36,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		initGui(parent, label, orientation);
 
 		//  Set initial time elsewhere
-		this.setValue(9.995e8);
+		this.setValue(1.1e9);
 		text.setCaretOffset(13);
 		tsModel.selectField(text);
 	}
@@ -109,22 +106,13 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		else
 			tzCombo.setBackground(DARK_GRAY);
 	}
-	
 
-	public void setValue(Calendar value){
-		tsModel.setValue(value);
-		text.setText(tsModel.toString());
-		tsModel.selectField(text);
-	}
-	
 	public void setValue(double jul1970_seconds){
-		Calendar cal = new GregorianCalendar();
-		cal.setTimeInMillis((long)jul1970_seconds*1000l);
-		tsModel.setValue(cal);
+		tsModel.setValue(new Double(jul1970_seconds));
 		text.setText(tsModel.toString());
 		tsModel.selectField(text);
 	}
-
+		
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
@@ -134,7 +122,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 			((CalendarSpinnerModel)tsModel).setZoneOffset(tzCombo.getZoneOffset());
 			text.setText(tsModel.toString());
 			//tsModel.selectField(text);
+			System.err.println("New timeVal is " + tsModel.getValue());
 		}
 	}
-	
 }
