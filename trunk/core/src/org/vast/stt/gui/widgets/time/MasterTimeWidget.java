@@ -103,8 +103,8 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 		while(dit.hasNext()){
 			itemTmp = dit.next();
 			provTmp = itemTmp.getDataProvider();
-			provTmp.getTimeExtent().setBaseTime(newTime);
 			if(provTmp.isTimeSubsetSupported() && itemTmp.isEnabled()) {
+				provTmp.getTimeExtent().setBaseTime(newTime);
 				System.err.println("New Time for: " + itemTmp.getName() + " = " + newTime);
 				try {
 					provTmp.updateData();
