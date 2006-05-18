@@ -52,11 +52,6 @@ public class TimeZoneCombo {
     	return tzCombo;
     }
     
-    public TimeZone getTimeZone(){
-    	TimeZone tz = TimeZone.getTimeZone(tzCombo.getText());
-    	return tz;
-    }
-    
     public int getZoneOffset(){
     	int sel = tzCombo.getSelectionIndex();
     	return sel - 14;  
