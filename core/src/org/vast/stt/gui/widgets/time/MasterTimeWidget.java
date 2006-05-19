@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets.time;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,6 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.data.DataException;
 import org.vast.stt.project.DataProvider;
@@ -24,6 +26,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 	private TimeSpinner stepSpinner;
 	private Button rtBtn;
 	private Button setBtn;
+	private double timeStep = 60.0; //  timeStep in seconds
 	
 	public MasterTimeWidget(Composite parent) {
 		init(parent);
@@ -55,6 +58,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 		
 		//  Time Step
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
+		stepSpinner.setValue(timeStep);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		stepSpinner.setLayoutData(gridData);
@@ -84,14 +88,19 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 
 	public void widgetSelected(SelectionEvent e) {
 		if (e.widget == rtBtn) {
-			//  start/stop realtime mode
+			//  TODO start/stop realtime mode
 		} else if (e.widget == setBtn) {
 			//  popup setTimeStep Spinner
+			StepSpinnerDialog ssd = new StepSpinnerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+			int rc = ssd.getReturnCode();
+			if(rc == IDialogConstants.OK_ID){
+				stepSpinner.setValue(ssd.getTimeStep());
+			}
 		}
-		//  TODO  mod, support multiple Scenes (after Scene is inited)
 	}
 
 	public void timeChanged(double newTime) {
+		//  TODO  mod, support multiple Scenes (after Scene is inited)
 		Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
 		//  Do I need to reset scene's TimeSettings here?
 		//scene.setTimeSettings();
@@ -115,5 +124,4 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 			}
 		}
 	}
-
 }

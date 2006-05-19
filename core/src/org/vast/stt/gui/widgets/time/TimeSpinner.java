@@ -97,19 +97,13 @@ public class TimeSpinner
 		mainGroup.addDisposeListener(this);
 		//  Text widget		
 		text = new StyledText(mainGroup, SWT.RIGHT | SWT.BORDER | SWT.READ_ONLY);
-		//text = new Text(mainGroup, SWT.RIGHT | SWT.BORDER);
 		GridData gridData = new GridData();
-		//gridData.verticalAlignment = SWT.CENTER;
 		//gridData.heightHint = 18;
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
 		text.setToolTipText(formatStr);
 		activeBackground = text.getBackground();
 		
-		//text.addSelectionListener(this);
-		//text.addModifyListener(this);
-		//text.addVerifyListener(this);
-		//text.addFocusListener(this);
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
 		text.addKeyListener(this);
@@ -311,7 +305,6 @@ public class TimeSpinner
 	}
 
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	/**

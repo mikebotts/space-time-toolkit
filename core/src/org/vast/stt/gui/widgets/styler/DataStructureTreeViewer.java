@@ -10,7 +10,6 @@ import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataList;
-import org.vast.data.DataValue;
 
 public class DataStructureTreeViewer {
 
@@ -42,7 +41,6 @@ class DataStructureContentProvider implements ITreeContentProvider {
 	Viewer viewer;
 	
 	public Object[] getChildren(Object parentElement) {
-		// TODO Auto-generated method stub
 		if(parentElement instanceof DataGroup){
 			DataGroup group = (DataGroup)parentElement;
 			int numComps = group.getComponentCount();
@@ -63,12 +61,10 @@ class DataStructureContentProvider implements ITreeContentProvider {
 	}
 
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public boolean hasChildren(Object element) {
-		// TODO Auto-generated method stub
 		if (element instanceof DataGroup || element instanceof DataArray ||
 			element instanceof DataList)
 			return true;
@@ -82,14 +78,12 @@ class DataStructureContentProvider implements ITreeContentProvider {
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
 		System.err.println("inputChanged for " + viewer);
 		this.viewer = viewer;
 	}
 
 	public Object[] getElements(Object inputElement) {
 		System.err.println("DataStructTV.getElements():  inputElt = " + inputElement);
-		// TODO Auto-generated method stub
 		if(inputElement instanceof DataList){
 			DataList node = (DataList)inputElement;
 			//int numComps = node.getComponentCount();
@@ -107,12 +101,10 @@ class DataStructureContentProvider implements ITreeContentProvider {
 class DataStructureLabelProvider extends LabelProvider {
 
 	public Image getImage(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String getText(Object element) {
-		// TODO Auto-generated method stub
 		if(element instanceof DataComponent) {
 			//System.err.println("dataComp is " + element);
 			String name = ((DataComponent)element).getName();
