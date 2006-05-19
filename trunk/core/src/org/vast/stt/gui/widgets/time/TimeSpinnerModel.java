@@ -240,6 +240,7 @@ public class TimeSpinnerModel implements SpinnerModel{
         }
     }
 
+    //  TODO  fix this.  It doesn't work right, and needs to be moved anyway
     public void selectField(StyledText text){
 		int caretPos = text.getCaretOffset();
 		//  Force single characer selection
