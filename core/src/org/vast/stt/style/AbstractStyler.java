@@ -120,6 +120,7 @@ public abstract class AbstractStyler implements DataStyler
         IndexerTreeBuilder builder = treeBuilders.get(listName);
         if (builder == null)
         {
+        	//  dataNode is null here when I am trying to add a new Styler - TC
             BlockList list = dataNode.getList(listName);
             if (list == null) return;
             builder = new IndexerTreeBuilder(list.getBlockStructure());

@@ -33,6 +33,7 @@ import org.vast.stt.project.DataProvider;
  */
 public class StylerFactory
 {
+	public static enum StylerType { point, line, grid, polygon, raster, texture, label };
 	
 	public DataStyler createStyler(DataProvider provider, Symbolizer sym)
 	{
@@ -69,13 +70,37 @@ public class StylerFactory
 	}
 	
 	/**
+	 * Construct a new styler with the given name, stylerType, and DataProvider
+	 * 
+	 * @param stylerName
+	 * @param stylerType
+	 * @param provider
+	 * @return the newly created styler
+	 */
+	public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataProvider provider){
+		DataStyler newStyler = null;
+		switch(stylerType){
+		case point:
+			newStyler = StylerFactory.createDefaultPointStyler(provider);
+			break;
+		case line:
+			newStyler = StylerFactory.createDefaultLineStyler(provider);
+			break;
+		default:
+			System.err.println("StylerType not supported in createNewStyler()");
+			break;
+		}
+		return newStyler;
+	}
+	
+	/**
 	 * Convenience method for constructing a new PointStyler with a default 
 	 * size and color, and the geometry settings of the input DataProvider
 	 * 
 	 * @param provider - the dataProvider to use for the new Styler
 	 * @return PointStyler
 	 */
-	static public PointStyler createDefaultPointStyler(DataProvider provider){
+	static private PointStyler createDefaultPointStyler(DataProvider provider){
 		PointStyler styler = new PointStyler();
 		styler.setDataProvider(provider);
 
@@ -107,7 +132,7 @@ public class StylerFactory
 	 * @param provider - the dataProvider to use for the new Styler
 	 * @return new LineStyler
 	 */
-	static public LineStyler createDefaultLineStyler(DataProvider provider){
+	static private LineStyler createDefaultLineStyler(DataProvider provider){
 		LineStyler styler = new LineStyler();
 		styler.setDataProvider(provider);
 		
