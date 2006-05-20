@@ -3,6 +3,7 @@ package org.vast.stt.gui.widgets.styler;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ISelection;
@@ -11,7 +12,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -23,6 +23,7 @@ import org.vast.stt.scene.DataItem;
 import org.vast.stt.style.CompositeStyler;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
+import org.vast.stt.style.StylerFactory.StylerType;
  
 /**
  * <p><b>Title:</b><br/>
@@ -44,7 +45,6 @@ public class StyleWidget extends CheckOptionTable
 { 
 	java.util.List<DataStyler> stylerAL;
 	DataStyler activeStyler;
-	enum StylerType { point, line };
 	OptionListener optListener;
 	
 	public StyleWidget(Composite parent){
@@ -106,26 +106,12 @@ public class StyleWidget extends CheckOptionTable
 	/**
 	 * create a new styler and call addStyle() with it
 	 */
-	public void createNewStyler(String stylerName, int stylerType){
-		DataStyler newStyler = null;
-		switch(stylerType){
-		case 0:
-			newStyler = 
-				StylerFactory.createDefaultPointStyler(dataItem.getDataProvider());
+	public void createNewStyler(String stylerName, StylerType stylerType){
+		DataStyler newStyler = 
+			StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem.getDataProvider());
+		if(newStyler != null) {
 			//  Hack to set geom
 			newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
-			break;
-		case 1:
-			newStyler = 
-				StylerFactory.createDefaultLineStyler(dataItem.getDataProvider());
-			//  Hack to set geom 
-			newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
-			break;
-		default:
-			System.err.println("StylerType note supported in createNewStyler()");
-			break;
-		}
-		if(newStyler != null) {
 			newStyler.setName(stylerName);
 			newStyler.updateDataMappings();
 			newStyler.setEnabled(false);
@@ -211,7 +197,12 @@ public class StyleWidget extends CheckOptionTable
 	}
 	
 	private void openAddStyleDialog(){
-		AddStylerDialog asd = new AddStylerDialog(this);
+		AddStylerDialog asd = new AddStylerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		int rc = asd.getReturnCode();
+		if(rc == IDialogConstants.OK_ID){
+			createNewStyler(asd.getStylerName(), asd.getStylerType());
+		}
+
 	}
 	
 	//  Called when parent styleView is closed.  Set basicControls and
