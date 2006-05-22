@@ -1,7 +1,5 @@
 package org.vast.stt.gui.widgets.time;
 
-import java.util.TimeZone;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;

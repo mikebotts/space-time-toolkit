@@ -48,7 +48,7 @@ public class TimeSpinner
 	String formatStr;
 	Font entryFont;
 	Button upBtn, downBtn;
-	SpinnerModel tsModel;
+	TimeSpinnerModel tsModel;
 	boolean btnDown = false;  //  Used to indicate user is pressing and holding a spinner button
 	// List timeListeners;
 	final Color DARK_GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
@@ -260,6 +260,10 @@ public class TimeSpinner
 	public double getValue(){
 		Double val = (Double)tsModel.getValue();
 		return val.doubleValue();
+	}
+	
+	public void resetCaret(){
+		tsModel.resetCaret(text);
 	}
 	
 	/**

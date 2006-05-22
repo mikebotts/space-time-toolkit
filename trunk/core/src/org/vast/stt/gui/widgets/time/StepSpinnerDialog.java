@@ -41,6 +41,7 @@ public class StepSpinnerDialog extends Dialog {
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.horizontalSpan = 2;
 		stepSpinner.setLayoutData(gridData);
+		stepSpinner.resetCaret();
 		return comp;
 	}
 
@@ -60,6 +61,7 @@ public class StepSpinnerDialog extends Dialog {
     	} else if(buttonId == DEFAULT_ID){
     		timeStep = DEFAULT_TIME_STEP;
     		stepSpinner.setValue(timeStep);
+    		stepSpinner.resetCaret();
     	}
     	super.buttonPressed(buttonId);
     }    
