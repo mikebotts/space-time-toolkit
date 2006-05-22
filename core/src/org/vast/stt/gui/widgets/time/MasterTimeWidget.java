@@ -30,6 +30,8 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 	
 	public MasterTimeWidget(Composite parent) {
 		init(parent);
+		//stepSpinner.setValue(timeStep);
+		stepSpinner.resetCaret();
 	}
 
 	public void init(Composite parent){
@@ -95,6 +97,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 			int rc = ssd.getReturnCode();
 			if(rc == IDialogConstants.OK_ID){
 				stepSpinner.setValue(ssd.getTimeStep());
+				stepSpinner.resetCaret();
 			}
 		}
 	}

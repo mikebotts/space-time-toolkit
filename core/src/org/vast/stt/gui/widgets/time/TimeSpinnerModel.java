@@ -1,5 +1,7 @@
 package org.vast.stt.gui.widgets.time;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -8,6 +10,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.gui.widgets.SpinnerModel;
 /**
  * <p><b>Title:</b><br/>
  * TimeSpinnerModel
@@ -30,7 +33,7 @@ public class TimeSpinnerModel implements SpinnerModel{
 	String formatStr;
 	// position of field in arrays start and len
     protected int YEAR = -1 , MONTH = -1, DAY = -1, HOUR = -1, MIN = -1, SEC = -1, FSEC = -1;
-    int [] start, len; // position of fields in Str
+    Integer [] start, len; // position of fields in Str
     int yearDigits, dayDigits, fsecDigits;
     protected int years, months, days, hours, minutes, seconds, fseconds;
     int maxYears, maxDays, maxFseconds;  //  editor supplies these
@@ -52,9 +55,9 @@ public class TimeSpinnerModel implements SpinnerModel{
     public void loadFieldPositionArrays(String formatStr){
         String token;
         StringTokenizer parser = new StringTokenizer(formatStr," :./,", true);
-        int numFields = parser.countTokens();
-        start = new int[numFields];
-        len = new int[numFields];
+        //int numFields = parser.countTokens();
+        List<Integer> startList = new ArrayList<Integer>();
+        List<Integer> lenList = new ArrayList<Integer>();
         int index = 0;
         int where = 0;
 
@@ -94,25 +97,32 @@ public class TimeSpinnerModel implements SpinnerModel{
                     case '.':
                     case '/':
                     case ',':
-                        where++;  numFields--;
+                        where++;  //numFields--;
                         continue;
                     default:
                         System.err.println("TimeStepSpinnerEditor:  Format invalid: " + formatStr);
                         return;
                 }
 
-                len[index] = token.length();
-                start[index] = where;
-                where = start[index]+len[index];
+                startList.add(where);
+                lenList.add(token.length());
+                //len[index] = token.length();
+                //start[index] = where;
+                //where = start[index]+len[index];
+                where = where + token.length();
 
                 index++;
             }
 
         }catch (NoSuchElementException e) {
-            e.printStackTrace();
+        	//  These are really fatal exceptions for the Model 
+        	e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+      
+        start = (Integer [])startList.toArray(new Integer[]{});
+        len = (Integer [])lenList.toArray(new Integer[]{});
     }
 	
 	private void stepCurrentField(int step){
@@ -269,6 +279,15 @@ public class TimeSpinnerModel implements SpinnerModel{
         currentField = -1;
 	}
 
+    /** 
+     * Convenience method to hilite the minute field when spinner is refreshed
+     * @param text
+     */
+    public void resetCaret(StyledText text){
+    	text.setCaretOffset(start[start.length -2]);
+    	selectField(text);
+    }
+    
     public Object getValue(){
         double timeStep = years * SECONDS_PER_YEAR;  // no leap year here.
         timeStep += days * SECONDS_PER_DAY;
