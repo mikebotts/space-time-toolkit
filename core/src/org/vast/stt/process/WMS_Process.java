@@ -104,7 +104,7 @@ public class WMS_Process extends DataProcess
             // image data type
             DataGroup pixelData = (DataGroup)outputImage.getComponent(0).getComponent(0);
             for (int i=0; i<pixelData.getComponentCount(); i++)
-                ((DataValue)pixelData.getComponent(i)).type = DataType.BYTE;
+                ((DataValue)pixelData.getComponent(i)).setDataType(DataType.BYTE);
         }
         catch (Exception e)
         {
