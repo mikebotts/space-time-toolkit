@@ -52,6 +52,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:WCS_image:1.0</uri>
+      <class>org.vast.stt.process.WCS_imageProcess</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:flatGridGenerator:1.0</uri>
       <class>org.vast.stt.process.FlatGridGenerator_Process</class>
    </Process>
