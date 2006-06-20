@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>GOES Demo Project</name>
+      <author>T Cook</author>
+      <dateCreated>2006-06-15T22:23:00</dateCreated>
+      <description>Goes Test</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>3D ECF View</name>
+            <renderer>OPENGL</renderer>
+            <view>
+               <ViewSettings>
+                  <backgroundColor>#FFFFFF</backgroundColor>
+                  <viewWidth>1000</viewWidth>
+                  <viewHeight>800</viewHeight>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-1.514 0.6032 10</cameraPos>
+                  <targetPos>-1.514 0.6032 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>0.07</orthoWidth>
+                  <orthoHeight>1.67</orthoHeight>
+                  <nearClip>0</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>GOES Demo Project</name>                  
+                  <member>
+                     <DataItem enabled="false">
+                        <name>GOES Imagery</name>
+                        <dataProvider xlink:href="#GOES_PROCESS"/>
+                        <style>
+                           <sldx:TextureSymbolizer enabled="true">
+                              <sldx:GridSymbolizer>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>goesData/coverage/row/point/longitude</ogc:PropertyName>
+                                          <Gain>0.017453292519943295769236907684886</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>goesData/coverage/row/point/latitude</ogc:PropertyName>
+                                          <Gain>0.017453292519943295769236907684886</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                    <!--
+                                    <sld:CssParameter name="geometry-z">
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>gridData/coverage/row/point/elevation</ogc:PropertyName>
+                                          <Gain>5e-7</Gain>
+                                       </LinearAdjustment>
+                                    </sld:CssParameter>
+                                    -->
+                                 </sld:Geometry>
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>goesData/width</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>goesData/length</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sldx:GridSymbolizer>
+                              <sld:RasterSymbolizer>
+                                 <sld:Opacity>1.0</sld:Opacity>
+                                 <!--
+                                 <sld:ChannelSelection>
+                                    <sld:RedChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                    </sld:RedChannel>
+                                    <sld:GreenChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                    </sld:GreenChannel>
+                                    <sld:BlueChannel>
+                                       <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                    </sld:BlueChannel>
+                                 </sld:ChannelSelection>
+                                 -->
+                                 <sldx:Dimensions>
+                                    <sld:CssParameter name="width">
+                                       <ogc:PropertyName>goesData/imageWidth</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="length">
+                                       <ogc:PropertyName>goesData/imageHeight</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sldx:Dimensions>
+                              </sld:RasterSymbolizer>
+                           </sldx:TextureSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <!--
+                  <member>
+                     <DataList>
+                        <name>Geographic Data</name>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>Coast Lines - 100km</name>
+                              <dataProvider xlink:href="#COASTLINE_PROV"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>                             
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>Boundaries</name>
+                              <dataProvider xlink:href="#STATE_PROV"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+                  -->
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources (preloaded capabilities) -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            <member>
+               <SensorMLProvider id="GOES_PROCESS">
+                  <name>GOES Process</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <spatialExtent> <!-- tiling="4x2"> -->
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="./GoesProcess.xml#GOES_WCS_PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="STATE_PROV">
+                  <name>States Boundaries</name>
+                  <description>US States Boundaries</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/states/allStates.swe"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="COASTLINE_PROV">
+                  <name>World Coast Lines - 100</name>
+                  <description>World Coast Lines</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
+               </SWEDataProvider>
+            </member>
+ 
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
