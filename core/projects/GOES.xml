@@ -37,42 +37,48 @@
                         <name>GOES Imagery</name>
                         <dataProvider xlink:href="#GOES_PROCESS"/>
                         <style>
-                           <sldx:TextureSymbolizer enabled="true">
-                              <sldx:GridSymbolizer>
+                          <!-- <sldx:TextureSymbolizer enabled="true">
+                           <sldx:TextureSymbolizer enabled="true">-->
+                                 <sldx:GridSymbolizer enabled="true">
                                  <sld:Geometry>
                                     <sld:CssParameter name="geometry-x">
                                        <LinearAdjustment>
-                                          <ogc:PropertyName>goesData/coverage/row/point/longitude</ogc:PropertyName>
+                                          <ogc:PropertyName>coverageData/coverage/row/point/longitude</ogc:PropertyName>
                                           <Gain>0.017453292519943295769236907684886</Gain>
                                        </LinearAdjustment>
                                     </sld:CssParameter>
                                     <sld:CssParameter name="geometry-y">
                                        <LinearAdjustment>
-                                          <ogc:PropertyName>goesData/coverage/row/point/latitude</ogc:PropertyName>
+                                          <ogc:PropertyName>coverageData/coverage/row/point/latitude</ogc:PropertyName>
                                           <Gain>0.017453292519943295769236907684886</Gain>
                                        </LinearAdjustment>
                                     </sld:CssParameter>
-                                    <!--
+                                    
                                     <sld:CssParameter name="geometry-z">
                                        <LinearAdjustment>
-                                          <ogc:PropertyName>gridData/coverage/row/point/elevation</ogc:PropertyName>
+                                          <ogc:PropertyName>coverageData/coverage/row/point/tiepointX</ogc:PropertyName>
                                           <Gain>5e-7</Gain>
                                        </LinearAdjustment>
                                     </sld:CssParameter>
-                                    -->
                                  </sld:Geometry>
+                                 <sld:Stroke>
+                                    <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                    <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                 </sld:Stroke>
                                  <sldx:Dimensions>
                                     <sld:CssParameter name="width">
-                                       <ogc:PropertyName>goesData/width</ogc:PropertyName>
+                                       <ogc:PropertyName>coverageData/width</ogc:PropertyName>
                                     </sld:CssParameter>
                                     <sld:CssParameter name="length">
-                                       <ogc:PropertyName>goesData/length</ogc:PropertyName>
+                                       <ogc:PropertyName>coverageData/length</ogc:PropertyName>
                                     </sld:CssParameter>
                                  </sldx:Dimensions>
                               </sldx:GridSymbolizer>
+                              <!--
                               <sld:RasterSymbolizer>
-                                 <sld:Opacity>1.0</sld:Opacity>
-                                 <!--
+                                 <sld:Opacity>1.0</sld:Opa
+                                 city>
+                                 
                                  <sld:ChannelSelection>
                                     <sld:RedChannel>
                                        <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
@@ -84,7 +90,7 @@
                                        <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
                                     </sld:BlueChannel>
                                  </sld:ChannelSelection>
-                                 -->
+                                 
                                  <sldx:Dimensions>
                                     <sld:CssParameter name="width">
                                        <ogc:PropertyName>goesData/imageWidth</ogc:PropertyName>
@@ -94,7 +100,8 @@
                                     </sld:CssParameter>
                                  </sldx:Dimensions>
                               </sld:RasterSymbolizer>
-                           </sldx:TextureSymbolizer>
+                              
+                           </sldx:TextureSymbolizer>-->
                         </style>
                      </DataItem>
                   </member>
@@ -169,11 +176,12 @@
                <SensorMLProvider id="GOES_PROCESS">
                   <name>GOES Process</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
-                  <spatialExtent> <!-- tiling="4x2"> -->
+                  <spatialExtent tiling="1x1"> 
                      <BoundingBox srsName="EPSG:4326">
                         <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
+                  <!--<process xlink:href="./SRTM_Process.xml#WCS_PROCESS"/>-->
                   <process xlink:href="./GoesProcess.xml#GOES_WCS_PROCESS"/>
                </SensorMLProvider>
             </member>

@@ -61,9 +61,11 @@
                                     <swe:component name="tiepointX">
                                        <swe:Quantity definition="..."/>
                                     </swe:component>
+                                    <!--
                                     <swe:component name="tiepointY">
                                        <swe:Quantity definition="..."/>
                                     </swe:component>
+                                    -->
                                  </swe:DataGroup>
                               </swe:component>
                            </swe:DataArray>
@@ -71,7 +73,7 @@
                      </swe:DataArray>
                   </swe:component>
                   <!--  second group is imagery data -->
-                 
+                 <!--
                   <swe:component name="imageWidth">
                      <swe:Count id="IMAGE_WIDTH"/>
                   </swe:component>
@@ -89,13 +91,12 @@
                         </swe:component>
                      </swe:DataArray>
                   </swe:component>
-                  
+                  -->
                </swe:DataGroup>
                                           
             </sml:output>
          </sml:OutputList>
       </sml:outputs>
-      <!-- TODO  Define these in a common WCS_PARAMS and xlink -->
       <sml:parameters>
          <sml:ParameterList>
             <sml:parameter name="wcsOptions">
@@ -126,6 +127,7 @@
             </sml:parameter>
          </sml:ParameterList>
       </sml:parameters>
-      <sml:method xlink:href="urn:ogc:def:process:WCS_image:1.0"/>
+      <!--<sml:method xlink:href="urn:ogc:def:process:WCS_image:1.0"/>-->
+      <sml:method xlink:href="urn:ogc:def:process:WCS:1.0"/>
    </sml:ProcessModel>
 </sml:SensorML>
