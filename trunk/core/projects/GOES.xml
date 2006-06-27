@@ -43,21 +43,14 @@
                                  <sld:Geometry>
                                     <sld:CssParameter name="geometry-x">
                                        <LinearAdjustment>
-                                          <ogc:PropertyName>coverageData/coverage/row/point/longitude</ogc:PropertyName>
-                                          <Gain>0.017453292519943295769236907684886</Gain>
+                                          <ogc:PropertyName>coverageData/gridData/coverage/row/point/longitude</ogc:PropertyName>
+                                          <Gain>0.017453292519943295769236907684886</Gain> <!--  PI/180 -->
                                        </LinearAdjustment>
                                     </sld:CssParameter>
                                     <sld:CssParameter name="geometry-y">
                                        <LinearAdjustment>
-                                          <ogc:PropertyName>coverageData/coverage/row/point/latitude</ogc:PropertyName>
+                                          <ogc:PropertyName>coverageData/gridData/coverage/row/point/latitude</ogc:PropertyName>
                                           <Gain>0.017453292519943295769236907684886</Gain>
-                                       </LinearAdjustment>
-                                    </sld:CssParameter>
-                                    
-                                    <sld:CssParameter name="geometry-z">
-                                       <LinearAdjustment>
-                                          <ogc:PropertyName>coverageData/coverage/row/point/tiepointX</ogc:PropertyName>
-                                          <Gain>5e-7</Gain>
                                        </LinearAdjustment>
                                     </sld:CssParameter>
                                  </sld:Geometry>
@@ -67,10 +60,10 @@
                                  </sld:Stroke>
                                  <sldx:Dimensions>
                                     <sld:CssParameter name="width">
-                                       <ogc:PropertyName>coverageData/width</ogc:PropertyName>
+                                       <ogc:PropertyName>coverageData/gridData/width</ogc:PropertyName>
                                     </sld:CssParameter>
                                     <sld:CssParameter name="length">
-                                       <ogc:PropertyName>coverageData/length</ogc:PropertyName>
+                                       <ogc:PropertyName>coverageData/gridData/length</ogc:PropertyName>
                                     </sld:CssParameter>
                                  </sldx:Dimensions>
                               </sldx:GridSymbolizer>
