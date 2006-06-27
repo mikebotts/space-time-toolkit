@@ -38,42 +38,43 @@
          <sml:OutputList>
             <sml:output name="coverageData">
                <swe:DataGroup>
-                  
-                  <!--  first component is (lat, lon, tieptX, tieptY)[][] -->
-                  <swe:component name="width">
-                     <swe:Count id="GRID_WIDTH"/>
-                  </swe:component>
-                  <swe:component name="length">
-                     <swe:Count id="GRID_LENGTH"/>
-                  </swe:component>                  
-                  <swe:component name="coverage">
-                     <swe:DataArray arraySize="#GRID_LENGTH">  
-                        <swe:component name="row">
-                           <swe:DataArray arraySize="#GRID_WIDTH">  
-                              <swe:component name="point">
-                                 <swe:DataGroup>
-                                    <swe:component name="latitude">
-                                       <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84" uom="deg"/>
+                  <swe:component name="gridData">
+                     <swe:DataGroup>
+                        <!--  first component is (lat, lon, tieptX, tieptY)[][] -->
+                        <swe:component name="width">
+                           <swe:Count id="GRID_WIDTH"/>
+                        </swe:component>
+                        <swe:component name="length">
+                           <swe:Count id="GRID_LENGTH"/>
+                        </swe:component>                  
+                        <swe:component name="coverage">
+                           <swe:DataArray arraySize="#GRID_LENGTH">  
+                              <swe:component name="row">
+                                 <swe:DataArray arraySize="#GRID_WIDTH">  
+                                    <swe:component name="point">
+                                       <swe:DataGroup>
+                                          <swe:component name="latitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84" uom="deg"/>
+                                          </swe:component>
+                                          <swe:component name="longitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84" uom="deg"/>
+                                          </swe:component>
+                                          <swe:component name="tiepointX">
+                                             <swe:Quantity definition="..."/>
+                                          </swe:component>
+                                          <swe:component name="tiepointY">
+                                             <swe:Quantity definition="..."/>
+                                          </swe:component>
+                                       </swe:DataGroup>
                                     </swe:component>
-                                    <swe:component name="longitude">
-                                       <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84" uom="deg"/>
-                                    </swe:component>
-                                    <swe:component name="tiepointX">
-                                       <swe:Quantity definition="..."/>
-                                    </swe:component>
-                                    <!--
-                                    <swe:component name="tiepointY">
-                                       <swe:Quantity definition="..."/>
-                                    </swe:component>
-                                    -->
-                                 </swe:DataGroup>
-                              </swe:component>
+                                 </swe:DataArray>
+                              </swe:component>   
                            </swe:DataArray>
-                        </swe:component>   
-                     </swe:DataArray>
+                        </swe:component>
+                     </swe:DataGroup>
                   </swe:component>
                   <!--  second group is imagery data -->
-                 <!--
+                  <!--
                   <swe:component name="imageWidth">
                      <swe:Count id="IMAGE_WIDTH"/>
                   </swe:component>
@@ -127,7 +128,6 @@
             </sml:parameter>
          </sml:ParameterList>
       </sml:parameters>
-      <!--<sml:method xlink:href="urn:ogc:def:process:WCS_image:1.0"/>-->
-      <sml:method xlink:href="urn:ogc:def:process:WCS:1.0"/>
+      <sml:method xlink:href="urn:ogc:def:process:WCS_image:1.0"/>
    </sml:ProcessModel>
 </sml:SensorML>
