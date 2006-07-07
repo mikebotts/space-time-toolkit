@@ -3,9 +3,9 @@
 	<classpathentry excluding="**/*.old|**/.svn/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
-	<classpathentry kind="lib" path="D:/Projects/NSSTC/STT3/lib/jai_codec.jar"/>
-	<classpathentry kind="lib" path="D:/Projects/NSSTC/STT3/lib/jai_core.jar"/>
-	<classpathentry kind="lib" path="D:/Projects/NSSTC/STT3/lib/jogl.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="lib/jai_codec.jar"/>
+	<classpathentry kind="lib" path="lib/jai_core.jar"/>
+	<classpathentry kind="lib" path="lib/jogl.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
