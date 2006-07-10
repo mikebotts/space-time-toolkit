@@ -19,7 +19,7 @@
             <view name="StyleView" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
             <view name="DataProvide" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
             <view name="SceneTree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
-            <view name="Scene" class="org.vast.stt.gui.views.SceneView" id="STT.SceneView" allowMultiple="true"/>
+            <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView" allowMultiple="true"/>
       </extension>
       <extension point="org.eclipse.ui.editors">
             <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="src/icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
