@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.scene;
+package org.vast.stt.project;
 
 import java.util.Iterator;
 

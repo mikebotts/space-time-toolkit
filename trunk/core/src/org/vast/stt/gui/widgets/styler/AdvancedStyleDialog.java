@@ -19,9 +19,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.scene.DataItem;
+import org.vast.stt.project.DataItem;
+import org.vast.stt.project.DataStyler;
+import org.vast.stt.project.DataStylerList;
 import org.vast.stt.style.CompositeStyler;
-import org.vast.stt.style.DataStyler;
 
 /**
  * 
@@ -64,7 +65,7 @@ public class AdvancedStyleDialog implements SelectionListener
 		//  init GUI components
 		init(ol);
 		//  Set initial state of tabs and tree based on dataItem's styles
-		setStyler(dataItem.getStyler());
+		setStyler(dataItem.getStylerList());
 		//  set the currently active non-composite DataStyler based on 
 		//  what was selected in StyleWidget wheb "advanced" button was pressed 
 		dataStructureTree.setInput(item.getDataProvider().getDataNode());
@@ -191,14 +192,9 @@ public class AdvancedStyleDialog implements SelectionListener
 	 * can be a compositeStyler
 	 * @param newStyler
 	 */
-	public void setStyler(DataStyler newStyler){
+	public void setStyler(DataStylerList stylerList){
 		//  Check for CompositeStyler first...
-		if(newStyler instanceof CompositeStyler) 
-			stylerAL = ((CompositeStyler)newStyler).getStylerList();
-		else {  // this is a single DataStyler
-			stylerAL = new ArrayList<DataStyler>();
-			stylerAL.add(newStyler);
-		}
+		stylerAL = stylerList;
 		setStylesComboItems();
 	}
 

@@ -21,7 +21,6 @@ import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.scene.*;
 import org.vast.stt.style.*;
 import org.vast.util.*;
 import org.w3c.dom.*;
@@ -287,6 +286,11 @@ public class ProjectReader
 		// set scene properties
 		scene.setName(dom.getElementValue(sceneElt, "name"));
 		
+		// read time settings
+        Element timeSettingsElt = dom.getElement(sceneElt, "time/TimeSettings");
+        TimeSettings timeSettings = readTimeSettings(timeSettingsElt);
+        scene.setTimeSettings(timeSettings);
+        
 		// read view settings
 		Element viewSettingsElt = dom.getElement(sceneElt, "view/ViewSettings");
 		ViewSettings viewSettings = readViewSettings(viewSettingsElt);
@@ -299,6 +303,75 @@ public class ProjectReader
 		
 		return scene;
 	}
+    
+    
+    /**
+     * Reads Scene Time Settings
+     * @param timeSettingsElt
+     * @return
+     */
+    protected TimeSettings readTimeSettings(Element timeSettingsElt)
+    {
+        // try to get it from the table
+        Object obj = findExistingObject(timeSettingsElt);
+        if (obj != null)
+            return (TimeSettings)obj;
+                
+        String val;
+        TimeSettings timeSettings = new TimeSettings();
+                
+        // current time
+        val = dom.getElementValue(timeSettingsElt, "currentTime");
+        if (val != null)
+        {
+            double julianTime = 0;
+            
+            try
+            {
+                julianTime = DateTimeFormat.parseIso(val);                
+            }
+            catch (ParseException e)
+            {
+            }
+            
+            timeSettings.setCurrentTime(new DateTime(julianTime));
+        }
+        
+        // lag time
+        val = dom.getElementValue(timeSettingsElt, "lagTime");
+        if (val != null)
+        {
+            double time = Double.parseDouble(val);
+            timeSettings.setLagTime(time);
+        }
+        
+        // lead time
+        val = dom.getElementValue(timeSettingsElt, "leadTime");
+        if (val != null)
+        {
+            double time = Double.parseDouble(val);
+            timeSettings.setLeadTime(time);
+        }
+        
+        // step time
+        val = dom.getElementValue(timeSettingsElt, "stepTime");
+        if (val != null)
+        {
+            double time = Double.parseDouble(val);
+            timeSettings.setStepTime(time);
+        }
+        
+        // real time mode
+        val = dom.getElementValue(timeSettingsElt, "realTimeMode");
+        if (val.equals("on") || val.equals("yes"))
+        {
+            timeSettings.setRealTime(true);
+        }
+        else
+            timeSettings.setRealTime(false);
+        
+        return timeSettings;
+    }
 	
 	
 	/**
@@ -494,27 +567,13 @@ public class ProjectReader
 		NodeList symElts = dom.getElements(dataItemElt, "style/*");
 		int listSize = symElts.getLength();
 		
-		if (listSize > 1)
-		{
-			CompositeStyler compositeStyler = new CompositeStyler(listSize);
-			
-			// read all stylers
-			for (int i=0; i<listSize; i++)
-			{
-				Element symElt = (Element)symElts.item(i);
-				DataStyler styler = readSymbolizer(provider, symElt);
-				compositeStyler.getStylerList().add(styler);
-			}
-			
-			dataItem.setStyler(compositeStyler);
-		}
-		else if (listSize > 0)
-		{
-			// read only one styler
-			Element symElt = (Element)symElts.item(0);
-			DataStyler styler = readSymbolizer(provider, symElt);
-			dataItem.setStyler(styler);
-		}		
+		// read all stylers
+        for (int i=0; i<listSize; i++)
+        {
+            Element symElt = (Element)symElts.item(i);
+            DataStyler styler = readSymbolizer(provider, symElt);
+            dataItem.getStylerList().add(styler);
+        }
         
 		return dataItem;
 	}

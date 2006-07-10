@@ -20,10 +20,6 @@ import java.util.ArrayList;
 //import java.util.Hashtable;
 
 import org.vast.io.xml.*;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataItem;
-import org.vast.stt.scene.DataEntryList;
-import org.vast.stt.scene.Scene;
 import org.vast.util.DateTimeFormat;
 import org.w3c.dom.*;
 

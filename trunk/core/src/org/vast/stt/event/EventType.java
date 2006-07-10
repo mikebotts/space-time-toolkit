@@ -11,28 +11,36 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.scene;
-
-import org.vast.util.DateTime;
+package org.vast.stt.event;
 
 
 /**
- * <p><b>Title:</b><br/>
- * Scene Time Settings
+ * <p><b>Title:</b>
+ * Event Type
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Contains information about a scene time settings
+ * Enumeration of event types.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 9, 2005
+ * @date Jul 8, 2006
  * @version 1.0
  */
-public class TimeSettings
+public enum EventType
 {
-	protected DateTime currentTime;
-	protected double timeStep;
-	protected boolean realTime;
+    ITEM_STYLE_CHANGED,
+    ITEM_OPTIONS_CHANGED,
+    ITEM_TIME_EXTENT_CHANGED,
+    ITEM_SPATIAL_EXTENT_CHANGED,
+    ITEM_DATA_CHANGED,
+    
+    SCENE_TIME_CHANGED,
+    SCENE_VIEW_CHANGED,
+    SCENE_DATA_CHANGED,
+    
+    PROVIDER_DATA_CHANGED,
+    PROVIDER_DATA_ADDED,
+    PROVIDER_DATA_REMOVED    
 }

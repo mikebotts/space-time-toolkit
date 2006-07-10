@@ -7,9 +7,9 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.gui.widgets.time.TimeExtentWidget;
+import org.vast.stt.project.DataEntry;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataItem;
 
 /**
  * <p><b>Title:</b><br/>

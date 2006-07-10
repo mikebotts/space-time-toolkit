@@ -1,25 +1,29 @@
+/***************************************************************
+ (c) Copyright 2005, University of Alabama in Huntsville (UAH)
+ ALL RIGHTS RESERVED
+
+ This software is the property of UAH.
+ It cannot be duplicated, used, or distributed without the
+ express written consent of UAH.
+
+ This software developed by the Vis Analysis Systems Technology
+ (VAST) within the Earth System Science Lab under the direction
+ of Mike Botts (mike.botts@atmos.uah.edu)
+ ***************************************************************/
+
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.gui.widgets.DataProcess.DataProcessWidget;
-import org.vast.stt.gui.widgets.dataProvider.DataProviderWidget;
-import org.vast.stt.gui.widgets.styler.StyleWidget;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataItem;
+
 
 /**
  * <p><b>Title:</b><br/>
- * DataProviderView
+ * Data Provider View
  * </p>
  *
  * <p><b>Description:</b><br/>
- *	View for managing options of DataProviders   
- *
+ * View for managing options of DataProviders
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -29,45 +33,38 @@ import org.vast.stt.scene.DataItem;
  *
  * 
  */
-public class DataProviderView extends ViewPart implements ISelectionListener{
-	
-	public static final String ID = "STT.DataProviderView";
-//	DataProviderWidget dpWidget;
-	DataProcessWidget procWidget;
-	
-	@Override
-	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
-		initView(parent);
-		getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);		
-	}
-	
-	public void initView(Composite parent){
-		procWidget = new DataProcessWidget(parent);
-	}
+public class DataProviderView extends DataItemView
+{
+    public static final String ID = "STT.DataProviderView";
+    protected DataProcessWidget procWidget;
 
-		@Override
-	public void setFocus() {
-	}
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
-		if (part instanceof SceneTreeView)
-		{
-			DataEntry selectedItem = (DataEntry)((IStructuredSelection)selection).getFirstElement();
-			if(selectedItem instanceof DataItem) { 
-				System.err.println("item " + selectedItem);
-				//dpWidget.setDataItem((DataItem)selectedItem);
-				procWidget.setDataItem((DataItem)selectedItem);
-			} else {
-				//  May add support for Composite items later
-			}
-		}		
-	}
-	
-	public void dispose(){
-		procWidget.close();
-		super.dispose();
-		//System.err.println("SV disposed!");
-	}
+    @Override
+    public void createPartControl(Composite parent)
+    {
+        procWidget = new DataProcessWidget(parent);
+        super.createPartControl(parent);
+    }
+
+    
+    @Override
+    public void dispose()
+    {
+        procWidget.close();
+        super.dispose();
+    }
+    
+
+    @Override
+    public void updateView()
+    {
+        procWidget.setDataItem(this.item);
+    }
+    
+    
+    @Override
+    public void clearView()
+    {
+        
+    }
 }

@@ -11,24 +11,26 @@ public class Perspective implements IPerspectiveFactory
 	public void createInitialLayout(IPageLayout layout)
 	{
 		String resFolderID = "STT.ResourceFolder";
-		String scenesFolderID = "STT.ScenesFolder";
-        String optFolderID = "STT.CustomizerFolder";
+		String sceneFolderID = "STT.SceneFolder";
+        String resOptFolderID = "STT.CustomizerFolder";
+        String sceneOptFolderID = "STT.SceneOptionsFolder";
 		layout.setEditorAreaVisible(false);
 		layout.setFixed(false);
 
-		IFolderLayout ResourceFolder = layout.createFolder(resFolderID, IPageLayout.LEFT, 1.0f, layout.getEditorArea());
-		IFolderLayout SceneFolder = layout.createFolder(scenesFolderID, IPageLayout.RIGHT, 0.25f, resFolderID);
-        IFolderLayout OptFolder = layout.createFolder(optFolderID, IPageLayout.BOTTOM, 0.5f, resFolderID);
+		IFolderLayout resFolder = layout.createFolder(resFolderID, IPageLayout.LEFT, 1.0f, layout.getEditorArea());
+		IFolderLayout sceneFolder = layout.createFolder(sceneFolderID, IPageLayout.RIGHT, 0.25f, resFolderID);
+        IFolderLayout resOptFolder = layout.createFolder(resOptFolderID, IPageLayout.BOTTOM, 0.5f, resFolderID);
+        IFolderLayout sceneOptFolder = layout.createFolder(sceneOptFolderID, IPageLayout.BOTTOM, 0.75f, sceneFolderID);
         
-		ResourceFolder.addView(SceneTreeView.ID);
-        OptFolder.addView(DataProviderView.ID);        
-        OptFolder.addView(StyleView.ID);
-        OptFolder.addView(TimeExtentView.ID);
-        OptFolder.addView(SpatialExtentView.ID);
+		resFolder.addView(SceneTreeView.ID);
+        resOptFolder.addView(DataProviderView.ID);        
+        resOptFolder.addView(StyleView.ID);
+        resOptFolder.addView(TimeExtentView.ID);
+        resOptFolder.addView(SpatialExtentView.ID);
 
-        SceneFolder.addPlaceholder(SceneView.ID + ":*");
-//        OptFolder.addView(MasterTimeView.ID);
-        SceneFolder.addView(MasterTimeView.ID);
+        //sceneFolder.addPlaceholder(WorldView.ID + ":*");
+        sceneFolder.addView(WorldView.ID + ":000");
+        sceneOptFolder.addView(MasterTimeView.ID);
 	}
 
 }

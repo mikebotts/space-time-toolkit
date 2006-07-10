@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.scene.DataItem;
 import org.vast.stt.util.SpatialExtent;
 
 public class BboxWidget implements SelectionListener 

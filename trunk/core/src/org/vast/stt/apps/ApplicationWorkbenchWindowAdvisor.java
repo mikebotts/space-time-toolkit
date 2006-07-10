@@ -11,7 +11,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.vast.stt.commands.OpenProject;
-import org.vast.stt.gui.views.SceneView;
+import org.vast.stt.gui.views.WorldView;
 
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
@@ -66,7 +66,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 			try
 			{
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				page.showView(SceneView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
+				page.showView(WorldView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
 			}
 			catch (PartInitException e)
 			{

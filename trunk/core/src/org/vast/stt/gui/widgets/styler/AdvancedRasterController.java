@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 
 public class AdvancedRasterController extends AdvancedOptionController 
 	implements SelectionListener {
