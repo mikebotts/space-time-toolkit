@@ -9,7 +9,7 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.style.RasterStyler;
 import org.vast.stt.style.TextureMappingStyler;
 

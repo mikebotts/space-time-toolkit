@@ -10,7 +10,7 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 
 public class PolygonOptionHelper implements SelectionListener {
 

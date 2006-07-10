@@ -19,55 +19,45 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.*;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.commands.*;
+import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.gui.views.SceneTreeView;
-import org.vast.stt.gui.views.SceneView;
+import org.vast.stt.gui.views.WorldView;
+import org.vast.stt.project.Scene;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
 {
-    Runnable openSceneView = new Runnable()
+    Runnable refreshWorkPage = new Runnable()
     {
         public void run()
         {
             try
             {
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                IViewReference view = page.findViewReference(SceneView.ID, "000");
-                if (view != null)
-                {
-                    SceneView sceneView = (SceneView)view.getView(false);
-                    sceneView.reset();
-                    
-                    SceneTreeView sceneTree = (SceneTreeView)page.findView(SceneTreeView.ID);
-                    if (sceneTree != null)
-                        sceneTree.refresh();
-                }
-                else
-                    page.showView(SceneView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
+                Scene newScene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
+                ScenePageInput pageInput = new ScenePageInput(newScene);
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                                
+                
+                // IWorkbenchWindow window = PlatformUI.getWorkbench().openWorkbenchWindow("STT.Perspective", null);
+                //IWorkbenchPage page = window.getActivePage();
+//                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+//                IViewReference view = page.findViewReference(WorldView.ID, "000");
+//                if (view != null)
+//                {
+//                    WorldView sceneView = (WorldView)view.getView(false);
+//                    sceneView.reset();
+//                    
+//                    SceneTreeView sceneTree = (SceneTreeView)page.findView(SceneTreeView.ID);
+//                    if (sceneTree != null)
+//                        sceneTree.refresh();
+//                }
+//                else
+//                    page.showView(WorldView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
             }
-            catch (PartInitException e)
+            catch (WorkbenchException e)
             {
                 e.printStackTrace();
             }
-        }
-    };
-    
-    
-    Runnable clearViews = new Runnable()
-    {
-        public void run()
-        {
-            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            IViewReference view = page.findViewReference(SceneView.ID, "000");
-            if (view != null)
-            {
-                SceneView sceneView = (SceneView)view.getView(false);
-                sceneView.clear();
-            }
-            
-            SceneTreeView sceneTree = (SceneTreeView)page.findView(SceneTreeView.ID);
-            if (sceneTree != null)
-                sceneTree.clear();
         }
     };
 
@@ -87,7 +77,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         if (actionId.endsWith("CloseProject"))
         {
             STTConfig.getInstance().setCurrentProject(null);
-            clearViews.run();
+            refreshWorkPage.run();
             System.gc();
             return;
         }        
@@ -114,7 +104,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
             public void run()
             {
                 command.execute();
-                PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
+                PlatformUI.getWorkbench().getDisplay().asyncExec(refreshWorkPage);
             }
         };
 

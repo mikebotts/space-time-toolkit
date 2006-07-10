@@ -15,7 +15,6 @@ package org.vast.stt.project;
 
 import java.util.*;
 
-import org.vast.stt.scene.Scene;
 import org.vast.util.*;
 import org.vast.process.*;
 

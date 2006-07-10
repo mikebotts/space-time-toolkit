@@ -13,8 +13,6 @@
 
 package org.vast.stt.gui.views;
 
-import java.util.*;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -22,7 +20,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -30,23 +27,19 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IPartListener;
-import org.vast.stt.apps.STTConfig;
 import org.vast.stt.apps.STTPlugin;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataEntryList;
-import org.vast.stt.scene.Scene;
+import org.vast.stt.project.DataEntry;
+import org.vast.stt.project.DataEntryList;
+import org.vast.stt.project.Scene;
 
 
-public class SceneTreeView extends ViewPart implements IPartListener
+public class SceneTreeView extends SceneView
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
 	private Image itemImg, folderImg;
 	private Font treeFont;
-	private Object[] expandedItems;
+//	private Object[] expandedItems;
 	
 	
 	// Label + Image provider
@@ -128,6 +121,7 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		sceneTree.setContentProvider(contentProvider);
 		//sceneTree.getTree().setFont(treeFont);
 		getSite().setSelectionProvider(sceneTree);
+        super.createPartControl(parent);
 	}
 	
 	
@@ -154,94 +148,34 @@ public class SceneTreeView extends ViewPart implements IPartListener
 		
 		action.setText("Scene 001");
 		site.getActionBars().getMenuManager().add(action);
-		
-		// register listener
-		getSite().getPage().addPartListener(this);
-	}
-    
-    
-    public void clear()
-    {
-        sceneTree.setInput(null);
-    }
-    
-    
-    public void refresh()
-    {
-        if (sceneTree == null)
-            return;
-        
-//        Runnable updateTree = new Runnable()
-//        {
-//            public void run()
-//            {
-                int sceneID = 0;
-                ArrayList<Scene> sceneList = STTConfig.getInstance().getCurrentProject().getSceneList();
-                Scene currentScene = sceneList.get(sceneID);
-                
-                // save previous expanded state
-                expandedItems = sceneTree.getVisibleExpandedElements();
-                
-                // load new data
-                sceneTree.setInput(currentScene);
-                
-                // restore expanded elements
-                for (int i=0; i<expandedItems.length; i++)
-                    sceneTree.expandToLevel(expandedItems[i], 1);
-//            }
-//        };
-//        
-//        sceneTree.getTree().getDisplay().asyncExec(updateTree);
-    }
-	
-	
-	public void partActivated(IWorkbenchPart part)
-	{
-        if (part instanceof SceneView)
-            refresh();
 	}
 	
 	
 	@Override
 	public void dispose()
 	{
-		getSite().getPage().removePartListener(this);
 		itemImg.dispose();
 		folderImg.dispose();
 		treeFont.dispose();
+        super.dispose();
 	}
-	
-	
-	@Override
-	public void setFocus()
-	{
-	
-	}
+    
+    
+    @Override
+    public void updateView()
+    {       
+        // load new data in tree
+        sceneTree.setInput(scene);
+        
+        // restore expanded elements
+//        for (int i=0; i<expandedItems.length; i++)
+//            sceneTree.expandToLevel(expandedItems[i], 1);
+    }
 
 
-	public void partBroughtToTop(IWorkbenchPart part)
-	{
-	}
-
-
-	public void partClosed(IWorkbenchPart part)
-	{
-	}
-
-
-	public void partDeactivated(IWorkbenchPart part)
-	{
-	}
-
-
-	public void partOpened(IWorkbenchPart part)
-	{
-	}
-
-
-	public void widgetDefaultSelected(SelectionEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void clearView()
+    {
+        sceneTree.setInput(null);        
+    }  
 }

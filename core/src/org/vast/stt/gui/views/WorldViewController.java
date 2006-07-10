@@ -15,9 +15,11 @@ package org.vast.stt.gui.views;
 
 import org.vast.math.Quaternion;
 import org.vast.math.Vector3D;
-import org.vast.stt.apps.STTConfig;
+import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.scene.ViewSettings;
+import org.vast.stt.project.Scene;
+import org.vast.stt.project.ViewSettings;
+import org.vast.stt.renderer.Renderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -39,14 +41,13 @@ import org.eclipse.swt.events.*;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public class SceneViewController implements MouseListener, MouseMoveListener, Listener
+public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
-	protected SceneView sceneView;
+	protected Scene scene;
 	protected boolean enableZoom = true;
 	protected boolean enableRotation = true;
 	protected boolean enableTranslation = true;
 	
-	private ViewSettings viewSettings;
 	private Vector3D P0 = new Vector3D();
 	private Vector3D P1 = new Vector3D();
 	private int xOld;
@@ -56,16 +57,18 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	private boolean zooming;
 	
 
-	public SceneViewController(SceneView sceneView)
+	public WorldViewController()
 	{
-		this.sceneView = sceneView;	
 	}
 	
 	
 	protected void doRotation(int x0, int y0, int x1, int y1)
 	{
-		sceneView.getRenderer().unproject(x0, -y0, 0.0, P0);
-		sceneView.getRenderer().unproject(x1, -y1, 0.0, P1);
+        ViewSettings viewSettings = scene.getViewSettings();
+        Renderer renderer = scene.getRenderer();
+        
+        renderer.unproject(x0, -y0, 0.0, P0);
+        renderer.unproject(x1, -y1, 0.0, P1);
 		P1.sub(P0);		
 		
         // actual camera position
@@ -95,8 +98,11 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	
 	protected void doTranslation(int x0, int y0, int x1, int y1)
 	{
-		sceneView.getRenderer().unproject(x0, -y0, 0.0, P0);
-		sceneView.getRenderer().unproject(x1, -y1, 0.0, P1);
+        ViewSettings viewSettings = scene.getViewSettings();
+        Renderer renderer = scene.getRenderer();
+        
+        renderer.unproject(x0, -y0, 0.0, P0);
+        renderer.unproject(x1, -y1, 0.0, P1);
 		P1.sub(P0);
 		viewSettings.getTargetPos().sub(P1);
 		viewSettings.getCameraPos().sub(P1);
@@ -105,7 +111,9 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	
 	protected void doZoom(double amount)
 	{
-		// zoom in ortho mode
+        ViewSettings viewSettings = scene.getViewSettings();
+        
+        // zoom in ortho mode
 		if (viewSettings.getCameraMode() == ViewSettings.ORTHO)
 		{
 			double currentWidth = viewSettings.getOrthoWidth();			
@@ -153,9 +161,11 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseMove(MouseEvent e)
 	{
-		if (rotating || translating || zooming)
+        if (rotating || translating || zooming)
 		{
-			if (rotating && enableRotation)
+            ViewSettings viewSettings = scene.getViewSettings();
+            
+            if (rotating && enableRotation)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 				doRotation(xOld, yOld, e.x, e.y);				
@@ -170,7 +180,7 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 			else if (zooming && enableZoom)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));				
-				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)sceneView.getCanvas().getClientArea().height);
+				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewSettings.getViewHeight());
 				doZoom(amount);
 			}
 			
@@ -196,8 +206,7 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	
 	protected void updateView()
 	{
-		//sceneView.getRenderer().redraw();
-		STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
+        scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 	}
 
 
@@ -237,8 +246,14 @@ public class SceneViewController implements MouseListener, MouseMoveListener, Li
 	}
 
 
-    public void setViewSettings(ViewSettings viewSettings)
+    public Scene getScene()
     {
-        this.viewSettings = viewSettings;
+        return scene;
+    }
+
+
+    public void setScene(Scene scene)
+    {
+        this.scene = scene;
     }
 }

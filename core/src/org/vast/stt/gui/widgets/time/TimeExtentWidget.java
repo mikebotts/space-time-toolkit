@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
-import org.vast.stt.scene.DataItem;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.util.TimeExtent;
 
 public class TimeExtentWidget implements SelectionListener

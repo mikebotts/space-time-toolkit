@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.style.PointStyler;
 
 public class AdvancedPointController extends AdvancedOptionController 

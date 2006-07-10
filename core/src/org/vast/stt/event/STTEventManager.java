@@ -184,25 +184,15 @@ public class STTEventManager implements Runnable
 	
 	private synchronized void dispatchEvent(STTEvent evt)
 	{
-		switch (evt.getSection())
-		{		
-			case PROJECT:
-				for (int i=0; i<projectListeners.size(); i++)
-					projectListeners.get(i).handleEvent(evt);
-				break;
-				
-			case RESOURCE:
-				for (int i=0; i<resourceListeners.size(); i++)
-					resourceListeners.get(i).handleEvent(evt);
-				break;
-				
-			case SCENE_VIEW:
+		switch (evt.type)
+		{					
+			case SCENE_VIEW_CHANGED:
 				for (int i=0; i<viewListeners.size(); i++)
 					viewListeners.get(i).handleEvent(evt);
 				break;
 				
 			default:
-				throw new RuntimeException("Unrecognized event type: " + evt.getSection());
+				throw new RuntimeException("Unrecognized event type: " + evt.type);
 		}
 	}
 

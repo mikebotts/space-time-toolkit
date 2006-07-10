@@ -16,7 +16,7 @@ package org.vast.stt.commands;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.gui.views.SceneView;
+import org.vast.stt.gui.views.WorldView;
 
 
 public class OpenSceneView implements Command
@@ -35,7 +35,7 @@ public class OpenSceneView implements Command
 					// TODO use an event instead of code below
 					// Scene View should close itself when receiving the event
 					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					page.showView(SceneView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
+					page.showView(WorldView.ID, "000", IWorkbenchPage.VIEW_ACTIVATE);
 				}
 				catch (PartInitException e)
 				{

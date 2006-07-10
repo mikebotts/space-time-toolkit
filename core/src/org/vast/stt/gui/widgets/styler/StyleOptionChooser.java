@@ -4,7 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.style.GridStyler;
 import org.vast.stt.style.LabelStyler;
 import org.vast.stt.style.LineStyler;

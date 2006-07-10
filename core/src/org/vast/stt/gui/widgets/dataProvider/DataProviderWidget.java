@@ -22,8 +22,8 @@ import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.process.WMS_Process;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.scene.DataItem;
  
 /**
  * <p><b>Title:</b><br/>

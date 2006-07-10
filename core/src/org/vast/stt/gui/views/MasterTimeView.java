@@ -1,25 +1,29 @@
+/***************************************************************
+ (c) Copyright 2005, University of Alabama in Huntsville (UAH)
+ ALL RIGHTS RESERVED
+
+ This software is the property of UAH.
+ It cannot be duplicated, used, or distributed without the
+ express written consent of UAH.
+
+ This software developed by the Vis Analysis Systems Technology
+ (VAST) within the Earth System Science Lab under the direction
+ of Mike Botts (mike.botts@atmos.uah.edu)
+ ***************************************************************/
+
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.gui.widgets.time.MasterTimeWidget;
-import org.vast.stt.gui.widgets.time.TimeExtentWidget;
-import org.vast.stt.project.DataProvider;
-import org.vast.stt.scene.DataEntry;
-import org.vast.stt.scene.DataItem;
+
 
 /**
  * <p><b>Title:</b><br/>
- * MasterTimeView
+ * Master Time View
  * </p>
  *
  * <p><b>Description:</b><br/>
- *	View for MasterTime Controller for a Scene/Workbench   
- *
+ * View for MasterTime Controller for a Scene/Workbench
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -28,20 +32,34 @@ import org.vast.stt.scene.DataItem;
  * @version 1.0
  * 
  */
-public class MasterTimeView extends ViewPart // implements ISelectionListener
-{	
-	public static final String ID = "STT.MasterTimeView";
-	private MasterTimeWidget masterTimeWidget;
-	
-	@Override
-	public void createPartControl(Composite parent) {
-		masterTimeWidget = new MasterTimeWidget(parent); 
-		//getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);		
-	}
-	@Override
-	public void setFocus() {
-	}
+public class MasterTimeView extends SceneView
+{
+    public static final String ID = "STT.MasterTimeView";
+    protected MasterTimeWidget masterTimeWidget;
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	}
+
+    @Override
+    public void createPartControl(Composite parent)
+    {
+        masterTimeWidget = new MasterTimeWidget(parent);
+        super.createPartControl(parent);
+    }
+
+
+    @Override
+    public void updateView()
+    {
+        double sceneTime = scene.getTimeSettings().getCurrentTime().getJulianTime();
+        masterTimeWidget.setAbsoluteTime(sceneTime);
+        double stepTime = scene.getTimeSettings().getStepTime();
+        masterTimeWidget.setStepTime(stepTime);
+    }
+
+
+    @Override
+    public void clearView()
+    {
+        masterTimeWidget.setAbsoluteTime(0);
+        masterTimeWidget.setStepTime(10);
+    }
 }

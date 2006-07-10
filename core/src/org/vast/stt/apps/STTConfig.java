@@ -28,7 +28,7 @@ public class STTConfig
 	private STTConfig()
 	{
 		currentProject = new Project();
-		eventManager = new STTEventManager();
+		//eventManager = new STTEventManager();
 	}
 	
 	

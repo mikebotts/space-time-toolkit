@@ -16,7 +16,8 @@ package org.vast.stt.renderer.opengl;
 import java.nio.ByteBuffer;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import org.vast.stt.style.DataStyler;
+
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.style.RasterPixelGraphic;
 import org.vast.stt.style.RasterTileGraphic;
 import org.vast.stt.style.TextureMappingStyler;

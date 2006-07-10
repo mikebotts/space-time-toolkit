@@ -16,8 +16,9 @@ package org.vast.stt.style;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
 import org.vast.stt.apps.STTConfig;
+import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.scene.ViewSettings;
+import org.vast.stt.project.ViewSettings;
 
 
 /**
@@ -114,7 +115,7 @@ public class BlockList
         if (sendUpdates)
         {
             ViewSettings viewSettings = STTConfig.getInstance().getCurrentProject().getSceneList().get(0).getViewSettings();
-            STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, STTEvent.Section.SCENE_VIEW));
+            STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, EventType.SCENE_VIEW_CHANGED));
         }
     }
 

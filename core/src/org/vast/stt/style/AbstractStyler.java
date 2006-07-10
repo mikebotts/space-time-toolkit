@@ -19,6 +19,7 @@ import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataProvider;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.util.SpatialExtent;
 
 

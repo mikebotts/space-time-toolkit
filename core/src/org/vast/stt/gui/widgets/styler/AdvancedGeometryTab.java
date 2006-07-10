@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.ScalarParameter;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 
 /**
  * 

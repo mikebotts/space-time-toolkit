@@ -11,40 +11,43 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.event;
+package org.vast.stt.project;
 
 
 /**
  * <p><b>Title:</b>
- * STT Event
+ * Project Exception
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Base STT Event
+ * Exception thrown when encountering errors while parsing
+ * project file.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Jul 8, 2006
+ * @date Jul 10, 2006
  * @version 1.0
  */
-public class STTEvent
+public class ProjectException extends Exception
 {
-    public STTEventProducer producer;
-    public Object source;
-    public EventType type;
-    protected STTEvent next;
-	
-	
-    public STTEvent(Object source, EventType type)
+    static final long serialVersionUID = 0;
+
+
+    public ProjectException(String message)
     {
-        this.type = type;
-        this.source = source;
+        super(message);
     }
-    
-    
-	public String toString()
-	{
-		return "Event: " + this.type;
-	}
+
+
+    public ProjectException(Exception e)
+    {
+        super(e);
+    }
+
+
+    public ProjectException(String message, Exception e)
+    {
+        super(message, e);
+    }
 }

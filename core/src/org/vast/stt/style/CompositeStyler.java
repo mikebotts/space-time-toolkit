@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.util.SpatialExtent;
 
 

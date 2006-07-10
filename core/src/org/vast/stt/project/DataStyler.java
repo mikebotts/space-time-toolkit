@@ -11,11 +11,11 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.project;
 
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.project.DataProvider;
+import org.vast.stt.style.StylerVisitor;
 import org.vast.stt.util.SpatialExtent;
 
 

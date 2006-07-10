@@ -2,7 +2,7 @@ package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.events.SelectionListener;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.project.DataStyler;
 
 public abstract class OptionController { //implements SelectionListener {
 	protected OptionControl[] optionControls;
