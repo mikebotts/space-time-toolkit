@@ -182,17 +182,4 @@ public abstract class CompositeProvider implements DataProvider
     public void setResource(Resource resource)
     {
     }
-    
-    
-    public UpdateMonitor getUpdateMonitor()
-    {
-        return providerList.get(0).getUpdateMonitor();
-    }
-    
-    
-    public void setUpdateMonitor(UpdateMonitor updateMonitor)
-    {
-        for (int i = 0; i < providerList.size(); i++)
-            providerList.get(i).setUpdateMonitor(updateMonitor);
-    }
 }

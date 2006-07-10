@@ -76,69 +76,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 		canvas.addPaintListener(this);
         super.createPartControl(parent);
 	}
-    
-    
-    /**
-     * Redraw the whole world view using provided renderer
-     */
-    public void updateView()
-    {
-        // set part name
-        setPartName("Scene: " + scene.getName());
-        
-        // render whole scene tree
-        canvas.getDisplay().asyncExec(renderExec);
-    }
-    
-    
-    /**
-     * Clears the world view and unregister listeners
-     */
-    public void clearView()
-    {
-        canvas.removeMouseListener(controller);
-        canvas.removeMouseMoveListener(controller);
-        canvas.removeListener(SWT.MouseWheel , controller);
-        canvas.redraw();
-        setPartName("Nothing Open");
-    }
-    
-    
-    /**
-     * init scene and renderer parameters
-     */
-    public void assignScene()
-    {
-        // make sure we dispose previous renderer
-        if (scene != null)
-            scene.getRenderer().dispose();
-
-        // call parent method !!
-        super.assignScene();
-        
-        if (scene != null)
-        {        
-            // init the renderer
-            scene.getRenderer().setCanvas(canvas);
-            scene.getRenderer().init();
-            
-            // init size
-            Rectangle clientArea = canvas.getClientArea();
-            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            scene.getViewSettings().setViewHeight(clientArea.height);
-            scene.getViewSettings().setViewWidth(clientArea.width);
-            
-            // create and register view controller
-            controller.setScene(scene);
-            canvas.addMouseListener(controller);
-            canvas.addMouseMoveListener(controller);
-            canvas.addListener(SWT.MouseWheel , controller);
-            
-            // register view as listener to the scene
-            scene.addListener(this);
-        }
-    }
-	
+    	
 	
 	@Override
 	public void init(IViewSite site) throws PartInitException
@@ -200,6 +138,66 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	{
 		canvas.setFocus();
 	}
+    
+    
+    @Override
+    public void assignScene()
+    {
+        // make sure we dispose previous renderer
+        if (scene != null)
+            scene.getRenderer().dispose();
+
+        // call parent method !!
+        super.assignScene();
+        
+        if (scene != null)
+        {        
+            // init the renderer
+            scene.getRenderer().setCanvas(canvas);
+            scene.getRenderer().init();
+            
+            // init size
+            Rectangle clientArea = canvas.getClientArea();
+            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
+            scene.getViewSettings().setViewHeight(clientArea.height);
+            scene.getViewSettings().setViewWidth(clientArea.width);
+            
+            // create and register view controller
+            controller.setScene(scene);
+            canvas.addMouseListener(controller);
+            canvas.addMouseMoveListener(controller);
+            canvas.addListener(SWT.MouseWheel , controller);
+            
+            // register view as listener to the scene
+            scene.addListener(this);
+        }
+    }
+    
+    
+    /**
+     * Redraw the whole world view using provided renderer
+     */
+    public void updateView()
+    {
+        // set part name
+        setPartName("Scene: " + scene.getName());
+        
+        // render whole scene tree
+        canvas.getDisplay().asyncExec(renderExec);
+    }
+    
+    
+    /**
+     * Clears the world view and unregister listeners
+     */
+    public void clearView()
+    {
+        canvas.removeMouseListener(controller);
+        canvas.removeMouseMoveListener(controller);
+        canvas.removeListener(SWT.MouseWheel , controller);
+        canvas.redraw();
+        setPartName("Nothing Open");
+    }
     
     
     public void paintControl(PaintEvent e)
