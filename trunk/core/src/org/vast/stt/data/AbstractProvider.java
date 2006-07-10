@@ -15,7 +15,10 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
@@ -43,15 +46,15 @@ public abstract class AbstractProvider implements DataProvider
     protected boolean updating = false;
 	protected boolean canceled = false;
     protected boolean forceUpdate = true;
-    protected UpdateMonitor updateMonitor;
+    protected ArrayList<STTEventListener> listeners = new ArrayList<STTEventListener>(2);
 	protected InputStream dataStream;
 	protected DataNode cachedData;
 	protected TimeExtent timeExtent = new TimeExtent();
 	protected TimeExtent maxTimeExtent = new TimeExtent();
 	protected SpatialExtent spatialExtent = new SpatialExtent();
 	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
-	
-	
+    
+    
 	public abstract void updateData() throws DataException;
 	
 	
@@ -174,18 +177,6 @@ public abstract class AbstractProvider implements DataProvider
 	}
 
 
-    public UpdateMonitor getUpdateMonitor()
-    {
-        return updateMonitor;
-    }
-
-
-    public void setUpdateMonitor(UpdateMonitor updateMonitor)
-    {
-        this.updateMonitor = updateMonitor;
-    }
-    
-    
     public String getDescription()
     {
         return description;
@@ -207,5 +198,41 @@ public abstract class AbstractProvider implements DataProvider
     public void setName(String name)
     {
         this.name = name;
+    }
+    
+    
+    public void addListener(STTEventListener listener)
+    {
+        if (!listeners.contains(listener))
+            listeners.add(listener);        
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);        
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();        
+    }
+    
+    
+    /**
+     * Sends an event to all registered listeners except
+     * if the sender and listener are the same object.
+     */
+    public void dispatchEvent(Object sender, STTEvent event)
+    {
+        event.producer = this;
+        
+        for (int i=0; i<listeners.size(); i++)
+        {
+            STTEventListener next = listeners.get(i);
+            if (next != sender)
+                next.handleEvent(event);
+        }        
     }
 }

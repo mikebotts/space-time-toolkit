@@ -69,7 +69,6 @@ public class SensorMLProvider extends AbstractProvider
             for (int i=0; i<outputCount; i++)
             {
                 BlockList blockList = cachedData.createList(outputs.getComponent(i));
-                blockList.sendUpdates = true;
                 blockListArray.add(blockList);
             }
             
@@ -111,6 +110,7 @@ public class SensorMLProvider extends AbstractProvider
                     {
                         BlockList blockList = blockListArray.get(c);
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                        //sendEvent(this, null);
                     }                    
                 }
             }
