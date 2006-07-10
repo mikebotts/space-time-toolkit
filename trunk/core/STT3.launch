@@ -7,14 +7,12 @@
 <booleanAttribute key="useProduct" value="false"/>
 <booleanAttribute key="tracing" value="false"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_SET" value="New Profiling Set1145501302515"/>
-<stringAttribute key="location2" value="d:\temp\runtime-STT2"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <intAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_LIMIT_INVOCATIONS_NUM" value="10000"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_DESTINATION_FILE" value=""/>
 <booleanAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_LIMIT_SECONDS" value="false"/>
-<stringAttribute key="location3" value="d:\projects\runtime-EclipseApplication"/>
 <booleanAttribute key="automaticAdd" value="false"/>
 <intAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_LIMIT_SECONDS_NUM" value="5"/>
 <booleanAttribute key="includeFragments" value="false"/>
@@ -24,7 +22,7 @@
 <booleanAttribute key="clearws" value="false"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_DESTINATION_MONITOR" value="DefaultMonitor"/>
 <booleanAttribute key="org.eclipse.hyades.trace.ui.ATTR_AUTO_MONITORING" value="false"/>
-<stringAttribute key="location1" value="d:\temp\workspace-STT3"/>
+<stringAttribute key="location1" value="c:\temp\workspace-STT3"/>
 <stringAttribute key="vmargs" value="-Djava.library.path=D:\Projects\NSSTC\STT3\lib"/>
 <booleanAttribute key="default" value="false"/>
 <booleanAttribute key="clearConfig" value="false"/>
@@ -39,5 +37,5 @@
 <booleanAttribute key="askclear" value="true"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_DESTINATION_PROJECT" value="ProfileProject"/>
-<stringAttribute key="location0" value="d:\temp\workspace-STT3"/>
+<stringAttribute key="location0" value="c:\temp\workspace-STT3"/>
 </launchConfiguration>
