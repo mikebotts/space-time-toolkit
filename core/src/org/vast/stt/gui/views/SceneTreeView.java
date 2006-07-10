@@ -39,7 +39,7 @@ public class SceneTreeView extends SceneView
 	private TreeViewer sceneTree;
 	private Image itemImg, folderImg;
 	private Font treeFont;
-//	private Object[] expandedItems;
+	private Object[] expandedItems;
 	
 	
 	// Label + Image provider
@@ -162,20 +162,30 @@ public class SceneTreeView extends SceneView
     
     
     @Override
+    public void assignScene()
+    {
+        super.assignScene();
+        expandedItems = new Object[0];
+    }
+    
+    
     public void updateView()
     {       
+        // save previous expanded elements
+        expandedItems = sceneTree.getExpandedElements();
+        
         // load new data in tree
         sceneTree.setInput(scene);
         
         // restore expanded elements
-//        for (int i=0; i<expandedItems.length; i++)
-//            sceneTree.expandToLevel(expandedItems[i], 1);
+        for (int i=0; i<expandedItems.length; i++)
+            sceneTree.expandToLevel(expandedItems[i], 1);
     }
 
 
-    @Override
     public void clearView()
     {
-        sceneTree.setInput(null);        
+        sceneTree.setInput(null);
+        expandedItems = new Object[0];
     }  
 }

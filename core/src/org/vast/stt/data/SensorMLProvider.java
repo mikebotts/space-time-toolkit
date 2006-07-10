@@ -21,6 +21,8 @@ import org.vast.data.*;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.style.BlockList;
 
 
@@ -110,7 +112,7 @@ public class SensorMLProvider extends AbstractProvider
                     {
                         BlockList blockList = blockListArray.get(c);
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
-                        //sendEvent(this, null);
+                        this.dispatchEvent(this, new STTEvent(this, EventType.PROVIDER_DATA_ADDED));
                     }                    
                 }
             }
