@@ -12,7 +12,15 @@
       <member>
          <Scene id="SCENE_01">
             <name>3D ECF View</name>
-            <renderer>OPENGL</renderer>
+            <time>
+               <TimeSettings>
+                  <currentTime>2004-01-01T12:00:00Z</currentTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+                  <realTimeMode>on</realTimeMode>
+               </TimeSettings>
+            </time>
             <view>
                <ViewSettings>
                   <backgroundColor>#FFFFFF</backgroundColor>
