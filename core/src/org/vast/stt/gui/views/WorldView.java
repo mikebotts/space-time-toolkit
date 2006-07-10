@@ -104,6 +104,9 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     }
     
     
+    /**
+     * init scene and renderer parameters
+     */
     public void assignScene()
     {
         // make sure we dispose previous renderer

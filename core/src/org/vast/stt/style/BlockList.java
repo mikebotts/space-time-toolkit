@@ -15,10 +15,6 @@ package org.vast.stt.style;
 
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
-import org.vast.stt.apps.STTConfig;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.ViewSettings;
 
 
 /**
@@ -44,7 +40,6 @@ public class BlockList
     protected BlockListItem lastBlock;
     //protected BlockListItem[] fastAccessBlocks; // use if random access needed
     public boolean hasNext;
-    public boolean sendUpdates;
     
     
     public BlockList()
@@ -110,13 +105,6 @@ public class BlockList
             firstBlock = lastBlock;
         
         size++;
-        
-        // TODO handle redraw events in a better way !!
-        if (sendUpdates)
-        {
-            ViewSettings viewSettings = STTConfig.getInstance().getCurrentProject().getSceneList().get(0).getViewSettings();
-            STTConfig.getInstance().getEventManager().postEvent(new STTEvent(viewSettings, EventType.SCENE_VIEW_CHANGED));
-        }
     }
 
 
