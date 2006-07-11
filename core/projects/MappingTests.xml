@@ -43,7 +43,7 @@
                    <member>
                      <DataList>
                         <name>Geographic Data Sets</name>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Country Boundaries</name>
                               <dataProvider xlink:href="#DATASET_03"/>
@@ -76,7 +76,7 @@
                               </style>
                            </DataItem>
                         </member>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider xlink:href="#DATASET_04"/>
@@ -133,7 +133,7 @@
                               </style>                             
                            </DataItem>
                         </member>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Alabama</name>
                               <dataProvider xlink:href="#DATASET_05"/>
