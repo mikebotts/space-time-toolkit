@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.data;
 
 import org.vast.data.AbstractDataBlock;
 
@@ -49,5 +49,36 @@ public class BlockListItem
         
         if (nextBlock != null)
             nextBlock.prevBlock = this;
+    }
+    
+    
+    public void ensureInfo()
+    {
+        if (info == null)
+            info = new BlockInfo();
+    }
+
+
+    public AbstractDataBlock getData()
+    {
+        return data;
+    }
+
+
+    public void setData(AbstractDataBlock data)
+    {
+        this.data = data;
+    }
+
+
+    public BlockInfo getInfo()
+    {
+        return info;
+    }
+
+
+    public void setInfo(BlockInfo info)
+    {
+        this.info = info;
     }
 }

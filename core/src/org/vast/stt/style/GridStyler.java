@@ -17,6 +17,7 @@ import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.data.BlockListItem;
 
 
 /**
@@ -62,19 +63,18 @@ public class GridStyler extends AbstractStyler
         // TODO implement block filtering here
         
         // setup indexer with new data 
-        AbstractDataBlock nextBlock = nextItem.data;
+        AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
         listInfo.blockIndexer.getData(0,0,0);
         
-        // add a block info if not present
-        if (nextItem.info == null)
-            nextItem.info = new BasicBlockInfo();
+        // ensure a block info is present
+        nextItem.ensureInfo();
         
         // TODO scan and compute block BBOX and Time Range
         
         // copy current item info in the patch object
-        patch.info = nextItem.info;
+        patch.info = nextItem.getInfo();
         return patch;
     }
     

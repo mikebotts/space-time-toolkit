@@ -23,7 +23,6 @@ import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.style.BlockList;
 
 
 /**

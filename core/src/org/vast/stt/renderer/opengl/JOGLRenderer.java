@@ -20,6 +20,7 @@ import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
+import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;

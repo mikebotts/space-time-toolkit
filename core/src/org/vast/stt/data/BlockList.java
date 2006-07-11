@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.data;
 
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;

@@ -18,6 +18,7 @@ import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
+import org.vast.stt.data.BlockListItem;
 
 
 /**
@@ -67,24 +68,22 @@ public class TextureMappingStyler extends AbstractStyler
         // TODO implement block filtering here
         
         // setup grid indexer with new data 
-        AbstractDataBlock nextGridBlock = nextGrid.data;
+        AbstractDataBlock nextGridBlock = nextGrid.getData();
         gridBlocks.blockIndexer.setData(nextGridBlock);
         gridBlocks.blockIndexer.reset();
         gridBlocks.blockIndexer.getData(0,0,0);
-        if (nextGrid.info == null)
-            nextGrid.info = new BasicBlockInfo();
+        nextGrid.ensureInfo();
         
         // setup texture indexer with new data 
-        AbstractDataBlock nextTexBlock = nextTexture.data;
+        AbstractDataBlock nextTexBlock = nextTexture.getData();
         texBlocks.blockIndexer.setData(nextTexBlock);
         texBlocks.blockIndexer.reset();
         texBlocks.blockIndexer.getData(0,0,0);
-        if (nextTexture.info == null)
-            nextTexture.info = new BasicBlockInfo();
+        nextTexture.ensureInfo();
         
         // copy current item info blocks in the patch object
-        patch.getGrid().info = nextGrid.info;
-        patch.getTexture().info = nextTexture.info;
+        patch.getGrid().info = nextGrid.getInfo();
+        patch.getTexture().info = nextTexture.getInfo();
         
         // TODO scan and compute block BBOX and Time Range
         

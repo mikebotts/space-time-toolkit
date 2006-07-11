@@ -1,40 +1,78 @@
+/***************************** BEGIN LICENSE BLOCK ***************************
+
+ The contents of this file are subject to the Mozilla Public License Version
+ 1.1 (the "License"); you may not use this file except in compliance with
+ the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/MPL-1.1.html
+ 
+ Software distributed under the License is distributed on an "AS IS" basis,
+ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ for the specific language governing rights and limitations under the License.
+ 
+ The Original Code is the "SensorML DataProcessing Engine".
+ 
+ The Initial Developer of the Original Code is the
+ University of Alabama in Huntsville (UAH).
+ Portions created by the Initial Developer are Copyright (C) 2006
+ the Initial Developer. All Rights Reserved.
+ 
+ Contributor(s): 
+    Alexandre Robin <robin@nsstc.uah.edu>
+ 
+******************************* END LICENSE BLOCK ***************************/
+
 package org.vast.stt.process;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
-import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataArray;
-import org.vast.data.DataBlockMixed;
-import org.vast.data.DataGroup;
-import org.vast.data.DataValue;
+import org.ogc.cdm.common.DataHandler;
+import org.ogc.cdm.reader.DataStreamParser;
+import org.vast.data.*;
 import org.vast.ows.wcs.CoverageReader;
-import org.vast.process.ProcessException;
+import org.vast.ows.wcs.WCSQuery;
+import org.vast.ows.wcs.WCSRequestWriter;
+import org.vast.process.*;
+
 
 /**
  * <p><b>Title:</b><br/>
- * WCS_imageProcess 
+ * WCS Process
  * </p>
- * 
+ *
  * <p><b>Description:</b><br/>
- * Adds image data to the base WCS_Process for data that is 
- * encoded with a geographic tiepoint grid and separate 
- * data section with differing resolutions.  Using this for 
- * GOES, and maybe Doppler eventually 
+ * Issues a request to a WCS server using provided parameters
+ * and input bounding box and time, and outputs the resulting
+ * coverage encapsulated in a data component structure.
  * </p>
- ** 
- * @author Tony Cook
- * @date Jun 16, 2006
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Alexandre Robin
+ * @date Jan 20, 2006
  * @version 1.0
  */
-public class WCS_imageProcess extends WCS_Process
+public class WCS_Process2 extends DataProcess implements DataHandler
 {
-	protected DataValue imageWidth, imageHeight; //  adding for GOES support
-	protected DataArray imageData;  
-	protected DataGroup coverageGroup;
-	
-	/**
+    protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
+    protected DataValue outputWidth, outputLength;
+    protected DataArray outputCoverage;
+    protected DataGroup output;
+    protected InputStream dataStream;
+    protected WCSQuery query;
+    protected WCSRequestWriter requestBuilder;
+    protected DataStreamParser dataParser;
+    
+
+    public WCS_Process2()
+    {
+        query = new WCSQuery();
+        requestBuilder = new WCSRequestWriter();
+    }
+
+
+    /**
      * Initializes the process
      * Gets handles to input/output components
      */
@@ -53,12 +91,11 @@ public class WCS_imageProcess extends WCS_Process
             bboxLon2 = (DataValue)input.getComponent("corner2").getComponent(1);
             input.assignNewDataBlock();
             
-            // Output mappings 
+            // Output mappings
             output = (DataGroup)outputData.getComponent("coverageData");
-            coverageGroup = (DataGroup)output.getComponent("gridData");
-            outputCoverage = (DataArray)coverageGroup.getComponent("coverage");
-            outputWidth = (DataValue)coverageGroup.getComponent("width");  
-            outputLength = (DataValue)coverageGroup.getComponent("length");
+            outputCoverage = (DataArray)output.getComponent("coverage");
+            outputWidth = (DataValue)output.getComponent("width");
+            outputLength = (DataValue)output.getComponent("length");
         }
         catch (Exception e)
         {
@@ -121,13 +158,11 @@ public class WCS_imageProcess extends WCS_Process
         {
             throw new ProcessException("Invalid Parameters", e);
         }
-        
-        System.out.println(this);
     }
 
-    
+
     /**
-     * Ovveride base implementation to add image data
+     * Executes process algorithm on inputs and set output data
      */
     public void execute() throws ProcessException
     {
@@ -149,12 +184,9 @@ public class WCS_imageProcess extends WCS_Process
             int length = dataInfo.getComponentCount();                
             outputWidth.getData().setIntValue(width);
             outputLength.getData().setIntValue(length);
-            
-            //  get image data...
         }
         catch (Exception e)
         {
-        	e.printStackTrace();
             throw new ProcessException("Error while requesting data from WCS server:\n" + url, e);
         }
         finally
@@ -162,13 +194,88 @@ public class WCS_imageProcess extends WCS_Process
             endRequest();
         }
     }
-	
+        
+    
+    protected void initRequest()
+    {
+        // make sure previous request is cancelled
+        endRequest();
+        outputWidth.renewDataBlock();
+        outputLength.renewDataBlock();
+        
+        // read lat/lon bbox
+        double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;
+        double lat1 = bboxLat1.getData().getDoubleValue();///Math.PI*180;
+        double lon2 = bboxLon2.getData().getDoubleValue();///Math.PI*180;
+        double lat2 = bboxLat2.getData().getDoubleValue();///Math.PI*180;
+        
+        double minX = Math.min(lon1, lon2);
+        double maxX = Math.max(lon1, lon2);
+        double minY = Math.min(lat1, lat2);
+        double maxY = Math.max(lat1, lat2);
+        
+        query.getBbox().setMinX(minX);
+        query.getBbox().setMaxX(maxX);
+        query.getBbox().setMinY(minY);
+        query.getBbox().setMaxY(maxY);
+    }
+    
+    
+    protected void endRequest()
+    {
+        try
+        {
+            if (dataStream != null)
+                dataStream.close();
+            
+            dataStream = null;
+            dataParser = null;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void beginDataAtom(DataComponent info, DataBlock data)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
     public void endData(DataComponent info, DataBlock data)
     {
-        //outputCoverage.setData(data);
-        AbstractDataBlock[] barr = ((DataBlockMixed)data).getUnderlyingObject();
-        outputCoverage.setData( barr[0]);
+        outputCoverage.setData(data);
         output.combineDataBlocks();
     }
 
+
+    public void endDataAtom(DataComponent info, DataBlock data)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void endDataBlock(DataComponent info, DataBlock data)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void startData(DataComponent info)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void startDataBlock(DataComponent info)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }
