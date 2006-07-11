@@ -52,16 +52,6 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	private WorldViewController controller;
     
     
-    // Runnable for rendering scene asynchronously in GUI thread
-	Runnable renderExec = new Runnable()
-	{
-		public void run()
-		{
-			scene.getRenderer().drawScene(scene);
-		}
-	};
-    
-    
     public WorldView()
     {
         controller = new WorldViewController();
@@ -183,7 +173,6 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         setPartName("Scene: " + scene.getName());
         
         // render whole scene tree
-        //canvas.getDisplay().asyncExec(renderExec);
         scene.getRenderer().drawScene(scene);
     }
     
