@@ -49,6 +49,12 @@ public interface DataProvider extends Resource
 	
 	
 	public void clearData();
+    
+    
+    public DataItem getDataItem();
+    
+    
+    public void setDataItem(DataItem dataItem);
 
 
 	public DataNode getDataNode();

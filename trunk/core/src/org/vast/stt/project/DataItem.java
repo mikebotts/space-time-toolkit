@@ -82,6 +82,7 @@ public class DataItem implements DataEntry, STTEventProducer
 	public void setDataProvider(DataProvider dataProvider)
 	{
 		this.dataProvider = dataProvider;
+		this.dataProvider.setDataItem(this);
 	}
 
 

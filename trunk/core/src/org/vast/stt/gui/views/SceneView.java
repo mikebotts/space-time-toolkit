@@ -110,7 +110,15 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     public void handleEvent(STTEvent e)
     {
-        refreshView();
+        if (e.producer == this.scene)
+        {
+            Runnable refresh = new Runnable()
+            {
+                public void run() {refreshView();}
+            };
+            
+            getSite().getShell().getDisplay().asyncExec(refresh);
+        }
     }
 
 

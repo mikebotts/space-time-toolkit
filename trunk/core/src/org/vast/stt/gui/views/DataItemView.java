@@ -126,8 +126,15 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
      * handle data item events
      */
     public void handleEvent(STTEvent e)
-    {
-        item = (DataItem)e.producer;
-        refreshView();       
+    {       
+        if (e.producer == this.item)
+        {
+            Runnable refresh = new Runnable()
+            {
+                public void run() {refreshView();}
+            };
+            
+            getSite().getShell().getDisplay().asyncExec(refresh);
+        }
     }
 }
