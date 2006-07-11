@@ -1,5 +1,7 @@
 package org.vast.stt.style;
 
+import org.vast.stt.data.BlockInfo;
+
 
 /**
  * <p><b>Title:</b><br/>

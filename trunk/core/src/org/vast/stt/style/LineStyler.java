@@ -17,6 +17,8 @@ import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.data.BlockInfo;
+import org.vast.stt.data.BlockListItem;
 
 
 /**
@@ -52,7 +54,7 @@ public class LineStyler extends AbstractStyler
     
     public BlockInfo nextLineBlock()    
     {
-        ListInfo listInfo = dataLists[0]; 
+        ListInfo listInfo = dataLists[0];
         
         // if no more items in the list, just return null
         if (!listInfo.blockList.hasNext)
@@ -64,20 +66,19 @@ public class LineStyler extends AbstractStyler
         // TODO implement block filtering here
         
         // setup indexer with new data 
-        AbstractDataBlock nextBlock = nextItem.data;
+        AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
         
-        // add a block info if not present
-        if (nextItem.info == null)
-            nextItem.info = new BasicBlockInfo();
+        // ensure a block info is present
+        nextItem.ensureInfo();
         
         // TODO scan and compute block BBOX and Time Range
         
-        if (listInfo.blockList.size != oldBlockCount)
+        if (listInfo.blockList.getSize() != oldBlockCount)
             lineInfo.updated = true;
         
-        oldBlockCount = listInfo.blockList.size;
+        oldBlockCount = listInfo.blockList.getSize();
         
         return lineInfo;
     }

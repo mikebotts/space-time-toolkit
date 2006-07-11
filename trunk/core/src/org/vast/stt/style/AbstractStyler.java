@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
+import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.DataStyler;
@@ -176,7 +177,7 @@ public abstract class AbstractStyler implements DataStyler
             if (!info.blockList.hasNext)
                 return false;
             
-            AbstractDataBlock nextBlock = info.blockList.next().data;
+            AbstractDataBlock nextBlock = info.blockList.next().getData();
             
             // TODO implement block filtering here
             

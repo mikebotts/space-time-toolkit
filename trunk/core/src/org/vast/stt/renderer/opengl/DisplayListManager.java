@@ -16,7 +16,7 @@ package org.vast.stt.renderer.opengl;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
-import org.vast.stt.style.BlockInfo;
+import org.vast.stt.data.BlockInfo;
 
 
 /**
