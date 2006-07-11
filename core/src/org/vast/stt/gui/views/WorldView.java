@@ -183,7 +183,8 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         setPartName("Scene: " + scene.getName());
         
         // render whole scene tree
-        canvas.getDisplay().asyncExec(renderExec);
+        //canvas.getDisplay().asyncExec(renderExec);
+        scene.getRenderer().drawScene(scene);
     }
     
     
