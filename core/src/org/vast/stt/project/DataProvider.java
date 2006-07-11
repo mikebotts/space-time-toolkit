@@ -15,7 +15,6 @@ package org.vast.stt.project;
 
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.event.STTEventProducer;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
 
@@ -37,7 +36,7 @@ import org.vast.stt.util.TimeExtent;
  * @date Nov 21, 2005
  * @version 1.0
  */
-public interface DataProvider extends Resource, STTEventProducer
+public interface DataProvider extends Resource
 {
 
 	public void updateData() throws DataException;
