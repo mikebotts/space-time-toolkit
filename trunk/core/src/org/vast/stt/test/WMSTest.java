@@ -33,10 +33,10 @@ public class WMSTest
             
             // set bbox input values
             DataBlock bboxData = new DataBlockDouble(4);
-            bboxData.setDoubleValue(0, 1);
-            bboxData.setDoubleValue(1, -1);
-            bboxData.setDoubleValue(2, -1);
-            bboxData.setDoubleValue(3, 1);
+            bboxData.setDoubleValue(1, -86.75);
+            bboxData.setDoubleValue(0, 33.9);
+            bboxData.setDoubleValue(3, -86.525);
+            bboxData.setDoubleValue(2, 34.4);
             process.getInputList().getComponent("bbox").setData(bboxData);
             
             System.out.println("Image buffer will be: " + process.getOutputList().getComponent(0).getComponent(2).getData());
@@ -52,7 +52,7 @@ public class WMSTest
                 System.out.print(data.getByteValue(i) + ",");
                 
                 if (i%outputImage.getComponentCount() == 0)
-                    System.out.println();                    
+                    System.out.println("");                    
             }
 		}
 		catch (Exception e)
@@ -60,4 +60,5 @@ public class WMSTest
 			e.printStackTrace();
 		}
 	}
+
 }
