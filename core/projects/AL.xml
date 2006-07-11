@@ -43,7 +43,7 @@
                   <member>
                      <DataList>
                         <name>Geographic Data Sets</name>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>AL State Boundaries</name>
                               <dataProvider xlink:href="#AL_STATE"/>
@@ -68,7 +68,7 @@
                               </style>
                            </DataItem>
                         </member>
-						      <member>
+						      <member visible="true">
 						         <DataItem enabled="true">
                               <name>AL County Boundaries</name>
 						            <dataProvider xlink:href="#AL_COUNTIES"/>
