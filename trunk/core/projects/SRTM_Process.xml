@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" xmlns:swe="http://www.opengis.net/swe" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" version="1.0">
-   <sml:ProcessModel id="SRTM_WCS_PROCESS">
+   <sml:ProcessModel id="WCS_PROCESS">
       <sml:inputs>
          <sml:InputList>
             <sml:input name="bbox">
