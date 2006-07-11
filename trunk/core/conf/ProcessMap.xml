@@ -52,8 +52,8 @@
    </Process>
    
    <Process>
-      <uri>urn:ogc:def:process:WCS_image:1.0</uri>
-      <class>org.vast.stt.process.WCS_imageProcess</class>
+      <uri>urn:ogc:def:process:WCS:2.0</uri>
+      <class>org.vast.stt.process.WCS_Process2</class>
    </Process>
    
    <Process>
