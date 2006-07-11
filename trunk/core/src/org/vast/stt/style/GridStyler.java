@@ -54,7 +54,7 @@ public class GridStyler extends AbstractStyler
         ListInfo listInfo = dataLists[0]; 
         
         // if no more items in the list, just return null
-        if (!listInfo.blockList.hasNext)
+        if (!listInfo.blockList.hasNext())
             return null;
         
         // otherwise get the next item
