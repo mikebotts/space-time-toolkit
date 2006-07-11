@@ -30,8 +30,8 @@
                   <cameraPos>-1.514 0.6032 10</cameraPos>
                   <targetPos>-1.514 0.6032 0</targetPos>
                   <upDirection>0 1 0</upDirection>
-                  <orthoWidth>0.07</orthoWidth>
-                  <orthoHeight>1.67</orthoHeight>
+                  <orthoWidth>1.0</orthoWidth>
+                  <orthoHeight>0.7</orthoHeight>
                   <nearClip>0</nearClip>
                   <farClip>100</farClip>
                   <zFudgeFactor>1000</zFudgeFactor>
@@ -40,8 +40,8 @@
             <contents>
                <DataList>
                   <name>GOES Demo Project</name>                  
-                  <member>
-                     <DataItem enabled="false">
+                  <member visible="false">
+                     <DataItem enabled="true">
                         <name>GOES Imagery</name>
                         <dataProvider xlink:href="#GOES_PROCESS"/>
                         <style>
@@ -106,63 +106,31 @@
                         </style>
                      </DataItem>
                   </member>
-                  <!--
-                  <member>
-                     <DataList>
-                        <name>Geographic Data</name>
-                        <member>
-                           <DataItem enabled="true">
-                              <name>Coast Lines - 100km</name>
-                              <dataProvider xlink:href="#COASTLINE_PROV"/>
-                              <style>
-                                 <sld:LineSymbolizer enabled="true">
-                                    <sld:Geometry>
-                                       <sld:CssParameter name="geometry-breaks">
-                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                                       </sld:CssParameter>                                       
-                                    </sld:Geometry>
-                                    <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                                    </sld:Stroke>
-                                 </sld:LineSymbolizer>
-                              </style>                             
-                           </DataItem>
-                        </member>
-                        <member>
-                           <DataItem enabled="true">
-                              <name>Boundaries</name>
-                              <dataProvider xlink:href="#STATE_PROV"/>
-                              <style>
-                                 <sld:LineSymbolizer enabled="true">
-                                    <sld:Geometry>
-                                       <sld:CssParameter name="geometry-breaks">
-                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                                       </sld:CssParameter>                                       
-                                    </sld:Geometry>
-                                    <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                                    </sld:Stroke>
-                                 </sld:LineSymbolizer>
-                              </style>
-                           </DataItem>
-                        </member>
-                     </DataList>
+                  <member visible="true">
+                     <DataItem enabled="true">
+                        <name>Coast Lines - 100km</name>
+                        <dataProvider xlink:href="#COASTLINE_PROV"/>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>                                       
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>                             
+                     </DataItem>
                   </member>
-                  -->
                </DataList>
             </contents>
          </Scene>
@@ -182,18 +150,8 @@
                         <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <!--<process xlink:href="./SRTM_Process.xml#WCS_PROCESS"/>-->
                   <process xlink:href="./GoesProcess.xml#GOES_WCS_PROCESS"/>
                </SensorMLProvider>
-            </member>
-            <member>
-               <SWEDataProvider id="STATE_PROV">
-                  <name>States Boundaries</name>
-                  <description>US States Boundaries</description>
-                  <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
-                  <rawData xlink:href="http://vast.uah.edu/SWEData/states/allStates.swe"/>
-               </SWEDataProvider>
             </member>
             <member>
                <SWEDataProvider id="COASTLINE_PROV">
