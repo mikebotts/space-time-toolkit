@@ -58,7 +58,7 @@ public class TextureMappingStyler extends AbstractStyler
         ListInfo texBlocks = dataLists[1];
         
         // if no more items one of the lists, just return null
-        if (!(gridBlocks.blockList.hasNext && texBlocks.blockList.hasNext))
+        if (!(gridBlocks.blockList.hasNext() && texBlocks.blockList.hasNext()))
             return null;
         
         // otherwise get blocks for next tile

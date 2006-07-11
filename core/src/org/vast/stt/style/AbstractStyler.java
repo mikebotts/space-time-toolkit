@@ -174,7 +174,7 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i]; 
             DataIndexer nextIndexer = info.blockIndexer;
                         
-            if (!info.blockList.hasNext)
+            if (!info.blockList.hasNext())
                 return false;
             
             AbstractDataBlock nextBlock = info.blockList.next().getData();

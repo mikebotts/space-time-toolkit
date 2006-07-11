@@ -39,7 +39,7 @@ public class BlockList
     protected BlockListItem firstBlock;
     protected BlockListItem lastBlock;
     //protected BlockListItem[] fastAccessBlocks; // use if random access needed
-    public boolean hasNext;
+    protected boolean hasNext;
     
     
     public BlockList()
@@ -47,13 +47,14 @@ public class BlockList
         this.clear();        
     }
     
-    public boolean hasNext()
+    
+    public synchronized boolean hasNext()
     {
         return hasNext;
     }
     
     
-    public BlockListItem next()
+    public synchronized BlockListItem next()
     {
         BlockListItem block = currentBlock;
         currentBlock = currentBlock.nextBlock;
@@ -63,7 +64,7 @@ public class BlockList
     }
     
     
-    public void reset()
+    public synchronized void reset()
     {
         if (firstBlock == null)
             hasNext = false;
@@ -73,15 +74,17 @@ public class BlockList
     }
     
     
-    public void clear()
+    public synchronized void clear()
     {
+        hasNext = false;
         firstBlock = null;
         lastBlock = null;
-        size = 0;
+        currentBlock = null;
+        size = 0;   
     }
     
     
-    public void remove()
+    public synchronized void remove()
     {
         currentBlock.prevBlock.nextBlock = currentBlock.nextBlock;
         currentBlock.nextBlock.prevBlock = currentBlock.prevBlock;
@@ -90,14 +93,14 @@ public class BlockList
     }
     
     
-    public void insertBlock(AbstractDataBlock dataBlock)
+    public synchronized void insertBlock(AbstractDataBlock dataBlock)
     {
         currentBlock = new BlockListItem(dataBlock, currentBlock, currentBlock.nextBlock);
         size++;
     }
     
     
-    public void addBlock(AbstractDataBlock dataBlock)
+    public synchronized void addBlock(AbstractDataBlock dataBlock)
     {
         lastBlock = new BlockListItem(dataBlock, lastBlock, null);
         
@@ -105,6 +108,13 @@ public class BlockList
             firstBlock = lastBlock;
         
         size++;
+        hasNext = true;
+    }
+    
+    
+    public synchronized int getSize()
+    {
+        return size;
     }
 
 
@@ -117,11 +127,5 @@ public class BlockList
     public void setBlockStructure(DataComponent blockStructure)
     {
         this.blockStructure = blockStructure;
-    }
-
-
-    public int getSize()
-    {
-        return size;
     }
 }
