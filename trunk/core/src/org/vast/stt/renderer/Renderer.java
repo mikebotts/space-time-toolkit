@@ -42,12 +42,11 @@ public abstract class Renderer implements StylerVisitor
 	public void drawScene(Scene scene)
 	{
 		setupView(scene.getViewSettings());
-		
-		Iterator<DataItem> it = scene.getDataList().getItemIterator();
-		
-		while (it.hasNext())
+		List<DataItem> items = scene.getVisibleItems();
+        
+		for (int i=0; i<items.size(); i++)
 		{
-			DataItem item = it.next();
+			DataItem item = items.get(i);
 			
 			if (!item.isEnabled())
 				continue;

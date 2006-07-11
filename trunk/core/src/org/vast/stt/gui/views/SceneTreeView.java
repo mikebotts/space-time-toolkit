@@ -13,8 +13,13 @@
 
 package org.vast.stt.gui.views;
 
+import java.util.Iterator;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -28,24 +33,27 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataEntry;
 import org.vast.stt.project.DataEntryList;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.Scene;
 
 
-public class SceneTreeView extends SceneView
+public class SceneTreeView extends SceneView implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemImg, folderImg;
+	private Image itemVisImg, itemHidImg, folderImg;
 	private Font treeFont;
 	private Object[] expandedItems;
 	
 	
 	// Label + Image provider
 	class TreeLabelProvider extends LabelProvider
-	{
-		@Override
+	{        
+        @Override
 		public Image getImage(Object element)
 		{
 			if (element instanceof DataEntryList)
@@ -55,8 +63,15 @@ public class SceneTreeView extends SceneView
 				
 				return folderImg;
 			}		
-			else
-				return itemImg;
+			else if (element instanceof DataItem)
+            {
+                if (scene.isItemVisible((DataItem)element))
+                    return itemVisImg;
+                else
+                    return itemHidImg;
+            }
+            else
+				return itemVisImg;
 		}
 
 		@Override
@@ -119,7 +134,7 @@ public class SceneTreeView extends SceneView
 		sceneTree = new TreeViewer(parent, SWT.SINGLE);
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
-		//sceneTree.getTree().setFont(treeFont);
+		sceneTree.addDoubleClickListener(this);
 		getSite().setSelectionProvider(sceneTree);
         super.createPartControl(parent);
 	}
@@ -131,10 +146,11 @@ public class SceneTreeView extends SceneView
 		super.init(site);
 		
 		ImageDescriptor descriptor;
-		descriptor = STTPlugin.getImageDescriptor("icons/item.gif");
-		itemImg = descriptor.createImage();
+		descriptor = STTPlugin.getImageDescriptor("icons/itemVisible.gif");
+		itemVisImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/itemNotVisible.gif");
+        itemHidImg = descriptor.createImage();
 		descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
-		//STTPlugin.getImageDescriptor("icons/group.gif");
 		folderImg = descriptor.createImage();
 		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
 		
@@ -154,7 +170,7 @@ public class SceneTreeView extends SceneView
 	@Override
 	public void dispose()
 	{
-		itemImg.dispose();
+		itemVisImg.dispose();
 		folderImg.dispose();
 		treeFont.dispose();
         super.dispose();
@@ -166,6 +182,14 @@ public class SceneTreeView extends SceneView
     {
         super.assignScene();
         expandedItems = new Object[0];
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent event)
+    {
+        if (event.type == EventType.SCENE_DATA_CHANGED)
+            refreshView();
     }
     
     
@@ -187,5 +211,45 @@ public class SceneTreeView extends SceneView
     {
         sceneTree.setInput(null);
         expandedItems = new Object[0];
+    }
+
+
+    public void doubleClick(DoubleClickEvent event)
+    {
+        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+        DataEntry selectedEntry = (DataEntry)selection.getFirstElement();
+        
+        // if it's a list change visibility for all descendants
+        if (selectedEntry instanceof DataEntryList)
+        {
+            DataEntryList list = (DataEntryList)selectedEntry;
+            Iterator<DataItem> it = list.getItemIterator();
+            boolean getVis = true;
+            boolean visibility = true;
+            
+            while (it.hasNext())
+            {
+                DataItem nextItem = it.next();
+                
+                if (getVis)
+                {
+                    visibility = !scene.isItemVisible(nextItem);
+                    getVis = false;
+                }
+                
+                scene.setItemVisibility(nextItem, visibility);
+            }
+        }
+        
+        // if it's a single item, change its visibility
+        else if (selectedEntry instanceof DataItem)
+        {
+            DataItem item = (DataItem)selectedEntry;
+            boolean visible = scene.isItemVisible(item);
+            scene.setItemVisibility(item, !visible);
+        }
+        
+        updateView();
+        scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_DATA_CHANGED));
     }  
 }

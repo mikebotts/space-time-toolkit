@@ -14,7 +14,6 @@
 package org.vast.stt.project;
 
 import java.util.ArrayList;
-
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventProducer;
@@ -36,7 +35,7 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class Scene implements STTEventProducer
+public class Scene implements STTEventProducer, STTEventListener
 {
 	protected String name;
     protected Renderer renderer;
@@ -44,12 +43,14 @@ public class Scene implements STTEventProducer
 	protected TimeSettings timeSettings;
 	protected DataEntryList dataList;
     protected ArrayList<STTEventListener> listeners;
+    protected ArrayList<DataItem> visibleItems;
 
 
     public Scene()
     {
         renderer = new JOGLRenderer();
         listeners = new ArrayList<STTEventListener>(2);
+        visibleItems = new ArrayList<DataItem>();
     }
     
     
@@ -99,6 +100,48 @@ public class Scene implements STTEventProducer
 	{
 		this.timeSettings = timeSettings;
 	}
+    
+    
+    public Renderer getRenderer()
+    {
+        return renderer;
+    }
+
+
+    public void setRenderer(Renderer renderer)
+    {
+        this.renderer = renderer;
+    }
+    
+    
+    public ArrayList<DataItem> getVisibleItems()
+    {
+        return visibleItems;
+    }
+    
+    
+    public void setItemVisibility(DataItem item, boolean visible)
+    {
+        if (visible)
+        {
+            if (!visibleItems.contains(item))
+            {
+                visibleItems.add(item);
+                item.addListener(this);
+            }
+        }
+        else
+        {
+            visibleItems.remove(item);
+            item.removeListener(this);
+        }
+    }
+    
+    
+    public boolean isItemVisible(DataItem item)
+    {
+        return visibleItems.contains(item);
+    }
 
 
     public void addListener(STTEventListener listener)
@@ -110,7 +153,7 @@ public class Scene implements STTEventProducer
 
     public void removeListener(STTEventListener listener)
     {
-        listeners.remove(listener);        
+        listeners.remove(listener);     
     }
 
 
@@ -135,16 +178,11 @@ public class Scene implements STTEventProducer
                 next.handleEvent(event);
         }        
     }
+    
 
-
-    public Renderer getRenderer()
+    public void handleEvent(STTEvent e)
     {
-        return renderer;
-    }
-
-
-    public void setRenderer(Renderer renderer)
-    {
-        this.renderer = renderer;
+        // simply forward the event to scene listeners
+        dispatchEvent(this, e);        
     }
 }

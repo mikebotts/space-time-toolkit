@@ -15,10 +15,7 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.event.STTEventListener;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 import org.vast.stt.util.TimeExtent;
@@ -46,7 +43,7 @@ public abstract class AbstractProvider implements DataProvider
     protected boolean updating = false;
 	protected boolean canceled = false;
     protected boolean forceUpdate = true;
-    protected ArrayList<STTEventListener> listeners = new ArrayList<STTEventListener>(2);
+    protected DataItem dataItem;
 	protected InputStream dataStream;
 	protected DataNode cachedData;
 	protected TimeExtent timeExtent = new TimeExtent();
@@ -199,40 +196,16 @@ public abstract class AbstractProvider implements DataProvider
     {
         this.name = name;
     }
-    
-    
-    public void addListener(STTEventListener listener)
+
+
+    public DataItem getDataItem()
     {
-        if (!listeners.contains(listener))
-            listeners.add(listener);        
+        return dataItem;
     }
 
 
-    public void removeListener(STTEventListener listener)
+    public void setDataItem(DataItem dataItem)
     {
-        listeners.remove(listener);        
-    }
-
-
-    public void removeAllListeners()
-    {
-        listeners.clear();        
-    }
-    
-    
-    /**
-     * Sends an event to all registered listeners except
-     * if the sender and listener are the same object.
-     */
-    public void dispatchEvent(Object sender, STTEvent event)
-    {
-        event.producer = this;
-        
-        for (int i=0; i<listeners.size(); i++)
-        {
-            STTEventListener next = listeners.get(i);
-            if (next != sender)
-                next.handleEvent(event);
-        }        
+        this.dataItem = dataItem;
     }
 }

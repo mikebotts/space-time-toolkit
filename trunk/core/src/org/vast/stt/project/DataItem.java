@@ -134,6 +134,9 @@ public class DataItem implements DataEntry, STTEventProducer
      */
     public void dispatchEvent(Object sender, STTEvent event)
     {
+        if (!enabled)
+            return;
+        
         event.producer = this;
         
         for (int i=0; i<listeners.size(); i++)

@@ -298,7 +298,7 @@ public class ProjectReader
 		
 		// read data item list
 		Element listElt = dom.getElement(sceneElt, "contents/DataList");
-		DataEntryList dataList = (DataEntryList)readDataEntry(listElt);
+		DataEntryList dataList = (DataEntryList)readDataEntry(listElt, scene);
 		scene.setDataList(dataList);
 		
 		return scene;
@@ -485,7 +485,7 @@ public class ProjectReader
 	 * @param dataEntryElt
 	 * @return
 	 */
-	protected DataEntry readDataEntry(Element dataEntryElt)
+	protected DataEntry readDataEntry(Element dataEntryElt, Scene parentScene)
 	{
 		DataEntry dataEntry = null;
 		
@@ -496,9 +496,9 @@ public class ProjectReader
         
         // if not found parse and instantiate a new one        
 		if (dataEntryElt.getLocalName().equals("DataList"))
-			dataEntry = readDataList(dataEntryElt);
+			dataEntry = readDataList(dataEntryElt, parentScene);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
-			dataEntry = readDataItem(dataEntryElt);
+			dataEntry = readDataItem(dataEntryElt, parentScene);
 		
 		// if successful, setup common parameters
 		if (dataEntry != null)
@@ -529,19 +529,30 @@ public class ProjectReader
 	 * @param listElt
 	 * @return
 	 */
-	protected DataEntryList readDataList(Element listElt)
+	protected DataEntryList readDataList(Element listElt, Scene parentScene)
 	{
-		NodeList memberElts = dom.getElements(listElt, "member/*");
+		NodeList memberElts = dom.getElements(listElt, "member");
 		int listSize = memberElts.getLength();
 		DataEntryList dataList = new DataEntryList(listSize);
 		
 		// members
 		for (int i=0; i<listSize; i++)
 		{
-			Element dataElt = (Element)memberElts.item(i);
-			DataEntry dataEntry = readDataEntry(dataElt);			
+			Element propElt = (Element)memberElts.item(i);
+            Element dataElt = dom.getFirstChildElement(propElt);
+			DataEntry dataEntry = readDataEntry(dataElt, parentScene);		
 			if (dataEntry != null)
+            {
 				dataList.add(dataEntry);
+                
+                // set visibility if it's a DataItem
+                if (dataEntry instanceof DataItem)
+                {
+                    String visText = dom.getAttributeValue(propElt, "visible");
+                    if (visText != null && visText.equals("true"))
+                        parentScene.setItemVisibility((DataItem)dataEntry, true);
+                }                    
+            }
 		}
 		
 		return dataList;
@@ -554,7 +565,7 @@ public class ProjectReader
 	 * @param dataItemElt
 	 * @return
 	 */
-	protected DataItem readDataItem(Element dataItemElt)
+	protected DataItem readDataItem(Element dataItemElt, Scene parentScene)
 	{
         DataItem dataItem = new DataItem();
 						
