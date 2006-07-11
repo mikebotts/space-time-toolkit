@@ -42,6 +42,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:Video:1.0</uri>
+      <class>org.vast.stt.process.Video_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:WMS:1.0</uri>
       <class>org.vast.stt.process.WMS_Process</class>
    </Process>
