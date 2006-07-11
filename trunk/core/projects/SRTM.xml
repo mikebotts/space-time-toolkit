@@ -40,8 +40,8 @@
             <contents>
                <DataList>
                   <name>SRTM Demo Project</name>                  
-                  <member>
-                     <DataItem enabled="false">
+                  <member visible="false">
+                     <DataItem enabled="true">
                         <name>Landsat Imagery (On Topo)</name>
                         <dataProvider xlink:href="#WMS_CHAIN"/>
                         <style>
@@ -102,8 +102,8 @@
                         </style>
                      </DataItem>
                   </member>
-                  <member>
-                     <DataItem enabled="false">
+                  <member visible="false">
+                     <DataItem enabled="true">
                         <name>Landsat Imagery (Flat)</name>
                         <dataProvider xlink:href="#WMS_CHAIN2"/>
                         <style>
@@ -152,8 +152,8 @@
                         </style>
                      </DataItem>
                   </member>
-                  <member>
-                     <DataItem enabled="false">
+                  <member visible="false">
+                     <DataItem enabled="true">
                         <name>SRTM Data</name>
                         <dataProvider xlink:href="#SRTM_CHAIN"/>
                         <style>
@@ -216,7 +216,7 @@
                   <member>
                      <DataList>
                         <name>Geographic Data</name>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider xlink:href="#DATASET_04"/>
@@ -241,7 +241,7 @@
                               </style>                             
                            </DataItem>
                         </member>
-                        <member>
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Boundaries</name>
                               <dataProvider xlink:href="#DATASET_03"/>
