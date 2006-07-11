@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" 
-              xmlns:swe="http://www.opengis.net/swe" 
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-              xmlns:xlink="http://www.w3.org/1999/xlink" 
-              xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" 
-              version="1.0">
-   <sml:ProcessModel id="GOES_WCS_PROCESS">
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" xmlns:swe="http://www.opengis.net/swe" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" version="1.0">
+   <sml:ProcessModel id="WCS_PROCESS">
       <sml:inputs>
          <sml:InputList>
             <sml:input name="bbox">
@@ -38,19 +33,20 @@
          <sml:OutputList>
             <sml:output name="coverageData">
                <swe:DataGroup>
-                  <swe:component name="gridData">
-                     <swe:DataGroup>
+                  <!-- first group is grid point data (i.e. coverage domain) -->
+                  <swe:component name="domainData">
+                     <swe:DataGroup definition="urn:ogc:def:data:grid">
                         <!--  first component is (lat, lon, tieptX, tieptY)[][] -->
                         <swe:component name="width">
                            <swe:Count id="GRID_WIDTH"/>
                         </swe:component>
                         <swe:component name="length">
                            <swe:Count id="GRID_LENGTH"/>
-                        </swe:component>                  
+                        </swe:component>
                         <swe:component name="coverage">
-                           <swe:DataArray arraySize="#GRID_LENGTH">  
+                           <swe:DataArray arraySize="#GRID_LENGTH">
                               <swe:component name="row">
-                                 <swe:DataArray arraySize="#GRID_WIDTH">  
+                                 <swe:DataArray arraySize="#GRID_WIDTH">
                                     <swe:component name="point">
                                        <swe:DataGroup>
                                           <swe:component name="latitude">
@@ -68,33 +64,34 @@
                                        </swe:DataGroup>
                                     </swe:component>
                                  </swe:DataArray>
-                              </swe:component>   
+                              </swe:component>
                            </swe:DataArray>
                         </swe:component>
                      </swe:DataGroup>
                   </swe:component>
-                  <!--  second group is imagery data -->
-                  <!--
-                  <swe:component name="imageWidth">
-                     <swe:Count id="IMAGE_WIDTH"/>
-                  </swe:component>
-                  <swe:component name="imageHeight">
-                     <swe:Count id="IMAGE_HEIGHT"/>
-                  </swe:component>                  
-                  <swe:component name="imagery">
-                     <swe:DataArray arraySize="#IMAGE_HEIGHT"> 
-                        <swe:component name="row">
-                           <swe:DataArray arraySize="#IMAGE_WIDTH">  
-                              <swe:component name="data">
-                                 <swe:Quantity definition="urn:ogc:phenomenon:..:..." uom="urn:ogc:unit:..."/>
+                  <!--  second group is imagery data (i.e. coverage range) -->
+                  <swe:component name="rangeData">
+                     <swe:DataGroup definition="urn:ogc:def:data:grid">
+                        <swe:component name="imageWidth">
+                           <swe:Count id="IMAGE_WIDTH"/>
+                        </swe:component>
+                        <swe:component name="imageHeight">
+                           <swe:Count id="IMAGE_HEIGHT"/>
+                        </swe:component>
+                        <swe:component name="imagery">
+                           <swe:DataArray arraySize="#IMAGE_HEIGHT">
+                              <swe:component name="row">
+                                 <swe:DataArray arraySize="#IMAGE_WIDTH">
+                                    <swe:component name="data">
+                                       <swe:Count min="0" max="255"/>
+                                    </swe:component>
+                                 </swe:DataArray>
                               </swe:component>
                            </swe:DataArray>
                         </swe:component>
-                     </swe:DataArray>
+                     </swe:DataGroup>
                   </swe:component>
-                  -->
                </swe:DataGroup>
-                                          
             </sml:output>
          </sml:OutputList>
       </sml:outputs>
@@ -103,7 +100,7 @@
             <sml:parameter name="wcsOptions">
                <swe:DataGroup fixed="true">
                   <swe:component name="endPoint">
-                     <swe:Category definition="urn:ogc:def:identifier:URL">http://localhost:8080/ows-dev/goes</swe:Category>
+                     <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu:8080/ows-dev/goes</swe:Category>
                   </swe:component>
                   <swe:component name="requestMethod">
                      <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
@@ -128,6 +125,6 @@
             </sml:parameter>
          </sml:ParameterList>
       </sml:parameters>
-      <sml:method xlink:href="urn:ogc:def:process:WCS_image:1.0"/>
+      <sml:method xlink:href="urn:ogc:def:process:WCS_image:2.0"/>
    </sml:ProcessModel>
 </sml:SensorML>
