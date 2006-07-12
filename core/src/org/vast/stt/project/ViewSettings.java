@@ -64,6 +64,9 @@ public class ViewSettings
 
 	// clipping planes
 	protected double nearClip, farClip;
+    
+    // other options
+    protected boolean showCameraTarget = true;
 
 	
 	public ViewSettings()
@@ -249,4 +252,15 @@ public class ViewSettings
 		this.viewWidth = viewWidth;
 	}
 
+
+    public boolean isShowCameraTarget()
+    {
+        return showCameraTarget;
+    }
+
+
+    public void setShowCameraTarget(boolean showCameraTarget)
+    {
+        this.showCameraTarget = showCameraTarget;
+    }
 }

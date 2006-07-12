@@ -121,6 +121,32 @@ public class JOGLRenderer extends Renderer
         scene.getViewSettings().setViewHeight(height);
         scene.getViewSettings().setViewWidth(width);
     }
+    
+    
+    @Override
+    protected void drawCameraTarget()
+    {
+        ViewSettings view = scene.getViewSettings();
+        double x = view.getTargetPos().getX();
+        double y = view.getTargetPos().getY();
+        double z = view.getTargetPos().getZ();
+        gl.glTranslated(x, y, z);
+        
+        double axisLength = view.getOrthoWidth() / 25; 
+            
+        gl.glLineWidth(2.0f);
+        gl.glBegin(GL.GL_LINES);
+        gl.glColor3f(1.0f, 0.0f, 0.0f);
+        gl.glVertex3d(0.0, 0.0, 0.0);
+        gl.glVertex3d(axisLength, 0.0, 0.0);
+        gl.glColor3f(0.0f, 1.0f, 0.0f);
+        gl.glVertex3d(0.0, 0.0, 0.0);
+        gl.glVertex3d(0.0, axisLength, 0.0);
+        gl.glColor3f(0.0f, 0.0f, 1.0f);
+        gl.glVertex3d(0.0, 0.0, 0.0);
+        gl.glVertex3d(0.0, 0.0, axisLength);
+        gl.glEnd();
+    }
 
 
     @Override

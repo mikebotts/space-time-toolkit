@@ -28,6 +28,8 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.commands.FitView;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 
 
 /**
@@ -73,17 +75,21 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	{
 		super.init(site);
 		
-		IAction action1 = new Action()
+		// dd show target action to toolbar
+		IAction ShowTargetAction = new Action()
 		{
 			public void run()
 			{
-				
+				boolean targetshown = scene.getViewSettings().isShowCameraTarget();
+                scene.getViewSettings().setShowCameraTarget(!targetshown);
+                scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 			}
 		};
-		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
-		action1.setToolTipText("File this!");
-		site.getActionBars().getToolBarManager().add(action1);
+        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+        ShowTargetAction.setToolTipText("Toggle Camera Target");
+		site.getActionBars().getToolBarManager().add(ShowTargetAction);
 
+        // add fit view action to pop down menu
 		Action fitViewAction = new Action()
 		{
 			public void run()
@@ -92,11 +98,11 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 				System.err.println("Execute fitView");
 				fv.execute();
 			}
-		};
-		
+		};		
 		fitViewAction.setText("Fit View");
 		site.getActionBars().getMenuManager().add(fitViewAction);
 		
+		// add fit item action to pop down menu
 		Action fitItemAction = new Action()
 		{
 			public void run()
@@ -106,8 +112,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 				System.err.println("Execute fitItem");
 				fv.execute();
 			}
-		};
-		
+		};		
 		fitItemAction.setText("Fit View to Selected Item");
 		site.getActionBars().getMenuManager().add(fitItemAction);
 	}
