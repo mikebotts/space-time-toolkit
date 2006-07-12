@@ -17,6 +17,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.GLDrawableFactory;
 import com.sun.opengl.util.GLUT;
+
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
@@ -86,8 +88,9 @@ public class JOGLRenderer extends Renderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
+        Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
-        float height = width * view.getViewHeight() / view.getViewWidth();
+        float height = width * clientArea.height / clientArea.width;
         float farClip = (float) view.getFarClip();
         float nearClip = (float) view.getNearClip();
         gl.glOrtho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, nearClip, farClip);
@@ -117,9 +120,8 @@ public class JOGLRenderer extends Renderer
     public void resizeView(int width, int height)
     {
         SWTContext.setCurrent();
-        SWTContext.resize(0, 0, width, height);
-        scene.getViewSettings().setViewHeight(height);
-        scene.getViewSettings().setViewWidth(width);
+        JOGLContext.makeCurrent();
+        SWTContext.resize(0, 0, width, height);        
     }
     
     

@@ -37,10 +37,6 @@ public class ViewSettings
 	protected Color backgroundColor;
 	protected boolean alphaBlendingEnabled = true;
 	
-	// canvas size
-	protected int viewWidth;
-	protected int viewHeight;
-	
 	// parameters defining camera position and orientation
 	protected Vector3D cameraPos = new Vector3D();
 	protected Vector3D targetPos = new Vector3D();
@@ -226,30 +222,6 @@ public class ViewSettings
 	public void setAlphaBlendingEnabled(boolean useAlphaBlending)
 	{
 		this.alphaBlendingEnabled = useAlphaBlending;
-	}
-
-
-	public int getViewHeight()
-	{
-		return viewHeight;
-	}
-
-
-	public void setViewHeight(int viewHeight)
-	{
-		this.viewHeight = viewHeight;
-	}
-
-
-	public int getViewWidth()
-	{
-		return viewWidth;
-	}
-
-
-	public void setViewWidth(int viewWidth)
-	{
-		this.viewWidth = viewWidth;
 	}
 
 

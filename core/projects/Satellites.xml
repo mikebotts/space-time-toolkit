@@ -24,8 +24,6 @@
             <view>
                <ViewSettings>
                   <backgroundColor>#FFFFFF</backgroundColor>
-                  <viewWidth>1000</viewWidth>
-                  <viewHeight>800</viewHeight>
                   <cameraMode>ORTHO</cameraMode>
                   <cameraPos>0 0 10</cameraPos>
                   <targetPos>0 0 0</targetPos>

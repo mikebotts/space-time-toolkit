@@ -44,10 +44,9 @@ import org.eclipse.swt.events.*;
 public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
 	protected Scene scene;
-	protected boolean enableZoom = true;
+    protected boolean enableZoom = true;
 	protected boolean enableRotation = true;
-	protected boolean enableTranslation = true;
-	
+	protected boolean enableTranslation = true;	
 	private Vector3D P0 = new Vector3D();
 	private Vector3D P1 = new Vector3D();
 	private int xOld;
@@ -162,9 +161,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	public void mouseMove(MouseEvent e)
 	{
         if (rotating || translating || zooming)
-		{
-            ViewSettings viewSettings = scene.getViewSettings();
-            
+		{           
             if (rotating && enableRotation)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
@@ -179,8 +176,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 			
 			else if (zooming && enableZoom)
 			{
-				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));				
-				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewSettings.getViewHeight());
+				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
+                int viewHeight = scene.getRenderer().getCanvas().getClientArea().height;
+				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewHeight);
 				doZoom(amount);
 			}
 			
