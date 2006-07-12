@@ -64,7 +64,7 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      * Method called when the scene attached to this view 
      * should be changed
      */
-    public void assignScene()
+    protected void assignScene()
     {
         if (scene != null)
             scene.removeListener(this);

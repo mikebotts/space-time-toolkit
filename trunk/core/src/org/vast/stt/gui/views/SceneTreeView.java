@@ -19,6 +19,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -48,6 +49,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	private Image itemVisImg, itemHidImg, folderImg;
 	private Font treeFont;
 	private Object[] expandedItems;
+    private ISelection selectedItem;
 	
 	
 	// Label + Image provider
@@ -195,15 +197,17 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     
     public void updateView()
     {       
-        // save previous expanded elements
+        // save previous expanded/selected elements
         expandedItems = sceneTree.getExpandedElements();
+        selectedItem = sceneTree.getSelection();
         
         // load new data in tree
         sceneTree.setInput(scene);
         
-        // restore expanded elements
+        // restore expanded/selected elements
         for (int i=0; i<expandedItems.length; i++)
             sceneTree.expandToLevel(expandedItems[i], 1);
+        sceneTree.setSelection(selectedItem);
     }
 
 

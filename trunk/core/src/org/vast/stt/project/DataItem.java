@@ -156,7 +156,7 @@ public class DataItem implements DataEntry, STTEventProducer
     
     
     /**
-     * Computes item bounding box and return it
+     * Computes item bounding box in world coordinate and return it
      * @return
      */
     public SpatialExtent getBoundingBox()

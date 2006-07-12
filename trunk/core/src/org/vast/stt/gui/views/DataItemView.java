@@ -51,6 +51,10 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     public abstract void clearView();
     
     
+    /**
+     * Method called when the view needs to be refreshed 
+     * (i.e. typically after a "CHANGE" event is received)
+     */
     protected void refreshView()
     {
         if (this.item != null)
@@ -58,12 +62,17 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
         else
             clearView();
     }
-    
+        
     
     @Override
     public void createPartControl(Composite parent)
     {
         getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);
+        
+        // trigger a selection event so we can update ourselves
+        SceneView treeView = (SceneView)getSite().getPage().findView(SceneTreeView.ID);
+        if (treeView != null)
+            treeView.updateView();
     }
     
     
@@ -108,7 +117,9 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
                         item.removeListener(this);
                     
                     item = selectedItem;
-                    item.addListener(this);
+                    
+                    if (item != null)
+                        item.addListener(this);
                     
                     refreshView();
                 }
