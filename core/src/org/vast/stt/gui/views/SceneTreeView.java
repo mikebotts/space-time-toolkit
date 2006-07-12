@@ -188,10 +188,10 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     
     
     @Override
-    public void handleEvent(STTEvent event)
+    public void handleEvent(STTEvent e)
     {
-        if (event.type == EventType.SCENE_DATA_CHANGED)
-            refreshView();
+        if (e.type == EventType.SCENE_DATA_CHANGED)
+            super.handleEvent(e);
     }
     
     
