@@ -48,13 +48,13 @@ public class BlockList
     }
     
     
-    public synchronized boolean hasNext()
+    public boolean hasNext()
     {
         return hasNext;
     }
     
     
-    public synchronized BlockListItem next()
+    public BlockListItem next()
     {
         BlockListItem block = currentBlock;
         currentBlock = currentBlock.nextBlock;
@@ -64,7 +64,7 @@ public class BlockList
     }
     
     
-    public synchronized void reset()
+    public void reset()
     {
         if (firstBlock == null)
             hasNext = false;
@@ -74,7 +74,7 @@ public class BlockList
     }
     
     
-    public synchronized void clear()
+    public void clear()
     {
         hasNext = false;
         firstBlock = null;
@@ -84,7 +84,7 @@ public class BlockList
     }
     
     
-    public synchronized void remove()
+    public void remove()
     {
         currentBlock.prevBlock.nextBlock = currentBlock.nextBlock;
         currentBlock.nextBlock.prevBlock = currentBlock.prevBlock;
@@ -93,14 +93,14 @@ public class BlockList
     }
     
     
-    public synchronized void insertBlock(AbstractDataBlock dataBlock)
+    public void insertBlock(AbstractDataBlock dataBlock)
     {
         currentBlock = new BlockListItem(dataBlock, currentBlock, currentBlock.nextBlock);
         size++;
     }
     
     
-    public synchronized void addBlock(AbstractDataBlock dataBlock)
+    public void addBlock(AbstractDataBlock dataBlock)
     {
         lastBlock = new BlockListItem(dataBlock, lastBlock, null);
         
@@ -108,11 +108,10 @@ public class BlockList
             firstBlock = lastBlock;
         
         size++;
-        hasNext = true;
     }
     
     
-    public synchronized int getSize()
+    public int getSize()
     {
         return size;
     }
