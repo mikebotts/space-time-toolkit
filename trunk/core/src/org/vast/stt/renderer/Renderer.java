@@ -26,60 +26,79 @@ import java.util.*;
  */
 public abstract class Renderer implements StylerVisitor
 {
-	protected Canvas canvas;
+    protected Canvas canvas;
     protected Scene scene;
 
 
-	public abstract void init();
-	public abstract void dispose();
-	public abstract void project(double worldX, double worldY, double worldZ, Vector3D viewPos);
-	public abstract void unproject(double viewX, double viewY, double viewZ, Vector3D worldPos);
-	public abstract void resizeView(int width, int height);
-	protected abstract void setupView();	
-	protected abstract void swapBuffers();
-	
-	
-	public void drawScene()
-	{
-		setupView();
-		List<DataItem> items = scene.getVisibleItems();
-        
-		for (int i=0; i<items.size(); i++)
-		{
-			DataItem item = items.get(i);
-			
-			if (!item.isEnabled())
-				continue;
-            
+    public abstract void init();
+
+
+    public abstract void dispose();
+
+
+    public abstract void project(double worldX, double worldY, double worldZ, Vector3D viewPos);
+
+
+    public abstract void unproject(double viewX, double viewY, double viewZ, Vector3D worldPos);
+
+
+    public abstract void resizeView(int width, int height);
+
+
+    protected abstract void setupView();
+
+
+    protected abstract void swapBuffers();
+    
+    
+    protected abstract void drawCameraTarget();
+
+
+    public void drawScene()
+    {
+        setupView();
+        List<DataItem> items = scene.getVisibleItems();
+
+        for (int i = 0; i < items.size(); i++)
+        {
+            DataItem item = items.get(i);
+
+            if (!item.isEnabled())
+                continue;
+
             //if (item.getDataProvider().isUpdating())
             //    continue;
-			
-			DataStylerList stylerList = item.getStylerList();
-			stylerList.accept(this);
-		}
 
-		swapBuffers();
-	}
+            DataStylerList stylerList = item.getStylerList();
+            stylerList.accept(this);
+        }
+        
+        // draw camera target if requested
+        if (scene.getViewSettings().isShowCameraTarget())
+            this.drawCameraTarget();
 
-
-	public Canvas getCanvas()
-	{
-		return canvas;
-	}
+        swapBuffers();
+    }
 
 
-	public void setCanvas(Canvas canvas)
-	{
-		this.canvas = canvas;
-	}
-    
-    
+    public Canvas getCanvas()
+    {
+        return canvas;
+    }
+
+
+    public void setCanvas(Canvas canvas)
+    {
+        this.canvas = canvas;
+    }
+
+
     public Scene getScene()
     {
         return scene;
     }
-    
-    
+
+
     public void setScene(Scene scene)
     {
         this.scene = scene;
