@@ -95,7 +95,7 @@ public class SOSProvider extends OWSProvider
         	System.out.println(dataInfo);
         	System.out.println(dataEnc);
             cachedData.clearAll();
-        	BlockList blockList = cachedData.createList(dataInfo);
+        	BlockList blockList = cachedData.createList(dataInfo.copy());
 			
         	// reset node - HACK
         	//DataNode node = item.getNode();
