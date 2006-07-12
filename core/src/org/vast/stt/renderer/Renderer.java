@@ -6,7 +6,6 @@ import org.vast.math.Vector3D;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.Scene;
-import org.vast.stt.project.ViewSettings;
 import org.vast.stt.style.StylerVisitor;
 import java.util.*;
 
@@ -28,6 +27,7 @@ import java.util.*;
 public abstract class Renderer implements StylerVisitor
 {
 	protected Canvas canvas;
+    protected Scene scene;
 
 
 	public abstract void init();
@@ -35,13 +35,13 @@ public abstract class Renderer implements StylerVisitor
 	public abstract void project(double worldX, double worldY, double worldZ, Vector3D viewPos);
 	public abstract void unproject(double viewX, double viewY, double viewZ, Vector3D worldPos);
 	public abstract void resizeView(int width, int height);
-	protected abstract void setupView(ViewSettings view);	
+	protected abstract void setupView();	
 	protected abstract void swapBuffers();
 	
 	
-	public void drawScene(Scene scene)
+	public void drawScene()
 	{
-		setupView(scene.getViewSettings());
+		setupView();
 		List<DataItem> items = scene.getVisibleItems();
         
 		for (int i=0; i<items.size(); i++)
@@ -72,4 +72,16 @@ public abstract class Renderer implements StylerVisitor
 	{
 		this.canvas = canvas;
 	}
+    
+    
+    public Scene getScene()
+    {
+        return scene;
+    }
+    
+    
+    public void setScene(Scene scene)
+    {
+        this.scene = scene;
+    }
 }

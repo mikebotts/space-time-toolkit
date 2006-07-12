@@ -49,6 +49,7 @@ public class Scene implements STTEventProducer, STTEventListener
     public Scene()
     {
         renderer = new JOGLRenderer();
+        renderer.setScene(this);
         listeners = new ArrayList<STTEventListener>(2);
         visibleItems = new ArrayList<DataItem>();
     }

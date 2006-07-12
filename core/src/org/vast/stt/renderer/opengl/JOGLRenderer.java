@@ -21,7 +21,6 @@ import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockInfo;
-import org.vast.stt.project.Scene;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.*;
@@ -56,6 +55,7 @@ public class JOGLRenderer extends Renderer
     protected int[] boolResult = new int[1];
     protected TextureManager textureManager;
     protected DisplayListManager displayListManager;
+    protected BlockFilter blockFilter;
     protected boolean normalizeCoords;
 
 
@@ -65,17 +65,19 @@ public class JOGLRenderer extends Renderer
 
 
     @Override
-    public void drawScene(Scene scene)
+    public void drawScene()
     {
         SWTContext.setCurrent();
         JOGLContext.makeCurrent();
-        super.drawScene(scene);
+        super.drawScene();
     }
 
 
     @Override
-    protected void setupView(ViewSettings view)
+    protected void setupView()
     {
+        ViewSettings view = scene.getViewSettings();
+        
         // clear back buffer
         Color backColor = view.getBackgroundColor();
         gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
@@ -156,6 +158,7 @@ public class JOGLRenderer extends Renderer
         glut = new GLUT();
         textureManager = new TextureManager(gl, glu);
         displayListManager = new DisplayListManager(gl, glu);
+        blockFilter = new BlockFilter(gl, glu);
         normalizeCoords = textureManager.isNormalizationRequired();
         
         gl.glClearDepth(1.0f);
@@ -210,6 +213,9 @@ public class JOGLRenderer extends Renderer
         // loop and draw all points
         while ((blockInfo = styler.nextLineBlock()) != null)
         {
+            if (blockFilter.filterBlock(blockInfo))
+                break;
+            
             if (checkList)
             {
                 OpenGLInfo glInfo = (OpenGLInfo)blockInfo.rendererParams;            
