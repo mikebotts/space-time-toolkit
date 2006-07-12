@@ -117,8 +117,13 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	public void dispose()
 	{
 		canvas.dispose();
-        scene.getRenderer().dispose();
-        scene.removeListener(this);
+        
+        if (scene != null)
+        {
+            scene.getRenderer().dispose();
+            scene.removeListener(this);
+        }
+        
         super.dispose();
 	}
 	
