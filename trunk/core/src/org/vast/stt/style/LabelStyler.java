@@ -262,7 +262,7 @@ public class LabelStyler extends AbstractStyler
 	
 	public void accept(StylerVisitor visitor)
 	{
-        dataNode = dataProvider.getDataNode();
+        dataNode = dataItem.getDataProvider().getDataNode();
         
         if (dataNode != null)
         {

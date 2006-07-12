@@ -108,7 +108,7 @@ public class StyleWidget extends CheckOptionTable
      */
     public void createNewStyler(String stylerName, StylerType stylerType)
     {
-        DataStyler newStyler = StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem.getDataProvider());
+        DataStyler newStyler = StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem);
         if (newStyler != null)
         {
             //  Hack to set geom

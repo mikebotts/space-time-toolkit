@@ -19,7 +19,7 @@ import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.project.DataProvider;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.util.SpatialExtent;
 
@@ -42,9 +42,9 @@ public abstract class AbstractStyler implements DataStyler
 {
     protected String name;
     protected boolean enabled;
-    protected DataProvider dataProvider;
-    protected SpatialExtent bbox;
+    protected DataItem dataItem;
     protected DataNode dataNode;
+    protected SpatialExtent bbox;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
         
@@ -58,16 +58,10 @@ public abstract class AbstractStyler implements DataStyler
         dataLists = new ListInfo[0];
     }
     
-    
-    public DataNode getDataNode()
-    {
-        return this.dataNode;
-    }
-    
         
-    public void setDataProvider(DataProvider dataProvider)
+    public void setDataItem(DataItem dataItem)
 	{
-		this.dataProvider = dataProvider;
+		this.dataItem = dataItem;
 	}
 
 

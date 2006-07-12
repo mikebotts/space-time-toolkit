@@ -582,7 +582,7 @@ public class ProjectReader
         for (int i=0; i<listSize; i++)
         {
             Element symElt = (Element)symElts.item(i);
-            DataStyler styler = readSymbolizer(provider, symElt);
+            DataStyler styler = readSymbolizer(dataItem, symElt);
             dataItem.getStylerList().add(styler);
         }
         
@@ -596,10 +596,10 @@ public class ProjectReader
 	 * @param symElt
 	 * @return
 	 */
-	protected DataStyler readSymbolizer(DataProvider provider, Element symElt)
+	protected DataStyler readSymbolizer(DataItem dataItem, Element symElt)
 	{
 		Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);
-		DataStyler styler = stylerFactory.createStyler(provider, symbolizer);
+		DataStyler styler = stylerFactory.createStyler(dataItem, symbolizer);
 		
 		// read enabled attribute
 		if (styler != null)

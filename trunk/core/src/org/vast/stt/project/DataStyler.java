@@ -14,7 +14,6 @@
 package org.vast.stt.project;
 
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.DataNode;
 import org.vast.stt.style.StylerVisitor;
 import org.vast.stt.util.SpatialExtent;
 
@@ -51,12 +50,9 @@ public interface DataStyler
 	public Symbolizer getSymbolizer();
 
 
-	public void setDataProvider(DataProvider dataProvider);
+	public void setDataItem(DataItem dataItem);
     
     
-    public DataNode getDataNode();
-
-
 	public void updateBoundingBox();
 	
 	

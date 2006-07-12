@@ -14,7 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.*;
-import org.vast.stt.project.DataProvider;
+import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 
 
@@ -40,7 +40,7 @@ public class StylerFactory
     };
 
 
-    public DataStyler createStyler(DataProvider provider, Symbolizer sym)
+    public DataStyler createStyler(DataItem dataItem, Symbolizer sym)
     {
         DataStyler styler = null;
 
@@ -68,7 +68,7 @@ public class StylerFactory
         if (styler != null)
         {
             styler.setSymbolizer(sym);
-            styler.setDataProvider(provider);
+            styler.setDataItem(dataItem);
         }
 
         return styler;
@@ -82,16 +82,16 @@ public class StylerFactory
      * @param provider
      * @return the newly created styler
      */
-    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataProvider provider)
+    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataItem dataItem)
     {
         DataStyler newStyler = null;
         switch (stylerType)
         {
         case point:
-            newStyler = StylerFactory.createDefaultPointStyler(provider);
+            newStyler = StylerFactory.createDefaultPointStyler(dataItem);
             break;
         case line:
-            newStyler = StylerFactory.createDefaultLineStyler(provider);
+            newStyler = StylerFactory.createDefaultLineStyler(dataItem);
             break;
         default:
             System.err.println("StylerType not supported in createNewStyler()");
@@ -107,10 +107,10 @@ public class StylerFactory
      * @param provider - the dataProvider to use for the new Styler
      * @return PointStyler
      */
-    static private PointStyler createDefaultPointStyler(DataProvider provider)
+    static private PointStyler createDefaultPointStyler(DataItem dataItem)
     {
         PointStyler styler = new PointStyler();
-        styler.setDataProvider(provider);
+        styler.setDataItem(dataItem);
 
         PointSymbolizer symbolizer = new PointSymbolizer();
         styler.setSymbolizer(symbolizer);
@@ -140,10 +140,10 @@ public class StylerFactory
      * @param provider - the dataProvider to use for the new Styler
      * @return new LineStyler
      */
-    static private LineStyler createDefaultLineStyler(DataProvider provider)
+    static private LineStyler createDefaultLineStyler(DataItem dataItem)
     {
         LineStyler styler = new LineStyler();
-        styler.setDataProvider(provider);
+        styler.setDataItem(dataItem);
 
         LineSymbolizer symbolizer = new LineSymbolizer();
         styler.setSymbolizer(symbolizer);
