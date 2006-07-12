@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.style.LineStyler;
@@ -79,6 +81,7 @@ public class LineOptionHelper implements SelectionListener {
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			setLineWidth(w);
 			styler.updateDataMappings();
+            styler.getDataItem().dispatchEvent(this, new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		} else if (control == optionControl[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
@@ -90,6 +93,7 @@ public class LineOptionHelper implements SelectionListener {
 			optionControl[1].setColorLabelColor(sldColor); 
 			setLineColor(sldColor);
 			styler.updateDataMappings();
+            styler.getDataItem().dispatchEvent(this, new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		}
 	}
 

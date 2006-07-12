@@ -58,6 +58,12 @@ public abstract class AbstractStyler implements DataStyler
         dataLists = new ListInfo[0];
     }
     
+    
+    public DataItem getDataItem()
+    {
+        return dataItem;
+    }
+    
         
     public void setDataItem(DataItem dataItem)
 	{

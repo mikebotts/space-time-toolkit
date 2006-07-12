@@ -50,6 +50,9 @@ public interface DataStyler
 	public Symbolizer getSymbolizer();
 
 
+    public DataItem getDataItem();
+    
+    
 	public void setDataItem(DataItem dataItem);
     
     
