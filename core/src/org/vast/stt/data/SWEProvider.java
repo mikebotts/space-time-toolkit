@@ -89,7 +89,7 @@ public class SWEProvider extends AbstractProvider
 			
 			// clean up old data			
             cachedData.clearAll();
-            BlockList blockList = cachedData.createList(dataInfo);
+            BlockList blockList = cachedData.createList(dataInfo.copy());
 			
 			// register the CDM data handler
 			dataHandler.setBlockList(blockList);
