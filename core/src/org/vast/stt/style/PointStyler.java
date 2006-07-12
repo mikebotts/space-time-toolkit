@@ -248,7 +248,7 @@ public class PointStyler extends AbstractStyler
 	
 	public void accept(StylerVisitor visitor)
 	{
-        dataNode = dataProvider.getDataNode();
+        dataNode = dataItem.getDataProvider().getDataNode();
         
         if (dataNode != null)
         {

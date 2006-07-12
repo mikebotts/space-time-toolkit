@@ -19,6 +19,8 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockListItem;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 
 
 /**
@@ -253,6 +255,8 @@ public class LineStyler extends AbstractStyler
                 }
             }
         }
+        
+        this.dataItem.dispatchEvent(this, new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
     }
     
     
@@ -270,7 +274,7 @@ public class LineStyler extends AbstractStyler
 
 	public void accept(StylerVisitor visitor)
 	{
-        dataNode = dataProvider.getDataNode();
+        dataNode = dataItem.getDataProvider().getDataNode();
 
         if (dataNode != null)
         {
