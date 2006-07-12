@@ -150,7 +150,7 @@ public class BboxWidget implements SelectionListener
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
-	public SpatialExtent getSpatitalExtent(){
+	public SpatialExtent getSpatialExtent(){
 		double nlat = getValue(nlatText);
 		double slat = getValue(slatText);
 		double wlon = getValue(wlonText);
@@ -175,7 +175,7 @@ public class BboxWidget implements SelectionListener
 		if(formatIndex == currentLlFormat)
 			return;
 		currentLlFormat = formatIndex;
-		SpatialExtent bbox = this.getSpatitalExtent();
+		SpatialExtent bbox = this.getSpatialExtent();
 		double minX = bbox.getMinX();
 		double maxX = bbox.getMaxX();
 		double minY = bbox.getMinY();
