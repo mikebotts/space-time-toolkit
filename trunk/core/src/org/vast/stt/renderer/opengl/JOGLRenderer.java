@@ -118,6 +118,8 @@ public class JOGLRenderer extends Renderer
     {
         SWTContext.setCurrent();
         SWTContext.resize(0, 0, width, height);
+        scene.getViewSettings().setViewHeight(height);
+        scene.getViewSettings().setViewWidth(width);
     }
 
 
