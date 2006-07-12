@@ -174,7 +174,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         setPartName("Scene: " + scene.getName());
         
         // render whole scene tree
-        scene.getRenderer().drawScene(scene);
+        scene.getRenderer().drawScene();
     }
     
     
@@ -194,7 +194,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     public void paintControl(PaintEvent e)
     {
         if (scene != null)
-            scene.getRenderer().drawScene(scene);
+            scene.getRenderer().drawScene();
     }
     
     
@@ -206,6 +206,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
             scene.getViewSettings().setViewHeight(clientArea.height);
             scene.getViewSettings().setViewWidth(clientArea.width);
+            scene.getRenderer().drawScene();
         }
     }
 	
