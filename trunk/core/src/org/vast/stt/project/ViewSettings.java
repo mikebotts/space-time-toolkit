@@ -15,6 +15,10 @@ package org.vast.stt.project;
 
 import org.vast.math.*;
 import org.vast.ows.sld.Color;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.event.STTEventProducer;
 
 
 /**
@@ -31,7 +35,7 @@ import org.vast.ows.sld.Color;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public class ViewSettings
+public class ViewSettings implements STTEventProducer
 {
 	// basic parameters
 	protected Color backgroundColor;
@@ -63,6 +67,8 @@ public class ViewSettings
     
     // other options
     protected boolean showCameraTarget = true;
+    
+    protected STTEventListeners listeners;
 
 	
 	public ViewSettings()
@@ -78,7 +84,9 @@ public class ViewSettings
 		
 		nearClip = 1e-3;
 		farClip = 1e3;
-	}
+        
+        listeners = new STTEventListeners(1);
+    }
 	
 
 	public int getCameraMode()
@@ -234,5 +242,30 @@ public class ViewSettings
     public void setShowCameraTarget(boolean showCameraTarget)
     {
         this.showCameraTarget = showCameraTarget;
+    }
+    
+    
+    public void addListener(STTEventListener listener)
+    {
+        listeners.add(listener);
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();
+    }
+
+
+    public void dispatchEvent(STTEvent event)
+    {
+        event.producer = this;
+        listeners.dispatchEvent(event);
     }
 }

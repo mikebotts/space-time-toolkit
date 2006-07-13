@@ -57,7 +57,7 @@ public class JOGLRenderer extends Renderer
     protected int[] boolResult = new int[1];
     protected TextureManager textureManager;
     protected DisplayListManager displayListManager;
-    protected BlockFilter blockFilter;
+    protected GLBlockFilter blockFilter;
     protected boolean normalizeCoords;
 
 
@@ -113,6 +113,10 @@ public class JOGLRenderer extends Renderer
         gl.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM, 0);
         gl.glGetDoublev(GL.GL_PROJECTION_MATRIX, projM, 0);
         gl.glGetIntegerv(GL.GL_VIEWPORT, viewPort, 0);
+        
+        // draw camera target if requested
+        if (view.isShowCameraTarget())
+            this.drawCameraTarget();
     }
 
 
@@ -125,13 +129,13 @@ public class JOGLRenderer extends Renderer
     }
     
     
-    @Override
     protected void drawCameraTarget()
     {
         ViewSettings view = scene.getViewSettings();
         double x = view.getTargetPos().getX();
         double y = view.getTargetPos().getY();
         double z = view.getTargetPos().getZ();
+        gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
         double axisLength = view.getOrthoWidth() / 25; 
@@ -148,6 +152,8 @@ public class JOGLRenderer extends Renderer
         gl.glVertex3d(0.0, 0.0, 0.0);
         gl.glVertex3d(0.0, 0.0, axisLength);
         gl.glEnd();
+        
+        gl.glPopMatrix();
     }
 
 
@@ -188,7 +194,7 @@ public class JOGLRenderer extends Renderer
         glut = new GLUT();
         textureManager = new TextureManager(gl, glu);
         displayListManager = new DisplayListManager(gl, glu);
-        blockFilter = new BlockFilter(gl, glu);
+        blockFilter = new GLBlockFilter(gl, glu);
         normalizeCoords = textureManager.isNormalizationRequired();
         
         gl.glClearDepth(1.0f);
@@ -228,6 +234,13 @@ public class JOGLRenderer extends Renderer
     }
     
     
+    @Override
+    public void deleteBlock(BlockInfo blockInfo)
+    {
+        
+    }
+    
+    
     /**
      * Renders all data passed by a line styler
      */
@@ -242,15 +255,11 @@ public class JOGLRenderer extends Renderer
         
         
         // loop and draw all points
-        while ((blockInfo = styler.nextLineBlock()) != null)
+        while ((blockInfo = styler.nextLineBlock(blockFilter)) != null)
         {
-            if (blockFilter.filterBlock(blockInfo))
-                break;
-            
             if (checkList)
             {
-                OpenGLInfo glInfo = (OpenGLInfo)blockInfo.rendererParams;            
-                boolean skip = displayListManager.useDisplayList(blockInfo, glInfo);
+                boolean skip = displayListManager.useDisplayList(blockInfo);
                 if (skip) break;
                 checkList = false;
             }
@@ -457,9 +466,8 @@ public class JOGLRenderer extends Renderer
 
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
-        {
-            OpenGLInfo glInfo = (OpenGLInfo)patch.info.rendererParams;            
-            boolean skip = displayListManager.useDisplayList(patch.info, glInfo);
+        {           
+            boolean skip = displayListManager.useDisplayList(patch.info);
             if (skip) continue;
             
             // select fill or wireframe
@@ -517,8 +525,7 @@ public class JOGLRenderer extends Renderer
             textureManager.useTexture(styler, tex);            
             
             // call display list if available 
-            OpenGLInfo glInfo = (OpenGLInfo)grid.info.rendererParams;            
-            boolean skip = displayListManager.useDisplayList(grid.info, glInfo);
+            boolean skip = displayListManager.useDisplayList(grid.info);
             if (skip) continue;
             
             // select fill or wireframe

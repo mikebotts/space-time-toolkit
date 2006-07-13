@@ -205,7 +205,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	
 	protected void updateView()
 	{
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+        scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 	}
 
 

@@ -15,8 +15,8 @@ package org.vast.stt.project;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -82,7 +82,16 @@ public class Scene implements STTEventProducer, STTEventListener
 
     public void setDataTree(DataTree dataTree)
     {
-        this.dataTree = dataTree;
+        if (this.dataTree != dataTree)
+        {
+            if (this.dataTree != null)
+                this.dataTree.removeListener(this);
+            
+            this.dataTree = dataTree;
+            
+            if (this.dataTree != null)
+                this.dataTree.addListener(this);
+        }
     }
 
 
@@ -94,7 +103,16 @@ public class Scene implements STTEventProducer, STTEventListener
 
 	public void setViewSettings(ViewSettings viewSettings)
 	{
-		this.viewSettings = viewSettings;
+        if (this.viewSettings != viewSettings)
+        {
+            if (this.viewSettings != null)
+                this.viewSettings.removeListener(this);
+            
+            this.viewSettings = viewSettings;
+            
+            if (this.viewSettings != null)
+                this.viewSettings.addListener(this);
+        }
 	}
 
 
@@ -106,7 +124,16 @@ public class Scene implements STTEventProducer, STTEventListener
 
 	public void setTimeSettings(TimeSettings timeSettings)
 	{
-		this.timeSettings = timeSettings;
+        if (this.timeSettings != timeSettings)
+        {
+            if (this.timeSettings != null)
+                this.timeSettings.removeListener(this);
+            
+            this.timeSettings = timeSettings;
+            
+            if (this.timeSettings != null)
+                this.timeSettings.addListener(this);
+        }
 	}
     
     
@@ -216,7 +243,23 @@ public class Scene implements STTEventProducer, STTEventListener
 
     public void handleEvent(STTEvent event)
     {
-        // simply forward the event to scene listeners
-        dispatchEvent(event);        
+        // case of data removed from a DataNode
+        if (event.type == EventType.PROVIDER_DATA_REMOVED)
+        {
+            
+        }
+        
+        // if dataItem event, forward only if item is visible
+        else if (event.producer instanceof DataItem)
+        {
+            DataItem srcItem = (DataItem)event.producer;
+            if (isItemVisible(srcItem))
+                dispatchEvent(event);
+        }
+        else
+        {
+            // simply forward the event to scene listeners
+            dispatchEvent(event);
+        }
     }
 }

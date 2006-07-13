@@ -11,10 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.renderer.opengl;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
+package org.vast.stt.data;
 
 import org.vast.stt.data.BlockInfo;
 
@@ -25,7 +22,7 @@ import org.vast.stt.data.BlockInfo;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Filter whole blocks based on time and bbox
+ * Filter whole blocks based on block info.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -33,21 +30,7 @@ import org.vast.stt.data.BlockInfo;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public class BlockFilter
+public interface BlockFilter
 {
-    protected GL gl;
-    protected GLU glu;
-    
-    
-    public BlockFilter(GL gl, GLU glu)
-    {
-        this.gl = gl;
-        this.glu = glu;
-    }
-    
-    
-    public boolean filterBlock(BlockInfo blockInfo)
-    {
-        return false;
-    }
+    public boolean filterBlock(BlockInfo blockInfo);
 }

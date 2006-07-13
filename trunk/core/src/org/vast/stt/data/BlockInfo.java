@@ -34,4 +34,5 @@ public class BlockInfo
 { 
     public RendererInfo rendererParams;
     public boolean updated = true;
+    public boolean delete = false;
 }

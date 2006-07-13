@@ -11,35 +11,44 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.event;
+package org.vast.stt.renderer.opengl;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.glu.GLU;
+
+import org.vast.stt.data.BlockFilter;
+import org.vast.stt.data.BlockInfo;
 
 
 /**
  * <p><b>Title:</b>
- * Event Type
+ * Block Filter
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Enumeration of event types.
+ * Filter whole blocks based on time and bbox
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Jul 8, 2006
+ * @date Jul 12, 2006
  * @version 1.0
  */
-public enum EventType
+public class GLBlockFilter implements BlockFilter
 {
-    ITEM_STYLE_CHANGED,
-    ITEM_OPTIONS_CHANGED,
-    ITEM_TIME_EXTENT_CHANGED,
-    ITEM_SPATIAL_EXTENT_CHANGED,
+    protected GL gl;
+    protected GLU glu;
     
-    SCENE_TIME_CHANGED,
-    SCENE_VIEW_CHANGED,
-    SCENE_DATA_CHANGED,
     
-    PROVIDER_DATA_CHANGED,
-    PROVIDER_DATA_ADDED,
-    PROVIDER_DATA_REMOVED
+    public GLBlockFilter(GL gl, GLU glu)
+    {
+        this.gl = gl;
+        this.glu = glu;
+    }
+    
+    
+    public boolean filterBlock(BlockInfo blockInfo)
+    {
+        return false;
+    }
 }

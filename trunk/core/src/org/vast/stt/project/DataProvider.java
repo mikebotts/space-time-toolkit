@@ -39,7 +39,10 @@ import org.vast.stt.util.TimeExtent;
 public interface DataProvider extends Resource
 {
 
-	public void updateData() throws DataException;
+    public void forceUpdate();
+    
+    
+    public void updateData() throws DataException;
 	
 	
 	public boolean isUpdating();
