@@ -3,9 +3,10 @@ package org.vast.stt.renderer;
 
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3D;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.Scene;
+import org.vast.stt.project.SceneItem;
 import org.vast.stt.style.StylerVisitor;
 import java.util.*;
 
@@ -52,24 +53,30 @@ public abstract class Renderer implements StylerVisitor
     
     
     protected abstract void drawCameraTarget();
+    
+    
+    public boolean filterBlock(BlockInfo blockInfo)
+    {
+        return false;
+    }
 
 
     public void drawScene()
     {
         setupView();
-        List<DataItem> items = scene.getVisibleItems();
+        List<SceneItem> sceneItems = scene.getSceneItems();
 
-        for (int i = 0; i < items.size(); i++)
+        for (int i = 0; i < sceneItems.size(); i++)
         {
-            DataItem item = items.get(i);
+            SceneItem nextItem = sceneItems.get(i);
 
-            if (!item.isEnabled())
+            if (!nextItem.isVisible())
+                continue;
+            
+            if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            //if (item.getDataProvider().isUpdating())
-            //    continue;
-
-            DataStylerList stylerList = item.getStylerList();
+            DataStylerList stylerList = nextItem.getStylers();
             stylerList.accept(this);
         }
         

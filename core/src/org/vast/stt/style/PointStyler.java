@@ -44,7 +44,6 @@ public class PointStyler extends AbstractStyler
 	public PointStyler()
 	{
 		point = new PointGraphic();
-		setName("Point Styler");
 	}
     
     

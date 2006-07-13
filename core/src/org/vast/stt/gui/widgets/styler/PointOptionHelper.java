@@ -1,7 +1,6 @@
 package org.vast.stt.gui.widgets.styler;
 
 import java.util.List;
-
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
@@ -15,20 +14,21 @@ import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.PointStyler;
 
-public class PointOptionHelper implements SelectionListener {
 
-	OptionController optionController;
-	PointStyler styler;
+public class PointOptionHelper implements SelectionListener
+{
+ 	OptionController optionController;
 	PointSymbolizer symbolizer;
+    
 
 	public PointOptionHelper(OptionController loc){
 		optionController = loc;
-		styler = (PointStyler)optionController.getStyler();
-		symbolizer = styler.getSymbolizer();
+        symbolizer = (PointSymbolizer)optionController.getSymbolizer();
 	}
 	
 	public Color getPointColor(){
@@ -91,8 +91,7 @@ public class PointOptionHelper implements SelectionListener {
 			Spinner sizeSpinner = (Spinner)control;
 			float size = (float)sizeSpinner.getSelection();
 			setPointSize(size);
-  		    
-			styler.updateDataMappings();
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		} else if(control == optionControls[1].getControl()) {
 			Button colorButton = (Button)control;
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
@@ -102,8 +101,7 @@ public class PointOptionHelper implements SelectionListener {
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			setPointColor(sldColor);
-			
-			styler.updateDataMappings();
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		}
 	}
 

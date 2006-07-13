@@ -32,20 +32,20 @@ import java.util.ArrayList;
  * @date Nov 17, 2005
  * @version 1.0
  */
-public class DataEntryList extends ArrayList<DataEntry> implements DataEntry
+public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 {
 	static final long serialVersionUID = 0;
 	protected String name;
 	protected DataItemIterator iterator;
 	
 	
-	public DataEntryList()
+	public DataFolder()
 	{
 		iterator = new DataItemIterator(this);
 	}
 	
 	
-	public DataEntryList(int listSize)
+	public DataFolder(int listSize)
 	{
 		super(listSize);
 		iterator = new DataItemIterator(this);

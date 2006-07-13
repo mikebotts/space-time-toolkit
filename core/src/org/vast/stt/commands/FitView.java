@@ -61,23 +61,7 @@ public class FitView implements Command
 
     public void fitScene()
     {
-        SpatialExtent bbox = null;
-        Iterator<DataItem> it = scene.getDataList().getItemIterator();
-
-        // loop though each enabled item in the scene
-        while (it.hasNext())
-        {
-            DataItem item = it.next();
-            if (!item.isEnabled())
-                continue;
-
-            SpatialExtent nextBbox = item.getBoundingBox();
-            
-            if (bbox == null)
-                bbox = nextBbox.copy();
-            else
-                bbox.add(nextBbox);
-        }
+        //SpatialExtent bbox = scene.getRootFolder().getBoundingBox();
 
         // need to convert bbox to view settings somehow
         //scene.getViewSettings().setBoundingBox(newExtent);
@@ -86,7 +70,7 @@ public class FitView implements Command
 
     public void fitItem()
     {
-        SpatialExtent extent = item.getBoundingBox();
+        //SpatialExtent extent = item.getBoundingBox();
         // need to convert bbox to view settings somehow
         //scene.getViewSettings().setSpatitalExtent(extent);
     }

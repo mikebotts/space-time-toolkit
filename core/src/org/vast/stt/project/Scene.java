@@ -14,11 +14,16 @@
 package org.vast.stt.project;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
+import org.vast.stt.style.StylerFactory;
 
 
 /**
@@ -38,33 +43,23 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
 public class Scene implements STTEventProducer, STTEventListener
 {
 	protected String name;
+    protected DataTree dataTree;
     protected Renderer renderer;
 	protected ViewSettings viewSettings;
 	protected TimeSettings timeSettings;
-	protected DataEntryList dataList;
-    protected ArrayList<STTEventListener> listeners;
-    protected ArrayList<DataItem> visibleItems;
+    protected STTEventListeners listeners;
+    protected ArrayList<SceneItem> sceneItems;
+    protected StylerFactory stylerFactory;
 
 
     public Scene()
     {
         renderer = new JOGLRenderer();
         renderer.setScene(this);
-        listeners = new ArrayList<STTEventListener>(2);
-        visibleItems = new ArrayList<DataItem>();
+        stylerFactory = new StylerFactory();
+        listeners = new STTEventListeners(2);
+        sceneItems = new ArrayList<SceneItem>();
     }
-    
-    
-	public DataEntryList getDataList()
-	{
-		return dataList;
-	}
-
-
-	public void setDataList(DataEntryList dataList)
-	{
-		this.dataList = dataList;
-	}
 
 
 	public String getName()
@@ -77,6 +72,18 @@ public class Scene implements STTEventProducer, STTEventListener
 	{
 		this.name = name;
 	}
+    
+
+    public DataTree getDataTree()
+    {
+        return dataTree;
+    }
+
+
+    public void setDataTree(DataTree dataTree)
+    {
+        this.dataTree = dataTree;
+    }
 
 
 	public ViewSettings getViewSettings()
@@ -115,40 +122,76 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
-    public ArrayList<DataItem> getVisibleItems()
+    public List<SceneItem> getSceneItems()
     {
-        return visibleItems;
+        return this.sceneItems;
     }
     
     
-    public void setItemVisibility(DataItem item, boolean visible)
+    public void setItemVisibility(DataEntry entry, boolean visible)
     {
-        if (visible)
+        if (entry instanceof DataItem)
         {
-            if (!visibleItems.contains(item))
+            DataItem dataItem = (DataItem)entry;
+            boolean found = false;
+            
+            // try to find entry in sceneItems list
+            for (int i=0; i<sceneItems.size(); i++)
             {
-                visibleItems.add(item);
-                item.addListener(this);
+                SceneItem nextItem = sceneItems.get(i);
+                if (nextItem.getDataItem() == dataItem)
+                {
+                    nextItem.setVisible(visible);
+                    found = true;
+                }
             }
+            
+            // if not found create a new SceneItem + prepare all stylers
+            if (!found)
+            {
+                SceneItem newSceneItem = new SceneItem();
+                newSceneItem.setDataItem(dataItem);
+                newSceneItem.setVisible(visible);
+                List<Symbolizer> symbolizers = dataItem.getSymbolizers();
+                for (int i=0; i<symbolizers.size(); i++)
+                {
+                    DataStyler styler = stylerFactory.createStyler(symbolizers.get(i));
+                    styler.setDataItem(dataItem);
+                    newSceneItem.getStylers().add(styler);
+                }
+                sceneItems.add(newSceneItem);
+            }
+            
+            // register scene as a listener to the item
+            if (visible)
+                dataItem.addListener(this);
+            else
+                dataItem.removeListener(this);
         }
-        else
+        
+        else if (entry instanceof DataFolder)
         {
-            visibleItems.remove(item);
-            item.removeListener(this);
+            
         }
     }
     
     
-    public boolean isItemVisible(DataItem item)
+    public boolean isItemVisible(DataItem dataItem)
     {
-        return visibleItems.contains(item);
+        for (int i=0; i<sceneItems.size(); i++)
+        {
+            SceneItem nextItem = sceneItems.get(i);
+            if (nextItem.getDataItem() == dataItem && nextItem.isVisible())
+                return true;
+        }
+        
+        return false;
     }
 
 
     public void addListener(STTEventListener listener)
     {
-        if (!listeners.contains(listener))
-            listeners.add(listener);        
+        listeners.add(listener);        
     }
 
 
@@ -164,26 +207,16 @@ public class Scene implements STTEventProducer, STTEventListener
     }
 
 
-    /**
-     * Sends an event to all registered listeners except
-     * if the sender and listener are the same object.
-     */
-    public void dispatchEvent(Object sender, STTEvent event)
+    public void dispatchEvent(STTEvent event)
     {
         event.producer = this;
-        
-        for (int i=0; i<listeners.size(); i++)
-        {
-            STTEventListener next = listeners.get(i);
-            if (next != sender)
-                next.handleEvent(event);
-        }        
+        listeners.dispatchEvent(event);        
     }
     
 
-    public void handleEvent(STTEvent e)
+    public void handleEvent(STTEvent event)
     {
         // simply forward the event to scene listeners
-        dispatchEvent(this, e);        
+        dispatchEvent(event);        
     }
 }

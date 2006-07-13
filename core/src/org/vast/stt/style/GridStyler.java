@@ -45,7 +45,6 @@ public class GridStyler extends AbstractStyler
 	{
         patch = new GridPatchGraphic();
         point = new GridPointGraphic();
-        setName("Grid Styler");
 	}
     
     

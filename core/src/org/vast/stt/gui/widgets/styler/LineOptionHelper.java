@@ -7,18 +7,19 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
+import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.LineStyler;
 
-public class LineOptionHelper implements SelectionListener {
 
+public class LineOptionHelper implements SelectionListener
+{
 	OptionController optionController;
-	LineStyler styler;
+	LineSymbolizer symbolizer;
 	//  Need a way to specify all options/types/args so 
 	//  AdvancedOptions can use them also - just repeating
 	//  code for now, and not using the labels/optTypes fields - TC
@@ -29,11 +30,11 @@ public class LineOptionHelper implements SelectionListener {
 		optionController = loc;
 		//  styler must not change for this to work
 		
-		styler = (LineStyler)optionController.getStyler();
+		symbolizer = (LineSymbolizer)optionController.getSymbolizer();
 	}
 	
 	public float getLineWidth(){
-		ScalarParameter widthSP = styler.getSymbolizer().getStroke().getWidth();
+		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
 		if(widthSP == null)
 			return 1.0f;
 		Object widthCon = widthSP.getConstantValue();
@@ -43,7 +44,7 @@ public class LineOptionHelper implements SelectionListener {
 	}
 	
 	public org.vast.ows.sld.Color getLineColor(){
-		Color colorSP = styler.getSymbolizer().getStroke().getColor();
+		Color colorSP = symbolizer.getStroke().getColor();
 		if(colorSP == null)
 			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
 		return colorSP;
@@ -54,7 +55,7 @@ public class LineOptionHelper implements SelectionListener {
 	 * @param w - width
 	 */
 	public void setLineWidth(float w){
-		Stroke stroke = styler.getSymbolizer().getStroke();
+		Stroke stroke = symbolizer.getStroke();
 		ScalarParameter width = new ScalarParameter();
 		width.setConstantValue(w);
 		stroke.setWidth(width);
@@ -65,7 +66,7 @@ public class LineOptionHelper implements SelectionListener {
 	 * @param Color
 	 */
 	public void setLineColor(Color color) {
-		Stroke stroke = styler.getSymbolizer().getStroke();
+		Stroke stroke = symbolizer.getStroke();
 		stroke.setColor(color);
 	}
 	
@@ -80,8 +81,7 @@ public class LineOptionHelper implements SelectionListener {
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			setLineWidth(w);
-			styler.updateDataMappings();
-            styler.getDataItem().dispatchEvent(this, new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		} else if (control == optionControl[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
@@ -92,8 +92,7 @@ public class LineOptionHelper implements SelectionListener {
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControl[1].setColorLabelColor(sldColor); 
 			setLineColor(sldColor);
-			styler.updateDataMappings();
-            styler.getDataItem().dispatchEvent(this, new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		}
 	}
 

@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.Scene;
 
 
 /**
@@ -82,7 +83,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 			{
 				boolean targetshown = scene.getViewSettings().isShowCameraTarget();
                 scene.getViewSettings().setShowCameraTarget(!targetshown);
-                scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 			}
 		};
         ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
@@ -137,14 +138,14 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     
     
     @Override
-    public void assignScene()
+    public void setScene(Scene sc)
     {
         // make sure we dispose previous renderer
         if (scene != null)
             scene.getRenderer().dispose();
 
         // call parent method !!
-        super.assignScene();
+        super.setScene(sc);
         
         if (scene != null)
         {        

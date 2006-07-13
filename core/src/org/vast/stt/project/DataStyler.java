@@ -38,12 +38,7 @@ import org.vast.stt.util.SpatialExtent;
  */
 public interface DataStyler
 {
-	public void setName(String name);
 
-
-	public String getName();
-	
-	
 	public void setSymbolizer(Symbolizer sym);
 
 
@@ -69,10 +64,4 @@ public interface DataStyler
 	
 	
 	public void accept(StylerVisitor visitor);
-	
-	
-	public boolean isEnabled();
-	
-	
-	public void setEnabled(boolean enabled);
 }

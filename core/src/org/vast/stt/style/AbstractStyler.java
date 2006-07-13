@@ -40,8 +40,6 @@ import org.vast.stt.util.SpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
-    protected String name;
-    protected boolean enabled;
     protected DataItem dataItem;
     protected DataNode dataNode;
     protected SpatialExtent bbox;
@@ -68,30 +66,6 @@ public abstract class AbstractStyler implements DataStyler
     public void setDataItem(DataItem dataItem)
 	{
 		this.dataItem = dataItem;
-	}
-
-
-	public boolean isEnabled()
-	{
-		return enabled;
-	}
-
-
-	public void setEnabled(boolean enabled)
-	{
-		this.enabled = enabled;
-	}
-
-
-	public String getName()
-	{
-		return name;
-	}
-
-
-	public void setName(String name)
-	{
-		this.name = name;		
 	}
     
     

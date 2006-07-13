@@ -1,6 +1,5 @@
 package org.vast.stt.gui.widgets.styler;
 
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,24 +12,30 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.ScalarParameter;
-import org.vast.stt.project.DataStyler;
+import org.vast.ows.sld.Symbolizer;
+
 
 /**
  * 
- * 
- * @author tcook
+ * <p><b>Title:</b>
+ * Advanced Geometry Tab
+ * </p>
  *
+ * <p><b>Description:</b><br/>
+ * TODO AdvancedGeometryTab type description
+ * </p>
  *
- * 
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
  */
-public class AdvancedGeometryTab extends ScrolledComposite 
-	implements SelectionListener
+public class AdvancedGeometryTab extends ScrolledComposite implements SelectionListener
 {
 	//Composite parent;
 	Composite mainGroup;
@@ -43,7 +48,7 @@ public class AdvancedGeometryTab extends ScrolledComposite
 	Text [] gainText;
 	Text [] offsetText;
 	Button[] lutButton;
-	DataStyler activeStyler;
+    Symbolizer activeSymbolizer;
 	String [] mappableItems;
 	Display display = PlatformUI.getWorkbench().getDisplay();
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
@@ -145,8 +150,8 @@ public class AdvancedGeometryTab extends ScrolledComposite
 	}
 	
 	//  active Styler should NOT be a compositeStyler here  
-	public void setActiveStyler(DataStyler styler){
-		this.activeStyler = styler;
+	public void setActiveSymbolizer(Symbolizer symbolizer){
+		this.activeSymbolizer = symbolizer;
 		updateMappingCombos();
 		//  recompute scroller minSize, as it may have changed
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -158,11 +163,11 @@ public class AdvancedGeometryTab extends ScrolledComposite
 	 *  TODO - support constants, LUTS-
 	 */
 	private void updateMappingCombos(){
-		if(activeStyler == null){
+		if(activeSymbolizer == null){
 			System.err.println("AdvancedGeomTab.updateMappings - null styler");
 			return;
 		}
-		Geometry geom = activeStyler.getSymbolizer().getGeometry();
+		Geometry geom = activeSymbolizer.getGeometry();
 		ScalarParameter xparam = geom.getX();
 		ScalarParameter yparam = geom.getY();
 		ScalarParameter zparam = geom.getZ();
@@ -232,7 +237,7 @@ public class AdvancedGeometryTab extends ScrolledComposite
 	}
 	
 	private void doMapping(int index){
-		Geometry geom = activeStyler.getSymbolizer().getGeometry();
+		Geometry geom = activeSymbolizer.getGeometry();
 		int selIndex = mapFromCombo[index].getSelectionIndex();
 		ScalarParameter sp = new ScalarParameter();
 		sp.setPropertyName(mappableItems[selIndex]);
@@ -255,7 +260,7 @@ public class AdvancedGeometryTab extends ScrolledComposite
 		default:
 			break;
 		}
-		activeStyler.updateDataMappings();
+		// TODO send event 
 	}
 	
 	public void widgetSelected(SelectionEvent e) {

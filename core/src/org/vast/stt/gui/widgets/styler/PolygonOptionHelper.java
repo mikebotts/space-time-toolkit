@@ -10,17 +10,17 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataStyler;
 
-public class PolygonOptionHelper implements SelectionListener {
 
+public class PolygonOptionHelper implements SelectionListener
+{
 	OptionController optionController;
-	DataStyler styler;
 	PolygonSymbolizer symbolizer;
+    
 	
 	public PolygonOptionHelper(OptionController loc){
 		optionController = loc;
-		styler = optionController.getStyler();
+        symbolizer = (PolygonSymbolizer)optionController.getSymbolizer();
 	}
 	
 	public Color getFillColor(){

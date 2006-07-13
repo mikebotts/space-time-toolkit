@@ -7,31 +7,35 @@ import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
 import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.style.GridStyler;
-import org.vast.stt.style.TextureMappingStyler;
 
-public class GridOptionHelper implements SelectionListener {
 
+public class GridOptionHelper implements SelectionListener
+{
 	OptionController optionController;
-	DataStyler styler;
 	GridSymbolizer symbolizer;
+    
 	
 	public GridOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
-		styler = optionController.getStyler();
+        Symbolizer sym = optionController.getSymbolizer();
 		//  a bit of hackery so I can reuse GridOptionHelper for Textures
 		//  rethink this logic...
-		if(styler instanceof GridStyler)
-			symbolizer = (GridSymbolizer)styler.getSymbolizer();
-		else if (styler instanceof TextureMappingStyler) {
-			TextureSymbolizer symTmp= (TextureSymbolizer)styler.getSymbolizer();
-			symbolizer = symTmp.getGrid();
-		}
+        if(sym instanceof GridSymbolizer)
+            symbolizer = (GridSymbolizer)sym;
+        else if (sym instanceof TextureSymbolizer) {
+            symbolizer = ((TextureSymbolizer)sym).getGrid();
+        }
+//		if(symbolizer instanceof GridStyler)
+//			symbolizer = (GridSymbolizer)styler.getSymbolizer();
+//		else if (styler instanceof TextureMappingStyler) {
+//			TextureSymbolizer symTmp= (TextureSymbolizer)styler.getSymbolizer();
+//			symbolizer = symTmp.getGrid();
+//		}
 	}
 	
 	public Color getFillColor(){

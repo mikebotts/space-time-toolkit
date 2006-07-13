@@ -5,19 +5,33 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
+import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.style.PointStyler;
 
-public class AdvancedPointController extends AdvancedOptionController 
-	implements SelectionListener {
+
+/**
+ * <p><b>Title:</b>
+ * Advanced Point Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds advanced Point controls for Advanced Dialog
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
+ */
+public class AdvancedPointController extends AdvancedOptionController implements SelectionListener
+{
 	private Composite parent;
 	private PointOptionHelper pointOptionHelper;
 	
-	public AdvancedPointController(Composite parent, DataStyler styler){
+	public AdvancedPointController(Composite parent, PointSymbolizer symbolizer){
 		this.parent = parent;
-		this.styler = styler;
+		this.symbolizer = symbolizer;
 		
 		pointOptionHelper = new PointOptionHelper(this);
 		buildControls();
@@ -50,7 +64,7 @@ public class AdvancedPointController extends AdvancedOptionController
 	public void setMappableItems(String [] items){
 		super.setMappableItems(items);
 		//  Size
-		ScalarParameter sizeSP = ((PointStyler)styler).getSymbolizer().getGraphic().getSize();
+		ScalarParameter sizeSP = ((PointSymbolizer)symbolizer).getGraphic().getSize();
 		//if(sizeSP != null)
 		setOptionState(sizeSP, 0);
 		//  Color

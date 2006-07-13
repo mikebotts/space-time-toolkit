@@ -62,6 +62,21 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
         else
             clearView();
     }
+    
+    
+    public void setDataItem(DataItem dataItem)
+    {
+        if (item != dataItem)
+        {
+            if (item != null)
+                item.removeListener(this);
+            
+            item = dataItem;
+            
+            if (item != null)
+                item.addListener(this);
+        }
+    }
         
     
     @Override
@@ -111,22 +126,12 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
 			if (selectedEntry instanceof DataItem)
             {
 			    DataItem selectedItem = (DataItem)selectedEntry;
-                if (item != selectedItem)
-                {
-                    if (item != null)
-                        item.removeListener(this);
-                    
-                    item = selectedItem;
-                    
-                    if (item != null)
-                        item.addListener(this);
-                    
-                    refreshView();
-                }
+                setDataItem(selectedItem);
+                refreshView();
             }
             else
             {
-                item = null;
+                setDataItem(null);
                 clearView();
             }
 		}		

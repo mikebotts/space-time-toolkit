@@ -6,30 +6,30 @@ import org.eclipse.swt.widgets.Control;
 import org.vast.ows.sld.Dimensions;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.style.RasterStyler;
-import org.vast.stt.style.TextureMappingStyler;
+
 
 public class RasterOptionHelper implements SelectionListener 
 {
 	OptionController optionController;
 	RasterSymbolizer symbolizer;
-	DataStyler styler;
+
 	
 	public RasterOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
-		DataStyler styler = optionController.getStyler();
+		Symbolizer sym = optionController.getSymbolizer();
 		//  a bit of hackery so I can reuse RasterOptionHelper for Textures
 		//  rethink this logic...
-		if(styler instanceof RasterStyler)
-			symbolizer = (RasterSymbolizer)styler.getSymbolizer();
-		else if (styler instanceof TextureMappingStyler) {
-			TextureSymbolizer symTmp= (TextureSymbolizer)styler.getSymbolizer();
-			symbolizer = symTmp.getImagery();
+		if(sym instanceof RasterSymbolizer)
+			symbolizer = (RasterSymbolizer)sym;
+		else if (sym instanceof TextureSymbolizer) {
+            symbolizer = ((TextureSymbolizer)sym).getImagery();
 		}
 	}
 	
@@ -61,9 +61,9 @@ public class RasterOptionHelper implements SelectionListener
 		OptionControl[] optionControls = optionController.getControls();
 
 		if(control == optionControls[0].getControl()) {
-			styler.updateDataMappings();
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		} else if(control == optionControls[1].getControl()) {
-			styler.updateDataMappings();
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		}
 	}
 

@@ -17,17 +17,20 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.functions.LinearAdjustment;
 import org.vast.stt.gui.widgets.OptionController;
 
-abstract public class AdvancedOptionController extends OptionController
-		implements SelectionListener {
+abstract public class AdvancedOptionController extends OptionController implements SelectionListener
+{
 	protected Combo [] mapFromCombo;
 	protected Text [] gainText;
 	protected Text [] offsetText;
 	protected Button [] lutButton;
 	protected String [] mappableItems;
-	Display display = PlatformUI.getWorkbench().getDisplay();
+    Display display = PlatformUI.getWorkbench().getDisplay();
+    
+    
 	abstract protected void doLut(int i);
 	abstract protected void doMapping(int i);
 	
+    
 	// TODO:  load these based on actual mappable items	
 	public void setMappableItems(String [] items){
 		this.mappableItems = new String[items.length+1];

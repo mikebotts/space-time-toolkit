@@ -1,15 +1,9 @@
+
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.gui.widgets.time.TimeExtentWidget;
-import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataProvider;
+
 
 /**
  * <p><b>Title:</b><br/>
@@ -27,36 +21,30 @@ import org.vast.stt.project.DataProvider;
  * @version 1.0
  * 
  */
-public class TimeExtentView extends ViewPart implements ISelectionListener
-{	
-	public static final String ID = "STT.TimeExtentView";
-	private TimeExtentWidget timeSettingsWidget;
-	
-	@Override
-	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
-		timeSettingsWidget = new TimeExtentWidget(parent); 
-		getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);		
-	}
-	@Override
-	public void setFocus() {
-	}
+public class TimeExtentView extends DataItemView
+{
+    public static final String ID = "STT.TimeExtentView";
+    private TimeExtentWidget timeSettingsWidget;
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
-		if (part instanceof SceneTreeView)
-		{
-			DataEntry selectedItem = (DataEntry)((IStructuredSelection)selection).getFirstElement();
-			if(selectedItem instanceof DataItem) { 
-				System.err.println("item " + selectedItem);
-				DataProvider prov = ((DataItem)selectedItem).getDataProvider();
-				//  If provider is null, this widget isn't supported.
-				if(prov!=null) {
-					timeSettingsWidget.setDataItem((DataItem)selectedItem);
-				}
-			} else {
-				//  TODO  support BBox for DataItemList
-			}
-		}		
-	}
+
+    @Override
+    public void createPartControl(Composite parent)
+    {
+        timeSettingsWidget = new TimeExtentWidget(parent);
+        super.createPartControl(parent);
+    }
+
+
+    @Override
+    public void updateView()
+    {
+        timeSettingsWidget.setDataItem(item);
+    }
+
+
+    @Override
+    public void clearView()
+    {
+        //timeSettingsWidget.disable();
+    }
 }

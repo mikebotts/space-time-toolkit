@@ -13,12 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTConfig;
-import org.vast.stt.data.DataException;
-import org.vast.stt.project.DataEntryList;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataItemIterator;
-import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.Scene;
+import org.vast.util.DateTime;
 
 
 public final class MasterTimeWidget implements SelectionListener, TimeListener
@@ -120,32 +116,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     {
         //  TODO  mod, support multiple Scenes (after Scene is inited)
         Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
-        //  Do I need to reset scene's TimeSettings here?
-        //scene.setTimeSettings();
-        //
-        DataEntryList dataList = scene.getDataList();
-        DataItemIterator dit = dataList.getItemIterator();
-        DataItem itemTmp = null;
-        DataProvider provTmp = null;
-        while (dit.hasNext())
-        {
-            itemTmp = dit.next();
-            provTmp = itemTmp.getDataProvider();
-            if (provTmp.isTimeSubsetSupported() && itemTmp.isEnabled())
-            {
-                provTmp.getTimeExtent().setBaseTime(newTime);
-                System.err.println("New Time for: " + itemTmp.getName() + " = " + newTime);
-                try
-                {
-                    provTmp.updateData();
-                }
-                catch (DataException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
+        scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
     }
     
     

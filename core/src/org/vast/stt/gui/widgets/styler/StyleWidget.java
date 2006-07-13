@@ -2,6 +2,8 @@
 package org.vast.stt.gui.widgets.styler;
 
 import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -19,10 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.DataStylerList;
-import org.vast.stt.style.StylerFactory;
-import org.vast.stt.style.StylerFactory.StylerType;
+import org.vast.ows.sld.*;
 
 
 /**
@@ -43,7 +42,7 @@ import org.vast.stt.style.StylerFactory.StylerType;
  */
 public class StyleWidget extends CheckOptionTable
 {
-    DataStyler activeStyler;
+    Symbolizer activeSymbolizer;
     OptionListener optListener;
 
 
@@ -67,7 +66,7 @@ public class StyleWidget extends CheckOptionTable
     public void setDataItem(DataItem item)
     {
         super.setDataItem(item);
-        setStyler(item.getStylerList());
+        setSymbolizers(item.getSymbolizers());
     }
 
 
@@ -75,17 +74,17 @@ public class StyleWidget extends CheckOptionTable
      * Make this DataStyler the currently active Styler in the StyleWidget
      * @param newStyler
      */
-    private void setStyler(DataStylerList stylers)
+    private void setSymbolizers(List<Symbolizer> symbolizerList)
     {
         //  Change cbTableViewer contents
-        checkboxTableViewer.setInput(stylers);
-        Iterator it = stylers.iterator();
-        DataStyler stylerTmp;
+        checkboxTableViewer.setInput(symbolizerList);
+        Iterator<Symbolizer> it = symbolizerList.iterator();
+        Symbolizer symTmp;
         //  Set init state of checkboxes
         while (it.hasNext())
         {
-            stylerTmp = (DataStyler) it.next();
-            checkboxTableViewer.setChecked(stylerTmp, stylerTmp.isEnabled());
+            symTmp = it.next();
+            checkboxTableViewer.setChecked(symTmp, symTmp.isEnabled());
         }
         checkboxTableViewer.getTable().setSelection(0);
         ISelection selection = checkboxTableViewer.getSelection();
@@ -93,42 +92,42 @@ public class StyleWidget extends CheckOptionTable
     }
 
 
-    void addStyle(DataStyler styler)
+    void addStyle(Symbolizer symbolizer)
     {
         //  Add Checkbox to stylers Set and rerender Table
-        dataItem.getStylerList().add(styler);
-        activeStyler = null;
+        dataItem.getSymbolizers().add(symbolizer);
+        activeSymbolizer = null;
         //  Change options panel to show Point options
-        checkboxTableViewer.setInput(dataItem.getStylerList());
+        checkboxTableViewer.setInput(dataItem.getSymbolizers());
     }
 
 
     /**
      * create a new styler and call addStyle() with it
      */
-    public void createNewStyler(String stylerName, StylerType stylerType)
+//    public void createNewStyler(String stylerName, StylerType stylerType)
+//    {
+//        DataStyler newStyler = StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem);
+//        if (newStyler != null)
+//        {
+//            //  Hack to set geom
+//            newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
+//            newStyler.setName(stylerName);
+//            newStyler.updateDataMappings();
+//            newStyler.setEnabled(false);
+//            addStyle(newStyler);
+//        }
+//
+//    }
+
+
+    private void removeStyle(Symbolizer symbolizer)
     {
-        DataStyler newStyler = StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem);
-        if (newStyler != null)
-        {
-            //  Hack to set geom
-            newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
-            newStyler.setName(stylerName);
-            newStyler.updateDataMappings();
-            newStyler.setEnabled(false);
-            addStyle(newStyler);
-        }
-
-    }
-
-
-    private void removeStyle(DataStyler styler)
-    {
-        dataItem.getStylerList().remove(styler);
+        dataItem.getSymbolizers().remove(symbolizer);
         //  reset activeStyler\
         // ...
         //TableItem [] items = checkboxTableViewer.getTable().getItems();
-        checkboxTableViewer.setInput(dataItem.getStylerList());
+        checkboxTableViewer.setInput(dataItem.getSymbolizers());
     }
 
 
@@ -137,8 +136,8 @@ public class StyleWidget extends CheckOptionTable
     {
         // TODO Auto-generated method stub
         //  e.getElement returns checked Styler
-        DataStyler styler = (DataStyler) e.getElement();
-        styler.setEnabled(e.getChecked());
+        Symbolizer symbolizer = (Symbolizer) e.getElement();
+        symbolizer.setEnabled(e.getChecked());
     }
 
 
@@ -147,11 +146,11 @@ public class StyleWidget extends CheckOptionTable
     {
         System.err.println("sel source is" + e.getSource());
         StructuredSelection selection = (StructuredSelection) e.getSelection();
-        DataStyler styler = (DataStyler) selection.getFirstElement();
+        Symbolizer symbolizer = (Symbolizer) selection.getFirstElement();
         //  Check for empty selection (happens when buildControls() is called)
-        if (styler == null)
+        if (symbolizer == null)
         {
-            Iterator it = dataItem.getStylerList().iterator();
+            Iterator it = dataItem.getSymbolizers().iterator();
             if (!it.hasNext())
             {
                 //  stylerSet is currently empty
@@ -161,17 +160,18 @@ public class StyleWidget extends CheckOptionTable
             //  Reset selected to first in Table
             checkboxTableViewer.getTable().setSelection(0);
             selection = (StructuredSelection) checkboxTableViewer.getSelection();
-            styler = (DataStyler) selection.getFirstElement();
+            symbolizer = (Symbolizer) selection.getFirstElement();
         }
         //  Check to see if selected Styler has really changed
-        if (styler == activeStyler)
+        if (symbolizer == activeSymbolizer)
         {
             System.err.println("Selection not really changed");
             return;
         }
-        System.err.println("Selection CHANGED");
-        activeStyler = styler;
-        optionChooser.buildControls(styler);
+        //System.err.println("Selection CHANGED");
+        activeSymbolizer = symbolizer;
+        ((StyleOptionChooser)optionChooser).setDataItem(dataItem);
+        optionChooser.buildControls(symbolizer);
     }
 
 
@@ -190,8 +190,8 @@ public class StyleWidget extends CheckOptionTable
         }
         else if (control == deleteButton)
         {
-            if (activeStyler != null)
-                removeStyle(activeStyler); //  remove currently selected row   
+            if (activeSymbolizer != null)
+                removeStyle(activeSymbolizer); //  remove currently selected row   
         }
         else if (control == enabledButton)
         {
@@ -210,7 +210,7 @@ public class StyleWidget extends CheckOptionTable
     {
         try
         {
-            new AdvancedStyleDialog(dataItem, activeStyler, optListener);
+            new AdvancedStyleDialog(dataItem, activeSymbolizer, optListener);
         }
         catch (Exception e)
         {
@@ -227,7 +227,7 @@ public class StyleWidget extends CheckOptionTable
         int rc = asd.getReturnCode();
         if (rc == IDialogConstants.OK_ID)
         {
-            createNewStyler(asd.getStylerName(), asd.getStylerType());
+            //createNewStyler(asd.getStylerName(), asd.getStylerType());
         }
 
     }
@@ -249,9 +249,8 @@ class StyleTableContentProvider implements IStructuredContentProvider
 {
     public Object[] getElements(Object inputElement)
     {
-        DataStylerList stylers = (DataStylerList)inputElement;
-        DataStyler[] stylerArr = stylers.toArray(new DataStyler[] {});
-        return stylerArr;
+        List symbolizers = (List)inputElement;
+        return symbolizers.toArray();
     }
 
 
@@ -277,7 +276,7 @@ class StyleTableLabelProvider extends LabelProvider
 
     public String getText(Object element)
     {
-        DataStyler styler = (DataStyler) element;
-        return styler.getName();
+        Symbolizer sym = (Symbolizer) element;
+        return sym.getName();
     }
 }
