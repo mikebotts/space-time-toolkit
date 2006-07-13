@@ -56,7 +56,7 @@ public class DataStylerList extends ArrayList<DataStyler>
         for (int i = 0; i < this.size(); i++)
         {
             stylerTmp = this.get(i);
-            if ((stylerTmp != null) && (stylerTmp.isEnabled()))
+            if ((stylerTmp != null) && (stylerTmp.getSymbolizer().isEnabled()))
                 stylerTmp.accept(visitor);
         }
     }

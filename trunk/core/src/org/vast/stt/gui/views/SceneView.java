@@ -60,23 +60,18 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     }
     
     
-    /**
-     * Method called when the scene attached to this view 
-     * should be changed
-     */
-    protected void assignScene()
+    public void setScene(Scene sc)
     {
-        if (scene != null)
-            scene.removeListener(this);
-        
-        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
-        if (pageInput != null)
-            this.scene = pageInput.getScene();
-        else 
-            this.scene = null;
-        
-        if (scene != null)
-            scene.addListener(this);
+        if (scene != sc)
+        {
+            if (scene != null)
+                scene.removeListener(this);
+            
+            this.scene = sc;
+            
+            if (scene != null)
+                scene.addListener(this);
+        }
     }
 
     
@@ -84,7 +79,6 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     public void createPartControl(Composite parent)
     {
         getSite().getWorkbenchWindow().addPageListener(this);
-        //assignScene();
     }
     
 
@@ -127,7 +121,11 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     public void pageActivated(IWorkbenchPage page)
     {
-        assignScene();
+        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene(pageInput.getScene());
+        else 
+            setScene(null);
         refreshView();
     }
 

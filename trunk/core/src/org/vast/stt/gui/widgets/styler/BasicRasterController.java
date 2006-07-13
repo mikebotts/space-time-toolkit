@@ -1,23 +1,32 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.RasterStyler;
+
 
 /**
- * 
- * @author tcook
- * @since: 3/16/05
+ * <p><b>Title:</b>
+ * Basic Raster Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds basic Raster controls for StyleWidget
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
  */
-
 public class BasicRasterController extends OptionController
 {
 	private RasterOptionHelper rasterOptionHelper;
 	
-	public BasicRasterController(Composite parent, RasterStyler styler){
-		this.styler = styler;
+	public BasicRasterController(Composite parent, RasterSymbolizer symbolizer){
+		this.symbolizer = symbolizer;
 
 		rasterOptionHelper = new RasterOptionHelper(this);
 		buildControls(parent);

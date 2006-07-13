@@ -21,7 +21,6 @@ import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.style.*;
 import org.vast.util.*;
 import org.w3c.dom.*;
 import org.vast.process.*;
@@ -47,7 +46,6 @@ public class ProjectReader
 {
 	private DOMReader dom;
     private Hashtable<String, Object> objectIds;
-	private StylerFactory stylerFactory;
 	private SLDReader sldReader;
     private DataProviderReader providerReader;
 	
@@ -55,7 +53,6 @@ public class ProjectReader
 	public ProjectReader()
 	{
         objectIds = new Hashtable<String, Object>();
-		stylerFactory = new StylerFactory();
 		sldReader = new SLDReader();
         providerReader = new DataProviderReader();
 	}
@@ -298,8 +295,8 @@ public class ProjectReader
 		
 		// read data item list
 		Element listElt = dom.getElement(sceneElt, "contents/DataList");
-		DataEntryList dataList = (DataEntryList)readDataEntry(listElt, scene);
-		scene.setDataList(dataList);
+		DataTree dataTree = readDataTree(listElt, scene);
+		scene.setDataTree(dataTree);
 		
 		return scene;
 	}
@@ -478,6 +475,19 @@ public class ProjectReader
 		Vector3D vect = new Vector3D(x, y, z);		
 		return vect;
 	}
+    
+    
+    /**
+     * Reads the whole Data Tree with items and folders
+     * @param dataListElt
+     * @param parentScene
+     * @return
+     */
+    protected DataTree readDataTree(Element dataListElt, Scene parentScene)
+    {
+        DataFolder folder = (DataFolder)readDataEntry(dataListElt, parentScene);
+        return new DataTree(folder);
+    }
 	
 	
 	/**
@@ -505,16 +515,6 @@ public class ProjectReader
 		{
 			// name
 			dataEntry.setName(dom.getElementValue(dataEntryElt, "name"));
-			
-			// enabled ?
-			String enabled = dom.getAttributeValue(dataEntryElt, "enabled");
-			if (enabled != null)
-			{
-				if (enabled.equalsIgnoreCase("true"))
-					dataEntry.setEnabled(true);
-				else
-					dataEntry.setEnabled(false);
-			}
 		}
 		
 		// add this new instance to the table
@@ -529,11 +529,11 @@ public class ProjectReader
 	 * @param listElt
 	 * @return
 	 */
-	protected DataEntryList readDataList(Element listElt, Scene parentScene)
+	protected DataFolder readDataList(Element listElt, Scene parentScene)
 	{
 		NodeList memberElts = dom.getElements(listElt, "member");
 		int listSize = memberElts.getLength();
-		DataEntryList dataList = new DataEntryList(listSize);
+        DataFolder dataList = new DataFolder(listSize);
 		
 		// members
 		for (int i=0; i<listSize; i++)
@@ -550,7 +550,7 @@ public class ProjectReader
                 {
                     String visText = dom.getAttributeValue(propElt, "visible");
                     if (visText != null && visText.equals("true"))
-                        parentScene.setItemVisibility((DataItem)dataEntry, true);
+                        parentScene.setItemVisibility(dataEntry, true);
                 }                    
             }
 		}
@@ -568,49 +568,60 @@ public class ProjectReader
 	protected DataItem readDataItem(Element dataItemElt, Scene parentScene)
 	{
         DataItem dataItem = new DataItem();
-						
+        
+        // enabled ?
+        String enabled = dom.getAttributeValue(dataItemElt, "enabled");
+        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
+            dataItem.setEnabled(true);
+        else
+            dataItem.setEnabled(false);
+        
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
         DataProvider provider = readDataProvider(providerElt);
         dataItem.setDataProvider(provider);
 		
 		// style/symbolizer list
-		NodeList symElts = dom.getElements(dataItemElt, "style/*");
+		NodeList symElts = dom.getElements(dataItemElt, "style");
 		int listSize = symElts.getLength();
 		
 		// read all stylers
         for (int i=0; i<listSize; i++)
         {
             Element symElt = (Element)symElts.item(i);
-            DataStyler styler = readSymbolizer(dataItem, symElt);
-            dataItem.getStylerList().add(styler);
+            Symbolizer symbolizer = readSymbolizer(dataItem, symElt);
+            dataItem.getSymbolizers().add(symbolizer);
         }
         
 		return dataItem;
 	}
 	
 	
-	/**
-	 * Reads an SLD Symbolizer description (uses SLDReader)
-	 * @param provider
-	 * @param symElt
-	 * @return
-	 */
-	protected DataStyler readSymbolizer(DataItem dataItem, Element symElt)
-	{
-		Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);
-		DataStyler styler = stylerFactory.createStyler(dataItem, symbolizer);
-		
-		// read enabled attribute
-		if (styler != null)
-		{
-			String enabled = dom.getAttributeValue(symElt, "enabled");
-			if (enabled != null)
-				styler.setEnabled(enabled.equalsIgnoreCase("true") ? true : false);
-		}
-		
-		return styler;
-	}
+    /**
+     * Reads an SLD Symbolizer description (uses SLDReader)
+     * @param provider
+     * @param symElt
+     * @return
+     */
+    protected Symbolizer readSymbolizer(DataItem dataItem, Element styleElt)
+    {
+        Element symElt = dom.getFirstChildElement(styleElt);
+        Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);
+        
+        // read name
+        String name = dom.getAttributeValue(styleElt, "name");
+        symbolizer.setName(name);
+        
+        // read enabled attribute
+        if (symbolizer != null)
+        {
+            String enabled = dom.getAttributeValue(symElt, "enabled");
+            if (enabled != null)
+                symbolizer.setEnabled(enabled.equalsIgnoreCase("true") ? true : false);
+        }
+        
+        return symbolizer;
+    }
     
     
     /**

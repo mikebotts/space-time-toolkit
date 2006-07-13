@@ -42,7 +42,6 @@ public class PolygonStyler extends AbstractStyler
 	public PolygonStyler()
 	{
         point = new PolygonPointGraphic();
-        setName("Polygon Styler");
 	}
     
     

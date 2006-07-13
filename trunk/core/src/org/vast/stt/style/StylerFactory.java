@@ -40,7 +40,7 @@ public class StylerFactory
     };
 
 
-    public DataStyler createStyler(DataItem dataItem, Symbolizer sym)
+    public DataStyler createStyler(Symbolizer sym)
     {
         DataStyler styler = null;
 
@@ -67,8 +67,7 @@ public class StylerFactory
 
         if (styler != null)
         {
-            styler.setSymbolizer(sym);
-            styler.setDataItem(dataItem);
+            styler.setSymbolizer(sym);            
         }
 
         return styler;

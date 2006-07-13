@@ -218,8 +218,9 @@ public class JOGLRenderer extends Renderer
     {
         if (SWTContext != null)
         {
-            SWTContext.dispose();
+            JOGLContext.makeCurrent();
             JOGLContext.release();
+            SWTContext.dispose();
             JOGLContext.destroy();
             SWTContext = null;
             JOGLContext = null;

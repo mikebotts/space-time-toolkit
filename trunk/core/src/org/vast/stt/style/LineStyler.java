@@ -48,7 +48,6 @@ public class LineStyler extends AbstractStyler
 	{
 		point = new LinePointGraphic();
         lineInfo = new BlockInfo();
-		setName("Line Styler");
 	}
     
     

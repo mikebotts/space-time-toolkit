@@ -44,7 +44,6 @@ public class LabelStyler extends AbstractStyler
 	public LabelStyler()
 	{
         label = new LabelGraphic();
-		setName("Label Styler");
 	}
     
     

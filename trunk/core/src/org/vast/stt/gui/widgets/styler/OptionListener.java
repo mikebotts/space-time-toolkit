@@ -4,9 +4,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataStyler;
+
 
 /**
  * OptionListener is a bridge between the basic controls of the StyleWidget 
@@ -29,18 +30,18 @@ public class OptionListener implements SelectionListener
 		OptionControl[] basicControls = null;
 		OptionControl[] advancedControls = null;
 		Combo[] mapFromCombos = null;
-		DataStyler basicStyler = null;
-		DataStyler advancedStyler = null;
+		Symbolizer basicSymbolizer = null;
+        Symbolizer advancedSymbolizer = null;
 		//  Selection can come from either a basic or advancedControl,
 		//  but either basicControl or advancedControl (or both) can also be 
 		//  null, so be sure to check for that
 		if(basicController != null) {
 			basicControls = basicController.getControls();
-			basicStyler = basicController.getStyler();
+			basicSymbolizer = basicController.getSymbolizer();
 		}
 		if(advancedController != null) {
 			advancedControls = advancedController.getControls();
-			advancedStyler = advancedController.getStyler();
+			advancedSymbolizer = advancedController.getSymbolizer();
 			mapFromCombos = advancedController.getMapFromCombos();
 		}
 		if(basicControls != null){
@@ -48,7 +49,7 @@ public class OptionListener implements SelectionListener
 				if(control == basicControls[i].getControl()){
 					//  advancedStyler must be set to null when 
 					//  dialog is closed for this to work
-					if(advancedStyler == basicStyler){
+					if(advancedSymbolizer == basicSymbolizer){
 						advancedControls[i].setSelection(basicControls[i]);
 					}
 					return;
@@ -60,7 +61,7 @@ public class OptionListener implements SelectionListener
 				if(control == advancedControls[i].getControl()){
 					//  basicStyler must be set to null when StyleView is 
 					//  closed for this to work
-					if(advancedStyler == basicStyler) {
+					if(advancedSymbolizer == basicSymbolizer) {
 						basicControls[i].setSelection(advancedControls[i]);
 					}
 					return;
@@ -73,7 +74,7 @@ public class OptionListener implements SelectionListener
 					boolean enabled = (mapFromCombos[i].getSelectionIndex() == 0);
 					//  basicStyler must be set to null when StyleView is 
 					//  closed for this to work
-					if(advancedStyler == basicStyler) {
+					if(advancedSymbolizer == basicSymbolizer) {
 						basicControls[i].setEnabled(enabled);
 						advancedControls[i].setEnabled(enabled);
 					}

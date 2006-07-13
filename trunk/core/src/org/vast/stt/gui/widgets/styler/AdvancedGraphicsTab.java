@@ -5,21 +5,15 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.vast.ows.sld.Geometry;
-import org.vast.ows.sld.ScalarParameter;
-import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.style.LineStyler;
-import org.vast.stt.style.PointStyler;
-import org.vast.stt.style.PolygonStyler;
+import org.vast.ows.sld.*;
 
-public class AdvancedGraphicsTab extends  ScrolledComposite  {
+
+public class AdvancedGraphicsTab extends ScrolledComposite  {
 
 	Composite mainGroup;
 	DataItem dataItem;
@@ -51,19 +45,19 @@ public class AdvancedGraphicsTab extends  ScrolledComposite  {
 		mainGroup.setBackground(WHITE);
 	}
 	
-	public void setActiveStyler(DataStyler styler){
+	public void setActiveSymbolizer(Symbolizer symbolizer){
 		//  Not making activeStyler a class member yet
-		buildControls(styler);
+		buildControls(symbolizer);
 	}
 	
-	public void buildControls(DataStyler styler){
+	public void buildControls(Symbolizer symbolizer){
 		removeOldControls();
 		addTopRow();
-		if(styler instanceof PointStyler){
-			optionController = new AdvancedPointController(mainGroup, (PointStyler)styler);
-		} else if(styler instanceof LineStyler) {
-			optionController = new AdvancedLineController(mainGroup, (LineStyler)styler);
-		} else if(styler instanceof PolygonStyler){
+		if(symbolizer instanceof PointSymbolizer){
+			optionController = new AdvancedPointController(mainGroup, (PointSymbolizer)symbolizer);
+		} else if(symbolizer instanceof LineSymbolizer) {
+			optionController = new AdvancedLineController(mainGroup, (LineSymbolizer)symbolizer);
+		} else if(symbolizer instanceof PolygonSymbolizer){
 			
 		}
 		

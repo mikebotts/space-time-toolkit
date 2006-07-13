@@ -21,10 +21,4 @@ public interface DataEntry
 
 
     public void setName(String name);
-
-
-    public boolean isEnabled();
-
-
-    public void setEnabled(boolean enabled);
 }

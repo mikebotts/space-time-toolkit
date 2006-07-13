@@ -113,7 +113,7 @@ public class SensorMLProvider extends AbstractProvider
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
                         
                         // send event for redraw
-                        dataItem.dispatchEvent(this, new STTEvent(this, EventType.PROVIDER_DATA_ADDED));
+                        dataItem.dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_ADDED));
                     }                    
                 }
             }

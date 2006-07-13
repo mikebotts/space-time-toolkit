@@ -3,17 +3,32 @@ package org.vast.stt.gui.widgets.styler;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
+import org.vast.ows.sld.PointSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.PointStyler;
 
+
+/**
+ * <p><b>Title:</b>
+ * Basic Point Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds basic Point controls for StyleWidget
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
+ */
 public class BasicPointController extends OptionController  
 {
 	private PointOptionHelper pointOptionHelper;
 	
-	public BasicPointController(Composite parent, PointStyler styler){
-		this.styler = styler;
+	public BasicPointController(Composite parent, PointSymbolizer symbolizer){
+		this.symbolizer = symbolizer;
 
 		pointOptionHelper = new PointOptionHelper(this);
 		buildControls(parent);

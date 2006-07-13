@@ -103,6 +103,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         renderer.unproject(x0, -y0, 0.0, P0);
         renderer.unproject(x1, -y1, 0.0, P1);
 		P1.sub(P0);
+        P1.setCoordinate(2, 0.0); //constraint for lat/lon view
 		viewSettings.getTargetPos().sub(P1);
 		viewSettings.getCameraPos().sub(P1);
 	}
@@ -204,7 +205,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	
 	protected void updateView()
 	{
-        scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 	}
 
 

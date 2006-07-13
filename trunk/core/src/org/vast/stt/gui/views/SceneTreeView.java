@@ -37,7 +37,7 @@ import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataEntryList;
+import org.vast.stt.project.DataFolder;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.Scene;
 
@@ -58,7 +58,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         @Override
 		public Image getImage(Object element)
 		{
-			if (element instanceof DataEntryList)
+			if (element instanceof DataFolder)
 			{
 				if (sceneTree.getExpandedState(element))
 					return folderImg;
@@ -97,9 +97,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 
 		public Object[] getChildren(Object parentElement)
 		{
-			if (parentElement instanceof DataEntryList)
+			if (parentElement instanceof DataFolder)
 			{
-				return ((DataEntryList)parentElement).toArray();
+				return ((DataFolder)parentElement).toArray();
 			}
 			return null;
 		}
@@ -111,7 +111,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 
 		public boolean hasChildren(Object element)
 		{
-			if (element instanceof DataEntryList)
+			if (element instanceof DataFolder)
 				return true;
 			else
 				return false;
@@ -121,7 +121,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		{
 			if (inputElement instanceof Scene)
 			{
-				return new Object[] {((Scene)inputElement).getDataList()};
+				return new Object[] {((Scene)inputElement).getDataTree()};
 			}
 			return null;
 		}		
@@ -180,9 +180,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     
     
     @Override
-    public void assignScene()
+    public void setScene(Scene sc)
     {
-        super.assignScene();
+        super.setScene(sc);
         expandedItems = new Object[0];
     }
     
@@ -224,9 +224,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         DataEntry selectedEntry = (DataEntry)selection.getFirstElement();
         
         // if it's a list change visibility for all descendants
-        if (selectedEntry instanceof DataEntryList)
+        if (selectedEntry instanceof DataFolder)
         {
-            DataEntryList list = (DataEntryList)selectedEntry;
+            DataFolder list = (DataFolder)selectedEntry;
             Iterator<DataItem> it = list.getItemIterator();
             boolean getVis = true;
             boolean visibility = true;
@@ -254,6 +254,6 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         }
         
         updateView();
-        scene.dispatchEvent(this, new STTEvent(this, EventType.SCENE_DATA_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_DATA_CHANGED));
     }  
 }

@@ -14,10 +14,11 @@
 package org.vast.stt.project;
 
 import java.util.*;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
-import org.vast.stt.util.SpatialExtent;
 
 
 /**
@@ -44,14 +45,14 @@ public class DataItem implements DataEntry, STTEventProducer
 	protected boolean enabled = true;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
-	protected DataStylerList stylers;
-    protected ArrayList<STTEventListener> listeners;
+    protected ArrayList<Symbolizer> symbolizers;
+    protected STTEventListeners listeners;
 
 	
 	public DataItem()
 	{
-        listeners = new ArrayList<STTEventListener>(2);
-        stylers = new DataStylerList(2);
+        listeners = new STTEventListeners(2);
+        symbolizers = new ArrayList<Symbolizer>(2);
 	}
 	
 
@@ -65,12 +66,12 @@ public class DataItem implements DataEntry, STTEventProducer
 	{
 		this.name = name;
 	}
-	
-	
-	public DataStylerList getStylerList()
-	{
-		return stylers;
-	}
+    
+    
+    public List<Symbolizer> getSymbolizers()
+    {
+        return symbolizers;
+    }
 
 
 	public DataProvider getDataProvider()
@@ -112,8 +113,7 @@ public class DataItem implements DataEntry, STTEventProducer
 
     public void addListener(STTEventListener listener)
     {
-        if (!listeners.contains(listener))
-            listeners.add(listener);        
+        listeners.add(listener);        
     }
 
 
@@ -129,57 +129,18 @@ public class DataItem implements DataEntry, STTEventProducer
     }
 
 
-    /**
-     * Sends an event to all registered listeners except
-     * if the sender and listener are the same object.
-     */
-    public void dispatchEvent(Object sender, STTEvent event)
+    public void dispatchEvent(STTEvent event)
     {
-        if (!enabled)
-            return;
-        
-        event.producer = this;
-        
-        for (int i=0; i<listeners.size(); i++)
+        if (enabled)
         {
-            STTEventListener next = listeners.get(i);
-            if (next != sender)
-                next.handleEvent(event);
-        }        
+            event.producer = this;
+            listeners.dispatchEvent(event);
+        }
     }
     
     
     public String toString()
     {
         return this.name + " - " + super.toString();
-    }
-    
-    
-    /**
-     * Computes item bounding box in world coordinate and return it
-     * @return
-     */
-    public SpatialExtent getBoundingBox()
-    {
-        SpatialExtent bbox = null;
-        
-        // compute smallest bbox containing all children bbox
-        for (int i = 0; i < stylers.size(); i++)
-        {
-            DataStyler nextStyler = stylers.get(i);
-            
-            if (!nextStyler.isEnabled())
-                continue;
-            
-            nextStyler.updateBoundingBox();
-            SpatialExtent childBox = nextStyler.getBoundingBox();
-            
-            if (i == 0)
-                bbox = childBox.copy();
-            else
-                bbox.add(childBox);
-        }
-        
-        return bbox;
     }
 }

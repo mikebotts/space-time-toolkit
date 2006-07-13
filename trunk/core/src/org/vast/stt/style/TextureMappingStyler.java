@@ -48,7 +48,6 @@ public class TextureMappingStyler extends AbstractStyler
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
         patch = new TexturePatchGraphic();
-        setName("Texture Styler");
 	}
     
     

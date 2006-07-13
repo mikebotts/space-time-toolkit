@@ -4,17 +4,32 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.project.DataStyler;
 
+
+/**
+ * <p><b>Title:</b>
+ * Advanced Raster Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds advanced Raster controls for Advanced Dialog
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
+ */
 public class AdvancedRasterController extends AdvancedOptionController 
 	implements SelectionListener {
 	private Composite parent;
 	//private RasterOptionHelper rasterOptionHelper;
 	
-	public AdvancedRasterController(Composite parent, DataStyler styler){
+	public AdvancedRasterController(Composite parent, PolygonSymbolizer symbolizer){
 		this.parent = parent;
-		this.styler = styler;
+		this.symbolizer = symbolizer;
 		
 		//rasterOptionHelper = new RasterOptionHelper(this);
 		buildControls();

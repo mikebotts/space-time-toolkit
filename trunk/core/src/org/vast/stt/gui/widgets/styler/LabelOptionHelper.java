@@ -11,23 +11,26 @@ import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
 import org.vast.ows.sld.Font;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.ows.sld.TextSymbolizer;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.style.LabelStyler;
+
 
 public class LabelOptionHelper implements SelectionListener {
 
 	OptionController optionController;
-	LabelStyler styler;
+	TextSymbolizer symbolizer;
 
 	public LabelOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
-		styler = (LabelStyler)optionController.getStyler();
+		symbolizer = (TextSymbolizer)optionController.getSymbolizer();
 	}
 	
 	public Color getLabelColor(){
-		Fill fill = styler.getSymbolizer().getFill();
+		Fill fill = symbolizer.getFill();
 		if(fill == null) {
 			System.err.println("Fill is NULL.  Do what now?");
 			return null;
@@ -47,7 +50,7 @@ public class LabelOptionHelper implements SelectionListener {
 	}
 	
 	private void setLabelColor(Color c){
-		Fill fill = styler.getSymbolizer().getFill();
+		Fill fill = symbolizer.getFill();
 		if(fill == null) {
 			System.err.println("Fill is NULL.  Do what now?");
 			return;
@@ -65,7 +68,7 @@ public class LabelOptionHelper implements SelectionListener {
 		
 		Font newFont = new Font();
 		//newFont.setFamily();
-		styler.getSymbolizer().setFont(newFont);
+        symbolizer.setFont(newFont);
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -76,13 +79,14 @@ public class LabelOptionHelper implements SelectionListener {
 		OptionControl[] optionControl = optionController.getControls();
 
 		if(control == optionControl[0].getControl()) {  //  Label Text
-			styler.updateDataMappings();
+
 		} else if (control == optionControl[1].getControl()) {  //  Label Font
 			FontDialog fontChooser = new FontDialog(control.getShell());
 			FontData fontData = fontChooser.open();
 			if(fontData == null)
 				return;
 			setFont(fontData);
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		} else if (control == optionControl[2].getControl()) { // Label Color
 			ColorDialog colorChooser = new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();
@@ -92,8 +96,7 @@ public class LabelOptionHelper implements SelectionListener {
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControl[2].setColorLabelColor(sldColor); 
 			setLabelColor(sldColor);
-			styler.updateDataMappings();			
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
 		}
 	}
-
 }

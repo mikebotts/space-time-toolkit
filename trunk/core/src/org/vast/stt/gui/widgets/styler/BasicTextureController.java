@@ -1,24 +1,33 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.TextureMappingStyler;
+
 
 /**
- * 
- * @author tcook
- * @since: 3/16/05
+ * <p><b>Title:</b>
+ * Basic Texture Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds basic Texture controls for StyleWidget
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
  */
-
 public class BasicTextureController extends OptionController
 {
 	private RasterOptionHelper rasterOptionHelper;
 	private GridOptionHelper gridOptionHelper;
 	
-	public BasicTextureController(Composite parent, TextureMappingStyler styler){
-		this.styler = styler;
+	public BasicTextureController(Composite parent, TextureSymbolizer symbolizer){
+		this.symbolizer = symbolizer;
 
 		rasterOptionHelper = new RasterOptionHelper(this);
 		gridOptionHelper = new GridOptionHelper(this);

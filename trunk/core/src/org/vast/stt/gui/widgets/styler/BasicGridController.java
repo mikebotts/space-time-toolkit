@@ -1,17 +1,32 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.ows.sld.GridSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.GridStyler;
 
+
+/**
+ * <p><b>Title:</b>
+ * Basic Grid Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds basic Grid controls for StyleWidget
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
+ */
 public class BasicGridController extends OptionController 
 {
 	private GridOptionHelper gridOptionHelper;
 	
-	public BasicGridController(Composite parent, GridStyler styler){
-		this.styler = styler;
+	public BasicGridController(Composite parent, GridSymbolizer symbolizer){
+		this.symbolizer = symbolizer;
 
 		gridOptionHelper = new GridOptionHelper(this);
 		buildControls(parent);

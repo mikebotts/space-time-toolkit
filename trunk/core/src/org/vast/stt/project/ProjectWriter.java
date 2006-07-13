@@ -188,7 +188,7 @@ public class ProjectWriter
 
 		// add data list
 		Element contentElt = dom.addElement(sceneElt, "contents");
-		writeDataEntry(scene.getDataList(), contentElt);
+		writeDataEntry(scene.getDataTree(), contentElt);
 
 		return sceneElt;
 	}
@@ -203,9 +203,9 @@ public class ProjectWriter
 	{
 		Element entryElt = null;
 
-		if (entry instanceof DataEntryList)
+		if (entry instanceof DataFolder)
 		{
-			entryElt = writeDataList((DataEntryList) entry, parentElt);
+			entryElt = writeDataList((DataFolder) entry, parentElt);
 		}
 		else if (entry instanceof DataItem)
 		{
@@ -225,13 +225,6 @@ public class ProjectWriter
 	{
 		// add name
 		dom.setElementValue(entryElt, "name", entry.getName());
-
-		// add enabled flag
-		if (!(entry instanceof DataEntryList))
-		{
-			String enableText = entry.isEnabled() ? "true" : "false";
-			dom.setAttributeValue(entryElt, "@enabled", enableText);
-		}
 	}
 
 
@@ -240,7 +233,7 @@ public class ProjectWriter
 	 * @param listElt
 	 * @return
 	 */
-	protected Element writeDataList(DataEntryList dataList, Element parentElt)
+	protected Element writeDataList(DataFolder dataList, Element parentElt)
 	{
 		Element listElt = dom.addElement(parentElt, "DataList");
 		writeCommonParameters(dataList, listElt);
@@ -268,6 +261,10 @@ public class ProjectWriter
 		Element itemElt = dom.addElement(parentElt, "DataItem");
 		writeCommonParameters(item, itemElt);
 
+		// enabled flag
+        String enableText = item.isEnabled() ? "true" : "false";
+        dom.setAttributeValue(itemElt, "@enabled", enableText);
+        
 		// TODO dataProvider
 		//Element providerElt = dom.addElement(parentElt, "DataItem/dataProvider");
 

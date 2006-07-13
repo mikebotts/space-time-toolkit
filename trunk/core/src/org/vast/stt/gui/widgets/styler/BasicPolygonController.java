@@ -1,17 +1,32 @@
 package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.style.PolygonStyler;
 
+
+/**
+ * <p><b>Title:</b>
+ * Basic Polygon Controller
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Builds basic Polygon controls for StyleWidget
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Feb 06, 2006
+ * @version 1.0
+ */
 public class BasicPolygonController extends OptionController 
 {
 	private PolygonOptionHelper polygonOptionHelper;
 	
-	public BasicPolygonController(Composite parent, PolygonStyler styler){
-		this.styler = styler;
+	public BasicPolygonController(Composite parent, PolygonSymbolizer symbolizer){
+		this.symbolizer = symbolizer;
 
 		//polygonOptionHelper = new PolygonOptionHelper(this);
 		buildControls(parent);

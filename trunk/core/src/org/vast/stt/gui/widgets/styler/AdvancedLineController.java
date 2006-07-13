@@ -5,32 +5,33 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.style.LineStyler;
+
 
 /**
- * <p><b>Title:</b><br/>
- * AdvancedLineController
+ * <p><b>Title:</b>
+ * Advanced Line Controller
  * </p>
  *
  * <p><b>Description:</b><br/>
+ * Builds advanced Line controls for Advanced Dialog
  * </p>
  *
- * <p>Copyright (c) 2006</p>
+ * <p>Copyright (c) 2005</p>
  * @author Tony Cook
- * @date Feb 6, 2006
+ * @date Feb 06, 2006
  * @version 1.0
- * 
  */
-public class AdvancedLineController extends AdvancedOptionController { 
-	//implements SelectionListener {
+public class AdvancedLineController extends AdvancedOptionController
+{ 
 	private Composite parent;
 	private LineOptionHelper lineOptionHelper;
 
-	public AdvancedLineController(Composite parent, LineStyler styler){
+	public AdvancedLineController(Composite parent, LineSymbolizer symbolizer){
 		this.parent = parent;
-		this.styler = styler;
+		this.symbolizer = symbolizer;
 		
 		lineOptionHelper = new LineOptionHelper(this);
 		buildControls();
@@ -62,20 +63,20 @@ public class AdvancedLineController extends AdvancedOptionController {
 	public void setMappableItems(String [] items){
 		super.setMappableItems(items);
 		//  Width
-		ScalarParameter widthSP = ((LineStyler)styler).getSymbolizer().getStroke().getWidth();
+		ScalarParameter widthSP = ((LineSymbolizer)symbolizer).getStroke().getWidth();
 		if(widthSP != null)  //  is null sometimes.
 			setOptionState(widthSP, 0);
 		//  Color
-		ScalarParameter redSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getRed();		
+		ScalarParameter redSP = ((LineSymbolizer)symbolizer).getStroke().getColor().getRed();		
 		if(redSP != null)
 			setOptionState(redSP, 1);
-        ScalarParameter greenSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getGreen();       
+        ScalarParameter greenSP = ((LineSymbolizer)symbolizer).getStroke().getColor().getGreen();       
         if(redSP != null)
             setOptionState(greenSP, 1);
-        ScalarParameter blueSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getBlue();       
+        ScalarParameter blueSP = ((LineSymbolizer)symbolizer).getStroke().getColor().getBlue();       
         if(redSP != null)
             setOptionState(blueSP, 1);
-        ScalarParameter alphaSP = ((LineStyler)styler).getSymbolizer().getStroke().getColor().getAlpha();       
+        ScalarParameter alphaSP = ((LineSymbolizer)symbolizer).getStroke().getColor().getAlpha();       
         if(redSP != null)
             setOptionState(alphaSP, 1);
 	}
