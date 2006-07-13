@@ -54,8 +54,10 @@ public class DisplayListManager
      * @param blockInfo
      * @return true if a list was called, false if a new needs to be generated
      */
-    protected boolean useDisplayList(BlockInfo blockInfo, OpenGLInfo glInfo)
+    protected boolean useDisplayList(BlockInfo blockInfo)
     {
+        OpenGLInfo glInfo = (OpenGLInfo)blockInfo.rendererParams;
+        
         if (glInfo != null)
         {
             // if block was updated delete previous display list

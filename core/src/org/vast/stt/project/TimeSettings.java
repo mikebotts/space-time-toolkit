@@ -13,6 +13,10 @@
 
 package org.vast.stt.project;
 
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.event.STTEventProducer;
 import org.vast.util.DateTime;
 
 
@@ -30,15 +34,22 @@ import org.vast.util.DateTime;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public class TimeSettings
+public class TimeSettings implements STTEventProducer
 {
     protected DateTime currentTime;
     protected double leadTime;
     protected double lagTime;
     protected double stepTime;
     protected boolean realTime;
+    protected STTEventListeners listeners;
 
 
+    public TimeSettings()
+    {
+        listeners = new STTEventListeners(1);
+    }
+    
+    
     public DateTime getCurrentTime()
     {
         return currentTime;
@@ -96,5 +107,30 @@ public class TimeSettings
     public void setRealTime(boolean realTime)
     {
         this.realTime = realTime;
+    }
+
+
+    public void addListener(STTEventListener listener)
+    {
+        listeners.add(listener);
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();
+    }
+
+
+    public void dispatchEvent(STTEvent event)
+    {
+        event.producer = this;
+        listeners.dispatchEvent(event);
     }
 }

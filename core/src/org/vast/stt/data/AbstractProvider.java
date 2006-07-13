@@ -52,9 +52,16 @@ public abstract class AbstractProvider implements DataProvider
 	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
     
     
-	public abstract void updateData() throws DataException;
+    public abstract void updateData() throws DataException;
 	
 	
+    public void forceUpdate()
+    {
+        forceUpdate = true;
+        getDataNode();
+    }
+    
+    
 	public DataNode getDataNode()
 	{
         if (!updating && forceUpdate)
@@ -96,7 +103,7 @@ public abstract class AbstractProvider implements DataProvider
 		if (cachedData != null)
 		{
 			//TODO cachedData.removeAllComponents();
-			//System.gc();
+            cachedData = null;
             forceUpdate = true;
 		}		
 	}

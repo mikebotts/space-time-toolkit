@@ -68,7 +68,7 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
         mainGroup.setText(item.getName());
         enabledButton.setData(dataItem);
         enabledButton.setSelection(dataItem.isEnabled());
-        System.err.println("COT.setDI(): " + dataItem.getName());
+        //System.err.println("COT.setDI(): " + dataItem.getName());
     }
 
 

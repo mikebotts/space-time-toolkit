@@ -49,14 +49,9 @@ public class DataTree extends DataFolder implements STTEventProducer
     
     public DataTree(DataFolder folder)
     {
+        this();
         this.name = folder.name;
         this.addAll(folder);
-    }
-
-
-    public DataTree(int listSize)
-    {
-        super(listSize);
     }
 
 

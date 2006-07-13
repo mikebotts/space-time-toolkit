@@ -33,7 +33,7 @@ import org.vast.stt.renderer.RendererInfo;
 public class OpenGLInfo implements RendererInfo
 {
     public int programNumber = -1;   // OpenGL shader program number (-1 if none)
-    public int objectID = -1;        // OpenGL name for texture, vertex buffer or display list (-1 if none)
+    public int objectID = -1;        // OpenGL name for vertex buffer or display list (-1 if none)
     public int indexBufferID = -1;   // OpenGL name for additional Index Buffer Object (-1 if none)
     public int widthPadding = 0;
     public int heightPadding = 0;

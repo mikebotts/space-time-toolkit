@@ -21,12 +21,13 @@ import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.util.SpatialExtent;
 
-public class BboxWidget implements SelectionListener 
+
+public class BboxWidget implements SelectionListener
 {
 	DataItem dataItem;
 	Text nlatText, slatText, wlonText, elonText;
 	Combo formatCombo;
-	Button fitBtn;
+	Button fitBtn, updateBtn;
 	//  Not sure I really need a persistent pointer to the currently selected 
 	//  LlFormat.  Can just get this from formatCombo.  Remove if it's not needed.
 	static final int DEGREES = 0;
@@ -139,6 +140,14 @@ public class BboxWidget implements SelectionListener
 		formatCombo.select(0);
 		currentLlFormat = DEGREES;  //  default to DEGREES 
 		
+		// Update Button
+        updateBtn = new Button(mainGroup, SWT.PUSH);
+        updateBtn.setText("Update Item");
+        updateBtn.addSelectionListener(this);
+        gridData = new GridData();
+        gridData.horizontalAlignment = SWT.CENTER;
+        updateBtn.setLayoutData(gridData);
+        
 		//  Fit Button
 		fitBtn = new Button(mainGroup, SWT.PUSH);
 		fitBtn.setText("Fit Item to View");
@@ -146,6 +155,7 @@ public class BboxWidget implements SelectionListener
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;
 		fitBtn.setLayoutData(gridData);
+        
 		//  Set Default scroller size
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -235,8 +245,19 @@ public class BboxWidget implements SelectionListener
 	}
 
 	public void widgetSelected(SelectionEvent e) {
-		//System.err.println(e);
-		if(e.widget == fitBtn){
+        if(e.widget == updateBtn){
+            double nlat = getValue(nlatText);
+            double slat = getValue(slatText);
+            double wlon = getValue(wlonText);
+            double elon = getValue(elonText);
+            SpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
+            bbox.setMaxX(elon);
+            bbox.setMinX(wlon);
+            bbox.setMaxY(nlat);
+            bbox.setMinY(slat);
+            this.dataItem.getDataProvider().forceUpdate();            
+        }
+        else if(e.widget == fitBtn){
 			double nlat = getValue(nlatText);
 			double slat = getValue(slatText);
 			double wlon = getValue(wlonText);
