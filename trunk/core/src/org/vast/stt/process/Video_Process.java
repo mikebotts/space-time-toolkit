@@ -32,35 +32,26 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+import javax.media.MediaLocator;
+import javax.media.Time;
+import javax.media.opengl.GL;
+import javax.media.opengl.GLContext;
+import javax.media.opengl.GLDrawableFactory;
+import javax.media.opengl.glu.GLU;
 import org.ogc.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.process.*;
+import org.vast.video.*;
 
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
-/**
- * <p><b>Title:</b><br/>
- * WMS_Process
- * </p>
- *
- * <p><b>Description:</b><br/>
- * Issues a request to a WMS server using provided parameters
- * and input bounding box and time, and outputs the resulting
- * image encapsulated in a data component structure.
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Jan 20, 2006
- * @version 1.0
- */
 public class Video_Process extends DataProcess
 {
-    protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
+    protected DataValue ttime;
     protected DataValue outputWidth, outputHeight;
     protected DataArray outputImage;
     protected DataGroup output;
@@ -69,7 +60,9 @@ public class Video_Process extends DataProcess
     protected WMSRequestWriter requestBuilder;
     protected int originalWidth;
     protected int originalHeight;
+    protected int count=0;
     protected boolean preserveAspectRatio = true;
+    protected JMFMain jmfm;
     
 
     public Video_Process()
@@ -88,11 +81,8 @@ public class Video_Process extends DataProcess
         try
         {
             // Input mappings
-            DataGroup input = (DataGroup)inputData.getComponent("bbox");
-            bboxLat1 = (DataValue)input.getComponent("corner1").getComponent(0);
-            bboxLon1 = (DataValue)input.getComponent("corner1").getComponent(1);
-            bboxLat2 = (DataValue)input.getComponent("corner2").getComponent(0);
-            bboxLon2 = (DataValue)input.getComponent("corner2").getComponent(1);
+            DataGroup input = (DataGroup)inputData.getComponent("time");
+            ttime = (DataValue)input.getComponent("ttime");
             input.assignNewDataBlock();
             
             // Output mappings
@@ -114,38 +104,46 @@ public class Video_Process extends DataProcess
         try
         {
             // Read parameter values (must be fixed!)
-            DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
+            DataGroup videoParams = (DataGroup)paramData.getComponent("videoOptions");
             
             // service end point url
-            String url = wmsParams.getComponent("endPoint").getData().getStringValue();
-            String requestMethod = wmsParams.getComponent("requestMethod").getData().getStringValue();
+            String url = videoParams.getComponent("endPoint").getData().getStringValue();
+            MediaLocator ml=new MediaLocator(url);
+            jmfm = new JMFMain();
+        	if(!jmfm.open(ml)){
+        		System.err.println("Could not open location: "+ml.toString());
+        		System.exit(0);
+        	}
+        	jmfm.init();
+        	
+            String requestMethod = videoParams.getComponent("requestMethod").getData().getStringValue();
             if (requestMethod.equalsIgnoreCase("post"))
                 query.setPostServer(url);
             else
                 query.setGetServer(url);
             
             // version
-            String version = wmsParams.getComponent("version").getData().getStringValue();
+            String version = videoParams.getComponent("version").getData().getStringValue();
             query.setVersion(version);
             
             // layer ID
-            String layerID = wmsParams.getComponent("layer").getData().getStringValue();
+            String layerID = videoParams.getComponent("layer").getData().getStringValue();
             query.getLayers().add(layerID);
             
             // image format
-            String format = wmsParams.getComponent("format").getData().getStringValue();
+            String format = videoParams.getComponent("format").getData().getStringValue();
             query.setFormat(format);
             
             // image width
-            originalWidth = wmsParams.getComponent("imageWidth").getData().getIntValue();
+            originalWidth = videoParams.getComponent("imageWidth").getData().getIntValue();
             query.setWidth(originalWidth);
             
             // image height
-            originalHeight = wmsParams.getComponent("imageHeight").getData().getIntValue();
+            originalHeight = videoParams.getComponent("imageHeight").getData().getIntValue();
             query.setHeight(originalHeight);
             
             // image transparency
-            boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
+            boolean transparent = videoParams.getComponent("imageTransparency").getData().getBooleanValue();
             query.setTransparent(transparent);
             
             query.setSrs("EPSG:4326");
@@ -163,6 +161,7 @@ public class Video_Process extends DataProcess
      */
     public void execute() throws ProcessException
     {
+    	count++;
         URL url = null;
         RenderedImage renderedImage = null;
         
@@ -170,6 +169,7 @@ public class Video_Process extends DataProcess
         {
             initRequest();
 
+            byte[] fData = jmfm.getFrame(count);
             String urlString = requestBuilder.buildGetRequest(query);
             url = new URL(urlString);
             URLConnection urlCon = url.openConnection();
@@ -200,7 +200,7 @@ public class Video_Process extends DataProcess
 
                     // put data buffer in output datablock
                     byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
-                    ((DataBlockByte)outputImage.getData()).setUnderlyingObject(data);
+                    ((DataBlockByte)outputImage.getData()).setUnderlyingObject(fData);
                 }
             }
             
@@ -220,7 +220,7 @@ public class Video_Process extends DataProcess
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WMS server:\n" + url, e);
+            throw new ProcessException("Error while requesting data from Video server:\n" + url, e);
         }
         finally
         {
@@ -231,42 +231,9 @@ public class Video_Process extends DataProcess
     
     protected void initRequest()
     {
-        // make sure previous request is cancelled
         endRequest();
         outputWidth.renewDataBlock();
         outputHeight.renewDataBlock();
-        
-        // read lat/lon bbox
-        double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;
-        double lat1 = bboxLat1.getData().getDoubleValue();///Math.PI*180;
-        double lon2 = bboxLon2.getData().getDoubleValue();///Math.PI*180;
-        double lat2 = bboxLat2.getData().getDoubleValue();///Math.PI*180;
-                
-        double minX = Math.min(lon1, lon2);
-        double maxX = Math.max(lon1, lon2);
-        double minY = Math.min(lat1, lat2);
-        double maxY = Math.max(lat1, lat2);
-        
-        query.getBbox().setMinX(minX);
-        query.getBbox().setMaxX(maxX);
-        query.getBbox().setMinY(minY);
-        query.getBbox().setMaxY(maxY);
-        
-        // adjust widht/height to match aspect ratio
-        if (preserveAspectRatio)
-        {
-            int width = originalWidth;
-            int height = originalHeight;
-            
-            // use smaller measure as reference
-            if (width <= height)
-                height = (int)(width * (maxY - minY) / (maxX - minX));
-            else
-                width = (int)(height * (maxX - minX) / (maxY - minY));
-            
-            query.setWidth(width);
-            query.setHeight(height);
-        }
     }
     
     
