@@ -68,22 +68,6 @@ public class JOGLRenderer extends Renderer
     }
     
     
-    protected void drawItem(SceneItem item)
-    {
-        DataStylerList stylerList = item.getStylers();
-        stylerList.accept(this);
-    }
-
-
-    @Override
-    public void drawScene()
-    {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
-        super.drawScene();
-    }
-
-
     @Override
     protected void setupView()
     {
@@ -138,6 +122,23 @@ public class JOGLRenderer extends Renderer
     }
     
     
+    @Override
+    public void drawScene()
+    {
+        SWTContext.setCurrent();
+        JOGLContext.makeCurrent();
+        super.drawScene();
+    }
+    
+    
+    @Override
+    protected void drawItem(SceneItem item)
+    {
+        DataStylerList stylerList = item.getStylers();
+        stylerList.accept(this);
+    }
+    
+    
     protected void drawCameraTarget()
     {
         ViewSettings view = scene.getViewSettings();
@@ -148,7 +149,7 @@ public class JOGLRenderer extends Renderer
         gl.glTranslated(x, y, z);
         
         double axisLength = view.getOrthoWidth() / 25; 
-            
+        
         gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINES);
         gl.glColor3f(1.0f, 0.0f, 0.0f);
