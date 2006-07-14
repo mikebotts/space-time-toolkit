@@ -2,11 +2,9 @@
 package org.vast.stt.renderer;
 
 import java.util.List;
-
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3D;
 import org.vast.stt.data.BlockInfo;
-import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.style.StylerVisitor;
@@ -53,6 +51,9 @@ public abstract class Renderer implements StylerVisitor
     protected abstract void swapBuffers();
     
     
+    protected abstract void drawItem(SceneItem item);
+    
+    
     public void drawScene()
     {
         setupView();
@@ -68,8 +69,7 @@ public abstract class Renderer implements StylerVisitor
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            DataStylerList stylerList = nextItem.getStylers();
-            stylerList.accept(this);
+            drawItem(nextItem);
         }
         
         swapBuffers();

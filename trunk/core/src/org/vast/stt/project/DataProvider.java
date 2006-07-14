@@ -63,9 +63,6 @@ public interface DataProvider extends Resource
 	public DataNode getDataNode();
 	
 	
-	public void setDataNode(DataNode dataNode);
-	
-	
 	public SpatialExtent getSpatialExtent();
 	
 	

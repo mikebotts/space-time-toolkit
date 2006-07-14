@@ -73,7 +73,9 @@ public class ViewSettings implements STTEventProducer
 	
 	public ViewSettings()
 	{
-		cameraPos.setCoordinates(0.0, 0.0, 1.0);
+        backgroundColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        
+        cameraPos.setCoordinates(0.0, 0.0, 1.0);
 		targetPos.setCoordinates(0.0, 0.0, 0.0);
 		upDirection.setCoordinates(0.0, 1.0, 0.0);
 		

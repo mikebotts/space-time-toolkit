@@ -5,6 +5,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
+import org.vast.stt.gui.views.ScenePageInput;
+import org.vast.stt.project.Scene;
+import org.vast.stt.project.ViewSettings;
 
 
 /**
@@ -36,8 +41,30 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
 	 */
 	public void run(IAction action)
 	{
-		if (action.getId().equals("STT.Exit"))
-			window.close();
+		if (action.getId().equals("STT.CloneScene"))
+        {
+            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+            if (pageInput != null)
+            {
+                Scene currentScene = pageInput.getScene();
+                Scene newScene = new Scene();
+                newScene.setViewSettings(currentScene.getViewSettings());
+                //newScene.setViewSettings(new ViewSettings());
+                newScene.setTimeSettings(currentScene.getTimeSettings());
+                newScene.setDataTree(currentScene.getDataTree());
+                newScene.setName(currentScene.getName());
+                
+                pageInput = new ScenePageInput(newScene);
+                try
+                {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                }
+                catch (WorkbenchException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 	}
 
 

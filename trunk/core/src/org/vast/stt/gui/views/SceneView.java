@@ -41,6 +41,10 @@ import org.vast.stt.project.Scene;
 public abstract class SceneView extends ViewPart implements IPageListener, STTEventListener
 {
     protected Scene scene;
+    protected Runnable runRefresh = new Runnable()
+    {
+        public void run() {refreshView();}
+    };
 
 
     public abstract void updateView();
@@ -57,6 +61,12 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
             updateView();
         else
             clearView();
+    }
+    
+    
+    protected void refreshViewAsync()
+    {
+        getSite().getShell().getDisplay().asyncExec(runRefresh);
     }
     
     
@@ -104,15 +114,7 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     public void handleEvent(STTEvent e)
     {
-        if (e.producer == this.scene)
-        {
-            Runnable refresh = new Runnable()
-            {
-                public void run() {refreshView();}
-            };
-            
-            getSite().getShell().getDisplay().asyncExec(refresh);
-        }
+        refreshViewAsync();
     }
 
 

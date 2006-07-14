@@ -115,7 +115,7 @@ public class WMSProvider extends OWSProvider
 					// copy image to DataNode
 					byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();                   
                     
-                    cachedData = new DataNode();
+                    dataNode = new DataNode();
                     
                     DataGroup pixelData = new DataGroup(renderedImage.getData().getNumBands());
                     pixelData.addComponent("blue", new DataValue(DataType.BYTE));
@@ -126,7 +126,7 @@ public class WMSProvider extends OWSProvider
                     DataArray imageData = new DataArray(renderedImage.getHeight());
                     imageData.addComponent(rowData);
                     imageData.setName("image");
-                    BlockList blockList = cachedData.createList(imageData);
+                    BlockList blockList = dataNode.createList(imageData);
                     System.out.println(imageData);
                     
                     DataBlock dataBlock = DataBlockFactory.createBlock(data);

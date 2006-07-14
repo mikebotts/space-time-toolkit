@@ -311,7 +311,7 @@ public class TextureMappingStyler extends AbstractStyler
 	{
         dataNode = dataItem.getDataProvider().getDataNode();
 
-        if (dataNode != null)
+        if (dataNode.isNodeStructureReady())
         {
             if (dataLists.length == 0)
                 updateDataMappings();

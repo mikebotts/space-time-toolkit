@@ -43,6 +43,14 @@ public class STTEvent
     }
     
     
+    public STTEvent copy()
+    {
+        STTEvent event = new STTEvent(this.source, this.type);
+        event.producer = this.producer;
+        return event;
+    }
+    
+    
 	public String toString()
 	{
 		return "Event: " + this.type;
