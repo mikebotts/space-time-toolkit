@@ -40,8 +40,62 @@
                   <name>Satellites</name>
                   <member visible="false">
                      <DataItem enabled="true">
+                        <name>NOAA-12 Footprints</name>
+                        <dataProvider xlink:href="#NOAA12_DATA"/>
+                        <style>
+                           <sld:GridSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sldx:Dimensions>
+                                 <sld:CssParameter name="width">
+                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="length">
+                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sldx:Dimensions>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                              </sld:Fill>
+                              <!--<sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
+                              </sld:Stroke>-->
+                           </sld:GridSymbolizer>
+                        </style>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
+                                 </sld:CssParameter> 
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>circle</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>2</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style> 
+                     </DataItem>
+                  </member>                  
+                  <member visible="false">
+                     <DataItem enabled="true">
                         <name>NOAA-13 Footprints</name>
-                        <dataProvider xlink:href="#FOOTPRINT_SOS"/>
+                        <dataProvider xlink:href="#NOAA13_DATA"/>
                         <style>
                            <sld:GridSymbolizer enabled="true">
                               <sld:Geometry>
@@ -91,7 +145,61 @@
                            </sld:PointSymbolizer>
                         </style> 
                      </DataItem>
-                  </member>                  
+                  </member>
+                  <member visible="false">
+                     <DataItem enabled="true">
+                        <name>SPOT-5 Footprints</name>
+                        <dataProvider xlink:href="#SPOT5_DATA"/>
+                        <style>
+                           <sld:GridSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sldx:Dimensions>
+                                 <sld:CssParameter name="width">
+                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="length">
+                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sldx:Dimensions>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                              </sld:Fill>
+                              <!--<sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
+                              </sld:Stroke>-->
+                           </sld:GridSymbolizer>
+                        </style>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
+                                 </sld:CssParameter> 
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>circle</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>2</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style> 
+                     </DataItem>
+                  </member>
                   <member>
                      <DataList>
                         <name>Geographic Data</name>
@@ -174,7 +282,29 @@
                </SWEDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="FOOTPRINT_SOS">
+               <OWSDataProvider id="NOAA12_DATA">
+                  <name>NOAA-12 Footprints</name>
+                  <description>Nadir Track for NOAA-12 Satellite</description>
+                  <layerId>NOAA_12</layerId>
+                  <request postUrl="http://localhost:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA_12</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>1994-01-01T04:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>1994-01-01T06:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="NOAA13_DATA">
                   <name>NOAA-13 Footprints</name>
                   <description>Nadir Track for NOAA-13 Satellite</description>
                   <layerId>NOAA_13</layerId>
@@ -186,6 +316,28 @@
                               <gml:TimePeriod>
                                  <gml:beginPosition>1994-01-01T04:40:00Z</gml:beginPosition>
                                  <gml:endPosition>1994-01-01T06:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="SPOT5_DATA">
+                  <name>SPOT-5 Footprints</name>
+                  <description>Nadir Track for SPOT-5 Satellite</description>
+                  <layerId>SPOT_5</layerId>
+                  <request postUrl="http://localhost:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>SPOT_5</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T04:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T06:40:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
