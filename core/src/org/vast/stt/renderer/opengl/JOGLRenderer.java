@@ -470,6 +470,7 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(GridStyler styler)
     {
+        double oldX = 0.0;
         GridPatchGraphic patch = null;
         GridPointGraphic point = null;
         styler.reset();
@@ -493,17 +494,24 @@ public class JOGLRenderer extends Renderer
             // loop through all grid points
             for (int v = 0; v < patch.length-1; v++)
             {
-                gl.glBegin(GL.GL_QUAD_STRIP);
+                gl.glBegin(GL.GL_TRIANGLE_STRIP);
                 
                 for (int u = 0; u < patch.width; u++)
                 {
-                    point = styler.getGridPoint(u, v, false);
-                    gl.glColor4f(point.r, point.g, point.b, point.a);
-                    gl.glVertex3d(point.x, point.y, point.z);
-                    
-                    point = styler.getGridPoint(u, v+1, false);
-                    gl.glColor4f(point.r, point.g, point.b, point.a);
-                    gl.glVertex3d(point.x, point.y, point.z);
+                    for (int p=0; p<2; p++)
+                    {                    
+                        point = styler.getGridPoint(u, v+p, false);
+                        // TODO hack to break grid when crossing lat/lon boundary
+                        if (Math.abs(point.x - oldX) > Math.PI*9/10)
+                        {
+                            gl.glEnd();
+                            gl.glBegin(GL.GL_QUAD_STRIP);
+                        }
+                        oldX = point.x;
+                        
+                        gl.glColor4f(point.r, point.g, point.b, point.a);
+                        gl.glVertex3d(point.x, point.y, point.z);
+                    }
                 }
                 
                 gl.glEnd();
