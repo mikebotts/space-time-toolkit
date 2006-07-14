@@ -43,7 +43,31 @@
                         <name>NOAA-13 Footprints</name>
                         <dataProvider xlink:href="#FOOTPRINT_SOS"/>
                         <style>
-                           <sld:LineSymbolizer enabled="true">
+                           <sld:GridSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sldx:Dimensions>
+                                 <sld:CssParameter name="width">
+                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="length">
+                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sldx:Dimensions>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:GridSymbolizer>
+                        </style>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
                               <sld:Geometry>
                                  <sld:CssParameter name="geometry-x">
                                     <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -52,18 +76,23 @@
                                     <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
                                  </sld:CssParameter> 
                               </sld:Geometry>
-                              <sld:Stroke>
-                                 <sld:CssParameter name="stroke">#CCCCFF</sld:CssParameter>
-                                 <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                              </sld:Stroke>
-                           </sld:LineSymbolizer>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>circle</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>2</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
                         </style> 
                      </DataItem>
                   </member>                  
                   <member>
                      <DataList>
                         <name>Geographic Data</name>
-                        <member visible="false">
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider xlink:href="#DATASET_04"/>
@@ -146,14 +175,14 @@
                   <name>NOAA-13 Footprints</name>
                   <description>Nadir Track for NOAA-13 Satellite</description>
                   <layerId>NOAA_13</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                  <request postUrl="http://localhost:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA_13</offering>
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2005-01-01T00:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2005-01-01T06:00:00Z</gml:endPosition>
+                                 <gml:beginPosition>1994-01-01T04:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>1994-01-01T05:40:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
