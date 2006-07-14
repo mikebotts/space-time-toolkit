@@ -16,8 +16,10 @@ package org.vast.stt.renderer.opengl;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.GLDrawableFactory;
-import com.sun.opengl.util.GLUT;
+//import javax.media.opengl.DebugGL;
+//import javax.media.opengl.TraceGL;
 
+import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
@@ -198,6 +200,8 @@ public class JOGLRenderer extends Renderer
         SWTContext.setCurrent();
         JOGLContext = GLDrawableFactory.getFactory().createExternalGLContext();
         JOGLContext.makeCurrent();
+        //JOGLContext.setGL(new DebugGL(JOGLContext.getGL()));
+        //JOGLContext.setGL(new TraceGL(JOGLContext.getGL(), System.err));
 
         gl = JOGLContext.getGL();
         glu = new GLU();
@@ -263,7 +267,7 @@ public class JOGLRenderer extends Renderer
             if (checkList)
             {
                 boolean skip = displayListManager.useDisplayList(blockInfo);
-                if (skip) break;
+                if (skip) return;
                 checkList = false;
             }
             
@@ -320,11 +324,14 @@ public class JOGLRenderer extends Renderer
         float oldSize = -1.0f;
         styler.reset();
 
+        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_POINT);
+        
         // loop and draw all points
         while (styler.nextBlock())
         {
             while ((point = styler.nextPoint()) != null)
             {
+                // hack to allow changing point size
                 if (point.size != oldSize)
                 {
                     if (begin)
@@ -478,7 +485,7 @@ public class JOGLRenderer extends Renderer
                 gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
             else
                 gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
-
+            
             gl.glLineWidth(patch.lineWidth);
             gl.glPolygonOffset(1.0f, 1.0f);
             gl.glDisable(GL.GL_CULL_FACE);            
