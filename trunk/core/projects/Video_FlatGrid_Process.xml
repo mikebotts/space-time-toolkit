@@ -7,9 +7,33 @@
       <sml:inputs>
          <sml:InputList>
             <sml:input name="time">
-               <swe:DataGroup id="INPUT_TIME" definition="urn:ogc:def:data:boundingBox">
+               <swe:DataGroup id="INPUT_TIME" definition="urn:ogc:def:data:inputTime">
                   <swe:component name="ttime">
                      <swe:Quantity definition="urn:ogc:def:phenomenon:time" uom="urn:ogc:def:unit:julian"/>
+                  </swe:component>
+               </swe:DataGroup>
+            </sml:input>
+            <sml:input name="bbox">
+               <swe:DataGroup id="INPUT_BBOX" definition="urn:ogc:def:data:boundingBox">
+                  <swe:component name="corner1">
+                     <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4326">
+                        <swe:coordinate name="lat">
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                        </swe:coordinate>
+                        <swe:coordinate name="lon">
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                        </swe:coordinate>
+                     </swe:Vector>
+                  </swe:component>
+                  <swe:component name="corner2">
+                     <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4326">
+                        <swe:coordinate name="lat">
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                        </swe:coordinate>
+                        <swe:coordinate name="lon">
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                        </swe:coordinate>
+                     </swe:Vector>
                   </swe:component>
                </swe:DataGroup>
             </sml:input>
@@ -52,13 +76,13 @@
                                        <swe:DataArray arraySize="#IMAGE_WIDTH">
                                           <swe:component name="pixel">
                                              <swe:DataGroup>
-                                                <swe:component name="blue">
+                                                <swe:component name="red">
                                                    <swe:Count min="0" max="255"/>
                                                 </swe:component>
                                                 <swe:component name="green">
                                                    <swe:Count min="0" max="255"/>
                                                 </swe:component>
-                                                <swe:component name="red">
+                                                <swe:component name="blue">
                                                    <swe:Count min="0" max="255"/>
                                                 </swe:component>
                                              </swe:DataGroup>
@@ -73,10 +97,10 @@
                   </sml:outputs>
                   <sml:parameters>
                      <sml:ParameterList>
-                        <sml:parameter name="wmsOptions">
+                        <sml:parameter name="videoOptions">
                            <swe:DataGroup fixed="true">
                               <swe:component name="endPoint">
-                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://wms.jpl.nasa.gov/wms.cgi</swe:Category>
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/video/test.mov</swe:Category>
                               </swe:component>
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
@@ -94,10 +118,10 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">1.1.1</swe:Category>
                               </swe:component>
                               <swe:component name="imageWidth">
-                                 <swe:Count>256</swe:Count>
+                                 <swe:Count>160</swe:Count>
                               </swe:component>
                               <swe:component name="imageHeight">
-                                 <swe:Count>512</swe:Count>
+                                 <swe:Count>120</swe:Count>
                               </swe:component>
                               <swe:component name="imageTransparency">
                                  <swe:Boolean>true</swe:Boolean>
@@ -177,7 +201,7 @@
             <sml:connection>
                <sml:Link>
                   <sml:source ref="this/inputs/bbox"/>
-                  <sml:destination ref="wmsProcess/inputs/bbox"/>
+                  <sml:destination ref="videoProcess/inputs/time"/>
                </sml:Link>
             </sml:connection>
             <sml:connection>
@@ -188,7 +212,7 @@
             </sml:connection>
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="wmsProcess/outputs/imageData"/>
+                  <sml:source ref="videoProcess/outputs/imageData"/>
                   <sml:destination ref="this/outputs/imageData"/>
                </sml:Link>
             </sml:connection>
