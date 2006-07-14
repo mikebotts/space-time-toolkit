@@ -26,6 +26,7 @@ public class BboxWidget implements SelectionListener
 {
 	DataItem dataItem;
 	Text nlatText, slatText, wlonText, elonText;
+    Text latTilesText, lonTilesText;
 	Combo formatCombo;
 	Button fitBtn, updateBtn;
 	//  Not sure I really need a persistent pointer to the currently selected 
@@ -52,7 +53,7 @@ public class BboxWidget implements SelectionListener
 		mainGroup.setText("itemName");
 		scroller.setContent(mainGroup);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 10;
 		mainGroup.setLayout(layout);
 		
@@ -60,6 +61,7 @@ public class BboxWidget implements SelectionListener
 		Composite compassGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;
+        gridData.horizontalSpan = 2;
 		compassGroup.setLayoutData(gridData);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
@@ -127,6 +129,7 @@ public class BboxWidget implements SelectionListener
 		Composite formatGrp = new Composite(mainGroup, 0x0);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;
+        gridData.horizontalSpan = 2;
 		formatGrp.setLayoutData(gridData);
 		RowLayout formatLayout = new RowLayout(SWT.HORIZONTAL);
 		formatGrp.setLayout(formatLayout);
@@ -140,6 +143,28 @@ public class BboxWidget implements SelectionListener
 		formatCombo.select(0);
 		currentLlFormat = DEGREES;  //  default to DEGREES 
 		
+        // tiles numbers
+        Group latTilesGroup = new Group(mainGroup, 0);
+        gridData = new GridData();
+        gridData.horizontalAlignment = SWT.CENTER;
+        latTilesGroup.setLayoutData(gridData);
+        latTilesGroup.setText("Lat Tiles");        
+        fl = new FillLayout();
+        fl.marginHeight = 4;
+        fl.marginWidth = 4;
+        latTilesGroup.setLayout(fl);
+        latTilesText = new Text(latTilesGroup, SWT.RIGHT);        
+        Group lonTilesGroup = new Group(mainGroup, 0);
+        gridData = new GridData();
+        gridData.horizontalAlignment = SWT.CENTER;
+        lonTilesGroup.setLayoutData(gridData);
+        lonTilesGroup.setText("Lon Tiles");
+        fl = new FillLayout();
+        fl.marginHeight = 4;
+        fl.marginWidth = 4;
+        lonTilesGroup.setLayout(fl);        
+        lonTilesText = new Text(lonTilesGroup, SWT.RIGHT);
+        
 		// Update Button
         updateBtn = new Button(mainGroup, SWT.PUSH);
         updateBtn.setText("Update Item");
@@ -179,6 +204,8 @@ public class BboxWidget implements SelectionListener
 		setValue(slatText, bbox.getMinY());
 		setValue(wlonText, bbox.getMinX());
 		setValue(elonText, bbox.getMaxX());
+        setValue(latTilesText, bbox.getYTiles());
+        setValue(lonTilesText, bbox.getXTiles());
 	}
 	
 	public void setFormat(int formatIndex){
@@ -250,11 +277,15 @@ public class BboxWidget implements SelectionListener
             double slat = getValue(slatText);
             double wlon = getValue(wlonText);
             double elon = getValue(elonText);
+            int latTiles = (int)getValue(latTilesText);
+            int lonTiles = (int)getValue(lonTilesText);
             SpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
             bbox.setMaxX(elon);
             bbox.setMinX(wlon);
             bbox.setMaxY(nlat);
             bbox.setMinY(slat);
+            bbox.setXTiles(lonTiles);
+            bbox.setYTiles(latTiles);
             this.dataItem.getDataProvider().clearData();
             this.dataItem.getDataProvider().forceUpdate();            
         }
