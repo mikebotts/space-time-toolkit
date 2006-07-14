@@ -45,6 +45,10 @@ import org.vast.stt.project.DataItem;
 public abstract class DataItemView extends ViewPart implements ISelectionListener, INullSelectionListener, STTEventListener
 {
     protected DataItem item;
+    protected Runnable runRefresh = new Runnable()
+    {
+        public void run() {refreshView();}
+    };
 	
 
     public abstract void updateView();
@@ -61,6 +65,12 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
             updateView();
         else
             clearView();
+    }
+    
+    
+    protected void refreshViewAsync()
+    {
+        getSite().getShell().getDisplay().asyncExec(runRefresh);
     }
     
     
@@ -143,14 +153,6 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
      */
     public void handleEvent(STTEvent e)
     {       
-        if (e.producer == this.item)
-        {
-            Runnable refresh = new Runnable()
-            {
-                public void run() {refreshView();}
-            };
-            
-            getSite().getShell().getDisplay().asyncExec(refresh);
-        }
+        refreshViewAsync();
     }
 }

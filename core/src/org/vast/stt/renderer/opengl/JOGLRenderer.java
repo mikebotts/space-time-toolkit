@@ -23,6 +23,8 @@ import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3D;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockInfo;
+import org.vast.stt.project.DataStylerList;
+import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.*;
@@ -63,6 +65,13 @@ public class JOGLRenderer extends Renderer
 
     public JOGLRenderer()
     {        
+    }
+    
+    
+    protected void drawItem(SceneItem item)
+    {
+        DataStylerList stylerList = item.getStylers();
+        stylerList.accept(this);
     }
 
 
@@ -231,13 +240,6 @@ public class JOGLRenderer extends Renderer
             SWTContext = null;
             JOGLContext = null;
         }
-    }
-    
-    
-    @Override
-    public void deleteBlock(BlockInfo blockInfo)
-    {
-        
     }
     
     

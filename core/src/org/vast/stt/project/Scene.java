@@ -254,12 +254,12 @@ public class Scene implements STTEventProducer, STTEventListener
         {
             DataItem srcItem = (DataItem)event.producer;
             if (isItemVisible(srcItem))
-                dispatchEvent(event);
+                dispatchEvent(event.copy());
         }
         else
         {
             // simply forward the event to scene listeners
-            dispatchEvent(event);
+            dispatchEvent(event.copy());
         }
     }
 }

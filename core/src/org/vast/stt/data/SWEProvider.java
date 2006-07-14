@@ -84,12 +84,13 @@ public class SWEProvider extends AbstractProvider
 			System.out.println(dataEnc);
 			
 			// create data node if needed
-			if (cachedData == null)
-				cachedData = new DataNode();
+			if (dataNode == null)
+				dataNode = new DataNode();
 			
 			// clean up old data			
-            cachedData.clearAll();
-            BlockList blockList = cachedData.createList(dataInfo.copy());
+            dataNode.clearAll();
+            BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.setNodeStructureReady(true);
 			
 			// register the CDM data handler
 			dataHandler.setBlockList(blockList);

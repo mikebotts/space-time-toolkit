@@ -1,6 +1,8 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.styler.StyleWidget;
 
 
@@ -53,5 +55,13 @@ public class StyleView extends DataItemView
     public void clearView()
     {
         
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {       
+        if (e.type == EventType.ITEM_STYLE_CHANGED)
+            refreshViewAsync();
     }
 }

@@ -18,6 +18,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.DataItem;
@@ -137,7 +139,7 @@ public class StyleWidget extends CheckOptionTable
         // TODO Auto-generated method stub
         //  e.getElement returns checked Styler
         Symbolizer symbolizer = (Symbolizer) e.getElement();
-        symbolizer.setEnabled(e.getChecked());
+        symbolizer.setEnabled(e.getChecked());        
     }
 
 
@@ -196,7 +198,10 @@ public class StyleWidget extends CheckOptionTable
         else if (control == enabledButton)
         {
             if (dataItem != null)
+            {
                 dataItem.setEnabled(enabledButton.getSelection());
+                dataItem.dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            }
         }
         else if (control == advancedButton)
         {

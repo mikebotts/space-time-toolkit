@@ -255,6 +255,7 @@ public class BboxWidget implements SelectionListener
             bbox.setMinX(wlon);
             bbox.setMaxY(nlat);
             bbox.setMinY(slat);
+            this.dataItem.getDataProvider().clearData();
             this.dataItem.getDataProvider().forceUpdate();            
         }
         else if(e.widget == fitBtn){

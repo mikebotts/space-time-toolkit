@@ -13,9 +13,9 @@
 
 package org.vast.stt.project;
 
-import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.renderer.RendererInfo;
 import org.vast.stt.util.SpatialExtent;
 
 
@@ -37,6 +37,8 @@ public class SceneItem implements STTEventListener
 {
     protected DataItem dataItem;
     protected DataStylerList stylers;
+    protected RendererInfo rendererInfo;
+    protected boolean updated;
     protected boolean visible;
 
 
@@ -124,15 +126,47 @@ public class SceneItem implements STTEventListener
 
     public void handleEvent(STTEvent e)
     {
-        if (e.type == EventType.ITEM_STYLE_CHANGED)
+        switch (e.type)
         {
-            // update all stylers
-            for (int i = 0; i < stylers.size(); i++)
-                stylers.get(i).updateDataMappings();
+            case ITEM_STYLE_CHANGED:            
+                // update all stylers
+                for (int i = 0; i < stylers.size(); i++)
+                    stylers.get(i).updateDataMappings();
+                
+                // TODO add missing stylers                
+                // TODO remove superfluous stylers
+                
+                break;
             
-            // add missing stylers
-            
-            // remove superfluous stylers
+            case PROVIDER_DATA_ADDED:
+            case PROVIDER_DATA_REMOVED:
+            case PROVIDER_DATA_CHANGED:
+                this.updated = true;
+                break;
         }
+    }
+
+
+    public RendererInfo getRendererInfo()
+    {
+        return rendererInfo;
+    }
+
+
+    public void setRendererInfo(RendererInfo rendererInfo)
+    {
+        this.rendererInfo = rendererInfo;
+    }
+
+
+    public boolean isUpdated()
+    {
+        return updated;
+    }
+
+
+    public void setUpdated(boolean updated)
+    {
+        this.updated = updated;
     }
 }

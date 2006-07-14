@@ -42,6 +42,7 @@ public class DataNode
     protected List<String> possibleScalarMappings;
     protected List<String> possibleBlockMappings;
     protected Hashtable<String, BlockList> listMap;
+    protected boolean nodeStructureReady;
     
     
     public DataNode()
@@ -92,11 +93,11 @@ public class DataNode
     {
         possibleScalarMappings.clear();
         possibleBlockMappings.clear();
-        buildMappers(component, component.getName());
+        findPossibleMappings(component, component.getName());
     }
     
     
-    private void buildMappers(DataComponent component, String componentPath)
+    private void findPossibleMappings(DataComponent component, String componentPath)
     {
         // for each array, build an array mapper
         if (component instanceof DataArray)
@@ -104,7 +105,7 @@ public class DataNode
             possibleBlockMappings.add(componentPath);
             DataComponent childComponent = component.getComponent(0);
             String childPath = componentPath + '/' + childComponent.getName();
-            buildMappers(childComponent, childPath);
+            findPossibleMappings(childComponent, childPath);
         }
         
         // just descend into DataGroups
@@ -115,7 +116,7 @@ public class DataNode
             {
                 DataComponent childComponent = component.getComponent(i);
                 String childPath = componentPath + '/' + childComponent.getName();
-                buildMappers(childComponent, childPath);
+                findPossibleMappings(childComponent, childPath);
             }
         }
         
@@ -138,4 +139,15 @@ public class DataNode
         return possibleScalarMappings;
     }
 
+
+    public boolean isNodeStructureReady()
+    {
+        return nodeStructureReady;
+    }
+
+
+    public void setNodeStructureReady(boolean nodeStructureReady)
+    {
+        this.nodeStructureReady = nodeStructureReady;
+    }
 }

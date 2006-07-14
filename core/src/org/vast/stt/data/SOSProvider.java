@@ -94,8 +94,9 @@ public class SOSProvider extends OWSProvider
         	System.out.println("--- " + dataInfo.getName() + " ---");
         	System.out.println(dataInfo);
         	System.out.println(dataEnc);
-            cachedData.clearAll();
-        	BlockList blockList = cachedData.createList(dataInfo.copy());
+            dataNode.clearAll();
+        	BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.setNodeStructureReady(true);
 			
         	// reset node - HACK
         	//DataNode node = item.getNode();
@@ -143,10 +144,10 @@ public class SOSProvider extends OWSProvider
 		//updateQuery();
 		canceled = false;
 		
-		if (cachedData == null)
-			cachedData = new DataNode();
+		if (dataNode == null)
+			dataNode = new DataNode();
 		else
-			((DataNode)cachedData).clearAll();
+			((DataNode)dataNode).clearAll();
 	}
 	
 	

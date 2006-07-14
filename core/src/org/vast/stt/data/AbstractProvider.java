@@ -45,7 +45,7 @@ public abstract class AbstractProvider implements DataProvider
     protected boolean forceUpdate = true;
     protected DataItem dataItem;
 	protected InputStream dataStream;
-	protected DataNode cachedData;
+	protected DataNode dataNode = new DataNode();
 	protected TimeExtent timeExtent = new TimeExtent();
 	protected TimeExtent maxTimeExtent = new TimeExtent();
 	protected SpatialExtent spatialExtent = new SpatialExtent();
@@ -88,22 +88,15 @@ public abstract class AbstractProvider implements DataProvider
             forceUpdate = false;
         }
 		
-		return cachedData;
-	}
-	
-	
-	public void setDataNode(DataNode dataNode)
-	{
-		cachedData = dataNode;		
+		return dataNode;
 	}
 	
 	
 	public void clearData()
 	{
-		if (cachedData != null)
+		if (dataNode != null)
 		{
-			//TODO cachedData.removeAllComponents();
-            cachedData = null;
+            dataNode.clearAll();
             forceUpdate = true;
 		}		
 	}
