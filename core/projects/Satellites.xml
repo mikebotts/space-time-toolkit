@@ -291,7 +291,7 @@
                   <name>NOAA-12 Footprints</name>
                   <description>Nadir Track for NOAA-12 Satellite</description>
                   <layerId>NOAA_12</layerId>
-                  <request postUrl="http://localhost:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA_12</offering>
                         <eventTime>
@@ -313,7 +313,7 @@
                   <name>NOAA-13 Footprints</name>
                   <description>Nadir Track for NOAA-13 Satellite</description>
                   <layerId>NOAA_13</layerId>
-                  <request postUrl="http://localhost:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA_13</offering>
                         <eventTime>
@@ -335,7 +335,7 @@
                   <name>SPOT-5 Footprints</name>
                   <description>Nadir Track for SPOT-5 Satellite</description>
                   <layerId>SPOT_5</layerId>
-                  <request postUrl="http://localhost:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>SPOT_5</offering>
                         <eventTime>
