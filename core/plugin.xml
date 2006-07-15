@@ -17,8 +17,9 @@
       <view name="TimeExtent" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
       <view name="MasterTime" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
       <view name="StyleView" class="org.vast.stt.gui.views.StyleView" id="STT.StyleView"/>
-      <view name="DataProvide" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
+      <view name="DataProvider" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
       <view name="SceneTree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
+      <view name="SceneItems" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
       <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView" allowMultiple="true"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
