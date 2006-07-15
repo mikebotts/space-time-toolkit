@@ -23,6 +23,7 @@ public class Perspective implements IPerspectiveFactory
         IFolderLayout sceneOptFolder = layout.createFolder(sceneOptFolderID, IPageLayout.BOTTOM, 0.75f, sceneFolderID);
         
 		resFolder.addView(SceneTreeView.ID);
+        resFolder.addView(SceneItemsView.ID);
         resOptFolder.addView(DataProviderView.ID);        
         resOptFolder.addView(StyleView.ID);
         resOptFolder.addView(TimeExtentView.ID);

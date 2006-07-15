@@ -166,7 +166,7 @@ public class TimeSpinner
 		double t = getValue();
 		for(int i=0; i<timeListeners.size(); i++){
 			tsTmp = timeListeners.get(i);
-			tsTmp.timeChanged(t);
+			tsTmp.timeChanged(this, t);
 		}
 	}
 

@@ -112,7 +112,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     }
 
 
-    public void timeChanged(double newTime)
+    public void timeChanged(TimeSpinner spinner, double newTime)
     {
         //  TODO  mod, support multiple Scenes (after Scene is inited)
         Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);

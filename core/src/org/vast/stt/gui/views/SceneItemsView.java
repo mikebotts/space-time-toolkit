@@ -13,9 +13,6 @@
 
 package org.vast.stt.gui.views;
 
-import java.util.Iterator;
-
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -29,26 +26,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-//import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataFolder;
-import org.vast.stt.project.DataItem;
 import org.vast.stt.project.Scene;
+import org.vast.stt.project.SceneItem;
 
 
-public class SceneTreeView extends SceneView implements IDoubleClickListener
+public class SceneItemsView extends SceneView implements IDoubleClickListener
 {
-	public static final String ID = "STT.SceneTreeView";
+	public static final String ID = "STT.SceneItemsView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, folderVisImg, folderHidImg;
+	private Image itemVisImg, itemHidImg;
 	private Font treeFont;
-	private Object[] expandedItems;
     private ISelection selectedItem;
 	
 	
@@ -58,28 +51,17 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         @Override
 		public Image getImage(Object element)
 		{
-			if (element instanceof DataFolder)
-			{
-                if (scene.isItemVisible((DataFolder)element))
-                    return folderVisImg;
-                else
-                    return folderHidImg;
-			}		
-			else if (element instanceof DataItem)
-            {
-                if (scene.isItemVisible((DataItem)element))
-                    return itemVisImg;
-                else
-                    return itemHidImg;
-            }
+			SceneItem item = (SceneItem)element;
+            if (item.isVisible())
+                return itemVisImg;
             else
-				return itemVisImg;
+                return itemHidImg;
 		}
 
 		@Override
 		public String getText(Object element)
 		{
-			return ((DataEntry)element).getName();
+			return ((SceneItem)element).getName();
 		}		
 	}
 	
@@ -97,10 +79,6 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 
 		public Object[] getChildren(Object parentElement)
 		{
-			if (parentElement instanceof DataFolder)
-			{
-				return ((DataFolder)parentElement).toArray();
-			}
 			return null;
 		}
 
@@ -111,17 +89,14 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 
 		public boolean hasChildren(Object element)
 		{
-			if (element instanceof DataFolder)
-				return true;
-			else
-				return false;
+			return false;
 		}
 
 		public Object[] getElements(Object inputElement)
 		{
 			if (inputElement instanceof Scene)
 			{
-				return new Object[] {((Scene)inputElement).getDataTree()};
+				return ((Scene)inputElement).getSceneItems().toArray();
 			}
 			return null;
 		}		
@@ -137,7 +112,6 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
 		sceneTree.addDoubleClickListener(this);
-		getSite().setSelectionProvider(sceneTree);
         super.createPartControl(parent);
 	}
 	
@@ -152,24 +126,8 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		itemVisImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/itemHid.gif");
         itemHidImg = descriptor.createImage();
-		//descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
-        descriptor = STTPlugin.getImageDescriptor("icons/folderVis.gif");
-        folderVisImg = descriptor.createImage();
-        descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
-        folderHidImg = descriptor.createImage();
         
 		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
-		
-		Action action = new Action()
-		{
-			public void run()
-			{
-				
-			}
-		};
-		
-		action.setText("Scene 001");
-		site.getActionBars().getMenuManager().add(action);
 	}
 	
 	
@@ -178,19 +136,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	{
         itemVisImg.dispose();
         itemHidImg.dispose();
-        folderVisImg.dispose();
-        folderHidImg.dispose();
 		treeFont.dispose();
         super.dispose();
 	}
-    
-    
-    @Override
-    public void setScene(Scene sc)
-    {
-        super.setScene(sc);
-        expandedItems = new Object[0];
-    }
     
     
     @Override
@@ -199,7 +147,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         switch (e.type)
         {
             case SCENE_OPTIONS_CHANGED:
-            case SCENE_TREE_CHANGED:
+            case SCENE_ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
         }
     }
@@ -208,15 +156,12 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     public void updateView()
     {       
         // save previous expanded/selected elements
-        expandedItems = sceneTree.getExpandedElements();
         selectedItem = sceneTree.getSelection();
         
         // load new data in tree
         sceneTree.setInput(scene);
         
-        // restore expanded/selected elements
-        for (int i=0; i<expandedItems.length; i++)
-            sceneTree.expandToLevel(expandedItems[i], 1);
+        // restore selected elements
         sceneTree.setSelection(selectedItem);
     }
 
@@ -224,44 +169,15 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     public void clearView()
     {
         sceneTree.setInput(null);
-        expandedItems = new Object[0];
     }
 
 
     public void doubleClick(DoubleClickEvent event)
     {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-        DataEntry selectedEntry = (DataEntry)selection.getFirstElement();
+        SceneItem sceneItem = (SceneItem)selection.getFirstElement();
         
-        // if it's a list change visibility for all descendants
-        if (selectedEntry instanceof DataFolder)
-        {
-            DataFolder list = (DataFolder)selectedEntry;
-            Iterator<DataItem> it = list.getItemIterator();
-            boolean getVis = true;
-            boolean visibility = true;
-            
-            while (it.hasNext())
-            {
-                DataItem nextItem = it.next();
-                
-                if (getVis)
-                {
-                    visibility = !scene.isItemVisible(nextItem);
-                    getVis = false;
-                }
-                
-                scene.setItemVisibility(nextItem, visibility);
-            }
-        }
-        
-        // if it's a single item, change its visibility
-        else if (selectedEntry instanceof DataItem)
-        {
-            DataItem item = (DataItem)selectedEntry;
-            boolean visible = scene.isItemVisible(item);
-            scene.setItemVisibility(item, !visible);
-        }
+        sceneItem.setVisible(!sceneItem.isVisible());
         
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_VISIBILITY_CHANGED));

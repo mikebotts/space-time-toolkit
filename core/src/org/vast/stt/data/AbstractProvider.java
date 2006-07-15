@@ -15,6 +15,9 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.SpatialExtent;
@@ -36,7 +39,7 @@ import org.vast.stt.project.TimeExtent;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public abstract class AbstractProvider implements DataProvider
+public abstract class AbstractProvider implements DataProvider, STTEventListener
 {
     protected String name;
     protected String description;
@@ -53,7 +56,9 @@ public abstract class AbstractProvider implements DataProvider
     
     
     public abstract void updateData() throws DataException;
-	
+    public abstract boolean isSpatialSubsetSupported();
+    public abstract boolean isTimeSubsetSupported();
+
 	
     public void forceUpdate()
     {
@@ -132,8 +137,17 @@ public abstract class AbstractProvider implements DataProvider
 	
 	public void setSpatialExtent(SpatialExtent spatialExtent)
 	{
-		this.forceUpdate = true;
-        this.spatialExtent = spatialExtent;		
+		if (this.spatialExtent != spatialExtent)
+        {
+            if (this.spatialExtent != null)
+                this.spatialExtent.removeListener(this);
+            
+            this.forceUpdate = true;
+            this.spatialExtent = spatialExtent;
+            
+            if (this.spatialExtent != null)
+                this.spatialExtent.addListener(this);
+        }
 	}
 
 
@@ -145,8 +159,17 @@ public abstract class AbstractProvider implements DataProvider
 
 	public void setTimeExtent(TimeExtent timeExtent)
 	{
-        this.forceUpdate = true;
-        this.timeExtent = timeExtent;		
+        if (this.timeExtent != timeExtent)
+        {
+            if (this.timeExtent != null)
+                this.timeExtent.removeListener(this);
+            
+            this.forceUpdate = true;
+            this.timeExtent = timeExtent;
+            
+            if (this.timeExtent != null)
+                this.timeExtent.addListener(this);
+        }	
 	}
 
 
@@ -207,5 +230,11 @@ public abstract class AbstractProvider implements DataProvider
     public void setDataItem(DataItem dataItem)
     {
         this.dataItem = dataItem;
+    }
+
+
+    public void handleEvent(STTEvent e)
+    {
+        // TODO implement handleEvent method        
     }
 }

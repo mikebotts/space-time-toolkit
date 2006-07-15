@@ -14,10 +14,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.TimeExtent;
 
-public class TimeExtentWidget implements SelectionListener
+public class TimeExtentWidget implements SelectionListener, TimeListener
 {	
 	Label itemLabel;
 	TimeZoneCombo tzCombo;
@@ -73,29 +75,34 @@ public class TimeExtentWidget implements SelectionListener
 		gridData.horizontalAlignment = SWT.RIGHT;
 		//biasSpinner.setBackground(GREEN);
 		biasSpinner.setLayoutData(gridData);
+        biasSpinner.addTimeListener(this);
 		
 		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		stepSpinner.setLayoutData(gridData);
-
+        stepSpinner.addTimeListener(this);
+        
 		leadSpinner = new TimeSpinner(mainGroup, "Delta Lead");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		leadSpinner.setLayoutData(gridData);
+        leadSpinner.addTimeListener(this);
 
 		lagSpinner = new TimeSpinner(mainGroup, "Delta Lag");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		lagSpinner.setLayoutData(gridData);
+        lagSpinner.addTimeListener(this);
 
 		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.VERTICAL);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		gridData.verticalIndent = 10;
 		absTimeSpinner.setLayoutData(gridData);
+        absTimeSpinner.addTimeListener(this);
 
 		//  Add UseAbsTime toggle
 		useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
@@ -192,5 +199,19 @@ public class TimeExtentWidget implements SelectionListener
 			System.err.println(e);
 		}
 	}
-	
+
+    public void timeChanged(TimeSpinner spinner, double newTime)
+    {
+        // update time extent object
+        double absTime = absTimeSpinner.getValue();
+        TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+        timeExtent.setAbsoluteTime(absTime);
+        
+        if (continuousUpdateBtn.getSelection())
+        {
+            //dataItem.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+            this.dataItem.getDataProvider().clearData();
+            this.dataItem.getDataProvider().forceUpdate();
+        }
+    }	
 }

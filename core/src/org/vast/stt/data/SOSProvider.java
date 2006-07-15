@@ -141,13 +141,11 @@ public class SOSProvider extends OWSProvider
 	{
 		// make sure previous request is cancelled
 		endRequest();
-		//updateQuery();
+		updateQuery();
 		canceled = false;
 		
 		if (dataNode == null)
 			dataNode = new DataNode();
-		else
-			((DataNode)dataNode).clearAll();
 	}
 	
 	
