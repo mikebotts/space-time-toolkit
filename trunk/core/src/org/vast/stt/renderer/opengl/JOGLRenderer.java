@@ -114,7 +114,7 @@ public class JOGLRenderer extends Renderer
         if (view.isShowCameraTarget())
             this.drawCameraTarget();
         
-        zBufferOffset = 1.0f;
+        zBufferOffset = 0.0f;
     }
 
 
@@ -253,7 +253,7 @@ public class JOGLRenderer extends Renderer
     
     protected float getOffset()
     {
-        zBufferOffset += 0.1f;
+        zBufferOffset += 0.2f;
         return zBufferOffset;
     }
     
