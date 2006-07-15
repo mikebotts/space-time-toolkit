@@ -37,169 +37,7 @@
             </view>
             <contents>
                <DataList>
-                  <name>Satellites</name>
-                  <member visible="false">
-                     <DataItem enabled="true">
-                        <name>NOAA-12 Footprints</name>
-                        <dataProvider xlink:href="#NOAA12_DATA"/>
-                        <style>
-                           <sld:GridSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sldx:Dimensions>
-                                 <sld:CssParameter name="width">
-                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="length">
-                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sldx:Dimensions>
-                              <sld:Fill>
-                                 <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
-                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
-                              </sld:Fill>
-                              <!--<sld:Stroke>
-                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
-                              </sld:Stroke>-->
-                           </sld:GridSymbolizer>
-                        </style>
-                        <style>
-                           <sld:PointSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter> 
-                              </sld:Geometry>
-                              <sld:Graphic>
-                                 <sld:Mark>
-                                    <sld:WellKnownName>circle</sld:WellKnownName>
-                                    <sld:Fill>
-                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
-                                    </sld:Fill>
-                                 </sld:Mark>
-                                 <sld:Size>2</sld:Size>
-                              </sld:Graphic>
-                           </sld:PointSymbolizer>
-                        </style> 
-                     </DataItem>
-                  </member>                  
-                  <member visible="false">
-                     <DataItem enabled="true">
-                        <name>NOAA-13 Footprints</name>
-                        <dataProvider xlink:href="#NOAA13_DATA"/>
-                        <style>
-                           <sld:GridSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sldx:Dimensions>
-                                 <sld:CssParameter name="width">
-                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="length">
-                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sldx:Dimensions>
-                              <sld:Fill>
-                                 <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
-                              </sld:Fill>
-                              <!--<sld:Stroke>
-                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
-                              </sld:Stroke>-->
-                           </sld:GridSymbolizer>
-                        </style>
-                        <style>
-                           <sld:PointSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter> 
-                              </sld:Geometry>
-                              <sld:Graphic>
-                                 <sld:Mark>
-                                    <sld:WellKnownName>circle</sld:WellKnownName>
-                                    <sld:Fill>
-                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
-                                    </sld:Fill>
-                                 </sld:Mark>
-                                 <sld:Size>2</sld:Size>
-                              </sld:Graphic>
-                           </sld:PointSymbolizer>
-                        </style> 
-                     </DataItem>
-                  </member>
-                  <member visible="false">
-                     <DataItem enabled="true">
-                        <name>SPOT-5 Footprints</name>
-                        <dataProvider xlink:href="#SPOT5_DATA"/>
-                        <style>
-                           <sld:GridSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sldx:Dimensions>
-                                 <sld:CssParameter name="width">
-                                    <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="length">
-                                    <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sldx:Dimensions>
-                              <sld:Fill>
-                                 <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
-                                 <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
-                              </sld:Fill>
-                              <!--<sld:Stroke>
-                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
-                              </sld:Stroke>-->
-                           </sld:GridSymbolizer>
-                        </style>
-                        <style>
-                           <sld:PointSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>                                       
-                                 </sld:CssParameter> 
-                              </sld:Geometry>
-                              <sld:Graphic>
-                                 <sld:Mark>
-                                    <sld:WellKnownName>circle</sld:WellKnownName>
-                                    <sld:Fill>
-                                       <sld:CssParameter name="fill">#000000</sld:CssParameter>                                       
-                                    </sld:Fill>
-                                 </sld:Mark>
-                                 <sld:Size>2</sld:Size>
-                              </sld:Graphic>
-                           </sld:PointSymbolizer>
-                        </style> 
-                     </DataItem>
-                  </member>
+                  <name>NASA Project</name>
                   <member>
                      <DataList>
                         <name>Geographic Data</name>
@@ -250,6 +88,173 @@
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Satellite Swaths</name>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>NOAA-12 Footprints</name>
+                              <dataProvider xlink:href="#NOAA12_DATA"/>
+                              <style>
+                                 <sld:GridSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                    <!--<sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
+                              </sld:Stroke>-->
+                                 </sld:GridSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>2</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>NOAA-13 Footprints</name>
+                              <dataProvider xlink:href="#NOAA13_DATA"/>
+                              <style>
+                                 <sld:GridSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                    <!--<sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
+                              </sld:Stroke>-->
+                                 </sld:GridSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>2</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>SPOT-5 Footprints</name>
+                              <dataProvider xlink:href="#SPOT5_DATA"/>
+                              <style>
+                                 <sld:GridSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                    <!--<sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF6666</sld:CssParameter>
+                              </sld:Stroke>-->
+                                 </sld:GridSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>2</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
                               </style>
                            </DataItem>
                         </member>
