@@ -169,9 +169,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     }
     
     
-    /**
-     * Redraw the whole world view using provided renderer
-     */
+    @Override
     public void updateView()
     {
         // set part name
@@ -182,16 +180,28 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     }
     
     
-    /**
-     * Clears the world view and unregister listeners
-     */
+    @Override
     public void clearView()
     {
+        // Clears the world view and unregister listeners
         canvas.removeMouseListener(controller);
         canvas.removeMouseMoveListener(controller);
         canvas.removeListener(SWT.MouseWheel , controller);
         canvas.redraw();
         setPartName("Nothing Open");
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {       
+        switch (e.type)
+        {
+            case SCENE_OPTIONS_CHANGED:
+            case SCENE_DATA_CHANGED:
+            case SCENE_VIEW_CHANGED:
+                refreshViewAsync();
+        }
     }
     
     

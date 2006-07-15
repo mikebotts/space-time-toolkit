@@ -11,7 +11,12 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.util;
+package org.vast.stt.project;
+
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.event.STTEventProducer;
 
 /**
  * <p><b>Title:</b><br/>
@@ -28,7 +33,7 @@ package org.vast.stt.util;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class SpatialExtent
+public class SpatialExtent implements STTEventProducer
 {
 	protected String crs;
 	protected double minX;
@@ -41,6 +46,7 @@ public class SpatialExtent
     protected int xTiles = 1;
     protected int yTiles = 1;
     protected int zTiles = 1;
+    protected STTEventListeners listeners;
 
 
     /**
@@ -273,5 +279,30 @@ public class SpatialExtent
     public void setZTiles(int tiles)
     {
         zTiles = tiles;
+    }
+    
+    
+    public void addListener(STTEventListener listener)
+    {
+        listeners.add(listener);
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();
+    }
+
+
+    public void dispatchEvent(STTEvent event)
+    {
+        event.producer = this;
+        listeners.dispatchEvent(event);
     }
 }

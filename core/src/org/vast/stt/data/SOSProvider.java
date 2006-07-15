@@ -51,7 +51,7 @@ public class SOSProvider extends OWSProvider
 	public SOSProvider()
 	{
 		requestBuilder = new SOSRequestWriter();
-		dataHandler = new SWEDataHandler();
+		dataHandler = new SWEDataHandler(this);
 	}
 	
 	

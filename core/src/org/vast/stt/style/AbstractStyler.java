@@ -21,7 +21,7 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
-import org.vast.stt.util.SpatialExtent;
+import org.vast.stt.project.SpatialExtent;
 
 
 /**

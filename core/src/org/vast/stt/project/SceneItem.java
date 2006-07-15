@@ -16,7 +16,6 @@ package org.vast.stt.project;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.renderer.RendererInfo;
-import org.vast.stt.util.SpatialExtent;
 
 
 /**

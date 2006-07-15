@@ -18,8 +18,8 @@ import java.util.List;
 
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.Resource;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
+import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.TimeExtent;
 
 
 /**

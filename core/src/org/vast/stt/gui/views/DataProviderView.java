@@ -14,6 +14,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.DataProcess.DataProcessWidget;
 
 
@@ -66,5 +67,17 @@ public class DataProviderView extends DataItemView
     public void clearView()
     {
         
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {       
+        switch (e.type)
+        {
+            case ITEM_OPTIONS_CHANGED:
+            case PROVIDER_OPTIONS_CHANGED:
+                refreshViewAsync();
+        }            
     }
 }

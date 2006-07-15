@@ -253,7 +253,7 @@ public class JOGLRenderer extends Renderer
     
     protected float getOffset()
     {
-        zBufferOffset -= 0.2f;
+        zBufferOffset -= 0.4f;
         return zBufferOffset;
     }
     

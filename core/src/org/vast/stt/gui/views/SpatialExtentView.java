@@ -14,6 +14,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.bbox.BboxWidget;
 
 
@@ -57,5 +58,17 @@ public class SpatialExtentView extends DataItemView
     public void clearView()
     {
   
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {       
+        switch (e.type)
+        {
+            case ITEM_OPTIONS_CHANGED:
+            case PROVIDER_SPATIAL_EXTENT_CHANGED:
+                refreshViewAsync();
+        }
     }
 }

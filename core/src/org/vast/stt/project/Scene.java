@@ -253,23 +253,19 @@ public class Scene implements STTEventProducer, STTEventListener
 
     public void handleEvent(STTEvent event)
     {
-        // case of data removed from a DataNode
-        if (event.type == EventType.PROVIDER_DATA_REMOVED)
+        switch (event.type)
         {
-            
-        }
-        
-        // if dataItem event, forward only if item is visible
-        else if (event.producer instanceof DataItem)
-        {
-            DataItem srcItem = (DataItem)event.producer;
-            if (isItemVisible(srcItem))
-                dispatchEvent(event.copy());
-        }
-        else
-        {
-            // simply forward the event to scene listeners
-            dispatchEvent(event.copy());
+            case ITEM_DATA_CHANGED:
+                DataItem srcItem = (DataItem)event.producer;
+                if (isItemVisible(srcItem))
+                    dispatchEvent(new STTEvent(this, EventType.SCENE_DATA_CHANGED));
+                break;
+                
+            case SCENE_VIEW_CHANGED:
+                STTEvent newEvent = event.copy();
+                newEvent.producer = this;
+                dispatchEvent(newEvent);
+                break;
         }
     }
 }

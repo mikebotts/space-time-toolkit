@@ -11,7 +11,12 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.util;
+package org.vast.stt.project;
+
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.event.STTEventProducer;
 
 /**
  * <p><b>Title:</b><br/>
@@ -29,7 +34,7 @@ package org.vast.stt.util;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class TimeExtent
+public class TimeExtent implements STTEventProducer
 {
     //members
     private double baseTime;
@@ -39,6 +44,7 @@ public class TimeExtent
     private double leadCacheDelta = 0, lagCacheDelta = 0; // added by meb: 02/02/03
     private boolean useAbsoluteTime = false; //  overrides STT clock, if true
     private double absoluteTime;
+    protected STTEventListeners listeners;
 
 
     // constructors
@@ -319,4 +325,28 @@ public class TimeExtent
         return result;
     }
 
+    
+    public void addListener(STTEventListener listener)
+    {
+        listeners.add(listener);
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();
+    }
+
+
+    public void dispatchEvent(STTEvent event)
+    {
+        event.producer = this;
+        listeners.dispatchEvent(event);
+    }
 }
