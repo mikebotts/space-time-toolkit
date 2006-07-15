@@ -41,6 +41,7 @@ import org.vast.stt.project.Scene;
 public abstract class SceneView extends ViewPart implements IPageListener, STTEventListener
 {
     protected Scene scene;
+    protected boolean updating = false;
     protected Runnable runRefresh = new Runnable()
     {
         public void run() {refreshView();}
@@ -57,10 +58,15 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     protected void refreshView()
     {
-        if (scene != null)
-            updateView();
-        else
-            clearView();
+        if (!updating)
+        {
+            updating = true;
+            if (scene != null)
+                updateView();
+            else
+                clearView();
+            updating = false;
+        }
     }
     
     

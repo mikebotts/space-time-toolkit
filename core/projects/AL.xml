@@ -25,11 +25,11 @@
                <ViewSettings>
                   <backgroundColor>#FFFFFF</backgroundColor>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>0 0 10</cameraPos>
-                  <targetPos>0 0 0</targetPos>
+                  <cameraPos>-1.52 0.57 10</cameraPos>
+                  <targetPos>-1.52 0.57 0</targetPos>
                   <upDirection>0 1 0</upDirection>
-                  <orthoWidth>4</orthoWidth>
-                  <orthoHeight>1.67</orthoHeight>
+                  <orthoWidth>0.2</orthoWidth>
+                  <orthoHeight>0.15</orthoHeight>
                   <nearClip>0</nearClip>
                   <farClip>1e7</farClip>
                   <zFudgeFactor>1000</zFudgeFactor>
