@@ -6,5 +6,5 @@ package org.vast.stt.gui.widgets.time;
  */
 public interface TimeListener {
 	//  May add more to the arg of timeChanged, if needed
-	public void timeChanged(double newTime);
+	public void timeChanged(TimeSpinner spinner, double newTime);
 }

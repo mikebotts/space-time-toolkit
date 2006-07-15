@@ -200,6 +200,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
             case SCENE_OPTIONS_CHANGED:
             case SCENE_DATA_CHANGED:
             case SCENE_VIEW_CHANGED:
+            case SCENE_ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
         }
     }

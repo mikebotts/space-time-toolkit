@@ -37,7 +37,21 @@ import org.vast.stt.event.STTEventProducer;
  */
 public class ViewSettings implements STTEventProducer
 {
-	// basic parameters
+    public enum MotionConstraint
+    {
+        NO_MOTION,
+        X, Y, Z,
+        XY, YZ, XZ,
+        XYZ
+    }
+    
+    public enum CameraMode
+    {
+        ORTHO,
+        PERPECTIVE
+    }
+    
+    // basic parameters
 	protected Color backgroundColor;
 	protected boolean alphaBlendingEnabled = true;
 	
@@ -53,9 +67,7 @@ public class ViewSettings implements STTEventProducer
 	protected double orthoWidth, orthoHeight;
 
 	// camera modes
-	public final static int ORTHO = 1;
-	public final static int PERSPECTIVE = 2;
-	protected int cameraMode = ORTHO;
+	protected CameraMode cameraMode;
 
 	// zDepthFudgeFactor provides support for stopping pixel fighting
 	// between objects with similar z-depth values; the use of this factor
@@ -64,6 +76,11 @@ public class ViewSettings implements STTEventProducer
 
 	// clipping planes
 	protected double nearClip, farClip;
+    
+    // camera motion contraints
+    protected MotionConstraint transConstraint;
+    protected MotionConstraint rotConstraint;
+    protected MotionConstraint zoomConstraint;
     
     // other options
     protected boolean showCameraTarget = true;
@@ -79,25 +96,28 @@ public class ViewSettings implements STTEventProducer
 		targetPos.setCoordinates(0.0, 0.0, 0.0);
 		upDirection.setCoordinates(0.0, 1.0, 0.0);
 		
+        cameraMode = CameraMode.ORTHO;
 		orthoWidth = 2.0;
 		orthoHeight = orthoWidth / 1.33;
 		
-		cameraFov = 20;
-		
 		nearClip = 1e-3;
-		farClip = 1e3;
+		farClip = 1e3;        
+        
+        transConstraint = MotionConstraint.XY;
+        rotConstraint = MotionConstraint.XYZ;
+        zoomConstraint = MotionConstraint.XYZ;
         
         listeners = new STTEventListeners(1);
     }
 	
 
-	public int getCameraMode()
+	public CameraMode getCameraMode()
 	{
 		return cameraMode;
 	}
 
 
-	public void setCameraMode(int cameraMode)
+	public void setCameraMode(CameraMode cameraMode)
 	{
 		this.cameraMode = cameraMode;
 	}
@@ -244,6 +264,42 @@ public class ViewSettings implements STTEventProducer
     public void setShowCameraTarget(boolean showCameraTarget)
     {
         this.showCameraTarget = showCameraTarget;
+    }
+    
+    
+    public MotionConstraint getRotConstraint()
+    {
+        return rotConstraint;
+    }
+
+
+    public void setRotConstraint(MotionConstraint rotConstraint)
+    {
+        this.rotConstraint = rotConstraint;
+    }
+
+
+    public MotionConstraint getTransConstraint()
+    {
+        return transConstraint;
+    }
+
+
+    public void setTransConstraint(MotionConstraint transConstraint)
+    {
+        this.transConstraint = transConstraint;
+    }
+
+
+    public MotionConstraint getZoomConstraint()
+    {
+        return zoomConstraint;
+    }
+
+
+    public void setZoomConstraint(MotionConstraint zoomConstraint)
+    {
+        this.zoomConstraint = zoomConstraint;
     }
     
     

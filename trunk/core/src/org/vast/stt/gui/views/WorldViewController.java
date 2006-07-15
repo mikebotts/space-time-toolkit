@@ -19,6 +19,8 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.ViewSettings.CameraMode;
+import org.vast.stt.project.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.Renderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -43,10 +45,7 @@ import org.eclipse.swt.events.*;
  */
 public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
-	protected Scene scene;
-    protected boolean enableZoom = true;
-	protected boolean enableRotation = true;
-	protected boolean enableTranslation = true;	
+	protected Scene scene;    
 	private Vector3D P0 = new Vector3D();
 	private Vector3D P1 = new Vector3D();
 	private int xOld;
@@ -64,68 +63,97 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	protected void doRotation(int x0, int y0, int x1, int y1)
 	{
         ViewSettings viewSettings = scene.getViewSettings();
-        Renderer renderer = scene.getRenderer();
+        MotionConstraint rotConstraint = viewSettings.getRotConstraint();
         
-        renderer.unproject(x0, -y0, 0.0, P0);
-        renderer.unproject(x1, -y1, 0.0, P1);
-		P1.sub(P0);		
-		
-        // actual camera position
-        Vector3D up = viewSettings.getUpDirection();
-        Vector3D pos = viewSettings.getCameraPos();
-        Vector3D target = viewSettings.getTargetPos();
-        Vector3D oldZ = Vector3D.subtractVectors(target, pos);
-
-        // rotation angle proportional to drag distance on the screen
-        double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
-        double rotationAngle = rotationAmount;//10.0;
-
-        // rotation axis in world coordinates
-        Vector3D rotationAxis = oldZ.cross(P1);
-        Quaternion qRot = new Quaternion(rotationAxis, rotationAngle);
-
-        // rotate current camera position
-        pos.sub(target);
-        pos.rotate(qRot);
-        pos.add(target);
-
-        //System.out.println(qRot);
-        // also update up axis
-        up.rotate(qRot);
+        if (rotConstraint != MotionConstraint.NO_MOTION)
+        {
+            Renderer renderer = scene.getRenderer();
+            
+            renderer.unproject(x0, -y0, 0.0, P0);
+            renderer.unproject(x1, -y1, 0.0, P1);
+    		P1.sub(P0);		
+    		
+            // actual camera position
+            Vector3D up = viewSettings.getUpDirection();
+            Vector3D pos = viewSettings.getCameraPos();
+            Vector3D target = viewSettings.getTargetPos();
+            Vector3D oldZ = Vector3D.subtractVectors(target, pos);
+    
+            // rotation angle proportional to drag distance on the screen
+            double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
+            double rotationAngle = rotationAmount;//10.0;
+    
+            // rotation axis in world coordinates
+            Vector3D rotationAxis = oldZ.cross(P1);
+            Quaternion qRot = new Quaternion(rotationAxis, rotationAngle);
+    
+            // rotate current camera position
+            pos.sub(target);
+            pos.rotate(qRot);
+            pos.add(target);
+    
+            //System.out.println(qRot);
+            // also update up axis
+            up.rotate(qRot);
+        }
 	}
 	
 	
 	protected void doTranslation(int x0, int y0, int x1, int y1)
 	{
         ViewSettings viewSettings = scene.getViewSettings();
-        Renderer renderer = scene.getRenderer();
+        MotionConstraint transConstraint = viewSettings.getTransConstraint();
         
-        renderer.unproject(x0, -y0, 0.0, P0);
-        renderer.unproject(x1, -y1, 0.0, P1);
-		P1.sub(P0);
-        P1.setCoordinate(2, 0.0); //constraint for lat/lon view
-		viewSettings.getTargetPos().sub(P1);
-		viewSettings.getCameraPos().sub(P1);
+        if (transConstraint != MotionConstraint.NO_MOTION)
+        {
+            Renderer renderer = scene.getRenderer();
+            
+            renderer.unproject(x0, -y0, 0.0, P0);
+            renderer.unproject(x1, -y1, 0.0, P1);
+    		P1.sub(P0);
+            
+            switch (transConstraint)
+            {
+                case XY:
+                    P1.setCoordinate(2, 0.0);
+                    break;
+                    
+                case XZ:
+                    P1.setCoordinate(1, 0.0);
+                    break;
+                    
+                case YZ:
+                    P1.setCoordinate(0, 0.0);
+                    break;
+            }
+    		
+            viewSettings.getTargetPos().sub(P1);
+    		viewSettings.getCameraPos().sub(P1);
+        }
 	}
 	
 	
 	protected void doZoom(double amount)
 	{
         ViewSettings viewSettings = scene.getViewSettings();
+        MotionConstraint zoomConstraint = viewSettings.getZoomConstraint();
         
-        // zoom in ortho mode
-		if (viewSettings.getCameraMode() == ViewSettings.ORTHO)
-		{
-			double currentWidth = viewSettings.getOrthoWidth();			
-			double newWidth = currentWidth + amount*currentWidth;
-			
-			if (newWidth == 0.0 && amount > 0.0)
-				newWidth = amount;
-			else if (newWidth < 0.0)
-				newWidth = 0.0;
-			
-			viewSettings.setOrthoWidth(newWidth);
-		}
+        if (zoomConstraint != MotionConstraint.NO_MOTION)
+        {
+            // zoom in ortho mode
+    		if (viewSettings.getCameraMode() == CameraMode.ORTHO)
+    		{
+    			double currentWidth = viewSettings.getOrthoWidth();			
+    			double newWidth = currentWidth + amount*currentWidth;
+    			
+    			if (newWidth == 0.0 && amount > 0.0)
+    				newWidth = amount;
+    			else if (newWidth < 0.0)
+    				newWidth = 0.0;
+    			
+    			viewSettings.setOrthoWidth(newWidth);
+    		}
+        }
 	}
 	
 
@@ -163,19 +191,19 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	{
         if (rotating || translating || zooming)
 		{           
-            if (rotating && enableRotation)
+            if (rotating)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 				doRotation(xOld, yOld, e.x, e.y);				
 			}
 			
-			else if (translating && enableTranslation)
+			else if (translating)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
 				doTranslation(xOld, yOld, e.x, e.y);				
 			}
 			
-			else if (zooming && enableZoom)
+			else if (zooming)
 			{
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
                 int viewHeight = scene.getRenderer().getCanvas().getClientArea().height;
@@ -209,43 +237,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	}
 
 
-	public boolean isEnableRotation()
-	{
-		return enableRotation;
-	}
-
-
-	public void setEnableRotation(boolean enableRotation)
-	{
-		this.enableRotation = enableRotation;
-	}
-
-
-	public boolean isEnableTranslation()
-	{
-		return enableTranslation;
-	}
-
-
-	public void setEnableTranslation(boolean enableTranslation)
-	{
-		this.enableTranslation = enableTranslation;
-	}
-
-
-	public boolean isEnableZoom()
-	{
-		return enableZoom;
-	}
-
-
-	public void setEnableZoom(boolean enableZoom)
-	{
-		this.enableZoom = enableZoom;
-	}
-
-
-    public Scene getScene()
+	public Scene getScene()
     {
         return scene;
     }
