@@ -28,7 +28,6 @@ import org.vast.process.DataProcess;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.SystemReader;
 import org.vast.stt.data.*;
-import org.vast.stt.util.SpatialExtent;
 import org.w3c.dom.*;
 
 

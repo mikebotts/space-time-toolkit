@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
+import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.TimeExtent;
 
 
 /**

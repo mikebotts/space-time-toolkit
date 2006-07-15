@@ -48,7 +48,7 @@ public class SWEProvider extends AbstractProvider
 	
 	public SWEProvider()
 	{
-		dataHandler = new SWEDataHandler();
+		dataHandler = new SWEDataHandler(this);
 	}
 	
 	

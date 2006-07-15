@@ -17,6 +17,9 @@ import java.util.Hashtable;
 
 import org.ogc.cdm.common.*;
 import org.vast.data.AbstractDataBlock;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.DataProvider;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -39,11 +42,13 @@ public class SWEDataHandler implements DataHandler
 {
 	protected Hashtable<DataComponent, UnitConverter> converters;
     protected BlockList blockList;
+    protected DataProvider provider;
 	
 
-	public SWEDataHandler()
+	public SWEDataHandler(DataProvider provider)
 	{
-		converters = new Hashtable<DataComponent, UnitConverter>();
+		this.provider = provider;
+        converters = new Hashtable<DataComponent, UnitConverter>();
 	}
 	
 	
@@ -56,6 +61,7 @@ public class SWEDataHandler implements DataHandler
 	public void endData(DataComponent info, DataBlock data)
 	{
         blockList.addBlock((AbstractDataBlock)data);
+        provider.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_DATA_CHANGED));
 	}
 
 

@@ -7,7 +7,7 @@ import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.Scene;
-import org.vast.stt.util.SpatialExtent;
+import org.vast.stt.project.SpatialExtent;
 
 
 /**

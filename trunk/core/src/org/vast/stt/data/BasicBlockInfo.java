@@ -13,8 +13,8 @@
 
 package org.vast.stt.data;
 
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
+import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.TimeExtent;
 
 /**
  * <p><b>Title:</b><br/>

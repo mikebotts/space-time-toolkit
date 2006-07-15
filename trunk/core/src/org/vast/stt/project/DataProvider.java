@@ -15,8 +15,6 @@ package org.vast.stt.project;
 
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.util.SpatialExtent;
-import org.vast.stt.util.TimeExtent;
 
 
 /**

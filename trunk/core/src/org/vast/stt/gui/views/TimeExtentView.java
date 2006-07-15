@@ -2,6 +2,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.time.TimeExtentWidget;
 
 
@@ -46,5 +47,17 @@ public class TimeExtentView extends DataItemView
     public void clearView()
     {
         //timeSettingsWidget.disable();
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {       
+        switch (e.type)
+        {
+            case ITEM_OPTIONS_CHANGED:
+            case PROVIDER_TIME_EXTENT_CHANGED:
+                refreshViewAsync();
+        }
     }
 }

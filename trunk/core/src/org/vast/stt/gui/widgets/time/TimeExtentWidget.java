@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
 import org.vast.stt.project.DataItem;
-import org.vast.stt.util.TimeExtent;
+import org.vast.stt.project.TimeExtent;
 
 public class TimeExtentWidget implements SelectionListener
 {	
@@ -140,7 +140,6 @@ public class TimeExtentWidget implements SelectionListener
 	}
 	
 	public void setDataItem(DataItem item){
-		mainGroup.setText(item.getName());
 		this.dataItem = item;
 		mainGroup.setText(item.getName());
 		//  set the fields 
@@ -151,7 +150,7 @@ public class TimeExtentWidget implements SelectionListener
 		leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		stepSpinner.setValue(timeExtent.getTimeStep());
-		absTimeSpinner.setValue(timeExtent.getAbsoluteTime());
+		absTimeSpinner.setValue(timeExtent.getBaseTime());//timeExtent.getAbsoluteTime());
 		useAbsTimeBtn.setSelection(timeExtent.getUseAbsoluteTime());
 		//timeExtent.getAbsoluteTimeZone();
 		//  
