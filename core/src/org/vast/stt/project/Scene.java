@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
@@ -155,51 +156,50 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
-    public void setItemVisibility(DataEntry entry, boolean visible)
+    public void setItemVisibility(DataItem dataItem, boolean visible)
     {
-        if (entry instanceof DataItem)
+        boolean found = false;
+        
+        // try to find entry in sceneItems list
+        for (int i=0; i<sceneItems.size(); i++)
         {
-            DataItem dataItem = (DataItem)entry;
-            boolean found = false;
-            
-            // try to find entry in sceneItems list
-            for (int i=0; i<sceneItems.size(); i++)
+            SceneItem nextItem = sceneItems.get(i);
+            if (nextItem.getDataItem() == dataItem)
             {
-                SceneItem nextItem = sceneItems.get(i);
-                if (nextItem.getDataItem() == dataItem)
-                {
-                    nextItem.setVisible(visible);
-                    found = true;
-                }
+                nextItem.setVisible(visible);
+                found = true;
             }
-            
-            // if not found create a new SceneItem + prepare all stylers
-            if (!found)
-            {
-                SceneItem newSceneItem = new SceneItem();
-                newSceneItem.setDataItem(dataItem);
-                newSceneItem.setVisible(visible);
-                List<Symbolizer> symbolizers = dataItem.getSymbolizers();
-                for (int i=0; i<symbolizers.size(); i++)
-                {
-                    DataStyler styler = stylerFactory.createStyler(symbolizers.get(i));
-                    styler.setDataItem(dataItem);
-                    newSceneItem.getStylers().add(styler);
-                }
-                sceneItems.add(newSceneItem);
-            }
-            
-            // register scene as a listener to the item
-            if (visible)
-                dataItem.addListener(this);
-            else
-                dataItem.removeListener(this);
         }
         
-        else if (entry instanceof DataFolder)
+        // if not found create a new SceneItem + prepare all stylers
+        if (!found)
         {
-            
+            SceneItem newSceneItem = new SceneItem();
+            newSceneItem.setDataItem(dataItem);
+            newSceneItem.setVisible(visible);
+            List<Symbolizer> symbolizers = dataItem.getSymbolizers();
+            for (int i=0; i<symbolizers.size(); i++)
+            {
+                DataStyler styler = stylerFactory.createStyler(symbolizers.get(i));
+                styler.setDataItem(dataItem);
+                newSceneItem.getStylers().add(styler);
+            }
+            sceneItems.add(newSceneItem);
         }
+        
+        // register scene as a listener to the item
+        if (visible)
+            dataItem.addListener(this);
+        else
+            dataItem.removeListener(this);
+    }
+    
+    
+    public void setItemVisibility(DataFolder folder, boolean visible)
+    {
+        Iterator<DataItem> it = folder.getItemIterator();        
+        while (it.hasNext())
+            setItemVisibility(it.next(), visible);
     }
     
     
@@ -212,6 +212,16 @@ public class Scene implements STTEventProducer, STTEventListener
                 return true;
         }
         
+        return false;
+    }
+    
+    
+    public boolean isItemVisible(DataFolder folder)
+    {
+        Iterator<DataItem> it = folder.getItemIterator();
+        while (it.hasNext())
+            if (isItemVisible(it.next()))
+                return true;
         return false;
     }
 

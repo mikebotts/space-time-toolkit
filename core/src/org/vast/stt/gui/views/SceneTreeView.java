@@ -29,7 +29,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISharedImages;
+//import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -46,7 +46,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, folderImg;
+	private Image itemVisImg, itemHidImg, folderVisImg, folderHidImg;
 	private Font treeFont;
 	private Object[] expandedItems;
     private ISelection selectedItem;
@@ -60,10 +60,10 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		{
 			if (element instanceof DataFolder)
 			{
-				if (sceneTree.getExpandedState(element))
-					return folderImg;
-				
-				return folderImg;
+                if (scene.isItemVisible((DataFolder)element))
+                    return folderVisImg;
+                else
+                    return folderHidImg;
 			}		
 			else if (element instanceof DataItem)
             {
@@ -148,12 +148,16 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		super.init(site);
 		
 		ImageDescriptor descriptor;
-		descriptor = STTPlugin.getImageDescriptor("icons/itemVisible.gif");
+		descriptor = STTPlugin.getImageDescriptor("icons/itemVis.gif");
 		itemVisImg = descriptor.createImage();
-        descriptor = STTPlugin.getImageDescriptor("icons/itemNotVisible.gif");
+        descriptor = STTPlugin.getImageDescriptor("icons/itemHid.gif");
         itemHidImg = descriptor.createImage();
-		descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
-		folderImg = descriptor.createImage();
+		//descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
+        descriptor = STTPlugin.getImageDescriptor("icons/folderVis.gif");
+        folderVisImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
+        folderHidImg = descriptor.createImage();
+        
 		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
 		
 		Action action = new Action()
@@ -172,8 +176,10 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	@Override
 	public void dispose()
 	{
-		itemVisImg.dispose();
-		folderImg.dispose();
+        itemVisImg.dispose();
+        itemHidImg.dispose();
+        folderVisImg.dispose();
+        folderHidImg.dispose();
 		treeFont.dispose();
         super.dispose();
 	}

@@ -63,6 +63,7 @@ public class JOGLRenderer extends Renderer
     protected DisplayListManager displayListManager;
     protected GLBlockFilter blockFilter;
     protected boolean normalizeCoords;
+    protected float zBufferOffset;
 
 
     public JOGLRenderer()
@@ -112,6 +113,8 @@ public class JOGLRenderer extends Renderer
         // draw camera target if requested
         if (view.isShowCameraTarget())
             this.drawCameraTarget();
+        
+        zBufferOffset = 1.0f;
     }
 
 
@@ -212,7 +215,7 @@ public class JOGLRenderer extends Renderer
         normalizeCoords = textureManager.isNormalizationRequired();
         
         gl.glClearDepth(1.0f);
-        gl.glDepthFunc(GL.GL_LEQUAL);
+        gl.glDepthFunc(GL.GL_LESS);
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
@@ -245,6 +248,13 @@ public class JOGLRenderer extends Renderer
             SWTContext = null;
             JOGLContext = null;
         }
+    }
+    
+    
+    protected float getOffset()
+    {
+        zBufferOffset += 0.1f;
+        return zBufferOffset;
     }
     
     
@@ -359,11 +369,11 @@ public class JOGLRenderer extends Renderer
         PolygonPointGraphic point;
         boolean begin = false;
         styler.reset();
-
+        
         // setup polygon offset
-        gl.glPolygonOffset(1.0f, 1.0f);
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-
+        gl.glPolygonOffset(getOffset(), 1.0f);
+        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
+        
         // loop and draw all points
         gl.glBegin(GL.GL_POLYGON);
 
@@ -474,7 +484,8 @@ public class JOGLRenderer extends Renderer
         GridPatchGraphic patch = null;
         GridPointGraphic point = null;
         styler.reset();
-
+        float offset = getOffset();
+        
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
@@ -487,8 +498,8 @@ public class JOGLRenderer extends Renderer
             else
                 gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
             
-            gl.glLineWidth(patch.lineWidth);
-            gl.glPolygonOffset(1.0f, 1.0f);
+            gl.glLineWidth(patch.lineWidth);            
+            gl.glPolygonOffset(offset, 1.0f);
             gl.glDisable(GL.GL_CULL_FACE);            
             
             // loop through all grid points
@@ -501,6 +512,7 @@ public class JOGLRenderer extends Renderer
                     for (int p=0; p<2; p++)
                     {                    
                         point = styler.getGridPoint(u, v+p, false);
+                        
                         // TODO hack to break grid when crossing lat/lon boundary
                         if (Math.abs(point.x - oldX) > Math.PI*9/10)
                         {

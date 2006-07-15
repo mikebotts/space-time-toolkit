@@ -550,7 +550,7 @@ public class ProjectReader
                 {
                     String visText = dom.getAttributeValue(propElt, "visible");
                     if (visText != null && visText.equals("true"))
-                        parentScene.setItemVisibility(dataEntry, true);
+                        parentScene.setItemVisibility((DataItem)dataEntry, true);
                 }                    
             }
 		}
