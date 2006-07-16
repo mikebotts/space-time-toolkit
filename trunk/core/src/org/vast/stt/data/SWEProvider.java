@@ -50,50 +50,67 @@ public class SWEProvider extends AbstractProvider
 	{
 		dataHandler = new SWEDataHandler(this);
 	}
+    
+    
+    @Override
+    public void init() throws DataException
+    {
+        try
+        {
+            // check that format is 'SWE'
+            if (!format.equalsIgnoreCase("SWE"))
+                throw new DataException("Invalid format: " + format);
+            
+            // parse response
+            SWEResourceReader reader = new SWEResourceReader();
+            dataStream = URIStreamHandler.openStream(sweDataUrl);            
+            reader.parse(dataStream);
+                        
+            // display data structure and encoding
+            DataComponent dataInfo = reader.getDataComponents();
+            DataEncoding dataEnc = reader.getDataEncoding();
+            System.out.println(dataInfo);
+            System.out.println(dataEnc);
+            
+            // create BlockList
+            BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.setNodeStructureReady(true);
+            dataHandler.setBlockList(blockList);
+        }
+        catch (CDMException e)
+        {
+            throw new DataException("Error while parsing resource stream: " + sweDataUrl, e);
+        }
+        finally
+        {
+            try
+            {
+                dataStream.close();
+            }
+            catch (IOException e)
+            {
+                throw new DataException("Error while closing resource stream: " + sweDataUrl);
+            }
+        }
+    }
 	
 	
 	@Override
 	public void updateData() throws DataException
 	{
-		String uri = sweDataUrl;
-		
 		try
 		{
-			dataStream = URIStreamHandler.openStream(uri);
-		}
-		catch (CDMException e)
-		{
-			throw new DataException(e.getMessage());
-		}
-		
-		// check that format is 'SWE'
-		if (!format.equalsIgnoreCase("SWE"))
-			throw new DataException("Invalid format: " + format);
-		
-		// parse response
-		try
-		{
-			SWEResourceReader reader = new SWEResourceReader();
+		    // init DataNode if not done yet
+            if (!dataNode.isNodeStructureReady())
+                init();
+            
+            // parse response
+            SWEResourceReader reader = new SWEResourceReader();
+            dataStream = URIStreamHandler.openStream(sweDataUrl);
 			reader.parse(dataStream);
-						
-			// display data structure and encoding
 			dataParser = reader.getDataParser();
-			DataComponent dataInfo = dataParser.getDataComponents();
-			DataEncoding dataEnc = dataParser.getDataEncoding();
-			System.out.println(dataInfo);
-			System.out.println(dataEnc);
-			
-			// create data node if needed
-			if (dataNode == null)
-				dataNode = new DataNode();
-			
-			// clean up old data			
-            dataNode.clearAll();
-            BlockList blockList = dataNode.createList(dataInfo.copy());
-            dataNode.setNodeStructureReady(true);
-			
+						
 			// register the CDM data handler
-			dataHandler.setBlockList(blockList);
 			dataParser.setDataHandler(dataHandler);
             
             // override resultUri if specified in data set
@@ -107,7 +124,7 @@ public class SWEProvider extends AbstractProvider
 		}
 		catch (CDMException e)
 		{
-			throw new DataException("Error while parsing resource stream: " + uri, e);
+			throw new DataException("Error while parsing resource stream: " + sweDataUrl, e);
 		}
 		finally
 		{
@@ -118,7 +135,7 @@ public class SWEProvider extends AbstractProvider
 			}
 			catch (IOException e)
 			{
-				throw new DataException("Error while closing resource stream: " + uri);
+				throw new DataException("Error while closing resource stream: " + sweDataUrl);
 			}
 		}
 	}

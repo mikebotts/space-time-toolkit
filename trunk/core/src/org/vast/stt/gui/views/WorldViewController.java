@@ -115,13 +115,16 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             Vector3D pos = viewSettings.getCameraPos();
             Vector3D target = viewSettings.getTargetPos();
             Vector3D viewZ = Vector3D.subtractVectors(target, pos);
+            viewZ.normalize();
             double s;
+            double maxS = P1.length();
             
             switch (transConstraint)
             {
                 case XY:
                     // P1 + s*viewZ = [x,y,0]
                     s = -P1.getZ() / viewZ.getZ();
+                    if (Math.abs(s) > maxS) s = Math.signum(s) * maxS;
                     viewZ.scale(s);
                     P1.add(viewZ);
                     P1.setCoordinate(2, 0.0);

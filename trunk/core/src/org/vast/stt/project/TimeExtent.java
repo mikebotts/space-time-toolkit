@@ -30,7 +30,7 @@ import org.vast.stt.event.STTEventProducer;
  * </p>
  *
  * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
+ * @author Tony Cook, Mike Botts, Alexandre Robin
  * @date Nov 15, 2005
  * @version 1.0
  */

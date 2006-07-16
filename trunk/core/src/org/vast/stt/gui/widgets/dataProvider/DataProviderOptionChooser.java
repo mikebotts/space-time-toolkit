@@ -8,7 +8,6 @@ import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.stt.data.SWEProvider;
 import org.vast.stt.data.SensorMLProvider;
-import org.vast.stt.data.WMSProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.process.WCS_Process;
 import org.vast.stt.process.WMS_Process;

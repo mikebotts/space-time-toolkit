@@ -36,14 +36,17 @@ import org.vast.stt.data.DataNode;
  */
 public interface DataProvider extends Resource
 {
-
-    public void forceUpdate();
+    
+    public void init() throws DataException;;
     
     
     public void updateData() throws DataException;
 	
 	
-	public boolean isUpdating();
+    public boolean isUpdating();
+    
+    
+    public void forceUpdate();
 	
 	
 	public void cancelUpdate();

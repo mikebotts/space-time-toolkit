@@ -274,7 +274,7 @@ public class GridStyler extends AbstractStyler
         {
             if (dataLists.length == 0 || dataLists[0].blockList.getSize() == 0)
                 updateDataMappings();
-                
+
             visitor.visit(this);
         }		
 	}
