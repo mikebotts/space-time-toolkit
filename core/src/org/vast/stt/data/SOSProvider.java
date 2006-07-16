@@ -53,58 +53,73 @@ public class SOSProvider extends OWSProvider
 		requestBuilder = new SOSRequestWriter();
 		dataHandler = new SWEDataHandler(this);
 	}
+    
+    
+    @Override
+    public void init() throws DataException
+    {
+        try
+        {
+            endRequest();  
+            
+            // create reader
+            SOSObservationReader reader = new SOSObservationReader();
+            
+            // create null request here
+            double startTime = query.getTime().getStartTime();
+            query.getTime().setStopTime(startTime);
+            
+            // select request type (post or get)
+            boolean usePost = true;
+            dataStream = requestBuilder.sendRequest(query, usePost);
+                        
+            // parse response
+            reader.parse(dataStream);
+            
+            // display data structure and encoding
+            DataComponent dataInfo = reader.getDataComponents();
+            DataEncoding dataEnc = reader.getDataEncoding();
+            System.out.println("--- " + dataInfo.getName() + " ---");
+            System.out.println(dataInfo);
+            System.out.println(dataEnc);
+
+            // create BlockList
+            BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.setNodeStructureReady(true);
+            dataHandler.setBlockList(blockList);
+        }
+        catch (Exception e)
+        {
+            throw new DataException("Error while parsing data from " + query.getGetServer(), e);
+        }
+        finally
+        {
+            endRequest();
+        }
+    }
 	
 	
 	public void updateData() throws DataException
 	{
 		try
 		{
-			initRequest();	
-			
+			// init DataNode if not done yet
+            if (!dataNode.isNodeStructureReady())
+                init();
+            
+            // init request using spatial + time extent
+            initRequest();
+            
 			// create reader
 			SOSObservationReader reader = new SOSObservationReader();
 			
 			// select request type (post or get)
-			boolean usePost = true;
-			String url = query.getPostServer();
-			if (url != null)
-			{
-				query.setPostServer(url);
-			}
-			else
-			{
-				url = layerCaps.getParent().getGetServers().get("GetObservation");
-				
-				if (url != null)
-					query.setGetServer(url);
-				else
-					throw new DataException("No server specified");
-			}			
-			
-			dataStream = requestBuilder.sendRequest(query, usePost);
+            boolean usePost = true;
+            dataStream = requestBuilder.sendRequest(query, usePost);
 						
 			// parse response
-			// TODO handle SOS service exception here -> remove from observation reader
 			reader.parse(dataStream);
-			
-			// display data structure and encoding
 			dataParser = reader.getDataParser();
-			DataComponent dataInfo = dataParser.getDataComponents();
-        	DataEncoding dataEnc = dataParser.getDataEncoding();
-        	System.out.println("--- " + dataInfo.getName() + " ---");
-        	System.out.println(dataInfo);
-        	System.out.println(dataEnc);
-            dataNode.clearAll();
-        	BlockList blockList = dataNode.createList(dataInfo.copy());
-            dataNode.setNodeStructureReady(true);
-			
-        	// reset node - HACK
-        	//DataNode node = item.getNode();
-        	//node.changePointCount(0);
-        	
-			// register the CDM data handler
-        	//SWEDataNodeHandler dataNodeHandler = new SWEDataNodeHandler(dataInfo, node);
-            dataHandler.setBlockList(blockList);
         	dataParser.setDataHandler(dataHandler);
         	
         	// start parsing if not cancelled
@@ -143,9 +158,6 @@ public class SOSProvider extends OWSProvider
 		endRequest();
 		updateQuery();
 		canceled = false;
-		
-		if (dataNode == null)
-			dataNode = new DataNode();
 	}
 	
 	

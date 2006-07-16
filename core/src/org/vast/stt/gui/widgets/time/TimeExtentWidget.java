@@ -14,8 +14,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.TimeExtent;
 
@@ -176,7 +174,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 			setUseAbsoluteTime(useAbsTimeBtn.getSelection());
 		} else if (e.widget == continuousUpdateBtn) {
 			boolean contUp = continuousUpdateBtn.getSelection();
-			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+			//TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 			if(contUp) {
 				//timeExtent.setContinuousUpdate(true);
 				updateNowBtn.setEnabled(false);
@@ -202,16 +200,20 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 
     public void timeChanged(TimeSpinner spinner, double newTime)
     {
-        // update time extent object
-        double absTime = absTimeSpinner.getValue();
-        TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-        timeExtent.setAbsoluteTime(absTime);
-        
-        if (continuousUpdateBtn.getSelection())
+        if (this.dataItem != null)
         {
-            //dataItem.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
-            this.dataItem.getDataProvider().clearData();
-            this.dataItem.getDataProvider().forceUpdate();
+            // update time extent object
+            TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+            timeExtent.setAbsoluteTime(absTimeSpinner.getValue());
+            timeExtent.setBaseTime(absTimeSpinner.getValue());
+            timeExtent.setLagTimeDelta(lagSpinner.getValue());
+            timeExtent.setLeadTimeDelta(leadSpinner.getValue());
+
+            if (continuousUpdateBtn.getSelection())
+            {
+                this.dataItem.getDataProvider().clearData();
+                this.dataItem.getDataProvider().forceUpdate();
+            }
         }
     }	
 }

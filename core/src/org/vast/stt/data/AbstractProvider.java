@@ -55,6 +55,7 @@ public abstract class AbstractProvider implements DataProvider, STTEventListener
 	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
     
     
+    public abstract void init() throws DataException;
     public abstract void updateData() throws DataException;
     public abstract boolean isSpatialSubsetSupported();
     public abstract boolean isTimeSubsetSupported();

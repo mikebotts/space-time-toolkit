@@ -53,7 +53,7 @@ public class SensorMLProvider extends AbstractProvider
 	
     
     @Override
-    public void updateData() throws DataException
+    public void init() throws DataException
     {
         try
         {
@@ -73,6 +73,22 @@ public class SensorMLProvider extends AbstractProvider
             }
             
             dataNode.setNodeStructureReady(true);
+        }
+        catch (ProcessException e)
+        {
+            throw new DataException("Error while parsing process " + process.getName() + "(" + process.getType() + ")", e);
+        }
+    }
+    
+    
+    @Override
+    public void updateData() throws DataException
+    {
+        try
+        {
+            // init DataNode if not done yet
+            if (!dataNode.isNodeStructureReady())
+                init();
             
             int tileCountX;
             int tileCountY;
@@ -87,7 +103,9 @@ public class SensorMLProvider extends AbstractProvider
                 tileCountX = 1;
                 tileCountY = 1;
             }
-                        
+       
+            DataComponent outputs = process.getOutputList();
+            
             for (int i=0; i<tileCountX; i++)
             {
                 for (int j=0; j<tileCountY; j++)
@@ -108,7 +126,7 @@ public class SensorMLProvider extends AbstractProvider
                     process.execute();
                     
                     // transfer block for each output
-                    for (int c=0; c<outputCount; c++)
+                    for (int c=0; c<blockListArray.size(); c++)
                     {
                         BlockList blockList = blockListArray.get(c);
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
@@ -121,7 +139,7 @@ public class SensorMLProvider extends AbstractProvider
         }
         catch (ProcessException e)
         {
-            e.printStackTrace();
+            throw new DataException("Error while running process " + process.getName() + "(" + process.getType() + ")", e);
         }
     }
     

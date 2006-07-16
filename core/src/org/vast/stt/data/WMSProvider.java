@@ -68,6 +68,12 @@ public class WMSProvider extends OWSProvider
 	}
 
 
+    public void init()
+    {
+        
+    }
+    
+    
 	public void updateData() throws DataException
 	{
 		URL url = null;
