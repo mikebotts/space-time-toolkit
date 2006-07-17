@@ -10,5 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt.opengl
 Eclipse-AutoStart: true
 Bundle-ClassPath: D:/Projects/NSSTC/Common/lib/xercesImpl.jar,
-                  D:/Projects/NSSTC/Common/classes
+                  D:/Projects/NSSTC/Common/classes,
+                  ./lib/jogl.jar
 Bundle-Vendor: UAH VAST
