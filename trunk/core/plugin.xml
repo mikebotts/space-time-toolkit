@@ -56,6 +56,8 @@
       </actionSet>
    </extension>
    <extension id="STT3" point="org.eclipse.core.runtime.products">
-      <product application="org.vast.STT.MainApp" name="Space Time Toolkit v3"/>
+      <product
+            application="org.vast.STT.MainApp"
+            name="Space Time Toolkit v3"/>
    </extension>
 </plugin>
