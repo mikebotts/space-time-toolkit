@@ -284,6 +284,7 @@ public class Scene implements STTEventProducer, STTEventListener
         switch (event.type)
         {
             case ITEM_DATA_CHANGED:
+            case ITEM_STYLE_CHANGED:
                 DataItem srcItem = (DataItem)event.producer;
                 if (isItemVisible(srcItem))
                     dispatchEvent(new STTEvent(this, EventType.SCENE_DATA_CHANGED));
