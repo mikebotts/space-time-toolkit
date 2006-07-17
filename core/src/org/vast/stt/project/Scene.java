@@ -256,7 +256,7 @@ public class Scene implements STTEventProducer, STTEventListener
 
     public void addListener(STTEventListener listener)
     {
-        listeners.add(listener);        
+        listeners.add(listener);
     }
 
 
@@ -275,7 +275,7 @@ public class Scene implements STTEventProducer, STTEventListener
     public void dispatchEvent(STTEvent event)
     {
         event.producer = this;
-        listeners.dispatchEvent(event);        
+        listeners.dispatchEvent(event);
     }
     
 
