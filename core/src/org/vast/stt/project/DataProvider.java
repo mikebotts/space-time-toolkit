@@ -59,7 +59,7 @@ public interface DataProvider extends Resource, STTEventListener
     public void setAutoUpdate(boolean autoUpdate);
     
     
-    public boolean isAutoUpdate();
+    public boolean getAutoUpdate();
     
     
     public DataItem getDataItem();

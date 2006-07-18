@@ -161,7 +161,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		useAbsTimeBtn.setSelection(timeExtent.getUseAbsoluteTime());
 		//timeExtent.getAbsoluteTimeZone();
 		//  
-		//continuousUpdateBtn.setSelection(timeExtent.getContinuousUpdate());
+		continuousUpdateBtn.setSelection(dataItem.getDataProvider().getAutoUpdate());
 	}
 	
 

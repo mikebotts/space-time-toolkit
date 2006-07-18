@@ -52,6 +52,7 @@ public abstract class AbstractProvider implements DataProvider
     protected SpatialExtent spatialExtent;
 	protected TimeExtent maxTimeExtent = new TimeExtent();
 	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
+    protected Thread updateThread;
     
     
     public abstract void init() throws DataException;
@@ -95,8 +96,8 @@ public abstract class AbstractProvider implements DataProvider
                 }
             };
 
-            Thread thread = new Thread(runnable);
-            thread.start();
+            updateThread = new Thread(runnable);
+            updateThread.start();
             forceUpdate = false;
         }
 		
@@ -149,7 +150,6 @@ public abstract class AbstractProvider implements DataProvider
             if (this.spatialExtent != null)
                 this.spatialExtent.removeListener(this);
             
-            this.forceUpdate = true;
             this.spatialExtent = spatialExtent;
             
             if (this.spatialExtent != null)
@@ -171,7 +171,6 @@ public abstract class AbstractProvider implements DataProvider
             if (this.timeExtent != null)
                 this.timeExtent.removeListener(this);
             
-            this.forceUpdate = true;
             this.timeExtent = timeExtent;
             
             if (this.timeExtent != null)
@@ -204,7 +203,7 @@ public abstract class AbstractProvider implements DataProvider
 	}
     
     
-    public boolean isAutoUpdate()
+    public boolean getAutoUpdate()
     {
         return autoUpdate;
     }
