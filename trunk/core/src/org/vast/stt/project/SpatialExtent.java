@@ -49,6 +49,12 @@ public class SpatialExtent implements STTEventProducer
     protected STTEventListeners listeners;
 
 
+    public SpatialExtent()
+    {
+        listeners = new STTEventListeners(1);    
+    }
+    
+    
     /**
      * Returns an exact copy of this SpatialExtent
      * @return

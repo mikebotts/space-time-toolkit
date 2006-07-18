@@ -13,9 +13,9 @@
 
 package org.vast.stt.project;
 
+import org.vast.stt.data.ItemInfo;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.renderer.RendererInfo;
 
 
 /**
@@ -36,7 +36,7 @@ public class SceneItem implements STTEventListener
 {
     protected DataItem dataItem;
     protected DataStylerList stylers;
-    protected RendererInfo rendererInfo;
+    protected ItemInfo info;
     protected boolean updated;
     protected boolean visible;
 
@@ -146,15 +146,15 @@ public class SceneItem implements STTEventListener
     }
 
 
-    public RendererInfo getRendererInfo()
+    public ItemInfo getInfo()
     {
-        return rendererInfo;
+        return info;
     }
 
 
-    public void setRendererInfo(RendererInfo rendererInfo)
+    public void setInfo(ItemInfo info)
     {
-        this.rendererInfo = rendererInfo;
+        this.info = info;
     }
 
 

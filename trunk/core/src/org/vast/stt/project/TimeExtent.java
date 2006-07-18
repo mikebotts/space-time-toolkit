@@ -50,6 +50,7 @@ public class TimeExtent implements STTEventProducer
     // constructors
     public TimeExtent()
     {
+        listeners = new STTEventListeners(1);
     }
 
 
