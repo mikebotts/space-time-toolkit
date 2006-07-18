@@ -105,31 +105,30 @@ public class TestMain
 //            provider.setResource(resource);
 //            provider.updateData();  
             
-            long t0, t1;
-            int var0 = 4;
-            int var = 0;
-            TryClass obj = new TryClass();
-            
-            for (int i = 0; i < 50000; i++)
-                var = obj.field1;
-            
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = obj.field1;
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
-
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = obj.getField3();
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
-            
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = var0;
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
+//            long t0, t1;
+//            int var0 = 4;
+//            int var = 0;
+//            
+//            for (int i = 0; i < 50000; i++)
+//                var = obj.field1;
+//            
+//            t0 = System.currentTimeMillis();
+//            for (int i = 0; i < 500000000; i++)
+//                var = obj.field1;
+//            t1 = System.currentTimeMillis();
+//            System.out.println(var + ": " + (t1 - t0));
+//
+//            t0 = System.currentTimeMillis();
+//            for (int i = 0; i < 500000000; i++)
+//                var = obj.getField3();
+//            t1 = System.currentTimeMillis();
+//            System.out.println(var + ": " + (t1 - t0));
+//            
+//            t0 = System.currentTimeMillis();
+//            for (int i = 0; i < 500000000; i++)
+//                var = var0;
+//            t1 = System.currentTimeMillis();
+//            System.out.println(var + ": " + (t1 - t0));
             
             System.exit(1);
             

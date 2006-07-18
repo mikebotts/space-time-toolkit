@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.TimeExtent;
 
@@ -174,14 +176,8 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 			setUseAbsoluteTime(useAbsTimeBtn.getSelection());
 		} else if (e.widget == continuousUpdateBtn) {
 			boolean contUp = continuousUpdateBtn.getSelection();
-			//TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-			if(contUp) {
-				//timeExtent.setContinuousUpdate(true);
-				updateNowBtn.setEnabled(false);
-			} else {
-				//timeExtent.setContinuousUpdate(false);
-				updateNowBtn.setEnabled(true);
-			}
+            if (dataItem != null)
+                dataItem.getDataProvider().setAutoUpdate(contUp);
 		} else if(e.widget == updateNowBtn){
 			try {
 				dataItem.getDataProvider().updateData();
@@ -208,12 +204,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             timeExtent.setBaseTime(absTimeSpinner.getValue());
             timeExtent.setLagTimeDelta(lagSpinner.getValue());
             timeExtent.setLeadTimeDelta(leadSpinner.getValue());
-
-            if (continuousUpdateBtn.getSelection())
-            {
-                this.dataItem.getDataProvider().clearData();
-                this.dataItem.getDataProvider().forceUpdate();
-            }
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
         }
     }	
 }

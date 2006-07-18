@@ -15,6 +15,7 @@ package org.vast.stt.project;
 
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
+import org.vast.stt.event.STTEventListener;
 
 
 /**
@@ -34,10 +35,10 @@ import org.vast.stt.data.DataNode;
  * @date Nov 21, 2005
  * @version 1.0
  */
-public interface DataProvider extends Resource
+public interface DataProvider extends Resource, STTEventListener
 {
     
-    public void init() throws DataException;;
+    public void init() throws DataException;
     
     
     public void updateData() throws DataException;
@@ -53,6 +54,12 @@ public interface DataProvider extends Resource
 	
 	
 	public void clearData();
+    
+    
+    public void setAutoUpdate(boolean autoUpdate);
+    
+    
+    public boolean isAutoUpdate();
     
     
     public DataItem getDataItem();

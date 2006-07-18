@@ -15,9 +15,7 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.SpatialExtent;
@@ -39,19 +37,20 @@ import org.vast.stt.project.TimeExtent;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public abstract class AbstractProvider implements DataProvider, STTEventListener
+public abstract class AbstractProvider implements DataProvider
 {
     protected String name;
     protected String description;
     protected boolean updating = false;
 	protected boolean canceled = false;
     protected boolean forceUpdate = true;
+    protected boolean autoUpdate = false;
     protected DataItem dataItem;
 	protected InputStream dataStream;
 	protected DataNode dataNode = new DataNode();
-	protected TimeExtent timeExtent = new TimeExtent();
+	protected TimeExtent timeExtent;
+    protected SpatialExtent spatialExtent;
 	protected TimeExtent maxTimeExtent = new TimeExtent();
-	protected SpatialExtent spatialExtent = new SpatialExtent();
 	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
     
     
@@ -61,9 +60,16 @@ public abstract class AbstractProvider implements DataProvider, STTEventListener
     public abstract boolean isTimeSubsetSupported();
 
 	
+    public AbstractProvider()
+    {
+        this.setTimeExtent(new TimeExtent());
+        this.setSpatialExtent(new SpatialExtent());
+    }
+    
+    
     public void forceUpdate()
     {
-        forceUpdate = true;
+        clearData();
         getDataNode();
     }
     
@@ -196,6 +202,18 @@ public abstract class AbstractProvider implements DataProvider, STTEventListener
 	{
 		this.maxTimeExtent = maxTimeExtent;
 	}
+    
+    
+    public boolean isAutoUpdate()
+    {
+        return autoUpdate;
+    }
+    
+    
+    public void setAutoUpdate(boolean autoUpdate)
+    {
+        this.autoUpdate = autoUpdate;
+    }
 
 
     public String getDescription()
@@ -236,6 +254,12 @@ public abstract class AbstractProvider implements DataProvider, STTEventListener
 
     public void handleEvent(STTEvent e)
     {
-        // TODO implement handleEvent method        
+        switch (e.type)
+        {
+            case PROVIDER_TIME_EXTENT_CHANGED:
+            case PROVIDER_SPATIAL_EXTENT_CHANGED:
+                if (autoUpdate)
+                    forceUpdate();
+        }
     }
 }
