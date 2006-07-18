@@ -286,7 +286,6 @@ public class BboxWidget implements SelectionListener
             bbox.setMinY(slat);
             bbox.setXTiles(lonTiles);
             bbox.setYTiles(latTiles);
-            this.dataItem.getDataProvider().clearData();
             this.dataItem.getDataProvider().forceUpdate();            
         }
         else if(e.widget == fitBtn){
