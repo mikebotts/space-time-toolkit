@@ -9,6 +9,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt.opengl
 Eclipse-AutoStart: true
-Bundle-ClassPath: ../Common/lib/xercesImpl.jar, ../Common/classes,
+Bundle-ClassPath: ../Common/classes,
+                  ../Common/lib/xercesImpl.jar, ../Common/lib/vecmath.jar,
                   ./lib/jogl.jar, ./lib/jai_core.jar, ./lib/jai_codec.jar
 Bundle-Vendor: UAH VAST
