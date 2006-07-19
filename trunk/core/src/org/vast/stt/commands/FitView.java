@@ -1,13 +1,10 @@
 
 package org.vast.stt.commands;
 
-import java.util.Iterator;
-
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.Scene;
+import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.ViewSettings;
 
 
 /**
@@ -23,11 +20,12 @@ import org.vast.stt.project.SpatialExtent;
 public class FitView implements Command
 {
     private Scene scene;
-    private DataItem item;
+    private SceneItem item;
 
 
-    public FitView(DataItem item)
+    public FitView(Scene scene, SceneItem item)
     {
+        this.scene = scene;
         this.item = item;
     }
 
@@ -36,14 +34,30 @@ public class FitView implements Command
     {
         this.scene = scene;
     }
+    
+    
+    protected void fit(SpatialExtent bbox)
+    {
+        ViewSettings view = scene.getViewSettings();
+        bbox.getCenter();
+    }
 
 
     public void execute()
     {
-        if (scene != null)
-            fitScene();
-        else if (item != null)
-            fitItem();
+        SpatialExtent bbox = null;
+        
+        if (item == null)
+            bbox = scene.getBoundingBox();
+        else
+            bbox = item.getBoundingBox();
+        
+        fit(bbox);
+    }
+    
+    
+    public void unexecute()
+    {
     }
 
 
@@ -53,36 +67,13 @@ public class FitView implements Command
     }
 
 
-    public void unexecute()
-    {
-        // TODO Auto-generated method stub
-    }
-
-
-    public void fitScene()
-    {
-        //SpatialExtent bbox = scene.getRootFolder().getBoundingBox();
-
-        // need to convert bbox to view settings somehow
-        //scene.getViewSettings().setBoundingBox(newExtent);
-    }
-
-
-    public void fitItem()
-    {
-        //SpatialExtent extent = item.getBoundingBox();
-        // need to convert bbox to view settings somehow
-        //scene.getViewSettings().setSpatitalExtent(extent);
-    }
-
-
     public void setScene(Scene scene)
     {
         this.scene = scene;
     }
 
 
-    public void setItem(DataItem item)
+    public void setItem(SceneItem item)
     {
         this.item = item;
     }

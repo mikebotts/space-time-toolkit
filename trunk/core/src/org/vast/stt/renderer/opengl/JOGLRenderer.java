@@ -18,11 +18,10 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
-
 import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
-import org.vast.math.Vector3D;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.DataStylerList;
@@ -94,16 +93,10 @@ public class JOGLRenderer extends Renderer
         // set up 3D camera position from ViewSettings
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
-        double eyeX = view.getCameraPos().getX();
-        double eyeY = view.getCameraPos().getY();
-        double eyeZ = view.getCameraPos().getZ();
-        double centerX = view.getTargetPos().getX();
-        double centerY = view.getTargetPos().getY();
-        double centerZ = view.getTargetPos().getZ();
-        double upX = view.getUpDirection().getX();
-        double upY = view.getUpDirection().getY();
-        double upZ = view.getUpDirection().getZ();
-        glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+        Vector3d eye = view.getCameraPos();
+        Vector3d center = view.getTargetPos();
+        Vector3d up = view.getUpDirection();
+        glu.gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 
         // save projection matrices
         gl.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM, 0);
@@ -147,9 +140,9 @@ public class JOGLRenderer extends Renderer
     protected void drawCameraTarget()
     {
         ViewSettings view = scene.getViewSettings();
-        double x = view.getTargetPos().getX();
-        double y = view.getTargetPos().getY();
-        double z = view.getTargetPos().getZ();
+        double x = view.getTargetPos().x;
+        double y = view.getTargetPos().y;
+        double z = view.getTargetPos().z;
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
@@ -173,18 +166,18 @@ public class JOGLRenderer extends Renderer
 
 
     @Override
-    public void project(double worldX, double worldY, double worldZ, Vector3D viewPos)
+    public void project(double worldX, double worldY, double worldZ, Vector3d viewPos)
     {
         glu.gluProject(worldX, worldY, worldZ, modelM, 0, projM, 0, viewPort, 0, coords, 0);
-        viewPos.setCoordinates(coords[0], coords[1], coords[2]);
+        viewPos.set(coords[0], coords[1], coords[2]);      
     }
 
 
     @Override
-    public void unproject(double viewX, double viewY, double viewZ, Vector3D worldPos)
+    public void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos)
     {
         glu.gluUnProject(viewX, viewY, viewZ, modelM, 0, projM, 0, viewPort, 0, coords, 0);
-        worldPos.setCoordinates(coords[0], coords[1], coords[2]);
+        worldPos.set(coords[0], coords[1], coords[2]);
     }
 
 

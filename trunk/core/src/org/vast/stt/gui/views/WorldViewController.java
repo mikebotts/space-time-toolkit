@@ -13,8 +13,8 @@
 
 package org.vast.stt.gui.views;
 
-import org.vast.math.Quaternion;
-import org.vast.math.Vector3D;
+import org.vast.math.Quat4d;
+import org.vast.math.Vector3d;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
@@ -46,8 +46,8 @@ import org.eclipse.swt.events.*;
 public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
 	protected Scene scene;    
-	private Vector3D P0 = new Vector3D();
-	private Vector3D P1 = new Vector3D();
+	private Vector3d P0 = new Vector3d();
+	private Vector3d P1 = new Vector3d();
 	private int xOld;
 	private int yOld;
 	private boolean rotating;
@@ -70,29 +70,32 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             Renderer renderer = scene.getRenderer();
             
             renderer.unproject(x0, -y0, 0.0, P0);
-            renderer.unproject(x1, -y1, 0.0, P1);
-    		P1.sub(P0);		
+            renderer.unproject(x1, -y1, 0.0, P1);            
+    		P1.sub(P0);
     		
             // actual camera position
-            Vector3D up = viewSettings.getUpDirection();
-            Vector3D pos = viewSettings.getCameraPos();
-            Vector3D target = viewSettings.getTargetPos();
-            Vector3D oldZ = Vector3D.subtractVectors(target, pos);
+            Vector3d up = viewSettings.getUpDirection();
+            Vector3d pos = viewSettings.getCameraPos();
+            Vector3d target = viewSettings.getTargetPos();
+            
+            // viewZ vector = target - pos
+            Vector3d oldZ = new Vector3d(target);
+            oldZ.sub(pos);
     
             // rotation angle proportional to drag distance on the screen
             double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
             double rotationAngle = rotationAmount;//10.0;
     
             // rotation axis in world coordinates
-            Vector3D rotationAxis = oldZ.cross(P1);
-            Quaternion qRot = new Quaternion(rotationAxis, rotationAngle);
+            Vector3d rotAxis = new Vector3d();
+            rotAxis.cross(oldZ, P1);
+            Quat4d qRot = new Quat4d(rotAxis, rotationAngle);
     
             // rotate current camera position
             pos.sub(target);
             pos.rotate(qRot);
             pos.add(target);
-    
-            //System.out.println(qRot);
+            
             // also update up axis
             up.rotate(qRot);
         }
@@ -112,10 +115,14 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             renderer.unproject(x1, -y1, 0.0, P1);
     		P1.sub(P0);
             
-            Vector3D pos = viewSettings.getCameraPos();
-            Vector3D target = viewSettings.getTargetPos();
-            Vector3D viewZ = Vector3D.subtractVectors(target, pos);
+            Vector3d pos = viewSettings.getCameraPos();
+            Vector3d target = viewSettings.getTargetPos();
+            
+            // viewZ vector = target - pos
+            Vector3d viewZ = new Vector3d(target);
+            viewZ.sub(pos);
             viewZ.normalize();
+            
             double s;
             double maxS = P1.length();
             
@@ -123,27 +130,27 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             {
                 case XY:
                     // P1 + s*viewZ = [x,y,0]
-                    s = -P1.getZ() / viewZ.getZ();
+                    s = -P1.z / viewZ.z;
                     if (Math.abs(s) > maxS) s = Math.signum(s) * maxS;
                     viewZ.scale(s);
                     P1.add(viewZ);
-                    P1.setCoordinate(2, 0.0);
+                    P1.z = 0.0;
                     break;
                     
                 case XZ:
                     // P1 + s*viewZ = [x,0,z]
-                    s = -P1.getY() / viewZ.getY();
+                    s = -P1.y / viewZ.y;
                     viewZ.scale(s);
                     P1.add(viewZ);
-                    P1.setCoordinate(1, 0.0);
+                    P1.y = 0.0;
                     break;
                     
                 case YZ:
                     // P1 + s*viewZ = [0,y,z]
-                    s = -P1.getX() / viewZ.getX();
+                    s = -P1.x / viewZ.x;
                     viewZ.scale(s);
                     P1.add(viewZ);
-                    P1.setCoordinate(0, 0.0);
+                    P1.x = 0.0;
                     break;
             }
     		

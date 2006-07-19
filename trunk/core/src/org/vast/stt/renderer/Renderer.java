@@ -3,7 +3,7 @@ package org.vast.stt.renderer;
 
 import java.util.List;
 import org.eclipse.swt.widgets.Canvas;
-import org.vast.math.Vector3D;
+import org.vast.math.Vector3d;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
@@ -36,10 +36,10 @@ public abstract class Renderer implements StylerVisitor
     public abstract void dispose();
 
 
-    public abstract void project(double worldX, double worldY, double worldZ, Vector3D viewPos);
+    public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);
 
 
-    public abstract void unproject(double viewX, double viewY, double viewZ, Vector3D worldPos);
+    public abstract void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos);
 
 
     public abstract void resizeView(int width, int height);

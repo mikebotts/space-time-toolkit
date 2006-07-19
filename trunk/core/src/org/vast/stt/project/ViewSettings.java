@@ -56,9 +56,9 @@ public class ViewSettings implements STTEventProducer
 	protected boolean alphaBlendingEnabled = true;
 	
 	// parameters defining camera position and orientation
-	protected Vector3D cameraPos = new Vector3D();
-	protected Vector3D targetPos = new Vector3D();
-	protected Vector3D upDirection = new Vector3D();
+	protected Vector3d cameraPos = new Vector3d();
+	protected Vector3d targetPos = new Vector3d();
+	protected Vector3d upDirection = new Vector3d();
 
 	// parameters defining perspective field of view
 	protected double cameraFov;
@@ -92,9 +92,9 @@ public class ViewSettings implements STTEventProducer
 	{
         backgroundColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         
-        cameraPos.setCoordinates(0.0, 0.0, 1.0);
-		targetPos.setCoordinates(0.0, 0.0, 0.0);
-		upDirection.setCoordinates(0.0, 1.0, 0.0);
+        cameraPos.set(0.0, 0.0, 1.0);
+		targetPos.set(0.0, 0.0, 0.0);
+		upDirection.set(0.0, 1.0, 0.0);
 		
         cameraMode = CameraMode.ORTHO;
 		orthoWidth = 2.0;
@@ -123,13 +123,13 @@ public class ViewSettings implements STTEventProducer
 	}
 
 
-	public Vector3D getCameraPos()
+	public Vector3d getCameraPos()
 	{
 		return cameraPos;
 	}
 
 
-	public void setCameraPos(Vector3D cameraPos)
+	public void setCameraPos(Vector3d cameraPos)
 	{
 		this.cameraPos = cameraPos;
 	}
@@ -195,25 +195,25 @@ public class ViewSettings implements STTEventProducer
 	}
 
 
-	public Vector3D getTargetPos()
+	public Vector3d getTargetPos()
 	{
 		return targetPos;
 	}
 
 
-	public void setTargetPos(Vector3D targetPos)
+	public void setTargetPos(Vector3d targetPos)
 	{
 		this.targetPos = targetPos;
 	}
 
 
-	public Vector3D getUpDirection()
+	public Vector3d getUpDirection()
 	{
 		return upDirection;
 	}
 
 
-	public void setUpDirection(Vector3D upDirection)
+	public void setUpDirection(Vector3d upDirection)
 	{
 		this.upDirection = upDirection;
 	}
