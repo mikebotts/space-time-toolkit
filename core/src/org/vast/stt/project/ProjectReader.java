@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.*;
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
-import org.vast.math.Vector3D;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
@@ -395,17 +395,17 @@ public class ProjectReader
 		}
 		
 		// camera position
-		Vector3D cameraPos = readVector(dom.getElement(viewSettingsElt, "cameraPos"));
+		Vector3d cameraPos = readVector(dom.getElement(viewSettingsElt, "cameraPos"));
 		if (cameraPos != null)
 			viewSettings.setCameraPos(cameraPos);
 		
 		// camera target position
-		Vector3D targetPos = readVector(dom.getElement(viewSettingsElt, "targetPos"));
+		Vector3d targetPos = readVector(dom.getElement(viewSettingsElt, "targetPos"));
 		if (targetPos != null)
 			viewSettings.setTargetPos(targetPos);
 		
 		// camera up direction
-		Vector3D upDir = readVector(dom.getElement(viewSettingsElt, "upDirection"));
+		Vector3d upDir = readVector(dom.getElement(viewSettingsElt, "upDirection"));
 		if (upDir != null)
 			viewSettings.setUpDirection(upDir);
 		
@@ -461,7 +461,7 @@ public class ProjectReader
 	 * @param vectorElt
 	 * @return
 	 */
-	protected Vector3D readVector(Element vectorElt)
+	protected Vector3d readVector(Element vectorElt)
 	{
 		if (vectorElt == null)
 			return null;
@@ -472,7 +472,7 @@ public class ProjectReader
 		double y = Double.parseDouble(coords[1]);
 		double z = Double.parseDouble(coords[2]);
 		
-		Vector3D vect = new Vector3D(x, y, z);		
+		Vector3d vect = new Vector3d(x, y, z);		
 		return vect;
 	}
     

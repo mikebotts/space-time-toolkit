@@ -13,6 +13,7 @@
 
 package org.vast.stt.project;
 
+import org.vast.math.Vector3d;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -72,6 +73,16 @@ public class SpatialExtent implements STTEventProducer
         bbox.maxZ = this.maxZ;        
         
         return bbox;
+    }
+    
+    
+    public Vector3d getCenter()
+    {
+        Vector3d center = new Vector3d();
+        center.x = (minX + maxX) / 2;
+        center.y = (minY + maxY) / 2;
+        center.z = (minZ + maxZ) / 2;
+        return center;
     }
     
     
