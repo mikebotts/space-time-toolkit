@@ -39,18 +39,21 @@ public class BasicGridController extends OptionController
 		
 		OptionParams[] params = 
 		{
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Width:", width + ""),	
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Length:", length + ""),	
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Depth:", depth + ""),	
 			new OptionParams(OptionControl.ControlType.CHECKBOX, "Fill Grid", new Boolean(true)),	
 			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Fill Color", 
 					gridOptionHelper.getFillColor()),	
 			new OptionParams(OptionControl.ControlType.CHECKBOX, "Show Wiremesh", new Boolean(false)),	
 			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Mesh Color", 
-					gridOptionHelper.getFillColor())
+					gridOptionHelper.getFillColor()),
+			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Width:", width + ""),	
+			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Length:", length + ""),	
+			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Depth:", depth + "")
 		};
 		
 		optionControls = OptionControl.createControls(parent, params);
+		// disable controls that don't work yet
+		for(int i=2; i<7; i++)
+			optionControls[i].setEnabled(false);
 		addSelectionListener(gridOptionHelper);
 	}
 }

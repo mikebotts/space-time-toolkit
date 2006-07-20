@@ -2,6 +2,9 @@ package org.vast.stt.gui.widgets.styler;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Control;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
@@ -9,6 +12,8 @@ import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 
@@ -18,7 +23,6 @@ public class GridOptionHelper implements SelectionListener
 	OptionController optionController;
 	GridSymbolizer symbolizer;
     
-	
 	public GridOptionHelper(OptionController loc){
 		optionController = loc;
 		//  styler must not change for this to work
@@ -30,12 +34,6 @@ public class GridOptionHelper implements SelectionListener
         else if (sym instanceof TextureSymbolizer) {
             symbolizer = ((TextureSymbolizer)sym).getGrid();
         }
-//		if(symbolizer instanceof GridStyler)
-//			symbolizer = (GridSymbolizer)styler.getSymbolizer();
-//		else if (styler instanceof TextureMappingStyler) {
-//			TextureSymbolizer symTmp= (TextureSymbolizer)styler.getSymbolizer();
-//			symbolizer = symTmp.getGrid();
-//		}
 	}
 	
 	public Color getFillColor(){
@@ -93,32 +91,40 @@ public class GridOptionHelper implements SelectionListener
 	 * @param swtRgb
 	 */
 	private void setFillColor(org.vast.ows.sld.Color sldColor){
+		symbolizer.getFill().setColor(sldColor);
+	}
+	
+	private void setFillGrid(boolean b){
+		Fill f = symbolizer.getFill();
+		//  ???
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
-	public void widgetSelected(SelectionEvent e) {
+	public void widgetSelected(SelectionEvent e) { // fill, fillCol, showMesh, meshCol
 		Control control = (Control)e.getSource();
 		OptionControl[] optionControls = optionController.getControls();
 
-//		if(control == optionControls[0].getControl()) {
-//			Spinner sizeSpinner = (Spinner)control;
-//			float size = (float)sizeSpinner.getSelection();
-//			setPointSize(size);
-//			styler.updateDataMappings();
-//		} else if(control == optionControls[1].getControl()) {
-//			Button colorButton = (Button)control;
-//			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
-//			RGB rgb = colorChooser.open();
-//			if(rgb == null)
-//				return;
-//			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
-//			optionControls[1].setColorLabelColor(sldColor); 
-//			setPointColor(sldColor);
-//			
-//			styler.updateDataMappings();
-//		}
+		if(control == optionControls[0].getControl()) {  //  toggle fill
+			boolean ckState = ((Button)control).getSelection();
+			setFillGrid(ckState);
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+		} else if(control == optionControls[1].getControl()) {  //  fillColor
+			Button colorButton = (Button)control;
+			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
+			RGB rgb = colorChooser.open();
+			if(rgb == null)
+				return;
+			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
+			optionControls[1].setColorLabelColor(sldColor); 
+			setFillColor(sldColor);
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+		} else if(control == optionControls[2].getControl()) {
+			//  setShowMesh
+		} else if(control == optionControls[3].getControl()) {
+			//  setMeshColor
+		}
 	}
 
 }
