@@ -73,7 +73,12 @@ public class StyleWidget extends CheckOptionTable
 
 
     /**
-     * Make this DataStyler the currently active Styler in the StyleWidget
+     * Make this DataStyler the currently active Styler in the StyleWidget.
+     * This is now being called by StyleView.updateView() because of a 
+     * ITEM_STYLE_CHANGED event.  This caused a side-effect in the behavior
+     * which reset the activeSymbolizer every time any change was made.  I 
+     * added the activeSymbolier==null check to prevent.  Need to consider
+     * if this is the best way to go about this.  TC
      * @param newStyler
      */
     private void setSymbolizers(List<Symbolizer> symbolizerList)
@@ -88,9 +93,12 @@ public class StyleWidget extends CheckOptionTable
             symTmp = it.next();
             checkboxTableViewer.setChecked(symTmp, symTmp.isEnabled());
         }
-        checkboxTableViewer.getTable().setSelection(0);
-        ISelection selection = checkboxTableViewer.getSelection();
-        checkboxTableViewer.setSelection(selection);
+        //  added check, 7/19/06
+        if(activeSymbolizer == null) {
+	        checkboxTableViewer.getTable().setSelection(0);
+	        ISelection selection = checkboxTableViewer.getSelection();
+	        checkboxTableViewer.setSelection(selection);
+        }
     }
 
 
@@ -146,9 +154,10 @@ public class StyleWidget extends CheckOptionTable
     //  Selecting label causes ONLY selChanged event
     public void selectionChanged(SelectionChangedEvent e)
     {
-        System.err.println("sel source is" + e.getSource());
         StructuredSelection selection = (StructuredSelection) e.getSelection();
         Symbolizer symbolizer = (Symbolizer) selection.getFirstElement();
+        System.err.println("sel,activ Symb is" + symbolizer + ", " + activeSymbolizer);
+        
         //  Check for empty selection (happens when buildControls() is called)
         if (symbolizer == null)
         {

@@ -54,7 +54,7 @@ public class PointOptionHelper implements SelectionListener
 	}
 
 	/**
-	 * Convenience method to set line color
+	 * Convenience method to set point color
 	 * @param swtRgb
 	 */
 	private void setPointColor(org.vast.ows.sld.Color sldColor){
