@@ -159,6 +159,7 @@ public class TimeSpinner
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
 		//  TODO  publish "timeChanged" event
+		publishTimeChanged();
 	}
 	
 	private void publishTimeChanged(){
