@@ -90,29 +90,29 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
     public void increment(){
     	Calendar calendar = getGoodCalendar();
 		calendar.set(years, months, days, hours, minutes, seconds);
-		stepCurrentField(calendar, true);
+		stepCurrentField(calendar, 1);
     }
     
     public void decrement(){
     	Calendar calendar = getGoodCalendar();
     	calendar.set(years, months, days, hours, minutes, seconds);
-		stepCurrentField(calendar, false);
+		stepCurrentField(calendar, -1);
     }
     
-	private void stepCurrentField(Calendar cal, boolean up){
+	private void stepCurrentField(Calendar cal, int step){
 		//  Roll the appropriate field
 		if(currentField == YEAR){
-			cal.roll(Calendar.YEAR, up);
+			cal.add(Calendar.YEAR, step);
 		} else if(currentField == MONTH){
-			cal.roll(Calendar.MONTH, up);
+			cal.add(Calendar.MONTH, step);
 		} else if(currentField == DAY){
-			cal.roll(Calendar.DAY_OF_MONTH, up);
+			cal.add(Calendar.DAY_OF_MONTH, step);
 		} else if(currentField == HOUR){
-			cal.roll(Calendar.HOUR_OF_DAY, up);
+			cal.add(Calendar.HOUR_OF_DAY, step);
 		} else if(currentField == MIN) {
-			cal.roll(Calendar.MINUTE, up);
+			cal.add(Calendar.MINUTE, step);
 		} else if(currentField == SEC) {
-			cal.roll(Calendar.SECOND, up);
+			cal.add(Calendar.SECOND, step);
 		} else if(currentField == FSEC) {
 			;// changeFsecond(step);
 		} else 
