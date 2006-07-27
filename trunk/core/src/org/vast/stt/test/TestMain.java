@@ -94,7 +94,7 @@ public class TestMain
         array1.assignNewDataBlock();
         array1.getComponent(3);
         array2.getComponent(5);
-        System.exit(0);
+        //System.exit(0);
         
 		try
 		{
@@ -130,13 +130,13 @@ public class TestMain
 //            t1 = System.currentTimeMillis();
 //            System.out.println(var + ": " + (t1 - t0));
             
-            System.exit(1);
+            //System.exit(1);
             
-            DOMReader dom = new DOMReader("file:///D:/Projects/NSSTC/SensorML/examples/Process/TextureMappingProcess.xml#WMS_PROCESS", false);
+            DOMReader dom = new DOMReader("file:///C:/humphrz/workspace/STT3/src/org/vast/stt/test/WMSTest.xml#WMS_PROCESS", false);
             ProcessReader processReader = new ProcessReader(dom);
             processReader.setReadMetadata(false);
             processReader.setCreateExecutableProcess(true);
-            ProcessLoader.reloadMaps("file:///d:/Projects/NSSTC/STT3/conf/ProcessMap.xml");
+            ProcessLoader.reloadMaps("file:///C:/humphrz/workspace/STT3/src/org/vast/stt/test/ProcessMap.xml");
             DataProcess process = processReader.readProcess(dom.getBaseElement());
             process.init();
             System.out.println(process);
