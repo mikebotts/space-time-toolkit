@@ -23,54 +23,10 @@ import org.vast.sensorML.reader.ProcessReader;
 //import org.vast.data.DataValue;
 
 
-public class TestMain
+public class TestMain2
 {
 	public static void main(String args[])
 	{
-//		long t0 = System.currentTimeMillis();
-//		double a = 0;
-//		double b = 0;
-//		int c = 2;
-//		for (int i=0; i<10000000; i++)
-//		{
-//			switch(c)
-//			{
-//				case 0:
-//					a = cast(i);
-//					break;
-//					
-//				case 1:
-//					a = cast(i);
-//					break;
-//					
-//				case 2:
-//					a = cast(i);
-//					break;
-//			}
-//		}
-//		
-//		long t1 = System.currentTimeMillis();
-//		System.out.println(t1 - t0);
-//		System.exit(0);
-        
-//        double[] array = new double[1000000];
-//        double[] array2;
-//        long t0, t1;
-//        
-//        t0 = System.currentTimeMillis();
-//        for (int i=0; i<50; i++)
-//            array2 = array.clone();        
-//        t1 = System.currentTimeMillis();        
-//        System.out.println(t1 - t0);
-//        
-//        t0 = System.currentTimeMillis();        
-//        for (int i=0; i<50; i++)
-//            array2 = new double[1000000];
-//        t1 = System.currentTimeMillis();        
-//        System.out.println(t1 - t0);
-//        
-//        System.exit(0);
-        
         DataArray array1 = new DataArray(10);
         array1.setName("array1");
         DataArray array2 = new DataArray(10);
@@ -94,45 +50,9 @@ public class TestMain
         array1.assignNewDataBlock();
         array1.getComponent(3);
         array2.getComponent(5);
-        //System.exit(0);
         
 		try
-		{
-//            StaticDataSet resource = new StaticDataSet();
-//            resource.setFormat("SWE");
-//            resource.setSweDataUrl("http://vast.uah.edu/SWEData/coastlines/mapcil100.xml");
-//            SWEProvider provider = new SWEProvider();
-//            provider.setResource(resource);
-//            provider.updateData();  
-            
-            long t0, t1;
-            int var0 = 4;
-            int var = 0;
-            TryClass obj = new TryClass();
-            
-            for (int i = 0; i < 50000; i++)
-                var = obj.field1;
-            
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = obj.field1;
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
-
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = obj.getField3();
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
-            
-            t0 = System.currentTimeMillis();
-            for (int i = 0; i < 500000000; i++)
-                var = var0;
-            t1 = System.currentTimeMillis();
-            System.out.println(var + ": " + (t1 - t0));
-            
-            //System.exit(1);
-            
+		{            
             DOMReader dom = new DOMReader("file:///C:/humphrz/workspace/STT3/projects/Video_FlatGrid_Process.xml#PROCESS", false);
             ProcessReader processReader = new ProcessReader(dom);
             processReader.setReadMetadata(false);
