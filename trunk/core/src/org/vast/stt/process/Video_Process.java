@@ -26,28 +26,31 @@ package org.vast.stt.process;
 import java.awt.image.DataBufferByte;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import javax.media.jai.JAI;
-import javax.media.jai.RenderedOp;
+import java.nio.ByteBuffer;
+
 import javax.media.Buffer;
 import javax.media.MediaLocator;
-import javax.media.Time;
-import javax.media.opengl.GL;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.GLDrawableFactory;
-import javax.media.opengl.glu.GLU;
+import javax.media.jai.JAI;
+import javax.media.jai.RenderedOp;
 
 import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataType;
-import org.vast.data.*;
+import org.vast.data.DataArray;
+import org.vast.data.DataBlockByte;
+import org.vast.data.DataGroup;
+import org.vast.data.DataValue;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
-import org.vast.process.*;
-import org.vast.video.*;
+import org.vast.process.DataProcess;
+import org.vast.process.ProcessException;
+import org.vast.video.JMFMain;
 
 import com.sun.media.jai.codec.ByteArraySeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
@@ -174,74 +177,14 @@ public class Video_Process extends DataProcess
         try
         {
             initRequest();
-
-            Buffer fData = jmfm.getFrame(count);
-            /*ParameterBlock pb = new ParameterBlock();
-            ByteArraySeekableStream stream = new ByteArraySeekableStream(fData);
-            if (System.getProperty("JAI_IMAGE_READER_USE_CODECS") == null) {
-                renderedImage = JAI.create("stream", stream);
-            } else {
-                try {
-                    // Use the ImageCodec APIs
-                    //SeekableStream stream = new FileSeekableStream(filename);
-                    String[] names = ImageCodec.getDecoderNames(stream);
-                    ImageDecoder dec =
-                        ImageCodec.createImageDecoder(names[0], stream, null);
-                    RenderedImage im = dec.decodeAsRenderedImage();
-                    renderedImage = im;
-                }
-                catch (Exception e) {
-                	e.printStackTrace();
-                }
-            }*/
+            Thread.sleep(500);
+            Buffer bb = jmfm.getFrame(0);
+            byte[] data = ((DataBufferByte)bb.getData()).getData();
+            //byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
+            ((DataBlockByte)outputImage.getData()).setUnderlyingObject(data);
             
-            //String urlString = requestBuilder.buildGetRequest(query);
-            //url = new URL(urlString);
-            //URLConnection urlCon = url.openConnection();
-
-            //  Check on mimeType catches all three types (blank, inimage, xml)
-            //  of OGC service exceptions
-            //String mimeType = urlCon.getContentType();
-            //if (mimeType.contains("xml") || mimeType.startsWith("application"))
-            //{
-                //OWSExceptionReader reader = new OWSExceptionReader();
-                //reader.parseException(urlCon.getInputStream());
-            //}
-            //else
-            {
-                // use JAI MemorySeekableStream for better performance
-                //dataStream = new MemoryCacheSeekableStream(url.openStream());
-
-                // Create the ParameterBlock and add the SeekableStream to it.
-                //ParameterBlock pb = new ParameterBlock();
-                //pb.
-
-                // decode image using JAI
-                //RenderedOp rop = JAI.create("stream", pb);
-                
-                //if (rop != null)
-                //{
-                    //renderedImage = rop.createInstance();
-
-                    // put data buffer in output datablock
-                    //byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
-                    //((DataBlockByte)outputImage.getData()).setUnderlyingObject((byte[]) fData.getData());
-                    outputImage.setData((DataBlock)fData.getData());
-                //}
-            }
-            
-            // adjust width and height of the output
-            int width = 0;
-            int height = 0;
-            
-            if (renderedImage != null)
-            {
-                width = renderedImage.getWidth();
-                height = renderedImage.getHeight();
-            }
-            
-            outputWidth.getData().setIntValue(width);
-            outputHeight.getData().setIntValue(height);
+            outputWidth.getData().setIntValue(160);
+            outputHeight.getData().setIntValue(120);
             output.combineDataBlocks();
         }
         catch (Exception e)
@@ -253,7 +196,23 @@ public class Video_Process extends DataProcess
             endRequest();
         }
     }
+    public static InputStream newInputStream(final ByteBuffer buf) {
+        return new InputStream() {
+            public synchronized int read() throws IOException {
+                if (!buf.hasRemaining()) {
+                    return -1;
+                }
+                return buf.get();
+            }
     
+            public synchronized int read(byte[] bytes, int off, int len) throws IOException {
+                // Read only what's left
+                len = Math.min(len, buf.remaining());
+                buf.get(bytes, off, len);
+                return len;
+            }
+        };
+    }
     
     protected void initRequest()
     {
