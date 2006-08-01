@@ -61,7 +61,7 @@ public class SWEDataHandler implements DataHandler
 	public void endData(DataComponent info, DataBlock data)
 	{
         blockList.addBlock((AbstractDataBlock)data);
-        provider.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_DATA_CHANGED));
+        provider.dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 	}
 
 

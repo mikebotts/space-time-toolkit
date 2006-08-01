@@ -39,7 +39,7 @@ import org.vast.stt.event.STTEventProducer;
  * @date Nov 3, 2005
  * @version 1.0
  */
-public class DataItem implements DataEntry, STTEventProducer
+public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 {
 	protected String name;
 	protected boolean enabled = true;
@@ -82,8 +82,16 @@ public class DataItem implements DataEntry, STTEventProducer
 
 	public void setDataProvider(DataProvider dataProvider)
 	{
-		this.dataProvider = dataProvider;
-		this.dataProvider.setDataItem(this);
+        if (this.dataProvider != dataProvider)
+        {
+            if (this.dataProvider != null)
+                this.dataProvider.removeListener(this);
+            
+            this.dataProvider = dataProvider;
+            
+            if (this.dataProvider != null)
+                this.dataProvider.addListener(this);
+        }
 	}
 
 
@@ -136,6 +144,17 @@ public class DataItem implements DataEntry, STTEventProducer
             event.producer = this;
             listeners.dispatchEvent(event);
         }
+    }
+    
+    
+    public void handleEvent(STTEvent event)
+    {
+        switch(event.type)
+        {
+            case PROVIDER_DATA_CHANGED:
+                dispatchEvent(event.copy());
+                break;    
+        }        
     }
     
     

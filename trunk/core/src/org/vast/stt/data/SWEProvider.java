@@ -98,13 +98,13 @@ public class SWEProvider extends AbstractProvider
 	@Override
 	public void updateData() throws DataException
 	{
-		try
+	    // init DataNode if not done yet
+        if (!dataNode.isNodeStructureReady())
+            init();
+        
+        try
 		{
-		    // init DataNode if not done yet
-            if (!dataNode.isNodeStructureReady())
-                init();
-            
-            // parse response
+		    // parse response
             SWEResourceReader reader = new SWEResourceReader();
             dataStream = URIStreamHandler.openStream(sweDataUrl);
 			reader.parse(dataStream);

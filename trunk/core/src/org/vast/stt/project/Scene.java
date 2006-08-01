@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -283,17 +282,16 @@ public class Scene implements STTEventProducer, STTEventListener
     {
         switch (event.type)
         {
-            case ITEM_DATA_CHANGED:
             case ITEM_STYLE_CHANGED:
+            case PROVIDER_DATA_CHANGED:
+            case PROVIDER_ERROR:            
                 DataItem srcItem = (DataItem)event.producer;
                 if (isItemVisible(srcItem))
-                    dispatchEvent(new STTEvent(this, EventType.SCENE_DATA_CHANGED));
+                    dispatchEvent(event.copy());
                 break;
                 
             case SCENE_VIEW_CHANGED:
-                STTEvent newEvent = event.copy();
-                newEvent.producer = this;
-                dispatchEvent(newEvent);
+                dispatchEvent(event.copy());
                 break;
         }
     }

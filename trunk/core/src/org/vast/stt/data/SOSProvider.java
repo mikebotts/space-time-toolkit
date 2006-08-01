@@ -90,7 +90,10 @@ public class SOSProvider extends OWSProvider
         }
         catch (Exception e)
         {
-            throw new DataException("Error while parsing data from " + query.getGetServer(), e);
+            String server = query.getPostServer();
+            if (server == null)
+                server = query.getGetServer();
+            throw new DataException("Error while parsing data from " + server, e);
         }
         finally
         {
@@ -101,12 +104,12 @@ public class SOSProvider extends OWSProvider
 	
 	public void updateData() throws DataException
 	{
-		try
-		{
-			// init DataNode if not done yet
-            if (!dataNode.isNodeStructureReady())
-                init();
-            
+		// init DataNode if not done yet
+        if (!dataNode.isNodeStructureReady())
+            init();
+        
+        try
+        {    
             // init request using spatial + time extent
             initRequest();
             

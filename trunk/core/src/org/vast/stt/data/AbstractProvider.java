@@ -15,11 +15,15 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.SpatialExtent;
 import org.vast.stt.project.TimeExtent;
+import org.vast.util.ExceptionSystem;
 
 
 /**
@@ -43,16 +47,17 @@ public abstract class AbstractProvider implements DataProvider
     protected String description;
     protected boolean updating = false;
 	protected boolean canceled = false;
+    protected boolean error = false;
     protected boolean forceUpdate = true;
     protected boolean autoUpdate = false;
-    protected DataItem dataItem;
 	protected InputStream dataStream;
-	protected DataNode dataNode = new DataNode();
+	protected DataNode dataNode;
 	protected TimeExtent timeExtent;
     protected SpatialExtent spatialExtent;
-	protected TimeExtent maxTimeExtent = new TimeExtent();
-	protected SpatialExtent maxSpatialExtent = new SpatialExtent();
+	protected TimeExtent maxTimeExtent;
+	protected SpatialExtent maxSpatialExtent;
     protected Thread updateThread;
+    protected STTEventListeners listeners;
     
     
     public abstract void init() throws DataException;
@@ -63,8 +68,10 @@ public abstract class AbstractProvider implements DataProvider
 	
     public AbstractProvider()
     {
+        this.dataNode = new DataNode();
         this.setTimeExtent(new TimeExtent());
         this.setSpatialExtent(new SpatialExtent());
+        listeners = new STTEventListeners(2);
     }
     
     
@@ -79,6 +86,8 @@ public abstract class AbstractProvider implements DataProvider
 	{
         if (!updating && forceUpdate)
         {
+            final AbstractProvider provider = this;
+            
             Runnable runnable = new Runnable()
             {
                 public void run()
@@ -91,7 +100,9 @@ public abstract class AbstractProvider implements DataProvider
                     }
                     catch (DataException e)
                     {
-                        e.printStackTrace();
+                        provider.error = true;
+                        ExceptionSystem.display(e);
+                        provider.dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));                        
                     }
                 }
             };
@@ -175,7 +186,7 @@ public abstract class AbstractProvider implements DataProvider
             
             if (this.timeExtent != null)
                 this.timeExtent.addListener(this);
-        }	
+        }
 	}
 
 
@@ -239,18 +250,6 @@ public abstract class AbstractProvider implements DataProvider
     }
 
 
-    public DataItem getDataItem()
-    {
-        return dataItem;
-    }
-
-
-    public void setDataItem(DataItem dataItem)
-    {
-        this.dataItem = dataItem;
-    }
-
-
     public void handleEvent(STTEvent e)
     {
         switch (e.type)
@@ -260,5 +259,36 @@ public abstract class AbstractProvider implements DataProvider
                 if (autoUpdate)
                     forceUpdate();
         }
+    }
+    
+    
+    public boolean hasError()
+    {
+        return error;
+    }
+    
+    
+    public void addListener(STTEventListener listener)
+    {
+        listeners.add(listener);        
+    }
+
+
+    public void removeListener(STTEventListener listener)
+    {
+        listeners.remove(listener);        
+    }
+
+
+    public void removeAllListeners()
+    {
+        listeners.clear();        
+    }
+
+
+    public void dispatchEvent(STTEvent event)
+    {
+        event.producer = this;
+        listeners.dispatchEvent(event);
     }
 }

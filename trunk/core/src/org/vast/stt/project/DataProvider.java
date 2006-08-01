@@ -16,6 +16,7 @@ package org.vast.stt.project;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.event.STTEventProducer;
 
 
 /**
@@ -35,7 +36,7 @@ import org.vast.stt.event.STTEventListener;
  * @date Nov 21, 2005
  * @version 1.0
  */
-public interface DataProvider extends Resource, STTEventListener
+public interface DataProvider extends Resource, STTEventListener, STTEventProducer
 {
     
     public void init() throws DataException;
@@ -45,6 +46,9 @@ public interface DataProvider extends Resource, STTEventListener
 	
 	
     public boolean isUpdating();
+    
+    
+    public boolean hasError();
     
     
     public void forceUpdate();
@@ -60,12 +64,6 @@ public interface DataProvider extends Resource, STTEventListener
     
     
     public boolean getAutoUpdate();
-    
-    
-    public DataItem getDataItem();
-    
-    
-    public void setDataItem(DataItem dataItem);
 
 
 	public DataNode getDataNode();
