@@ -84,12 +84,12 @@ public class SensorMLProvider extends AbstractProvider
     @Override
     public void updateData() throws DataException
     {
+        // init DataNode if not done yet
+        if (!dataNode.isNodeStructureReady())
+            init();
+        
         try
         {
-            // init DataNode if not done yet
-            if (!dataNode.isNodeStructureReady())
-                init();
-            
             int tileCountX;
             int tileCountY;
             
@@ -132,7 +132,7 @@ public class SensorMLProvider extends AbstractProvider
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
                         
                         // send event for redraw
-                        dataItem.dispatchEvent(new STTEvent(this, EventType.ITEM_DATA_CHANGED));
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                     }                    
                 }
             }

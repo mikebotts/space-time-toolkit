@@ -11,6 +11,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.vast.stt.commands.OpenProject;
+import org.vast.stt.gui.views.ExceptionPopup;
 import org.vast.stt.gui.views.WorldView;
 
 
@@ -56,7 +57,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 		};
 		
 		Thread thread = new Thread(readProject);
-		//thread.start();	
+		//thread.start();
 	}
 
 	Runnable openSceneView = new Runnable()

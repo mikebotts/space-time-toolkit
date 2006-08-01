@@ -7,6 +7,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.ProcessLoader;
+import org.vast.stt.gui.views.ExceptionPopup;
 
 
 /**
@@ -41,6 +42,7 @@ public class STTPlugin extends AbstractUIPlugin
             if (e.hasMoreElements())
                 fileLocation = (String)e.nextElement().toString();
             ProcessLoader.reloadMaps(fileLocation);
+            new ExceptionPopup();
         }
         catch (SMLException e)
         {

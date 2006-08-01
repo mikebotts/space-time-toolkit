@@ -46,7 +46,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, folderVisImg, folderHidImg;
+	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg;
 	private Font treeFont;
 	private Object[] expandedItems;
     private ISelection selectedItem;
@@ -67,8 +67,15 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 			}		
 			else if (element instanceof DataItem)
             {
-                if (scene.isItemVisible((DataItem)element))
-                    return itemVisImg;
+                DataItem item = (DataItem)element;
+                
+                if (scene.isItemVisible(item))
+                {
+                    if (item.getDataProvider() == null || item.getDataProvider().hasError())
+                        return itemErrImg;
+                    else
+                        return itemVisImg;
+                }
                 else
                     return itemHidImg;
             }
@@ -152,7 +159,8 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		itemVisImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/itemHid.gif");
         itemHidImg = descriptor.createImage();
-		//descriptor = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER);
+        descriptor = STTPlugin.getImageDescriptor("icons/itemErr.gif");
+        itemErrImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/folderVis.gif");
         folderVisImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
@@ -178,6 +186,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	{
         itemVisImg.dispose();
         itemHidImg.dispose();
+        itemErrImg.dispose();
         folderVisImg.dispose();
         folderHidImg.dispose();
 		treeFont.dispose();
@@ -200,7 +209,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         {
             case SCENE_OPTIONS_CHANGED:
             case SCENE_TREE_CHANGED:
+            case PROVIDER_ERROR:
                 refreshViewAsync();
+                break;
         }
     }
     
@@ -264,6 +275,6 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         }
         
         updateView();
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_VISIBILITY_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
     }  
 }

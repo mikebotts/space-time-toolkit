@@ -137,8 +137,6 @@ public class SceneItem implements STTEventListener
                 
                 break;
             
-            case PROVIDER_DATA_ADDED:
-            case PROVIDER_DATA_REMOVED:
             case PROVIDER_DATA_CHANGED:
                 this.updated = true;
                 break;

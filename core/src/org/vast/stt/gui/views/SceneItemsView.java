@@ -147,7 +147,8 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
         switch (e.type)
         {
             case SCENE_OPTIONS_CHANGED:
-            case SCENE_ITEM_VISIBILITY_CHANGED:
+            case ITEM_VISIBILITY_CHANGED:
+            case PROVIDER_ERROR:
                 refreshViewAsync();
         }
     }
@@ -180,6 +181,6 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
         sceneItem.setVisible(!sceneItem.isVisible());
         
         updateView();
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_VISIBILITY_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
     }  
 }
