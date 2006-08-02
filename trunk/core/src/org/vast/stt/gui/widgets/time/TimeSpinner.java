@@ -148,7 +148,6 @@ public class TimeSpinner
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
-		//  TODO  publish "timeChanged" event 
 		publishTimeChanged();
 	}
 	
@@ -158,7 +157,6 @@ public class TimeSpinner
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
 		tsModel.selectField(text);
-		//  TODO  publish "timeChanged" event
 		publishTimeChanged();
 	}
 	
@@ -199,9 +197,9 @@ public class TimeSpinner
 		Runnable spinThread = new Runnable(){
 			public void run(){
 				try {		
-					Thread.sleep(300l);
+					Thread.sleep(500l);
 					while(btnDown){
-							Thread.sleep(30l);
+							Thread.sleep(60l);
 							if(!text.isDisposed()) {
 								text.getDisplay().asyncExec(spinUpThread);
 							}
@@ -228,10 +226,10 @@ public class TimeSpinner
 				try {		
 					Thread.sleep(500l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
 					while(btnDown){
-							Thread.sleep(10l);
-							if(!text.isDisposed()) {
-								text.getDisplay().asyncExec(spinDownThread);
-							}
+						Thread.sleep(60l);
+						if(!text.isDisposed()) {
+							text.getDisplay().asyncExec(spinDownThread);
+						}
 					}	
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
