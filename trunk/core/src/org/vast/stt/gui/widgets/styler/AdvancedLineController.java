@@ -1,4 +1,4 @@
-package org.vast.stt.gui.widgets.styler;
+package org.vast.stt.gui.widgets.symbolizer;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;

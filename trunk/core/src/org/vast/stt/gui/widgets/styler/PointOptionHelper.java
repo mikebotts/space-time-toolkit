@@ -1,4 +1,4 @@
-package org.vast.stt.gui.widgets.styler;
+package org.vast.stt.gui.widgets.symbolizer;
 
 import java.util.List;
 import org.eclipse.swt.events.SelectionEvent;

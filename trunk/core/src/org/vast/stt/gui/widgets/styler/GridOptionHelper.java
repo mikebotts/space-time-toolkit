@@ -1,4 +1,4 @@
-package org.vast.stt.gui.widgets.styler;
+package org.vast.stt.gui.widgets.symbolizer;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -95,8 +95,10 @@ public class GridOptionHelper implements SelectionListener
 	}
 	
 	private void setFillGrid(boolean b){
-		Fill f = symbolizer.getFill();
-		//  ???
+		if(!b) {
+			Fill f = symbolizer.getFill();
+			symbolizer.setFill(null);
+		}
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
