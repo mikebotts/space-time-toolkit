@@ -1,6 +1,8 @@
 
 package org.vast.stt.gui.widgets.time;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -115,7 +117,11 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     public void timeChanged(TimeSpinner spinner, double newTime)
     {
         //  TODO  mod, support multiple Scenes (after Scene is inited)
-        Scene scene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
+    	ArrayList<Scene> sceneList =  STTConfig.getInstance().getCurrentProject().getSceneList();
+    	//  If no sceneList, no project is currently open- do nothing
+    	if(sceneList == null)
+    		return;
+    	Scene scene = sceneList.get(0);
         scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
     }
     

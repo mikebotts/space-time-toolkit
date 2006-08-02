@@ -180,6 +180,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
                 dataItem.getDataProvider().setAutoUpdate(contUp);
 		} else if(e.widget == updateNowBtn){
 			try {
+			//	timeChanged(null, -1.0);
 				dataItem.getDataProvider().updateData();
 			} catch (DataException e1) {
 				// TODO Auto-generated catch block
