@@ -109,7 +109,6 @@ public class SceneItem implements STTEventListener
             if (!nextStyler.getSymbolizer().isEnabled())
                 continue;
             
-            nextStyler.updateBoundingBox();
             SpatialExtent childBox = nextStyler.getBoundingBox();
             
             if (i == 0)

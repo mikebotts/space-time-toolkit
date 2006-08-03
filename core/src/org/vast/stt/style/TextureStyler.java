@@ -118,12 +118,6 @@ public class TextureStyler extends AbstractStyler
         
         return point;
     }
-    
-    
-    public void updateBoundingBox()
-	{
-		// TODO Auto-generated method stub
-	}
 
 
 	public void updateDataMappings()

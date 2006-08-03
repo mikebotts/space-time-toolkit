@@ -98,13 +98,6 @@ public class LineStyler extends AbstractStyler
         
         return null;
     }
-    
-    
-    public void updateBoundingBox()
-    {
-        // TODO Auto-generated method stub
-        // compute bounding box by scanning max and min geometry values
-    }
 
 
     public void updateDataMappings()
