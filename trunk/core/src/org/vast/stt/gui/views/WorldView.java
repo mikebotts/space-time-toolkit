@@ -27,7 +27,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
@@ -52,7 +51,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 {
 	public static final String ID = "STT.WorldView";
 	private Canvas canvas;
-	private WorldViewController controller;
+    private WorldViewController controller;
     
     
     public WorldView()
@@ -76,7 +75,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	{
 		super.init(site);
 		
-		// dd show target action to toolbar
+        // add show target action to toolbar
 		IAction ShowTargetAction = new Action()
 		{
 			public void run()
@@ -87,35 +86,8 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 			}
 		};
         ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
-        ShowTargetAction.setToolTipText("Toggle Camera Target");
+        ShowTargetAction.setToolTipText("Toggle Target Tripod");
 		site.getActionBars().getToolBarManager().add(ShowTargetAction);
-
-        // add fit view action to pop down menu
-		Action fitViewAction = new Action()
-		{
-			public void run()
-			{
-				FitView fv = new FitView(scene);
-				System.err.println("Execute fitView");
-				fv.execute();
-			}
-		};		
-		fitViewAction.setText("Fit View");
-		site.getActionBars().getMenuManager().add(fitViewAction);
-		
-		// add fit item action to pop down menu
-		Action fitItemAction = new Action()
-		{
-			public void run()
-			{
-				//FitView fv = new FitView(scene.getSelectedItem...);
-				FitView fv = new FitView(scene);
-				System.err.println("Execute fitItem");
-				fv.execute();
-			}
-		};		
-		fitItemAction.setText("Fit View to Selected Item");
-		site.getActionBars().getMenuManager().add(fitItemAction);
 	}
 	
 	

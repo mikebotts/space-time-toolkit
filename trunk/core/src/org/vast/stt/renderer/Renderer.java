@@ -36,7 +36,7 @@ public abstract class Renderer implements StylerVisitor
     public abstract void dispose();
     
     
-    public abstract void cleanup(RendererInfo info);
+    public abstract void cleanup(SceneItem item);
 
 
     public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);

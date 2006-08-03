@@ -13,6 +13,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -50,6 +51,10 @@ public class PolygonStyler extends AbstractStyler
         if (dataLists[0].blockIndexer.hasNext)
         {
             dataLists[0].blockIndexer.getNext();
+            
+            if (computeExtents)
+                bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+            
             return point;
         }
         

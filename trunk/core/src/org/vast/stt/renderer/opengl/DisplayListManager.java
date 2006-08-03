@@ -178,6 +178,11 @@ public class DisplayListManager
     }
     
     
+    /**
+     * Record a new display list with GL commands called in the given runnable
+     * @param dlInfo
+     * @param renderRunnable
+     */
     protected void createDisplayList(GLDisplayList dlInfo, Runnable renderRunnable)
     {
         // create new DL name and record Gl commands in runnable
@@ -206,24 +211,39 @@ public class DisplayListManager
      * Clears all display lists used by this symbolizer
      * @param sym
      */
-    protected void clearDisplayLists(Symbolizer sym)
+    public void clearDisplayLists(Symbolizer sym)
     {
-        // delete main symbolizer display list
-        GLDisplayList dlInfo = symDLs.get(sym);
-        if (dlInfo != null && dlInfo.id > 0)
-            gl.glDeleteLists(dlInfo.id, 1);
-        
-        // delete all sub display lists
-        GLDisplayListTable dlTable = symDLTables.get(sym);
-        if (dlTable != null)
-        {
-            Enumeration<GLDisplayList> subLists = dlTable.elements();
-            while (subLists.hasMoreElements())
+        synchronized (symDLs)
+        {        
+            // delete main symbolizer display list
+            GLDisplayList dlInfo = symDLs.get(sym);            
+            if (dlInfo != null && dlInfo.id > 0)
             {
-                GLDisplayList nextDL = subLists.nextElement();
-                if (nextDL.id > 0)
-                    gl.glDeleteLists(nextDL.id, 1);
+                gl.glDeleteLists(dlInfo.id, 1);
+                //System.err.println("DL #" + dlInfo.id + " deleted");
             }
+        }
+        
+        synchronized (symDLTables)
+        {
+            // delete all sub display lists
+            GLDisplayListTable dlTable = symDLTables.get(sym);
+            if (dlTable != null)
+            {
+                Enumeration<GLDisplayList> subLists = dlTable.elements();
+                while (subLists.hasMoreElements())
+                {
+                    GLDisplayList nextDL = subLists.nextElement();
+                    if (nextDL.id > 0)
+                    {
+                        gl.glDeleteLists(nextDL.id, 1);
+                        //System.err.println("DL #" + nextDL.id + " deleted");
+                    }
+                }
+                
+                symDLTables.remove(sym);
+            }
+            
         }
     }
 }

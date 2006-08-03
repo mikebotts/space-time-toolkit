@@ -152,6 +152,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
         switch(event.type)
         {
             case PROVIDER_DATA_CHANGED:
+            case PROVIDER_DATA_CLEARED:
                 dispatchEvent(event.copy());
                 break;    
         }        

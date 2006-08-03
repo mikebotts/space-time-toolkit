@@ -33,15 +33,16 @@ import org.vast.stt.event.STTEventListener;
  */
 public class SceneItem implements STTEventListener
 {
+    protected Scene parentScene;
     protected DataItem dataItem;
     protected DataStylerList stylers;
-    protected boolean updated;
     protected boolean visible;
 
 
-    public SceneItem()
+    public SceneItem(Scene scene)
     {
         stylers = new DataStylerList();
+        parentScene = scene;
     }
     
     
@@ -126,27 +127,18 @@ public class SceneItem implements STTEventListener
         switch (e.type)
         {
             case ITEM_STYLE_CHANGED:            
-                // update all stylers
                 for (int i = 0; i < stylers.size(); i++)
-                    stylers.get(i).updateDataMappings();
-                                
+                    stylers.get(i).updateDataMappings();                                
                 break;
             
             case PROVIDER_DATA_CHANGED:
-                this.updated = true;
+                for (int i = 0; i < stylers.size(); i++)
+                    stylers.get(i).updateBoundingBox();
+                break;
+                
+            case PROVIDER_DATA_CLEARED:
+                parentScene.getRenderer().cleanup(this);
                 break;
         }
-    }
-
-
-    public boolean isUpdated()
-    {
-        return updated;
-    }
-
-
-    public void setUpdated(boolean updated)
-    {
-        this.updated = updated;
     }
 }

@@ -16,6 +16,7 @@ package org.vast.stt.gui.views;
 import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -34,12 +35,14 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataEntry;
 import org.vast.stt.project.DataFolder;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.Scene;
+import org.vast.stt.project.SceneItem;
 
 
 public class SceneTreeView extends SceneView implements IDoubleClickListener
@@ -47,6 +50,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
 	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg;
+    private ImageDescriptor fitSceneImg, fitItemImg;
 	private Font treeFont;
 	private Object[] expandedItems;
     private ISelection selectedItem;
@@ -154,6 +158,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 	{
 		super.init(site);
 		
+        // load tree images
 		ImageDescriptor descriptor;
 		descriptor = STTPlugin.getImageDescriptor("icons/itemVis.gif");
 		itemVisImg = descriptor.createImage();
@@ -166,18 +171,50 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
         folderHidImg = descriptor.createImage();
         
-		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
+        // load menu images
+        fitSceneImg = STTPlugin.getImageDescriptor("icons/fitScene.gif");
+        fitItemImg = STTPlugin.getImageDescriptor("icons/fitItem.gif");
+        
+        // load tree font
+        treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
+        
+        // add fit to scene action to toolbar
+        IAction Fit2SceneAction = new Action()
+        {
+            public void run()
+            {
+                if (scene != null)
+                {
+                    FitView cmd = new FitView(scene);
+                    cmd.execute();
+                }
+            }
+        };
+        Fit2SceneAction.setImageDescriptor(fitSceneImg);
+        Fit2SceneAction.setToolTipText("Fit View To Scene");
+        site.getActionBars().getToolBarManager().add(Fit2SceneAction);
 		
-		Action action = new Action()
-		{
-			public void run()
-			{
-				
-			}
-		};
-		
-		action.setText("Scene 001");
-		site.getActionBars().getMenuManager().add(action);
+		// add fit to item action to toolbar
+        IAction Fit2ItemAction = new Action()
+        {
+            public void run()
+            {
+                if (scene != null)
+                {
+                    ISelection selection = sceneTree.getSelection();
+                    DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
+                    if (selectedEntry instanceof DataItem)
+                    {
+                        SceneItem sceneItem = scene.findItem((DataItem)selectedEntry);
+                        FitView cmd = new FitView(scene, sceneItem);
+                        cmd.execute();
+                    }
+                }
+            }
+        };
+        Fit2ItemAction.setImageDescriptor(fitItemImg);
+        Fit2ItemAction.setToolTipText("Fit View To Item");
+        site.getActionBars().getToolBarManager().add(Fit2ItemAction);
 	}
 	
 	

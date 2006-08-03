@@ -14,6 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -41,7 +42,7 @@ public class LineStyler extends AbstractStyler
     protected LinePointGraphic point;
     protected LineSymbolizer symbolizer;
     protected BlockInfo lineInfo;
-    protected int oldBlockCount = 0; 
+    protected int oldBlockCount = 0;
         
 	
 	public LineStyler()
@@ -52,9 +53,9 @@ public class LineStyler extends AbstractStyler
     
     
     @Override
-    public void reset()
+    public void resetIterators()
     {
-        super.reset();
+        super.resetIterators();
         int currentBlockCount = dataLists[0].blockIterator.getList().getSize();
         if (currentBlockCount != oldBlockCount)
             this.updated = true;
@@ -79,8 +80,6 @@ public class LineStyler extends AbstractStyler
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
         
-        // TODO scan and compute block BBOX and Time Range
-        
         return lineInfo;
     }
     
@@ -89,7 +88,11 @@ public class LineStyler extends AbstractStyler
     {
         if (dataLists[0].blockIndexer.hasNext)
         {
-            dataLists[0].blockIndexer.getNext();
+            dataLists[0].blockIndexer.getNext();            
+            
+            if (computeExtents)
+                bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+            
             return point;
         }
         

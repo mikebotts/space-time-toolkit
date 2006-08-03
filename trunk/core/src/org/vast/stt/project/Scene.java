@@ -209,7 +209,7 @@ public class Scene implements STTEventProducer, STTEventListener
         else 
         {
             // if not found create a new SceneItem + prepare all stylers
-            SceneItem newSceneItem = new SceneItem();
+            SceneItem newSceneItem = new SceneItem(this);
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
             List<Symbolizer> symbolizers = dataItem.getSymbolizers();

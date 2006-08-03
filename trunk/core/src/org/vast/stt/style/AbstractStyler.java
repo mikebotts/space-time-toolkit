@@ -23,7 +23,6 @@ import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SpatialExtent;
-import org.vast.stt.renderer.RendererInfo;
 
 
 /**
@@ -48,16 +47,14 @@ public abstract class AbstractStyler implements DataStyler
     protected SpatialExtent bbox;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
-    protected RendererInfo rendererInfo;
-        
-    
-    public abstract void updateBoundingBox();
+    protected boolean computeExtents = true;
     
     
     public AbstractStyler()
     {
         treeBuilders = new Hashtable<String, IndexerTreeBuilder>();
         dataLists = new ListInfo[0];
+        bbox = new SpatialExtent();
     }
     
     
@@ -125,13 +122,14 @@ public abstract class AbstractStyler implements DataStyler
         dataLists = new ListInfo[0];
         treeBuilders.clear();
         this.updated = true;
+        this.bbox = new SpatialExtent();
     }
     
     
     /**
      * Reset the block counter used for the block iterator
      */
-    public void reset()
+    public void resetIterators()
     {
         // reset all list iterators
         for (int i = 0; i < dataLists.length; i++)
@@ -166,17 +164,11 @@ public abstract class AbstractStyler implements DataStyler
                         
         return true;
     }
-
-
-    public RendererInfo getRendererInfo()
+    
+    
+    public void updateBoundingBox()
     {
-        return rendererInfo;
-    }
-
-
-    public void setRendererInfo(RendererInfo rendererInfo)
-    {
-        this.rendererInfo = rendererInfo;
+        this.bbox = new SpatialExtent();
     }
 
 

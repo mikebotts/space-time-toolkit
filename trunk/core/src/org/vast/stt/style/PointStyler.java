@@ -13,6 +13,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
@@ -52,6 +53,10 @@ public class PointStyler extends AbstractStyler
         if (dataLists[0].blockIndexer.hasNext)
         {
             dataLists[0].blockIndexer.getNext();
+            
+            if (computeExtents)
+                bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+            
             return point;
         }
         
