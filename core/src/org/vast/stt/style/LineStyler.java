@@ -51,6 +51,17 @@ public class LineStyler extends AbstractStyler
 	}
     
     
+    @Override
+    public void reset()
+    {
+        super.reset();
+        int currentBlockCount = dataLists[0].blockIterator.getList().getSize();
+        if (currentBlockCount != oldBlockCount)
+            this.updated = true;
+        oldBlockCount = currentBlockCount;
+    }
+    
+    
     public BlockInfo nextLineBlock()
     {
         ListInfo listInfo = dataLists[0];
@@ -67,9 +78,6 @@ public class LineStyler extends AbstractStyler
         AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
-        
-        // ensure a block info is present
-        nextItem.ensureInfo();
         
         // TODO scan and compute block BBOX and Time Range
         
@@ -244,17 +252,6 @@ public class LineStyler extends AbstractStyler
                 }
             }
         }
-    }
-    
-    
-    @Override
-    public void reset()
-    {
-        super.reset();
-        int currentBlockCount = dataLists[0].blockIterator.getList().getSize();
-        if (currentBlockCount != oldBlockCount)
-            this.updated = true;
-        oldBlockCount = currentBlockCount;
     }
     
     
