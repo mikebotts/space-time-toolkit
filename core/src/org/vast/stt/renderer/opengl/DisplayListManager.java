@@ -13,10 +13,13 @@
 
 package org.vast.stt.renderer.opengl;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-
-import org.vast.stt.data.BlockInfo;
+import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.data.BlockListItem;
+import org.vast.stt.project.DataStyler;
 
 
 /**
@@ -36,8 +39,10 @@ import org.vast.stt.data.BlockInfo;
  */
 public class DisplayListManager
 {
+    protected static Hashtable<Symbolizer, GLDisplayList> symTable = new Hashtable<Symbolizer, GLDisplayList>();
     protected GL gl;
     protected GLU glu;
+    protected int refreshPeriod = 500;
     
     
     public DisplayListManager(GL gl, GLU glu)
@@ -48,45 +53,152 @@ public class DisplayListManager
     
     
     /**
-     * Manage display list by calling previously recorded one
-     * or starting to record a new one
-     * @param glInfo
-     * @param blockInfo
-     * @return true if a list was called, false if a new needs to be generated
+     * Record new display list for the symbolizer attached with the styler
+     * or simply call the one that was previously created.
+     * @param sym
+     * @return
      */
-    protected boolean useDisplayList(BlockInfo blockInfo)
+    public void useDisplayList(DataStyler styler, Runnable renderRunnable)
     {
-        OpenGLInfo glInfo = (OpenGLInfo)blockInfo.rendererParams;
+        Symbolizer sym = styler.getSymbolizer();
         
-        if (glInfo != null)
+        synchronized (symTable)
         {
-            // if block was updated delete previous display list
-            if (blockInfo.updated)
+            GLDisplayList dl = symTable.get(sym);
+            
+            // if it already exists, delete or use existing one
+            if (dl != null && dl.id > 0)
             {
-                if (glInfo.objectID != -1)
-                    gl.glDeleteLists(glInfo.objectID, 1);
+                // if style has changed, delete previous list
+                long time = System.currentTimeMillis();
+                if (time - dl.lastCompiled > refreshPeriod && styler.isUpdated())
+                {
+                    symTable.remove(sym);
+                    gl.glDeleteLists(dl.id, 1);
+                    //System.err.println("DL #" + dl.id + " deleted");
+                }
+               
+                // otherwise simply call recorded list
+                else if (dl.ready)
+                {
+                    gl.glCallList(dl.id);
+                    //System.err.println("DL #" + dl.id + " called");
+                    return;
+                }
             }
             
-            // otherwise just call display list
-            else 
+            // otherwise record it        
+            dl = new GLDisplayList();
+            recordDisplayList(dl, renderRunnable);
+            symTable.put(sym, dl);
+            styler.setUpdated(false);
+            //System.err.println("DL #" + dl.id + " created");
+        }
+    }
+    
+    
+    /**
+     * Record new display list for the symbolizer/block combination or
+     * call simply the one that was previously created.
+     * @param styler
+     * @param block
+     * @param renderRunnable
+     */
+    public void useDisplayList(DataStyler styler, BlockListItem block, Runnable renderRunnable)
+    {
+        Symbolizer sym = styler.getSymbolizer();
+        
+        synchronized (symTable)
+        {
+            GLDisplayList mainList = symTable.get(sym);
+            
+            // if list doesn't exist, create it
+            if (mainList == null)
             {
-                gl.glCallList(glInfo.objectID);
-                return true;
+                mainList = new GLDisplayList();
+                symTable.put(sym, mainList);
+            }
+            
+            // try to find sub list
+            GLDisplayList subList = mainList.subDisplayLists.get(block);
+            
+            // if it already exists, delete or use existing one
+            if (subList != null && subList.id > 0)
+            {
+                // if style has changed, delete previous list
+                long time = System.currentTimeMillis();
+                if (time - subList.lastCompiled > refreshPeriod && styler.isUpdated())
+                {
+                    subList.subDisplayLists.remove(block);
+                    gl.glDeleteLists(subList.id, 1);
+                    //System.err.println("DL #" + dl.id + " deleted");
+                }
+                
+                // otherwise simply call recorded list
+                else if (subList.ready)
+                {
+                    gl.glCallList(subList.id);
+                    //System.err.println("DL #" + dl.id + " called");
+                    return;
+                }
+            }
+            
+            // otherwise record it        
+            subList = new GLDisplayList();
+            mainList.subDisplayLists.put(block, subList);
+            styler.setUpdated(false);        
+            recordDisplayList(subList, renderRunnable);
+            //System.err.println("DL #" + dl.id + " created");
+        }
+    }
+    
+    
+    /**
+     * Clears all display lists used by this symbolizer
+     * @param sym
+     */
+    protected void clearDisplayLists(Symbolizer sym)
+    {
+        GLDisplayList dl = symTable.get(sym);
+        
+        if (dl != null)
+        {
+            symTable.remove(sym);
+            if (dl.id > 0)
+                gl.glDeleteLists(dl.id, 1);
+            
+            Enumeration<GLDisplayList> subLists = dl.subDisplayLists.elements();
+            while (subLists.hasMoreElements())
+            {
+                GLDisplayList nextDL = subLists.nextElement();
+                gl.glDeleteLists(nextDL.id, 1);
             }
         }
-        else
-        {
-            glInfo = new OpenGLInfo();
-            blockInfo.rendererParams = glInfo;
-        }
-        
-        // create and start list recording
-        int listNum = gl.glGenLists(1);
-        glInfo.objectID = listNum;
-        blockInfo.updated = false;
-        
-        gl.glNewList(listNum, GL.GL_COMPILE_AND_EXECUTE);        
-        
-        return false;
+    }
+    
+    
+    protected void recordDisplayList(GLDisplayList dl, Runnable renderRunnable)
+    {
+        dl.id = gl.glGenLists(1);
+        gl.glNewList(dl.id, GL.GL_COMPILE_AND_EXECUTE);
+        renderRunnable.run();
+        gl.glEndList();
+        dl.lastCompiled = System.currentTimeMillis();
+        dl.ready = true;        
+    }
+}
+
+
+class GLDisplayList
+{
+    protected int id = 0;
+    protected boolean ready = false;
+    protected long lastCompiled = 0;
+    protected int blockCount = 1;
+    protected Hashtable<Object, GLDisplayList> subDisplayLists;
+    
+    public GLDisplayList()
+    {
+        subDisplayLists = new Hashtable<Object, GLDisplayList>();
     }
 }

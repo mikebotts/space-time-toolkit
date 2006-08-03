@@ -1,6 +1,7 @@
 package org.vast.stt.style;
 
-import org.vast.stt.data.BlockInfo;
+import org.vast.stt.data.BlockListItem;
+import org.vast.stt.renderer.RendererInfo;
 
 
 /**
@@ -19,5 +20,6 @@ import org.vast.stt.data.BlockInfo;
  */
 public abstract class GraphicObject
 {
-    public BlockInfo info;
+    public RendererInfo rendererInfo;
+    public BlockListItem block;
 }

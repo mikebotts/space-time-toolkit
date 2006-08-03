@@ -17,7 +17,6 @@ import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.BlockFilter;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockListItem;
 
@@ -52,21 +51,17 @@ public class LineStyler extends AbstractStyler
 	}
     
     
-    public BlockInfo nextLineBlock(BlockFilter filter)    
+    public BlockInfo nextLineBlock()
     {
         ListInfo listInfo = dataLists[0];
         BlockListItem nextItem;
         
-        do
-        {
-            // if no more items in the list, just return null
-            if (!listInfo.blockList.hasNext())
-                return null;
-        
-            // otherwise get the next item
-            nextItem = listInfo.blockList.next();
-        }
-        while (filter.filterBlock(nextItem.getInfo()));
+        // if no more items in the list, just return null
+        if (!listInfo.blockIterator.hasNext())
+            return null;
+    
+        // otherwise get the next item
+        nextItem = listInfo.blockIterator.next();
         
         // setup indexer with new data 
         AbstractDataBlock nextBlock = nextItem.getData();
@@ -77,10 +72,6 @@ public class LineStyler extends AbstractStyler
         nextItem.ensureInfo();
         
         // TODO scan and compute block BBOX and Time Range
-        
-        if (listInfo.blockList.getSize() != oldBlockCount)
-            lineInfo.updated = true;        
-        oldBlockCount = listInfo.blockList.getSize();
         
         return lineInfo;
     }
@@ -113,9 +104,7 @@ public class LineStyler extends AbstractStyler
         
         // reset all parameters
         point = new LinePointGraphic();
-        this.clearAllMappers();
-        lineInfo.updated = true;
-        
+        this.clearAllMappers();       
         
         // geometry breaks
         param = this.symbolizer.getGeometry().getBreaks();
@@ -255,6 +244,17 @@ public class LineStyler extends AbstractStyler
                 }
             }
         }
+    }
+    
+    
+    @Override
+    public void reset()
+    {
+        super.reset();
+        int currentBlockCount = dataLists[0].blockIterator.getList().getSize();
+        if (currentBlockCount != oldBlockCount)
+            this.updated = true;
+        oldBlockCount = currentBlockCount;
     }
     
     

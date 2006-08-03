@@ -37,7 +37,9 @@ public class RasterTileGraphic extends GraphicObject
     
     public int width = 0;
     public int height = 0;
-    public float opacity = 1.0f;        
+    public float opacity = 1.0f;
+    public int widthPadding = 0;
+    public int heightPadding = 0;
     
     public Buffer rasterData;
     public Buffer colorMapData;

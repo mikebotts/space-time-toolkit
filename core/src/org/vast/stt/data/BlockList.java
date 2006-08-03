@@ -48,29 +48,9 @@ public class BlockList
     }
     
     
-    public boolean hasNext()
+    public BlockListIterator getIterator()
     {
-        return hasNext;
-    }
-    
-    
-    public BlockListItem next()
-    {
-        BlockListItem block = currentBlock;
-        currentBlock = currentBlock.nextBlock;
-        if (currentBlock == null)
-            hasNext = false;
-        return block;
-    }
-    
-    
-    public void reset()
-    {
-        if (firstBlock == null)
-            hasNext = false;
-        else
-            hasNext = true;
-        currentBlock = firstBlock;
+        return new BlockListIterator(this);
     }
     
     

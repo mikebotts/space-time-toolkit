@@ -122,11 +122,10 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	@Override
 	public void dispose()
 	{
-        super.dispose();
-        canvas.dispose();
-        
+        super.dispose();        
         if (scene != null)
-            scene.getRenderer().dispose();        
+            scene.getRenderer().dispose();
+        canvas.dispose();
 	}
 	
 	
@@ -140,15 +139,15 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     @Override
     public void setScene(Scene sc)
     {
-        // make sure we dispose previous renderer
-        if (scene != null)
-            scene.getRenderer().dispose();
-
-        // call parent method !!
-        super.setScene(sc);
-        
-        if (scene != null)
-        {        
+        if (scene != sc)
+        {
+            // make sure we dispose previous renderer
+            if (scene != null)
+                scene.getRenderer().dispose();
+    
+            // call parent method !!
+            super.setScene(sc);
+            
             // init the renderer
             scene.getRenderer().setCanvas(canvas);
             scene.getRenderer().init();

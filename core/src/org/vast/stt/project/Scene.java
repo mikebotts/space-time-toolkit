@@ -155,24 +155,60 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
-    public void setItemVisibility(DataItem dataItem, boolean visible)
+    /**
+     * Finds the SceneItem object associated with this dataItem
+     * @param dataItem
+     * @return
+     */
+    public SceneItem findItem(DataItem dataItem)
     {
-        boolean found = false;
-        
         // try to find entry in sceneItems list
         for (int i=0; i<sceneItems.size(); i++)
         {
             SceneItem nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem)
-            {
-                nextItem.setVisible(visible);
-                found = true;
-            }
+                return nextItem;
         }
         
-        // if not found create a new SceneItem + prepare all stylers
-        if (!found)
+        return null;
+    }
+    
+    
+    /**
+     * Removes an item from the scene and cleanup all cached data
+     * @param dataItem
+     */
+    public void removeItem(DataFolder folder, DataItem dataItem)
+    {
+        SceneItem sceneItem = findItem(dataItem);
+        
+        // cleanup SceneItem as well
+        if (sceneItem != null)
         {
+            //this.renderer.cleanup(RendererInfo)
+        }
+        
+        folder.remove(dataItem);
+    }
+    
+    
+    /**
+     * Sets item visibility to the specified value
+     * Also creates a SceneItem if not created yet
+     * @param dataItem
+     * @param visible
+     */
+    public void setItemVisibility(DataItem dataItem, boolean visible)
+    {       
+        SceneItem sceneItem = findItem(dataItem);
+        
+        if (sceneItem != null)
+        {
+            sceneItem.setVisible(visible);
+        }
+        else 
+        {
+            // if not found create a new SceneItem + prepare all stylers
             SceneItem newSceneItem = new SceneItem();
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
@@ -186,7 +222,7 @@ public class Scene implements STTEventProducer, STTEventListener
             sceneItems.add(newSceneItem);
         }
         
-        // register scene as a listener to the item
+        // register/unregister scene as a listener to the item
         if (visible)
             dataItem.addListener(this);
         else
@@ -194,6 +230,11 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
+    /**
+     * Sets folder visibility recursively 
+     * @param folder
+     * @param visible
+     */
     public void setItemVisibility(DataFolder folder, boolean visible)
     {
         Iterator<DataItem> it = folder.getItemIterator();        
@@ -202,6 +243,11 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
+    /**
+     * Determine item visibility
+     * @param dataItem
+     * @return true if item is visible, false otherwise
+     */
     public boolean isItemVisible(DataItem dataItem)
     {
         for (int i=0; i<sceneItems.size(); i++)
@@ -215,6 +261,11 @@ public class Scene implements STTEventProducer, STTEventListener
     }
     
     
+    /**
+     * Determine folder visibility
+     * @param folder
+     * @return true if at least one subitem is visible, false otherwise
+     */
     public boolean isItemVisible(DataFolder folder)
     {
         Iterator<DataItem> it = folder.getItemIterator();

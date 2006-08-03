@@ -93,7 +93,7 @@ public class SOSProvider extends OWSProvider
             String server = query.getPostServer();
             if (server == null)
                 server = query.getGetServer();
-            throw new DataException("Error while parsing data from " + server, e);
+            throw new DataException("Error while reading data from " + server, e);
         }
         finally
         {
