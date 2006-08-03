@@ -13,8 +13,8 @@
 
 package org.vast.stt.data;
 
-import org.vast.stt.renderer.RendererInfo;
-
+import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.TimeExtent;
 
 /**
  * <p><b>Title:</b><br/>
@@ -22,7 +22,7 @@ import org.vast.stt.renderer.RendererInfo;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Base Block Info.
+ * TODO BlockInfo type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -31,8 +31,9 @@ import org.vast.stt.renderer.RendererInfo;
  * @version 1.0
  */
 public class BlockInfo
-{ 
-    public RendererInfo rendererParams;
-    public boolean updated = true;
-    public boolean delete = false;
+{
+    public SpatialExtent spatialExtent;  // Stores bbox of this block for filtering
+    public TimeExtent timeExtent;        // 
+    public double geometryStepAverage;
+    public double geometryStepVariance;
 }

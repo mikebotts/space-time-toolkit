@@ -180,7 +180,7 @@ public class WMS_Process extends DataProcess
             if (mimeType.contains("xml") || mimeType.startsWith("application"))
             {
                 OWSExceptionReader reader = new OWSExceptionReader();
-                reader.parseException(urlCon.getInputStream());
+                reader.parseException(url.openStream());
             }
             else
             {
@@ -220,7 +220,7 @@ public class WMS_Process extends DataProcess
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WMS server:\n" + url, e);
+            throw new ProcessException("Error while requesting data from WMS server:\n" + url.getHost(), e);
         }
         finally
         {

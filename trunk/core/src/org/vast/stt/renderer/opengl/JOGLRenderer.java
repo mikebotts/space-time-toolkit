@@ -14,6 +14,7 @@
 package org.vast.stt.renderer.opengl;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
@@ -23,11 +24,11 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
-import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
+import org.vast.stt.renderer.RendererInfo;
 import org.vast.stt.style.*;
 
 
@@ -61,12 +62,26 @@ public class JOGLRenderer extends Renderer
     protected TextureManager textureManager;
     protected DisplayListManager displayListManager;
     protected GLBlockFilter blockFilter;
-    protected boolean normalizeCoords;
     protected float zBufferOffset;
+    protected static javax.media.opengl.GLContext lastContext = null;
 
+    protected GLRenderPoints pointRenderer;
+    protected GLRenderLines lineRenderer;
+    protected GLRenderPolygons polygonRenderer;
+    protected GLRenderGrids gridRenderer;
+    protected GLRenderGridBorder gridBorderRenderer;
+    protected GLRenderTexture textureRenderer;
+    
 
     public JOGLRenderer()
     {        
+    }
+    
+    
+    @Override
+    public void cleanup(RendererInfo info)
+    {
+      
     }
     
     
@@ -194,8 +209,11 @@ public class JOGLRenderer extends Renderer
     {
         SWTContext = new GLContext(canvas);
         SWTContext.setCurrent();
-        JOGLContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        //JOGLContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
+        JOGLContext = drawable.createContext(lastContext);
         JOGLContext.makeCurrent();
+        lastContext = JOGLContext;
         //JOGLContext.setGL(new DebugGL(JOGLContext.getGL()));
         //JOGLContext.setGL(new TraceGL(JOGLContext.getGL(), System.err));
 
@@ -205,10 +223,15 @@ public class JOGLRenderer extends Renderer
         textureManager = new TextureManager(gl, glu);
         displayListManager = new DisplayListManager(gl, glu);
         blockFilter = new GLBlockFilter(gl, glu);
-        normalizeCoords = textureManager.isNormalizationRequired();
+        pointRenderer = new GLRenderPoints(gl, glu);
+        lineRenderer = new GLRenderLines(gl, glu);
+        polygonRenderer = new GLRenderPolygons(gl, glu);
+        gridRenderer = new GLRenderGrids(gl, glu);
+        gridBorderRenderer = new GLRenderGridBorder(gl, glu);
+        textureRenderer = new GLRenderTexture(gl, glu);        
         
         gl.glClearDepth(1.0f);
-        gl.glDepthFunc(GL.GL_LESS);
+        gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
@@ -249,72 +272,6 @@ public class JOGLRenderer extends Renderer
         zBufferOffset -= 0.4f;
         return zBufferOffset;
     }
-    
-    
-    /**
-     * Renders all data passed by a line styler
-     */
-    public void visit(LineStyler styler)
-    {
-        BlockInfo blockInfo;
-        LinePointGraphic point;
-        boolean begin = false;
-        boolean checkList = true;
-        float oldWidth = -1.0f;
-        styler.reset();
-        
-        
-        // loop and draw all points
-        while ((blockInfo = styler.nextLineBlock(blockFilter)) != null)
-        {
-            if (checkList)
-            {
-                boolean skip = displayListManager.useDisplayList(blockInfo);
-                if (skip) return;
-                checkList = false;
-            }
-            
-            while ((point = styler.nextPoint()) != null)
-            {
-                if (!begin)
-                {
-                    // enable line smooth if needed        
-                    if (point.smooth)
-                        gl.glEnable(GL.GL_LINE_SMOOTH);
-                    else
-                        gl.glDisable(GL.GL_LINE_SMOOTH);
-                }
-                
-                if (point.width != oldWidth)
-                {
-                    if (begin)
-                    {
-                        gl.glEnd();
-                        begin = false;
-                    }
-                    gl.glLineWidth(point.width);
-                    oldWidth = point.width;
-                    gl.glBegin(GL.GL_LINE_STRIP);
-                }
-
-                if (point.lineBreak && begin)
-                {
-                    gl.glEnd();
-                    gl.glBegin(GL.GL_LINE_STRIP);
-                }
-
-                point.lineBreak = false;
-                begin = true;
-                gl.glColor4f(point.r, point.g, point.b, point.a);
-                gl.glVertex3d(point.x, point.y, point.z);
-            }
-        }
-        
-        if (begin)
-            gl.glEnd();
-        
-        gl.glEndList();        
-    }
 
 
     /**
@@ -322,35 +279,20 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PointStyler styler)
     {
-        PointGraphic point;
-        boolean begin = false;
-        float oldSize = -1.0f;
         styler.reset();
-
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_POINT);
-        
-        // loop and draw all points
-        while (styler.nextBlock())
-        {
-            while ((point = styler.nextPoint()) != null)
-            {
-                // hack to allow changing point size
-                if (point.size != oldSize)
-                {
-                    if (begin)
-                        gl.glEnd();
-                    gl.glPointSize(point.size);
-                    oldSize = point.size;
-                    gl.glBegin(GL.GL_POINTS);
-                    begin = true;
-                }
-
-                gl.glColor4f(point.r, point.g, point.b, point.a);
-                gl.glVertex3d(point.x, point.y, point.z);
-            }
-        }
-
-        gl.glEnd();
+        pointRenderer.setStyler(styler);
+        pointRenderer.run();        
+    }
+    
+    
+    /**
+     * Renders all data passed by a line styler
+     */
+    public void visit(LineStyler styler)
+    {
+        styler.reset();        
+        lineRenderer.setStyler(styler);
+        displayListManager.useDisplayList(styler, lineRenderer);
     }
 
 
@@ -359,35 +301,9 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PolygonStyler styler)
     {
-        PolygonPointGraphic point;
-        boolean begin = false;
         styler.reset();
-        
-        // setup polygon offset
-        gl.glPolygonOffset(getOffset(), 1.0f);
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-        
-        // loop and draw all points
-        gl.glBegin(GL.GL_POLYGON);
-
-        while (styler.nextBlock())
-        {
-            while ((point = styler.nextPoint()) != null)
-            {
-                if (point.polyBreak && begin)
-                {
-                    gl.glEnd();
-                    gl.glBegin(GL.GL_POLYGON);
-                }
-
-                point.polyBreak = false;
-                begin = true;
-                gl.glColor4f(point.r, point.g, point.b, point.a);
-                gl.glVertex3d(point.x, point.y, point.z);
-            }
-        }
-
-        gl.glEnd();
+        polygonRenderer.setStyler(styler);
+        displayListManager.useDisplayList(styler, polygonRenderer);        
     }
 
 
@@ -469,60 +385,58 @@ public class JOGLRenderer extends Renderer
     
     
     /**
-     * Renders all data passed by a grid styler
+     * Renders all data passed by a grid mesh styler
      */
-    public void visit(GridStyler styler)
+    public void visit(GridMeshStyler styler)
     {
-        double oldX = 0.0;
-        GridPatchGraphic patch = null;
-        GridPointGraphic point = null;
+        GridPatchGraphic patch;
         styler.reset();
+        gridRenderer.setStyler(styler);
+        
+        // loop through all tiles
+        while ((patch = styler.nextPatch()) != null)
+        {           
+            gridRenderer.setPatch(patch);
+            gridRenderer.setOffset(0.0f);
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer);
+        }
+    }
+    
+    
+    /**
+     * Renders all data passed by a grid fill styler
+     */
+    public void visit(GridFillStyler styler)
+    {
+        GridPatchGraphic patch;
+        styler.reset();
+        gridRenderer.setStyler(styler);
         float offset = getOffset();
         
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
-            boolean skip = displayListManager.useDisplayList(patch.info);
-            if (skip) continue;
-            
-            // select fill or wireframe
-            if (patch.fill)
-                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-            else
-                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
-            
-            gl.glLineWidth(patch.lineWidth);            
-            gl.glPolygonOffset(offset, 1.0f);
-            gl.glDisable(GL.GL_CULL_FACE);            
-            
-            // loop through all grid points
-            for (int v = 0; v < patch.length-1; v++)
-            {
-                gl.glBegin(GL.GL_TRIANGLE_STRIP);
-                
-                for (int u = 0; u < patch.width; u++)
-                {
-                    for (int p=0; p<2; p++)
-                    {                    
-                        point = styler.getGridPoint(u, v+p, false);
-                        
-                        // TODO hack to break grid when crossing lat/lon boundary
-                        if (Math.abs(point.x - oldX) > Math.PI*9/10)
-                        {
-                            gl.glEnd();
-                            gl.glBegin(GL.GL_QUAD_STRIP);
-                        }
-                        oldX = point.x;
-                        
-                        gl.glColor4f(point.r, point.g, point.b, point.a);
-                        gl.glVertex3d(point.x, point.y, point.z);
-                    }
-                }
-                
-                gl.glEnd();
-            }
-            
-            gl.glEndList();
+            gridRenderer.setPatch(patch);
+            gridRenderer.setOffset(offset);
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer);
+        }
+    }
+    
+    
+    /**
+     * Renders all data passed by a grid border styler
+     */
+    public void visit(GridBorderStyler styler)
+    {
+        GridPatchGraphic patch;
+        styler.reset();
+        gridBorderRenderer.setStyler(styler);
+        
+        // loop through all tiles
+        while ((patch = styler.nextPatch()) != null)
+        {           
+            gridBorderRenderer.setPatch(patch);
+            displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer);
         }
     }
 
@@ -530,66 +444,21 @@ public class JOGLRenderer extends Renderer
     /**
      * Renders all data passed by a texture mapping styler
      */
-    public void visit(TextureMappingStyler styler)
+    public void visit(TextureStyler styler)
     {
-        TexturePatchGraphic patch;
-        GridPointGraphic point;
-        float uScale = 0.0f;
-        float vScale = 0.0f;
+        TexturePatchGraphic patch;        
         styler.reset();
-
+        textureRenderer.setStyler(styler);
+        float offset = getOffset();
+        
         // loop through all tiles
         while ((patch = styler.nextTile()) != null)
         {
-            RasterTileGraphic tex = patch.getTexture();
-            GridPatchGraphic grid = patch.getGrid();
-            
             // bind texture and load in GL if needed
-            textureManager.useTexture(styler, tex);            
-            
-            // call display list if available 
-            boolean skip = displayListManager.useDisplayList(grid.info);
-            if (skip) continue;
-            
-            // select fill or wireframe
-            if (grid.fill)
-                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-            else
-                gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
-
-            gl.glLineWidth(grid.lineWidth);
-            gl.glPolygonOffset(1.0f, 1.0f);
-            gl.glDisable(GL.GL_CULL_FACE);            
-            gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
-            
-            // compute tex coordinate scale (for padded textures)
-            GLTextureInfo texInfo = (GLTextureInfo)tex.info.rendererParams;
-            if (texInfo.widthPadding != 0 || texInfo.heightPadding != 0)
-            {
-                uScale = (float)tex.width / (float)(tex.width + texInfo.widthPadding);
-                vScale = (float)tex.height / (float)(tex.height + texInfo.heightPadding);
-            }
-            
-            // loop through all grid points
-            for (int v = 0; v < grid.length-1; v++)
-            {
-                gl.glBegin(GL.GL_QUAD_STRIP);
-                
-                for (int u = 0; u < grid.width; u++)
-                {
-                    point = styler.getGridPoint(u, v, uScale, vScale, normalizeCoords);
-                    gl.glTexCoord2f(point.tx, point.ty);
-                    gl.glVertex3d(point.x, point.y, point.z);
-                    
-                    point = styler.getGridPoint(u, v+1, uScale, vScale, normalizeCoords);
-                    gl.glTexCoord2f(point.tx, point.ty);
-                    gl.glVertex3d(point.x, point.y, point.z);
-                }
-                
-                gl.glEnd();
-            }
-            
-            gl.glEndList();
+            textureManager.useTexture(styler, patch.getTexture());
+            textureRenderer.setPatch(patch);
+            textureRenderer.setOffset(offset);
+            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer);
         }
         
         // reload the void texture

@@ -123,6 +123,7 @@ public class SensorMLProvider extends AbstractProvider
                         timeInput.setData(timeData);
                     }
                     
+                    process.createNewOutputBlocks();
                     process.execute();
                     
                     // transfer block for each output
@@ -130,16 +131,16 @@ public class SensorMLProvider extends AbstractProvider
                     {
                         BlockList blockList = blockListArray.get(c);
                         blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
-                        
-                        // send event for redraw
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-                    }                    
+                    }
+                    
+                    // send event for redraw
+                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                 }
             }
         }
         catch (ProcessException e)
         {
-            throw new DataException("Error while running process " + process.getName() + "(" + process.getType() + ")", e);
+            throw new DataException("Error while running SensorML process in " + this.getName(), e);
         }
     }
     

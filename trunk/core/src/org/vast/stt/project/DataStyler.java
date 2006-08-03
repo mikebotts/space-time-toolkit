@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.renderer.RendererInfo;
 import org.vast.stt.style.StylerVisitor;
 
 
@@ -62,5 +63,17 @@ public interface DataStyler
 	public double[] getCenterPoint();
 	
 	
-	public void accept(StylerVisitor visitor);
+	public RendererInfo getRendererInfo();
+
+
+    public void setRendererInfo(RendererInfo rendererInfo);
+    
+    
+    public void accept(StylerVisitor visitor);
+    
+    
+    public boolean isUpdated();
+    
+    
+    public void setUpdated(boolean updated);
 }

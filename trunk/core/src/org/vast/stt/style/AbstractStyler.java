@@ -18,10 +18,12 @@ import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
 import org.vast.stt.data.BlockList;
+import org.vast.stt.data.BlockListIterator;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.renderer.RendererInfo;
 
 
 /**
@@ -40,11 +42,13 @@ import org.vast.stt.project.SpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
+    protected boolean updated = true;
     protected DataItem dataItem;
     protected DataNode dataNode;
     protected SpatialExtent bbox;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
+    protected RendererInfo rendererInfo;
         
     
     public abstract void updateBoundingBox();
@@ -120,6 +124,7 @@ public abstract class AbstractStyler implements DataStyler
     {
         dataLists = new ListInfo[0];
         treeBuilders.clear();
+        this.updated = true;
     }
     
     
@@ -132,7 +137,7 @@ public abstract class AbstractStyler implements DataStyler
         for (int i = 0; i < dataLists.length; i++)
         {
             ListInfo info = dataLists[i];
-            info.blockList.reset();
+            info.blockIterator.reset();
         }
     }
     
@@ -148,10 +153,10 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i]; 
             DataIndexer nextIndexer = info.blockIndexer;
                         
-            if (!info.blockList.hasNext())
+            if (!info.blockIterator.hasNext())
                 return false;
             
-            AbstractDataBlock nextBlock = info.blockList.next().getData();
+            AbstractDataBlock nextBlock = info.blockIterator.next().getData();
             
             // TODO implement block filtering here
             
@@ -161,18 +166,42 @@ public abstract class AbstractStyler implements DataStyler
                         
         return true;
     }
+
+
+    public RendererInfo getRendererInfo()
+    {
+        return rendererInfo;
+    }
+
+
+    public void setRendererInfo(RendererInfo rendererInfo)
+    {
+        this.rendererInfo = rendererInfo;
+    }
+
+
+    public boolean isUpdated()
+    {
+        return updated;
+    }
+
+
+    public void setUpdated(boolean updated)
+    {
+        this.updated = updated;
+    }
 }
 
 
 class ListInfo
 {
-    protected BlockList blockList;
+    protected BlockListIterator blockIterator;
     protected DataIndexer blockIndexer;
     
     
     public ListInfo(BlockList blockList, DataIndexer dataIndexer)
     {
         this.blockIndexer = dataIndexer;
-        this.blockList = blockList;
+        this.blockIterator = blockList.getIterator();
     }
 }

@@ -13,7 +13,6 @@
 
 package org.vast.stt.project;
 
-import org.vast.stt.data.ItemInfo;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 
@@ -36,7 +35,6 @@ public class SceneItem implements STTEventListener
 {
     protected DataItem dataItem;
     protected DataStylerList stylers;
-    protected ItemInfo info;
     protected boolean updated;
     protected boolean visible;
 
@@ -131,28 +129,13 @@ public class SceneItem implements STTEventListener
                 // update all stylers
                 for (int i = 0; i < stylers.size(); i++)
                     stylers.get(i).updateDataMappings();
-                
-                // TODO add missing stylers                
-                // TODO remove superfluous stylers
-                
+                                
                 break;
             
             case PROVIDER_DATA_CHANGED:
                 this.updated = true;
                 break;
         }
-    }
-
-
-    public ItemInfo getInfo()
-    {
-        return info;
-    }
-
-
-    public void setInfo(ItemInfo info)
-    {
-        this.info = info;
     }
 
 

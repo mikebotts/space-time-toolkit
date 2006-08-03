@@ -40,11 +40,15 @@ public interface StylerVisitor
     
     public void visit(LabelStyler styler);
 	
-    public void visit(GridStyler styler);
+    public void visit(GridMeshStyler styler);
+    
+    public void visit(GridFillStyler styler);
+    
+    public void visit(GridBorderStyler styler);
     
 	public void visit(RasterStyler styler);    
     
-    public void visit(TextureMappingStyler styler);
+    public void visit(TextureStyler styler);
     
     public boolean filterBlock(BlockInfo blockInfo);
 }

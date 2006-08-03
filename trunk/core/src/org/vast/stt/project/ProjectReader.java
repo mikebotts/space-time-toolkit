@@ -590,7 +590,8 @@ public class ProjectReader
         {
             Element symElt = (Element)symElts.item(i);
             Symbolizer symbolizer = readSymbolizer(dataItem, symElt);
-            dataItem.getSymbolizers().add(symbolizer);
+            if (symbolizer != null)
+                dataItem.getSymbolizers().add(symbolizer);
         }
         
 		return dataItem;
@@ -607,6 +608,9 @@ public class ProjectReader
     {
         Element symElt = dom.getFirstChildElement(styleElt);
         Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);
+        
+        if (symbolizer == null)
+            return null;
         
         // read name
         String name = dom.getAttributeValue(styleElt, "name");

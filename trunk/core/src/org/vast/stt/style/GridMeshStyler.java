@@ -13,19 +13,18 @@
 
 package org.vast.stt.style;
 
-import org.vast.ows.sld.PolygonSymbolizer;
+import org.vast.ows.sld.GridMeshSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Polygon Styler
+ * Grid Mesh Styler
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Converts source data to a sequence of PolygonPointGraphic objects
- * that the renderer can access and render sequentially.
+ * Used to render a grid mesh.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -33,93 +32,38 @@ import org.vast.ows.sld.Symbolizer;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class PolygonStyler extends AbstractStyler
+public class GridMeshStyler extends AbstractGridStyler
 {
-    protected PolygonPointGraphic point;
-    protected PolygonSymbolizer symbolizer;    
-	
-	
-	public PolygonStyler()
-	{
-        point = new PolygonPointGraphic();
-	}
     
-    
-    public PolygonPointGraphic nextPoint()
+    public GridMeshStyler()
     {
-        if (dataLists[0].blockIndexer.hasNext)
-        {
-            dataLists[0].blockIndexer.getNext();
-            return point;
-        }
-        
-        return null;
+    }
+    
+    
+    public GridMeshSymbolizer getSymbolizer()
+    {
+        return (GridMeshSymbolizer)symbolizer;
     }
 
 
-	public void updateBoundingBox()
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    public void setSymbolizer(Symbolizer sym)
+    {
+        this.symbolizer = (GridMeshSymbolizer)sym;
+    }
 
-
-	public void updateDataMappings()
-	{
+    
+    @Override
+    public void updateDataMappings()
+    {
+        super.updateDataMappings();
+        patch.fill = false;
+        GridMeshSymbolizer sym = (GridMeshSymbolizer)this.symbolizer;
         ScalarParameter param;
-        String propertyName = null;
         Object value;
+        String propertyName = null;
         
-        // reset all parameters
-        point = new PolygonPointGraphic();
-        this.clearAllMappers();        
-        
-        // geometry breaks
-        param = this.symbolizer.getGeometry().getBreaks();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new PolygonBreakMapper(point));               
-            }
-        }
-        
-        // geometry X
-        param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
-            }
-        }
-        
-        //geometry Y
-        param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
-            }
-        }
-        
-        // geometry Z
-        param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-            }
-        }
-        
-        // color - red 
-        param = this.symbolizer.getFill().getColor().getRed();
+        // point red
+        param = sym.getStroke().getColor().getRed();
         if (param != null)
         {
             if (param.isConstant())
@@ -134,11 +78,11 @@ public class PolygonStyler extends AbstractStyler
                 {
                     addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
                 }
-            }
+            }            
         }
         
-        // color - green 
-        param = this.symbolizer.getFill().getColor().getGreen();
+        // point green
+        param = sym.getStroke().getColor().getGreen();
         if (param != null)
         {
             if (param.isConstant())
@@ -153,13 +97,14 @@ public class PolygonStyler extends AbstractStyler
                 {
                     addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
                 }
-            }
+            }            
         }
         
-        // color - blue 
-        param = this.symbolizer.getFill().getColor().getBlue();
+        // point blue
+        param = sym.getStroke().getColor().getBlue();
         if (param != null)
         {
+            
             if (param.isConstant())
             {
                 value = param.getConstantValue();
@@ -175,8 +120,8 @@ public class PolygonStyler extends AbstractStyler
             }
         }
         
-        // color - alpha 
-        param = this.symbolizer.getFill().getColor().getAlpha();
+        // point alpha
+        param = sym.getStroke().getColor().getAlpha();
         if (param != null)
         {
             if (param.isConstant())
@@ -193,31 +138,19 @@ public class PolygonStyler extends AbstractStyler
                 }
             }
         }
-	}
-	
-	
-	public PolygonSymbolizer getSymbolizer()
-	{
-		return symbolizer;
-	}
-
-
-	public void setSymbolizer(Symbolizer sym)
-	{
-		this.symbolizer = (PolygonSymbolizer)sym;
-	}
-
-
-	public void accept(StylerVisitor visitor)
-	{
+    }
+    
+    
+    public void accept(StylerVisitor visitor)
+    {
         dataNode = dataItem.getDataProvider().getDataNode();
-        
+
         if (dataNode.isNodeStructureReady())
         {
             if (dataLists.length == 0)
                 updateDataMappings();
-                        
+
             visitor.visit(this);
-        }		
-	}
+        }       
+    }
 }

@@ -14,13 +14,16 @@
 package org.vast.stt.renderer.opengl;
 
 import java.nio.ByteBuffer;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.style.RasterPixelGraphic;
 import org.vast.stt.style.RasterTileGraphic;
-import org.vast.stt.style.TextureMappingStyler;
+import org.vast.stt.style.TextureStyler;
+import org.vast.util.MessageSystem;
 
 
 /**
@@ -42,10 +45,27 @@ import org.vast.stt.style.TextureMappingStyler;
  */
 public class TextureManager
 {
+    protected static Hashtable<Symbolizer, GLTextureTable> symTable
+                     = new Hashtable<Symbolizer, GLTextureTable>();
     protected GL gl;
     protected GLU glu;
     protected boolean npotSupported;
     protected boolean normalizationRequired;
+    
+    
+    class GLTexture
+    {
+        protected int id = -1;
+        protected boolean needsUpdate = true;
+        protected int widthPadding;
+        protected int heightPadding;
+    }
+    
+    
+    class GLTextureTable extends Hashtable<Object, GLTexture>
+    {
+        private final static long serialVersionUID = 0;
+    }
     
     
     public TextureManager(GL gl, GLU glu)
@@ -59,15 +79,15 @@ public class TextureManager
             glu.gluCheckExtension("GL_EXT_texture_rectangle", glExtensions))
         {
             OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_RECTANGLE_EXT;
-            System.err.println("--> NPOT textures supported <--");
+            MessageSystem.display("--> NPOT textures supported <--", false);
             npotSupported = true;
             normalizationRequired = false;
         }
         else
         {
             OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;
-            System.err.println("--> NPOT textures NOT supported <--");
-            System.err.println("--> Textures will be padded with transparent pixels or resampled <--");
+            MessageSystem.display("--> NPOT textures NOT supported <--", false);
+            MessageSystem.display("--> Textures will be padded with transparent pixels or resampled <--", false);
             npotSupported = false;
             normalizationRequired = true;
         }
@@ -83,51 +103,150 @@ public class TextureManager
      * @param tex
      * @return
      */
-    public void useTexture(DataStyler styler, RasterTileGraphic tex)
+    public void useTexture(TextureStyler styler, RasterTileGraphic tex)
     {
-        GLTextureInfo texInfo = (GLTextureInfo)tex.info.rendererParams;
-        if (texInfo != null)
+        Symbolizer sym = styler.getSymbolizer();
+        
+        synchronized (symTable)
         {
-            // if block was updated delete previous texture
-            if (tex.info.updated)
+            // try to find table for this symbolizer
+            GLTextureTable textureTable = symTable.get(sym);
+            
+            // create if it doesn't exist
+            if (textureTable == null)
             {
-                if (texInfo.textureID != -1)
-                    gl.glDeleteTextures(1, new int[] {texInfo.textureID}, 0);
+                textureTable = new GLTextureTable();
+                symTable.put(sym, textureTable);
             }
             
-            // otherwise just bind texture
-            else 
+            // TODO reset flags if update needed -> needs to come from sym vs styler !!
+            if (styler.isUpdated())
             {
-                gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.textureID);
-                return;
+                Enumeration<GLTexture> textureEnum = textureTable.elements();
+                while (textureEnum.hasMoreElements())
+                {
+                    GLTexture texInfo = textureEnum.nextElement();
+                    texInfo.needsUpdate = true;
+                }
+                styler.setUpdated(false);
             }
+                
+            // try to find texture for this tile
+            GLTexture texInfo = textureTable.get(tex.block);
+            
+            // create if it doesn't exist
+            if (texInfo == null)
+            {
+                texInfo = new GLTexture();
+                textureTable.put(tex.block, texInfo);
+            }            
+            
+            // create new texture if it needs update
+            if (texInfo.needsUpdate)
+            {
+                texInfo.needsUpdate = false;
+                createTexture(styler, tex, texInfo);
+            }
+            else
+            {
+                if (texInfo.id > 0)
+                {
+                    gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.id);
+                    //System.err.println("Tex #" + texInfo.id + " used");
+                }
+            }
+            
+            // transfer padding info to RasterTileGraphic
+            tex.heightPadding = texInfo.heightPadding;
+            tex.widthPadding = texInfo.widthPadding;
         }
-        else
-        {
-            texInfo = new GLTextureInfo();
-            tex.info.rendererParams = texInfo;
-        }
-        
-        // fetch texture data
+    }
+    
+    
+    /**
+     * Creates a new texture by transfering data from styler to GL memory
+     * @param styler
+     * @param tex
+     * @param texInfo
+     */
+    protected void createTexture(TextureStyler styler, RasterTileGraphic tex, GLTexture texInfo)
+    {
+        // fetch texture data from styler
         fillRGBAData(styler, tex, texInfo);
         
         // if texture was successfully constructed, bind it with GL
         if (tex.hasRasterData)
         {
+            // create new texture name and bind it
             int[] id = new int[1];
-            gl.glGenTextures(1, id, 0);
-            texInfo.textureID = id[0];
-            gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.textureID);
+            gl.glGenTextures(1, id, 0); 
+            gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
+            
+            // set texture parameters
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+            
+            // create texture in GL memory
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, GL.GL_RGBA,
                             tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
                             0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, tex.rasterData);
             
+            // erase temp buffer
+            //System.err.println("Raster Size: " + tex.rasterData.capacity());
             tex.rasterData = null;
-            tex.info.updated = false;
+            
+            // delete previous texture if needed
+            if (texInfo.id > 0)
+            {
+                gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                //System.err.println("Tex #" + texInfo.id + " deleted");
+            }
+            
+            // set new id and reset needsUpdate flag
+            texInfo.id = id[0];            
+            //System.err.println("Tex #" + texInfo.id + " created");
         }
+    }
+    
+    
+    /**
+     * Clears all display lists used by this symbolizer
+     * @param sym
+     */
+    public void clearTextures(Symbolizer sym)
+    {
+        GLTextureTable textureTable = symTable.get(sym);
         
-        gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-        gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+        if (textureTable != null)
+        {
+            Enumeration<GLTexture> textureEnum = textureTable.elements();
+            while (textureEnum.hasMoreElements())
+            {
+                GLTexture texInfo = textureEnum.nextElement();
+                if (texInfo.id > 0)
+                    gl.glDeleteLists(texInfo.id, 1);
+            }
+            
+            symTable.remove(sym);
+        }
+    }
+    
+    
+    /**
+     * Clears texture associated with this symbolizer/object pair
+     * @param sym
+     * @param obj
+     */
+    public void clearTexture(Symbolizer sym, Object obj)
+    {
+        GLTextureTable textureTable = symTable.get(sym);
+        
+        if (textureTable != null)
+        {
+            GLTexture texInfo = textureTable.get(obj);            
+            if (texInfo != null && texInfo.id > 0)
+                gl.glDeleteLists(texInfo.id, 1);
+        }
     }
     
     
@@ -137,7 +256,7 @@ public class TextureManager
      * @param tex
      * @param texInfo
      */
-    protected void fillRGBAData(DataStyler styler, RasterTileGraphic tex, GLTextureInfo texInfo)
+    protected void fillRGBAData(TextureStyler styler, RasterTileGraphic tex, GLTexture texInfo)
     {
         int paddedWidth = tex.width;
         int paddedHeight = tex.height;
@@ -183,26 +302,23 @@ public class TextureManager
         byte[] buffer = new byte[paddedWidth*paddedHeight*4];
         int index = 0;
         
-        if (styler instanceof TextureMappingStyler)
+        for (int j=0; j<trueHeight; j++)
         {
-            for (int j=0; j<trueHeight; j++)
+            for (int i=0; i<trueWidth; i++)
             {
-                for (int i=0; i<trueWidth; i++)
-                {
-                    RasterPixelGraphic pixel = ((TextureMappingStyler)styler).getPixel(i, j);
-                    buffer[index] = (byte)pixel.r;
-                    index++;
-                    buffer[index] = (byte)pixel.g;
-                    index++;
-                    buffer[index] = (byte)pixel.b;
-                    index++;
-                    buffer[index] = -1;//(byte)pixel.a;
-                    index++;
-                }
-                
-                // skip padding bytes
-                index += texInfo.widthPadding*4;
+                RasterPixelGraphic pixel = styler.getPixel(i, j);
+                buffer[index] = (byte)pixel.r;
+                index++;
+                buffer[index] = (byte)pixel.g;
+                index++;
+                buffer[index] = (byte)pixel.b;
+                index++;
+                buffer[index] = -1;//(byte)pixel.a;
+                index++;
             }
+            
+            // skip padding bytes
+            index += texInfo.widthPadding*4;
         }
         
         tex.rasterData = ByteBuffer.wrap(buffer);

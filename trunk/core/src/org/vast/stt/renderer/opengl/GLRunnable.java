@@ -13,29 +13,43 @@
 
 package org.vast.stt.renderer.opengl;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.glu.GLU;
+
 
 /**
- * <p><b>Title:</b><br/>
- * GLTexture Info
+ * <p><b>Title:</b>
+ * GLRunnable
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Class for storing GL Texture specific options.
+ * Abstract class for all GL rendering runnables.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Apr 13, 2006
+ * @date Aug 2, 2006
  * @version 1.0
  */
-public class GLTextureInfo extends OpenGLInfo
+public abstract class GLRunnable implements Runnable
 {
-    public int textureID = -1;
-    public int widthPadding = 0;
-    public int heightPadding = 0;
+    protected GL gl;
+    protected GLU glu;
+    protected float offset;
     
     
-    public GLTextureInfo()
-    {        
+    public abstract void run();
+    
+    
+    public void setGL(GL gl, GLU glu)
+    {
+        this.gl = gl;
+        this.glu = glu;
+    }
+
+
+    public void setOffset(float offset)
+    {
+        this.offset = offset;
     }
 }
