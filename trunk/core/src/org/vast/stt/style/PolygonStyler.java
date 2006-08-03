@@ -62,13 +62,6 @@ public class PolygonStyler extends AbstractStyler
     }
 
 
-	public void updateBoundingBox()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	public void updateDataMappings()
 	{
         ScalarParameter param;

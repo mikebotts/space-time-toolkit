@@ -70,12 +70,6 @@ public class RasterStyler extends AbstractStyler
     {
         return pixel;
     }
-    
-    
-    public void updateBoundingBox()
-	{
-		// TODO Auto-generated method stub
-	}
 
 
 	public void updateDataMappings()

@@ -45,7 +45,7 @@ public class DisplayListManager
                = new Hashtable<Symbolizer, GLDisplayListTable>();
     protected GL gl;
     protected GLU glu;
-    protected int refreshPeriod = 500;
+    protected int refreshPeriod = 300;
     
     
     class GLDisplayList
