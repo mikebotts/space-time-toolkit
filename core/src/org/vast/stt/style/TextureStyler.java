@@ -14,6 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -111,6 +112,9 @@ public class TextureStyler extends AbstractStyler
             point.tx = (float)u / (float)(patch.grid.width-1) * ((float)patch.texture.width-1);
             point.ty = (float)v / (float)(patch.grid.length-1) * ((float)patch.texture.height-1);
         }
+        
+        if (computeExtents)
+            bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
         
         return point;
     }

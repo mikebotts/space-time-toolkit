@@ -122,6 +122,7 @@ public abstract class AbstractProvider implements DataProvider
 		{
             dataNode.clearAll();
             forceUpdate = true;
+            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
 		}		
 	}
 	

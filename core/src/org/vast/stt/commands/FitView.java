@@ -1,6 +1,9 @@
 
 package org.vast.stt.commands;
 
+import org.vast.math.Vector3d;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.SpatialExtent;
@@ -36,10 +39,30 @@ public class FitView implements Command
     }
     
     
-    protected void fit(SpatialExtent bbox)
+    protected void fit(SpatialExtent bbox, boolean adjustZRange)
     {
+        if (bbox == null || bbox.isNull())
+            return;
+        
         ViewSettings view = scene.getViewSettings();
-        bbox.getCenter();
+        Vector3d center = bbox.getCenter();
+        view.setTargetPos(center);
+        
+        double dist = bbox.getDiagonalDistance();
+        Vector3d camera = center.copy();
+        camera.add(new Vector3d(0, 0, dist/2));
+        view.setCameraPos(camera);
+        
+        view.setUpDirection(new Vector3d(0, 1, 0));        
+        view.setOrthoWidth(bbox.getMaxX() - bbox.getMinX());
+        
+        if (adjustZRange)
+        {
+            view.setFarClip(dist);
+            view.setNearClip(0);
+        }
+        
+        view.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
     }
 
 
@@ -48,11 +71,15 @@ public class FitView implements Command
         SpatialExtent bbox = null;
         
         if (item == null)
+        {
             bbox = scene.getBoundingBox();
+            fit(bbox, false);
+        }
         else
+        {
             bbox = item.getBoundingBox();
-        
-        fit(bbox);
+            fit(bbox, true);
+        }
     }
     
     

@@ -24,11 +24,11 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.DataStylerList;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
-import org.vast.stt.renderer.RendererInfo;
 import org.vast.stt.style.*;
 
 
@@ -79,9 +79,15 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void cleanup(RendererInfo info)
+    public void cleanup(SceneItem item)
     {
-      
+        DataStylerList stylers = item.getStylers();
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            Symbolizer sym = stylers.get(i).getSymbolizer();
+            textureManager.clearTextures(sym);
+            displayListManager.clearDisplayLists(sym);
+        }
     }
     
     
@@ -279,7 +285,7 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PointStyler styler)
     {
-        styler.reset();
+        styler.resetIterators();
         pointRenderer.setStyler(styler);
         pointRenderer.run();        
     }
@@ -290,7 +296,7 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(LineStyler styler)
     {
-        styler.reset();        
+        styler.resetIterators();        
         lineRenderer.setStyler(styler);
         displayListManager.useDisplayList(styler, lineRenderer);
     }
@@ -301,7 +307,7 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PolygonStyler styler)
     {
-        styler.reset();
+        styler.resetIterators();
         polygonRenderer.setStyler(styler);
         displayListManager.useDisplayList(styler, polygonRenderer);        
     }
@@ -313,7 +319,7 @@ public class JOGLRenderer extends Renderer
     public void visit(LabelStyler styler)
     {
         LabelGraphic label;
-        styler.reset();
+        styler.resetIterators();
         int minDist = 100;
         byte[] buf = new byte[1];
         buf[0] = (byte) 0x01;
@@ -390,7 +396,7 @@ public class JOGLRenderer extends Renderer
     public void visit(GridMeshStyler styler)
     {
         GridPatchGraphic patch;
-        styler.reset();
+        styler.resetIterators();
         gridRenderer.setStyler(styler);
         
         // loop through all tiles
@@ -409,7 +415,7 @@ public class JOGLRenderer extends Renderer
     public void visit(GridFillStyler styler)
     {
         GridPatchGraphic patch;
-        styler.reset();
+        styler.resetIterators();
         gridRenderer.setStyler(styler);
         float offset = getOffset();
         
@@ -429,7 +435,7 @@ public class JOGLRenderer extends Renderer
     public void visit(GridBorderStyler styler)
     {
         GridPatchGraphic patch;
-        styler.reset();
+        styler.resetIterators();
         gridBorderRenderer.setStyler(styler);
         
         // loop through all tiles
@@ -447,7 +453,7 @@ public class JOGLRenderer extends Renderer
     public void visit(TextureStyler styler)
     {
         TexturePatchGraphic patch;        
-        styler.reset();
+        styler.resetIterators();
         textureRenderer.setStyler(styler);
         float offset = getOffset();
         

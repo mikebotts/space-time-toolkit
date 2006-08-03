@@ -86,6 +86,39 @@ public class SpatialExtent implements STTEventProducer
     }
     
     
+    public double getDiagonalDistance()
+    {
+        double dx2 = (maxX - minX) * (maxX - minX);
+        double dy2 = (maxY - minY) * (maxY - minY);
+        double dz2 = (maxZ - minZ) * (maxZ - minZ);
+        return Math.sqrt(dx2 + dy2 + dz2);
+    }
+    
+    
+    public boolean isNull()
+    {
+        if (minX != 0) return false;
+        if (minY != 0) return false;
+        if (minZ != 0) return false;
+        if (maxX != 0) return false;
+        if (maxY != 0) return false;
+        if (maxZ != 0) return false;
+        return true;
+    }
+    
+    
+    public void resizeToContain(Vector3d point)
+    {
+        if (minX > point.x) minX = point.x;
+        if (minY > point.y) minY = point.y;
+        if (minZ > point.z) minZ = point.z;
+        
+        if (maxX < point.x) maxX = point.x;
+        if (maxY < point.y) maxY = point.y;
+        if (maxZ < point.z) maxZ = point.z;
+    }
+    
+    
     /**
      * Combines given extent with this extent
      * by computing the smallest rectangular

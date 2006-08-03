@@ -14,6 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.data.BlockListItem;
@@ -77,7 +78,11 @@ public abstract class AbstractGridStyler extends AbstractStyler
     
     public GridPointGraphic getGridPoint(int u, int v)
     {
-        dataLists[0].blockIndexer.getData(v, u, 0);        
+        dataLists[0].blockIndexer.getData(v, u, 0);
+        
+        if (computeExtents)
+            bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+        
         return point;
     }
     

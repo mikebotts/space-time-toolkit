@@ -194,7 +194,6 @@ public class TextureManager
                             0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, tex.rasterData);
             
             // erase temp buffer
-            //System.err.println("Raster Size: " + tex.rasterData.capacity());
             tex.rasterData = null;
             
             // set new id and reset needsUpdate flag
@@ -219,19 +218,25 @@ public class TextureManager
      */
     public void clearTextures(Symbolizer sym)
     {
-        GLTextureTable textureTable = symTextureTables.get(sym);
-        
-        if (textureTable != null)
+        synchronized (symTextureTables)
         {
-            Enumeration<GLTexture> textureEnum = textureTable.elements();
-            while (textureEnum.hasMoreElements())
-            {
-                GLTexture texInfo = textureEnum.nextElement();
-                if (texInfo.id > 0)
-                    gl.glDeleteLists(texInfo.id, 1);
-            }
+            GLTextureTable textureTable = symTextureTables.get(sym);
             
-            symTextureTables.remove(sym);
+            if (textureTable != null)
+            {
+                Enumeration<GLTexture> textureEnum = textureTable.elements();
+                while (textureEnum.hasMoreElements())
+                {
+                    GLTexture texInfo = textureEnum.nextElement();
+                    if (texInfo.id > 0)
+                    {
+                        gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        //System.err.println("Tex #" + texInfo.id + " deleted");
+                    }
+                }
+                
+                symTextureTables.remove(sym);
+            }
         }
     }
     
@@ -247,9 +252,15 @@ public class TextureManager
         
         if (textureTable != null)
         {
-            GLTexture texInfo = textureTable.get(obj);            
+            GLTexture texInfo = textureTable.get(obj);
+            
             if (texInfo != null && texInfo.id > 0)
-                gl.glDeleteLists(texInfo.id, 1);
+            {
+                gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                //System.err.println("Tex #" + texInfo.id + " deleted");
+            }
+            
+            textureTable.remove(obj);
         }
     }
     
