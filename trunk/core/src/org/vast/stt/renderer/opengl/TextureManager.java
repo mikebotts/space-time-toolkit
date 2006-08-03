@@ -45,8 +45,8 @@ import org.vast.util.MessageSystem;
  */
 public class TextureManager
 {
-    protected static Hashtable<Symbolizer, GLTextureTable> symTable
-                     = new Hashtable<Symbolizer, GLTextureTable>();
+    protected static Hashtable<Symbolizer, GLTextureTable> symTextureTables
+               = new Hashtable<Symbolizer, GLTextureTable>();
     protected GL gl;
     protected GLU glu;
     protected boolean npotSupported;
@@ -107,19 +107,19 @@ public class TextureManager
     {
         Symbolizer sym = styler.getSymbolizer();
         
-        synchronized (symTable)
+        synchronized (symTextureTables)
         {
             // try to find table for this symbolizer
-            GLTextureTable textureTable = symTable.get(sym);
+            GLTextureTable textureTable = symTextureTables.get(sym);
             
             // create if it doesn't exist
             if (textureTable == null)
             {
                 textureTable = new GLTextureTable();
-                symTable.put(sym, textureTable);
+                symTextureTables.put(sym, textureTable);
             }
             
-            // TODO reset flags if update needed -> needs to come from sym vs styler !!
+            // TODO reset flags if style was updated -> needs to come from sym vs styler !!
             if (styler.isUpdated())
             {
                 Enumeration<GLTexture> textureEnum = textureTable.elements();
@@ -147,6 +147,8 @@ public class TextureManager
                 texInfo.needsUpdate = false;
                 createTexture(styler, tex, texInfo);
             }
+            
+            // otherwise just bind existing one
             else
             {
                 if (texInfo.id > 0)
@@ -195,15 +197,17 @@ public class TextureManager
             //System.err.println("Raster Size: " + tex.rasterData.capacity());
             tex.rasterData = null;
             
-            // delete previous texture if needed
-            if (texInfo.id > 0)
-            {
-                gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                //System.err.println("Tex #" + texInfo.id + " deleted");
-            }
-            
             // set new id and reset needsUpdate flag
-            texInfo.id = id[0];            
+            int oldID = texInfo.id;
+            texInfo.id = id[0];
+            
+            // delete previous texture if needed
+            if (oldID > 0)
+            {
+                gl.glDeleteTextures(1, new int[] {oldID}, 0);
+                //System.err.println("Tex #" + oldID + " deleted");
+            }
+                        
             //System.err.println("Tex #" + texInfo.id + " created");
         }
     }
@@ -215,7 +219,7 @@ public class TextureManager
      */
     public void clearTextures(Symbolizer sym)
     {
-        GLTextureTable textureTable = symTable.get(sym);
+        GLTextureTable textureTable = symTextureTables.get(sym);
         
         if (textureTable != null)
         {
@@ -227,7 +231,7 @@ public class TextureManager
                     gl.glDeleteLists(texInfo.id, 1);
             }
             
-            symTable.remove(sym);
+            symTextureTables.remove(sym);
         }
     }
     
@@ -239,7 +243,7 @@ public class TextureManager
      */
     public void clearTexture(Symbolizer sym, Object obj)
     {
-        GLTextureTable textureTable = symTable.get(sym);
+        GLTextureTable textureTable = symTextureTables.get(sym);
         
         if (textureTable != null)
         {
