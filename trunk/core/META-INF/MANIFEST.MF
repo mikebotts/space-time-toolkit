@@ -5,6 +5,10 @@ Bundle-SymbolicName: org.vast.STT; singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-Localization: plugin
+Export-Package: org.vast.stt.gui.views,
+                org.vast.stt.project,
+                org.vast.stt.commands,
+                org.vast.stt.apps
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt.opengl
