@@ -106,7 +106,7 @@ public class GridOptionHelper implements SelectionListener
 		if(control == optionControls[0].getControl()) {  //  toggle fill
 			boolean ckState = ((Button)control).getSelection();
 			setFillGrid(ckState);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[1].getControl()) {  //  fillColor
 			Button colorButton = (Button)control;
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
@@ -116,7 +116,7 @@ public class GridOptionHelper implements SelectionListener
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			setFillColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[2].getControl()) {
 			//  setShowMesh
 		} else if(control == optionControls[3].getControl()) {
