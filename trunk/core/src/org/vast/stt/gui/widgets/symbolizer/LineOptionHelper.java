@@ -81,7 +81,7 @@ public class LineOptionHelper implements SelectionListener
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			setLineWidth(w);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if (control == optionControl[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
@@ -92,7 +92,7 @@ public class LineOptionHelper implements SelectionListener
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControl[1].setColorLabelColor(sldColor); 
 			setLineColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}
 

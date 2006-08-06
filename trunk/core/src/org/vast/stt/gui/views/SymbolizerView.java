@@ -23,7 +23,7 @@ import org.vast.stt.gui.widgets.symbolizer.SymbolizerWidget;
  */
 public class SymbolizerView extends DataItemView
 {
-	public static final String ID = "STT.StyleView";
+	public static final String ID = "STT.SymbolizerView";
 	protected SymbolizerWidget symbolizerWidget;
 	
     
