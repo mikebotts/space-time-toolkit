@@ -56,7 +56,6 @@ public class GridMeshStyler extends AbstractGridStyler
     public void updateDataMappings()
     {
         super.updateDataMappings();
-        patch.fill = false;
         GridMeshSymbolizer sym = (GridMeshSymbolizer)this.symbolizer;
         ScalarParameter param;
         Object value;

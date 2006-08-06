@@ -18,7 +18,7 @@ import org.vast.stt.renderer.RendererInfo;
  * @date Apr 13, 2006
  * @version 1.0
  */
-public abstract class GraphicObject
+public class GraphicObject
 {
     public RendererInfo rendererInfo;
     public BlockListItem block;

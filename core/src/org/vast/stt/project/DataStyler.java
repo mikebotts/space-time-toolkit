@@ -48,25 +48,19 @@ public interface DataStyler
     
     
 	public void setDataItem(DataItem dataItem);
-    
-    
-	public void updateBoundingBox();
-	
+
 	
 	public void updateDataMappings();
+    
+    
+    public void skipBlocks(int blockCount);
+    
+    
+    public boolean hasMoreBlocks();
 	
 	
 	public SpatialExtent getBoundingBox();
-	
-	
-	public double[] getCenterPoint();
     
     
     public void accept(StylerVisitor visitor);
-    
-    
-    public boolean isUpdated();
-    
-    
-    public void setUpdated(boolean updated);
 }

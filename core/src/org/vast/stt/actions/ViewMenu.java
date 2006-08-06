@@ -41,7 +41,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
 	 */
 	public void run(IAction action)
 	{
-		if (action.getId().equals("STT.CloneScene"))
+		if (action.getId().equals("STT.CloneScene1"))
         {
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
@@ -49,7 +49,6 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 Scene currentScene = pageInput.getScene();
                 Scene newScene = new Scene();
                 newScene.setViewSettings(currentScene.getViewSettings());
-                //newScene.setViewSettings(new ViewSettings());
                 newScene.setTimeSettings(currentScene.getTimeSettings());
                 newScene.setDataTree(currentScene.getDataTree());
                 newScene.setName(currentScene.getName());
@@ -65,6 +64,30 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 }
             }
         }
+        else
+            if (action.getId().equals("STT.CloneScene2"))
+            {
+                ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+                if (pageInput != null)
+                {
+                    Scene currentScene = pageInput.getScene();
+                    Scene newScene = new Scene();
+                    newScene.setViewSettings(new ViewSettings());
+                    newScene.setTimeSettings(currentScene.getTimeSettings());
+                    newScene.setDataTree(currentScene.getDataTree());
+                    newScene.setName(currentScene.getName());
+                    
+                    pageInput = new ScenePageInput(newScene);
+                    try
+                    {
+                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                    }
+                    catch (WorkbenchException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
 	}
 
 

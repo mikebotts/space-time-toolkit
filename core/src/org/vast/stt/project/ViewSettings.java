@@ -65,6 +65,9 @@ public class ViewSettings implements STTEventProducer
 
 	// parameters defining ortho field of view
 	protected double orthoWidth, orthoHeight;
+    
+    // parameters containing view dimensions in pixels
+    protected int viewWidth, viewHeight;
 
 	// camera modes
 	protected CameraMode cameraMode;
@@ -92,7 +95,7 @@ public class ViewSettings implements STTEventProducer
 	{
         backgroundColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         
-        cameraPos.set(0.0, 0.0, 1.0);
+        cameraPos.set(0.0, 0.0, 100.0);
 		targetPos.set(0.0, 0.0, 0.0);
 		upDirection.set(0.0, 1.0, 0.0);
 		
@@ -100,8 +103,8 @@ public class ViewSettings implements STTEventProducer
 		orthoWidth = 2.0;
 		orthoHeight = orthoWidth / 1.33;
 		
-		nearClip = 1e-3;
-		farClip = 1e3;        
+		nearClip = 0;
+		farClip = 200.0;        
         
         transConstraint = MotionConstraint.XY;
         rotConstraint = MotionConstraint.XYZ;
@@ -111,6 +114,30 @@ public class ViewSettings implements STTEventProducer
     }
 	
 
+    public int getViewHeight()
+    {
+        return viewHeight;
+    }
+
+
+    public void setViewHeight(int viewHeight)
+    {
+        this.viewHeight = viewHeight;
+    }
+
+
+    public int getViewWidth()
+    {
+        return viewWidth;
+    }
+
+
+    public void setViewWidth(int viewWidth)
+    {
+        this.viewWidth = viewWidth;
+    }
+    
+    
 	public CameraMode getCameraMode()
 	{
 		return cameraMode;
@@ -318,6 +345,12 @@ public class ViewSettings implements STTEventProducer
     public void removeAllListeners()
     {
         listeners.clear();
+    }
+    
+    
+    public boolean hasListeners()
+    {
+        return !listeners.isEmpty();
     }
 
 

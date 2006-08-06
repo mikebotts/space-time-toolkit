@@ -58,11 +58,12 @@ public class GLRenderPoints extends GLRunnable
         PointGraphic point;
         boolean begin = false;
         float oldSize = -1.0f;
+        int count = 0;
         
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_POINT);
         
         // loop and draw all points
-        while (styler.nextBlock())
+        do
         {
             while ((point = styler.nextPoint()) != null)
             {
@@ -80,8 +81,14 @@ public class GLRenderPoints extends GLRunnable
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }
+            
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while (styler.nextBlock() != null);
 
+        blockCount = count;        
         gl.glEnd();
     }
 }

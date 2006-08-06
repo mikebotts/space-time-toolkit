@@ -13,6 +13,7 @@
 
 package org.vast.stt.actions;
 
+import java.util.ArrayList;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.FileDialog;
@@ -20,8 +21,6 @@ import org.eclipse.ui.*;
 import org.vast.stt.apps.STTConfig;
 import org.vast.stt.commands.*;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.gui.views.SceneTreeView;
-import org.vast.stt.gui.views.WorldView;
 import org.vast.stt.project.Scene;
 
 
@@ -33,9 +32,13 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         {
             try
             {
-                Scene newScene = STTConfig.getInstance().getCurrentProject().getSceneList().get(0);
-                ScenePageInput pageInput = new ScenePageInput(newScene);
-                PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                ArrayList<Scene> sceneList = STTConfig.getInstance().getCurrentProject().getSceneList();
+                for (int i=0; i<sceneList.size(); i++)
+                {
+                    Scene newScene = sceneList.get(i);
+                    ScenePageInput pageInput = new ScenePageInput(newScene);
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                }
                                 
                 
                 // IWorkbenchWindow window = PlatformUI.getWorkbench().openWorkbenchWindow("STT.Perspective", null);

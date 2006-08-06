@@ -13,7 +13,6 @@
 
 package org.vast.stt.apps;
 
-import org.vast.stt.event.STTEventManager;
 import org.vast.stt.project.Project;
 
 
@@ -21,7 +20,6 @@ public class STTConfig
 {
 	private static STTConfig currentConfig;
 	private Project currentProject;
-	private STTEventManager eventManager;
 	
 	
 	// singleton constructor
@@ -50,11 +48,5 @@ public class STTConfig
 	public void setCurrentProject(Project currentProject)
 	{
 		this.currentProject = currentProject;
-	}
-
-
-	public STTEventManager getEventManager()
-	{
-		return eventManager;
 	}
 }

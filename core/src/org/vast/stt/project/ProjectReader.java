@@ -231,16 +231,11 @@ public class ProjectReader
         // try to get the provider from the list
         Object obj = findExistingObject(providerElt);
         if (obj != null)
-        {
-            provider = (DataProvider)obj;
-        }
+            return (DataProvider)obj;
         
         // otherwise instantiate a new one
-        else
-        {
-            provider = providerReader.readProvider(dom, providerElt);
-            registerObjectID(providerElt, provider);
-        }
+        provider = providerReader.readProvider(dom, providerElt);
+        registerObjectID(providerElt, provider);
         
         return provider;
     }
@@ -483,10 +478,12 @@ public class ProjectReader
      * @param parentScene
      * @return
      */
-    protected DataTree readDataTree(Element dataListElt, Scene parentScene)
+    protected DataTree readDataTree(Element dataTreeElt, Scene parentScene)
     {
-        DataFolder folder = (DataFolder)readDataEntry(dataListElt, parentScene);
-        return new DataTree(folder);
+        DataFolder folder = (DataFolder)readDataEntry(dataTreeElt, parentScene);
+        DataTree dataTree = new DataTree(folder);
+        registerObjectID(dataTreeElt, dataTree);
+        return dataTree;
     }
 	
 	

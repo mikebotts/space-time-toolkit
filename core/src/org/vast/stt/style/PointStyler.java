@@ -55,7 +55,10 @@ public class PointStyler extends AbstractStyler
             dataLists[0].blockIndexer.getNext();
             
             if (computeExtents)
-                bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+            {
+                Vector3d point3d = new Vector3d(point.x, point.y, point.z);
+                currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
+            }
             
             return point;
         }
@@ -64,6 +67,7 @@ public class PointStyler extends AbstractStyler
     }
 
 
+    @Override
 	public void updateDataMappings()
 	{
         ScalarParameter param;

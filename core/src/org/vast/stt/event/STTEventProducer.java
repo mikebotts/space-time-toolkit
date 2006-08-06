@@ -39,5 +39,8 @@ public interface STTEventProducer
     public void removeAllListeners();
     
     
+    public boolean hasListeners();
+    
+    
     public void dispatchEvent(STTEvent event);
 }

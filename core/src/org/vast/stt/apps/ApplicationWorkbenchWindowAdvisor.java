@@ -10,8 +10,6 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
-import org.vast.stt.commands.OpenProject;
-import org.vast.stt.gui.views.ExceptionPopup;
 import org.vast.stt.gui.views.WorldView;
 
 
@@ -42,24 +40,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 		PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
 	}
 	
-	public void postWindowOpen(){
-		//  HACK to preload test proj
-		String	url = "file:///C:/tcook/sttEclipse/stt3/conf/AL.xml";
-		final OpenProject command = new OpenProject();
-		command.setUrl(url);
-		Runnable readProject = new Runnable()
-		{
-			public void run()
-			{
-				command.execute();
-				PlatformUI.getWorkbench().getDisplay().asyncExec(openSceneView);
-			}
-		};
-		
-		Thread thread = new Thread(readProject);
-		//thread.start();
+    
+	public void postWindowOpen()
+    {
 	}
 
+    
 	Runnable openSceneView = new Runnable()
 	{
 		public void run()

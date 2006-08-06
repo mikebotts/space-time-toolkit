@@ -24,7 +24,7 @@ import org.vast.stt.project.DataStyler;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Creates the right Styler object based on the symbolizer used.
+ * Creates the right Styler object based on the given symbolizer.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -40,7 +40,7 @@ public class StylerFactory
     };
 
 
-    public DataStyler createStyler(Symbolizer sym)
+    public static DataStyler createStyler(Symbolizer sym)
     {
         DataStyler styler = null;
 
@@ -81,7 +81,7 @@ public class StylerFactory
 
 
     /**
-     * Construct a new styler with the given name, stylerType, and DataProvider     * 
+     * Construct a new styler with the given name, stylerType, and DataProvider
      * @param stylerName
      * @param stylerType
      * @param provider
@@ -108,11 +108,11 @@ public class StylerFactory
 
     /**
      * Convenience method for constructing a new PointStyler with a default 
-     * size and color, and the geometry settings of the input DataProvider     * 
+     * size and color, and the geometry settings of the input DataProvider 
      * @param provider - the dataProvider to use for the new Styler
      * @return PointStyler
      */
-    static private PointStyler createDefaultPointStyler(DataItem dataItem)
+    private static PointStyler createDefaultPointStyler(DataItem dataItem)
     {
         PointStyler styler = new PointStyler();
         styler.setDataItem(dataItem);
@@ -141,11 +141,11 @@ public class StylerFactory
 
     /**
      * Convenience method for constructing a new LineStyler with a default 
-     * size and color, and the geometry settings of the input DataProvider     * 
+     * size and color, and the geometry settings of the input DataProvider
      * @param provider - the dataProvider to use for the new Styler
      * @return new LineStyler
      */
-    static private LineStyler createDefaultLineStyler(DataItem dataItem)
+    private static LineStyler createDefaultLineStyler(DataItem dataItem)
     {
         LineStyler styler = new LineStyler();
         styler.setDataItem(dataItem);
@@ -165,5 +165,4 @@ public class StylerFactory
 
         return styler;
     }
-
 }

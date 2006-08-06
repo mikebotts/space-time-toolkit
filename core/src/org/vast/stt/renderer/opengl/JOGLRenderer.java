@@ -25,7 +25,8 @@ import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.project.DataStylerList;
+import org.vast.stt.data.BlockListItem;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
@@ -79,15 +80,11 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void cleanup(SceneItem item)
+    public void cleanup(DataStyler styler)
     {
-        DataStylerList stylers = item.getStylers();
-        for (int i = 0; i < stylers.size(); i++)
-        {
-            Symbolizer sym = stylers.get(i).getSymbolizer();
-            textureManager.clearTextures(sym);
-            displayListManager.clearDisplayLists(sym);
-        }
+        Symbolizer sym = styler.getSymbolizer();
+        textureManager.clearTextures(sym);
+        displayListManager.clearDisplayLists(sym);
     }
     
     
@@ -128,7 +125,7 @@ public class JOGLRenderer extends Renderer
         if (view.isShowCameraTarget())
             this.drawCameraTarget();
         
-        zBufferOffset = 10.0f;
+        zBufferOffset = 1.0f;
     }
 
 
@@ -151,10 +148,9 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    protected void drawItem(SceneItem item)
+    protected void drawItem(SceneItem sceneItem)
     {
-        DataStylerList stylerList = item.getStylers();
-        stylerList.accept(this);
+        sceneItem.accept(this);
     }
     
     
@@ -275,7 +271,7 @@ public class JOGLRenderer extends Renderer
     
     protected float getOffset()
     {
-        zBufferOffset -= 0.4f;
+        zBufferOffset += 1.0f;
         return zBufferOffset;
     }
 
@@ -285,9 +281,17 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PointStyler styler)
     {
-        styler.resetIterators();
+        BlockListItem block;
+        styler.resetIterators();        
         pointRenderer.setStyler(styler);
-        pointRenderer.run();        
+        
+        // loop through all tiles
+        while ((block = styler.nextBlock()) != null)
+        { 
+            pointRenderer.blockCount = 10000;
+            pointRenderer.offset = 0;
+            displayListManager.useDisplayList(styler, block, pointRenderer);
+        }      
     }
     
     
@@ -296,9 +300,17 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(LineStyler styler)
     {
+        LineSegmentGraphic segment;
         styler.resetIterators();        
         lineRenderer.setStyler(styler);
-        displayListManager.useDisplayList(styler, lineRenderer);
+        
+        // loop through all tiles
+        while ((segment = styler.nextLineBlock()) != null)
+        { 
+            lineRenderer.blockCount = 10000;
+            lineRenderer.offset = 0;
+            displayListManager.useDisplayList(styler, segment.block, lineRenderer);
+        }
     }
 
 
@@ -307,9 +319,18 @@ public class JOGLRenderer extends Renderer
      */
     public void visit(PolygonStyler styler)
     {
-        styler.resetIterators();
+        BlockListItem block;
+        styler.resetIterators();        
         polygonRenderer.setStyler(styler);
-        displayListManager.useDisplayList(styler, polygonRenderer);        
+        float offset = getOffset();
+        
+        // loop through all tiles
+        while ((block = styler.nextBlock()) != null)
+        { 
+            polygonRenderer.blockCount = 10000;
+            polygonRenderer.offset = offset;
+            displayListManager.useDisplayList(styler, block, polygonRenderer);
+        }    
     }
 
 
@@ -326,7 +347,7 @@ public class JOGLRenderer extends Renderer
 
         gl.glEnable(GL.GL_STENCIL_TEST);
 
-        while (styler.nextBlock())
+        while (styler.nextBlock() != null)
         {
             while ((label = styler.nextPoint()) != null)
             {
@@ -402,8 +423,9 @@ public class JOGLRenderer extends Renderer
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
-            gridRenderer.setPatch(patch);
-            gridRenderer.setOffset(0.0f);
+            gridRenderer.offset = 0;
+            gridRenderer.blockCount = 1;
+            gridRenderer.patch = patch;
             displayListManager.useDisplayList(styler, patch.block, gridRenderer);
         }
     }
@@ -422,8 +444,9 @@ public class JOGLRenderer extends Renderer
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
-            gridRenderer.setPatch(patch);
-            gridRenderer.setOffset(offset);
+            gridRenderer.offset = offset;
+            gridRenderer.blockCount = 1;
+            gridRenderer.patch = patch;
             displayListManager.useDisplayList(styler, patch.block, gridRenderer);
         }
     }
@@ -441,7 +464,8 @@ public class JOGLRenderer extends Renderer
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
-            gridBorderRenderer.setPatch(patch);
+            gridBorderRenderer.blockCount = 1;
+            gridBorderRenderer.patch = patch;
             displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer);
         }
     }
@@ -462,8 +486,9 @@ public class JOGLRenderer extends Renderer
         {
             // bind texture and load in GL if needed
             textureManager.useTexture(styler, patch.getTexture());
-            textureRenderer.setPatch(patch);
-            textureRenderer.setOffset(offset);
+            textureRenderer.patch = patch;
+            textureRenderer.offset = offset;
+            textureRenderer.blockCount = 1;
             displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer);
         }
         

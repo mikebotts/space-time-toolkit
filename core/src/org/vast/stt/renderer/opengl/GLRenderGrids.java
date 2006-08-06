@@ -16,6 +16,7 @@ package org.vast.stt.renderer.opengl;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import org.vast.stt.style.GridFillStyler;
 import org.vast.stt.style.GridPatchGraphic;
 import org.vast.stt.style.GridPointGraphic;
 import org.vast.stt.style.AbstractGridStyler;
@@ -39,6 +40,7 @@ public class GLRenderGrids extends GLRunnable
 {
     protected AbstractGridStyler styler;
     protected GridPatchGraphic patch;
+    protected boolean fill;
     
     
     public GLRenderGrids(GL gl, GLU glu)
@@ -50,13 +52,12 @@ public class GLRenderGrids extends GLRunnable
     
     public void setStyler(AbstractGridStyler styler)
     {
-        this.styler = styler;        
-    }
-    
-    
-    public void setPatch(GridPatchGraphic patch)
-    {
-        this.patch = patch;
+        this.styler = styler;
+        
+        if (styler instanceof GridFillStyler)
+            fill = true;
+        else
+            fill = false;
     }
 
     
@@ -64,43 +65,55 @@ public class GLRenderGrids extends GLRunnable
     public void run()
     {
         GridPointGraphic point;
-        double oldX = 0.0;
+        int count = 0;
+        
+        gl.glPolygonOffset(offset, 1.0f);
+        gl.glDisable(GL.GL_CULL_FACE);
         
         // select fill or wireframe
-        if (patch.fill)
+        if (fill)
             gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
         else
             gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
         
-        gl.glLineWidth(patch.lineWidth);            
-        gl.glPolygonOffset(offset, 1.0f);
-        gl.glDisable(GL.GL_CULL_FACE);            
-        
-        // loop through all grid points
-        for (int v = 0; v < patch.length-1; v++)
+        do
         {
-            gl.glBegin(GL.GL_QUAD_STRIP);
+            double oldX = 0.0;
             
-            for (int u = 0; u < patch.width; u++)
+            // loop through all grid points
+            for (int v = 0; v < patch.length-1; v++)
             {
-                for (int p=0; p<2; p++)
-                {                    
-                    point = styler.getGridPoint(u, v+p);
-                    
-                    // TODO hack to break grid when crossing lat/lon boundary
-                    if (Math.abs(point.x - oldX) > Math.PI*9/10)
-                    {
-                        gl.glEnd();
-                        gl.glBegin(GL.GL_QUAD_STRIP);
+                gl.glLineWidth(patch.lineWidth);
+                gl.glBegin(GL.GL_QUAD_STRIP);
+                
+                for (int u = 0; u < patch.width; u++)
+                {
+                    for (int p=0; p<2; p++)
+                    {                    
+                        point = styler.getGridPoint(u, v+p);
+                        
+                        // TODO hack to break grid when crossing lat/lon boundary
+                        if (Math.abs(point.x - oldX) > Math.PI*9/10)
+                        {
+                            gl.glEnd();
+                            gl.glBegin(GL.GL_QUAD_STRIP);
+                        }
+                        oldX = point.x;
+                        
+                        gl.glColor4f(point.r, point.g, point.b, point.a);
+                        gl.glVertex3d(point.x, point.y, point.z);
                     }
-                    oldX = point.x;
-                    
-                    gl.glColor4f(point.r, point.g, point.b, point.a);
-                    gl.glVertex3d(point.x, point.y, point.z);
                 }
+                
+                gl.glEnd();
             }
             
-            gl.glEnd();
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while ((patch = styler.nextPatch()) != null);
+        
+        blockCount = count;
     }
 }

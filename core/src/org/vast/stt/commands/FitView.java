@@ -50,15 +50,24 @@ public class FitView implements Command
         
         double dist = bbox.getDiagonalDistance();
         Vector3d camera = center.copy();
-        camera.add(new Vector3d(0, 0, dist/2));
+        camera.add(new Vector3d(0, 0, dist*10));
         view.setCameraPos(camera);
         
-        view.setUpDirection(new Vector3d(0, 1, 0));        
-        view.setOrthoWidth(bbox.getMaxX() - bbox.getMinX());
+        view.setUpDirection(new Vector3d(0, 1, 0));
+        
+        double dx = bbox.getMaxX() - bbox.getMinX();
+        double dy = bbox.getMaxY() - bbox.getMinY();
+        double viewAspectRatio = (double)view.getViewWidth() / (double)view.getViewHeight();
+        double bboxAspectRatio = dx / dy;
+        
+        if (bboxAspectRatio >= viewAspectRatio)
+            view.setOrthoWidth(dx);
+        else
+            view.setOrthoWidth(dy * viewAspectRatio);
         
         if (adjustZRange)
         {
-            view.setFarClip(dist);
+            view.setFarClip(dist*20);
             view.setNearClip(0);
         }
         
@@ -72,13 +81,15 @@ public class FitView implements Command
         
         if (item == null)
         {
+            // fit to whole scene
             bbox = scene.getBoundingBox();
-            fit(bbox, false);
+            fit(bbox, true);
         }
         else
         {
+            // fit to one item
             bbox = item.getBoundingBox();
-            fit(bbox, true);
+            fit(bbox, false);
         }
     }
     

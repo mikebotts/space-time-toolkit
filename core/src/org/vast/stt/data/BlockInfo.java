@@ -16,13 +16,14 @@ package org.vast.stt.data;
 import org.vast.stt.project.SpatialExtent;
 import org.vast.stt.project.TimeExtent;
 
+
 /**
  * <p><b>Title:</b><br/>
  * Block Info
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO BlockInfo type description
+ * Additional (optional) info for a BlockListItem.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -32,8 +33,38 @@ import org.vast.stt.project.TimeExtent;
  */
 public class BlockInfo
 {
-    public SpatialExtent spatialExtent;  // Stores bbox of this block for filtering
-    public TimeExtent timeExtent;        // 
-    public double geometryStepAverage;
-    public double geometryStepVariance;
+    protected SpatialExtent spatialExtent;
+    protected TimeExtent timeExtent;
+    //protected double geometryStepAverage;
+    //protected double geometryStepVariance;
+    
+    
+    public SpatialExtent getSpatialExtent()
+    {
+        if (spatialExtent == null)
+            spatialExtent = new SpatialExtent();
+        
+        return spatialExtent;
+    }
+
+
+    public void setSpatialExtent(SpatialExtent spatialExtent)
+    {
+        this.spatialExtent = spatialExtent;
+    }
+
+
+    public TimeExtent getTimeExtent()
+    {
+        if (timeExtent == null)
+            timeExtent = new TimeExtent();
+        
+        return timeExtent;
+    }
+
+
+    public void setTimeExtent(TimeExtent timeExtent)
+    {
+        this.timeExtent = timeExtent;
+    }
 }

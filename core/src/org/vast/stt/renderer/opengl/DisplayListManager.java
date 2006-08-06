@@ -39,8 +39,6 @@ import org.vast.stt.project.DataStyler;
  */
 public class DisplayListManager
 {
-    protected static Hashtable<Symbolizer, GLDisplayList> symDLs
-               = new Hashtable<Symbolizer, GLDisplayList>();
     protected static Hashtable<Symbolizer, GLDisplayListTable> symDLTables
                = new Hashtable<Symbolizer, GLDisplayListTable>();
     protected GL gl;
@@ -53,6 +51,7 @@ public class DisplayListManager
         protected int id = 0;
         protected boolean needsUpdate = true;
         protected long lastCompiled = 0;
+        protected int blockCount;
     }
     
     
@@ -70,56 +69,13 @@ public class DisplayListManager
     
     
     /**
-     * Record new display list for the symbolizer attached with the styler
-     * or simply call the one that was previously created.
-     * @param sym
-     * @return
-     */
-    public void useDisplayList(DataStyler styler, Runnable renderRunnable)
-    {
-        Symbolizer sym = styler.getSymbolizer();
-        
-        synchronized (symDLs)
-        {
-            // try to find display list for this symbolizer
-            GLDisplayList dlInfo = symDLs.get(sym);
-            
-            // create if it doesn't exist
-            if (dlInfo == null)
-            {
-                dlInfo = new GLDisplayList();
-                symDLs.put(sym, dlInfo);
-            }
-            
-            // create new display list if it needs update
-            long now = System.currentTimeMillis();
-            if (styler.isUpdated() && (now - dlInfo.lastCompiled > refreshPeriod))
-            {
-                styler.setUpdated(false);
-                createDisplayList(dlInfo, renderRunnable);
-            }
-            
-            // otherwise just call existing one
-            else
-            {
-                if (dlInfo.id > 0)
-                {
-                    gl.glCallList(dlInfo.id);
-                    //System.err.println("DL #" + dlInfo.id + " called");
-                }
-            }
-        }
-    }
-    
-    
-    /**
      * Record new display list for the symbolizer/block combination or
      * call simply the one that was previously created.
      * @param styler
      * @param block
      * @param renderRunnable
      */
-    public void useDisplayList(DataStyler styler, BlockListItem block, Runnable renderRunnable)
+    public void useDisplayList(DataStyler styler, BlockListItem block, GLRunnable renderRunnable)
     {
         Symbolizer sym = styler.getSymbolizer();
         
@@ -133,18 +89,6 @@ public class DisplayListManager
             {
                 mainTable = new GLDisplayListTable();
                 symDLTables.put(sym, mainTable);
-            }
-            
-            // TODO reset flags if style was updated -> needs to come from sym vs styler !!
-            if (styler.isUpdated())
-            {
-                Enumeration<GLDisplayList> dlEnum = mainTable.elements();
-                while (dlEnum.hasMoreElements())
-                {
-                    GLDisplayList dlInfo = dlEnum.nextElement();
-                    dlInfo.needsUpdate = true;
-                }
-                styler.setUpdated(false);
             }
             
             // try to find display list for this block
@@ -171,6 +115,7 @@ public class DisplayListManager
                 if (dlInfo.id > 0)
                 {
                     gl.glCallList(dlInfo.id);
+                    styler.skipBlocks(dlInfo.blockCount-1);
                     //System.err.println("DL #" + dlInfo.id + " called");
                 }
             }
@@ -183,7 +128,7 @@ public class DisplayListManager
      * @param dlInfo
      * @param renderRunnable
      */
-    protected void createDisplayList(GLDisplayList dlInfo, Runnable renderRunnable)
+    protected void createDisplayList(GLDisplayList dlInfo, GLRunnable renderRunnable)
     {
         // create new DL name and record Gl commands in runnable
         int newID = gl.glGenLists(1);
@@ -195,6 +140,7 @@ public class DisplayListManager
         dlInfo.lastCompiled = System.currentTimeMillis();
         int oldID = dlInfo.id;
         dlInfo.id = newID;
+        dlInfo.blockCount = renderRunnable.blockCount;
         
         // delete previous texture if needed
         if (oldID > 0)
@@ -213,17 +159,6 @@ public class DisplayListManager
      */
     public void clearDisplayLists(Symbolizer sym)
     {
-        synchronized (symDLs)
-        {        
-            // delete main symbolizer display list
-            GLDisplayList dlInfo = symDLs.get(sym);            
-            if (dlInfo != null && dlInfo.id > 0)
-            {
-                gl.glDeleteLists(dlInfo.id, 1);
-                //System.err.println("DL #" + dlInfo.id + " deleted");
-            }
-        }
-        
         synchronized (symDLTables)
         {
             // delete all sub display lists
@@ -242,8 +177,7 @@ public class DisplayListManager
                 }
                 
                 symDLTables.remove(sym);
-            }
-            
+            }            
         }
     }
 }
