@@ -244,9 +244,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     {       
         switch (e.type)
         {
-            case SCENE_OPTIONS_CHANGED:
+            case SCENE_OPTIONS_CHANGED:            
             case SCENE_TREE_CHANGED:
-            case PROVIDER_ERROR:
+            case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
                 break;
         }

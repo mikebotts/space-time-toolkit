@@ -136,7 +136,6 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
         {
             case SCENE_VIEW_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
-            case ITEM_STYLE_CHANGED:
             case PROVIDER_DATA_CHANGED:
                 refreshViewAsync();
                 break;                

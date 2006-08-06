@@ -126,7 +126,9 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
             
             // init size
             Rectangle clientArea = canvas.getClientArea();
-            scene.getRenderer().resizeView(clientArea.width, clientArea.height);            
+            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
+            scene.getViewSettings().setViewHeight(clientArea.height);
+            scene.getViewSettings().setViewWidth(clientArea.width);
             
             // create and register view controller
             controller.setScene(scene);
@@ -170,10 +172,8 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         {
             case SCENE_OPTIONS_CHANGED:            
             case SCENE_VIEW_CHANGED:
+            case SCENE_ITEM_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
-            case ITEM_STYLE_CHANGED:
-            case PROVIDER_DATA_CHANGED:
-            case PROVIDER_ERROR:
                 refreshViewAsync();
         }
     }
@@ -190,8 +190,13 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     {
         if (scene != null)
         {
+            // update view size
             Rectangle clientArea = canvas.getClientArea();
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
+            scene.getViewSettings().setViewHeight(clientArea.height);
+            scene.getViewSettings().setViewWidth(clientArea.width);
+            
+            // redraw the whole scene
             scene.getRenderer().drawScene();
         }
     }
