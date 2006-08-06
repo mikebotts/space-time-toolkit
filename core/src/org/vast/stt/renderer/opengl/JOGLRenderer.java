@@ -134,7 +134,8 @@ public class JOGLRenderer extends Renderer
     {
         SWTContext.setCurrent();
         JOGLContext.makeCurrent();
-        SWTContext.resize(0, 0, width, height);        
+        SWTContext.resize(0, 0, width, height);
+        JOGLContext.release();
     }
     
     
@@ -144,6 +145,7 @@ public class JOGLRenderer extends Renderer
         SWTContext.setCurrent();
         JOGLContext.makeCurrent();
         super.drawScene();
+        JOGLContext.release();
     }
     
     
@@ -163,7 +165,7 @@ public class JOGLRenderer extends Renderer
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
-        double axisLength = view.getOrthoWidth() / 25; 
+        double axisLength = view.getOrthoWidth() / view.getViewWidth() * 40; 
         
         gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINES);
@@ -202,7 +204,6 @@ public class JOGLRenderer extends Renderer
     protected void swapBuffers()
     {
         SWTContext.swapBuffers();
-        JOGLContext.release();
     }
 
 
@@ -259,6 +260,7 @@ public class JOGLRenderer extends Renderer
     {
         if (SWTContext != null)
         {
+            SWTContext.setCurrent();
             JOGLContext.makeCurrent();
             JOGLContext.release();
             SWTContext.dispose();
