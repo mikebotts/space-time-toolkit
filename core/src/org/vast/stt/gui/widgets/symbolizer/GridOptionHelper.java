@@ -8,10 +8,9 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Control;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
-import org.vast.ows.sld.GridSymbolizer;
+import org.vast.ows.sld.GridFillSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
@@ -21,7 +20,7 @@ import org.vast.stt.gui.widgets.OptionController;
 public class GridOptionHelper implements SelectionListener
 {
 	OptionController optionController;
-	GridSymbolizer symbolizer;
+	GridFillSymbolizer symbolizer;
     
 	public GridOptionHelper(OptionController loc){
 		optionController = loc;
@@ -29,11 +28,7 @@ public class GridOptionHelper implements SelectionListener
         Symbolizer sym = optionController.getSymbolizer();
 		//  a bit of hackery so I can reuse GridOptionHelper for Textures
 		//  rethink this logic...
-        if(sym instanceof GridSymbolizer)
-            symbolizer = (GridSymbolizer)sym;
-        else if (sym instanceof TextureSymbolizer) {
-            symbolizer = ((TextureSymbolizer)sym).getGrid();
-        }
+        symbolizer = (GridFillSymbolizer)sym;
 	}
 	
 	public Color getFillColor(){
@@ -111,7 +106,7 @@ public class GridOptionHelper implements SelectionListener
 		if(control == optionControls[0].getControl()) {  //  toggle fill
 			boolean ckState = ((Button)control).getSelection();
 			setFillGrid(ckState);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[1].getControl()) {  //  fillColor
 			Button colorButton = (Button)control;
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
@@ -121,7 +116,7 @@ public class GridOptionHelper implements SelectionListener
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			setFillColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[2].getControl()) {
 			//  setShowMesh
 		} else if(control == optionControls[3].getControl()) {

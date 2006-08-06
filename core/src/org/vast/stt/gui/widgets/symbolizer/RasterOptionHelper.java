@@ -7,7 +7,6 @@ import org.vast.ows.sld.Dimensions;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
@@ -28,13 +27,10 @@ public class RasterOptionHelper implements SelectionListener
 		//  rethink this logic...
 		if(sym instanceof RasterSymbolizer)
 			symbolizer = (RasterSymbolizer)sym;
-		else if (sym instanceof TextureSymbolizer) {
-            symbolizer = ((TextureSymbolizer)sym).getImagery();
-		}
 	}
 	
 	public int getWidth(){
-		Dimensions dims = symbolizer.getDimensions();
+		Dimensions dims = symbolizer.getRasterDimensions();
 		ScalarParameter widthSP = dims.getWidth();
 
 		if(widthSP.isConstant()) {
@@ -44,7 +40,7 @@ public class RasterOptionHelper implements SelectionListener
 	}
 	
 	public int getHeight(){
-		Dimensions dims = symbolizer.getDimensions();
+		Dimensions dims = symbolizer.getRasterDimensions();
 		ScalarParameter lengthSP = dims.getLength();
 
 		if(lengthSP.isConstant()) {
@@ -61,9 +57,9 @@ public class RasterOptionHelper implements SelectionListener
 		OptionControl[] optionControls = optionController.getControls();
 
 		if(control == optionControls[0].getControl()) {
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[1].getControl()) {
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}
 
