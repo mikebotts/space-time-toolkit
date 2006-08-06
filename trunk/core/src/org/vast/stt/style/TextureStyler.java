@@ -83,7 +83,12 @@ public class TextureStyler extends AbstractStyler
         patch.grid.block = nextGrid;
         patch.texture.block = nextTexture;
         
-        // TODO scan and compute block BBOX and Time Range
+        // get BlockInfo
+        currentBlockInfo = nextGrid.getInfo();
+        if (currentBlockInfo.getSpatialExtent().isNull())
+            computeExtents = true;
+        else
+            computeExtents = false;
         
         return patch;
     }
@@ -114,12 +119,16 @@ public class TextureStyler extends AbstractStyler
         }
         
         if (computeExtents)
-            bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+        {
+            Vector3d point3d = new Vector3d(point.x, point.y, point.z);
+            currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
+        }
         
         return point;
     }
 
 
+    @Override
 	public void updateDataMappings()
 	{
         boolean colors = false;

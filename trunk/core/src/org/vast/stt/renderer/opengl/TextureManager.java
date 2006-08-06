@@ -118,18 +118,6 @@ public class TextureManager
                 textureTable = new GLTextureTable();
                 symTextureTables.put(sym, textureTable);
             }
-            
-            // TODO reset flags if style was updated -> needs to come from sym vs styler !!
-            if (styler.isUpdated())
-            {
-                Enumeration<GLTexture> textureEnum = textureTable.elements();
-                while (textureEnum.hasMoreElements())
-                {
-                    GLTexture texInfo = textureEnum.nextElement();
-                    texInfo.needsUpdate = true;
-                }
-                styler.setUpdated(false);
-            }
                 
             // try to find texture for this tile
             GLTexture texInfo = textureTable.get(tex.block);

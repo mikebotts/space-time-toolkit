@@ -285,6 +285,12 @@ public abstract class AbstractProvider implements DataProvider
     {
         listeners.clear();        
     }
+    
+    
+    public boolean hasListeners()
+    {
+        return !listeners.isEmpty();
+    }
 
 
     public void dispatchEvent(STTEvent event)

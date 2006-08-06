@@ -56,7 +56,6 @@ public class GridFillStyler extends AbstractGridStyler
     public void updateDataMappings()
     {
         super.updateDataMappings();
-        patch.fill = true;
         GridFillSymbolizer sym = (GridFillSymbolizer)this.symbolizer;
         ScalarParameter param;
         Object value;

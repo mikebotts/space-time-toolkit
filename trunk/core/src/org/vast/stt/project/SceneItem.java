@@ -13,8 +13,14 @@
 
 package org.vast.stt.project;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.style.StylerFactory;
+import org.vast.stt.style.StylerVisitor;
 
 
 /**
@@ -35,13 +41,15 @@ public class SceneItem implements STTEventListener
 {
     protected Scene parentScene;
     protected DataItem dataItem;
-    protected DataStylerList stylers;
+    protected ArrayList<DataStyler> stylers;
+    protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
 
     public SceneItem(Scene scene)
     {
-        stylers = new DataStylerList();
+        stylers = new ArrayList<DataStyler>(1);
+        stylerTable = new Hashtable<Symbolizer, DataStyler>();
         parentScene = scene;
     }
     
@@ -52,14 +60,18 @@ public class SceneItem implements STTEventListener
     }
 
 
-    public void setDataItem(DataItem item)
+    public void setDataItem(DataItem dataItem)
     {
-        if (this.dataItem != null)
-            this.dataItem.removeListener(this);
-        
-        this.dataItem = item;
-        
-        this.dataItem.addListener(this);
+        if (this.dataItem != dataItem)
+        {
+            if (this.dataItem != null)
+                this.dataItem.removeListener(this);
+            
+            this.dataItem = dataItem;
+            
+            if (visible)
+                this.dataItem.addListener(this);
+        }
     }
     
     
@@ -83,11 +95,19 @@ public class SceneItem implements STTEventListener
 
     public void setVisible(boolean visible)
     {
+        if (this.dataItem != null)
+        {
+            if (visible)
+                this.dataItem.addListener(this);
+            else
+                this.dataItem.removeListener(this);            
+        }
+        
         this.visible = visible;
     }
 
 
-    public DataStylerList getStylers()
+    public ArrayList<DataStyler> getStylers()
     {
         return stylers;
     }
@@ -99,7 +119,7 @@ public class SceneItem implements STTEventListener
      */
     public SpatialExtent getBoundingBox()
     {
-        SpatialExtent bbox = null;
+        SpatialExtent bbox = new SpatialExtent();
         
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < stylers.size(); i++)
@@ -109,35 +129,93 @@ public class SceneItem implements STTEventListener
             if (!nextStyler.getSymbolizer().isEnabled())
                 continue;
             
-            SpatialExtent childBox = nextStyler.getBoundingBox();
-            
-            if (i == 0)
-                bbox = childBox.copy();
-            else
-                bbox.add(childBox);
+            SpatialExtent nextBox = nextStyler.getBoundingBox();
+            bbox.add(nextBox);
         }
         
         return bbox;
     }
-
-
-    public void handleEvent(STTEvent e)
+    
+    
+    /**
+     * Clears all rendering cache related to this item
+     */
+    public void cleanup()
     {
-        switch (e.type)
+        for (int i = 0; i < stylers.size(); i++)
+            parentScene.getRenderer().cleanup(stylers.get(i));
+    }
+    
+    
+    /**
+     * Update this symbolizer after a change/addition/deletion
+     * For deletion, styler must first be disabled.
+     * @param sym
+     */
+    public void updateSymbolizer(Symbolizer sym)
+    {
+        // try to find corresponding styler
+        DataStyler styler = stylerTable.get(sym);
+        
+        // create new one if not found
+        if (styler == null)
         {
-            case ITEM_STYLE_CHANGED:            
-                for (int i = 0; i < stylers.size(); i++)
-                    stylers.get(i).updateDataMappings();                                
-                break;
+            if (!sym.isEnabled())
+                return;
             
-            case PROVIDER_DATA_CHANGED:
-                for (int i = 0; i < stylers.size(); i++)
-                    stylers.get(i).updateBoundingBox();
+            styler = StylerFactory.createStyler(sym);
+            styler.setDataItem(dataItem);
+            //styler.updateDataMappings();
+            stylers.add(styler);
+            stylerTable.put(sym, styler);
+        }
+        
+        // otherwise update existing one
+        else
+        {
+            parentScene.getRenderer().cleanup(styler);
+            
+            if (sym.isEnabled())
+            {
+                styler.updateDataMappings();
+            }
+            else
+            {
+                // completely remove if disabled
+                stylers.remove(styler);
+                stylerTable.remove(sym);
+            }                
+        }
+    }
+
+
+    public void handleEvent(STTEvent event)
+    {
+        switch (event.type)
+        {
+            case ITEM_SYMBOLIZER_CHANGED:
+                Symbolizer symbolizer = (Symbolizer)event.source;
+                updateSymbolizer(symbolizer);
                 break;
-                
+                            
             case PROVIDER_DATA_CLEARED:
-                parentScene.getRenderer().cleanup(this);
+                cleanup();
                 break;
+        }
+        
+        if (visible)
+            parentScene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED));
+    }
+    
+    
+    public void accept(StylerVisitor visitor)
+    {
+        // loop through all stylers for this item
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            DataStyler nextStyler = stylers.get(i);
+            if (nextStyler.getSymbolizer().isEnabled())
+                nextStyler.accept(visitor);
         }
     }
 }

@@ -109,6 +109,14 @@ public class SpatialExtent implements STTEventProducer
     
     public void resizeToContain(Vector3d point)
     {
+        if (isNull())
+        {
+            minX = maxX = point.x;
+            minY = maxY = point.y;
+            minZ = maxZ = point.z;
+            return;
+        }        
+        
         if (minX > point.x) minX = point.x;
         if (minY > point.y) minY = point.y;
         if (minZ > point.z) minZ = point.z;
@@ -128,6 +136,17 @@ public class SpatialExtent implements STTEventProducer
     public void add(SpatialExtent bbox)
     {
         checkCrs(bbox);
+        
+        if (isNull())
+        {
+            minX = bbox.minX;
+            minY = bbox.minY;
+            minZ = bbox.minZ;
+            maxX = bbox.maxX;
+            maxY = bbox.maxY;
+            maxZ = bbox.maxZ;
+            return;
+        }
         
         if (minX > bbox.minX)
             minX = bbox.minX;        
@@ -347,6 +366,12 @@ public class SpatialExtent implements STTEventProducer
     public void removeAllListeners()
     {
         listeners.clear();
+    }
+    
+    
+    public boolean hasListeners()
+    {
+        return !listeners.isEmpty();
     }
 
 

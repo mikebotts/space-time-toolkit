@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3d;
 import org.vast.stt.data.BlockInfo;
+import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.style.StylerVisitor;
@@ -36,7 +37,7 @@ public abstract class Renderer implements StylerVisitor
     public abstract void dispose();
     
     
-    public abstract void cleanup(SceneItem item);
+    public abstract void cleanup(DataStyler styler);
 
 
     public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);

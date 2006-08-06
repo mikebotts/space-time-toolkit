@@ -59,6 +59,7 @@ public class LabelStyler extends AbstractStyler
     }
 
 
+    @Override
 	public void updateDataMappings()
 	{
         ScalarParameter param;

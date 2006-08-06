@@ -39,7 +39,6 @@ public class GridPatchGraphic extends GraphicObject
     public int length = 1;
     public int depth = 1;
     public float lineWidth = 1.0f;
-    public boolean fill = false;
     
     public Buffer vertexData;
     public boolean hasGridData;

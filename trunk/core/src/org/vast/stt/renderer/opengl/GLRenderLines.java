@@ -58,9 +58,10 @@ public class GLRenderLines extends GLRunnable
         LinePointGraphic point;
         boolean begin = false;
         float oldWidth = -1.0f;
+        int count = 0;
         
         // loop and draw all points
-        while ((styler.nextLineBlock()) != null)
+        do
         {
             while ((point = styler.nextPoint()) != null)
             {
@@ -96,7 +97,14 @@ public class GLRenderLines extends GLRunnable
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }
+            
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while ((styler.nextLineBlock()) != null);
+        
+        blockCount = count;
         
         if (begin)
             gl.glEnd();

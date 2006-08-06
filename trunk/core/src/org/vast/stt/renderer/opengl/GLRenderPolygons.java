@@ -56,6 +56,7 @@ public class GLRenderPolygons extends GLRunnable
     {
         PolygonPointGraphic point;
         boolean begin = false;
+        int count = 0;
         
         // setup polygon offset
         gl.glPolygonOffset(offset, 1.0f);
@@ -63,7 +64,7 @@ public class GLRenderPolygons extends GLRunnable
         
         gl.glBegin(GL.GL_POLYGON);
 
-        while (styler.nextBlock())
+        do
         {
             while ((point = styler.nextPoint()) != null)
             {
@@ -78,8 +79,14 @@ public class GLRenderPolygons extends GLRunnable
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }
+            
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while (styler.nextBlock() != null);
 
+        blockCount = count;
         gl.glEnd();
     }
 }

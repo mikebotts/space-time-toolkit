@@ -33,7 +33,6 @@ public class STTEvent
     public STTEventProducer producer;
     public Object source;
     public EventType type;
-    protected STTEvent next;
 	
 	
     public STTEvent(Object source, EventType type)

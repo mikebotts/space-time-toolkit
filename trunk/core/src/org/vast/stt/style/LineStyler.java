@@ -18,7 +18,6 @@ import org.vast.math.Vector3d;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockListItem;
 
 
@@ -39,31 +38,20 @@ import org.vast.stt.data.BlockListItem;
  */
 public class LineStyler extends AbstractStyler
 {
-    protected LinePointGraphic point;
     protected LineSymbolizer symbolizer;
-    protected BlockInfo lineInfo;
+    protected LinePointGraphic point;
+    protected LineSegmentGraphic segment;
     protected int oldBlockCount = 0;
         
 	
 	public LineStyler()
 	{
 		point = new LinePointGraphic();
-        lineInfo = new BlockInfo();
+        segment = new LineSegmentGraphic();
 	}
     
     
-    @Override
-    public void resetIterators()
-    {
-        super.resetIterators();
-        int currentBlockCount = dataLists[0].blockIterator.getList().getSize();
-        if (currentBlockCount != oldBlockCount)
-            this.updated = true;
-        oldBlockCount = currentBlockCount;
-    }
-    
-    
-    public BlockInfo nextLineBlock()
+    public LineSegmentGraphic nextLineBlock()
     {
         ListInfo listInfo = dataLists[0];
         BlockListItem nextItem;
@@ -80,7 +68,17 @@ public class LineStyler extends AbstractStyler
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
         
-        return lineInfo;
+        // get BlockInfo
+        currentBlockInfo = nextItem.getInfo();
+        if (currentBlockInfo.getSpatialExtent().isNull())
+            computeExtents = true;
+        else
+            computeExtents = false;
+        
+        // copy current item in the patch object
+        segment.block = nextItem;
+        
+        return segment;
     }
     
     
@@ -88,18 +86,22 @@ public class LineStyler extends AbstractStyler
     {
         if (dataLists[0].blockIndexer.hasNext)
         {
-            dataLists[0].blockIndexer.getNext();            
+            dataLists[0].blockIndexer.getNext();
             
             if (computeExtents)
-                bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+            {
+                Vector3d point3d = new Vector3d(point.x, point.y, point.z);
+                currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
+            }
             
             return point;
         }
         
         return null;
-    }
+    }   
 
 
+    @Override
     public void updateDataMappings()
     {
         ScalarParameter param;

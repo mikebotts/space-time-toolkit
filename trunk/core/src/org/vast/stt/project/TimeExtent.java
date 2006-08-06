@@ -343,6 +343,12 @@ public class TimeExtent implements STTEventProducer
     {
         listeners.clear();
     }
+    
+    
+    public boolean hasListeners()
+    {
+        return !listeners.isEmpty();
+    }
 
 
     public void dispatchEvent(STTEvent event)

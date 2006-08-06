@@ -23,7 +23,6 @@ import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
-import org.vast.stt.style.StylerFactory;
 
 
 /**
@@ -49,14 +48,12 @@ public class Scene implements STTEventProducer, STTEventListener
 	protected TimeSettings timeSettings;
     protected STTEventListeners listeners;
     protected ArrayList<SceneItem> sceneItems;
-    protected StylerFactory stylerFactory;
 
 
     public Scene()
     {
         renderer = new JOGLRenderer();
         renderer.setScene(this);
-        stylerFactory = new StylerFactory();
         listeners = new STTEventListeners(2);
         sceneItems = new ArrayList<SceneItem>();
     }
@@ -180,15 +177,16 @@ public class Scene implements STTEventProducer, STTEventListener
      */
     public void removeItem(DataFolder folder, DataItem dataItem)
     {
-        SceneItem sceneItem = findItem(dataItem);
+        folder.remove(dataItem);
+        SceneItem sceneItem = findItem(dataItem);        
         
-        // cleanup SceneItem as well
+        // if SceneItem was created, cleanup as well
         if (sceneItem != null)
         {
-            //this.renderer.cleanup(RendererInfo)
+            dataItem.removeListener(sceneItem);
+            sceneItems.remove(sceneItem);
+            sceneItem.cleanup();
         }
-        
-        folder.remove(dataItem);
     }
     
     
@@ -206,27 +204,21 @@ public class Scene implements STTEventProducer, STTEventListener
         {
             sceneItem.setVisible(visible);
         }
-        else 
+        else
         {
-            // if not found create a new SceneItem + prepare all stylers
+            // if not found create a new SceneItem
             SceneItem newSceneItem = new SceneItem(this);
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
+            
+            // prepare all stylers
             List<Symbolizer> symbolizers = dataItem.getSymbolizers();
             for (int i=0; i<symbolizers.size(); i++)
-            {
-                DataStyler styler = stylerFactory.createStyler(symbolizers.get(i));
-                styler.setDataItem(dataItem);
-                newSceneItem.getStylers().add(styler);
-            }
+                newSceneItem.updateSymbolizer(symbolizers.get(i));
+            
+            // add new scene items to rendering list
             sceneItems.add(newSceneItem);
         }
-        
-        // register/unregister scene as a listener to the item
-        if (visible)
-            dataItem.addListener(this);
-        else
-            dataItem.removeListener(this);
     }
     
     
@@ -282,7 +274,7 @@ public class Scene implements STTEventProducer, STTEventListener
      */
     public SpatialExtent getBoundingBox()
     {
-        SpatialExtent bbox = null;
+        SpatialExtent bbox = new SpatialExtent();
         
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < sceneItems.size(); i++)
@@ -292,12 +284,8 @@ public class Scene implements STTEventProducer, STTEventListener
             if (!nextItem.isVisible())
                 continue;
             
-            SpatialExtent childBox = nextItem.getBoundingBox();
-            
-            if (i == 0)
-                bbox = childBox.copy();
-            else
-                bbox.add(childBox);
+            SpatialExtent nextBox = nextItem.getBoundingBox();
+            bbox.add(nextBox);
         }
         
         return bbox;
@@ -320,6 +308,12 @@ public class Scene implements STTEventProducer, STTEventListener
     {
         listeners.clear();        
     }
+    
+    
+    public boolean hasListeners()
+    {
+        return !listeners.isEmpty();
+    }
 
 
     public void dispatchEvent(STTEvent event)
@@ -333,15 +327,8 @@ public class Scene implements STTEventProducer, STTEventListener
     {
         switch (event.type)
         {
-            case ITEM_STYLE_CHANGED:
-            case PROVIDER_DATA_CHANGED:
-            case PROVIDER_ERROR:            
-                DataItem srcItem = (DataItem)event.producer;
-                if (isItemVisible(srcItem))
-                    dispatchEvent(event.copy());
-                break;
-                
             case SCENE_VIEW_CHANGED:
+            case SCENE_TIME_CHANGED:
                 dispatchEvent(event.copy());
                 break;
         }

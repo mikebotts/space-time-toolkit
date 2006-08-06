@@ -54,12 +54,6 @@ public class GLRenderTexture extends GLRunnable
     {
         this.styler = styler;        
     }
-    
-    
-    public void setPatch(TexturePatchGraphic patch)
-    {
-        this.patch = patch;
-    }
 
     
     @Override
@@ -68,8 +62,8 @@ public class GLRenderTexture extends GLRunnable
         GridPointGraphic point;
         float uScale = 0.0f;
         float vScale = 0.0f;
-        double oldX = 0.0;
-        
+        int count = 0;
+                
         RasterTileGraphic tex = patch.getTexture();
         GridPatchGraphic grid = patch.getGrid();
                 
@@ -88,31 +82,43 @@ public class GLRenderTexture extends GLRunnable
             vScale = (float)tex.height / (float)(tex.height + tex.heightPadding);
         }
         
-        // loop through all grid points
-        for (int v = 0; v < grid.length-1; v++)
+        do
         {
-            gl.glBegin(GL.GL_QUAD_STRIP);
-                        
-            for (int u = 0; u < grid.width; u++)
+            double oldX = 0.0;
+            
+            // loop through all grid points
+            for (int v = 0; v < grid.length-1; v++)
             {
-                for (int p=0; p<2; p++)
-                {                    
-                    point = styler.getGridPoint(u, v+p, uScale, vScale, normalizeCoords);
-                    
-                    // TODO hack to break grid when crossing lat/lon boundary
-                    if (Math.abs(point.x - oldX) > Math.PI*9/10)
-                    {
-                        gl.glEnd();
-                        gl.glBegin(GL.GL_QUAD_STRIP);
+                gl.glBegin(GL.GL_QUAD_STRIP);
+                            
+                for (int u = 0; u < grid.width; u++)
+                {
+                    for (int p=0; p<2; p++)
+                    {                    
+                        point = styler.getGridPoint(u, v+p, uScale, vScale, normalizeCoords);
+                        
+                        // TODO hack to break grid when crossing lat/lon boundary
+                        if (Math.abs(point.x - oldX) > Math.PI*9/10)
+                        {
+                            gl.glEnd();
+                            gl.glBegin(GL.GL_QUAD_STRIP);
+                        }
+                        oldX = point.x;
+                        
+                        gl.glTexCoord2f(point.tx, point.ty);
+                        gl.glVertex3d(point.x, point.y, point.z);
                     }
-                    oldX = point.x;
-                    
-                    gl.glTexCoord2f(point.tx, point.ty);
-                    gl.glVertex3d(point.x, point.y, point.z);
                 }
+                
+                gl.glEnd();
             }
             
-            gl.glEnd();
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while ((patch = styler.nextTile()) != null);
+        
+        blockCount = count;
     }
 }

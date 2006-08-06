@@ -38,7 +38,8 @@ public class BlockListIterator implements Iterator<BlockListItem>
     
     public BlockListIterator(BlockList list)
     {
-        this.list = list;        
+        this.list = list;
+        this.reset();
     }
     
     

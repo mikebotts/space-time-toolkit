@@ -67,7 +67,12 @@ public abstract class AbstractGridStyler extends AbstractStyler
         listInfo.blockIndexer.reset();
         listInfo.blockIndexer.getData(0,0,0);
         
-        // TODO scan and compute block BBOX and Time Range
+        // get BlockInfo
+        currentBlockInfo = nextItem.getInfo();
+        if (currentBlockInfo.getSpatialExtent().isNull())
+            computeExtents = true;
+        else
+            computeExtents = false;
         
         // copy current item in the patch object
         patch.block = nextItem;
@@ -81,12 +86,16 @@ public abstract class AbstractGridStyler extends AbstractStyler
         dataLists[0].blockIndexer.getData(v, u, 0);
         
         if (computeExtents)
-            bbox.resizeToContain(new Vector3d(point.x, point.y, point.z));
+        {
+            Vector3d point3d = new Vector3d(point.x, point.y, point.z);
+            currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
+        }
         
         return point;
     }
 
 
+    @Override
 	public void updateDataMappings()
 	{
         ScalarParameter param;

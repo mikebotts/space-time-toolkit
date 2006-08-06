@@ -50,13 +50,6 @@ public class BlockListItem
             nextBlock.prevBlock = this;
     }
     
-    
-    public void ensureInfo()
-    {
-        if (info == null)
-            info = new BlockInfo();
-    }
-
 
     public AbstractDataBlock getData()
     {
@@ -72,6 +65,9 @@ public class BlockListItem
 
     public BlockInfo getInfo()
     {
+        if (info == null)
+            info = new BlockInfo();
+        
         return info;
     }
 

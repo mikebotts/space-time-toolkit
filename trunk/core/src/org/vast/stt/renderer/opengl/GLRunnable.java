@@ -36,6 +36,7 @@ public abstract class GLRunnable implements Runnable
     protected GL gl;
     protected GLU glu;
     protected float offset;
+    protected int blockCount;
     
     
     public abstract void run();
@@ -45,11 +46,5 @@ public abstract class GLRunnable implements Runnable
     {
         this.gl = gl;
         this.glu = glu;
-    }
-
-
-    public void setOffset(float offset)
-    {
-        this.offset = offset;
     }
 }

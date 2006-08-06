@@ -17,7 +17,9 @@ import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
+import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockList;
+import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.BlockListIterator;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
@@ -41,20 +43,21 @@ import org.vast.stt.project.SpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
-    protected boolean updated = true;
     protected DataItem dataItem;
     protected DataNode dataNode;
-    protected SpatialExtent bbox;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
-    protected boolean computeExtents = true;
+    protected boolean computeExtents;
+    protected BlockInfo currentBlockInfo;
+    
+    
+    public abstract void updateDataMappings();
     
     
     public AbstractStyler()
     {
         treeBuilders = new Hashtable<String, IndexerTreeBuilder>();
         dataLists = new ListInfo[0];
-        bbox = new SpatialExtent();
     }
     
     
@@ -68,24 +71,6 @@ public abstract class AbstractStyler implements DataStyler
 	{
 		this.dataItem = dataItem;
 	}
-    
-    
-    public SpatialExtent getBoundingBox()
-    {
-        return bbox;
-    }
-
-
-    public double[] getCenterPoint()
-    {
-        double[] centerPoint = new double[3];
-        
-        centerPoint[0] = (bbox.getMaxX() - bbox.getMinX()) / 2;
-        centerPoint[1] = (bbox.getMaxY() - bbox.getMinY()) / 2;
-        centerPoint[2] = (bbox.getMaxZ() - bbox.getMinZ()) / 2;
-        
-        return centerPoint;
-    }
     
     
     public void addPropertyMapper(String componentPath, PropertyMapper newMapper)
@@ -121,8 +106,6 @@ public abstract class AbstractStyler implements DataStyler
     {
         dataLists = new ListInfo[0];
         treeBuilders.clear();
-        this.updated = true;
-        this.bbox = new SpatialExtent();
     }
     
     
@@ -144,43 +127,84 @@ public abstract class AbstractStyler implements DataStyler
      * Load data for next block so that it is updated
      * for all array mappers. Also update block property mappers.
      */
-    public boolean nextBlock()
+    public BlockListItem nextBlock()
     {
+        BlockListItem nextItem = null;
+        
         for (int i = 0; i < dataLists.length; i++)
         {
             ListInfo info = dataLists[i]; 
             DataIndexer nextIndexer = info.blockIndexer;
                         
             if (!info.blockIterator.hasNext())
-                return false;
+                return null;
             
-            AbstractDataBlock nextBlock = info.blockIterator.next().getData();
-            
-            // TODO implement block filtering here
-            
+            nextItem = info.blockIterator.next();
+            AbstractDataBlock nextBlock = nextItem.getData();
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
+            
+            // get BlockInfo
+            currentBlockInfo = nextItem.getInfo();
+            if (currentBlockInfo.getSpatialExtent().isNull())
+                computeExtents = true;
+            else
+                computeExtents = false;
         }           
                         
+        return nextItem;
+    }
+    
+    
+    /**
+     * Skips the specified number of blocks from the lists
+     */
+    public void skipBlocks(int blockCount)
+    {
+        for (int i = 0; i < dataLists.length; i++)
+        {
+            ListInfo info = dataLists[i]; 
+            
+            int count = 0;
+            while (info.blockIterator.hasNext() && count < blockCount)
+            {
+                info.blockIterator.next();
+                count++;
+            }
+        }
+    }
+    
+    
+    public boolean hasMoreBlocks()
+    {
+        for (int i = 0; i < dataLists.length; i++)
+        {
+            if (!dataLists[i].blockIterator.hasNext())
+                return false;
+        }
+        
         return true;
     }
     
     
-    public void updateBoundingBox()
+    /**
+     * Computes and return the bbox of this object in world coordinates
+     */
+    public SpatialExtent getBoundingBox()
     {
-        this.bbox = new SpatialExtent();
-    }
-
-
-    public boolean isUpdated()
-    {
-        return updated;
-    }
-
-
-    public void setUpdated(boolean updated)
-    {
-        this.updated = updated;
+        SpatialExtent bbox = new SpatialExtent();
+        
+        // get a fresh iterator
+        BlockListIterator iterator = dataLists[0].blockIterator.getList().getIterator();
+        
+        while (iterator.hasNext())
+        {
+            BlockInfo info = iterator.next().getInfo();
+            if (info != null)
+                bbox.add(info.getSpatialExtent());
+        }
+        
+        return bbox;
     }
 }
 
