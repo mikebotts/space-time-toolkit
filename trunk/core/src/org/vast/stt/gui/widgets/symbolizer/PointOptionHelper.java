@@ -91,7 +91,7 @@ public class PointOptionHelper implements SelectionListener
 			Spinner sizeSpinner = (Spinner)control;
 			float size = (float)sizeSpinner.getSelection();
 			setPointSize(size);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if(control == optionControls[1].getControl()) {
 			Button colorButton = (Button)control;
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
@@ -101,7 +101,7 @@ public class PointOptionHelper implements SelectionListener
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			setPointColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_STYLE_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(this, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}
 
