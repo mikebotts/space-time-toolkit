@@ -23,7 +23,7 @@
                </TimeSettings>
             </time>
             <view>
-               <ViewSettings>
+               <ViewSettings id="VIEW01">
                   <backgroundColor>#FFFFFF</backgroundColor>
                   <cameraMode>ORTHO</cameraMode>
                   <cameraPos>0 0 10</cameraPos>
@@ -95,7 +95,7 @@
                      </DataList>
                   </member>
                   <member>
-                     <DataList>
+                     <DataList id="DATA01">
                         <name>Satellite Swaths</name>
                         <member visible="false">
                            <DataItem enabled="true">
@@ -280,6 +280,52 @@
             </contents>
          </Scene>
       </member>
+      <member>
+         <Scene id="SCENE_02">
+            <name>2nd View</name>
+            <time>
+               <TimeSettings>
+                  <currentTime>2004-01-01T12:00:00Z</currentTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+                  <realTimeMode>on</realTimeMode>
+               </TimeSettings>
+            </time>
+            <view href="#VIEW01"/>
+            <contents>
+               <DataList>
+                  <name>NASA Project View 2</name>
+                  <member visible="true">
+                     <DataItem enabled="true">
+                        <name>Coast Lines - 100km</name>
+                        <dataProvider href="#DATASET_04"/>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>                                       
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>                             
+                     </DataItem>
+                  </member>
+                  <member href="#DATA01"/>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
    </SceneList>
    <!-- List of data resources -->
    <ResourceList>
@@ -313,7 +359,7 @@
                            <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>1999-01-01T04:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>1999-01-01T05:40:00Z</gml:endPosition>
+                                 <gml:endPosition>1999-01-01T06:40:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
