@@ -47,7 +47,8 @@
          <menu id="STT.ViewMenu" label="&amp;View">
             <separator name="group1"/>
          </menu>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene" label="&amp;Clone Scene" menubarPath="STT.ViewMenu/group1"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene1" label="Clone Scene1" menubarPath="STT.ViewMenu/group1"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene2" label="Clone Scene2" menubarPath="STT.ViewMenu/group1"/>
          <!-- File Menu -->
          <menu id="STT.FileMenu" label="&amp;File">
             <separator name="group1"/>
