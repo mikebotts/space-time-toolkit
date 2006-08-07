@@ -45,8 +45,6 @@ import org.vast.ows.sld.*;
 public class SymbolizerWidget extends CheckOptionTable
 {
     Symbolizer activeSymbolizer;
-    OptionListener optListener;
-
 
     public SymbolizerWidget(Composite parent)
     {
@@ -59,8 +57,7 @@ public class SymbolizerWidget extends CheckOptionTable
 
     public OptionChooser createOptionChooser(Composite parent)
     {
-        optListener = new OptionListener();
-        SymbolizerOptionChooser basicOptionChooser = new SymbolizerOptionChooser(parent, optListener);
+        SymbolizerOptionChooser basicOptionChooser = new SymbolizerOptionChooser(parent); 
         return basicOptionChooser;
     }
 
@@ -73,10 +70,10 @@ public class SymbolizerWidget extends CheckOptionTable
 
 
     /**
-     * Make this DataStyler the currently active Styler in the StyleWidget.
-     * This is now being called by StyleView.updateView() because of a 
+     * Make this Symbolizer the currently active Symbolizer in the SymbolizerWidget.
+     * This is now being called by SymbolizerView.updateView() because of a 
      * ITEM_STYLE_CHANGED event.  This caused a side-effect in the behavior
-     * which reset the activeSymbolizer every time any change was made.  I 
+     * which resets the activeSymbolizer every time any change was made.  I 
      * added the activeSymbolier==null check to prevent.  Need to consider
      * if this is the best way to go about this.  TC
      * @param newStyler
@@ -102,7 +99,7 @@ public class SymbolizerWidget extends CheckOptionTable
     }
 
 
-    void addStyle(Symbolizer symbolizer)
+    void addSymbolizer(Symbolizer symbolizer)
     {
         //  Add Checkbox to stylers Set and rerender Table
         dataItem.getSymbolizers().add(symbolizer);
@@ -131,7 +128,7 @@ public class SymbolizerWidget extends CheckOptionTable
 //    }
 
 
-    private void removeStyle(Symbolizer symbolizer)
+    private void removeSymbolizer(Symbolizer symbolizer)
     {
         dataItem.getSymbolizers().remove(symbolizer);
         //  reset activeStyler\
@@ -186,7 +183,10 @@ public class SymbolizerWidget extends CheckOptionTable
         optionChooser.buildControls(symbolizer);
     }
 
-
+    public void loadOptions(){
+    	optionChooser.optionController.loadFields();
+    }
+    
     public void widgetDefaultSelected(SelectionEvent e)
     {
     }
@@ -203,7 +203,7 @@ public class SymbolizerWidget extends CheckOptionTable
         else if (control == deleteButton)
         {
             if (activeSymbolizer != null)
-                removeStyle(activeSymbolizer); //  remove currently selected row   
+                removeSymbolizer(activeSymbolizer); //  remove currently selected row   
         }
         else if (control == enabledButton)
         {
@@ -225,7 +225,7 @@ public class SymbolizerWidget extends CheckOptionTable
     {
         try
         {
-            new AdvancedSymbolizerDialog(dataItem, activeSymbolizer, optListener);
+            new AdvancedSymbolizerDialog(dataItem, activeSymbolizer);
         }
         catch (Exception e)
         {
@@ -246,17 +246,6 @@ public class SymbolizerWidget extends CheckOptionTable
         }
 
     }
-
-
-    //  Called when parent styleView is closed.  Set basicControls and
-    //  basicStyler to null in OptListener (not sure this is sufficient 
-    //  for the case of StyleView being closed, but AdvancedDialog still 
-    //  open.  Also not sure if optListener will still be valid).
-    public void close()
-    {
-        optListener.setBasicController(null);
-    }
-
 }
 
 

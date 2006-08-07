@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
+import org.vast.stt.project.DataItem;
 
 
 /**
@@ -27,7 +28,8 @@ public class AdvancedRasterController extends AdvancedOptionController
 	private Composite parent;
 	//private RasterOptionHelper rasterOptionHelper;
 	
-	public AdvancedRasterController(Composite parent, PolygonSymbolizer symbolizer){
+	public AdvancedRasterController(Composite parent, DataItem item, PolygonSymbolizer symbolizer){
+		super(item);
 		this.parent = parent;
 		this.symbolizer = symbolizer;
 		
@@ -64,4 +66,5 @@ public class AdvancedRasterController extends AdvancedOptionController
 	protected void doMapping(int index){
 	}		
 
+	public void loadFields(){};
 }

@@ -33,7 +33,7 @@ import org.vast.stt.project.DataItem;
  * </p>
  *
  * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
+ * @author Tony Cook
  * @date Jul 12, 2006
  * @version 1.0
  * 
@@ -41,6 +41,7 @@ import org.vast.stt.project.DataItem;
  *        communicating between them will get nasty
  * TODO:  Fix NPEs for non DataItems that try to instantiate AdvancedStyleDialog (this 
  *        will need to be done upstream somewhere)
+ * TODO:  Have added symbolizers from AddSymbolizerDialog be added to this widget also 
  */
 public class AdvancedSymbolizerDialog implements SelectionListener
 {
@@ -54,30 +55,27 @@ public class AdvancedSymbolizerDialog implements SelectionListener
     private Button addButton;
     private Button removeButton;
     private Button renameButton;
-    private Combo stylesCombo;
+    private Combo symCombo;
     private Symbolizer activeSymbolizer;
     private List<Symbolizer> symbolizerList;
     private Button closeButton;
     private Button okButton;
 
 
-    //  This dialog's dataItem cannot change, unlike StyleWidget
-    //  However, it's list of styles can change if a style is added to the 
+    //  This dialog's dataItem cannot change, unlike SymbolizerWidget
+    //  However, it's list of symbolizers can change if a style is added to the 
     //  DataItem via the 'add' button, or the 'add' button on the 
-    //  StyleWidget
+    //  symbolizerWidget
     //  NOTE:  For now, if anything causes Dialog to fail, throw exception
-    public AdvancedSymbolizerDialog(DataItem item, Symbolizer activeSymbolizer, OptionListener ol) throws Exception
+    public AdvancedSymbolizerDialog(DataItem item, Symbolizer activeSymbolizer) throws Exception
     {
         this.dataItem = item;
         //  init GUI components
-        init(ol);
+        init();
         //  Set initial state of tabs and tree based on dataItem's styles
+        this.activeSymbolizer = activeSymbolizer;
         setSymbolizers(dataItem.getSymbolizers());
-        //  set the currently active non-composite DataStyler based on 
-        //  what was selected in StyleWidget wheb "advanced" button was pressed 
         dataStructureTree.setInput(item.getDataProvider().getDataNode());
-        setActiveSymbolizer(activeSymbolizer);
-        //  open the dialog
         shell.open();
     }
 
@@ -85,7 +83,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener
     /**
      * Init new dialog shell and its contents
      */
-    private void init(OptionListener ol)
+    private void init()
     {
         shell = new Shell();
         shell.setMinimumSize(new Point(400, 250));
@@ -104,12 +102,12 @@ public class AdvancedSymbolizerDialog implements SelectionListener
         final Label sLabel = new Label(topComp, SWT.NONE);
         sLabel.setText("Styles:");
 
-        stylesCombo = new Combo(topComp, SWT.READ_ONLY);
-        stylesCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+        symCombo = new Combo(topComp, SWT.READ_ONLY);
+        symCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
         //  enable when I fix stylesChanged 
         //stylesCombo.setEnabled(false);
 
-        stylesCombo.addSelectionListener(this);
+        symCombo.addSelectionListener(this);
 
         addButton = new Button(topComp, SWT.NONE);
         addButton.setText("Add");
@@ -139,7 +137,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener
         graphicTabItem.setText("Graphic");
 
         // AdvanceGraphicTab
-        advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem, ol);
+        advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem);
         String[] mappableItems = getMappableItems();
         advGraphicsTab.setMappableItems(mappableItems);
         graphicTabItem.setControl(advGraphicsTab);
@@ -161,7 +159,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener
         dataStructureGroup.setLayout(new FillLayout());
         dataStructureTree = new DataStructureTreeViewer(dataStructureGroup, SWT.BORDER);
 
-        //		//  Bottom composite for OK/Cancel Btns 
+        //  Bottom composite for OK/Cancel Btns 
         final Composite bottomComp = new Composite(shell, SWT.NONE);
         bottomComp.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
         bottomComp.setLayout(new GridLayout(2, true));
@@ -201,49 +199,25 @@ public class AdvancedSymbolizerDialog implements SelectionListener
 
 
     /**
-     * Make this DataStyler the currently active Styler in the StyleWidget - 
-     * can be a compositeStyler
-     * @param newStyler
      */
     public void setSymbolizers(List<Symbolizer> symbolizerList)
     {
-        //  Check for CompositeStyler first...
         this.symbolizerList = symbolizerList;
-        setStylesComboItems();
-    }
-
-
-    //  NOTE:  styler should NOT be a composite styler here
-    protected void setActiveSymbolizer(Symbolizer symbolizer)
-    {
-        //  Change DataTree/MappingTab contents
-        if (activeSymbolizer == null)
-            activeSymbolizer = symbolizerList.get(0);
-        if (activeSymbolizer == null)
-            return;
-        activeSymbolizer = symbolizer;
-        ///  Update Graphic and Geom tab
-        //advGraphicsTab.buildControls(activeStyler);
-        advGraphicsTab.setActiveSymbolizer(activeSymbolizer);
-        advGeomTab.setActiveSymbolizer(activeSymbolizer);
-        //  Try setting index to activeStyler's pos in ArrayList
-        Iterator<Symbolizer> it = symbolizerList.iterator();
-        Symbolizer symTmp = null;
-        int index = 0;
-        while (it.hasNext())
+        //  Remove old symbolizers
+        //symCombo.removeAll();
+        int numStyles = symbolizerList.size();
+        for (int i = 0; i < numStyles; i++)
         {
-            symTmp = it.next();
-            if (symTmp == activeSymbolizer)
-            {
-                stylesCombo.select(index);
-                return;
-            }
-            index++;
+            Symbolizer symTmp = symbolizerList.get(i);
+            symCombo.add(symTmp.getName());
         }
-        System.err.println("ASD.setActiveStyler():  activeStyler NOT in styleAL");
-        System.err.println("NOW WHAT???");
+        int activeIndex = symbolizerList.indexOf(activeSymbolizer);
+        if(activeIndex==-1)
+        	symCombo.select(0);
+        else
+        	symCombo.select(activeIndex);
+        setActiveSymbolizer(symCombo.getSelectionIndex());
     }
-
 
     protected void setActiveSymbolizer(int index)
     {
@@ -252,22 +226,6 @@ public class AdvancedSymbolizerDialog implements SelectionListener
         advGeomTab.setActiveSymbolizer(activeSymbolizer);
         //graphicTabItem.setControl()
     }
-
-
-    protected void setStylesComboItems()
-    {
-        stylesCombo.removeAll();
-        int numStyles = symbolizerList.size();
-        for (int i = 0; i < numStyles; i++)
-        {
-            Symbolizer symTmp = symbolizerList.get(i);
-            stylesCombo.add(symTmp.getName());
-            if (i == 0)
-                activeSymbolizer = symTmp;
-        }
-        stylesCombo.select(0);
-    }
-
 
     public void widgetDefaultSelected(SelectionEvent e)
     {
@@ -289,14 +247,15 @@ public class AdvancedSymbolizerDialog implements SelectionListener
         {
 
         }
-        else if (e.widget == stylesCombo)
+        else if (e.widget == symCombo)
         {
-            setActiveSymbolizer(stylesCombo.getSelectionIndex());
+            setActiveSymbolizer(symCombo.getSelectionIndex());
         }
         else if (e.widget == closeButton)
         {
-            //  Remove OptLstnr
-            advGraphicsTab.close();
+            //  Remove STTEventListener from item (a little messy still)
+        	dataItem.removeListener(advGraphicsTab.optionController);
+            advGraphicsTab.close();  //  why close tab?
             shell.close();
         }
     }

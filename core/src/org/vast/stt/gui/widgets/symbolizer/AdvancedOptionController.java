@@ -15,9 +15,13 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.MappingFunction;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.functions.LinearAdjustment;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.widgets.OptionController;
+import org.vast.stt.project.DataItem;
 
-abstract public class AdvancedOptionController extends OptionController implements SelectionListener
+abstract public class AdvancedOptionController extends OptionController 
+	implements SelectionListener, STTEventListener
 {
 	protected Combo [] mapFromCombo;
 	protected Text [] gainText;
@@ -26,12 +30,14 @@ abstract public class AdvancedOptionController extends OptionController implemen
 	protected String [] mappableItems;
     Display display = PlatformUI.getWorkbench().getDisplay();
     
-    
 	abstract protected void doLut(int i);
 	abstract protected void doMapping(int i);
 	
-    
-	// TODO:  load these based on actual mappable items	
+	public AdvancedOptionController(DataItem item){
+		this.dataItem = item;
+	}
+	
+	// TODO: load these based on actual mappable items
 	public void setMappableItems(String [] items){
 		this.mappableItems = new String[items.length+1];
 		mappableItems[0] = "<constant>";
@@ -123,7 +129,7 @@ abstract public class AdvancedOptionController extends OptionController implemen
 	/**
 	 * This widgetSelected is for events coming from the additional
 	 * mapping controls (LUT and Combo) on the advancedDialog.
-	 * OptionControl events still handled through LineOptionHelper class.  
+	 * All graphic options are handled as STTEvents  
 	 */
 	public void widgetSelected(SelectionEvent e) {
 		Control source = (Control)e.getSource();
@@ -159,5 +165,16 @@ abstract public class AdvancedOptionController extends OptionController implemen
 			lutButton[i].removeSelectionListener(sl);
 		}
 	}
+
+	// ============ NEW EVENT CODE
+	//abstract void loadFields();
 	
+	public void handleEvent(STTEvent e) {       
+        switch (e.type) {
+            case ITEM_OPTIONS_CHANGED:
+            case ITEM_SYMBOLIZER_CHANGED:
+            	loadFields();
+        }  
+	 }
+		
 }
