@@ -18,14 +18,13 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 	Composite mainGroup;
 	DataItem dataItem;
 	AdvancedOptionController optionController;
-	private OptionListener optionListener;
 	String [] mappableItems;
+	Symbolizer activeSymbolizer;
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
 	
-	public AdvancedGraphicsTab(Composite parent, DataItem item, OptionListener ol){
+	public AdvancedGraphicsTab(Composite parent, DataItem item){
 		super(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.dataItem = item;
-		this.optionListener = ol;
 		init();
 	}
 	
@@ -46,30 +45,32 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 	}
 	
 	public void setActiveSymbolizer(Symbolizer symbolizer){
-		//  Not making activeStyler a class member yet
-		buildControls(symbolizer);
-	}
-	
-	public void buildControls(Symbolizer symbolizer){
+		if(symbolizer == activeSymbolizer)
+			return;  // doNothing (user just re-selected the same entry)
+		
+		activeSymbolizer = symbolizer;
+		
 		removeOldControls();
 		addTopRow();
+		if(optionController!=null)
+			dataItem.removeListener(optionController);
 		if(symbolizer instanceof PointSymbolizer){
-			optionController = new AdvancedPointController(mainGroup, (PointSymbolizer)symbolizer);
+			optionController = new AdvancedPointController(mainGroup, dataItem, (PointSymbolizer)symbolizer);
 		} else if(symbolizer instanceof LineSymbolizer) {
-			optionController = new AdvancedLineController(mainGroup, (LineSymbolizer)symbolizer);
+			optionController = new AdvancedLineController(mainGroup,  dataItem, (LineSymbolizer)symbolizer);
 		} else if(symbolizer instanceof PolygonSymbolizer){
 			
 		}
 		
 		//  can remove null check when all Stlyer types are supported
 		if(optionController != null) {
-			optionController.addSelectionListener(optionListener);
-			optionListener.setAdvancedController(optionController);
 			optionController.setMappableItems(mappableItems);
+			dataItem.addListener(optionController);
+
 		}
 		this.layout();
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		this.redraw();
+		this.redraw();	
 	}
 
 	public void addTopRow(){
@@ -104,7 +105,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 	}
 	
 	public void close(){
-		optionListener.setAdvancedController(null);
 	}
 
 }

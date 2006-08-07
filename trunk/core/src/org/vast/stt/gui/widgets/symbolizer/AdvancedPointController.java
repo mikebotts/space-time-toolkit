@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.gui.widgets.OptionControl;
+import org.vast.stt.project.DataItem;
 
 
 /**
@@ -29,7 +30,8 @@ public class AdvancedPointController extends AdvancedOptionController implements
 	private Composite parent;
 	private PointOptionHelper pointOptionHelper;
 	
-	public AdvancedPointController(Composite parent, PointSymbolizer symbolizer){
+	public AdvancedPointController(Composite parent, DataItem item, PointSymbolizer symbolizer){
+		super(item);
 		this.parent = parent;
 		this.symbolizer = symbolizer;
 		
@@ -90,4 +92,11 @@ public class AdvancedPointController extends AdvancedOptionController implements
 		}
 	}		
 
+	//==============
+	//=============
+    @Override
+    public void loadFields(){
+    	//  Redraw ALL graphics options
+    	System.err.println("REDRAW Adv Pts");
+    }
 }

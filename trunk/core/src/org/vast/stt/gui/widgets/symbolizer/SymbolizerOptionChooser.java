@@ -14,9 +14,8 @@ import org.vast.ows.sld.*;
  * </p>
  *
  * <p><b>Description:</b><br/>
- *	StyleOptionChooser is a composite that holds label/control pairs for 
+ *	SymbolizerOptionChooser is a composite that holds label/control pairs for 
  *  selecting options for a particular Styler type.   
- *
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -30,15 +29,10 @@ import org.vast.ows.sld.*;
  */
 public class SymbolizerOptionChooser extends OptionChooser
 {
-	//  Need to keep controllers in memory and just rebuild their
-	//  controls as needed, so basic and advanced options can
-	//  co-exist and change together
-	private OptionListener optListener;
     private DataItem item;
 
-	public SymbolizerOptionChooser(Composite parent, OptionListener ol) {
+	public SymbolizerOptionChooser(Composite parent){
 		super(parent);
-		this.optListener = ol;
 	}
     
     public void setDataItem(DataItem item)
@@ -46,11 +40,10 @@ public class SymbolizerOptionChooser extends OptionChooser
         this.item = item;
     }
 
-	public void buildControls(Object stylerObj){
-		Symbolizer sym = (Symbolizer) stylerObj;
+	public void buildControls(Object symObj){
+		Symbolizer sym = (Symbolizer) symObj;
 		removeOldControls();
 
-		OptionController optionController = null;
 		if(sym instanceof PointSymbolizer) {
 			optionController = new BasicPointController(optComp, (PointSymbolizer)sym);
 		} else if (sym instanceof LineSymbolizer) {
@@ -68,9 +61,7 @@ public class SymbolizerOptionChooser extends OptionChooser
 		
 		if(optionController == null)
 			return;
-		optionController.addSelectionListener(optListener);
         optionController.setDataItem(item);
-		optListener.setBasicController(optionController);
 
 		optComp.layout(true);		
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));

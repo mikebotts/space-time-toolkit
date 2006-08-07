@@ -11,6 +11,9 @@ import org.eclipse.ui.PlatformUI;
 public abstract class OptionChooser {  //  extends Group/ScrolledComp
 	protected Composite optComp;  //  hold onto scroller and composite 
 	protected ScrolledComposite optScr;
+	//  TODO fix access
+	public OptionController optionController = null;
+
 	public OptionChooser(Composite parent){
 		init(parent);
 	}

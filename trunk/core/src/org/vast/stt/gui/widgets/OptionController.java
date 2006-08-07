@@ -16,7 +16,7 @@ import org.vast.stt.project.DataItem;
  * </p>
  *
  * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
+ * @author Tony Cook, Alexandre Robin
  * @date Jul 12, 2006
  * @version 1.0
  */
@@ -26,18 +26,18 @@ public abstract class OptionController
     protected Symbolizer symbolizer;
     protected DataItem dataItem;
 
-
+    public void loadFields(){};
+    
+    //  TODO  REMOVE THIS METHOD
     public OptionControl[] getControls()
     {
         return optionControls;
     }
 
-
     public DataItem getDataItem()
     {
         return dataItem;
     }
-    
     
     public void setDataItem(DataItem dataItem)
     {
@@ -56,7 +56,6 @@ public abstract class OptionController
         for (int i = 0; i < optionControls.length; i++)
             optionControls[i].addSelectionListener(sl);
     }
-
 
     public void removeSelectionListener(SelectionListener sl)
     {

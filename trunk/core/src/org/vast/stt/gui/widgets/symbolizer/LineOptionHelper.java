@@ -1,24 +1,13 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.gui.widgets.OptionController;
 
 
-public class LineOptionHelper implements SelectionListener
+public class LineOptionHelper //implements SelectionListener
 {
-	OptionController optionController;
 	LineSymbolizer symbolizer;
 	//  Need a way to specify all options/types/args so 
 	//  AdvancedOptions can use them also - just repeating
@@ -26,11 +15,8 @@ public class LineOptionHelper implements SelectionListener
 	//private String [] labels = {"Line Width:", "Line Color:"};
 	//private int [] optTypes = { 0, 1}; 
 
-	public LineOptionHelper(OptionController loc){
-		optionController = loc;
-		//  styler must not change for this to work
-		
-		symbolizer = (LineSymbolizer)optionController.getSymbolizer();
+	public LineOptionHelper(LineSymbolizer sym){
+		symbolizer = sym;
 	}
 	
 	public float getLineWidth(){
@@ -69,31 +55,4 @@ public class LineOptionHelper implements SelectionListener
 		Stroke stroke = symbolizer.getStroke();
 		stroke.setColor(color);
 	}
-	
-	public void widgetDefaultSelected(SelectionEvent e){
-	}
-	
-	public void widgetSelected(SelectionEvent e) {
-		Control control = (Control)e.getSource();
-		OptionControl[] optionControl = optionController.getControls();
-
-		if(control == optionControl[0].getControl()) {
-			Spinner widthSpinner = (Spinner)control;
-			float w = new Float(widthSpinner.getSelection()).floatValue();
-			setLineWidth(w);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		} else if (control == optionControl[1].getControl()) {
-			ColorDialog colorChooser = 
-				new ColorDialog(control.getShell());
-			RGB rgb = colorChooser.open();
-			if(rgb == null)
-				return;
-			// TODO:  add alpha support
-			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
-			optionControl[1].setColorLabelColor(sldColor); 
-			setLineColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		}
-	}
-
 }

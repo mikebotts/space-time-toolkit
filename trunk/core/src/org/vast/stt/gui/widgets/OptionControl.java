@@ -225,8 +225,8 @@ public class OptionControl extends Composite implements KeyListener
 		//  Add color label
 		colorLabel = new Label(this, 0x0);
 		colorLabel.setText("       ");
-		setColorLabelColor(sldColor);
-		colorLabel.setBackground(colorLabelColor);
+//		setColorLabelColor(sldColor);
+//		colorLabel.setBackground(colorLabelColor);
 		activeControl = new Button(this, SWT.PUSH);
 		Button button = (Button)activeControl;
 		button.setText("...");
