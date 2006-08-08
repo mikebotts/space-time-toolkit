@@ -39,25 +39,25 @@ import org.vast.stt.event.STTEventProducer;
 public interface DataProvider extends Resource, STTEventListener, STTEventProducer
 {
     
+    public void startUpdate(boolean force);
+    
+    
+    public void cancelUpdate();
+    
+    
     public void init() throws DataException;
     
     
     public void updateData() throws DataException;
 	
 	
-    public boolean isUpdating();
+	public void clearData();
+    
+    
+	public boolean isUpdating();
     
     
     public boolean hasError();
-    
-    
-    public void forceUpdate();
-	
-	
-	public void cancelUpdate();
-	
-	
-	public void clearData();
     
     
     public void setAutoUpdate(boolean autoUpdate);

@@ -25,6 +25,7 @@ import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.ViewSettings.Projection;
 
 
 /**
@@ -43,10 +44,25 @@ import org.vast.stt.project.SpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
-    protected DataItem dataItem;
+    class ListInfo
+    {
+        protected BlockListIterator blockIterator;
+        protected DataIndexer blockIndexer;
+        
+        
+        public ListInfo(BlockList blockList, DataIndexer dataIndexer)
+        {
+            this.blockIndexer = dataIndexer;
+            this.blockIterator = blockList.getIterator();
+        }
+    }
+    
+    
+    protected DataItem dataItem;    
     protected DataNode dataNode;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
+    protected Projection projection;
     protected boolean computeExtents;
     protected BlockInfo currentBlockInfo;
     
@@ -71,6 +87,12 @@ public abstract class AbstractStyler implements DataStyler
 	{
 		this.dataItem = dataItem;
 	}
+    
+    
+    public void setProjection(Projection projection)
+    {
+        this.projection = projection;
+    }
     
     
     public void addPropertyMapper(String componentPath, PropertyMapper newMapper)
@@ -205,19 +227,5 @@ public abstract class AbstractStyler implements DataStyler
         }
         
         return bbox;
-    }
-}
-
-
-class ListInfo
-{
-    protected BlockListIterator blockIterator;
-    protected DataIndexer blockIndexer;
-    
-    
-    public ListInfo(BlockList blockList, DataIndexer dataIndexer)
-    {
-        this.blockIndexer = dataIndexer;
-        this.blockIterator = blockList.getIterator();
     }
 }

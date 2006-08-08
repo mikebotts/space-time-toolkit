@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.project.ViewSettings.Projection;
 import org.vast.stt.style.StylerVisitor;
 
 
@@ -48,6 +49,9 @@ public interface DataStyler
     
     
 	public void setDataItem(DataItem dataItem);
+    
+    
+    public void setProjection(Projection projection);
 
 	
 	public void updateDataMappings();

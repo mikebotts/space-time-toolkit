@@ -19,6 +19,7 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.project.ViewSettings.Projection;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.StylerVisitor;
 
@@ -187,6 +188,17 @@ public class SceneItem implements STTEventListener
             }                
         }
     }
+    
+    
+    public void setProjection(Projection projection)
+    {
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            DataStyler nextStyler = stylers.get(i);
+            nextStyler.setProjection(projection);
+            parentScene.getRenderer().cleanup(stylers.get(i));
+        }
+    }
 
 
     public void handleEvent(STTEvent event)
@@ -200,7 +212,7 @@ public class SceneItem implements STTEventListener
                             
             case PROVIDER_DATA_CLEARED:
                 cleanup();
-                break;
+                return;
         }
         
         if (visible)
