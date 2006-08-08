@@ -92,6 +92,75 @@
                               </style>
                            </DataItem>
                         </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Landsat Imagery (Flat)</name>
+                              <dataProvider href="#DATASET_01"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>gridData/width</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>gridData/length</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>imageData/width</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>imageData/height</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>gridData/width</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>gridData/length</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
                      </DataList>
                   </member>
                   <member>
@@ -99,10 +168,10 @@
                         <name>Satellite Swaths</name>
                         <member visible="false">
                            <DataItem enabled="true">
-                              <name>NOAA-15 AMSU-A Footprints</name>
-                              <dataProvider href="#PROVIDER01"/>
+                              <name>NOAA15 AMSU-A Footprints</name>
+                              <dataProvider href="#PROVIDER_01"/>
                               <style>
-                                 <sldx:GridFillSymbolizer enabled="true">
+                                 <sldx:GridFillSymbolizer id="GRID_FILL" enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -126,7 +195,7 @@
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style>
-                                 <sldx:GridMeshSymbolizer enabled="true">
+                                 <sldx:GridMeshSymbolizer id="GRID_MESH" enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -149,8 +218,14 @@
                                     </sld:Stroke>
                                  </sldx:GridMeshSymbolizer>
                               </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>NOAA15 AVHRR Footprints</name>
+                              <dataProvider href="#PROVIDER_03"/>
                               <style>
-                                 <sld:PointSymbolizer enabled="true">
+                                 <sldx:GridFillSymbolizer id="GRID_FILL" enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -159,23 +234,27 @@
                                           <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
-                                    <sld:Graphic>
-                                       <sld:Mark>
-                                          <sld:WellKnownName>circle</sld:WellKnownName>
-                                          <sld:Fill>
-                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
-                                          </sld:Fill>
-                                       </sld:Mark>
-                                       <sld:Size>2</sld:Size>
-                                    </sld:Graphic>
-                                 </sld:PointSymbolizer>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
                               </style>
+                              <style href="#GRID_MESH"/>
                            </DataItem>
-                        </member>
+                        </member>                        
                         <member visible="false">
                            <DataItem enabled="true">
                               <name>NOAA12 AMSU-A Footprints</name>
-                              <dataProvider href="#PROVIDER02"/>
+                              <dataProvider href="#PROVIDER_04"/>
                               <style>
                                  <sldx:GridFillSymbolizer enabled="true">
                                     <sld:Geometry>
@@ -200,8 +279,15 @@
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
+                              <style href="#GRID_MESH"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>NOAA12 AVHRR Footprints</name>
+                              <dataProvider href="#PROVIDER_06"/>
                               <style>
-                                 <sld:PointSymbolizer enabled="true">
+                                 <sldx:GridFillSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -210,23 +296,27 @@
                                           <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
-                                    <sld:Graphic>
-                                       <sld:Mark>
-                                          <sld:WellKnownName>circle</sld:WellKnownName>
-                                          <sld:Fill>
-                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
-                                          </sld:Fill>
-                                       </sld:Mark>
-                                       <sld:Size>2</sld:Size>
-                                    </sld:Graphic>
-                                 </sld:PointSymbolizer>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
                               </style>
+                              <style href="#GRID_MESH"/>
                            </DataItem>
                         </member>
                         <member visible="false">
                            <DataItem enabled="true">
-                              <name>SPOT-5 Footprints</name>
-                              <dataProvider href="#PROVIDER03"/>
+                              <name>AQUA MODIS Footprints</name>
+                              <dataProvider href="#PROVIDER_08"/>
                               <style>
                                  <sldx:GridFillSymbolizer enabled="true">
                                     <sld:Geometry>
@@ -251,8 +341,15 @@
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
+                              <style href="#GRID_MESH"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>SPOT-5 Footprints</name>
+                              <dataProvider href="#PROVIDER_09"/>
                               <style>
-                                 <sld:PointSymbolizer enabled="true">
+                                 <sldx:GridFillSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -261,17 +358,21 @@
                                           <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
-                                    <sld:Graphic>
-                                       <sld:Mark>
-                                          <sld:WellKnownName>circle</sld:WellKnownName>
-                                          <sld:Fill>
-                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
-                                          </sld:Fill>
-                                       </sld:Mark>
-                                       <sld:Size>2</sld:Size>
-                                    </sld:Graphic>
-                                 </sld:PointSymbolizer>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
                               </style>
+                              <style href="#GRID_MESH"/>
                            </DataItem>
                         </member>
                      </DataList>
@@ -303,7 +404,19 @@
                </SWEDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER01">
+               <SensorMLProvider id="DATASET_01">
+                  <name>WMS</name>
+                  <description>Landsat Data on top of flat grid</description>
+                  <spatialExtent tiling="4x4">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_01">
                   <name>NOAA-15 AMSU-A Footprints</name>
                   <layerId>NOAA15-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
@@ -312,8 +425,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>1999-01-01T04:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>1999-01-01T05:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -324,7 +437,49 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER02">
+               <OWSDataProvider id="PROVIDER_02">
+                  <name>NOAA-15 AMSU-B Footprints</name>
+                  <layerId>NOAA15-AMSU-B</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA15-AMSU-B</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_03">
+                  <name>NOAA-15 AVHRR Footprints</name>
+                  <layerId>NOAA15-AVHRR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA15-AVHRR</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_04">
                   <name>NOAA12 AMSU-A Footprints</name>
                   <layerId>NOAA12-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
@@ -333,8 +488,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>1994-01-01T04:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>1994-01-01T06:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:45:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -345,7 +500,91 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER03">
+               <OWSDataProvider id="PROVIDER_05">
+                  <name>NOAA12 AMSU-B Footprints</name>
+                  <layerId>NOAA12-AMSU-B</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA12-AMSU-B</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T04:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_06">
+                  <name>NOAA12 AVHRR Footprints</name>
+                  <layerId>NOAA12-AVHRR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA12-AVHRR</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T04:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_07">
+                  <name>TERRA MODIS Footprints</name>
+                  <layerId>TERRA-MODIS</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>TERRA-MODIS</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_08">
+                  <name>AQUA MODIS Footprints</name>
+                  <layerId>AQUA-MODIS</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>AQUA-MODIS</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_09">
                   <name>SPOT-5 Footprints</name>
                   <layerId>SPOT_5</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
@@ -354,8 +593,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T04:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T06:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T03:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:30:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
