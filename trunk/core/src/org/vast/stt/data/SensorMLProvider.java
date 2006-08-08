@@ -123,8 +123,14 @@ public class SensorMLProvider extends AbstractProvider
                         timeInput.setData(timeData);
                     }
                     
+                    if (canceled)
+                        return;
+                    
                     process.createNewOutputBlocks();
                     process.execute();
+                    
+                    if (canceled)
+                        return;
                     
                     // transfer block for each output
                     for (int c=0; c<blockListArray.size(); c++)
@@ -171,13 +177,7 @@ public class SensorMLProvider extends AbstractProvider
             DataComponent lon2 = corner2.getComponent("lon");
             lon2.getData().setDoubleValue(0, maxX);
         }
-    }
-
-	
-	@Override
-	public void cancelUpdate()
-	{
-	}    
+    }  
 
 
 	public boolean isSpatialSubsetSupported()
