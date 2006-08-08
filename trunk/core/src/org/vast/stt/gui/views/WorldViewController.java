@@ -235,7 +235,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
                 int viewHeight = scene.getRenderer().getCanvas().getClientArea().height;
 				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewHeight);
-				doZoom(amount);
+				doZoom(-amount);
 			}
 			
 			xOld = e.x;
