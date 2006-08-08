@@ -228,13 +228,10 @@ public class LabelStyler extends AbstractStyler
             }
             else
             {
-                if (!param.isMapped())
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
                 {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new LabelOrientationMapper(label, param.getMappingFunction()));              
-                    }
+                    addPropertyMapper(propertyName, new LabelOrientationMapper(label, param.getMappingFunction()));              
                 }
             }
         }

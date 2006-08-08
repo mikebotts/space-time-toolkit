@@ -42,6 +42,7 @@ public class DataNode
     protected List<String> possibleScalarMappings;
     protected List<String> possibleBlockMappings;
     protected Hashtable<String, BlockList> listMap;
+    protected ArrayList<BlockList> listArray;
     protected boolean nodeStructureReady;
     
     
@@ -50,6 +51,13 @@ public class DataNode
         possibleScalarMappings = new ArrayList<String>();
         possibleBlockMappings = new ArrayList<String>();
         listMap = new Hashtable<String, BlockList>(1);
+        listArray = new ArrayList<BlockList>(1);
+    }
+    
+    
+    public ArrayList<BlockList> getListArray()
+    {
+        return listArray;
     }
     
     
@@ -58,6 +66,7 @@ public class DataNode
         BlockList newList = new BlockList();
         newList.setBlockStructure(component);
         listMap.put(component.getName(), newList);
+        listArray.add(newList);
         rebuildMappings(component);
         return newList;
     }
@@ -71,7 +80,8 @@ public class DataNode
     
     public void removeList(String name)
     {
-        listMap.remove(name);
+        BlockList list = listMap.remove(name);
+        listArray.remove(list);
     }
     
     
