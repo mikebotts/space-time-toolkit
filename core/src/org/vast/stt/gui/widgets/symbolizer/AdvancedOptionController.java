@@ -21,7 +21,7 @@ import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.project.DataItem;
 
 abstract public class AdvancedOptionController extends OptionController 
-	implements SelectionListener, STTEventListener
+	implements STTEventListener
 {
 	protected Combo [] mapFromCombo;
 	protected Text [] gainText;
@@ -121,17 +121,17 @@ abstract public class AdvancedOptionController extends OptionController
 		lutButton[index].setText("LUT");
 		lutButton[index].addSelectionListener(this);
 	}
-
+/*
 	public void widgetDefaultSelected(SelectionEvent e){
 	}
-	
+	*/
 	
 	/**
 	 * This widgetSelected is for events coming from the additional
 	 * mapping controls (LUT and Combo) on the advancedDialog.
 	 * All graphic options are handled as STTEvents  
 	 */
-	public void widgetSelected(SelectionEvent e) {
+	/*public void widgetSelected(SelectionEvent e) {
 		Control source = (Control)e.getSource();
 		for(int i=0; i<lutButton.length; i++){
 			if(source == lutButton[i]) {
@@ -144,7 +144,7 @@ abstract public class AdvancedOptionController extends OptionController
 			}
 		}
 	}
-	
+	*/
 	public Combo[] getMapFromCombos(){
 		return mapFromCombo;
 	}

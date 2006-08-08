@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
@@ -55,5 +56,21 @@ public class BasicTextureController extends OptionController
 		//  Current GridOptionHelper won't work for this- rethink
 		addSelectionListener(gridOptionHelper);
 		addSelectionListener(rasterOptionHelper);
+	}
+
+	@Override
+	public void loadFields() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

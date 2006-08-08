@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets.DataProcess;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.data.SensorMLProvider;
@@ -58,5 +59,21 @@ public class WCSOptionController extends OptionController
 		//  Increase default size of Combo for formats
 		((Combo)optionControls[0].getControl()).setTextLimit(25);
 		addSelectionListener(optionHelper);
+	}
+
+	@Override
+	public void loadFields() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

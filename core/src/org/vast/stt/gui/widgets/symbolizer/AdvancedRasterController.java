@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -24,7 +25,7 @@ import org.vast.stt.project.DataItem;
  * @version 1.0
  */
 public class AdvancedRasterController extends AdvancedOptionController 
-	implements SelectionListener {
+{
 	private Composite parent;
 	//private RasterOptionHelper rasterOptionHelper;
 	
@@ -66,5 +67,15 @@ public class AdvancedRasterController extends AdvancedOptionController
 	protected void doMapping(int index){
 	}		
 
-	public void loadFields(){};
+	public void loadFields(){}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	};
 }
