@@ -222,13 +222,10 @@ public class PointStyler extends AbstractStyler
             }
             else
             {
-                if (!param.isMapped())
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
                 {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new PointOrientationMapper(point, param.getMappingFunction()));              
-                    }
+                    addPropertyMapper(propertyName, new PointOrientationMapper(point, param.getMappingFunction()));              
                 }
             }
         }
