@@ -60,7 +60,7 @@ public class SOSProvider extends OWSProvider
     {
         try
         {
-            endRequest();  
+            initRequest();  
             
             // create reader
             SOSObservationReader reader = new SOSObservationReader();
@@ -106,7 +106,17 @@ public class SOSProvider extends OWSProvider
 	{
 		// init DataNode if not done yet
         if (!dataNode.isNodeStructureReady())
+        {
             init();
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
         
         try
         {    
@@ -116,18 +126,30 @@ public class SOSProvider extends OWSProvider
 			// create reader
 			SOSObservationReader reader = new SOSObservationReader();
 			
+            if (canceled)
+                return;
+            
 			// select request type (post or get)
             boolean usePost = true;
             dataStream = requestBuilder.sendRequest(query, usePost);
-						
+            
+//            int car;
+//            while ((car = dataStream.read()) != -1)
+//                System.err.print((char)car);
+            
+            if (canceled)
+                return;
+                
 			// parse response
 			reader.parse(dataStream);
 			dataParser = reader.getDataParser();
         	dataParser.setDataHandler(dataHandler);
         	
-        	// start parsing if not cancelled
-        	if (!canceled)
-        		dataParser.parse(reader.getDataStream());
+            if (canceled)
+                return;
+        	
+        	 // start parsing
+            dataParser.parse(reader.getDataStream());
 		}
 		catch (Exception e)
 		{
@@ -141,33 +163,22 @@ public class SOSProvider extends OWSProvider
 	}
 	
 	
-	protected void updateQuery()
-	{
-		// update time range
-		query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
-		query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
-		
-		// update bounding box
-		query.getBbox().setMinX(spatialExtent.getMinX());
-		query.getBbox().setMaxX(spatialExtent.getMaxX());
-		query.getBbox().setMinY(spatialExtent.getMinY());
-		query.getBbox().setMaxY(spatialExtent.getMaxY());
-	}
-	
-	
 	protected void initRequest()
 	{
-		// make sure previous request is cancelled
-		endRequest();
-		updateQuery();
-		canceled = false;
+	    // update time range
+        query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
+        query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+        
+        // update bounding box
+        query.getBbox().setMinX(spatialExtent.getMinX());
+        query.getBbox().setMaxX(spatialExtent.getMaxX());
+        query.getBbox().setMinY(spatialExtent.getMinY());
+        query.getBbox().setMaxY(spatialExtent.getMaxY());
 	}
 	
 	
 	protected void endRequest()
 	{
-		canceled = true;
-		
 		// close stream(s)
 		try
 		{
@@ -187,8 +198,10 @@ public class SOSProvider extends OWSProvider
 	}
     
     
-    public void cancelOperation()
+    @Override
+    public void cancelUpdate()
     {
+        canceled = true;
         endRequest();
     }
 	

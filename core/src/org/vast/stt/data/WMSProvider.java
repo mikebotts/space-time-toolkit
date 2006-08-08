@@ -82,7 +82,6 @@ public class WMSProvider extends OWSProvider
 		{
 			initRequest();
 
-			updating = true;
 			String urlString = requestBuilder.buildGetRequest(query);
 			url = new URL(urlString);
 			URLConnection urlCon = url.openConnection();
@@ -148,7 +147,6 @@ public class WMSProvider extends OWSProvider
 		finally
 		{
 			endRequest();
-			updating = false;
 			canceled = false;
 		}
 	}

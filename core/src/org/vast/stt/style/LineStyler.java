@@ -18,6 +18,7 @@ import org.vast.math.Vector3d;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.physics.MapProjection;
 import org.vast.stt.data.BlockListItem;
 
 
@@ -87,6 +88,11 @@ public class LineStyler extends AbstractStyler
         if (dataLists[0].blockIndexer.hasNext)
         {
             dataLists[0].blockIndexer.getNext();
+            
+//            double[] ecf = MapProjection.LLAtoECF(point.y, point.x, point.z, null);
+//            point.x = ecf[0];
+//            point.y = ecf[1];
+//            point.z = ecf[2];
             
             if (computeExtents)
             {

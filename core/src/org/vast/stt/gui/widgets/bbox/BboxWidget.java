@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.SpatialExtent;
@@ -286,7 +288,7 @@ public class BboxWidget implements SelectionListener
             bbox.setMinY(slat);
             bbox.setXTiles(lonTiles);
             bbox.setYTiles(latTiles);
-            this.dataItem.getDataProvider().forceUpdate();            
+            bbox.dispatchEvent(new STTEvent(bbox, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));            
         }
         else if(e.widget == fitBtn){
 			double nlat = getValue(nlatText);

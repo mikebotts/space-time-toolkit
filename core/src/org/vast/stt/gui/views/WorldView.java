@@ -104,7 +104,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	@Override
 	public void setFocus()
 	{
-		//canvas.setFocus();
+		canvas.setFocus();
 	}
     
     

@@ -144,9 +144,24 @@ public class SWEProvider extends AbstractProvider
 	@Override
 	public void cancelUpdate()
 	{
-		dataParser.stop();
-        dataParser = null;
-		super.cancelUpdate();
+	    canceled = true;
+        
+        // close stream(s)
+        try
+        {
+            if (dataParser != null)
+                dataParser.stop();
+            
+            if (dataStream != null)
+                dataStream.close();
+            
+            dataStream = null;
+            dataParser = null;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 	}
 
 

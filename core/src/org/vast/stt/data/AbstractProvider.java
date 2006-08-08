@@ -45,10 +45,8 @@ public abstract class AbstractProvider implements DataProvider
 {
     protected String name;
     protected String description;
-    protected boolean updating = false;
 	protected boolean canceled = false;
     protected boolean error = false;
-    protected boolean forceUpdate = true;
     protected boolean autoUpdate = false;
 	protected InputStream dataStream;
 	protected DataNode dataNode;
@@ -58,6 +56,7 @@ public abstract class AbstractProvider implements DataProvider
 	protected SpatialExtent maxSpatialExtent;
     protected Thread updateThread;
     protected STTEventListeners listeners;
+    protected Object lock = new Object();
     
     
     public abstract void init() throws DataException;
@@ -73,47 +72,74 @@ public abstract class AbstractProvider implements DataProvider
         this.setSpatialExtent(new SpatialExtent());
         listeners = new STTEventListeners(2);
     }
+      
     
-    
-    public void forceUpdate()
+    public synchronized void startUpdate(boolean force)
     {
-        clearData();
-        getDataNode();
-    }
-    
-    
-	public DataNode getDataNode()
-	{
-        if (!updating && forceUpdate)
+        this.error = false;
+        
+        // if updating, continue only if force is true
+        if ((updateThread != null) && updateThread.isAlive())
         {
-            final AbstractProvider provider = this;
+            if (force)
+            {
+                // make sure we canceled previous update properly
+                cancelUpdate();
+                System.err.println("Update canceled properly");
+            }
+            else
+                return;
+        }
+        
+        // synchronize because we want to make sure syncUpdate is done
+        synchronized(lock)
+        {
+            // clear dataNode
+            clearData();
+            System.err.println("Node erased");
             
+            // start the update thread
             Runnable runnable = new Runnable()
             {
                 public void run()
                 {
-                    try
+                    synchronized(lock)
                     {
-                        updating = true;
-                        updateData();
-                        updating = false;
-                    }
-                    catch (DataException e)
-                    {
-                        provider.error = true;
-                        ExceptionSystem.display(e);
-                        provider.dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));                        
+                        try
+                        {
+                            canceled = false;
+                            updateData();
+                            System.err.println("End of update thread");
+                        }
+                        catch (DataException e)
+                        {
+                            error = true;
+                            ExceptionSystem.display(e);
+                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                        }
                     }
                 }
             };
-
-            updateThread = new Thread(runnable);
+            updateThread = new Thread(runnable, "Data update: " + this.name);
             updateThread.start();
-            forceUpdate = false;
         }
-		
-		return dataNode;
-	}
+    }
+    
+    
+    public void cancelUpdate()
+    {
+        canceled = true;
+        
+        try
+        {
+            if (dataStream != null)
+                dataStream.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 	
 	
 	public void clearData()
@@ -121,31 +147,23 @@ public abstract class AbstractProvider implements DataProvider
 		if (dataNode != null)
 		{
             dataNode.clearAll();
-            forceUpdate = true;
             dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
 		}		
 	}
 	
 	
-	public void cancelUpdate()
-	{
-		canceled = true;
-		
-		try
-		{
-			if (dataStream != null)
-				dataStream.close();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}		
-	}
+    public DataNode getDataNode()
+    {
+        if (!dataNode.isNodeStructureReady())
+            startUpdate(false);
+        
+        return dataNode;
+    }
 	
 	
-	public boolean isUpdating()
+	public synchronized boolean isUpdating()
 	{
-		return updating;
+		return updateThread.isAlive();
 	}
 
 
@@ -258,7 +276,7 @@ public abstract class AbstractProvider implements DataProvider
             case PROVIDER_TIME_EXTENT_CHANGED:
             case PROVIDER_SPATIAL_EXTENT_CHANGED:
                 if (autoUpdate)
-                    forceUpdate();
+                    startUpdate(true);
         }
     }
     
