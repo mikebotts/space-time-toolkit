@@ -41,7 +41,7 @@ public class LabelOptionHelper implements SelectionListener {
 		ScalarParameter blueSP = fillColor.getBlue();
 		ScalarParameter alphaSP = fillColor.getAlpha();
 		
-		if(redSP.isMapped() || greenSP.isMapped() || blueSP.isMapped() || alphaSP.isMapped()) {
+		if(!redSP.isConstant() || !greenSP.isConstant() || !blueSP.isConstant() || !alphaSP.isConstant()) {
 			System.err.println("At least one FillColor channel is mapped.  Do what now?");
 			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
 		}
