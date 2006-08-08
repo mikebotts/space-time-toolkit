@@ -15,7 +15,6 @@ package org.vast.stt.data;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
@@ -48,6 +47,7 @@ public abstract class AbstractProvider implements DataProvider
 	protected boolean canceled = false;
     protected boolean error = false;
     protected boolean autoUpdate = false;
+    protected boolean redoUpdate = true;
 	protected InputStream dataStream;
 	protected DataNode dataNode;
 	protected TimeExtent timeExtent;
@@ -76,53 +76,60 @@ public abstract class AbstractProvider implements DataProvider
     
     public synchronized void startUpdate(boolean force)
     {
-        this.error = false;
-        
         // if updating, continue only if force is true
-        if ((updateThread != null) && updateThread.isAlive())
-        {
-            if (force)
-            {
-                // make sure we canceled previous update properly
-                cancelUpdate();
-                System.err.println("Update canceled properly");
-            }
-            else
-                return;
-        }
-        
-        // synchronize because we want to make sure syncUpdate is done
         synchronized(lock)
         {
-            // clear dataNode
-            clearData();
-            System.err.println("Node erased");
-            
-            // start the update thread
-            Runnable runnable = new Runnable()
+            if ((updateThread != null) && updateThread.isAlive())
             {
-                public void run()
+                if (force)
                 {
-                    synchronized(lock)
+                    // make sure we canceled previous update properly
+                    redoUpdate = true;
+                    cancelUpdate();                    
+                    return;
+                }
+                else
+                    return;
+            }
+        }
+        
+        // start the update thread
+        Runnable runnable = new Runnable()
+        {
+            public void run()
+            {
+                do
+                {
+                    try
                     {
-                        try
+                        // clear previous data
+                        clearData();                                
+                        canceled = false;                        
+                        
+                        // update data
+                        System.out.println("Updating " + name + "...");
+                        updateData();
+                        
+                        synchronized(lock)
                         {
-                            canceled = false;
-                            updateData();
-                            System.err.println("End of update thread");
-                        }
-                        catch (DataException e)
-                        {
-                            error = true;
-                            ExceptionSystem.display(e);
-                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                            if (!canceled)
+                                redoUpdate = false;
+                            else
+                                System.out.println("Update canceled");
                         }
                     }
+                    catch (DataException e)
+                    {
+                        error = true;
+                        ExceptionSystem.display(e);
+                        dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                    }
                 }
-            };
-            updateThread = new Thread(runnable, "Data update: " + this.name);
-            updateThread.start();
-        }
+                while (redoUpdate);
+            }
+        };
+        updateThread = new Thread(runnable, "Data update: " + this.name);
+        updateThread.start();
     }
     
     
@@ -144,7 +151,9 @@ public abstract class AbstractProvider implements DataProvider
 	
 	public void clearData()
 	{
-		if (dataNode != null)
+        error = false;
+        
+        if (dataNode != null)
 		{
             dataNode.clearAll();
             dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
