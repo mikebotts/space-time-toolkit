@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets.DataProcess;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
@@ -45,5 +46,21 @@ public class FlatGridOptionController extends OptionController
 		};
 		optionControls = OptionControl.createControls(parent, params);
 		addSelectionListener(optionHelper);
+	}
+
+	@Override
+	public void loadFields() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

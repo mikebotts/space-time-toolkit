@@ -1,12 +1,19 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
+import org.vast.ows.sld.Color;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.project.DataItem;
 
@@ -25,7 +32,7 @@ import org.vast.stt.project.DataItem;
  * @date Feb 06, 2006
  * @version 1.0
  */
-public class AdvancedPointController extends AdvancedOptionController implements SelectionListener
+public class AdvancedPointController extends AdvancedOptionController// implements SelectionListener
 {
 	private Composite parent;
 	private PointOptionHelper pointOptionHelper;
@@ -37,6 +44,7 @@ public class AdvancedPointController extends AdvancedOptionController implements
 		
 		pointOptionHelper = new PointOptionHelper(this);
 		buildControls();
+		addSelectionListener(this);
 	}
 	
 	public void buildControls(){
@@ -55,7 +63,8 @@ public class AdvancedPointController extends AdvancedOptionController implements
 		addMappingControls(parent, 1);
 		//  disable color mapFromCombo (consider just not showing this)
 		mapFromCombo[1].setEnabled(false);
-		addSelectionListener(pointOptionHelper);
+
+		loadFields();
 	}
 
 	//  Override to set the initial state of the Combos
@@ -99,4 +108,29 @@ public class AdvancedPointController extends AdvancedOptionController implements
     	//  Redraw ALL graphics options
     	System.err.println("REDRAW Adv Pts");
     }
+
+    public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		Control control = (Control)e.getSource();
+
+		if(control == optionControls[0].getControl()) {
+			Spinner sizeSpinner = (Spinner)control;
+			float size = (float)sizeSpinner.getSelection();
+			pointOptionHelper.setPointSize(size);
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		} else if(control == optionControls[1].getControl()) {
+			Button colorButton = (Button)control;
+			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
+			RGB rgb = colorChooser.open();
+			if(rgb == null)
+				return;
+			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
+			optionControls[1].setColorLabelColor(sldColor); 
+			pointOptionHelper.setPointColor(sldColor);
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		}
+	}
+
 }

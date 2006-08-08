@@ -20,7 +20,7 @@ import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 
 
-public class PointOptionHelper implements SelectionListener
+public class PointOptionHelper 
 {
  	OptionController optionController;
 	PointSymbolizer symbolizer;
@@ -46,7 +46,7 @@ public class PointOptionHelper implements SelectionListener
 		return new Color(1.0f, 0.0f, 0.0f, 1.0f);
 	}
 		
-	private void setPointSize(float f){
+	public void setPointSize(float f){
 		Graphic graphic = symbolizer.getGraphic();
 		ScalarParameter size = new ScalarParameter();
 		size.setConstantValue(f);
@@ -57,7 +57,7 @@ public class PointOptionHelper implements SelectionListener
 	 * Convenience method to set point color
 	 * @param swtRgb
 	 */
-	private void setPointColor(org.vast.ows.sld.Color sldColor){
+	public void setPointColor(org.vast.ows.sld.Color sldColor){
 		Graphic graphic = symbolizer.getGraphic();
 		List graphicSourceList = graphic.getGlyphs();
 		if(graphicSourceList == null)  return;
@@ -80,29 +80,4 @@ public class PointOptionHelper implements SelectionListener
 	}
 
     
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
-	public void widgetSelected(SelectionEvent e) {
-		Control control = (Control)e.getSource();
-		OptionControl[] optionControls = optionController.getControls();
-
-		if(control == optionControls[0].getControl()) {
-			Spinner sizeSpinner = (Spinner)control;
-			float size = (float)sizeSpinner.getSelection();
-			setPointSize(size);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		} else if(control == optionControls[1].getControl()) {
-			Button colorButton = (Button)control;
-			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
-			RGB rgb = colorChooser.open();
-			if(rgb == null)
-				return;
-			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
-			optionControls[1].setColorLabelColor(sldColor); 
-			setPointColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		}
-	}
-
 }

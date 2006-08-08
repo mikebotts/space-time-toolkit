@@ -20,13 +20,13 @@ import org.vast.stt.project.DataItem;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public abstract class OptionController
+public abstract class OptionController implements SelectionListener
 {
     protected OptionControl[] optionControls;
     protected Symbolizer symbolizer;
     protected DataItem dataItem;
 
-    public void loadFields(){};
+    abstract public void loadFields();
     
     //  TODO  REMOVE THIS METHOD
     public OptionControl[] getControls()

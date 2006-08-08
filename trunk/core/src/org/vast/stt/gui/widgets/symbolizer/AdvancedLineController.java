@@ -65,7 +65,7 @@ public class AdvancedLineController extends AdvancedOptionController
 
 		addMappingControls(parent, 1);
 		mapFromCombo[1].setEnabled(false);
-		//  set init state
+		//  set initial state
 		loadFields();
 	}
 	
