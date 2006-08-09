@@ -27,6 +27,14 @@ import org.vast.stt.style.StylerVisitor;
  */
 public abstract class Renderer implements StylerVisitor
 {
+    public enum CleanupSection
+    {
+        ALL,
+        GEOMETRY,
+        TEXTURES,
+    }
+    
+    
     protected Canvas canvas;
     protected Scene scene;
 
@@ -37,7 +45,7 @@ public abstract class Renderer implements StylerVisitor
     public abstract void dispose();
     
     
-    public abstract void cleanup(DataStyler styler);
+    public abstract void cleanup(DataStyler styler, CleanupSection section);
 
 
     public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);
