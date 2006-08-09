@@ -100,6 +100,7 @@ public class GLRenderTexture extends GLRunnable
                             gl.glEnd();
                             gl.glBegin(GL.GL_QUAD_STRIP);
                         }
+                        point.graphBreak = false;
                         
                         gl.glTexCoord2f(point.tx, point.ty);
                         gl.glVertex3d(point.x, point.y, point.z);
