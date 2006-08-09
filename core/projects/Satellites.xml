@@ -25,6 +25,7 @@
             <view>
                <ViewSettings>
                   <backgroundColor>#FFFFFF</backgroundColor>
+                  <projection>LLA -90</projection>
                   <cameraMode>ORTHO</cameraMode>
                   <cameraPos>0 0 10</cameraPos>
                   <targetPos>0 0 0</targetPos>
@@ -489,28 +490,7 @@
                            <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:45:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
-                        <resultModel>swe:DataValueType</resultModel>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
-            </member>
-            <member>
-               <OWSDataProvider id="PROVIDER_05">
-                  <name>NOAA12 AMSU-B Footprints</name>
-                  <layerId>NOAA12-AMSU-B</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
-                        <offering>NOAA12-AMSU-B</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T04:00:00Z</gml:endPosition>
+                                 <gml:endPosition>2003-01-01T04:05:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -531,7 +511,7 @@
                            <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T04:00:00Z</gml:endPosition>
+                                 <gml:endPosition>2003-01-01T04:05:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
