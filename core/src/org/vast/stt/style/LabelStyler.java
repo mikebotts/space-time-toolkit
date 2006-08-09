@@ -49,13 +49,32 @@ public class LabelStyler extends AbstractStyler
     
     public LabelGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext())
         {
-            dataLists[0].blockIndexer.getNext();
+            label.x = label.y = label.z = 0.0;
+            dataLists[0].blockIndexer.next();
+            
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, label);
+            
+            // add point to bbox if needed            
+            addToExtent(currentBlockInfo, label);
+            
             return label;
         }
         
         return null;
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextBlock() != null)
+            while (nextPoint() != null);
     }
 
 

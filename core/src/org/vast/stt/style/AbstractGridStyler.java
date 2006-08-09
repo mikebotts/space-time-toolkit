@@ -14,7 +14,6 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
-import org.vast.math.Vector3d;
 import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.data.BlockListItem;
@@ -67,12 +66,8 @@ public abstract class AbstractGridStyler extends AbstractStyler
         listInfo.blockIndexer.reset();
         listInfo.blockIndexer.getData(0,0,0);
         
-        // get BlockInfo
-        currentBlockInfo = nextItem.getInfo();
-        if (currentBlockInfo.getSpatialExtent().isNull())
-            computeExtents = true;
-        else
-            computeExtents = false;
+        // see what's needed on this block
+        prepareBlock(nextItem);
         
         // copy current item in the patch object
         patch.block = nextItem;
@@ -81,17 +76,49 @@ public abstract class AbstractGridStyler extends AbstractStyler
     }
     
     
-    public GridPointGraphic getGridPoint(int u, int v)
+    public GridPointGraphic getPoint(int u, int v)
     {
+        point.x = point.y = point.z = 0.0;
         dataLists[0].blockIndexer.getData(v, u, 0);
         
-        if (computeExtents)
-        {
-            Vector3d point3d = new Vector3d(point.x, point.y, point.z);
-            currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
-        }
+        // adjust geometry to fit projection
+        projection.adjust(geometryCrs, point);
+
+        // add point to bbox if needed
+        addToExtent(currentBlockInfo, point);
         
         return point;
+    }
+    
+    
+    public GridPointGraphic nextPoint()
+    {
+        if (dataLists[0].blockIndexer.hasNext())
+        {
+            point.x = point.y = point.z = 0.0;            
+            dataLists[0].blockIndexer.next();
+            
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, point);
+
+            // add point to bbox if needed            
+            addToExtent(currentBlockInfo, point);
+            
+            return point;
+        }
+        
+        return null;
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextPatch() != null)
+            while (nextPoint() != null);
     }
 
 
@@ -105,6 +132,17 @@ public abstract class AbstractGridStyler extends AbstractStyler
         patch = new GridPatchGraphic();
         point = new GridPointGraphic();
         this.clearAllMappers();
+        
+        // geometry breaks
+        param = this.symbolizer.getGeometry().getBreaks();
+        if (param != null)
+        {
+            propertyName = param.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
+            }
+        }
         
         // geometry X
         param = this.symbolizer.getGeometry().getX();

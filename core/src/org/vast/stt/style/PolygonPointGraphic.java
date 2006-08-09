@@ -30,5 +30,5 @@ package org.vast.stt.style;
  */
 public class PolygonPointGraphic extends PrimitiveGraphic
 {
-    public boolean polyBreak;
+
 }

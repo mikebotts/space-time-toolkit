@@ -388,6 +388,27 @@ public class ProjectReader
 			Color backColor = new Color(colorText.substring(1));
 			viewSettings.setBackgroundColor(backColor);
 		}
+        
+        // intended projection
+        String projText = dom.getElementValue(viewSettingsElt, "projection");
+        if (projText != null)
+        {
+            if (projText.equals("ECEF"))
+                viewSettings.setProjection(new Projection_ECEF());
+            else if (projText.startsWith("LLA"))
+            {
+                double centerLon;
+                try
+                {
+                    centerLon = Double.parseDouble(projText.substring(3));
+                }
+                catch (NumberFormatException e)
+                {
+                    centerLon = 0.0;
+                }
+                viewSettings.setProjection(new Projection_LLA(centerLon * Math.PI/180));
+            }
+        }
 		
 		// camera position
 		Vector3d cameraPos = readVector(dom.getElement(viewSettingsElt, "cameraPos"));

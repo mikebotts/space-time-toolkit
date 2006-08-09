@@ -13,7 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.math.Vector3d;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -48,20 +47,32 @@ public class PolygonStyler extends AbstractStyler
     
     public PolygonPointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext())
         {
-            dataLists[0].blockIndexer.getNext();
+            point.x = point.y = point.z = 0.0;
+            dataLists[0].blockIndexer.next();
             
-            if (computeExtents)
-            {
-                Vector3d point3d = new Vector3d(point.x, point.y, point.z);
-                currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
-            }
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, point);
+            
+            // add point to bbox if needed
+            addToExtent(currentBlockInfo, point);
             
             return point;
         }
         
         return null;
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextBlock() != null)
+            while (nextPoint() != null);
     }
 
 
@@ -83,7 +94,7 @@ public class PolygonStyler extends AbstractStyler
             propertyName = param.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new PolygonBreakMapper(point));               
+                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
             }
         }
         

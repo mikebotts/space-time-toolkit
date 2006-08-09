@@ -37,12 +37,12 @@ import org.vast.stt.event.STTEventProducer;
 public class SpatialExtent implements STTEventProducer
 {
 	protected String crs;
-	protected double minX;
-	protected double maxX;
-	protected double minY;
-	protected double maxY;
-	protected double minZ;
-	protected double maxZ;
+	protected double minX = Double.NaN;
+	protected double maxX = Double.NaN;
+	protected double minY = Double.NaN;
+	protected double maxY = Double.NaN;
+	protected double minZ = Double.NaN;
+	protected double maxZ = Double.NaN;
     protected boolean tilingEnabled;
     protected int xTiles = 1;
     protected int yTiles = 1;
@@ -97,33 +97,44 @@ public class SpatialExtent implements STTEventProducer
     
     public boolean isNull()
     {
-        if (minX != 0) return false;
-        if (minY != 0) return false;
-        if (minZ != 0) return false;
-        if (maxX != 0) return false;
-        if (maxY != 0) return false;
-        if (maxZ != 0) return false;
-        return true;
+        if (Double.isNaN(minX)) return true;
+        if (Double.isNaN(minY)) return true;
+        if (Double.isNaN(minZ)) return true;
+        if (Double.isNaN(maxX)) return true;
+        if (Double.isNaN(maxY)) return true;
+        if (Double.isNaN(maxZ)) return true;
+        return false;
     }
     
     
-    public void resizeToContain(Vector3d point)
+    public void nullify()
+    {
+        minX = Double.NaN;
+        maxX = Double.NaN;
+        minY = Double.NaN;
+        maxY = Double.NaN;
+        minZ = Double.NaN;
+        maxZ = Double.NaN;
+    }
+    
+    
+    public void resizeToContain(double x, double y, double z)
     {
         if (isNull())
         {
-            minX = maxX = point.x;
-            minY = maxY = point.y;
-            minZ = maxZ = point.z;
+            minX = maxX = x;
+            minY = maxY = y;
+            minZ = maxZ = z;
             return;
         }        
         
-        if (minX > point.x) minX = point.x;
-        if (minY > point.y) minY = point.y;
-        if (minZ > point.z) minZ = point.z;
+        if (minX > x) minX = x;
+        if (minY > y) minY = y;
+        if (minZ > z) minZ = z;
         
-        if (maxX < point.x) maxX = point.x;
-        if (maxY < point.y) maxY = point.y;
-        if (maxZ < point.z) maxZ = point.z;
+        if (maxX < x) maxX = x;
+        if (maxY < y) maxY = y;
+        if (maxZ < z) maxZ = z;
     }
     
     

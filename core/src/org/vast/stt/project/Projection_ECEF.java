@@ -11,27 +11,38 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.project;
+
+import org.vast.physics.MapProjection;
+import org.vast.stt.style.PrimitiveGraphic;
 
 
 /**
- * <p><b>Title:</b><br/>
- * Primitive Graphic
+ * <p><b>Title:</b>
+ * ECEF Projection
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO PrimitiveGraphic type description
+ * Contains methods to adjust geometries for ECEF projection
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Mar 31, 2006
+ * @date Aug 8, 2006
  * @version 1.0
  */
-public abstract class PrimitiveGraphic extends GraphicObject
+public class Projection_ECEF implements Projection
 {
-    public double x, y, z, t;
-    public float r, g, b;
-    public float a = 1.0f;
-    public boolean graphBreak;
+    public void adjust(Crs sourceCrs, PrimitiveGraphic point)
+    {
+        switch (sourceCrs)
+        {
+            case EPSG4329:
+                double[] ecef = MapProjection.LLAtoECF(point.y, point.x, point.z, null);
+                point.x = ecef[0];
+                point.y = ecef[1];
+                point.z = ecef[2];
+                break;
+        }
+    }
 }

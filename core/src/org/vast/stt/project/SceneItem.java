@@ -19,7 +19,7 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.ViewSettings.Projection;
+import org.vast.stt.project.Projection;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.StylerVisitor;
 
@@ -166,7 +166,7 @@ public class SceneItem implements STTEventListener
             
             styler = StylerFactory.createStyler(sym);
             styler.setDataItem(dataItem);
-            //styler.updateDataMappings();
+            styler.setProjection(parentScene.getViewSettings().getProjection());
             stylers.add(styler);
             stylerTable.put(sym, styler);
         }

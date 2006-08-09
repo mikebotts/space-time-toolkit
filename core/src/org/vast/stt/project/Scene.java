@@ -21,7 +21,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
-import org.vast.stt.project.ViewSettings.Projection;
+import org.vast.stt.project.Projection;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 
@@ -211,7 +211,7 @@ public class Scene implements STTEventProducer, STTEventListener
             SceneItem newSceneItem = new SceneItem(this);
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
-            newSceneItem.setProjection(viewSettings.getIntendedProjection());
+            newSceneItem.setProjection(viewSettings.getProjection());
             
             // prepare all stylers
             List<Symbolizer> symbolizers = dataItem.getSymbolizers();
@@ -329,24 +329,19 @@ public class Scene implements STTEventProducer, STTEventListener
     {
         switch (event.type)
         {
+            case SCENE_PROJECTION_CHANGED:
+                Projection newProjection = viewSettings.getProjection();
+                for (int i = 0; i < sceneItems.size(); i++)
+                    sceneItems.get(i).setProjection(newProjection);
+                break;
+                
             case SCENE_VIEW_CHANGED:
-                setProjection(viewSettings.getIntendedProjection());
                 dispatchEvent(event.copy());
                 break;
                 
             case SCENE_TIME_CHANGED:
                 dispatchEvent(event.copy());
                 break;
-        }
-    }
-    
-    
-    protected void setProjection(Projection projection)
-    {
-        if (viewSettings.getIntendedProjection() != projection)
-        {
-            for (int i = 0; i < sceneItems.size(); i++)
-                sceneItems.get(i).setProjection(projection);
         }
     }
 }

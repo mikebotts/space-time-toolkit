@@ -51,11 +51,6 @@ public class ViewSettings implements STTEventProducer
         PERPECTIVE
     }
     
-    public enum Projection
-    {
-        ECEF, EPSG4329
-    }
-    
     // basic parameters
 	protected Color backgroundColor;
 	protected boolean alphaBlendingEnabled = true;
@@ -78,7 +73,7 @@ public class ViewSettings implements STTEventProducer
 	protected CameraMode cameraMode;
     
     // intended view projection
-    protected Projection intendedProjection;
+    protected Projection projection;
 
 	// zDepthFudgeFactor provides support for stopping pixel fighting
 	// between objects with similar z-depth values; the use of this factor
@@ -110,7 +105,8 @@ public class ViewSettings implements STTEventProducer
         cameraMode = CameraMode.ORTHO;
 		orthoWidth = 2.0;
 		orthoHeight = orthoWidth / 1.33;
-		
+		projection = new Projection_LLA();//Projection_ECEF();//Projection_LLA();
+        
 		nearClip = 0;
 		farClip = 200.0;        
         
@@ -158,15 +154,15 @@ public class ViewSettings implements STTEventProducer
 	}
     
     
-    public Projection getIntendedProjection()
+    public Projection getProjection()
     {
-        return intendedProjection;
+        return projection;
     }
 
 
-    public void setIntendedProjection(Projection intendedProjection)
+    public void setProjection(Projection intendedProjection)
     {
-        this.intendedProjection = intendedProjection;
+        this.projection = intendedProjection;
     }
 
 

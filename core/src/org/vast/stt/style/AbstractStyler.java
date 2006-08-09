@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.data.IndexerTreeBuilder;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
@@ -25,7 +26,8 @@ import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SpatialExtent;
-import org.vast.stt.project.ViewSettings.Projection;
+import org.vast.stt.project.Projection;
+import org.vast.stt.project.Projection.Crs;
 
 
 /**
@@ -58,22 +60,26 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    protected DataItem dataItem;    
+    protected DataItem dataItem;
     protected DataNode dataNode;
     protected Hashtable<String, IndexerTreeBuilder> treeBuilders;
     protected ListInfo[] dataLists;
     protected Projection projection;
-    protected boolean computeExtents;
+    protected Crs geometryCrs;
+    protected boolean addToExtent, wantComputeExtent, forceComputeExtent;
     protected BlockInfo currentBlockInfo;
     
     
+    public abstract void setSymbolizer(Symbolizer symbolizer);
     public abstract void updateDataMappings();
+    protected abstract void computeExtent();
     
     
     public AbstractStyler()
     {
         treeBuilders = new Hashtable<String, IndexerTreeBuilder>();
         dataLists = new ListInfo[0];
+        geometryCrs = Crs.EPSG4329;
     }
     
     
@@ -89,9 +95,17 @@ public abstract class AbstractStyler implements DataStyler
 	}
     
     
+    public Projection getProjection()
+    {
+        return this.projection;
+    }
+    
+    
     public void setProjection(Projection projection)
     {
         this.projection = projection;
+        if (dataLists.length > 0)
+            this.computeExtent();
     }
     
     
@@ -142,6 +156,41 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i];
             info.blockIterator.reset();
         }
+        
+        forceComputeExtent = false;
+        if (wantComputeExtent)
+        {
+            forceComputeExtent = true;
+            wantComputeExtent = false;
+        }
+    }
+    
+    
+    protected void addToExtent(BlockInfo blockInfo, PrimitiveGraphic point)
+    {
+        if (addToExtent)
+        {
+            blockInfo.getSpatialExtent().resizeToContain(point.x, point.y, point.z);
+        }
+    }
+    
+    
+    protected void prepareBlock(BlockListItem block)
+    {
+        currentBlockInfo = block.getInfo();
+        
+        if (forceComputeExtent)
+        {
+            currentBlockInfo.getSpatialExtent().nullify();
+            addToExtent = true;
+        }
+        else
+        {
+            if (currentBlockInfo.getSpatialExtent().isNull())
+                addToExtent = true;
+            else
+                addToExtent = false;
+        }
     }
     
     
@@ -165,13 +214,8 @@ public abstract class AbstractStyler implements DataStyler
             AbstractDataBlock nextBlock = nextItem.getData();
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
-            
-            // get BlockInfo
-            currentBlockInfo = nextItem.getInfo();
-            if (currentBlockInfo.getSpatialExtent().isNull())
-                computeExtents = true;
-            else
-                computeExtents = false;
+
+            prepareBlock(nextItem);
         }           
                         
         return nextItem;

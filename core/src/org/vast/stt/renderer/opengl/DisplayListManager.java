@@ -17,9 +17,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.DataStyler;
+import org.vast.stt.project.Projection;
+import org.vast.stt.project.Projection_ECEF;
+import org.vast.stt.project.Projection_LLA;
 
 
 /**
@@ -39,11 +41,42 @@ import org.vast.stt.project.DataStyler;
  */
 public class DisplayListManager
 {
-    protected static Hashtable<Symbolizer, GLDisplayListTable> symDLTables
-               = new Hashtable<Symbolizer, GLDisplayListTable>();
+    protected static Hashtable<HashKey, GLDisplayListTable> DLTables
+               = new Hashtable<HashKey, GLDisplayListTable>();
     protected GL gl;
     protected GLU glu;
-    protected int refreshPeriod = 300;
+    
+    
+    class HashKey
+    {
+        int hashCode;
+        
+        public HashKey(DataStyler styler)
+        {
+            hashCode = styler.getSymbolizer().hashCode();
+            
+            Projection projection = styler.getProjection();
+            if (projection instanceof Projection_ECEF)
+                hashCode *= 1;
+            else if (projection instanceof Projection_LLA)
+                hashCode *= 2;
+        }
+        
+        @Override
+        public int hashCode()
+        {
+            return hashCode;
+        }
+        
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (((HashKey)obj).hashCode == hashCode)
+                return true;
+            else
+                return false;
+        }
+    }
     
     
     class GLDisplayList
@@ -77,33 +110,33 @@ public class DisplayListManager
      */
     public void useDisplayList(DataStyler styler, BlockListItem block, GLRunnable renderRunnable)
     {
-        Symbolizer sym = styler.getSymbolizer();
-        
-        synchronized (symDLTables)
+        synchronized (DLTables)
         {
+            // wrap styler with our own hashKey
+            HashKey hashKey = new HashKey(styler);
+            
             // try to find table for this symbolizer
-            GLDisplayListTable mainTable = symDLTables.get(sym);
+            GLDisplayListTable mainTable = DLTables.get(hashKey);
             
             // if list doesn't exist, create it
             if (mainTable == null)
             {
                 mainTable = new GLDisplayListTable();
-                symDLTables.put(sym, mainTable);
+                DLTables.put(hashKey, mainTable);
             }
             
             // try to find display list for this block
             GLDisplayList dlInfo = mainTable.get(block);
             
-            // create if it doesn't exist
+            // instantiate and add to table if it doesn't exist
             if (dlInfo == null)
             {
                 dlInfo = new GLDisplayList();
                 mainTable.put(block, dlInfo);
             }
             
-            // create new display list if it needs update
-            long now = System.currentTimeMillis();
-            if (dlInfo.needsUpdate && (now - dlInfo.lastCompiled > refreshPeriod))
+            // create new display list only if it needs update
+            if (dlInfo.needsUpdate)
             {
                 dlInfo.needsUpdate = false;
                 createDisplayList(dlInfo, renderRunnable);
@@ -157,12 +190,15 @@ public class DisplayListManager
      * Clears all display lists used by this symbolizer
      * @param sym
      */
-    public void clearDisplayLists(Symbolizer sym)
+    public void clearDisplayLists(DataStyler styler)
     {
-        synchronized (symDLTables)
+        synchronized (DLTables)
         {
+            // wrap styler with our own hashKey
+            HashKey hashKey = new HashKey(styler);
+            
             // delete all sub display lists
-            GLDisplayListTable dlTable = symDLTables.get(sym);
+            GLDisplayListTable dlTable = DLTables.get(hashKey);
             if (dlTable != null)
             {
                 Enumeration<GLDisplayList> subLists = dlTable.elements();
@@ -176,7 +212,7 @@ public class DisplayListManager
                     }
                 }
                 
-                symDLTables.remove(sym);
+                DLTables.remove(hashKey);
             }            
         }
     }

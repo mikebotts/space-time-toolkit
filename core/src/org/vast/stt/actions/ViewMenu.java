@@ -7,7 +7,12 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
+import org.vast.stt.commands.FitView;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.ScenePageInput;
+import org.vast.stt.project.Projection_ECEF;
+import org.vast.stt.project.Projection_LLA;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.ViewSettings;
 
@@ -64,30 +69,55 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 }
             }
         }
-        else
-            if (action.getId().equals("STT.CloneScene2"))
+        else if (action.getId().equals("STT.CloneScene2"))
+        {
+            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+            if (pageInput != null)
             {
-                ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
-                if (pageInput != null)
+                Scene currentScene = pageInput.getScene();
+                Scene newScene = new Scene();
+                newScene.setViewSettings(new ViewSettings());
+                newScene.setTimeSettings(currentScene.getTimeSettings());
+                newScene.setDataTree(currentScene.getDataTree());
+                newScene.setName(currentScene.getName());
+                
+                pageInput = new ScenePageInput(newScene);
+                try
                 {
-                    Scene currentScene = pageInput.getScene();
-                    Scene newScene = new Scene();
-                    newScene.setViewSettings(new ViewSettings());
-                    newScene.setTimeSettings(currentScene.getTimeSettings());
-                    newScene.setDataTree(currentScene.getDataTree());
-                    newScene.setName(currentScene.getName());
-                    
-                    pageInput = new ScenePageInput(newScene);
-                    try
-                    {
-                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
-                    }
-                    catch (WorkbenchException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().openPage("STT.Perspective", pageInput);
+                }
+                catch (WorkbenchException e)
+                {
+                    e.printStackTrace();
                 }
             }
+        }
+        else if (action.getId().equals("STT.ProjectECEF"))
+        {
+            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+            if (pageInput != null)
+            {
+                Scene currentScene = pageInput.getScene();
+                ViewSettings viewSettings = currentScene.getViewSettings();
+                viewSettings.setProjection(new Projection_ECEF());
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                FitView fit = new FitView(currentScene);
+                fit.execute();
+            }
+        }
+        else if (action.getId().equals("STT.ProjectLLA"))
+        {
+            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+            if (pageInput != null)
+            {
+                Scene currentScene = pageInput.getScene();
+                ViewSettings viewSettings = currentScene.getViewSettings();
+                viewSettings.setProjection(new Projection_LLA());
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                FitView fit = new FitView(currentScene);
+                fit.execute();
+            }
+        }
 	}
 
 

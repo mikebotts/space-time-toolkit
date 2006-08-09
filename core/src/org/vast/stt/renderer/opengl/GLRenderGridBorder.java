@@ -78,7 +78,7 @@ public class GLRenderGridBorder extends GLRunnable
         // segment 1
         for (int u = 0; u < patch.width; u++)
         {
-            point = styler.getGridPoint(u, 0);
+            point = styler.getPoint(u, 0);
             renderPoint(point, oldX);
             oldX = point.x;
         }
@@ -86,7 +86,7 @@ public class GLRenderGridBorder extends GLRunnable
         // segment 2
         for (int v = 0; v < patch.length; v++)
         {
-            point = styler.getGridPoint(patch.width-1, v);
+            point = styler.getPoint(patch.width-1, v);
             renderPoint(point, oldX);
             oldX = point.x;
         }
@@ -94,7 +94,7 @@ public class GLRenderGridBorder extends GLRunnable
         // segment 3
         for (int u = patch.width-1; u >= 0; u--)
         {
-            point = styler.getGridPoint(u, patch.length-1);
+            point = styler.getPoint(u, patch.length-1);
             renderPoint(point, oldX);
             oldX = point.x;
         }
@@ -102,7 +102,7 @@ public class GLRenderGridBorder extends GLRunnable
         // segment 4
         for (int v = patch.length-1; v >= 0 ; v--)
         {
-            point = styler.getGridPoint(0, v);
+            point = styler.getPoint(0, v);
             renderPoint(point, oldX);
             oldX = point.x;
         }

@@ -86,13 +86,13 @@ public class GLRenderLines extends GLRunnable
                     gl.glBegin(GL.GL_LINE_STRIP);
                 }
     
-                if (point.lineBreak && begin)
+                if (point.graphBreak && begin)
                 {
                     gl.glEnd();
                     gl.glBegin(GL.GL_LINE_STRIP);
                 }
     
-                point.lineBreak = false;
+                point.graphBreak = false;
                 begin = true;
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);

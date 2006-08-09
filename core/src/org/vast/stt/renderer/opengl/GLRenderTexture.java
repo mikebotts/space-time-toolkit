@@ -84,8 +84,6 @@ public class GLRenderTexture extends GLRunnable
         
         do
         {
-            double oldX = 0.0;
-            
             // loop through all grid points
             for (int v = 0; v < grid.length-1; v++)
             {
@@ -97,13 +95,11 @@ public class GLRenderTexture extends GLRunnable
                     {                    
                         point = styler.getGridPoint(u, v+p, uScale, vScale, normalizeCoords);
                         
-                        // TODO hack to break grid when crossing lat/lon boundary
-                        if (Math.abs(point.x - oldX) > Math.PI*9/10)
+                        if (point.graphBreak)
                         {
                             gl.glEnd();
                             gl.glBegin(GL.GL_QUAD_STRIP);
                         }
-                        oldX = point.x;
                         
                         gl.glTexCoord2f(point.tx, point.ty);
                         gl.glVertex3d(point.x, point.y, point.z);
