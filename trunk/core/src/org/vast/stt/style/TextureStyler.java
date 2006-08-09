@@ -14,7 +14,6 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
-import org.vast.math.Vector3d;
 import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -83,12 +82,8 @@ public class TextureStyler extends AbstractStyler
         patch.grid.block = nextGrid;
         patch.texture.block = nextTexture;
         
-        // get BlockInfo
-        currentBlockInfo = nextGrid.getInfo();
-        if (currentBlockInfo.getSpatialExtent().isNull())
-            computeExtents = true;
-        else
-            computeExtents = false;
+        // see what's needed on this block
+        prepareBlock(nextGrid);
         
         return patch;
     }
@@ -105,8 +100,10 @@ public class TextureStyler extends AbstractStyler
     
     public GridPointGraphic getGridPoint(int u, int v, float uScale, float vScale, boolean normalize)
     {
+        point.x = point.y = point.z = 0.0;
         dataLists[0].blockIndexer.getData(v, u, 0);
         
+        // compute texture coordinates
         if (normalize)
         {
             point.tx = (float)u / (float)(patch.grid.width-1) * uScale;
@@ -118,13 +115,68 @@ public class TextureStyler extends AbstractStyler
             point.ty = (float)v / (float)(patch.grid.length-1) * ((float)patch.texture.height-1);
         }
         
-        if (computeExtents)
-        {
-            Vector3d point3d = new Vector3d(point.x, point.y, point.z);
-            currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
-        }
+        // adjust geometry to fit projection
+        projection.adjust(geometryCrs, point);
+        
+        // add point to bbox if needed
+        addToExtent(currentBlockInfo, point);
         
         return point;
+    }
+    
+    
+    private BlockListItem nextGridBlock()
+    {
+        ListInfo listInfo = dataLists[0];
+        
+        // if no more items in the list, just return null
+        if (!listInfo.blockIterator.hasNext())
+            return null;
+        
+        // otherwise get the next item
+        BlockListItem nextItem = listInfo.blockIterator.next();
+
+        // setup indexer with new data 
+        AbstractDataBlock nextBlock = nextItem.getData();
+        listInfo.blockIndexer.setData(nextBlock);
+        listInfo.blockIndexer.reset();
+        listInfo.blockIndexer.getData(0,0,0);
+        
+        // see what's needed on this block
+        prepareBlock(nextItem);
+        
+        return nextItem;
+    }
+    
+    
+    private GridPointGraphic nextPoint()
+    {
+        if (dataLists[0].blockIndexer.hasNext())
+        {
+            point.x = point.y = point.z = 0.0;            
+            dataLists[0].blockIndexer.next();
+            
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, point);
+
+            // add point to bbox if needed            
+            addToExtent(currentBlockInfo, point);
+            
+            return point;
+        }
+        
+        return null;
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextGridBlock() != null)
+            while (nextPoint() != null);
     }
 
 

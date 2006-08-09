@@ -11,27 +11,33 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.project;
+
+import org.vast.stt.style.PrimitiveGraphic;
 
 
 /**
- * <p><b>Title:</b><br/>
- * Primitive Graphic
+ * <p><b>Title:</b>
+ * Projection
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO PrimitiveGraphic type description
+ * Interface for all map projections
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Mar 31, 2006
+ * @date Aug 8, 2006
  * @version 1.0
  */
-public abstract class PrimitiveGraphic extends GraphicObject
+public interface Projection
 {
-    public double x, y, z, t;
-    public float r, g, b;
-    public float a = 1.0f;
-    public boolean graphBreak;
+    public enum Crs
+    {
+        ECEF,
+        EPSG4329
+    }
+    
+    
+    public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
 }

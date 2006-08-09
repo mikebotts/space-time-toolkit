@@ -141,4 +141,10 @@ public class RasterStyler extends AbstractStyler
             visitor.visit(this);
         }		
 	}
+
+
+    @Override
+    protected void computeExtent()
+    {
+    }
 }

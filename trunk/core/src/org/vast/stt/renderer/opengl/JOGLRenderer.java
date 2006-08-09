@@ -24,7 +24,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.opengl.GLContext;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
-import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.SceneItem;
@@ -82,9 +81,8 @@ public class JOGLRenderer extends Renderer
     @Override
     public void cleanup(DataStyler styler)
     {
-        Symbolizer sym = styler.getSymbolizer();
-        textureManager.clearTextures(sym);
-        displayListManager.clearDisplayLists(sym);
+        textureManager.clearTextures(styler);
+        displayListManager.clearDisplayLists(styler);
     }
     
     

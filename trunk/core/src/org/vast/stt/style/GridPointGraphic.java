@@ -34,5 +34,4 @@ public class GridPointGraphic extends PrimitiveGraphic
     public float ty;
     public float tz;
     public boolean normalizedTexCoords;
-    public boolean gridBreak;
 }

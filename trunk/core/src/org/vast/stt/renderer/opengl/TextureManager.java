@@ -204,10 +204,11 @@ public class TextureManager
      * Clears all display lists used by this symbolizer
      * @param sym
      */
-    public void clearTextures(Symbolizer sym)
+    public void clearTextures(DataStyler styler)
     {
         synchronized (symTextureTables)
         {
+            Symbolizer sym = styler.getSymbolizer();
             GLTextureTable textureTable = symTextureTables.get(sym);
             
             if (textureTable != null)

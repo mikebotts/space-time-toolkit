@@ -13,7 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.math.Vector3d;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
@@ -50,20 +49,32 @@ public class PointStyler extends AbstractStyler
     
     public PointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext())
         {
-            dataLists[0].blockIndexer.getNext();
+            point.x = point.y = point.z = 0.0;
+            dataLists[0].blockIndexer.next();
             
-            if (computeExtents)
-            {
-                Vector3d point3d = new Vector3d(point.x, point.y, point.z);
-                currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
-            }
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, point);
+
+            // add point to bbox if needed
+            addToExtent(currentBlockInfo, point);
             
             return point;
         }
         
         return null;
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextBlock() != null)
+            while (nextPoint() != null);
     }
 
 

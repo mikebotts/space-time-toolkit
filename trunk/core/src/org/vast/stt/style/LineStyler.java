@@ -14,11 +14,9 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
-import org.vast.math.Vector3d;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.physics.MapProjection;
 import org.vast.stt.data.BlockListItem;
 
 
@@ -69,12 +67,8 @@ public class LineStyler extends AbstractStyler
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
         
-        // get BlockInfo
-        currentBlockInfo = nextItem.getInfo();
-        if (currentBlockInfo.getSpatialExtent().isNull())
-            computeExtents = true;
-        else
-            computeExtents = false;
+        // see what's needed on this block
+        prepareBlock(nextItem);
         
         // copy current item in the patch object
         segment.block = nextItem;
@@ -85,26 +79,33 @@ public class LineStyler extends AbstractStyler
     
     public LinePointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext)
+        if (dataLists[0].blockIndexer.hasNext())
         {
-            dataLists[0].blockIndexer.getNext();
+            point.x = point.y = point.z = 0.0;            
+            dataLists[0].blockIndexer.next();
             
-//            double[] ecf = MapProjection.LLAtoECF(point.y, point.x, point.z, null);
-//            point.x = ecf[0];
-//            point.y = ecf[1];
-//            point.z = ecf[2];
-            
-            if (computeExtents)
-            {
-                Vector3d point3d = new Vector3d(point.x, point.y, point.z);
-                currentBlockInfo.getSpatialExtent().resizeToContain(point3d);
-            }
+            // adjust geometry to fit projection
+            projection.adjust(geometryCrs, point);
+
+            // add point to bbox if needed            
+            addToExtent(currentBlockInfo, point);
             
             return point;
         }
         
         return null;
-    }   
+    }
+    
+    
+    @Override
+    protected void computeExtent()
+    {
+        this.wantComputeExtent = true;
+        this.resetIterators();
+                
+        while (nextLineBlock() != null)
+            while (nextPoint() != null);
+    }
 
 
     @Override
@@ -125,7 +126,7 @@ public class LineStyler extends AbstractStyler
             propertyName = param.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new LineBreakMapper(point));               
+                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
             }
         }
         

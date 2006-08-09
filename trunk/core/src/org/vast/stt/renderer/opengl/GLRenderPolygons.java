@@ -68,13 +68,13 @@ public class GLRenderPolygons extends GLRunnable
         {
             while ((point = styler.nextPoint()) != null)
             {
-                if (point.polyBreak && begin)
+                if (point.graphBreak && begin)
                 {
                     gl.glEnd();
                     gl.glBegin(GL.GL_POLYGON);
                 }
     
-                point.polyBreak = false;
+                point.graphBreak = false;
                 begin = true;
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
