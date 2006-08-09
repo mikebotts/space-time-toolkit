@@ -46,9 +46,12 @@
          <!-- View Menu -->
          <menu id="STT.ViewMenu" label="&amp;View">
             <separator name="group1"/>
+            <separator name="group2"/>
          </menu>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene1" label="Clone Scene1" menubarPath="STT.ViewMenu/group1"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene2" label="Clone Scene2" menubarPath="STT.ViewMenu/group1"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectLLA" label="LLA" menubarPath="STT.ViewMenu/group2"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectECEF" label="ECEF" menubarPath="STT.ViewMenu/group2"/>
          <!-- File Menu -->
          <menu id="STT.FileMenu" label="&amp;File">
             <separator name="group1"/>
