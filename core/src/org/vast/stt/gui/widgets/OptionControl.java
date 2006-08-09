@@ -57,51 +57,53 @@ public class OptionControl extends Composite implements KeyListener
 		setLayoutData(gd);
 	}
 
+	public static OptionControl createControl(Composite parent, OptionParams param){
+		OptionControl control = new OptionControl(parent, 0x0);
+		ControlType type = param.getType();
+		String label = param.getLabel();
+		Object data = param.getData();
+		
+		try {
+			switch(type){
+			case BUTTON:
+				control.createButton(label, (String)data);
+				break;
+			case CHECKBOX:
+				boolean enabled = ((Boolean)data).booleanValue();
+				control.createCheckbox(label, enabled);
+				break;
+			case COLOR_BUTTON:
+				control.createColorButton(label, (org.vast.ows.sld.Color)data);
+				break;
+			case TEXT:
+				control.createText(label, (String)data);
+				break;
+			case NUMERIC_TEXT:
+				control.createNumericText(label, (String)data);
+				break;
+			case SPINNER:
+				int [] minMax = (int [])data;
+				control.createSpinner(label, minMax[0], minMax[1]);
+				break;
+			case COMBO:
+				control.createCombo(label, (String[])data);
+				break;
+			default:
+				System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
+			}
+		} catch (ClassCastException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return control;
+	}
+	
 	public static OptionControl[] createControls(Composite parent, OptionParams[] params){
 		int numParams = params.length;
 		OptionControl [] controls = new OptionControl[numParams];
-		String label;
-		ControlType type;
-		Object data;
-		for(int i=0; i<numParams; i++){
-			controls[i] = new OptionControl(parent, 0x0);
-			type = params[i].getType();
-			label = params[i].getLabel();
-			data = params[i].getData();
-			
-			try {
-				switch(type){
-				case BUTTON:
-					controls[i].createButton(label, (String)data);
-					break;
-				case CHECKBOX:
-					boolean enabled = ((Boolean)data).booleanValue();
-					controls[i].createCheckbox(label, enabled);
-					break;
-				case COLOR_BUTTON:
-					controls[i].createColorButton(label, (org.vast.ows.sld.Color)data);
-					break;
-				case TEXT:
-					controls[i].createText(label, (String)data);
-					break;
-				case NUMERIC_TEXT:
-					controls[i].createNumericText(label, (String)data);
-					break;
-				case SPINNER:
-					int [] minMax = (int [])data;
-					controls[i].createSpinner(label, minMax[0], minMax[1]);
-					break;
-				case COMBO:
-					controls[i].createCombo(label, (String[])data);
-					break;
-				default:
-					System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
-				}
-			} catch (ClassCastException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		for(int i=0; i<numParams; i++)
+			controls[i] = OptionControl.createControl(parent, params[i]);
+		
 		return controls;
 	}
 	
