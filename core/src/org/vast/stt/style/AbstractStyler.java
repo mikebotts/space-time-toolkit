@@ -72,7 +72,7 @@ public abstract class AbstractStyler implements DataStyler
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
     public abstract void updateDataMappings();
-    protected abstract void computeExtent();
+    public abstract void computeBoundingBox();
     
     
     public AbstractStyler()
@@ -104,8 +104,7 @@ public abstract class AbstractStyler implements DataStyler
     public void setProjection(Projection projection)
     {
         this.projection = projection;
-        if (dataLists.length > 0)
-            this.computeExtent();
+        this.wantComputeExtent = true;
     }
     
     

@@ -144,7 +144,7 @@ public class RasterStyler extends AbstractStyler
 
 
     @Override
-    protected void computeExtent()
+    public void computeBoundingBox()
     {
     }
 }

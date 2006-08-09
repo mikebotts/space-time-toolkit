@@ -101,6 +101,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                currentScene.getRenderer().drawScene();
                 FitView fit = new FitView(currentScene);
                 fit.execute();
             }
@@ -114,6 +115,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                currentScene.getRenderer().drawScene();
                 FitView fit = new FitView(currentScene);
                 fit.execute();
             }
