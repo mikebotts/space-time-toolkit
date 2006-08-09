@@ -79,10 +79,23 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void cleanup(DataStyler styler)
+    public void cleanup(DataStyler styler, CleanupSection section)
     {
-        textureManager.clearTextures(styler);
-        displayListManager.clearDisplayLists(styler);
+        switch (section)
+        {
+            case ALL:
+                textureManager.clearTextures(styler);
+                displayListManager.clearDisplayLists(styler);
+                break;
+                
+            case TEXTURES:
+                textureManager.clearTextures(styler);
+                break;
+                
+            case GEOMETRY:
+                displayListManager.clearDisplayLists(styler);
+                break;
+        }
     }
     
     

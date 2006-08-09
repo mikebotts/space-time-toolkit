@@ -20,6 +20,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.Projection;
+import org.vast.stt.renderer.Renderer.CleanupSection;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.StylerVisitor;
 
@@ -144,7 +145,7 @@ public class SceneItem implements STTEventListener
     public void cleanup()
     {
         for (int i = 0; i < stylers.size(); i++)
-            parentScene.getRenderer().cleanup(stylers.get(i));
+            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.ALL);
     }
     
     
@@ -174,7 +175,7 @@ public class SceneItem implements STTEventListener
         // otherwise update existing one
         else
         {
-            parentScene.getRenderer().cleanup(styler);
+            parentScene.getRenderer().cleanup(styler, CleanupSection.ALL);
             
             if (sym.isEnabled())
             {
@@ -195,7 +196,7 @@ public class SceneItem implements STTEventListener
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler nextStyler = stylers.get(i);
-            parentScene.getRenderer().cleanup(stylers.get(i));
+            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.GEOMETRY);
             nextStyler.setProjection(projection);
         }
     }
