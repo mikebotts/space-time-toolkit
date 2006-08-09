@@ -170,7 +170,7 @@ public class TextureStyler extends AbstractStyler
     
     
     @Override
-    protected void computeExtent()
+    public void computeBoundingBox()
     {
         this.wantComputeExtent = true;
         this.resetIterators();

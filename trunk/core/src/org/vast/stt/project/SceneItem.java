@@ -195,8 +195,8 @@ public class SceneItem implements STTEventListener
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler nextStyler = stylers.get(i);
-            nextStyler.setProjection(projection);
             parentScene.getRenderer().cleanup(stylers.get(i));
+            nextStyler.setProjection(projection);
         }
     }
 
