@@ -96,8 +96,11 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
         
         // trigger a selection event so we can update ourselves
         SceneTreeView treeView = (SceneTreeView)getSite().getPage().findView(SceneTreeView.ID);
-        ISelection selection = treeView.getSite().getSelectionProvider().getSelection();
-        selectionChanged(treeView, selection);
+        if (treeView != null)
+        {
+            ISelection selection = treeView.getSite().getSelectionProvider().getSelection();
+            selectionChanged(treeView, selection);
+        }
     }
     
     
@@ -123,16 +126,16 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
 	 */
     public void selectionChanged(IWorkbenchPart part, ISelection selection)
 	{
-		// handle case of null selection
-        if (part == null || selection == null)
-        {
-            item = null;
-            clearView();
-        }
-        
-        if (part instanceof SceneTreeView)
+		if (part != null && part instanceof SceneTreeView)
 		{
-			DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
+		    // handle case of null selection
+            if (selection == null)
+            {
+                item = null;
+                clearView();
+            }
+            
+            DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
 			if (selectedEntry instanceof DataItem)
             {
 			    DataItem selectedItem = (DataItem)selectedEntry;
