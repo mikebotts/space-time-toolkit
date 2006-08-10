@@ -43,7 +43,7 @@
                   <member>
                      <DataList>
                         <name>Geographic Data</name>
-                        <member visible="false">
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider href="#DATASET_04"/>
