@@ -68,29 +68,67 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         if (rotConstraint != MotionConstraint.NO_MOTION)
         {
             Renderer renderer = scene.getRenderer();
-            
-            renderer.unproject(x0, -y0, 0.0, P0);
-            renderer.unproject(x1, -y1, 0.0, P1);            
-    		P1.sub(P0);
-    		
+
             // actual camera position
             Vector3d up = viewSettings.getUpDirection();
             Vector3d pos = viewSettings.getCameraPos();
             Vector3d target = viewSettings.getTargetPos();
             
+            int viewHeight = viewSettings.getViewHeight();
+            renderer.unproject(x0, viewHeight-y0, 0.0, P0);
+            renderer.unproject(x1, viewHeight-y1, 0.0, P1);
+
+//            P1.sub(P0);
+//            
+//            // viewZ vector = target - pos
+//            Vector3d oldZ = new Vector3d(target);
+//            oldZ.sub(pos);
+//    
+//            // rotation angle proportional to drag distance on the screen
+//            double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
+//            double rotationAngle = rotationAmount;//10.0;
+//    
+//            // rotation axis in world coordinates
+//            Vector3d rotAxis = new Vector3d();
+//            rotAxis.cross(oldZ, P1);
+//            Quat4d qRot = new Quat4d(rotAxis, rotationAngle);
+            
             // viewZ vector = target - pos
             Vector3d oldZ = new Vector3d(target);
             oldZ.sub(pos);
-    
-            // rotation angle proportional to drag distance on the screen
-            double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
-            double rotationAngle = rotationAmount;//10.0;
-    
-            // rotation axis in world coordinates
-            Vector3d rotAxis = new Vector3d();
-            rotAxis.cross(oldZ, P1);
-            Quat4d qRot = new Quat4d(rotAxis, rotationAngle);
-    
+            oldZ.normalize();
+            
+            // arcball radius
+            double r = viewSettings.getOrthoWidth() / 2;
+
+            P0.sub(pos);
+            P0.scale(1/r);
+            double P0_2 = P0.lengthSquared();
+            if (P0_2 < 1)
+            {
+                Vector3d fakeZ = oldZ.copy();
+                fakeZ.scale(-Math.sqrt(1 - P0_2));
+                P0.add(fakeZ);
+            }
+            P0.normalize();
+            
+            P1.sub(pos);
+            P1.scale(1/r);            
+            double P1_2 = P1.lengthSquared();
+            if (P1_2 < 1)
+            {
+                Vector3d fakeZ = oldZ.copy();
+                fakeZ.scale(-Math.sqrt(1 - P1_2));
+                P1.add(fakeZ);
+            }
+            P1.normalize();
+            
+            // compute rotation quaternion
+            Vector3d crossP = new Vector3d();
+            crossP.cross(P0, P1);
+            crossP.normalize();
+            Quat4d qRot = new Quat4d(crossP, -Math.acos(P0.dot(P1)));
+
             // rotate current camera position
             pos.sub(target);
             pos.rotate(qRot);
