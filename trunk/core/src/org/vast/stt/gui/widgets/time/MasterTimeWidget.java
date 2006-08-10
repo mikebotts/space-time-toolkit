@@ -1,8 +1,6 @@
 
 package org.vast.stt.gui.widgets.time;
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -14,19 +12,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.apps.STTConfig;
 import org.vast.stt.project.Scene;
 import org.vast.util.DateTime;
 
 
 public final class MasterTimeWidget implements SelectionListener, TimeListener
 {
-    Group mainGroup;
+    private Group mainGroup;
     private CalendarSpinner absTimeSpinner;
     private TimeSpinner stepSpinner;
     private Button rtBtn;
     private Button setBtn;
     private double timeStep = 60.0; //  timeStep in seconds
+    private Scene scene;
 
 
     public MasterTimeWidget(Composite parent)
@@ -116,24 +114,25 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 
     public void timeChanged(TimeSpinner spinner, double newTime)
     {
-        //  TODO  mod, support multiple Scenes (after Scene is inited)
-    	ArrayList<Scene> sceneList =  STTConfig.getInstance().getCurrentProject().getSceneList();
-    	//  If no sceneList, no project is currently open- do nothing
-    	if(sceneList == null)
-    		return;
-    	Scene scene = sceneList.get(0);
         scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
     }
-    
-    
-    public void setAbsoluteTime(double newTime)
+
+
+    public void setScene(Scene scene)
     {
-        absTimeSpinner.setValue(newTime);
-    }
-    
-    
-    public void setStepTime(double newTime)
-    {
-        stepSpinner.setValue(newTime);
+        this.scene = scene;
+        
+        if (scene != null)
+        {
+            double sceneTime = scene.getTimeSettings().getCurrentTime().getJulianTime();
+            absTimeSpinner.setValue(sceneTime);
+            double stepTime = scene.getTimeSettings().getStepTime();
+            stepSpinner.setValue(stepTime);
+        }
+        else
+        {
+            absTimeSpinner.setValue(0);
+            stepSpinner.setValue(0);
+        }
     }
 }

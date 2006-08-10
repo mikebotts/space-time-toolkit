@@ -13,7 +13,6 @@
 
 package org.vast.stt.commands;
 
-import org.vast.stt.apps.STTConfig;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.ProjectReader;
 
@@ -21,14 +20,16 @@ import org.vast.stt.project.ProjectReader;
 public class OpenProject implements Command
 {
 	private String url = null;
+    private Project project = null;
+    
 	
 	public void execute()
 	{
 		ProjectReader reader = new ProjectReader();
-		Project project = reader.readProject(url);
-		STTConfig.getInstance().setCurrentProject(project);
+		project = reader.readProject(url);
         System.gc();
 	}
+    
 
 	public void unexecute()
 	{
@@ -51,4 +52,10 @@ public class OpenProject implements Command
 	{
 		this.url = url;
 	}
+
+    
+    public Project getProject()
+    {
+        return project;
+    }
 }

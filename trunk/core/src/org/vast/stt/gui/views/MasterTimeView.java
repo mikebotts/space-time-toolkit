@@ -42,24 +42,20 @@ public class MasterTimeView extends SceneView
     public void createPartControl(Composite parent)
     {
         masterTimeWidget = new MasterTimeWidget(parent);
-        super.createPartControl(parent);
+        super.createPartControl(parent);                
     }
 
 
     @Override
     public void updateView()
     {
-        double sceneTime = scene.getTimeSettings().getCurrentTime().getJulianTime();
-        masterTimeWidget.setAbsoluteTime(sceneTime);
-        double stepTime = scene.getTimeSettings().getStepTime();
-        masterTimeWidget.setStepTime(stepTime);
+        masterTimeWidget.setScene(scene);
     }
 
 
     @Override
     public void clearView()
     {
-        masterTimeWidget.setAbsoluteTime(0);
-        masterTimeWidget.setStepTime(10);
+        masterTimeWidget.setScene(null);
     }
 }
