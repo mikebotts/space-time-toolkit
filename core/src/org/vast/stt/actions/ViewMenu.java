@@ -3,8 +3,12 @@ package org.vast.stt.actions;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.vast.stt.commands.FitView;
@@ -25,7 +29,7 @@ import org.vast.stt.project.ViewSettings;
  * delegated to it.
  * @see IWorkbenchWindowActionDelegate
  */
-public class ViewMenu implements IWorkbenchWindowActionDelegate
+public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
 {
 	private IWorkbenchWindow window;
 	
@@ -46,7 +50,9 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
 	 */
 	public void run(IAction action)
 	{
-		if (action.getId().equals("STT.CloneScene1"))
+		String actionID = action.getId();
+        
+        if (actionID.endsWith("CloneScene1"))
         {
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
@@ -69,7 +75,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 }
             }
         }
-        else if (action.getId().equals("STT.CloneScene2"))
+        else if (actionID.endsWith("CloneScene2"))
         {
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
@@ -92,7 +98,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 }
             }
         }
-        else if (action.getId().equals("STT.ProjectECEF"))
+        else if (actionID.endsWith("ProjectECEF"))
         {
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
@@ -106,7 +112,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 fit.execute();
             }
         }
-        else if (action.getId().equals("STT.ProjectLLA"))
+        else if (actionID.endsWith("ProjectLLA"))
         {
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
@@ -118,6 +124,20 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
                 currentScene.getRenderer().drawScene();
                 FitView fit = new FitView(currentScene);
                 fit.execute();
+            }
+        }
+        else if (actionID.startsWith("STT.Show"))
+        {
+            action.setChecked(true);
+            try
+            {
+                String viewID = actionID.substring(8);
+                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                page.showView("STT." + viewID);
+            }
+            catch (PartInitException e)
+            {
+                e.printStackTrace();
             }
         }
 	}
@@ -153,5 +173,40 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate
 	public void init(IWorkbenchWindow window)
 	{
 		this.window = window;
+        window.getActivePage().addPartListener(this);
 	}
+
+
+    public void partActivated(IWorkbenchPart part)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void partBroughtToTop(IWorkbenchPart part)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void partClosed(IWorkbenchPart part)
+    {
+        //window.getWorkbench().      
+    }
+
+
+    public void partDeactivated(IWorkbenchPart part)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public void partOpened(IWorkbenchPart part)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }
