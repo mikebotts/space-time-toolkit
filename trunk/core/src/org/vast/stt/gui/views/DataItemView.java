@@ -95,9 +95,9 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
         getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);
         
         // trigger a selection event so we can update ourselves
-        SceneView treeView = (SceneView)getSite().getPage().findView(SceneTreeView.ID);
-        if (treeView != null)
-            treeView.updateView();
+        SceneTreeView treeView = (SceneTreeView)getSite().getPage().findView(SceneTreeView.ID);
+        ISelection selection = treeView.getSite().getSelectionProvider().getSelection();
+        selectionChanged(treeView, selection);
     }
     
     
@@ -111,7 +111,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     @Override
     public void dispose()
     {
-        getSite().getPage().removePostSelectionListener(this);
+        getSite().getPage().removePostSelectionListener(SceneTreeView.ID, this);
         
         if (item != null)
             item.removeListener(this);
