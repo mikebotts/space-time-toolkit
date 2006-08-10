@@ -10,16 +10,13 @@
       <perspective name="Perspective" class="org.vast.stt.apps.Perspective" id="STT.Perspective"/>
    </extension>
    <extension point="org.eclipse.ui.views">
-      <view name="Resources" class="org.vast.stt.gui.views.ResourceTreeView" id="STT.ResourceTreeView"/>
-      <view name="Services" class="org.vast.stt.gui.views.ServiceTreeView" id="STT.ServiceTreeView"/>
-      <view name="Customizer" class="org.vast.stt.gui.views.CustomizerView" id="STT.CustomizerView"/>
       <view name="Bbox" class="org.vast.stt.gui.views.SpatialExtentView" id="STT.SpatialExtentView"/>
-      <view name="TimeExtent" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
-      <view name="MasterTime" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
-      <view name="SymbolizerView" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
-      <view name="DataProvider" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
-      <view name="SceneTree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
-      <view name="SceneItems" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
+      <view name="Time" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
+      <view name="Master Time" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
+      <view name="Style" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
+      <view name="Data" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
+      <view name="Scene Tree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
+      <view name="Scene Items" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
       <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView" allowMultiple="true"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
