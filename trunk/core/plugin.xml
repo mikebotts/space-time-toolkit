@@ -17,7 +17,7 @@
       <view name="Data" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
       <view name="Scene Tree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
       <view name="Scene Items" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
-      <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView" allowMultiple="true"/>
+      <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="src/icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
@@ -44,11 +44,20 @@
          <menu id="STT.ViewMenu" label="&amp;View">
             <separator name="group1"/>
             <separator name="group2"/>
+            <separator name="group3"/>
          </menu>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene1" label="Clone Scene1" menubarPath="STT.ViewMenu/group1"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene2" label="Clone Scene2" menubarPath="STT.ViewMenu/group1"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectLLA" label="LLA" menubarPath="STT.ViewMenu/group2"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectECEF" label="ECEF" menubarPath="STT.ViewMenu/group2"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectLLA" label="LLA" menubarPath="STT.ViewMenu/group2" style="radio"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectECEF" label="ECEF" menubarPath="STT.ViewMenu/group2" style="radio"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowWorldView" label="Show World View" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneTreeView" label="Show Scene Tree" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneItemsView" label="Show Scene Items" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowMasterTimeView" label="Show Master Time" menubarPath="STT.ViewMenu/group3"/>    
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowTimeExtentView" label="Show Time Options" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSpatialExtentView" label="Show Bbox Options" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSymbolizerView" label="Show Style Options" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowDataProviderView" label="Show Data Options" menubarPath="STT.ViewMenu/group3"/>
          <!-- File Menu -->
          <menu id="STT.FileMenu" label="&amp;File">
             <separator name="group1"/>
