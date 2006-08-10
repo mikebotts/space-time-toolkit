@@ -24,10 +24,10 @@ public class Perspective implements IPerspectiveFactory
         
 		resFolder.addView(SceneTreeView.ID);
         resFolder.addView(SceneItemsView.ID);
-        resOptFolder.addView(DataProviderView.ID);        
         resOptFolder.addView(SymbolizerView.ID);
         resOptFolder.addView(TimeExtentView.ID);
         resOptFolder.addView(SpatialExtentView.ID);
+        resOptFolder.addView(DataProviderView.ID);
 
         //sceneFolder.addPlaceholder(WorldView.ID + ":*");
         sceneFolder.addView(WorldView.ID + ":000");
