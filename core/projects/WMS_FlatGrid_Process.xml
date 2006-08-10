@@ -111,10 +111,10 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">1.1.1</swe:Category>
                               </swe:component>
                               <swe:component name="imageWidth">
-                                 <swe:Count>256</swe:Count>
+                                 <swe:Count>512</swe:Count>
                               </swe:component>
                               <swe:component name="imageHeight">
-                                 <swe:Count>512</swe:Count>
+                                 <swe:Count>256</swe:Count>
                               </swe:component>
                               <swe:component name="imageTransparency">
                                  <swe:Boolean>true</swe:Boolean>
