@@ -91,6 +91,11 @@ public class DataProviderReader
         Element timeElt = dom.getElement(providerElt, "timeExtent");
         readTimeExtent(provider, dom, timeElt);
         
+        // read quadTree option
+        String text = dom.getAttributeValue(providerElt, "quadTree");
+        if (text != null && text.equalsIgnoreCase("true"))
+            provider = new QuadTreeProvider(provider);
+        
         return provider;
 	}
     

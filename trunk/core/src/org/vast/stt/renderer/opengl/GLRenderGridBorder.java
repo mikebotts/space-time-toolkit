@@ -64,7 +64,7 @@ public class GLRenderGridBorder extends GLRunnable
     public void run()
     {
         GridPointGraphic point;
-        double oldX = 0.0;
+        int count = 0;
         
         // select fill or wireframe
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
@@ -73,53 +73,52 @@ public class GLRenderGridBorder extends GLRunnable
         gl.glPolygonOffset(offset, 1.0f);
         gl.glDisable(GL.GL_CULL_FACE);            
         
-        gl.glBegin(GL.GL_LINE_STRIP);
-        
-        // segment 1
-        for (int u = 0; u < patch.width; u++)
+        do
         {
-            point = styler.getPoint(u, 0);
-            renderPoint(point, oldX);
-            oldX = point.x;
+            gl.glBegin(GL.GL_LINE_STRIP);
+            
+            // segment 1
+            for (int u = 0; u < patch.width; u++)
+            {
+                point = styler.getPoint(u, 0);
+                renderPoint(point);
+            }
+            
+            // segment 2
+            for (int v = 0; v < patch.length; v++)
+            {
+                point = styler.getPoint(patch.width-1, v);
+                renderPoint(point);
+            }
+            
+            // segment 3
+            for (int u = patch.width-1; u >= 0; u--)
+            {
+                point = styler.getPoint(u, patch.length-1);
+                renderPoint(point);
+            }
+            
+            // segment 4
+            for (int v = patch.length-1; v >= 0 ; v--)
+            {
+                point = styler.getPoint(0, v);
+                renderPoint(point);
+            }
+            
+            gl.glEnd();
+            
+            count++;
+            if (count == blockCount)
+                break;
         }
+        while ((patch = styler.nextPatch()) != null);
         
-        // segment 2
-        for (int v = 0; v < patch.length; v++)
-        {
-            point = styler.getPoint(patch.width-1, v);
-            renderPoint(point, oldX);
-            oldX = point.x;
-        }
-        
-        // segment 3
-        for (int u = patch.width-1; u >= 0; u--)
-        {
-            point = styler.getPoint(u, patch.length-1);
-            renderPoint(point, oldX);
-            oldX = point.x;
-        }
-        
-        // segment 4
-        for (int v = patch.length-1; v >= 0 ; v--)
-        {
-            point = styler.getPoint(0, v);
-            renderPoint(point, oldX);
-            oldX = point.x;
-        }
-        
-        gl.glEnd();
+        blockCount = count;
     }
     
     
-    protected void renderPoint(GridPointGraphic point, double oldX)
-    {
-        // TODO hack to break grid when crossing lat/lon boundary
-        if (Math.abs(point.x - oldX) > Math.PI*9/10)
-        {
-            gl.glEnd();
-            gl.glBegin(GL.GL_LINE_STRIP);
-        }
-        
+    protected void renderPoint(GridPointGraphic point)
+    {       
         gl.glColor4f(point.r, point.g, point.b, point.a);
         gl.glVertex3d(point.x, point.y, point.z);
     }
