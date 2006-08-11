@@ -121,6 +121,7 @@ public abstract class AbstractProvider implements DataProvider
                     catch (DataException e)
                     {
                         error = true;
+                        redoUpdate = false;
                         ExceptionSystem.display(e);
                         dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
                     }
