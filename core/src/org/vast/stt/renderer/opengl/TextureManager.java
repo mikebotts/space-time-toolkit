@@ -173,8 +173,8 @@ public class TextureManager
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
             
             // set texture parameters
-            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);//GL.GL_LINEAR);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);//GL.GL_LINEAR);
             
             // create texture in GL memory
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, GL.GL_RGBA,

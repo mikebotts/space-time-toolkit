@@ -136,7 +136,7 @@ public class JOGLRenderer extends Renderer
         if (view.isShowCameraTarget())
             this.drawCameraTarget();
         
-        zBufferOffset = 1.0f;
+        zBufferOffset = (float)scene.getSceneItems().size();
     }
 
 
@@ -250,7 +250,6 @@ public class JOGLRenderer extends Renderer
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glEnable(GL.GL_POLYGON_OFFSET_LINE);
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -284,7 +283,7 @@ public class JOGLRenderer extends Renderer
     
     protected float getOffset()
     {
-        zBufferOffset += 1.0f;
+        zBufferOffset -= 1.0f;
         return zBufferOffset;
     }
 
