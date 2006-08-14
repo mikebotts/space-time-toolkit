@@ -8,6 +8,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * 
+ * @author Tony Cook
+ * 
+ * TODO:  Right now, parent of this class MUST use GridLayout \
+ *        with 3 columns.  Refactor layout dependence out.
+ */
+
 public abstract class OptionChooser {  //  extends Group/ScrolledComp
 	protected Composite optComp;  //  hold onto scroller and composite 
 	protected ScrolledComposite optScr;

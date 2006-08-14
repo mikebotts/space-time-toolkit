@@ -19,6 +19,16 @@ public class LineOptionHelper //implements SelectionListener
 		symbolizer = sym;
 	}
 	
+	public boolean getWidthConstant(){
+		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
+		return widthSP.isConstant();
+	}
+	
+	public void setWidthConstant(boolean b){
+		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
+		widthSP.setConstant(b);
+	}
+	
 	public float getLineWidth(){
 		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
 		if(widthSP == null)

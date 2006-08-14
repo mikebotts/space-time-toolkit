@@ -1,5 +1,6 @@
 package org.vast.stt.gui.widgets;
 
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -33,7 +34,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  */ 
 
-public class OptionControl extends Composite implements KeyListener 
+public class OptionControl extends Composite implements KeyListener
 {
 	Color colorLabelColor;
 	Label colorLabel;
@@ -48,10 +49,13 @@ public class OptionControl extends Composite implements KeyListener
 
 	public OptionControl(Composite parent, int styleBits){
 		super(parent, styleBits);
+		GridLayout layout = new GridLayout();
+		this.setLayout(layout);
+		
 		setBackground(display.getSystemColor(SWT.COLOR_WHITE));
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER,true, false);
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gd.minimumWidth = 100;
-		gd.minimumWidth = 120;
+		//gd.minimumWidth = 120;
 		gd.minimumHeight = 25;
 		//gd.heightHint = 25;		
 		setLayoutData(gd);
@@ -190,6 +194,22 @@ public class OptionControl extends Composite implements KeyListener
 		button.setLayoutData(gd);
 		controlType = ControlType.BUTTON;
 		return button;
+	}
+
+	//  Experimenting with Jface Editors (it's not showing up, for some reason)
+	public TextCellEditor createTextCellEditor(String labelStr, String defText){
+		TextCellEditor tce = new TextCellEditor(this, SWT.RIGHT);
+		tce.setValue(defText);
+		Text text = (Text)tce.getControl();
+		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, false,false);
+		gd.widthHint = 45;
+		text.setLayoutData(gd);
+		//  Set limit to 7.  Callers can override this setting by using the return Text object
+		text.setTextLimit(7);
+		//  make bg gray to distinguish it from bg of parent
+		text.setBackground(new Color(display, 210, 210, 210));
+		controlType = ControlType.TEXT;
+		return tce;
 	}
 	
 	public Text createText(String labelStr, String defaultText){

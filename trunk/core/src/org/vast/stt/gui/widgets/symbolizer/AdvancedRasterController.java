@@ -39,9 +39,9 @@ public class AdvancedRasterController extends AdvancedOptionController
 	}
 	
 	public void buildControls(){
-		optionControls = new OptionControl[2];
+	/*	optionControls = new OptionControl[2];
 		mapFromCombo = new Combo[2];
-		lutButton = new Button[2];
+		mappingBtn = new Button[2];
 		optionControls[0] = new OptionControl(parent, 0x0);
 		optionControls[0].createText("Width:", "500");
 		//advWidthSpinner.setSelection((int)rasterOptionHelper.getPointSize());
@@ -54,18 +54,33 @@ public class AdvancedRasterController extends AdvancedOptionController
 		//addMappingControls(parent, 1);
 		//  disable color mapFromCombo (consider just not showing this)
 		mapFromCombo[1].setEnabled(false);
-		//addSelectionListener(rasterOptionHelper);
+		//addSelectionListener(rasterOptionHelper);*/
 	}
 
 	public void setMappableItems(String [] items){
 	}
 	
-	protected void doLut(int index){
-		System.err.println("AdvLinControl:  doLut for " + index);
+	protected void mapFrom(int index, int selIndex){
+		System.err.println("AdvLinControl:  mapFrom for " + index);
 	}
 	
-	protected void doMapping(int index){
-	}		
+	protected void editMapping(int index){
+		System.err.println("AdvLinControl:  editMapping for " + index);
+	}
+	
+	protected void isMapped(int index, boolean b){
+		System.err.println("AdvLinControl:  isMapped for " + index);
+		int selIndex = mapFromCombo[index].getSelectionIndex();
+		switch(index){
+		case 0:  // set lineWidth 
+			break;
+		case 1:
+			break;  // set lineColor
+		default:
+			break;
+		}
+	}	
+	
 
 	public void loadFields(){}
 

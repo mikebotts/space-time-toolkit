@@ -32,7 +32,7 @@ import org.vast.stt.project.DataItem;
  * @date Feb 06, 2006
  * @version 1.0
  */
-public class AdvancedPointController extends AdvancedOptionController// implements SelectionListener
+public class AdvancedPointController extends AdvancedOptionController
 {
 	private Composite parent;
 	private PointOptionHelper pointOptionHelper;
@@ -49,18 +49,18 @@ public class AdvancedPointController extends AdvancedOptionController// implemen
 	
 	public void buildControls(){
 		optionControls = new OptionControl[2];
-		mapFromCombo = new Combo[2];
-		lutButton = new Button[2];
+		//mapFromCombo = new Combo[2];
+		//lutButton = new Button[2];
 		optionControls[0] = new OptionControl(parent, 0x0);
 		Spinner advWidthSpinner = optionControls[0].createSpinner("Point Size:", 1, 10);
 		advWidthSpinner.setSelection((int)pointOptionHelper.getPointSize());
 		//  add other controls
-		addMappingControls(parent, 0);
+		addMapFromCombos(parent, 0);
 		
 		optionControls[1] = new OptionControl(parent, 0x0);
 		optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
 
-		addMappingControls(parent, 1);
+		addMapFromCombos(parent, 1);
 		//  disable color mapFromCombo (consider just not showing this)
 		mapFromCombo[1].setEnabled(false);
 
@@ -84,13 +84,17 @@ public class AdvancedPointController extends AdvancedOptionController// implemen
 		//setOptionState(colorSP, 1);
 	}
 	
-	protected void doLut(int index){
-		System.err.println("AdvLinControl:  doLut for " + index);
+	protected void mapFrom(int index, int selIndex){
+		System.err.println("AdvLinControl:  mapFrom for " + index);
 	}
 	
-	protected void doMapping(int index){
-		System.err.println("AdvLinControl:  doMapping for " + index);
-		//int selIndex = mapFromCombo[index].getSelectionIndex();
+	protected void editMapping(int index){
+		System.err.println("AdvLinControl:  editMapping for " + index);
+	}
+	
+	protected void isMapped(int index, boolean b){
+		System.err.println("AdvLinControl:  isMapped for " + index);
+		int selIndex = mapFromCombo[index].getSelectionIndex();
 		switch(index){
 		case 0:  // set lineWidth 
 			break;
@@ -99,7 +103,8 @@ public class AdvancedPointController extends AdvancedOptionController// implemen
 		default:
 			break;
 		}
-	}		
+	}	
+	
 
 	//==============
 	//=============
