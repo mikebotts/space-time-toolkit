@@ -39,7 +39,9 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		this.setContent(mainGroup);
 			
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 5;
+		//  NOTE:  Should really be 3, but contents aren't rendered initially with 3 columns-
+		//         see hack @ bottom of setActiveSymb()
+		gridLayout.numColumns = 1;
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setBackground(WHITE);
 	}
@@ -68,28 +70,35 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 			dataItem.addListener(optionController);
 
 		}
-		this.layout();
+//		this.layout();
+//		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		this.redraw();	
+		//  NOTE:  Here is hack.  I reset layout to 3 columns and redraw, and it works.
+		//         This is due to a bug in SWT ScrolledComp, I think.  TC
+		GridLayout gridLayout = (GridLayout)mainGroup.getLayout();
+		gridLayout.numColumns = 4;
+		mainGroup.setLayout(gridLayout);
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		this.redraw();	
+		this.layout();
+		//this.redraw();	
 	}
 
 	public void addTopRow(){
 		//  Add Labels for top row
+		Label isMappedLabel = new Label(mainGroup, SWT.LEFT);
+		Label editMappingLabel = new Label(mainGroup, SWT.LEFT);
 		Label toLabel = new Label(mainGroup, SWT.LEFT);
 		Label fromLabel = new Label(mainGroup, SWT.LEFT);
-		Label gainLabel = new Label(mainGroup, SWT.LEFT);
-		Label offsetLabel = new Label(mainGroup, SWT.LEFT);
-		Label lutLabel = new Label(mainGroup, SWT.LEFT);
+
+		isMappedLabel.setText("Map    ");
+		editMappingLabel.setText("Edit  ");
 		toLabel.setText("Map To:");
 		fromLabel.setText("MapFrom:");
-		gainLabel.setText("Gain");
-		offsetLabel.setText("Offset");
-		lutLabel.setText("");
+		
+		isMappedLabel.setBackground(WHITE);
+		editMappingLabel.setBackground(WHITE);
 		toLabel.setBackground(WHITE);
 		fromLabel.setBackground(WHITE);
-		gainLabel.setBackground(WHITE);
-		offsetLabel.setBackground(WHITE);
-		lutLabel.setBackground(WHITE);
 	}
 
 	public void setMappableItems(String [] items){
@@ -98,6 +107,7 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 
 	public void removeOldControls(){
 		Control [] controls = mainGroup.getChildren();
+		//  TODO  REMOVE LISTENERES HERE !!!!
 		for(int i=0; i<controls.length; i++){
 			controls[i].dispose();
 			controls[i] = null;

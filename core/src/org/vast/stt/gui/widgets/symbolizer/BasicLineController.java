@@ -45,6 +45,7 @@ public class BasicLineController extends OptionController// implements Selection
 		OptionParams[] params = 
 		{
 			new OptionParams(OptionControl.ControlType.SPINNER, "Line Width:", new int[] {1, 10}),	
+			//new OptionParams(OptionControl.ControlType.TEXT, "Som text:",	"blah"),
 			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",	null)
 		};
 		optionControls = OptionControl.createControls(parent, params);

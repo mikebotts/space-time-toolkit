@@ -1,12 +1,10 @@
-
 package org.vast.stt.gui.widgets.symbolizer;
 
-import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,241 +20,241 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 
-
 /**
- * <p><b>Title:</b>
- * Advanced Style Dialog
+ * <p>
+ * <b>Title:</b> Advanced Symbolizer Dialog
  * </p>
- *
- * <p><b>Description:</b><br/>
- * TODO AdvancedStyleDialog type description
+ * 
+ * <p>
+ * <b>Dialog for controlling Advanced parameters for Symbolizers,
+ *    including mapping functions.</b><br/> 
  * </p>
- *
- * <p>Copyright (c) 2005</p>
+ * 
+ * <p>
+ * Copyright (c) 2005
+ * </p>
+ * 
  * @author Tony Cook
  * @date Jul 12, 2006
  * @version 1.0
  * 
- * TODO:  Don't allow multiple advancedStyleDialog for a dataStyler - otherwise,
- *        communicating between them will get nasty
- * TODO:  Fix NPEs for non DataItems that try to instantiate AdvancedStyleDialog (this 
- *        will need to be done upstream somewhere)
- * TODO:  Have added symbolizers from AddSymbolizerDialog be added to this widget also 
+ * TODO: Don't allow multiple advancedStyleDialog for a dataStyler - otherwise,
+ * communicating between them will get nasty 
+ * TODO: Fix NPEs for non DataItems
+ * that try to instantiate AdvancedStyleDialog (this will need to be done
+ * upstream somewhere) 
+ * TODO: Have added symbolizers from AddSymbolizerDialog be
+ * added to this widget also
  */
-public class AdvancedSymbolizerDialog implements SelectionListener
-{
-    private Shell shell;
+public class AdvancedSymbolizerDialog implements SelectionListener {
+	private Shell shell;
+	private DataItem dataItem;
+	private AdvancedGraphicsTab advGraphicsTab;
+	private AdvancedGeometryTab advGeomTab;
+	DataStructureTreeViewer dataStructureTree;
+	private TabItem graphicTabItem;
+	private Button addButton;
+	private Button removeButton;
+	private Button renameButton;
+	private Combo symCombo;
+	private Symbolizer activeSymbolizer;
+	private List<Symbolizer> symbolizerList;
+	private Button closeButton;
+	private Button okButton;
 
-    private DataItem dataItem;
-    private AdvancedGraphicsTab advGraphicsTab;
-    private AdvancedGeometryTab advGeomTab;
-    DataStructureTreeViewer dataStructureTree;
-    private TabItem graphicTabItem;
-    private Button addButton;
-    private Button removeButton;
-    private Button renameButton;
-    private Combo symCombo;
-    private Symbolizer activeSymbolizer;
-    private List<Symbolizer> symbolizerList;
-    private Button closeButton;
-    private Button okButton;
+	// This dialog's dataItem cannot change, unlike SymbolizerWidget
+	// However, it's list of symbolizers can change if a style is added to the
+	// DataItem via the 'add' button, or the 'add' button on the
+	// symbolizerWidget
+	// NOTE: For now, if anything causes Dialog to fail, throw exception
+	public AdvancedSymbolizerDialog(DataItem item, Symbolizer activeSymbolizer)
+			throws Exception {
+		this.dataItem = item;
+		// init GUI components
+		init();
+		// Set initial state of tabs and tree based on dataItem's styles
+		this.activeSymbolizer = activeSymbolizer;
+		setSymbolizers(dataItem.getSymbolizers());
+		dataStructureTree.setInput(item.getDataProvider().getDataNode());
+		shell.open();
+	}
 
+	/**
+	 * Init new dialog shell and its contents
+	 */
+	private void init() {
+		shell = new Shell();
+		//shell.setMinimumSize(new Point(400, 250));
+		shell.setLayout(new GridLayout(1, false));
+		shell.setSize(500,520);
+		shell.setText("Advanced Style Options");
 
-    //  This dialog's dataItem cannot change, unlike SymbolizerWidget
-    //  However, it's list of symbolizers can change if a style is added to the 
-    //  DataItem via the 'add' button, or the 'add' button on the 
-    //  symbolizerWidget
-    //  NOTE:  For now, if anything causes Dialog to fail, throw exception
-    public AdvancedSymbolizerDialog(DataItem item, Symbolizer activeSymbolizer) throws Exception
-    {
-        this.dataItem = item;
-        //  init GUI components
-        init();
-        //  Set initial state of tabs and tree based on dataItem's styles
-        this.activeSymbolizer = activeSymbolizer;
-        setSymbolizers(dataItem.getSymbolizers());
-        dataStructureTree.setInput(item.getDataProvider().getDataNode());
-        shell.open();
-    }
+		// Top composite for top row
+		final Composite topComp = new Composite(shell, SWT.NONE);
+		topComp.setLayoutData(new GridData(GridData.CENTER, GridData.CENTER,
+				false, false));
+		// GridLayout w/5 columns
+		final GridLayout topLayout = new GridLayout(5, false);
+		topComp.setLayout(topLayout);
 
+		// Top "Row" of combo and buttons
+		final Label sLabel = new Label(topComp, SWT.NONE);
+		sLabel.setText("Styles:");
 
-    /**
-     * Init new dialog shell and its contents
-     */
-    private void init()
-    {
-        shell = new Shell();
-        shell.setMinimumSize(new Point(400, 250));
-        shell.setLayout(new GridLayout(1, false));
-        shell.setSize(600, 350);
-        shell.setText("Advanced Style Options");
+		symCombo = new Combo(topComp, SWT.READ_ONLY);
+		symCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
+				true, false));
+		// enable when I fix stylesChanged
+		// stylesCombo.setEnabled(false);
 
-        //  Top composite for top row
-        final Composite topComp = new Composite(shell, SWT.NONE);
-        topComp.setLayoutData(new GridData(GridData.CENTER, GridData.CENTER, false, false));
-        //  GridLayout w/5 columns
-        final GridLayout topLayout = new GridLayout(5, false);
-        topComp.setLayout(topLayout);
+		symCombo.addSelectionListener(this);
 
-        //  Top "Row" of combo and buttons
-        final Label sLabel = new Label(topComp, SWT.NONE);
-        sLabel.setText("Styles:");
+		addButton = new Button(topComp, SWT.NONE);
+		addButton.setText("Add");
+		addButton.addSelectionListener(this);
 
-        symCombo = new Combo(topComp, SWT.READ_ONLY);
-        symCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        //  enable when I fix stylesChanged 
-        //stylesCombo.setEnabled(false);
+		removeButton = new Button(topComp, SWT.NONE);
+		removeButton.setText("Remove");
+		removeButton.addSelectionListener(this);
 
-        symCombo.addSelectionListener(this);
+		renameButton = new Button(topComp, SWT.NONE);
+		renameButton.setLayoutData(new GridData(GridData.END, GridData.CENTER,
+				false, false));
+		renameButton.setText("Rename");
+		renameButton.addSelectionListener(this);
 
-        addButton = new Button(topComp, SWT.NONE);
-        addButton.setText("Add");
-        addButton.addSelectionListener(this);
+		// middle composite for Tabbed Folder
+		final Composite midComp = new Composite(shell, SWT.NONE);
+		midComp.setLayout(new GridLayout(1, true));
+		GridData gd = new GridData(GridData.FILL, GridData.FILL,true, true);
+		midComp.setLayoutData(gd);
+		
+		// Tab Folder (left 2 columns of midComp)
+		final TabFolder tabFolder = new TabFolder(midComp, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));//, 2, 1));
 
-        removeButton = new Button(topComp, SWT.NONE);
-        removeButton.setText("Remove");
-        removeButton.addSelectionListener(this);
+		// Graphic TabItem
+		graphicTabItem = new TabItem(tabFolder, SWT.NONE);
+		graphicTabItem.setText("Graphic");
 
-        renameButton = new Button(topComp, SWT.NONE);
-        renameButton.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        renameButton.setText("Rename");
-        renameButton.addSelectionListener(this);
+		// AdvanceGraphicTab
+		advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem);
+		String[] mappableItems = getMappableItems();
+		advGraphicsTab.setMappableItems(mappableItems);
+		graphicTabItem.setControl(advGraphicsTab);
 
-        //  middle composite for tab and treeView 
-        final Composite midComp = new Composite(shell, SWT.NONE);
-        final GridData gridData_1 = new GridData(GridData.FILL, GridData.FILL, true, true);
-        midComp.setLayoutData(gridData_1);
-        midComp.setLayout(new GridLayout(3, true));
+		// Geom tab
+		final TabItem geometryTabItem = new TabItem(tabFolder, SWT.NONE);
+		geometryTabItem.setText("Geometry");
 
-        //  Tab Folder (left 2 columns of midComp)
-        final TabFolder tabFolder = new TabFolder(midComp, SWT.NONE);
-        tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 2, 1));
+		// AdvanceGeomTab
+		advGeomTab = new AdvancedGeometryTab(tabFolder);
+		advGeomTab.setMappableItems(mappableItems);
+		geometryTabItem.setControl(advGeomTab);
 
-        //  Graphic TabItem
-        graphicTabItem = new TabItem(tabFolder, SWT.NONE);
-        graphicTabItem.setText("Graphic");
+		//  Bottom comp for mapping function options and DataStructureTree Viewer
+		final Composite bottomComp = new Composite(shell, SWT.NONE);
+		bottomComp.setLayout(new GridLayout(2, true));
+		gd = new GridData(GridData.FILL, GridData.FILL,true, true);
+		bottomComp.setLayoutData(gd);
 
-        // AdvanceGraphicTab
-        advGraphicsTab = new AdvancedGraphicsTab(tabFolder, dataItem);
-        String[] mappableItems = getMappableItems();
-        advGraphicsTab.setMappableItems(mappableItems);
-        graphicTabItem.setControl(advGraphicsTab);
+		//  MappingFunctionOpts Editor (left Item of bottomComp)
+		Group mappingGroup = new Group(bottomComp, 0x0);
+		gd = new GridData(GridData.FILL, GridData.FILL,true, true);
+		mappingGroup.setLayoutData(gd);
+		mappingGroup.setLayout(new GridLayout(3, false));
+		mappingGroup.setText("Mapping Function Options:");
+		MappingOptionChooser moc = new MappingOptionChooser(mappingGroup);
+		
+		// DataStructure TreeViewer (right item of bottomComp)
+		Group dstGroup = new Group(bottomComp, 0x0);
+		gd = new GridData(GridData.FILL, GridData.FILL,true, true);
+		dstGroup.setLayoutData(gd);
 
-        //  Geom tab
-        final TabItem geometryTabItem = new TabItem(tabFolder, SWT.NONE);
-        geometryTabItem.setText("Geometry");
+		dstGroup.setLayout(new FillLayout());
+		dstGroup.setText("Data Structure");
+		dataStructureTree = new DataStructureTreeViewer(dstGroup, SWT.BORDER);
+		
+		// Bottom composite for OK/Cancel Btns
+		final Composite buttonComp = new Composite(shell, SWT.NONE);
+		buttonComp.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+		buttonComp.setLayout(new GridLayout(2, true));
 
-        // AdvanceGeomTab
-        advGeomTab = new AdvancedGeometryTab(tabFolder);
-        advGeomTab.setMappableItems(mappableItems);
-        geometryTabItem.setControl(advGeomTab);
+		okButton = new Button(buttonComp, SWT.CENTER);
+		gd = new GridData(SWT.END, SWT.CENTER, false, false);
+		gd.widthHint = 60;
+		okButton.setLayoutData(gd);
+		okButton.setText("OK");
+		okButton.addSelectionListener(this);
 
-        //  DataStructure TreeViewer (right item of midComp)
-        final Group dataStructureGroup = new Group(midComp, SWT.NONE);
-        //dataStructureGroup.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        dataStructureGroup.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-        dataStructureGroup.setText("Data Structure");
-        dataStructureGroup.setLayout(new FillLayout());
-        dataStructureTree = new DataStructureTreeViewer(dataStructureGroup, SWT.BORDER);
+		closeButton = new Button(buttonComp, SWT.CENTER);
+		gd = new GridData(SWT.END, SWT.CENTER, false, false);
+		gd.widthHint = 60;
+		closeButton.setLayoutData(gd);
+		closeButton.setText("Close");
+		closeButton.addSelectionListener(this);
 
-        //  Bottom composite for OK/Cancel Btns 
-        final Composite bottomComp = new Composite(shell, SWT.NONE);
-        bottomComp.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
-        bottomComp.setLayout(new GridLayout(2, true));
+		shell.layout();
+	}
 
-        okButton = new Button(bottomComp, SWT.CENTER);
-        GridData gd = new GridData(SWT.END, SWT.CENTER, false, false);
-        gd.widthHint = 60;
-        okButton.setLayoutData(gd);
-        okButton.setText("OK");
-        okButton.addSelectionListener(this);
+	/**
+	 * @return - the mappable property names for this dataItem
+	 */
+	protected String[] getMappableItems() {
+		DataNode node = dataItem.getDataProvider().getDataNode();
+		if (node == null) {
+			System.err
+					.println("ASD.getMappables():  Node is still null (probably not yet enabled.");
+			return null;
+		}
+		List<String> mappingList = node.getPossibleScalarMappings();
+		return mappingList.toArray(new String[0]);
+	}
 
-        closeButton = new Button(bottomComp, SWT.CENTER);
-        gd = new GridData(GridData.END, GridData.CENTER, false, false);
-        gd.widthHint = 60;
-        closeButton.setLayoutData(gd);
-        closeButton.setText("Close");
-        closeButton.addSelectionListener(this);
+	/**
+	 */
+	public void setSymbolizers(List<Symbolizer> symbolizerList) {
+		this.symbolizerList = symbolizerList;
+		// Remove old symbolizers
+		// symCombo.removeAll();
+		int numStyles = symbolizerList.size();
+		for (int i = 0; i < numStyles; i++) {
+			Symbolizer symTmp = symbolizerList.get(i);
+			symCombo.add(symTmp.getName());
+		}
+		int activeIndex = symbolizerList.indexOf(activeSymbolizer);
+		if (activeIndex == -1)
+			symCombo.select(0);
+		else
+			symCombo.select(activeIndex);
+		setActiveSymbolizer(symCombo.getSelectionIndex());
+	}
 
-        shell.layout();
-    }
+	protected void setActiveSymbolizer(int index) {
+		activeSymbolizer = symbolizerList.get(index);
+		advGraphicsTab.setActiveSymbolizer(activeSymbolizer);
+		advGeomTab.setActiveSymbolizer(activeSymbolizer);
+		// graphicTabItem.setControl()
+	}
 
+	public void widgetDefaultSelected(SelectionEvent e) {
+	}
 
-    /**
-     * @return - the mappable property names for this dataItem
-     */
-    protected String[] getMappableItems()
-    {
-        DataNode node = dataItem.getDataProvider().getDataNode();
-        if (node == null)
-        {
-            System.err.println("ASD.getMappables():  Node is still null (probably not yet enabled.");
-            return null;
-        }
-        List<String> mappingList = node.getPossibleScalarMappings();
-        return mappingList.toArray(new String[0]);
-    }
+	public void widgetSelected(SelectionEvent e) {
+		System.err.println(e);
+		if (e.widget == addButton) {
 
+		} else if (e.widget == removeButton) {
 
-    /**
-     */
-    public void setSymbolizers(List<Symbolizer> symbolizerList)
-    {
-        this.symbolizerList = symbolizerList;
-        //  Remove old symbolizers
-        //symCombo.removeAll();
-        int numStyles = symbolizerList.size();
-        for (int i = 0; i < numStyles; i++)
-        {
-            Symbolizer symTmp = symbolizerList.get(i);
-            symCombo.add(symTmp.getName());
-        }
-        int activeIndex = symbolizerList.indexOf(activeSymbolizer);
-        if(activeIndex==-1)
-        	symCombo.select(0);
-        else
-        	symCombo.select(activeIndex);
-        setActiveSymbolizer(symCombo.getSelectionIndex());
-    }
+		} else if (e.widget == renameButton) {
 
-    protected void setActiveSymbolizer(int index)
-    {
-        activeSymbolizer = symbolizerList.get(index);
-        advGraphicsTab.setActiveSymbolizer(activeSymbolizer);
-        advGeomTab.setActiveSymbolizer(activeSymbolizer);
-        //graphicTabItem.setControl()
-    }
-
-    public void widgetDefaultSelected(SelectionEvent e)
-    {
-    }
-
-
-    public void widgetSelected(SelectionEvent e)
-    {
-        System.err.println(e);
-        if (e.widget == addButton)
-        {
-
-        }
-        else if (e.widget == removeButton)
-        {
-
-        }
-        else if (e.widget == renameButton)
-        {
-
-        }
-        else if (e.widget == symCombo)
-        {
-            setActiveSymbolizer(symCombo.getSelectionIndex());
-        }
-        else if (e.widget == closeButton)
-        {
-            //  Remove STTEventListener from item (a little messy still)
-        	dataItem.removeListener(advGraphicsTab.optionController);
-            advGraphicsTab.close();  //  why close tab?
-            shell.close();
-        }
-    }
+		} else if (e.widget == symCombo) {
+			setActiveSymbolizer(symCombo.getSelectionIndex());
+		} else if (e.widget == closeButton) {
+			// Remove STTEventListener from item (a little messy still)
+			dataItem.removeListener(advGraphicsTab.optionController);
+			advGraphicsTab.close(); // why close tab?
+			shell.close();
+		}
+	}
 }

@@ -1,7 +1,9 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
@@ -15,6 +17,7 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
+import org.vast.stt.gui.widgets.OptionParams;
 import org.vast.stt.project.DataItem;
 
 
@@ -49,22 +52,25 @@ public class AdvancedLineController extends AdvancedOptionController
 	
 	//  These controls differ from basic in that they have 3 channels for color
 	public void buildControls(){
-		optionControls = new OptionControl[2];
-		mapFromCombo = new Combo[2];
-		gainText = new Text[2];
-		offsetText = new Text[2];
-		lutButton = new Button[2];
-		optionControls[0] = new OptionControl(parent, 0x0);
-		optionControls[0].createSpinner("LineWidth:", 1, 10);
+		OptionParams[] params =	{
+			new OptionParams(OptionControl.ControlType.SPINNER, "Line Width:", new int[] {1, 10}),	
+			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",	null)
+		};
 		
-		//  add other controls
-		addMappingControls(parent, 0);
+		initMappingControls(params.length);
 		
-		optionControls[1] = new OptionControl(parent, 0x0);
-		optionControls[1].createColorButton("Line Color:", lineOptionHelper.getLineColor());
-
-		addMappingControls(parent, 1);
+		addMappingButtons(parent, 0);
+		optionControls[0] = OptionControl.createControl(parent, params[0]);
+//		GridData gd = new GridData();
+//		gd.horizontalAlignment = SWT.BEGINNING;
+//		optionControls[0].setLayoutData(gd);
+		addMapFromCombos(parent, 0);
+		
+		addMappingButtons(parent, 1);
+		optionControls[1] = OptionControl.createControl(parent, params[1]);
+		addMapFromCombos(parent, 1);
 		mapFromCombo[1].setEnabled(false);
+
 		//  set initial state
 		loadFields();
 	}
@@ -93,15 +99,24 @@ public class AdvancedLineController extends AdvancedOptionController
             setOptionState(alphaSP, 1);
 	}
 	
-	protected void doLut(int index){
-		System.err.println("AdvLinControl:  doLut for " + index);
+	protected void mapFrom(int index,  int selIndex){
+		System.err.println("AdvLinControl:  mapFrom for " + index +", " + 
+				mapFromCombo[index].getText());
 	}
 	
-	protected void doMapping(int index){
-		System.err.println("AdvLinControl:  doMapping for " + index);
+	protected void editMapping(int index){
+		System.err.println("AdvLinControl:  editMapping for " + index);
+		//  TODO  reset options in MappintOptChooser
+	}
+	
+	protected void isMapped(int index, boolean b){
+		System.err.println("AdvLinControl:  isMapped for " + index);
+		//dataItem.getDataProvider().
 		int selIndex = mapFromCombo[index].getSelectionIndex();
 		switch(index){
 		case 0:  // set lineWidth 
+			optionControls[0].setEnabled(!b);
+			lineOptionHelper.setWidthConstant(!b);
 			break;
 		case 1:
 			break;  // set lineColor
@@ -112,9 +127,16 @@ public class AdvancedLineController extends AdvancedOptionController
 	
     @Override
     // reset value of all controls to what is currently in symbolizer
-	public void loadFields(){
-		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
+    //   TODO  deal with color and rgba
+    public void loadFields(){
+		//  width
+    	Spinner widthSpinner = (Spinner)optionControls[0].getControl();
 		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
+		boolean widthMapped = !lineOptionHelper.getWidthConstant();
+		isMappedBtn[0].setSelection(widthMapped);
+		optionControls[0].setEnabled(!widthMapped);
+		
+		//  color
 		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
 	}
 	
@@ -123,6 +145,7 @@ public class AdvancedLineController extends AdvancedOptionController
 	
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
+		System.err.println(e);
 
 		if(control == optionControls[0].getControl()) {
 			Spinner widthSpinner = (Spinner)control;
@@ -140,7 +163,9 @@ public class AdvancedLineController extends AdvancedOptionController
 			optionControls[1].setColorLabelColor(sldColor); 
 			lineOptionHelper.setLineColor(sldColor);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		}
+		} else 
+			handleMappingEvent(e);
+			
 	}
 }
 

@@ -7,7 +7,9 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataArray;
@@ -19,7 +21,6 @@ import org.vast.stt.data.DataNode;
 
 public class DataStructureTreeViewer
 {
-
     TreeViewer treeViewer;
 
 
@@ -32,6 +33,7 @@ public class DataStructureTreeViewer
     public void init(Composite parent, int style)
     {
         treeViewer = new TreeViewer(parent, style);
+        //treeViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
         DataStructureContentProvider contProv = new DataStructureContentProvider();
         DataStructureLabelProvider labelProv = new DataStructureLabelProvider();
         treeViewer.setContentProvider(contProv);

@@ -69,7 +69,7 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		this.setContent(mainGroup);
 			
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 5;
+		gridLayout.numColumns = 3;
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setBackground(WHITE);
 		addTopRow();
@@ -81,18 +81,18 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		//  Add Labels for top row
 		Label toLabel = new Label(mainGroup, SWT.LEFT);
 		Label fromLabel = new Label(mainGroup, SWT.LEFT);
-		Label gainLabel = new Label(mainGroup, SWT.LEFT);
-		Label offsetLabel = new Label(mainGroup, SWT.LEFT);
+		//Label gainLabel = new Label(mainGroup, SWT.LEFT);
+		//Label offsetLabel = new Label(mainGroup, SWT.LEFT);
 		Label lutLabel = new Label(mainGroup, SWT.LEFT);
 		toLabel.setText("Map To:");
 		fromLabel.setText("Map From:");
-		gainLabel.setText("Gain");
-		offsetLabel.setText("Offset");
-		lutLabel.setText("");
+		//gainLabel.setText("Gain");
+		//ffsetLabel.setText("Offset");
+		lutLabel.setText("Edit");
 		toLabel.setBackground(WHITE);
 		fromLabel.setBackground(WHITE);
-		gainLabel.setBackground(WHITE);
-		offsetLabel.setBackground(WHITE);
+		//gainLabel.setBackground(WHITE);
+		//offsetLabel.setBackground(WHITE);
 		lutLabel.setBackground(WHITE);
 	}
 	
@@ -116,25 +116,25 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 			gd = new GridData();
 			//gd.widthHint = 30;
 			mapFromCombo[i].setLayoutData(gd);
-			gd = new GridData();
-			gd.widthHint = 30;
-			gainText[i] = new Text(mainGroup,SWT.RIGHT );
-			offsetText[i] = new Text(mainGroup, SWT.RIGHT);
-			gainText[i].setTextLimit(7);
-			gainText[i].setLayoutData(gd);
-			//  make bg gray to distinguish it from bg of parent
-			gainText[i].setBackground(new Color(display, 210, 210, 210));
-			gd = new GridData();
-			gd.widthHint = 30;
-			offsetText[i].setTextLimit(7);
-			offsetText[i].setLayoutData(gd);
-			//  make bg gray to distinguish it from bg of parent
-			offsetText[i].setBackground(new Color(display, 210, 210, 210));
+//			gd = new GridData();
+//			gd.widthHint = 30;
+//			gainText[i] = new Text(mainGroup,SWT.RIGHT );
+//			offsetText[i] = new Text(mainGroup, SWT.RIGHT);
+//			gainText[i].setTextLimit(7);
+//			gainText[i].setLayoutData(gd);
+//			//  make bg gray to distinguish it from bg of parent
+//			gainText[i].setBackground(new Color(display, 210, 210, 210));
+//			gd = new GridData();
+//			gd.widthHint = 30;
+//			offsetText[i].setTextLimit(7);
+//			offsetText[i].setLayoutData(gd);
+//			//  make bg gray to distinguish it from bg of parent
+//			offsetText[i].setBackground(new Color(display, 210, 210, 210));
 
 			//  set inititial vals for gain, offset
 			//  set enabled state
 			lutButton[i] = new Button(mainGroup, SWT.PUSH);
-			lutButton[i].setText("LUT");
+			lutButton[i].setText("Edit");
 			lutButton[i].setBackground(WHITE);
 			lutButton[i].addSelectionListener(this);
 		}
