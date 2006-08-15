@@ -230,10 +230,18 @@ public class TextureStyler extends AbstractStyler
         param = this.symbolizer.getGridDimensions().getWidth();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GridWidthMapper(patch.grid, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.grid.width = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GridWidthMapper(patch.grid, param.getMappingFunction()));
+                }
             }
         }
         
@@ -241,10 +249,18 @@ public class TextureStyler extends AbstractStyler
         param = this.symbolizer.getGridDimensions().getLength();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GridLengthMapper(patch.grid, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.grid.length = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GridLengthMapper(patch.grid, param.getMappingFunction()));
+                }
             }
         }
         
@@ -272,10 +288,10 @@ public class TextureStyler extends AbstractStyler
         if (channel != null)       
         {
             colors = true;
-            propertyName = channel.getChannelName().getPropertyName();
+            propertyName = channel.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericRedMapper(pixel, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericRedMapper(pixel, channel.getMappingFunction()));
             }
         }
         
@@ -284,10 +300,10 @@ public class TextureStyler extends AbstractStyler
         if (channel != null)
         {
             colors = true;
-            propertyName = channel.getChannelName().getPropertyName();
+            propertyName = channel.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericGreenMapper(pixel, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericGreenMapper(pixel, channel.getMappingFunction()));
             }
         }
         
@@ -296,10 +312,10 @@ public class TextureStyler extends AbstractStyler
         if (channel != null)
         {
             colors = true;
-            propertyName = channel.getChannelName().getPropertyName();
+            propertyName = channel.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericBlueMapper(pixel, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericBlueMapper(pixel, channel.getMappingFunction()));
             }
         }
         
@@ -307,10 +323,10 @@ public class TextureStyler extends AbstractStyler
         channel = this.symbolizer.getAlphaChannel();
         if (channel != null)
         {
-            propertyName = channel.getChannelName().getPropertyName();
+            propertyName = channel.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, param.getMappingFunction()));
+                addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, channel.getMappingFunction()));
             }
         }
         
@@ -320,10 +336,10 @@ public class TextureStyler extends AbstractStyler
             channel = this.symbolizer.getGrayChannel();
             if (channel != null)
             {
-                propertyName = channel.getChannelName().getPropertyName();
+                propertyName = channel.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericGrayMapper(pixel, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new GenericGrayMapper(pixel, channel.getMappingFunction()));
                 }
             }
         }
@@ -332,10 +348,18 @@ public class TextureStyler extends AbstractStyler
         param = this.symbolizer.getRasterDimensions().getWidth();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new RasterWidthMapper(patch.texture, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.texture.width = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new RasterWidthMapper(patch.texture, param.getMappingFunction()));
+                }
             }
         }
         
@@ -343,10 +367,18 @@ public class TextureStyler extends AbstractStyler
         param = this.symbolizer.getRasterDimensions().getLength();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new RasterHeightMapper(patch.texture, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.texture.height = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();                
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new RasterHeightMapper(patch.texture, param.getMappingFunction()));
+                }
             }
         }
 	}

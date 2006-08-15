@@ -181,10 +181,18 @@ public abstract class AbstractGridStyler extends AbstractStyler
         param = this.symbolizer.getDimensions().getWidth();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GridWidthMapper(patch, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.width = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GridWidthMapper(patch, param.getMappingFunction()));
+                }
             }
         }
         
@@ -192,10 +200,18 @@ public abstract class AbstractGridStyler extends AbstractStyler
         param = this.symbolizer.getDimensions().getLength();
         if (param != null)       
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GridLengthMapper(patch, param.getMappingFunction()));
+                Object value = param.getConstantValue();
+                patch.length = ((Float)value).intValue();
+            }
+            else
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GridLengthMapper(patch, param.getMappingFunction()));
+                }
             }
         }
         
