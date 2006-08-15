@@ -133,7 +133,16 @@ abstract public class AdvancedOptionController extends OptionController
 		}
 	}
 	
-
+	public void selectMapFromCombo(int index, String selection){
+		String [] items = mapFromCombo[index].getItems();
+		for(int i=0; i<items.length; i++){
+			if(items[0].equals(selection)){
+				mapFromCombo[index].select(i);
+				return;
+			}
+		}
+	}
+	
 	public void addSelectionListener(SelectionListener sl){
 		super.addSelectionListener(sl); 
 		for(int i=0; i<optionControls.length; i++) {

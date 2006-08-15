@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
+import org.vast.ows.sld.MappingFunction;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -107,6 +108,14 @@ public class AdvancedLineController extends AdvancedOptionController
 	protected void editMapping(int index){
 		System.err.println("AdvLinControl:  editMapping for " + index);
 		//  TODO  reset options in MappintOptChooser
+		switch(index){
+		case 0:  //  lineWidth
+			MappingFunction func = lineOptionHelper.getWidthMappingFunction();
+			
+			break;
+		case 1:  //  color
+			break;
+		}
 	}
 	
 	protected void isMapped(int index, boolean b){
@@ -135,6 +144,11 @@ public class AdvancedLineController extends AdvancedOptionController
 		boolean widthMapped = !lineOptionHelper.getWidthConstant();
 		isMappedBtn[0].setSelection(widthMapped);
 		optionControls[0].setEnabled(!widthMapped);
+		if(widthMapped) {
+			String widthProp = lineOptionHelper.getWidthProperty();
+			//mapFromCombo[0].select(widthProp);
+			selectMapFromCombo(0, widthProp);
+		}
 		
 		//  color
 		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());

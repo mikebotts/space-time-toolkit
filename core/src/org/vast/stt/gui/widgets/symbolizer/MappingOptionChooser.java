@@ -1,9 +1,7 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
-import org.eclipse.jface.viewers.CellEditor.LayoutData;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
+import org.vast.ows.sld.MappingFunction;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionParams;
@@ -15,6 +13,7 @@ import org.vast.stt.gui.widgets.OptionParams;
 public class MappingOptionChooser extends OptionChooser
 {
 	OptionControl [] optionControls;
+	MappingFunction func;
 	
 	public MappingOptionChooser(Composite parent){
 		super(parent);
@@ -28,6 +27,10 @@ public class MappingOptionChooser extends OptionChooser
 		};
 		
 		optionControls = OptionControl.createControls(optComp, params);
-	}	
+	}
+	
+	public void setMappingFunction(MappingFunction func){
+		
+	}
 }
 
