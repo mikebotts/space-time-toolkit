@@ -39,9 +39,9 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		this.setContent(mainGroup);
 			
 		final GridLayout gridLayout = new GridLayout();
-		//  NOTE:  Should really be 3, but contents aren't rendered initially with 3 columns-
+		//  NOTE:  Should really be 4, but contents aren't rendered initially with 4 columns-
 		//         see hack @ bottom of setActiveSymb()
-		gridLayout.numColumns = 1;
+		gridLayout.numColumns = 5;
 		mainGroup.setLayout(gridLayout);
 		mainGroup.setBackground(WHITE);
 	}
@@ -54,8 +54,10 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		
 		removeOldControls();
 		addTopRow();
-		if(optionController!=null)
+		if(optionController!=null) {
 			dataItem.removeListener(optionController);
+			optionController.removeSelectionListener(optionController);
+		}
 		if(symbolizer instanceof PointSymbolizer){
 			optionController = new AdvancedPointController(mainGroup, dataItem, (PointSymbolizer)symbolizer);
 		} else if(symbolizer instanceof LineSymbolizer) {
@@ -70,17 +72,16 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 			dataItem.addListener(optionController);
 
 		}
-//		this.layout();
-//		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		this.redraw();	
-		//  NOTE:  Here is hack.  I reset layout to 3 columns and redraw, and it works.
+		this.layout();
+		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		this.redraw();	
+		//  NOTE:  Here is hack.  I reset layout to 4 columns and redraw, and it works.
 		//         This is due to a bug in SWT ScrolledComp, I think.  TC
 		GridLayout gridLayout = (GridLayout)mainGroup.getLayout();
 		gridLayout.numColumns = 4;
 		mainGroup.setLayout(gridLayout);
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		this.layout();
-		//this.redraw();	
 	}
 
 	public void addTopRow(){
@@ -107,7 +108,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 
 	public void removeOldControls(){
 		Control [] controls = mainGroup.getChildren();
-		//  TODO  REMOVE LISTENERES HERE !!!!
 		for(int i=0; i<controls.length; i++){
 			controls[i].dispose();
 			controls[i] = null;

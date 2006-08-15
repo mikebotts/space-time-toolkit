@@ -29,33 +29,33 @@ public class BasicGridController extends OptionController
 	public BasicGridController(Composite parent, GridSymbolizer symbolizer){
 		this.symbolizer = symbolizer;
 
-		gridOptionHelper = new GridOptionHelper(this);
+		gridOptionHelper = new GridOptionHelper(symbolizer);
 		buildControls(parent);
 	}
 
 	public void buildControls(Composite parent){
-		int width = gridOptionHelper.getGridWidth();
-		int length = gridOptionHelper.getGridLength();
-		int depth = gridOptionHelper.getGridDepth();
-		
-		OptionParams[] params = 
-		{
-			new OptionParams(OptionControl.ControlType.CHECKBOX, "Fill Grid", new Boolean(true)),	
-			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Fill Color", 
-					gridOptionHelper.getFillColor()),	
-			new OptionParams(OptionControl.ControlType.CHECKBOX, "Show Wiremesh", new Boolean(false)),	
-			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Mesh Color", 
-					gridOptionHelper.getFillColor()),
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Width:", width + ""),	
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Length:", length + ""),	
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Depth:", depth + "")
-		};
-		
-		optionControls = OptionControl.createControls(parent, params);
-		// disable controls that don't work yet
-		for(int i=2; i<7; i++)
-			optionControls[i].setEnabled(false);
-		addSelectionListener(gridOptionHelper);
+//		int width = gridOptionHelper.getGridWidth();
+//		int length = gridOptionHelper.getGridLength();
+//		int depth = gridOptionHelper.getGridDepth();
+//		
+//		OptionParams[] params = 
+//		{
+//			new OptionParams(OptionControl.ControlType.CHECKBOX, "Fill Grid", new Boolean(true)),	
+//			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Fill Color", 
+//					gridOptionHelper.getFillColor()),	
+//			new OptionParams(OptionControl.ControlType.CHECKBOX, "Show Wiremesh", new Boolean(false)),	
+//			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Mesh Color", 
+//					gridOptionHelper.getFillColor()),
+//			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Width:", width + ""),	
+//			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Length:", length + ""),	
+//			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Grid Depth:", depth + "")
+//		};
+//		
+//		optionControls = OptionControl.createControls(parent, params);
+//		// disable controls that don't work yet
+//		for(int i=2; i<7; i++)
+//			optionControls[i].setEnabled(false);
+//		addSelectionListener(gridOptionHelper);
 	}
 
 	@Override

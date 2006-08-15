@@ -2,6 +2,7 @@ package org.vast.stt.gui.widgets.symbolizer;
 
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
+import org.vast.ows.sld.MappingFunction;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 
@@ -29,6 +30,11 @@ public class LineOptionHelper //implements SelectionListener
 		widthSP.setConstant(b);
 	}
 	
+	public String getWidthProperty(){
+		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
+		return widthSP.getPropertyName();
+	}
+	
 	public float getLineWidth(){
 		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
 		if(widthSP == null)
@@ -37,6 +43,11 @@ public class LineOptionHelper //implements SelectionListener
 		if(widthCon == null)
 			return 1.0f;
 		return ((Float)widthCon).floatValue();
+	}
+	
+	public MappingFunction getWidthMappingFunction(){
+		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
+		return widthSP.getMappingFunction();
 	}
 	
 	public org.vast.ows.sld.Color getLineColor(){

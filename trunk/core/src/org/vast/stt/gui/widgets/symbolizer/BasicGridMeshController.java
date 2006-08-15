@@ -7,45 +7,30 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
-import org.vast.ows.sld.LineSymbolizer;
+import org.vast.ows.sld.GridSymbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
 
-
-/**
- * <p><b>Title:</b>
- * Basic Line Controller
- * </p>
- *
- * <p><b>Description:</b><br/>
- * Builds basic Line controls for StyleWidget
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Tony Cook
- * @date Feb 06, 2006
- * @version 1.0
- */
-public class BasicLineController extends OptionController// implements SelectionListener
-{
-	private LineOptionHelper lineOptionHelper;
+public class BasicGridMeshController extends OptionController {
+	private GridOptionHelper gridOptionHelper;
 	
-	public BasicLineController(Composite parent, LineSymbolizer symbolizer){
+	public BasicGridMeshController(Composite parent, GridSymbolizer symbolizer){
 		this.symbolizer = symbolizer;
 		
-		lineOptionHelper = new LineOptionHelper(symbolizer);
+		gridOptionHelper = new GridOptionHelper(symbolizer);
 		buildControls(parent);
 	}
 	
 	public void buildControls(Composite parent){
 		OptionParams[] params = 
 		{
-			new OptionParams(OptionControl.ControlType.SPINNER, "Line Width:", new int[] {1, 10}),	
+			new OptionParams(OptionControl.ControlType.SPINNER, "Mesh Width:", new int[] {1, 10}),	
 			//new OptionParams(OptionControl.ControlType.TEXT, "Som text:",	"blah"),
-			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",	null)
+			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Mesh Color:",	null),
+			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Mesh Opacity:", "1.0")	
 		};
 		optionControls = OptionControl.createControls(parent, params);
 		loadFields();
@@ -54,9 +39,9 @@ public class BasicLineController extends OptionController// implements Selection
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
-		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
-		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
+//		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
+//		widthSpinner.setSelection((int)gridOptionHelper.getLineWidth());
+//		optionControls[1].setColorLabelColor(gridOptionHelper.getLineColor());
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){
@@ -68,7 +53,7 @@ public class BasicLineController extends OptionController// implements Selection
 		if(control == optionControls[0].getControl()) {
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
-			lineOptionHelper.setLineWidth(w);
+			gridOptionHelper.setGridMeshWidth(w);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if (control == optionControls[1].getControl()) {
 			ColorDialog colorChooser = 
@@ -79,7 +64,7 @@ public class BasicLineController extends OptionController// implements Selection
 			// TODO:  add alpha support
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
-			lineOptionHelper.setLineColor(sldColor);
+			gridOptionHelper.setGridMeshColor(sldColor);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}
