@@ -110,25 +110,29 @@ public class MsRoadsProvider extends AbstractProvider
                 DataBlock imageryDataBlock = DataBlockFactory.createBlock(data);
                 
                 // build grid
+                int gridWidth = 10;
+                int gridLength = 10;
                 double minY = yToLat(item.getMinY());
                 double maxY = yToLat(item.getMaxY());
                 double minX = item.getMinX();
                 double maxX = item.getMaxX();
-                double dX = (maxX - minX) / 9;
-                double dY = (maxY - minY) / 9;
-                gridData.renewDataBlock();
+                double dX = (maxX - minX) / (gridWidth-1);
+                double dY = (maxY - minY) / (gridLength-1);
+                DataBlock gridBlock = DataBlockFactory.createBlock(new double[gridLength*gridWidth*2]);
                 
                 // compute data for grid block
-                for (int u=0; u<10; u++)
+                int valCount = 0;
+                for (int v=0; v<gridLength; v++)
                 {
-                    for (int v=0; v<10; v++)
+                    for (int u=0; u<gridWidth; u++)
                     {
                         double lon = minX + dX * u;
                         double lat = maxY - dY * v;
                         
                         // write lat and lon value
-                        gridData.getComponent(v).getComponent(u).getComponent(0).getData().setDoubleValue(lat);
-                        gridData.getComponent(v).getComponent(u).getComponent(1).getData().setDoubleValue(lon);
+                        gridBlock.setDoubleValue(valCount, lat);
+                        gridBlock.setDoubleValue(valCount+1, lon);
+                        valCount += 2;
                     }
                 }
                 
@@ -138,7 +142,7 @@ public class MsRoadsProvider extends AbstractProvider
                     // add blocks to data node
                     item.setData(blockArray);
                     blockArray[0] = blockLists[0].addBlock((AbstractDataBlock)imageryDataBlock);
-                    blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridData.getData());
+                    blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridBlock);
                     
                     // remove sub items now that we have the new tile
                     removeChildrenData(item);
@@ -228,7 +232,7 @@ public class MsRoadsProvider extends AbstractProvider
         // query tree for matching and unused items
         ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
         ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
-        quadTree.findItems(matchingItems, unusedItems, mercatorExtent, 20, 5);
+        quadTree.findItems(matchingItems, unusedItems, mercatorExtent, 18, 5);
         
         // clean up old items
         int unusedItemCount = unusedItems.size();

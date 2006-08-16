@@ -57,7 +57,10 @@ public class LineStyler extends AbstractStyler
         
         // if no more items in the list, just return null
         if (!listInfo.blockIterator.hasNext())
+        {
+            clearBlockData();
             return null;
+        }
     
         // otherwise get the next item
         nextItem = listInfo.blockIterator.next();

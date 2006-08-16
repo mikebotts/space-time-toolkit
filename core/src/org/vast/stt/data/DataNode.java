@@ -67,6 +67,7 @@ public class DataNode
         listMap.put(component.getName(), newList);
         listArray.add(newList);
         rebuildMappings(component);
+        component.clearData();
         return newList;
     }
     
