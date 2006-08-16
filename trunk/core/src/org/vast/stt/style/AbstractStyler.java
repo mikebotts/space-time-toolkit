@@ -136,13 +136,6 @@ public abstract class AbstractStyler implements DataStyler
         }
     }
     
-       
-    public void clearAllMappers()
-    {
-        dataLists = new ListInfo[0];
-        treeBuilders.clear();
-    }
-    
     
     /**
      * Reset the block counter used for the block iterator
@@ -162,6 +155,13 @@ public abstract class AbstractStyler implements DataStyler
             forceComputeExtent = true;
             wantComputeExtent = false;
         }
+    }
+    
+    
+    protected void clearAllMappers()
+    {
+        dataLists = new ListInfo[0];
+        treeBuilders.clear();
     }
     
     
@@ -193,6 +193,13 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
+    protected void clearBlockData()
+    {
+        for (int i = 0; i < dataLists.length; i++)
+            dataLists[i].blockIndexer.clearData();
+    }
+    
+    
     /**
      * Load data for next block so that it is updated
      * for all array mappers. Also update block property mappers.
@@ -207,7 +214,10 @@ public abstract class AbstractStyler implements DataStyler
             DataIndexer nextIndexer = info.blockIndexer;
                         
             if (!info.blockIterator.hasNext())
+            {
+                clearBlockData();
                 return null;
+            }
             
             nextItem = info.blockIterator.next();
             AbstractDataBlock nextBlock = nextItem.getData();

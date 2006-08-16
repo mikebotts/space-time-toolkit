@@ -58,7 +58,10 @@ public class TextureStyler extends AbstractStyler
         
         // if no more items one of the lists, just return null
         if (!(gridBlocks.blockIterator.hasNext() && texBlocks.blockIterator.hasNext()))
+        {
+            clearBlockData();
             return null;
+        }
         
         // otherwise get blocks for next tile
         BlockListItem nextGrid = gridBlocks.blockIterator.next();

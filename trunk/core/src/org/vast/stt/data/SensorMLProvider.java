@@ -143,6 +143,8 @@ public class SensorMLProvider extends AbstractProvider
                     dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                 }
             }
+            
+            outputs.clearData();
         }
         catch (ProcessException e)
         {
