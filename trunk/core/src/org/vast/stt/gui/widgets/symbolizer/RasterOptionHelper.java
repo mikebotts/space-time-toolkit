@@ -29,22 +29,22 @@ public class RasterOptionHelper implements SelectionListener
 			symbolizer = (RasterSymbolizer)sym;
 	}
 	
-	public int getWidth(){
+	public float getWidth(){
 		Dimensions dims = symbolizer.getRasterDimensions();
 		ScalarParameter widthSP = dims.getWidth();
 
 		if(widthSP.isConstant()) {
-			return ((Integer)widthSP.getConstantValue()).intValue();
+			return ((Float)widthSP.getConstantValue()).floatValue();
 		} else
 			return -1;
 	}
 	
-	public int getHeight(){
+	public float getHeight(){
 		Dimensions dims = symbolizer.getRasterDimensions();
 		ScalarParameter lengthSP = dims.getLength();
 
 		if(lengthSP.isConstant()) {
-			return ((Integer)lengthSP.getConstantValue()).intValue();
+			return ((Float)lengthSP.getConstantValue()).floatValue();
 		} else
 			return -1;
 	}
