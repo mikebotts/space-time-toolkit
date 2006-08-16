@@ -32,7 +32,17 @@ public class GridOptionHelper
 	public float getGridMeshWidth(){
 		Stroke stroke = ((GridMeshSymbolizer)symbolizer).getStroke();
 		ScalarParameter width = stroke.getWidth();
-
+		//  Was getting NPE here, so I add a width if it's null here.
+		//  IMO, Scalar Params should never be null here.  Otherwise, 
+		//  I will have to check them all wherever I access them.  TC
+		if(width == null) {
+			width = new ScalarParameter();
+			width.setConstant(true);
+			width.setConstantValue(new Float(1.0));
+			stroke.setWidth(width);
+			return 1.0f;
+		}
+		
 		if(width.isConstant())
 			return ((Float)width.getConstantValue()).floatValue();
 		else 
