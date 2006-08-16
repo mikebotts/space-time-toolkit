@@ -76,8 +76,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             Vector3d target = viewSettings.getTargetPos();
             
             // ge actual viewport dimensions
-            int viewHeight = viewSettings.getViewHeight();
-            int viewWidth = viewSettings.getViewWidth();
+            int viewHeight = renderer.getViewHeight();
+            int viewWidth = renderer.getViewWidth();
             
             // unproject to world view
             renderer.unproject(x0, viewHeight-y0, 0.0, P0);

@@ -66,9 +66,6 @@ public class ViewSettings implements STTEventProducer
 	// parameters defining ortho field of view
 	protected double orthoWidth, orthoHeight;
     
-    // parameters containing view dimensions in pixels
-    protected int viewWidth, viewHeight;
-
 	// camera modes
 	protected CameraMode cameraMode;
     
@@ -115,30 +112,6 @@ public class ViewSettings implements STTEventProducer
         zoomConstraint = MotionConstraint.XYZ;
         
         listeners = new STTEventListeners(1);
-    }
-	
-
-    public int getViewHeight()
-    {
-        return viewHeight;
-    }
-
-
-    public void setViewHeight(int viewHeight)
-    {
-        this.viewHeight = viewHeight;
-    }
-
-
-    public int getViewWidth()
-    {
-        return viewWidth;
-    }
-
-
-    public void setViewWidth(int viewWidth)
-    {
-        this.viewWidth = viewWidth;
     }
     
     

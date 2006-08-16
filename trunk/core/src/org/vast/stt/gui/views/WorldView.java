@@ -127,8 +127,6 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
             // init size
             Rectangle clientArea = canvas.getClientArea();
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            scene.getViewSettings().setViewHeight(clientArea.height);
-            scene.getViewSettings().setViewWidth(clientArea.width);
             
             // create and register view controller
             controller.setScene(scene);
@@ -192,9 +190,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         {
             // update view size
             Rectangle clientArea = canvas.getClientArea();
-            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            scene.getViewSettings().setViewHeight(clientArea.height);
-            scene.getViewSettings().setViewWidth(clientArea.width);            
+            scene.getRenderer().resizeView(clientArea.width, clientArea.height);       
             
             // redraw the whole scene
             scene.getRenderer().drawScene();

@@ -58,21 +58,19 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     protected void refreshView()
     {
-        if (!updating)
-        {
-            updating = true;
-            if (scene != null)
-                updateView();
-            else
-                clearView();
-            updating = false;
-        }
+        updating = true;
+        if (scene != null)
+            updateView();
+        else
+            clearView();
+        updating = false;
     }
     
     
     protected void refreshViewAsync()
     {
-        getSite().getShell().getDisplay().asyncExec(runRefresh);
+        if (!updating)
+            getSite().getShell().getDisplay().asyncExec(runRefresh);
     }
     
     
@@ -132,14 +130,7 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     public void handleEvent(STTEvent e)
     {
-        switch (e.type)
-        {
-            case SCENE_VIEW_CHANGED:
-            case ITEM_VISIBILITY_CHANGED:
-            case PROVIDER_DATA_CHANGED:
-                refreshViewAsync();
-                break;                
-        }
+        refreshViewAsync();
     }
 
 

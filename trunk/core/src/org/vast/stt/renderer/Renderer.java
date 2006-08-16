@@ -100,13 +100,15 @@ public abstract class Renderer implements StylerVisitor
     }
     
     
-    /**
-     * Takes care of flushing block rendering cache
-     * @param blockInfo
-     */
-    public void deleteBlock(BlockInfo blockInfo)
+    public int getViewWidth()
     {
-        
+        return canvas.getClientArea().width;
+    }
+    
+    
+    public int getViewHeight()
+    {
+        return canvas.getClientArea().height;
     }
 
 
