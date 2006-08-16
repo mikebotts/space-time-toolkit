@@ -5,7 +5,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.GridSymbolizer;
 import org.vast.stt.event.EventType;
@@ -38,9 +37,8 @@ public class BasicGridFillController extends OptionController {
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
-//		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-//		widthSpinner.setSelection((int)gridOptionHelper.getLineWidth());
-//		optionControls[1].setColorLabelColor(gridOptionHelper.getLineColor());
+		optionControls[0].setColorLabelColor(gridOptionHelper.getGridFillColor());
+		//  TODO support opacity
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){
@@ -60,6 +58,7 @@ public class BasicGridFillController extends OptionController {
 			gridOptionHelper.setGridFillColor(sldColor);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		} else if (control == optionControls[1].getControl()) {
+			//  TODO support fill opacity
 		}
 	}
 }

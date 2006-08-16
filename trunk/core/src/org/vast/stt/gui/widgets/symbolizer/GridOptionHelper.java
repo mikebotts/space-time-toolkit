@@ -2,6 +2,7 @@ package org.vast.stt.gui.widgets.symbolizer;
 
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
+import org.vast.ows.sld.GridBorderSymbolizer;
 import org.vast.ows.sld.GridFillSymbolizer;
 import org.vast.ows.sld.GridMeshSymbolizer;
 import org.vast.ows.sld.GridSymbolizer;
@@ -25,33 +26,80 @@ public class GridOptionHelper
 	public void setGridMeshWidth(float w){
 		Stroke stroke = ((GridMeshSymbolizer)symbolizer).getStroke();
 		ScalarParameter width = stroke.getWidth();
-		//ScalarParameter width = new ScalarParameter();
 		width.setConstantValue(w);
-		//stroke.setWidth(width);		
 	}
 	
-	public Color getFillColor(){
-//		Fill fill = symbolizer.getFill();
-//		if(fill == null) {
-//			System.err.println("Fill is NULL.  Do what now?");
-//			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
-//			//return null;
-//		}
-//		Color fillColor = fill.getColor();
-//		ScalarParameter redSP = fillColor.getRed();
-//		ScalarParameter greenSP = fillColor.getGreen();
-//		ScalarParameter blueSP = fillColor.getBlue();
-//		ScalarParameter alphaSP = fillColor.getAlpha();
-//		
-//		if(!redSP.isConstant() || !greenSP.isConstant() || !blueSP.isConstant() || !alphaSP.isConstant()) {
-//			System.err.println("At least one FillColor channel is mapped.  Do what now?");
-//			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
-//		}
-//		
-//		return fillColor;
-		return null;
+	public float getGridMeshWidth(){
+		Stroke stroke = ((GridMeshSymbolizer)symbolizer).getStroke();
+		ScalarParameter width = stroke.getWidth();
+
+		if(width.isConstant())
+			return ((Float)width.getConstantValue()).floatValue();
+		else 
+			return 1.0f;  //Not sure what to return here
+	}
+	
+	public Color getGridMeshColor(){
+		Stroke stroke = ((GridMeshSymbolizer)symbolizer).getStroke();
+		return stroke.getColor();
+	}
+	
+	/**
+	 * Convenience method to set line color
+	 * @param swtRgb
+	 */
+	public void setGridFillColor(org.vast.ows.sld.Color sldColor){
+		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
+		fill.setColor(sldColor);
+	}
+	
+	public Color getGridFillColor(){
+		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
+		if(fill == null) {
+			System.err.println("Fill is NULL.  Do what now?");
+			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
+			//return null;
+		}
+		Color fillColor = fill.getColor();
+		ScalarParameter redSP = fillColor.getRed();
+		ScalarParameter greenSP = fillColor.getGreen();
+		ScalarParameter blueSP = fillColor.getBlue();
+		ScalarParameter alphaSP = fillColor.getAlpha();
+		
+		if(!redSP.isConstant() || !greenSP.isConstant() || !blueSP.isConstant() || !alphaSP.isConstant()) {
+			System.err.println("At least one FillColor channel is mapped.  Do what now?");
+			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
+		}
+		
+		return fillColor;
 	}
 		
+	public float getGridBorderWidth(){
+		Stroke stroke = ((GridBorderSymbolizer)symbolizer).getStroke();
+		ScalarParameter width = stroke.getWidth();
+
+		if(width.isConstant())
+			return ((Float)width.getConstantValue()).floatValue();
+		else 
+			return 1.0f;  //Not sure what to return here
+	}
+	public void setGridBorderWidth(float w){
+		Stroke stroke = ((GridBorderSymbolizer)symbolizer).getStroke();
+		ScalarParameter width = stroke.getWidth();
+		width.setConstantValue(w);
+	}
+	
+	public Color getGridBorderColor(){
+		Stroke stroke = ((GridBorderSymbolizer)symbolizer).getStroke();
+		return stroke.getColor();
+	}
+	
+	public void setGridBorderColor(org.vast.ows.sld.Color sldColor){
+		Stroke stroke = ((GridBorderSymbolizer)symbolizer).getStroke();
+		stroke.setColor(sldColor);
+	}
+		
+	
 	public int getGridWidth(){
 		ScalarParameter widthSP = symbolizer.getDimensions().getWidth();
 		//  for SRTM width,length,depth are all properties taken from coverageData/width...
@@ -81,19 +129,4 @@ public class GridOptionHelper
 		return -1; // what to do here?
 	}
 	
-	/**
-	 * Convenience method to set line color
-	 * @param swtRgb
-	 */
-	public void setGridFillColor(org.vast.ows.sld.Color sldColor){
-		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
-		fill.setColor(sldColor);
-	}
-	
-	private void setFillGrid(boolean b){
-//		if(!b) {
-//			Fill f = symbolizer.getFill();
-//			symbolizer.setFill(null);
-//		}
-	}
 }
