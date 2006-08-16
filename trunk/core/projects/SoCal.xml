@@ -41,8 +41,8 @@
                   <member>
                      <DataList>
                         <name>SOS Layers</name>
-                        <member>
-                           <DataItem enabled="false">
+                        <member visible="false">
+                           <DataItem enabled="true">
                               <name>San Diego Plume</name>
                               <time>
                                  <TimeSettings>
@@ -87,8 +87,8 @@
                   <member>
                      <DataList>
                         <name>Geographic Data Sets</name>
-                        <member>
-                           <DataItem enabled="false">
+                        <member visible="false">
+                           <DataItem enabled="true">
                               <name>Country Boundaries</name>
                               <dataProvider xlink:href="#WORLD_BOUNDARIES"/>
                               <style>
@@ -111,7 +111,7 @@
                               </style>
                            </DataItem>
                         </member>
-                        <member>
+                        <member visible="false">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider xlink:href="#COAST_LINES"/>
@@ -183,7 +183,7 @@
                   <name>World Coast Lines - 100</name>
                   <description>World Coast Lines</description>
                   <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
+                  <sweData href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
                </SWEDataProvider>
             </member>
             <member>
