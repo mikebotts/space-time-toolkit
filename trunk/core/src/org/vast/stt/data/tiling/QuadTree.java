@@ -45,27 +45,47 @@ public class QuadTree
     }
     
     
-    public ArrayList<QuadTreeItem> findItems(SpatialExtent bbox)
+    /**
+     * Init the tree by setting the bbox as the root tile
+     * @param bbox
+     */
+    public void init(SpatialExtent bbox)
     {
-        // create a fresh list of items
-        ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
-        
+        rootItem = new QuadTreeItem(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+    }
+    
+    
+    /**
+     * Find matching and unused items depending on given bbox
+     * @param matchingItems
+     * @param unusedItems
+     * @param bbox
+     * @param maxLevel
+     * @param maxDistance
+     */
+    public void findItems(ArrayList<QuadTreeItem> matchingItems, 
+                          ArrayList<QuadTreeItem> unusedItems,
+                          SpatialExtent bbox, int maxLevel, double maxDistance)
+    {        
         // compute bbox surface
         double bboxSize = Math.abs(bbox.getMaxX() - bbox.getMinX()) * Math.abs(bbox.getMaxY() - bbox.getMinY());
+        if (bboxSize == 0)
+            return;
         
         if (rootItem == null)
             rootItem = new QuadTreeItem(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
         
         // call findItems recursively in the tree
         rootItem = rootItem.findTopItem(bbox, bboxSize);
-        rootItem.findChildItems(matchingItems, bbox, bboxSize);
-        
-        return matchingItems;
+        rootItem.findChildItems(matchingItems, unusedItems, bbox, bboxSize, 0, maxLevel, maxDistance);
     }
     
     
     public static void main(String[] args)
     {
+        ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
+        ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
+        
         QuadTree tree = new QuadTree();
         
         SpatialExtent bbox = new SpatialExtent();
@@ -74,10 +94,10 @@ public class QuadTree
         bbox.setMinY(-10);
         bbox.setMaxY(+10);        
         
-        ArrayList<QuadTreeItem> list = tree.findItems(bbox);
+        tree.findItems(matchingItems, unusedItems, bbox, 3, 1);
         
-        for (int i=0; i<list.size(); i++)
-            System.out.println(list.get(i));
+        for (int i=0; i<matchingItems.size(); i++)
+            System.out.println(matchingItems.get(i));
         
         // subset
         System.out.println();
@@ -86,11 +106,12 @@ public class QuadTree
         bbox.setMaxX(+10);
         bbox.setMaxY(+10);
         
-        list.clear();
-        list = tree.findItems(bbox);
+        matchingItems.clear();
+        unusedItems.clear();
+        tree.findItems(matchingItems, unusedItems, bbox, 3, 1);
         
-        for (int i=0; i<list.size(); i++)
-            System.out.println(list.get(i));
+        for (int i=0; i<matchingItems.size(); i++)
+            System.out.println(matchingItems.get(i));
         
         // superset
         System.out.println();
@@ -99,10 +120,11 @@ public class QuadTree
         bbox.setMaxX(+10);
         bbox.setMaxY(+10);
         
-        list.clear();
-        list = tree.findItems(bbox);
+        matchingItems.clear();
+        unusedItems.clear();
+        tree.findItems(matchingItems, unusedItems, bbox, 3, 1);
         
-        for (int i=0; i<list.size(); i++)
-            System.out.println(list.get(i));
+        for (int i=0; i<matchingItems.size(); i++)
+            System.out.println(matchingItems.get(i));
     }
 }

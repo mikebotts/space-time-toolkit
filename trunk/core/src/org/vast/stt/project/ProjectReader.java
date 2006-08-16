@@ -587,13 +587,6 @@ public class ProjectReader
 	{
         DataItem dataItem = new DataItem();
         
-        // enabled ?
-        String enabled = dom.getAttributeValue(dataItemElt, "enabled");
-        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
-            dataItem.setEnabled(true);
-        else
-            dataItem.setEnabled(false);
-        
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
         DataProvider provider = readDataProvider(providerElt);
@@ -611,6 +604,13 @@ public class ProjectReader
             if (symbolizer != null)
                 dataItem.getSymbolizers().add(symbolizer);
         }
+        
+        // enabled ?
+        String enabled = dom.getAttributeValue(dataItemElt, "enabled");
+        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
+            dataItem.setEnabled(true);
+        else
+            dataItem.setEnabled(false);
         
 		return dataItem;
 	}

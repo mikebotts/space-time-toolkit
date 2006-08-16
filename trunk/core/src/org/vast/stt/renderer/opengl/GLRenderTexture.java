@@ -70,8 +70,6 @@ public class GLRenderTexture extends GLRunnable
         // select fill mode
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
 
-        gl.glLineWidth(grid.lineWidth);
-        gl.glPolygonOffset(offset, 1.0f);
         gl.glDisable(GL.GL_CULL_FACE);            
         gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
         

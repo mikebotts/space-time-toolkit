@@ -35,7 +35,6 @@ public abstract class GLRunnable implements Runnable
 {
     protected GL gl;
     protected GLU glu;
-    protected float offset;
     protected int blockCount;
     
     

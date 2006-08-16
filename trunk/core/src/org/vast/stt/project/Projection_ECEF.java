@@ -13,6 +13,7 @@
 
 package org.vast.stt.project;
 
+import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
 import org.vast.stt.style.PrimitiveGraphic;
 
@@ -44,5 +45,17 @@ public class Projection_ECEF implements Projection
                 point.z = ecef[2];
                 break;
         }
+    }
+    
+    
+    public Vector3d getDefaultCameraLookDirection()
+    {
+        return new Vector3d(-1,0,0);
+    }
+    
+    
+    public Vector3d getDefaultCameraUpDirection()
+    {
+        return new Vector3d(0,0,1);
     }
 }

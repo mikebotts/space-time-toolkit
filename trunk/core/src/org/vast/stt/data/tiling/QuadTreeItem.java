@@ -42,20 +42,19 @@ public class QuadTreeItem
     private final static int SE = S+E;
     private final static int SW = S+W;
     
-    protected String id = "";
     protected double minX, minY;
     protected double maxX, maxY;
     protected double tileSize;
+    protected double distance;
+    protected byte quadrant;
     protected Object data;
-    protected QuadTreeItem parentBlock;
-    //protected QuadTreeItem[] sideBlocks;   // 0->7 from N counter clockwise
-    protected QuadTreeItem[] childBlocks;  // 0->3 from lower left, counter clockwise
+    protected QuadTreeItem parent;
+    protected QuadTreeItem[] children;  // 0->3 from lower left, counter clockwise
     
     
     public QuadTreeItem()
     {
-        childBlocks = new QuadTreeItem[4];
-        //sideBlocks = new QuadTreeItem[8];
+        children = new QuadTreeItem[4];
     }
     
     
@@ -65,10 +64,11 @@ public class QuadTreeItem
      * @param parentBlock
      * @param quadrant
      */
-    public QuadTreeItem(QuadTreeItem parentBlock, int quadrant)
+    public QuadTreeItem(QuadTreeItem parentBlock, byte quadrant)
     {
         this();
-        this.parentBlock = parentBlock;
+        this.parent = parentBlock;
+        this.quadrant = quadrant;
         
         double dX = (parentBlock.maxX - parentBlock.minX) / 2;
         double dY = (parentBlock.maxY - parentBlock.minY) / 2;
@@ -104,8 +104,6 @@ public class QuadTreeItem
                 maxY = minY + dY;
                 break;
         }
-        
-        this.id = parentBlock.id + (quadrant + 1);
     }
     
     
@@ -127,7 +125,8 @@ public class QuadTreeItem
         {
             case N:
             case NE:
-                childBlocks[0] = childBlock;
+                children[0] = childBlock;
+                childBlock.quadrant = 0;
                 minX = childBlock.minX;
                 minY = childBlock.minY;
                 maxX = minX + dX;
@@ -136,7 +135,8 @@ public class QuadTreeItem
             
             case E:    
             case SE:
-                childBlocks[3] = childBlock;
+                children[3] = childBlock;
+                childBlock.quadrant = 3;
                 minX = childBlock.minX;
                 minY = childBlock.maxY - dY;
                 maxX = minX + dX;
@@ -145,7 +145,8 @@ public class QuadTreeItem
             
             case S:
             case SW:
-                childBlocks[2] = childBlock;
+                children[2] = childBlock;
+                childBlock.quadrant = 2;
                 minX = childBlock.maxX - dX;
                 minY = childBlock.maxY - dY;
                 maxX = childBlock.maxX;
@@ -154,7 +155,8 @@ public class QuadTreeItem
                 
             case W:
             case NW:
-                childBlocks[1] = childBlock;
+                children[1] = childBlock;
+                childBlock.quadrant = 1;
                 minX = childBlock.maxX - dX;
                 minY = childBlock.minY;
                 maxX = childBlock.maxX;
@@ -175,56 +177,137 @@ public class QuadTreeItem
     }
     
     
-    public void findChildItems(ArrayList<QuadTreeItem> matchingItems, SpatialExtent bbox, double bboxSize)
-    {
-        double sizeRatio = bboxSize / tileSize;
-        
-        // go down in the tree
-        if (sizeRatio < 8)
-        {
-            for (int i=0; i<4; i++)
-            {
-                if (childBlocks[i] == null)
-                    childBlocks[i] = new QuadTreeItem(this, i);
-                
-                if (childBlocks[i].intersects(bbox))
-                    childBlocks[i].findChildItems(matchingItems, bbox, bboxSize);
-            }            
-        }
-        
-        // get tile at this level
-        else
-        {
-            matchingItems.add(this);
-        }
-    }
-    
-    
+    /**
+     * Expand tree until the root tile contains the bbox
+     * @param bbox
+     * @param bboxSize
+     * @return
+     */
     public QuadTreeItem findTopItem(SpatialExtent bbox, double bboxSize)
     {
         double sizeRatio = bboxSize / tileSize;
         
         if (sizeRatio > 16 || !this.contains(bbox))
         {
-            if (parentBlock == null)
+            if (parent == null)
             {
                 int dir = whereIs(bbox);
-                parentBlock = new QuadTreeItem(this, dir, false);
+                parent = new QuadTreeItem(this, dir, false);
             }
             
-            return parentBlock.findTopItem(bbox, bboxSize);
+            return parent.findTopItem(bbox, bboxSize);
         }
         else        
             return this;
     }
     
     
-    public void createChildren()
+    /**
+     * Finds all child items that intersects that bbox and
+     * are at the right level of details.
+     * @param matchingItems
+     * @param unusedItems
+     * @param bbox
+     * @param bboxSize
+     * @param level
+     * @param maxLevel
+     * @param maxDistance
+     */
+    public void findChildItems(ArrayList<QuadTreeItem> matchingItems,
+                               ArrayList<QuadTreeItem> unusedItems,
+                               SpatialExtent bbox, double bboxSize,
+                               int level, int maxLevel, double maxDistance)
     {
-        for (int i=0; i<4; i++)
+        double sizeRatio = bboxSize / tileSize;
+        
+        // we reached the good level
+        if (sizeRatio >= 8 || level == maxLevel)
         {
-            if (childBlocks[i] == null)
-                childBlocks[i] = new QuadTreeItem(this, i);
+            addToMatchingItemsAndSort(matchingItems, bbox);
+        }
+        
+        // go down in the tree
+        else
+        {
+            for (byte i=0; i<4; i++)
+            {
+                if (children[i] == null)
+                    children[i] = new QuadTreeItem(this, i);
+                
+                if (children[i].intersects(bbox))
+                    children[i].findChildItems(matchingItems, unusedItems, bbox, bboxSize, level+1, maxLevel, maxDistance);
+                else
+                {
+                    boolean delete = children[i].addToUnusedItems(unusedItems, bbox, maxDistance);
+                    if (delete)
+                        children[i] = null;
+                }
+            }
+        }
+    }
+
+    
+    /**
+     * Add item and all children to unused items if far away enough from bbox
+     * @param unusedItems
+     * @param bbox
+     * @param maxDistance
+     * @return
+     */
+    protected boolean addToUnusedItems(ArrayList<QuadTreeItem> unusedItems, SpatialExtent bbox, double maxDistance)
+    {
+        double dX =  (bbox.getMinX() + bbox.getMaxX() - minX - maxX) / 2;
+        double dY =  (bbox.getMinY() + bbox.getMaxY() - minY - maxY) / 2;
+        double distance = dX*dX + dY*dY;
+        
+        // loop through children
+        for (byte i=0; i<4; i++)
+        {
+            if (children[i] != null)
+                children[i].addToUnusedItems(unusedItems, bbox, maxDistance);
+        }
+        
+        // figure out if the tile is too far
+        if (distance > tileSize*maxDistance*maxDistance)
+        {
+            // add this tile only if there is data attached to it
+            unusedItems.add(this);        
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    /**
+     * Add the item in the list at the right position so that the list
+     * is sorted from closest to farthest to the center of the bbox
+     * @param matchingItems
+     * @param bbox
+     */
+    protected void addToMatchingItemsAndSort(ArrayList<QuadTreeItem> matchingItems, SpatialExtent bbox)
+    {
+        double dX =  (bbox.getMinX() + bbox.getMaxX() - minX - maxX) / 2;
+        double dY =  (bbox.getMinY() + bbox.getMaxY() - minY - maxY) / 2;
+        distance = dX*dX + dY*dY;
+        
+        if (matchingItems.isEmpty())
+        {
+            matchingItems.add(this);
+        }
+        else
+        {
+            for (int i=0; i<matchingItems.size(); i++)
+            {
+                if (matchingItems.get(i).distance >= distance)
+                {
+                    matchingItems.add(i, this);
+                    return;
+                }
+            }
+            
+            // if we didn't add it yet, add at end of list
+            matchingItems.add(this);
         }
     }
     
@@ -380,9 +463,50 @@ public class QuadTreeItem
     }
     
     
+    public void appendId(StringBuffer buf)
+    {
+        if (parent != null)
+        {
+            parent.appendId(buf);
+            buf.append(quadrant);
+        }
+        else
+            buf.append('q');
+    }
+    
+    
+    public void appendId2(StringBuffer buf)
+    {
+        if (parent != null)
+        {
+            parent.appendId2(buf);
+            switch (quadrant)
+            {
+                case 0:
+                    buf.append('2');
+                    break;
+                    
+                case 1:
+                    buf.append('3');
+                    break;
+                    
+                case 2:
+                    buf.append('1');
+                    break;
+                    
+                case 3:
+                    buf.append('0');
+                    break;
+            }
+        }
+    }
+    
+    
     public String toString()
     {
         StringBuffer buf = new StringBuffer();
+        appendId(buf);
+        buf.append(": ");
         buf.append(maxX-minX);
         buf.append(" x ");
         buf.append(maxY-minY);
@@ -396,5 +520,35 @@ public class QuadTreeItem
         buf.append(maxY);
         buf.append(")");
         return buf.toString();
+    }
+
+
+    public QuadTreeItem getChild(int i)
+    {
+        return children[i];
+    }
+
+
+    public void setChild(int i, QuadTreeItem item)
+    {
+        this.children[i] = item;
+    }
+
+
+    public QuadTreeItem getParent()
+    {
+        return parent;
+    }
+
+
+    public void setParent(QuadTreeItem parentBlock)
+    {
+        this.parent = parentBlock;
+    }
+
+
+    public byte getQuadrant()
+    {
+        return quadrant;
     }
 }

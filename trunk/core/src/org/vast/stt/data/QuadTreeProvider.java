@@ -43,10 +43,11 @@ public class QuadTreeProvider extends AbstractProvider
     protected QuadTree quadTree;
     
     
-	public QuadTreeProvider(DataProvider subProvider)
+    public QuadTreeProvider(DataProvider subProvider)
 	{
         quadTree = new QuadTree();
         this.subProvider = subProvider;
+        this.autoUpdate = true;
         
         subProvider.getSpatialExtent().removeAllListeners();
         subProvider.getTimeExtent().removeAllListeners();        
@@ -60,7 +61,7 @@ public class QuadTreeProvider extends AbstractProvider
     public void init() throws DataException
     {
         subProvider.init();
-        dataNode = subProvider.getDataNode();
+        dataNode = subProvider.getDataNode();        
     }
     
     
@@ -71,11 +72,16 @@ public class QuadTreeProvider extends AbstractProvider
         if (!dataNode.isNodeStructureReady())
             init();
         
-        ArrayList<QuadTreeItem> list = quadTree.findItems(this.spatialExtent);
+        ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
+        ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
+        quadTree.findItems(matchingItems, unusedItems, spatialExtent, 100, 1);
 
-        for (int i=0; i<list.size(); i++)
+        for (int i=0; i<matchingItems.size(); i++)
         {
-            QuadTreeItem nextItem = list.get(i);
+            QuadTreeItem nextItem = matchingItems.get(i);
+            
+            if (canceled)
+                return;
             
             if (nextItem.getData() == null)
             {
@@ -84,6 +90,7 @@ public class QuadTreeProvider extends AbstractProvider
                 subProvider.getSpatialExtent().setMaxX(nextItem.getMaxX());
                 subProvider.getSpatialExtent().setMaxY(nextItem.getMaxY());
                 subProvider.updateData();
+                //System.out.println(nextItem);
                 dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
             }
         }
@@ -100,6 +107,14 @@ public class QuadTreeProvider extends AbstractProvider
 //            dataNode.clearAll();
 //            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
 //        }       
+    }
+    
+    
+    @Override
+    public DataNode getDataNode()
+    {
+        new MyBboxUpdater(spatialExtent);
+        return super.getDataNode();
     }
     
     

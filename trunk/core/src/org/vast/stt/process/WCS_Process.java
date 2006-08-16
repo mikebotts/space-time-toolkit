@@ -218,6 +218,12 @@ public class WCS_Process extends DataProcess implements DataHandler
         query.getBbox().setMaxX(maxX);
         query.getBbox().setMinY(minY);
         query.getBbox().setMaxY(maxY);
+        
+        double dX = Math.abs(maxX - minX);
+        double dY = Math.abs(maxY - minY);
+        
+        query.setSkipX((int)Math.round(dX*10) + 1);
+        query.setSkipY((int)Math.round(dY*10) + 1);
     }
     
     

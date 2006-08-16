@@ -67,7 +67,6 @@ public class GLRenderGrids extends GLRunnable
         GridPointGraphic point;
         int count = 0;
         
-        gl.glPolygonOffset(offset, 1.0f);
         gl.glDisable(GL.GL_CULL_FACE);
         
         // select fill or wireframe

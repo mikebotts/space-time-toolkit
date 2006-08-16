@@ -60,32 +60,76 @@ public class BlockList
         firstBlock = null;
         lastBlock = null;
         currentBlock = null;
-        size = 0;   
+        size = 0;
     }
     
     
-    public void remove()
+    public void remove(BlockListItem item)
     {
-        currentBlock.prevBlock.nextBlock = currentBlock.nextBlock;
-        currentBlock.nextBlock.prevBlock = currentBlock.prevBlock;
-        currentBlock = currentBlock.nextBlock;
+        boolean endItem = false;
+        
+        if (item.nextBlock == null && item.prevBlock == null)
+            return;
+        
+        // if item is first in list
+        if (item == firstBlock)
+        {
+            firstBlock = item.nextBlock;
+            if (firstBlock != null)
+                firstBlock.prevBlock = null;
+            endItem = true;
+        }
+        
+        // if item is last in list
+        if (item == lastBlock)
+        {
+            lastBlock = item.prevBlock;
+            if (lastBlock != null)
+                lastBlock.nextBlock = null;
+            endItem = true;
+        }
+        
+        // if item is in middle of list
+        if (!endItem)
+        {
+            // connect previous to next
+            item.prevBlock.nextBlock = item.nextBlock;
+            item.nextBlock.prevBlock = item.prevBlock;
+        }
+        
+        // set both prev and next to null
+        item.nextBlock = null;
+        item.prevBlock = null;
+        
+        // reduce list size
         size--;
     }
     
     
-    public void insertBlock(AbstractDataBlock dataBlock)
-    {
-        currentBlock = new BlockListItem(dataBlock, currentBlock, currentBlock.nextBlock);
-        size++;
-    }
-    
-    
-    public void addBlock(AbstractDataBlock dataBlock)
+    public BlockListItem addBlock(AbstractDataBlock dataBlock)
     {
         lastBlock = new BlockListItem(dataBlock, lastBlock, null);
         
         if (firstBlock == null)
             firstBlock = lastBlock;
+        
+        size++;
+        
+        return lastBlock;
+    }
+    
+    
+    public void add(BlockListItem newItem)
+    {
+        newItem.prevBlock = lastBlock;
+        
+        if (lastBlock != null)
+            lastBlock.nextBlock = newItem;
+        
+        if (firstBlock == null)
+            firstBlock = newItem;
+        
+        lastBlock = newItem;
         
         size++;
     }

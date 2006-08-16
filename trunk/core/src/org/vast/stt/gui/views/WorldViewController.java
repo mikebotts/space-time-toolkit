@@ -48,6 +48,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	protected Scene scene;    
 	private Vector3d P0 = new Vector3d();
 	private Vector3d P1 = new Vector3d();
+    private Vector3d C = new Vector3d();
 	private int xOld;
 	private int yOld;
 	private boolean rotating;
@@ -74,24 +75,14 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             Vector3d pos = viewSettings.getCameraPos();
             Vector3d target = viewSettings.getTargetPos();
             
+            // ge actual viewport dimensions
             int viewHeight = viewSettings.getViewHeight();
+            int viewWidth = viewSettings.getViewWidth();
+            
+            // unproject to world view
             renderer.unproject(x0, viewHeight-y0, 0.0, P0);
             renderer.unproject(x1, viewHeight-y1, 0.0, P1);
-
-//            P1.sub(P0);
-//            
-//            // viewZ vector = target - pos
-//            Vector3d oldZ = new Vector3d(target);
-//            oldZ.sub(pos);
-//    
-//            // rotation angle proportional to drag distance on the screen
-//            double rotationAmount = P1.length()/viewSettings.getOrthoWidth() * Math.PI;//Math.atan(P1.length()/view.getOrthoWidth()/2);
-//            double rotationAngle = rotationAmount;//10.0;
-//    
-//            // rotation axis in world coordinates
-//            Vector3d rotAxis = new Vector3d();
-//            rotAxis.cross(oldZ, P1);
-//            Quat4d qRot = new Quat4d(rotAxis, rotationAngle);
+            renderer.unproject(viewWidth/2, viewHeight/2, 0.0, C);
             
             // viewZ vector = target - pos
             Vector3d oldZ = new Vector3d(target);
@@ -101,7 +92,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             // arcball radius
             double r = viewSettings.getOrthoWidth() / 2;
 
-            P0.sub(pos);
+            // pos of point 0 on arcball
+            P0.sub(C);
             P0.scale(1/r);
             double P0_2 = P0.lengthSquared();
             if (P0_2 < 1)
@@ -112,7 +104,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             }
             P0.normalize();
             
-            P1.sub(pos);
+            // pos of point 1 on arcball
+            P1.sub(C);
             P1.scale(1/r);            
             double P1_2 = P1.lengthSquared();
             if (P1_2 < 1)
@@ -162,7 +155,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             viewZ.normalize();
             
             double s;
-            double maxS = P1.length();
+            double maxS = P1.length()*10;
             
             switch (transConstraint)
             {

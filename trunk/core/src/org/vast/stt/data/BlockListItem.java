@@ -34,7 +34,7 @@ public class BlockListItem
     protected BlockInfo info;
     protected AbstractDataBlock data;    
     protected BlockListItem nextBlock;
-    protected BlockListItem prevBlock;    
+    protected BlockListItem prevBlock;
     
     
     public BlockListItem(AbstractDataBlock data, BlockListItem prevBlock, BlockListItem nextBlock)

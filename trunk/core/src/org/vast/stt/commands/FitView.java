@@ -4,6 +4,7 @@ package org.vast.stt.commands;
 import org.vast.math.Vector3d;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.Projection;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.SpatialExtent;
@@ -45,15 +46,17 @@ public class FitView implements Command
             return;
         
         ViewSettings view = scene.getViewSettings();
+        Projection proj = view.getProjection();
         Vector3d center = bbox.getCenter();
         view.setTargetPos(center);
         
         double dist = bbox.getDiagonalDistance();
-        Vector3d camera = center.copy();
-        camera.add(new Vector3d(0, 0, dist*10));
+        Vector3d camera = proj.getDefaultCameraLookDirection();
+        camera.scale(-dist*10);
+        camera.add(center);
         view.setCameraPos(camera);
         
-        view.setUpDirection(new Vector3d(0, 1, 0));
+        view.setUpDirection(proj.getDefaultCameraUpDirection());
         
         double dx = bbox.getMaxX() - bbox.getMinX();
         double dy = bbox.getMaxY() - bbox.getMinY();
@@ -68,7 +71,7 @@ public class FitView implements Command
         if (adjustZRange)
         {
             view.setFarClip(dist*20);
-            view.setNearClip(0);
+            view.setNearClip(dist);
         }
         
         view.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));

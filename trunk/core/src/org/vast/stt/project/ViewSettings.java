@@ -107,7 +107,7 @@ public class ViewSettings implements STTEventProducer
 		orthoHeight = orthoWidth / 1.33;
 		projection = new Projection_LLA();//Projection_ECEF();//Projection_LLA();
         
-		nearClip = 0;
+		nearClip = 1.0;
 		farClip = 200.0;        
         
         transConstraint = MotionConstraint.XY;

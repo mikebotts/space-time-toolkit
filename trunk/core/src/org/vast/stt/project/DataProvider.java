@@ -60,6 +60,9 @@ public interface DataProvider extends Resource, STTEventListener, STTEventProduc
     public boolean hasError();
     
     
+    public void setError(boolean error);
+    
+    
     public void setAutoUpdate(boolean autoUpdate);
     
     

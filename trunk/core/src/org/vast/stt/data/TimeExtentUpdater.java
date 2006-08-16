@@ -11,38 +11,32 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project;
+package org.vast.stt.data;
 
-import org.vast.math.Vector3d;
-import org.vast.stt.style.PrimitiveGraphic;
+import org.vast.stt.project.TimeExtent;
 
 
 /**
  * <p><b>Title:</b>
- * Projection
+ * Time Extent Updater
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Interface for all map projections
+ * TODO TimeExtentUpdater type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Aug 8, 2006
+ * @date Aug 6, 2006
  * @version 1.0
  */
-public interface Projection
+public abstract class TimeExtentUpdater
 {
-    public enum Crs
+    protected TimeExtent timeExtent;
+    
+    
+    public void setTimeExtent(TimeExtent timeExtent)
     {
-        ECEF,
-        EPSG4329
+        this.timeExtent = timeExtent;
     }
-    
-    
-    public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
-    
-    public abstract Vector3d getDefaultCameraLookDirection();
-    
-    public abstract Vector3d getDefaultCameraUpDirection();
 }

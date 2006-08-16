@@ -14,7 +14,6 @@
 package org.vast.stt.data;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import org.ogc.cdm.common.DataComponent;
@@ -93,9 +92,8 @@ public class DataNode
     
     public void clearAll()
     {
-        Enumeration<BlockList> lists = listMap.elements();
-        while (lists.hasMoreElements())
-            lists.nextElement().clear();
+        for (int i=0; i<listArray.size(); i++)
+            listArray.get(i).clear();
     }
     
     
