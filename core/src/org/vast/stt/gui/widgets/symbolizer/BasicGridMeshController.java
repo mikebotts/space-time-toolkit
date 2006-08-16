@@ -39,9 +39,11 @@ public class BasicGridMeshController extends OptionController {
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
-//		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-//		widthSpinner.setSelection((int)gridOptionHelper.getLineWidth());
-//		optionControls[1].setColorLabelColor(gridOptionHelper.getLineColor());
+		//  TODO check for mapping
+		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
+		widthSpinner.setSelection((int)gridOptionHelper.getGridMeshWidth());
+		optionControls[1].setColorLabelColor(gridOptionHelper.getGridMeshColor());
+		//  TODO support mesh opacity
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){
@@ -66,6 +68,8 @@ public class BasicGridMeshController extends OptionController {
 			optionControls[1].setColorLabelColor(sldColor); 
 			gridOptionHelper.setGridMeshColor(sldColor);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		} else {
+			//TODO:  support mesh opacity
 		}
 	}
 	
