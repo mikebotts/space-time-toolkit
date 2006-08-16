@@ -12,7 +12,7 @@
    <SceneList>
       <member>
          <Scene id="SCENE_01">
-            <name>3D ECF View</name>
+            <name>World View</name>
             <time>
                <TimeSettings>
                   <currentTime>2004-01-01T12:00:00Z</currentTime>
@@ -24,15 +24,15 @@
             </time>
             <view>
                <ViewSettings>
-                  <backgroundColor>#FFFFFF</backgroundColor>
+                  <backgroundColor>#000000</backgroundColor>
                   <projection>LLA -90</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>0 0 10</cameraPos>
-                  <targetPos>0 0 0</targetPos>
+                  <cameraPos>-1.72 0 10</cameraPos>
+                  <targetPos>-1.72 0 0</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>6.0</orthoWidth>
                   <orthoHeight>4.0</orthoHeight>
-                  <nearClip>0</nearClip>
+                  <nearClip>1</nearClip>
                   <farClip>100</farClip>
                   <zFudgeFactor>1000</zFudgeFactor>
                </ViewSettings>
@@ -86,7 +86,7 @@
                                        </sld:CssParameter>                                       
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#FF6600</sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
@@ -172,7 +172,7 @@
                               <name>NOAA15 AMSU-A Footprints</name>
                               <dataProvider href="#PROVIDER_01"/>
                               <style>
-                                 <sldx:GridFillSymbolizer id="GRID_FILL" enabled="true">
+                                 <sldx:GridFillSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -191,12 +191,12 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style>
-                                 <sldx:GridMeshSymbolizer id="GRID_MESH" enabled="true">
+                                 <sldx:GridMeshSymbolizer id="GRID_MESH" enabled="false">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
@@ -214,10 +214,34 @@
                                        </sld:CssParameter>
                                     </sldx:Dimensions>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#0000AA</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sldx:GridMeshSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000ff</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -244,12 +268,13 @@
                                        </sld:CssParameter>
                                     </sldx:Dimensions>
                                     <sld:Fill>
-                                       <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
                            </DataItem>
                         </member>                        
                         <member visible="false">
@@ -276,11 +301,12 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -307,11 +333,12 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -338,11 +365,12 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -368,12 +396,45 @@
                                        </sld:CssParameter>
                                     </sldx:Dimensions>
                                     <sld:Fill>
-                                       <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                       <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
                               <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>TRMM TMI Footprints</name>
+                              <dataProvider href="#PROVIDER_10"/>
+                              <style>
+                                 <sldx:GridFillSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>footprint/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>footprint/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#AAAAFF</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
                            </DataItem>
                         </member>
                      </DataList>
@@ -565,11 +626,32 @@
             </member>
             <member>
                <OWSDataProvider id="PROVIDER_09">
-                  <name>SPOT-5 Footprints</name>
-                  <layerId>SPOT_5</layerId>
+                  <name>SPOT5 Footprints</name>
+                  <layerId>SPOT5</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
-                        <offering>SPOT_5</offering>
+                        <offering>SPOT5</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2003-01-01T03:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:30:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_10">
+                  <name>TRMM TMI Footprints</name>
+                  <layerId>TRMM-TMI</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>TRMM-TMI</offering>
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
