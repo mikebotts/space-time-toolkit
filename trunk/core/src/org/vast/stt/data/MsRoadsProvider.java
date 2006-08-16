@@ -239,20 +239,23 @@ public class MsRoadsProvider extends AbstractProvider
             BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
             nextItem.setData(null);
             
-            for (int b=0; b<blockArray.length; b++)
+            if (blockArray != null)
             {
-                if (blockArray[b] != null)
+                for (int b=0; b<blockArray.length; b++)
                 {
-                    // remove BlockListItem from list
-                    blockLists[b].remove(blockArray[b]);
-                    
-                    // added to deletedItems list
-                    deletedItems.add(blockArray[b]);
-                    
-                    // also remove tree item itself from parent
-                    nextItem.getParent().setChild(nextItem.getQuadrant(), null);
+                    if (blockArray[b] != null)
+                    {
+                        // remove BlockListItem from list
+                        blockLists[b].remove(blockArray[b]);
+                        
+                        // added to deletedItems list
+                        deletedItems.add(blockArray[b]);
+                    }
                 }
             }
+            
+            // also remove tree item itself from parent
+            nextItem.getParent().setChild(nextItem.getQuadrant(), null);
         }
         
         // send event to cleanup stylers
@@ -273,8 +276,9 @@ public class MsRoadsProvider extends AbstractProvider
             if (nextItem.getData() == null)
             {
                 GetTileRunnable getTile = new GetTileRunnable(nextItem);
-                Thread newThread = new Thread(getTile, nextItem.toString());
-                newThread.start();
+                //Thread newThread = new Thread(getTile, nextItem.toString());
+                //newThread.start();
+                getTile.run();
                 continue;
             }
             else
