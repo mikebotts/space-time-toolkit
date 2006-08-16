@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe" xmlns:stt="http://vast.uah.edu/stt">
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:sldx="http://vast.uah.edu/sldx" xmlns:gml="http://www.opengis.net/gml" xmlns:swe="http://www.opengis.net/swe">
    <!-- Global metadata about the project -->
    <Identification>
       <name>Alabama Roads Test Project</name>
@@ -199,6 +199,64 @@
                               </style>
                            </DataItem>
                         </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Roads Imagery (Flat)</name>
+                              <dataProvider href="#MS_ROADS"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000ff</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
                      </DataList>
                   </member>
                </DataList>
@@ -246,6 +304,16 @@
                   <sweData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/interstate.xml"/>
                   <rawData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/AL_interstates.swe"/>
                </SWEDataProvider>
+            </member>
+            <member>
+               <MsRoadsProvider id="MS_ROADS">
+                  <name>World Roads</name>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </MsRoadsProvider>
             </member>
          </ResourceList>
       </member>
