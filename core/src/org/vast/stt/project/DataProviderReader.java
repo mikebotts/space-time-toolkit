@@ -80,6 +80,10 @@ public class DataProviderReader
         {
             provider = readSensorMLProvider(dom, providerElt);                           
         }
+        else if (providerElt.getLocalName().equals("MsRoadsProvider"))
+        {
+            provider = new MsRoadsProvider();                           
+        }
         else
             return null;
         

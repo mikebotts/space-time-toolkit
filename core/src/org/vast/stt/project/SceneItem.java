@@ -142,10 +142,22 @@ public class SceneItem implements STTEventListener
     /**
      * Clears all rendering cache related to this item
      */
-    public void cleanup()
+    protected void cleanup()
     {
         for (int i = 0; i < stylers.size(); i++)
             parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.ALL);
+    }
+    
+    
+    /**
+     * Clears all rendering cache associated to the given array of objects
+     */
+    protected void cleanup(Object[] deletedObjects)
+    {
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            parentScene.getRenderer().cleanup(stylers.get(i), deletedObjects, CleanupSection.ALL);
+        }
     }
     
     
@@ -154,7 +166,7 @@ public class SceneItem implements STTEventListener
      * For deletion, styler must first be disabled.
      * @param sym
      */
-    public void updateSymbolizer(Symbolizer sym)
+    protected void updateSymbolizer(Symbolizer sym)
     {
         // try to find corresponding styler
         DataStyler styler = stylerTable.get(sym);
@@ -191,7 +203,12 @@ public class SceneItem implements STTEventListener
     }
     
     
-    public void setProjection(Projection projection)
+    /**
+     * Sets the new projection on all stylers and make sure
+     * cached geometry is cleaned up
+     * @param projection
+     */
+    protected void setProjection(Projection projection)
     {
         for (int i = 0; i < stylers.size(); i++)
         {
@@ -213,6 +230,11 @@ public class SceneItem implements STTEventListener
                             
             case PROVIDER_DATA_CLEARED:
                 cleanup();
+                return;
+                
+            case PROVIDER_DATA_REMOVED:
+                Object[] deletedItems = (Object[])event.source;
+                cleanup(deletedItems);
                 return;
         }
         

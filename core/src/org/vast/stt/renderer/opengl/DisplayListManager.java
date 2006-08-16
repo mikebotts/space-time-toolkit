@@ -216,4 +216,34 @@ public class DisplayListManager
             }            
         }
     }
+    
+    
+    /**
+     * Clears display lists used by this symbolizer and
+     * associated by the given objects.
+     * @param sym
+     */
+    public void clearDisplayLists(DataStyler styler, Object[] objects)
+    {
+        synchronized (DLTables)
+        {
+            // wrap styler with our own hashKey
+            HashKey hashKey = new HashKey(styler);
+            
+            // delete all sub display lists
+            GLDisplayListTable dlTable = DLTables.get(hashKey);
+            if (dlTable != null)
+            {
+                for (int i=0; i<objects.length; i++)
+                {
+                    GLDisplayList nextDL = dlTable.get(objects[i]);
+                    if (nextDL != null && nextDL.id > 0)
+                    {
+                        gl.glDeleteLists(nextDL.id, 1);
+                        //System.err.println("DL #" + nextDL.id + " deleted");
+                    }
+                }
+            }            
+        }
+    }
 }

@@ -104,6 +104,8 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+        if (dataProvider != null)
+            dataProvider.setError(false);
 	}
 
 
@@ -159,8 +161,14 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
         {
             case PROVIDER_DATA_CHANGED:
             case PROVIDER_DATA_CLEARED:
+            case PROVIDER_DATA_REMOVED:
                 dispatchEvent(event.copy());
-                break;    
+                break;
+                
+            case PROVIDER_ERROR:
+                this.enabled = false;
+                dispatchEvent(event.copy());
+                break;
         }        
     }
     

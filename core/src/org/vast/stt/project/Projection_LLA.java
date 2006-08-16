@@ -13,6 +13,7 @@
 
 package org.vast.stt.project;
 
+import org.vast.math.Vector3d;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -99,6 +100,18 @@ public class Projection_LLA implements Projection
             return lon + TWO_PI;
         
         return lon;
+    }
+    
+    
+    public Vector3d getDefaultCameraLookDirection()
+    {
+        return new Vector3d(0,0,-1);
+    }
+    
+    
+    public Vector3d getDefaultCameraUpDirection()
+    {
+        return new Vector3d(0,1,0);
     }
     
     

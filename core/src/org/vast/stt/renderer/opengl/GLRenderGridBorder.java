@@ -70,7 +70,6 @@ public class GLRenderGridBorder extends GLRunnable
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
         
         gl.glLineWidth(patch.lineWidth);            
-        gl.glPolygonOffset(offset, 1.0f);
         gl.glDisable(GL.GL_CULL_FACE);            
         
         do
@@ -119,6 +118,13 @@ public class GLRenderGridBorder extends GLRunnable
     
     protected void renderPoint(GridPointGraphic point)
     {       
+        if (point.graphBreak)
+        {
+            gl.glEnd();
+            gl.glBegin(GL.GL_LINE_STRIP);
+        }
+
+        point.graphBreak = false;
         gl.glColor4f(point.r, point.g, point.b, point.a);
         gl.glVertex3d(point.x, point.y, point.z);
     }

@@ -59,7 +59,6 @@ public class GLRenderPolygons extends GLRunnable
         int count = 0;
         
         // setup polygon offset
-        gl.glPolygonOffset(offset, 1.0f);
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
         
         gl.glBegin(GL.GL_POLYGON);

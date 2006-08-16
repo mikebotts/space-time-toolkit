@@ -173,8 +173,8 @@ public class TextureManager
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
             
             // set texture parameters
-            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);//GL.GL_LINEAR);
-            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);//GL.GL_LINEAR);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
+            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
             
             // create texture in GL memory
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, GL.GL_RGBA,
@@ -201,7 +201,7 @@ public class TextureManager
     
     
     /**
-     * Clears all display lists used by this symbolizer
+     * Clears all textures used by this symbolizer
      * @param sym
      */
     public void clearTextures(DataStyler styler)
@@ -231,25 +231,30 @@ public class TextureManager
     
     
     /**
-     * Clears texture associated with this symbolizer/object pair
+     * Clears texture used by this symbolizer and
+     * associatd with the given objects
      * @param sym
      * @param obj
      */
-    public void clearTexture(Symbolizer sym, Object obj)
+    public void clearTextures(DataStyler styler, Object[] objects)
     {
-        GLTextureTable textureTable = symTextureTables.get(sym);
-        
-        if (textureTable != null)
+        synchronized (symTextureTables)
         {
-            GLTexture texInfo = textureTable.get(obj);
+            Symbolizer sym = styler.getSymbolizer();
+            GLTextureTable textureTable = symTextureTables.get(sym);
             
-            if (texInfo != null && texInfo.id > 0)
+            if (textureTable != null)
             {
-                gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                //System.err.println("Tex #" + texInfo.id + " deleted");
+                for (int i=0; i<objects.length; i++)
+                {
+                    GLTexture texInfo = textureTable.get(objects[i]);
+                    if (texInfo != null && texInfo.id > 0)
+                    {
+                        gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        //System.err.println("Tex #" + texInfo.id + " deleted");
+                    }
+                }
             }
-            
-            textureTable.remove(obj);
         }
     }
     

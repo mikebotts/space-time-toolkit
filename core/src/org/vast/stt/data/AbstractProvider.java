@@ -76,12 +76,15 @@ public abstract class AbstractProvider implements DataProvider
     
     public synchronized void startUpdate(boolean force)
     {
+        if (error)
+            return;
+        
         // if updating, continue only if force is true
         synchronized(lock)
         {
-            if ((updateThread != null) && updateThread.isAlive())
+            if (updateThread != null)
             {
-                if (force)
+                if (!canceled && force)
                 {
                     // make sure we canceled previous update properly
                     redoUpdate = true;
@@ -104,7 +107,7 @@ public abstract class AbstractProvider implements DataProvider
                     {
                         // clear previous data
                         clearData();                                
-                        canceled = false;                        
+                        canceled = false;
                         
                         // update data
                         System.out.println("Updating " + name + "...");
@@ -127,8 +130,10 @@ public abstract class AbstractProvider implements DataProvider
                     }
                 }
                 while (redoUpdate);
+                updateThread = null;                
             }
         };
+        
         updateThread = new Thread(runnable, "Data update: " + this.name);
         updateThread.start();
     }
@@ -137,7 +142,7 @@ public abstract class AbstractProvider implements DataProvider
     public void cancelUpdate()
     {
         canceled = true;
-        
+
         try
         {
             if (dataStream != null)
@@ -294,6 +299,12 @@ public abstract class AbstractProvider implements DataProvider
     public boolean hasError()
     {
         return error;
+    }
+    
+    
+    public void setError(boolean error)
+    {
+        this.error = error;
     }
     
     

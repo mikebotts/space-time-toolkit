@@ -260,13 +260,16 @@ public abstract class AbstractStyler implements DataStyler
         SpatialExtent bbox = new SpatialExtent();
         
         // get a fresh iterator
-        BlockListIterator iterator = dataLists[0].blockIterator.getList().getIterator();
-        
-        while (iterator.hasNext())
+        if (dataNode != null && dataNode.isNodeStructureReady())
         {
-            BlockInfo info = iterator.next().getInfo();
-            if (info != null)
-                bbox.add(info.getSpatialExtent());
+            BlockListIterator iterator = dataLists[0].blockIterator.getList().getIterator();
+            
+            while (iterator.hasNext())
+            {
+                BlockInfo info = iterator.next().getInfo();
+                if (info != null)
+                    bbox.add(info.getSpatialExtent());
+            }
         }
         
         return bbox;

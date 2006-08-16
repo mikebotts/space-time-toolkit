@@ -46,6 +46,9 @@ public abstract class Renderer implements StylerVisitor
     
     
     public abstract void cleanup(DataStyler styler, CleanupSection section);
+    
+    
+    public abstract void cleanup(DataStyler styler, Object[] objects, CleanupSection section);
 
 
     public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);

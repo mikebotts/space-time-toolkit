@@ -11,38 +11,38 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project;
+package org.vast.stt.data;
 
-import org.vast.math.Vector3d;
-import org.vast.stt.style.PrimitiveGraphic;
+import org.vast.stt.project.SpatialExtent;
 
 
 /**
  * <p><b>Title:</b>
- * Projection
+ * Spatial Extent Updater
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Interface for all map projections
+ * TODO SpatialExtentUpdater type description
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Aug 8, 2006
+ * @date Aug 6, 2006
  * @version 1.0
  */
-public interface Projection
+public abstract class SpatialExtentUpdater
 {
-    public enum Crs
+    protected SpatialExtent spatialExtent;
+    
+    
+    public SpatialExtentUpdater(SpatialExtent spatialExtent)
     {
-        ECEF,
-        EPSG4329
+        this.spatialExtent = spatialExtent;
     }
     
     
-    public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
-    
-    public abstract Vector3d getDefaultCameraLookDirection();
-    
-    public abstract Vector3d getDefaultCameraUpDirection();
+    public void setTimeExtent(SpatialExtent spatialExtent)
+    {
+        this.spatialExtent = spatialExtent;
+    }
 }
