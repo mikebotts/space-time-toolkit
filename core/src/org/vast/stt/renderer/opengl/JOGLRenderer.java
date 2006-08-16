@@ -202,7 +202,7 @@ public class JOGLRenderer extends Renderer
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
-        double axisLength = view.getOrthoWidth() / view.getViewWidth() * 30; 
+        double axisLength = canvas.getSize().x / canvas.getSize().y * 30; 
         
         gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINES);

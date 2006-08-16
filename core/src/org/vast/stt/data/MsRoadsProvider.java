@@ -301,6 +301,7 @@ public class MsRoadsProvider extends AbstractProvider
     
     /**
      * Recursively remove children data from blockLists
+     * but keep the underlying data in cache.
      * @param item
      * @param list
      */
@@ -309,10 +310,10 @@ public class MsRoadsProvider extends AbstractProvider
         // loop through children
         for (byte i=0; i<4; i++)
         {
-            QuadTreeItem nextItem = item.getChild(i);
-            if (nextItem != null)
+            QuadTreeItem childItem = item.getChild(i);
+            if (childItem != null)
             {
-                BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
+                BlockListItem[] blockArray = (BlockListItem[])childItem.getData();
                 
                 if (blockArray == null)
                     continue;
@@ -324,7 +325,7 @@ public class MsRoadsProvider extends AbstractProvider
                         blockLists[b].remove(blockArray[b]);
                 }
                 
-                removeChildrenData(nextItem);
+                removeChildrenData(childItem);
             }
         }
     }

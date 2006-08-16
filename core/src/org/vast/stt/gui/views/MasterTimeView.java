@@ -14,6 +14,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.time.MasterTimeWidget;
 
 
@@ -57,5 +58,16 @@ public class MasterTimeView extends SceneView
     public void clearView()
     {
         masterTimeWidget.setScene(null);
+    }
+    
+    
+    @Override
+    public void handleEvent(STTEvent e)
+    {
+        switch (e.type)
+        {
+            case SCENE_TIME_CHANGED:
+                refreshViewAsync();
+        }
     }
 }
