@@ -550,7 +550,7 @@ public class JOGLRenderer extends Renderer
         {
             // bind texture and load in GL if needed
             textureManager.useTexture(styler, patch.getTexture());            
-            gl.glPolygonOffset(0.0f, zBufferOffset*100);
+            gl.glPolygonOffset(0.5f, zBufferOffset*100);
             textureRenderer.patch = patch;
             textureRenderer.blockCount = 1;
             displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer);
