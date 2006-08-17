@@ -40,7 +40,7 @@ import org.vast.stt.renderer.Renderer;
  */
 public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
-    final private double RTD = 180 / Math.PI;
+    private final static double RTD = 180 / Math.PI;
     private Renderer renderer;
     private ViewSettings view;
     
@@ -66,10 +66,10 @@ public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListe
                 double dX = view.getOrthoWidth()/2 * RTD;
                 double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
                 
-                spatialExtent.setMinX(centerX - dX);
-                spatialExtent.setMaxX(centerX + dX);
-                spatialExtent.setMinY(centerY - dY);
-                spatialExtent.setMaxY(centerY + dY);
+                spatialExtent.setMinX(Math.max(centerX - dX, -180));
+                spatialExtent.setMaxX(Math.min(centerX + dX, +180));
+                spatialExtent.setMinY(Math.max(centerY - dY, -90));
+                spatialExtent.setMaxY(Math.min(centerY + dY, +90));
                 
                 spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
                 break;
