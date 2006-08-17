@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import org.vast.math.Vector3d;
+import org.vast.stt.project.ViewSettings.MotionConstraint;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -45,4 +46,10 @@ public interface Projection
     public abstract Vector3d getDefaultCameraLookDirection();
     
     public abstract Vector3d getDefaultCameraUpDirection();
+    
+    public abstract MotionConstraint getDefaultTranslationConstraint();
+    
+    public abstract MotionConstraint getDefaultRotationConstraint();
+    
+    public abstract MotionConstraint getDefaultZoomConstraint();
 }

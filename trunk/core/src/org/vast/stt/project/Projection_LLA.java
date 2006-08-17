@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import org.vast.math.Vector3d;
+import org.vast.stt.project.ViewSettings.MotionConstraint;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -112,6 +113,24 @@ public class Projection_LLA implements Projection
     public Vector3d getDefaultCameraUpDirection()
     {
         return new Vector3d(0,1,0);
+    }
+    
+    
+    public MotionConstraint getDefaultRotationConstraint()
+    {
+        return MotionConstraint.XYZ;
+    }
+
+
+    public MotionConstraint getDefaultTranslationConstraint()
+    {
+        return MotionConstraint.XY;
+    }
+
+
+    public MotionConstraint getDefaultZoomConstraint()
+    {
+        return MotionConstraint.XYZ;
     }
     
     

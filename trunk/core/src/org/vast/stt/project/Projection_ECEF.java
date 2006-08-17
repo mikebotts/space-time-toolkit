@@ -15,6 +15,7 @@ package org.vast.stt.project;
 
 import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
+import org.vast.stt.project.ViewSettings.MotionConstraint;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -34,6 +35,7 @@ import org.vast.stt.style.PrimitiveGraphic;
  */
 public class Projection_ECEF implements Projection
 {
+    
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
     {
         switch (sourceCrs)
@@ -57,5 +59,23 @@ public class Projection_ECEF implements Projection
     public Vector3d getDefaultCameraUpDirection()
     {
         return new Vector3d(0,0,1);
+    }
+    
+    
+    public MotionConstraint getDefaultRotationConstraint()
+    {
+        return MotionConstraint.XYZ;
+    }
+
+
+    public MotionConstraint getDefaultTranslationConstraint()
+    {
+        return MotionConstraint.XYZ;
+    }
+
+
+    public MotionConstraint getDefaultZoomConstraint()
+    {
+        return MotionConstraint.XYZ;
     }
 }

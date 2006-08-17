@@ -22,6 +22,7 @@ import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
 import com.sun.opengl.util.GLUT;
+
 import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
@@ -137,9 +138,10 @@ public class JOGLRenderer extends Renderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
+        
         Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
-        float height = width * clientArea.height / clientArea.width;
+        float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
         float farClip = (float) view.getFarClip();
         float nearClip = (float) view.getNearClip();
         gl.glOrtho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, nearClip, farClip);
@@ -202,7 +204,7 @@ public class JOGLRenderer extends Renderer
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
-        double axisLength = canvas.getSize().x / canvas.getSize().y * 30; 
+        double axisLength = view.getOrthoWidth() / this.getViewWidth() * 30; 
         
         gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINES);
