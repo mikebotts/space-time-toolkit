@@ -30,11 +30,11 @@ import org.eclipse.swt.widgets.Composite;
  * @version 1.0
  */
 
-public class CatalogWidget extends Composite 
+public class CatalogWidget //extends Composite 
 {
+	Composite mainGroup;
 	
 	public CatalogWidget(Composite parent, int style) {
-		super(parent,  style);
 		initGui(parent);
 	}
 
