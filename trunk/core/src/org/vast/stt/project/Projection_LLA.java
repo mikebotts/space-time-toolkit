@@ -15,6 +15,7 @@ package org.vast.stt.project;
 
 import org.vast.math.Vector3d;
 import org.vast.stt.project.ViewSettings.MotionConstraint;
+import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -104,15 +105,47 @@ public class Projection_LLA implements Projection
     }
     
     
-    public Vector3d getDefaultCameraLookDirection(Vector3d targetPos)
+    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
     {
-        return new Vector3d(0,0,-1);
-    }
-    
-    
-    public Vector3d getDefaultCameraUpDirection(Vector3d targetPos)
-    {
-        return new Vector3d(0,1,0);
+        ViewSettings view = scene.getViewSettings();
+        
+        // compute bbox 3D diagonal distance
+        double dist = bbox.getDiagonalDistance();
+        
+        // change camera target to center of bbox on XY plane       
+        Vector3d center = bbox.getCenter();
+        center.z = 0.0;
+        view.setTargetPos(center);
+        
+        // change camera pos
+        Vector3d newCameraPos = new Vector3d(center.x, center.y, dist*10);
+        view.setCameraPos(newCameraPos);
+        
+        // change camera up direction
+        view.getUpDirection().set(0, 1, 0);
+        
+        // adjust z range        
+        if (adjustZRange)
+        {
+            view.setFarClip(dist*20);
+            view.setNearClip(dist);
+        }
+                
+        // get dimensions of projection of bbox
+        double dx = Math.abs(bbox.getMaxX() - bbox.getMinX());
+        double dy = Math.abs(bbox.getMaxY() - bbox.getMinY());
+        
+        // set new orthowidth
+        Renderer renderer = scene.getRenderer();
+        double viewWidth = (double)renderer.getViewWidth();
+        double viewHeight = (double)renderer.getViewHeight();
+        double viewAspectRatio = viewWidth / viewHeight;
+        double bboxAspectRatio = dx / dy;
+        
+        if (bboxAspectRatio >= viewAspectRatio)
+            view.setOrthoWidth(dx);
+        else
+            view.setOrthoWidth(dy * viewAspectRatio);
     }
     
     
