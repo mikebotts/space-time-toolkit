@@ -16,6 +16,7 @@ package org.vast.stt.project;
 import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
 import org.vast.stt.project.ViewSettings.MotionConstraint;
+import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -50,13 +51,75 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public Vector3d getDefaultCameraLookDirection(Vector3d targetPos)
+    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
     {
-        // get a vector always oriented toward center of earth
-        Vector3d cameraLook = new Vector3d();
-        cameraLook.sub(targetPos);
-        cameraLook.normalize();
-        return cameraLook;
+        ViewSettings view = scene.getViewSettings();
+        
+        // compute bbox 3D diagonal distance
+        double dist = bbox.getDiagonalDistance();
+        
+        // change camera target to center of bbox or 0,0,0
+        Vector3d center = bbox.getCenter();
+        Vector3d newCameraPos = new Vector3d();
+        newCameraPos.sub(center);
+        
+        if (newCameraPos.length() < 1e6)
+        {
+            view.getCameraPos().set(dist*10, 0.0, 0.0);
+            view.getUpDirection().set(0.0, 0.0, 1.0);
+            view.getTargetPos().set(0.0, 0.0, 0.0);
+        }
+        else
+        {
+            // change camera pos
+            newCameraPos.normalize();
+            newCameraPos.scale(-dist*10);
+            view.setCameraPos(newCameraPos);
+            
+            // change camera up direction
+            Vector3d newUp = new Vector3d();
+            Vector3d sideDir = new Vector3d(0,0,1);
+            sideDir.cross(sideDir, newCameraPos);
+            newUp.cross(newCameraPos, sideDir);
+            newUp.normalize();        
+            view.setUpDirection(newUp);
+            
+            // change camera target
+            view.setTargetPos(center);
+        }
+        
+        
+        
+        // adjust z range        
+        if (adjustZRange)
+        {
+            view.setFarClip(dist*20);
+            view.setNearClip(dist);
+        }
+        
+        // now use renderer to find projection of bbox on screen
+        Renderer renderer = scene.getRenderer();
+        renderer.setupView();
+        Vector3d winPoint1 = new Vector3d();
+        Vector3d winPoint2 = new Vector3d();
+        renderer.project(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ(), winPoint1);
+        renderer.project(bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ(), winPoint2);
+                
+        // get dimensions of projection of bbox
+        double dx = Math.abs(winPoint1.x - winPoint2.x);
+        double dy = Math.abs(winPoint1.y - winPoint2.y);
+        
+        // set new orthowidth
+        double viewWidth = (double)renderer.getViewWidth();
+        double viewHeight = (double)renderer.getViewHeight();
+        double viewAspectRatio = viewWidth / viewHeight;
+        double bboxAspectRatio = dx / dy;
+        double oldWidth = view.getOrthoWidth();
+        
+        if (bboxAspectRatio >= viewAspectRatio)
+            view.setOrthoWidth(oldWidth * dx / viewWidth);
+        else
+            view.setOrthoWidth(oldWidth * dy / viewHeight);
     }
     
     
@@ -66,12 +129,19 @@ public class Projection_ECEF implements Projection
         Vector3d cameraUp = new Vector3d();
         cameraUp.sub(targetPos);
         
-        Vector3d sideDir = new Vector3d(0,0,1);
-        sideDir.cross(sideDir, cameraUp);
-        cameraUp.cross(cameraUp, sideDir);
-        cameraUp.normalize();
-        
-        return cameraUp;
+        if (cameraUp.length() < 1e6)
+        {
+            targetPos.set(0.0, 0.0, 0.0);
+            return new Vector3d(0, 0, 1);
+        }
+        else
+        {
+            Vector3d sideDir = new Vector3d(0,0,1);
+            sideDir.cross(sideDir, cameraUp);
+            cameraUp.cross(cameraUp, sideDir);
+            cameraUp.normalize();        
+            return cameraUp;
+        }
     }
     
     

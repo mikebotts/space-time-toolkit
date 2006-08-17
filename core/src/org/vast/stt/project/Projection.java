@@ -13,7 +13,6 @@
 
 package org.vast.stt.project;
 
-import org.vast.math.Vector3d;
 import org.vast.stt.project.ViewSettings.MotionConstraint;
 import org.vast.stt.style.PrimitiveGraphic;
 
@@ -43,13 +42,15 @@ public interface Projection
     
     public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
-    public abstract Vector3d getDefaultCameraLookDirection(Vector3d targetPos);
     
-    public abstract Vector3d getDefaultCameraUpDirection(Vector3d targetPos);
+    public abstract void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange);
+    
     
     public abstract MotionConstraint getDefaultTranslationConstraint();
     
+    
     public abstract MotionConstraint getDefaultRotationConstraint();
+    
     
     public abstract MotionConstraint getDefaultZoomConstraint();
 }
