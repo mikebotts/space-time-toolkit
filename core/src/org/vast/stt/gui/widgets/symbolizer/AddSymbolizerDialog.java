@@ -43,7 +43,7 @@ public class AddSymbolizerDialog extends Dialog {
     }
 
 	protected Control createDialogArea(Composite parent) {
-		Composite comp = new Composite(parent, 0x0);
+		Composite comp = (Composite)super.createDialogArea(parent);
 		comp.setLayout(new GridLayout(2, false));
 
 		//  Type Combo

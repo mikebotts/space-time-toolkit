@@ -15,11 +15,11 @@ package org.vast.stt.gui.widgets.catalog;
 
 /**
  * <p><b>Title:</b>
- *  TODO:  Add Title
+ *  ServerInfo
  * </p>
  *
  * <p><b>Description:</b><br/>
- *  TODO: Add Description
+ *  Simple class to store server Info for Cap Server Tree
  * </p>
  *
  * <p>Copyright (c) 2006</p>

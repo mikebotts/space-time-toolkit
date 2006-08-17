@@ -3,9 +3,7 @@ package org.vast.stt.gui.widgets.symbolizer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.ows.sld.GridSymbolizer;
-import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.gui.widgets.OptionParams;
 
 
 /**

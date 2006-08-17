@@ -23,15 +23,18 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.vast.stt.gui.widgets.catalog.CapServerTree.TreeContentProvider;
+import org.vast.stt.gui.widgets.catalog.CapServerTree.TreeLabelProvider;
 
 /**
  * <p><b>Title:</b>
- *  CapServerTree
+ *  LayerTree
  * </p>
  *
  * <p><b>Description:</b><br/>
- *  Tree to display and edit Cap Servers
- *  TODO:  tie this to an external XML file containg server info
+ *  Tree for adding layers (dataItems) to the Scene.  This tree is populated by 
+ *  a "GetCapabilities" button event in CapabiltiesWidget.  Layers can be dragged from 
+ *  this tree to the sceneTree.
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -40,20 +43,16 @@ import org.eclipse.swt.widgets.Control;
  * @version 1.0
  */
 
-public class CapServerTree
-{
+public class LayerTree {
 	TreeViewer treeViewer;
-	List [] servers;
-	CapServers capServers;
 	
-	public CapServerTree(Composite parent, CapServers capServers){
+	public LayerTree(Composite parent){
 		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(new TreeContentProvider());
 		treeViewer.setLabelProvider(new TreeLabelProvider());
-		this.capServers = capServers;
-		loadServerLists();
-		treeViewer.setInput(servers);
-		treeViewer.expandAll();	
+//		loaadINitialInput();
+		//treeViewer.setInput(servers);
+		//treeViewer.expandAll();	
 	}  
 	
 	public Control getControl(){
@@ -126,14 +125,6 @@ public class CapServerTree
 		{
 			return getChildren(inputElement);
 		}		
-	}
-	
-	public void loadServerLists(){
-		
-		// test hack
-		servers = new List[2];
-		servers[0] = capServers.wmsServers;
-		servers[1] = capServers.sosServers;
 	}
 }
 
