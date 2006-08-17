@@ -137,6 +137,17 @@ public class GridMeshStyler extends AbstractGridStyler
                 }
             }
         }
+        
+        // line width
+        param = sym.getStroke().getWidth();
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                value = param.getConstantValue();
+                patch.lineWidth = (Float)value;
+            }
+        }
     }
     
     
