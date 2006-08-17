@@ -155,7 +155,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             viewZ.normalize();
             
             double s;
-            double maxS = P1.length()*10;
+            double maxS = P1.length()*2;
             
             switch (transConstraint)
             {

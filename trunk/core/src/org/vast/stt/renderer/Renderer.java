@@ -1,10 +1,8 @@
 
 package org.vast.stt.renderer;
 
-import java.util.List;
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3d;
-import org.vast.stt.data.BlockInfo;
 import org.vast.stt.project.DataStyler;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
@@ -40,9 +38,9 @@ public abstract class Renderer implements StylerVisitor
 
 
     public abstract void init();
-
-
-    public abstract void dispose();
+    
+    
+    public abstract void drawScene();
     
     
     public abstract void cleanup(DataStyler styler, CleanupSection section);
@@ -60,45 +58,14 @@ public abstract class Renderer implements StylerVisitor
     public abstract void resizeView(int width, int height);
 
 
-    protected abstract void setupView();
-
-
-    protected abstract void swapBuffers();
+    public abstract void setupView();
     
     
-    protected abstract void drawItem(SceneItem item);
+    public abstract void dispose();
     
     
-    public void drawScene()
-    {
-        setupView();
-        List<SceneItem> sceneItems = scene.getSceneItems();
-        
-        for (int i = 0; i < sceneItems.size(); i++)
-        {
-            SceneItem nextItem = sceneItems.get(i);
-
-            if (!nextItem.isVisible())
-                continue;
-            
-            if (!nextItem.getDataItem().isEnabled())
-                continue;
-
-            drawItem(nextItem);
-        }
-        
-        swapBuffers();
-    }
-    
-    
-    /**
-     * Returns true if the block should not be rendered
-     */
-    public boolean filterBlock(BlockInfo blockInfo)
-    {
-        return false;
-    }
-    
+    public abstract void drawItem(SceneItem item);
+       
     
     public int getViewWidth()
     {

@@ -206,8 +206,11 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
                     if (selectedEntry instanceof DataItem)
                     {
                         SceneItem sceneItem = scene.findItem((DataItem)selectedEntry);
-                        FitView cmd = new FitView(scene, sceneItem);
-                        cmd.execute();
+                        if (sceneItem != null && sceneItem.isVisible())
+                        {
+                            FitView cmd = new FitView(scene, sceneItem);
+                            cmd.execute();
+                        }
                     }
                 }
             }

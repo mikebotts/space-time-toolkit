@@ -43,9 +43,9 @@ public interface Projection
     
     public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
-    public abstract Vector3d getDefaultCameraLookDirection();
+    public abstract Vector3d getDefaultCameraLookDirection(Vector3d targetPos);
     
-    public abstract Vector3d getDefaultCameraUpDirection();
+    public abstract Vector3d getDefaultCameraUpDirection(Vector3d targetPos);
     
     public abstract MotionConstraint getDefaultTranslationConstraint();
     
