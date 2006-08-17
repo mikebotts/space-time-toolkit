@@ -19,9 +19,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.gui.widgets.catalog.CapabilitiesWidget;
+import org.vast.stt.gui.widgets.catalog.EditCapServerDialog;
 
 /**
  * <p><b>Title:</b>
@@ -49,7 +51,7 @@ public class CapabilitiesView extends ViewPart// implements IPageListener, STTEv
 	@Override
 	public void createPartControl(Composite parent)
     {
-		capabilitiesWidget = new CapabilitiesWidget(parent, 0x0);
+		capabilitiesWidget = new CapabilitiesWidget(parent);
 		//  TODO anything else?
     }
 
@@ -63,20 +65,23 @@ public class CapabilitiesView extends ViewPart// implements IPageListener, STTEv
 	{
 		super.init(site);
         
-        // load menu images
-        editServerImg = STTPlugin.getImageDescriptor("icons/fitScene.gif");
-
-        // editServer action
-        IAction editServerAction = new Action()
-        {
-            public void run()
-            {
-            	//  popup EditCapServerDialog
-            }
-        };
-        editServerAction.setImageDescriptor(editServerImg);
-        editServerAction.setToolTipText("Edit your Capabilities server list");
-        site.getActionBars().getToolBarManager().add(editServerAction);
+		//  NOTE:  I had editServer as a Toolbar thing, but changed my mind about 
+		//         using it this way
+		
+//        // load menu images
+//        editServerImg = STTPlugin.getImageDescriptor("icons/fitScene.gif");
+//
+//        // editServer action
+//        IAction editServerAction = new Action()
+//        {
+//            public void run()
+//            {
+//            	new EditCapServerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+//            }
+//        };
+//        editServerAction.setImageDescriptor(editServerImg);
+//        editServerAction.setToolTipText("Edit your Capabilities server list");
+//        site.getActionBars().getToolBarManager().add(editServerAction);
 	}
 	
 	
