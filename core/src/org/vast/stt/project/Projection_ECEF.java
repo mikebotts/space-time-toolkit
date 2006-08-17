@@ -50,15 +50,28 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public Vector3d getDefaultCameraLookDirection()
+    public Vector3d getDefaultCameraLookDirection(Vector3d targetPos)
     {
-        return new Vector3d(-1,0,0);
+        // get a vector always oriented toward center of earth
+        Vector3d cameraLook = new Vector3d();
+        cameraLook.sub(targetPos);
+        cameraLook.normalize();
+        return cameraLook;
     }
     
     
-    public Vector3d getDefaultCameraUpDirection()
+    public Vector3d getDefaultCameraUpDirection(Vector3d targetPos)
     {
-        return new Vector3d(0,0,1);
+        // get the up vector so that the earth z is going up on the screen
+        Vector3d cameraUp = new Vector3d();
+        cameraUp.sub(targetPos);
+        
+        Vector3d sideDir = new Vector3d(0,0,1);
+        sideDir.cross(sideDir, cameraUp);
+        cameraUp.cross(cameraUp, sideDir);
+        cameraUp.normalize();
+        
+        return cameraUp;
     }
     
     

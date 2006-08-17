@@ -14,6 +14,8 @@
 package org.vast.stt.renderer.opengl;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.GLDrawable;
@@ -126,8 +128,11 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    protected void setupView()
+    public void setupView()
     {
+        SWTContext.setCurrent();
+        JOGLContext.makeCurrent();
+        
         ViewSettings view = scene.getViewSettings();
         
         // clear back buffer
@@ -164,6 +169,8 @@ public class JOGLRenderer extends Renderer
             this.drawCameraTarget();
         
         zBufferOffset = 100.0f;
+        
+        JOGLContext.release();
     }
     
     
@@ -180,18 +187,38 @@ public class JOGLRenderer extends Renderer
     @Override
     public void drawScene()
     {
+        setupView();
+        List<SceneItem> sceneItems = scene.getSceneItems();
+        
+        for (int i = 0; i < sceneItems.size(); i++)
+        {
+            SceneItem nextItem = sceneItems.get(i);
+
+            if (!nextItem.isVisible())
+                continue;
+            
+            if (!nextItem.getDataItem().isEnabled())
+                continue;
+
+            drawItem(nextItem);
+        }
+        
+        // swap buffers
         SWTContext.setCurrent();
         JOGLContext.makeCurrent();
-        super.drawScene();
+        SWTContext.swapBuffers();
         JOGLContext.release();
     }
-    
+       
     
     @Override
-    protected void drawItem(SceneItem sceneItem)
+    public void drawItem(SceneItem sceneItem)
     {
+        SWTContext.setCurrent();
+        JOGLContext.makeCurrent();
         resetZOffset = false;
         sceneItem.accept(this);
+        JOGLContext.release();
     }
     
     
@@ -236,13 +263,6 @@ public class JOGLRenderer extends Renderer
     {
         glu.gluUnProject(viewX, viewY, viewZ, modelM, 0, projM, 0, viewPort, 0, coords, 0);
         worldPos.set(coords[0], coords[1], coords[2]);
-    }
-
-
-    @Override
-    protected void swapBuffers()
-    {
-        SWTContext.swapBuffers();
     }
 
 

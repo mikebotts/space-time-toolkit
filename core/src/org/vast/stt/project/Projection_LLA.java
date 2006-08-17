@@ -104,13 +104,13 @@ public class Projection_LLA implements Projection
     }
     
     
-    public Vector3d getDefaultCameraLookDirection()
+    public Vector3d getDefaultCameraLookDirection(Vector3d targetPos)
     {
         return new Vector3d(0,0,-1);
     }
     
     
-    public Vector3d getDefaultCameraUpDirection()
+    public Vector3d getDefaultCameraUpDirection(Vector3d targetPos)
     {
         return new Vector3d(0,1,0);
     }

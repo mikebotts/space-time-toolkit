@@ -13,7 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.stt.data.BlockInfo;
 
 /**
  * <p><b>Title:</b><br/>
@@ -49,6 +48,4 @@ public interface StylerVisitor
 	public void visit(RasterStyler styler);    
     
     public void visit(TextureStyler styler);
-    
-    public boolean filterBlock(BlockInfo blockInfo);
 }
