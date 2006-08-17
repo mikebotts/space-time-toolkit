@@ -64,7 +64,7 @@ public class ViewSettings implements STTEventProducer
 	protected double cameraFov;
 
 	// parameters defining ortho field of view
-	protected double orthoWidth, orthoHeight;
+	protected double orthoWidth;
     
 	// camera modes
 	protected CameraMode cameraMode;
@@ -101,8 +101,7 @@ public class ViewSettings implements STTEventProducer
 		
         cameraMode = CameraMode.ORTHO;
 		orthoWidth = 2.0;
-		orthoHeight = orthoWidth / 1.33;
-		projection = new Projection_LLA();//Projection_ECEF();//Projection_LLA();
+		projection = new Projection_LLA();
         
 		nearClip = 1.0;
 		farClip = 200.0;        
@@ -133,9 +132,12 @@ public class ViewSettings implements STTEventProducer
     }
 
 
-    public void setProjection(Projection intendedProjection)
+    public void setProjection(Projection projection)
     {
-        this.projection = intendedProjection;
+        this.projection = projection;
+        this.transConstraint = projection.getDefaultTranslationConstraint();
+        this.rotConstraint = projection.getDefaultRotationConstraint();
+        this.zoomConstraint = projection.getDefaultZoomConstraint();
     }
 
 
@@ -172,18 +174,6 @@ public class ViewSettings implements STTEventProducer
 	public void setNearClip(double nearClip)
 	{
 		this.nearClip = nearClip;
-	}
-
-
-	public double getOrthoHeight()
-	{
-		return orthoHeight;
-	}
-
-
-	public void setOrthoHeight(double orthoHeight)
-	{
-		this.orthoHeight = orthoHeight;
 	}
 
 

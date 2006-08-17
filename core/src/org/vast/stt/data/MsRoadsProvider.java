@@ -54,7 +54,7 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  */
 public class MsRoadsProvider extends AbstractProvider
 {
-    private final static double PI_180 = Math.PI/180;
+    private final static double DTR = Math.PI/180;
     protected QuadTree quadTree;
     protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
     protected DataArray gridData;
@@ -220,10 +220,10 @@ public class MsRoadsProvider extends AbstractProvider
         
         // convert extent to mercator projection
         SpatialExtent mercatorExtent = new SpatialExtent();
-        double minX = spatialExtent.getMinX() * PI_180;
-        double maxX = spatialExtent.getMaxX() * PI_180;
-        double minY = latToY(spatialExtent.getMinY() * PI_180);
-        double maxY = latToY(spatialExtent.getMaxY() * PI_180);
+        double minX = spatialExtent.getMinX() * DTR;
+        double maxX = spatialExtent.getMaxX() * DTR;
+        double minY = latToY(spatialExtent.getMinY() * DTR);
+        double maxY = latToY(spatialExtent.getMaxY() * DTR);
         mercatorExtent.setMinX(Math.max(minX, -Math.PI));
         mercatorExtent.setMaxX(Math.min(maxX, +Math.PI));
         mercatorExtent.setMinY(Math.max(minY, -Math.PI));

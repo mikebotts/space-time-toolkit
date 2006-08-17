@@ -9,6 +9,7 @@ import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
 import org.vast.stt.project.SpatialExtent;
 import org.vast.stt.project.ViewSettings;
+import org.vast.stt.renderer.Renderer;
 
 
 /**
@@ -58,9 +59,10 @@ public class FitView implements Command
         
         view.setUpDirection(proj.getDefaultCameraUpDirection());
         
+        Renderer renderer = scene.getRenderer();
         double dx = bbox.getMaxX() - bbox.getMinX();
         double dy = bbox.getMaxY() - bbox.getMinY();
-        double viewAspectRatio = (double)view.getViewWidth() / (double)view.getViewHeight();
+        double viewAspectRatio = (double)renderer.getViewWidth() / (double)renderer.getViewHeight();
         double bboxAspectRatio = dx / dy;
         
         if (bboxAspectRatio >= viewAspectRatio)

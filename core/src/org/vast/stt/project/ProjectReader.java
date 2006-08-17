@@ -433,14 +433,6 @@ public class ProjectReader
 			viewSettings.setOrthoWidth(orthoWidth);
 		}
 		
-		// ortho projection height
-		val = dom.getElementValue(viewSettingsElt, "orthoHeight");
-		if (val != null)
-		{
-			double orthoHeight = Double.parseDouble(val);
-			viewSettings.setOrthoHeight(orthoHeight);
-		}
-		
 		// Z buffer / Rendering near clipping plane
 		val = dom.getElementValue(viewSettingsElt, "nearClip");
 		if (val != null)
