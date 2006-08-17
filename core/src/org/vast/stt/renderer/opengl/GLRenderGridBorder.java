@@ -65,15 +65,12 @@ public class GLRenderGridBorder extends GLRunnable
     {
         GridPointGraphic point;
         int count = 0;
-        
-        // select fill or wireframe
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
-        
-        gl.glLineWidth(patch.lineWidth);            
-        gl.glDisable(GL.GL_CULL_FACE);            
+
+        gl.glDisable(GL.GL_CULL_FACE);
         
         do
         {
+            gl.glLineWidth(patch.lineWidth); 
             gl.glBegin(GL.GL_LINE_STRIP);
             
             // segment 1
