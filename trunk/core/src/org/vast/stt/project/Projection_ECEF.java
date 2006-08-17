@@ -88,8 +88,6 @@ public class Projection_ECEF implements Projection
             view.setTargetPos(center);
         }
         
-        
-        
         // adjust z range        
         if (adjustZRange)
         {
