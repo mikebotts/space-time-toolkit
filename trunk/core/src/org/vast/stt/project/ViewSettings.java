@@ -15,6 +15,7 @@ package org.vast.stt.project;
 
 import org.vast.math.*;
 import org.vast.ows.sld.Color;
+import org.vast.stt.dynamics.ViewSettingsUpdater;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -89,6 +90,7 @@ public class ViewSettings implements STTEventProducer
     protected boolean showCameraTarget = true;
     
     protected STTEventListeners listeners;
+    protected ViewSettingsUpdater updater;
 
 	
 	public ViewSettings()
@@ -306,6 +308,18 @@ public class ViewSettings implements STTEventProducer
     public void setZoomConstraint(MotionConstraint zoomConstraint)
     {
         this.zoomConstraint = zoomConstraint;
+    }
+    
+    
+    public ViewSettingsUpdater getUpdater()
+    {
+        return updater;
+    }
+
+
+    public void setUpdater(ViewSettingsUpdater updater)
+    {
+        this.updater = updater;
     }
     
     
