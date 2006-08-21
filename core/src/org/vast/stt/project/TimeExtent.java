@@ -13,6 +13,7 @@
 
 package org.vast.stt.project;
 
+import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -45,6 +46,7 @@ public class TimeExtent implements STTEventProducer
     private boolean useAbsoluteTime = false; //  overrides STT clock, if true
     private double absoluteTime;
     protected STTEventListeners listeners;
+    protected TimeExtentUpdater updater;
 
 
     // constructors
@@ -324,6 +326,18 @@ public class TimeExtent implements STTEventProducer
             if (this.getAdjustedLeadTime() == ts.getAdjustedLeadTime())
                 result = true;
         return result;
+    }
+    
+    
+    public TimeExtentUpdater getUpdater()
+    {
+        return updater;
+    }
+
+
+    public void setUpdater(TimeExtentUpdater updater)
+    {
+        this.updater = updater;
     }
 
     

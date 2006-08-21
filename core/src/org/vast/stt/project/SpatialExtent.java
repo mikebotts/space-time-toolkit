@@ -14,6 +14,7 @@
 package org.vast.stt.project;
 
 import org.vast.math.Vector3d;
+import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
@@ -48,6 +49,7 @@ public class SpatialExtent implements STTEventProducer
     protected int yTiles = 1;
     protected int zTiles = 1;
     protected STTEventListeners listeners;
+    protected SpatialExtentUpdater updater;
 
 
     public SpatialExtent()
@@ -359,6 +361,18 @@ public class SpatialExtent implements STTEventProducer
     public void setZTiles(int tiles)
     {
         zTiles = tiles;
+    }
+    
+    
+    public SpatialExtentUpdater getUpdater()
+    {
+        return updater;
+    }
+
+
+    public void setUpdater(SpatialExtentUpdater updater)
+    {
+        this.updater = updater;
     }
     
     
