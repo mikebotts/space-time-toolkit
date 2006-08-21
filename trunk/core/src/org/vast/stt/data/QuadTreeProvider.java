@@ -16,6 +16,7 @@ package org.vast.stt.data;
 import java.util.ArrayList;
 import org.vast.stt.data.tiling.QuadTree;
 import org.vast.stt.data.tiling.QuadTreeItem;
+import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataProvider;

@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
+package org.vast.stt.dynamics;
 
 import org.vast.stt.project.SpatialExtent;
 
@@ -30,18 +30,12 @@ import org.vast.stt.project.SpatialExtent;
  * @date Aug 6, 2006
  * @version 1.0
  */
-public abstract class SpatialExtentUpdater
+public abstract class SpatialExtentUpdater extends DynamicUpdater
 {
     protected SpatialExtent spatialExtent;
     
     
-    public SpatialExtentUpdater(SpatialExtent spatialExtent)
-    {
-        this.spatialExtent = spatialExtent;
-    }
-    
-    
-    public void setTimeExtent(SpatialExtent spatialExtent)
+    public void setSpatialExtent(SpatialExtent spatialExtent)
     {
         this.spatialExtent = spatialExtent;
     }

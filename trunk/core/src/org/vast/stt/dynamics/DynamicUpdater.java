@@ -11,13 +11,36 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
-
-import org.vast.stt.renderer.RendererInfo;
+package org.vast.stt.dynamics;
 
 
-public class ItemInfo
+/**
+ * <p><b>Title:</b>
+ * Dynamic Updater
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * TODO DynamicUpdater type description
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Alexandre Robin
+ * @date Aug 6, 2006
+ * @version 1.0
+ */
+public abstract class DynamicUpdater
 {
-    public RendererInfo rendererParams;
-    public boolean delete;
+    protected boolean enabled;
+
+    
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
 }

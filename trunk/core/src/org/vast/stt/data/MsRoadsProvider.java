@@ -30,6 +30,7 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.stt.data.tiling.QuadTree;
 import org.vast.stt.data.tiling.QuadTreeItem;
+import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.SpatialExtent;
@@ -45,6 +46,10 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * <p><b>Description:</b><br/>
  * Requests Data from Microsoft Live Local servers
  * with it.
+ * Ref: http://local.live.com/
+ * Requests: http://r1.ortho.tiles.virtualearth.net/tiles/r0231.png?g=25
+ *           http://a1.ortho.tiles.virtualearth.net/tiles/a2301.jpeg?g=25
+ *           http://h0.ortho.tiles.virtualearth.net/tiles/h1220330.jpeg?g=25
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -84,7 +89,7 @@ public class MsRoadsProvider extends AbstractProvider
 
                 // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
                 String urlString = "http://r" + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/r" + q + ".png?g=25";
-                System.out.println(urlString);
+                //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://local.live.com");
@@ -158,10 +163,8 @@ public class MsRoadsProvider extends AbstractProvider
             }           
         }        
     }
+        
     
-    
-    // http://local.live.com/
-    // http://r1.ortho.tiles.virtualearth.net/tiles/r1.png?g=15
     public MsRoadsProvider()
 	{
         quadTree = new QuadTree();
@@ -315,14 +318,14 @@ public class MsRoadsProvider extends AbstractProvider
             {
                 BlockListItem[] blockArray = (BlockListItem[])childItem.getData();
                 
-                if (blockArray == null)
-                    continue;
-                
-                for (int b=0; b<blockArray.length; b++)
-                {
-                    // remove items from list
-                    if (blockArray[b] != null)
-                        blockLists[b].remove(blockArray[b]);
+                if (blockArray != null)
+                {                
+                    for (int b=0; b<blockArray.length; b++)
+                    {
+                        // remove items from list
+                        if (blockArray[b] != null)
+                            blockLists[b].remove(blockArray[b]);
+                    }
                 }
                 
                 removeChildrenData(childItem);

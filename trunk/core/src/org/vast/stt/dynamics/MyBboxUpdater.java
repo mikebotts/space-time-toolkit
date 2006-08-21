@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.data;
+package org.vast.stt.dynamics;
 
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
@@ -47,7 +47,7 @@ public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListe
     
     public MyBboxUpdater(SpatialExtent spatialExtent)
     {
-        super(spatialExtent);
+        setSpatialExtent(spatialExtent);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
         Scene scene = input.getScene();
         renderer = scene.getRenderer();
