@@ -13,8 +13,17 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.xerces.dom.AttributeMap;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.PlatformUI;
+import org.vast.io.xml.DOMReader;
+import org.vast.io.xml.DOMReaderException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * <p><b>Title:</b>
@@ -41,37 +50,12 @@ public class CapServers {
 	public enum ServiceType { WMS, WCS, WFS, SOS };
 	
 	public CapServers(){
-		
+		//  Init ArrayLists
+		wmsServers = new ArrayList<ServerInfo>(5);
+		wcsServers = new ArrayList<ServerInfo>(5);
+		wfsServers = new ArrayList<ServerInfo>(5);
+		sosServers = new ArrayList<ServerInfo>(5);
 	}
-	
-	//  TODO load from config XML
-	public void loadServerData(){
-		ServerInfo server1 = new ServerInfo();
-		server1.serverName="Some WMS";
-		server1.serverUrl="http://blahblahvlagh";
-		server1.type = ServerInfo.ControlType.WMS;
-		ServerInfo server2 = new ServerInfo();
-		server2.serverName="Another WMS";
-		server2.serverUrl="http://bobs.adult.movies";
-		server2.type = ServerInfo.ControlType.WMS;
-		
-		wmsServers = new ArrayList<ServerInfo>();
-		wmsServers.add(server1);
-		wmsServers.add(server2);
-		
-		ServerInfo server3 = new ServerInfo();
-		server3.serverName="Some SOS";
-		server3.serverUrl="http://sos.sos.sos";
-		server3.type = ServerInfo.ControlType.SOS;
-		ServerInfo server4 = new ServerInfo();
-		server4.serverName="UAh SOS";
-		server4.serverUrl="http://vast.uah.edu";
-		server4.type = ServerInfo.ControlType.SOS;
-		
-		sosServers = new ArrayList<ServerInfo>();
-		sosServers.add(server3);
-		sosServers.add(server4);
-	}	
 	
 	public String [] getServiceTypes(){
 		ServiceType[] types = ServiceType.values();
@@ -97,21 +81,83 @@ public class CapServers {
 		case WMS:
 			servers = new String[wmsServers.size()];
 			for(ServerInfo info : wmsServers)
-				servers[i++] = info.serverName;
+				servers[i++] = info.name;
 			break;
 		case WCS:
+			servers = new String[wcsServers.size()];
+			for(ServerInfo info : wcsServers)
+				servers[i++] = info.name;
 			break;
 		case WFS:
+			servers = new String[wfsServers.size()];
+			for(ServerInfo info : wfsServers)
+				servers[i++] = info.name;
 			break;
 		case SOS:
 			servers = new String[sosServers.size()];
 			for(ServerInfo info : sosServers)
-				servers[i++] = info.serverName;
+				servers[i++] = info.name;
 			break;
 		default:
 			System.err.println("CapServes.getServers();  Type not supported:" + type);
 		}
 		return servers;
+	}
+	
+	public void loadServerData() {
+		try	{
+		    readServers();
+		} catch (DOMReaderException e) {
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"STT Error", "Servers.xml file not found.  Capabilities Servers are empty.");
+			return;
+		}
+		
+		
+	}	
+	
+	public void readServers() throws DOMReaderException {
+		InputStream is = this.getClass().getResourceAsStream("Servers.xml");
+		DOMReader dom = new DOMReader(is, false);
+		Element rootElt = dom.getRootElement();
+		
+		NodeList serverNodes = rootElt.getElementsByTagName("Server");
+		Element server, urlElt;
+		AttributeMap serverAtts;
+		int numServers = serverNodes.getLength();
+		ServerInfo si;
+		String type;
+		for(int i=0; i<numServers; i++){
+			server = (Element)serverNodes.item(i);
+			serverAtts = (AttributeMap)server.getAttributes();
+			si = new ServerInfo();
+			si.name = server.getAttribute("name");
+			si.version = server.getAttribute("version");
+			type = server.getAttribute("type");
+			si.setServiceType(type);
+			urlElt = (Element)server.getElementsByTagName("URL").item(0);
+			si.url = urlElt.getTextContent();
+			//  Add ServerInfo to List
+			switch(si.type){
+			case WMS:
+				wmsServers.add(si);
+				break;
+			case WCS:
+				wcsServers.add(si);
+				break;
+			case WFS:
+				wfsServers.add(si);
+				break;
+			case SOS:
+				sosServers.add(si);
+				break;
+			}
+		}
+	}		
+	
+	//  TODO rewrite cap file if changes are made
+	public void writeServerData(){
+		
 	}
 }
 
