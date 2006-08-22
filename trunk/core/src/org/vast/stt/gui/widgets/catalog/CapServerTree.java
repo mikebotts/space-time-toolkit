@@ -76,12 +76,14 @@ public class CapServerTree
 		public String getText(Object element)
 		{
 			if(element instanceof ArrayList) {
-				ServerInfo serverInfo = ((ArrayList<ServerInfo>)element).get(0);
-				if(serverInfo != null)
+				if( ((List)element).size() == 0)
+					return "";
+				ServerInfo serverInfo = ((List<ServerInfo>)element).get(0);
+				//if(serverInfo != null)
 					return serverInfo.type.toString();
-				return null;
+				//return null;
 			} else if (element instanceof ServerInfo)
-				return ((ServerInfo)element).serverName;
+				return ((ServerInfo)element).name;
 			else 
 				return null;
 		}		

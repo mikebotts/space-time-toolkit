@@ -30,11 +30,22 @@ package org.vast.stt.gui.widgets.catalog;
 
 public class ServerInfo {
 
-	public String serverName;
-	public String serverVersion;
-	public String serverUrl;
-	public static enum ControlType 
+	public String name;
+	public String version;
+	public String url;
+	public static enum ServiceType 
 		{ WMS, WCS, WFS, SOS };
-	public ControlType type;
+	public ServiceType type;
+	
+	public void setServiceType(String typeStr){
+		if(typeStr.equalsIgnoreCase("wms"))
+			type = ServiceType.WMS;
+		else if(typeStr.equalsIgnoreCase("wcs"))
+			type = ServiceType.WCS;
+		else if(typeStr.equalsIgnoreCase("wfs"))
+			type = ServiceType.WFS;
+		else if(typeStr.equalsIgnoreCase("sos"))
+			type = ServiceType.SOS;
+	}
 }
 

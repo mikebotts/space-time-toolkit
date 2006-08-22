@@ -1,0 +1,8 @@
+<ServerList>
+    <Server name="Microsoft Terraserver" type="WMS" version="1.1.1">
+        <URL>http://terraserver.microsoft.com/ogccapabilities.ashx</URL>
+    </Server>
+    <Server name="NASA Globe Program" type="WMS" version="1.1.1">
+        <URL>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</URL>
+    </Server>
+</ServerList>

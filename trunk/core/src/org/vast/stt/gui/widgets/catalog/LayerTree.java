@@ -80,7 +80,7 @@ public class LayerTree {
 					return serverInfo.type.toString();
 				return null;
 			} else if (element instanceof ServerInfo)
-				return ((ServerInfo)element).serverName;
+				return ((ServerInfo)element).name;
 			else 
 				return null;
 		}		
