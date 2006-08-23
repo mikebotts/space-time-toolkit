@@ -259,6 +259,86 @@
                         </member>
                      </DataList>
                   </member>
+                  <member>
+                     <DataList>
+                        <name>Model Data</name>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Max Surface Temperature</name>
+                              <dataProvider href="#PROVIDER_11"/>
+                              <style>
+                                 <sldx:GridFillSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>surfaceTemp/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>surfaceTemp/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill-blue">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 1.0 82.5 1.0 87.5 0.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-green">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 1.0 87.5 1.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>                           
+                                       <sld:CssParameter name="fill-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 0.0 87.5 1.0 90 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 -100.0 -100.0 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridMeshSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>surfaceTemp/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>surfaceTemp/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#00FFFF</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridMeshSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
                </DataList>
             </contents>
          </Scene>
@@ -314,6 +394,26 @@
                      </BoundingBox>
                   </spatialExtent>
                </MsRoadsProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_11">
+                  <name>Temperature Data</name>
+                  <layerId>MaxT_SFC</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>MaxT_SFC</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimeInstant>
+                                 <gml:timePosition>2006-06-06T13:00:00Z</gml:timePosition>
+                              </gml:TimeInstant>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-binary-base64</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
             </member>
          </ResourceList>
       </member>
