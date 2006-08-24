@@ -67,8 +67,7 @@ public class ProjectWriter
 
 			String filePath = (new URL(url)).getPath();
 			OutputStream outputStream = new FileOutputStream(filePath);
-			dom.setOutputStream(outputStream);
-			dom.writeDOM(dom.getBaseElement());
+			dom.writeDOM(dom.getBaseElement(), outputStream, null);
 		}
 		catch (Exception e)
 		{
