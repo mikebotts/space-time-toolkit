@@ -106,17 +106,7 @@ public class SOSProvider extends OWSProvider
 	{
 		// init DataNode if not done yet
         if (!dataNode.isNodeStructureReady())
-        {
             init();
-            try
-            {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-        }
         
         try
         {    
