@@ -123,10 +123,6 @@ public class SOSProvider extends OWSProvider
             boolean usePost = true;
             dataStream = requestBuilder.sendRequest(query, usePost);
             
-//            int car;
-//            while ((car = dataStream.read()) != -1)
-//                System.err.print((char)car);
-            
             if (canceled)
                 return;
                 
