@@ -140,7 +140,12 @@ public class SOSProvider extends OWSProvider
 		catch (Exception e)
 		{
 			if (!canceled)
-				throw new DataException(e.getMessage(), e);
+            {
+                String server = query.getPostServer();
+                if (server == null)
+                    server = query.getGetServer();
+                throw new DataException("Error while reading data from " + server, e);
+            }
 		}
 		finally
 		{
