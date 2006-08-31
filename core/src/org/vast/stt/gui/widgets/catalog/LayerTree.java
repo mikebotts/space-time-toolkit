@@ -19,6 +19,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.vast.ows.OWSLayerCapabilities;
@@ -49,6 +51,11 @@ public class LayerTree implements ITreeContentProvider {
 		treeViewer.setContentProvider(this);
 		labelProv = new LayerLabelProvider();
 		treeViewer.setLabelProvider(labelProv);
+		
+		//  Add Drag support
+		int ops = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] transfers = new Transfer[] { new LayerTransfer(null)};
+		treeViewer.addDragSupport(ops, transfers, new LayerTreeDragListener(treeViewer));
 	}  
 	
 	public Control getControl(){
