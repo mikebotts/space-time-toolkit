@@ -115,7 +115,7 @@ public class LayerLabelProvider extends LabelProvider {
 		} else {
 			if (element != null)
 			    return element.toString();
-			return "NULL";
+			return "NULL"; //  Why am I getting this?
 		}
 	}		
 
