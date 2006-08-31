@@ -17,14 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.vast.stt.gui.widgets.catalog.CapServerTree.TreeContentProvider;
-import org.vast.stt.gui.widgets.catalog.CapServerTree.TreeLabelProvider;
+import org.vast.ows.OWSLayerCapabilities;
 
 /**
  * <p><b>Title:</b>
@@ -43,88 +40,65 @@ import org.vast.stt.gui.widgets.catalog.CapServerTree.TreeLabelProvider;
  * @version 1.0
  */
 
-public class LayerTree {
+public class LayerTree implements ITreeContentProvider {
 	TreeViewer treeViewer;
+	LayerLabelProvider labelProv;
 	
 	public LayerTree(Composite parent){
 		treeViewer = new TreeViewer(parent);
-		treeViewer.setContentProvider(new TreeContentProvider());
-		treeViewer.setLabelProvider(new TreeLabelProvider());
-//		loaadINitialInput();
-		//treeViewer.setInput(servers);
-		//treeViewer.expandAll();	
+		treeViewer.setContentProvider(this);
+		labelProv = new LayerLabelProvider();
+		treeViewer.setLabelProvider(labelProv);
 	}  
 	
 	public Control getControl(){
 		return treeViewer.getControl();
 	}
 	
-	// Label + Image provider
-	class TreeLabelProvider extends LabelProvider
-	{        
-//        @Override
-//        public Image getImage(Object element)
-//		{
-//			if (element instanceof WMSServer)
-//                return WMSServerImg;
-//			else if (element instanceof SOSServer)
-//                return SOSServerImg;
-//		}
-
-		@Override
-		public String getText(Object element)
-		{
-			if(element instanceof ArrayList) {
-				ServerInfo serverInfo = ((ArrayList<ServerInfo>)element).get(0);
-				if(serverInfo != null)
-					return serverInfo.type.toString();
-				return null;
-			} else if (element instanceof ServerInfo)
-				return ((ServerInfo)element).name;
-			else 
-				return null;
-		}		
+	public void setInput(List layers){
+		treeViewer.setInput(layers);
 	}
 	
-	// Content provider
-	class TreeContentProvider implements ITreeContentProvider
-	{
-		public void dispose()
-		{						
-		}
+	//  TreeContentProvider interfaces
+	public void dispose() {
+	}
 
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-		{
-		}
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	}
 
-		public Object[] getChildren(Object parentElement)
-		{
-			if (parentElement instanceof List[]) {
-				return (List [])parentElement;
-			} else if(parentElement instanceof ArrayList) {
-				return ((ArrayList)parentElement).toArray(new ServerInfo[]{});
-			} else
-				return null;
-			
-		}
-
-		public Object getParent(Object element)
-		{
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof List) {
+			List parentList = (List) parentElement;
+			if (parentList.size() > 0) {
+				//Object testObj = parentList.get(0);  //  may not need to test the object
+				return ((ArrayList) parentElement).toArray();
+			}
 			return null;
-		}
+		} else if (parentElement instanceof OWSLayerCapabilities) {
+			labelProv.setCapabilities((OWSLayerCapabilities) parentElement);
+			LayerInfo info = new LayerInfo((OWSLayerCapabilities) parentElement);
+			return info.getOptions();
+		} else if (parentElement instanceof List[]) {
+			return (List[]) parentElement;
+		} else
+			return null;
 
-		public boolean hasChildren(Object element)
-		{
-			if (element instanceof List)
-				return true;
-			else
-				return false;
-		}
+	}
 
-		public Object[] getElements(Object inputElement)
-		{
-			return getChildren(inputElement);
-		}		
+	public Object getParent(Object element) {
+		return null;
+	}
+
+	public boolean hasChildren(Object element) {
+		if (element instanceof List || element instanceof List[])
+			return true;
+		else if (element instanceof OWSLayerCapabilities)
+			return true;
+		else
+			return false;
+	}
+
+	public Object[] getElements(Object inputElement) {
+		return getChildren(inputElement);
 	}
 }
-

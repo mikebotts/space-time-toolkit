@@ -13,6 +13,9 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.util.List;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -26,6 +29,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
+import org.vast.ows.OWSCapabilitiesReader;
+import org.vast.ows.OWSException;
+import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.server.OWSServlet;
+import org.vast.ows.sos.SOSCapabilitiesReader;
+import org.vast.ows.sos.SOSLayerCapabilities;
+import org.vast.ows.wcs.WCSCapabilitiesReader;
+import org.vast.ows.wfs.WFSCapabilitiesReader;
+import org.vast.ows.wms.WMSCapabilitiesReader;
 
 /**
  * <p><b>Title:</b>
@@ -48,6 +61,7 @@ public class CapabilitiesWidget implements SelectionListener
 	private Button getCapsBtn;
 	private Combo typesCombo;
 	private Combo serverCombo;
+	private LayerTree layerTree;
 	
 	public CapabilitiesWidget(Composite parent) {
 		capServers = new CapServers();
@@ -74,7 +88,7 @@ public class CapabilitiesWidget implements SelectionListener
 		//typesCombo.setItems(new String [] {"WMS", "WCS", "WFS", "SOS"});
 		gd = new GridData(SWT.LEFT, SWT.FILL, false, true);
 		typesCombo.setLayoutData(gd);
-		typesCombo.select(0);
+		typesCombo.select(3);
 		typesCombo.addSelectionListener(this);
 		
 		//  Server  
@@ -117,8 +131,7 @@ public class CapabilitiesWidget implements SelectionListener
 		getCapsBtn.setLayoutData(gd);
 		getCapsBtn.addSelectionListener(this);
 		
-		//  Layer TreeViewer for layers returned from caps
-		LayerTree layerTree = new LayerTree(mainGroup);
+		layerTree = new LayerTree(mainGroup);
 		layerTree.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));		
 	}
 
@@ -134,6 +147,46 @@ public class CapabilitiesWidget implements SelectionListener
 		serverCombo.select(0);
 	}
 	
+	/**
+	 *  get the Capabilities from the currently selected server
+	 */
+	protected void getCapabilities(String server, ServiceType type){
+		System.err.println("Get caps for " + server);
+		ServerInfo info = capServers.getServerInfo(server, type);
+		OWSCapabilitiesReader reader;
+		switch(type){
+		case WMS:
+			reader = new WMSCapabilitiesReader();
+			break;
+		case WCS:
+			reader = new WCSCapabilitiesReader();
+			break;
+		case WFS:
+			reader = new WFSCapabilitiesReader();
+			break;
+		case SOS:
+			reader = new SOSCapabilitiesReader();
+			break;
+		default:
+            MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+            		"STT Error", "Error reading caps from " + info.url);
+			return;
+		}
+		OWSServiceCapabilities caps = null;
+		try {		
+			caps = reader.readCapabilities(info.url, info.version);
+		} catch (OWSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<OWSLayerCapabilities> layers = caps.getLayers();
+//		for(OWSLayerCapabilities layerTmp: layers){
+//			System.err.println("Layer is " + layerTmp.getName());
+//		}
+		layerTree.setInput(layers);
+	}
+	
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
@@ -141,7 +194,8 @@ public class CapabilitiesWidget implements SelectionListener
 		Control control = (Control)e.getSource();
 		
 		if(control == getCapsBtn){
-			
+			String server = serverCombo.getText();
+			getCapabilities(server, ServiceType.getServiceType(typesCombo.getText()));
 		} else if(control == typesCombo) {
 			//  repopulate servers with selected type
 			setServerComboItems();
