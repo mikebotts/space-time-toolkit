@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xerces.dom.AttributeMap;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 import org.vast.io.xml.DOMReader;
@@ -46,8 +45,9 @@ import org.w3c.dom.NodeList;
  */
 
 public class CapServers {
+	//  May make these HashMaps for mroe efficient lookups
 	List<ServerInfo> wmsServers, wcsServers, wfsServers, sosServers;
-	public enum ServiceType { WMS, WCS, WFS, SOS };
+	//public enum ServiceType { WMS, WCS, WFS, SOS };
 	
 	public CapServers(){
 		//  Init ArrayLists
@@ -104,6 +104,40 @@ public class CapServers {
 		return servers;
 	}
 	
+	public ServerInfo getServerInfo(String serverName, ServiceType type){
+		switch(type){
+		case WMS:
+			for(ServerInfo info : wmsServers) {
+				if(info.name.equals(serverName))
+					return info;
+			}
+			break;
+		case WCS:
+			for(ServerInfo info : wcsServers) {
+				if(info.name.equals(serverName))
+					return info;
+			}
+			break;
+		case WFS:
+			for(ServerInfo info : wfsServers) {
+				if(info.name.equals(serverName))
+					return info;
+			}
+			break;
+		case SOS:
+			for(ServerInfo info : sosServers) {
+				if(info.name.equals(serverName))
+					return info;
+			}
+			break;
+		default:
+			System.err.println("CapServes.getServers();  Type not supported:" + type);
+			return null;
+		}
+		System.err.println("CapServes.getServers();  Info not found for ServerName:" + serverName);
+		return null;
+	}
+	
 	public void loadServerData() {
 		try	{
 		    readServers();
@@ -112,29 +146,26 @@ public class CapServers {
 					"STT Error", "Servers.xml file not found.  Capabilities Servers are empty.");
 			return;
 		}
-		
-		
 	}	
 	
 	public void readServers() throws DOMReaderException {
 		InputStream is = this.getClass().getResourceAsStream("Servers.xml");
+		//InputStream is = STTPlugin.getResource("Servers.xml");
 		DOMReader dom = new DOMReader(is, false);
 		Element rootElt = dom.getRootElement();
 		
 		NodeList serverNodes = rootElt.getElementsByTagName("Server");
 		Element server, urlElt;
-		AttributeMap serverAtts;
 		int numServers = serverNodes.getLength();
 		ServerInfo si;
-		String type;
+		String typeStr;
 		for(int i=0; i<numServers; i++){
 			server = (Element)serverNodes.item(i);
-			serverAtts = (AttributeMap)server.getAttributes();
 			si = new ServerInfo();
 			si.name = server.getAttribute("name");
 			si.version = server.getAttribute("version");
-			type = server.getAttribute("type");
-			si.setServiceType(type);
+			typeStr = server.getAttribute("type");
+			si.type = ServiceType.getServiceType(typeStr);
 			urlElt = (Element)server.getElementsByTagName("URL").item(0);
 			si.url = urlElt.getTextContent();
 			//  Add ServerInfo to List

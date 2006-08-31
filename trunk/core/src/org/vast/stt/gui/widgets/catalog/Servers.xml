@@ -1,8 +1,23 @@
 <ServerList>
-    <Server name="Microsoft Terraserver" type="WMS" version="1.1.1">
-        <URL>http://terraserver.microsoft.com/ogccapabilities.ashx</URL>
-    </Server>
     <Server name="NASA Globe Program" type="WMS" version="1.1.1">
         <URL>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</URL>
+    </Server>
+    <Server name="UAH GOES" type="WCS" version="0.6">
+        <URL>http://vast.uah.edu:8080/ows-dev/goes</URL>
+    </Server>
+    <Server name="UAH SRTM Topo data" type="WCS" version="0.6">
+        <URL>http://vast.uah.edu:8080/ows-dev/srtmWcs</URL>
+    </Server>
+    <Server name="UAH Weather data" type="SOS" version="0.0.31">
+        <URL>http://vast.uah.edu:8080/ows-dev/weather</URL>
+    </Server>
+    <Server name="UAH Doppler" type="SOS" version="0.0.31">
+        <URL>http://vast.uah.edu:8080/ows-dev/dopplerSos</URL>
+    </Server>
+    <Server name="UAH Plume model" type="SOS" version="0.0.31">
+        <URL>http://vast.uah.edu:8080/ows-dev/plumeSos</URL>
+    </Server>
+    <Server name="UAH Airdas data" type="SOS" version="0.0.31">
+        <URL>http://vast.uah.edu:8080/ows-dev/airdas</URL>
     </Server>
 </ServerList>
