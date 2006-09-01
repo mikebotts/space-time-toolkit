@@ -20,7 +20,7 @@ import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 
 
 /**
@@ -54,7 +54,7 @@ public class QuadTreeProvider extends AbstractProvider
         subProvider.getTimeExtent().removeAllListeners();        
         this.setSpatialExtent(subProvider.getSpatialExtent());
         this.setTimeExtent(subProvider.getTimeExtent());
-        subProvider.setSpatialExtent(new SpatialExtent());
+        subProvider.setSpatialExtent(new STTSpatialExtent());
 	}
 	
     

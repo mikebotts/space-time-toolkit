@@ -20,7 +20,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import org.vast.stt.project.STTTimeExtent;
 import org.vast.util.ExceptionSystem;
 
@@ -51,9 +51,9 @@ public abstract class AbstractProvider implements DataProvider
 	protected InputStream dataStream;
 	protected DataNode dataNode;
 	protected STTTimeExtent timeExtent;
-    protected SpatialExtent spatialExtent;
+    protected STTSpatialExtent spatialExtent;
 	protected STTTimeExtent maxTimeExtent;
-	protected SpatialExtent maxSpatialExtent;
+	protected STTSpatialExtent maxSpatialExtent;
     protected Thread updateThread;
     protected STTEventListeners listeners;
     protected Object lock = new Object();
@@ -69,7 +69,7 @@ public abstract class AbstractProvider implements DataProvider
     {
         this.dataNode = new DataNode();
         this.setTimeExtent(new STTTimeExtent());
-        this.setSpatialExtent(new SpatialExtent());
+        this.setSpatialExtent(new STTSpatialExtent());
         listeners = new STTEventListeners(2);
     }
       
@@ -182,13 +182,13 @@ public abstract class AbstractProvider implements DataProvider
 	}
 
 
-	public SpatialExtent getSpatialExtent()
+	public STTSpatialExtent getSpatialExtent()
 	{
 		return spatialExtent;
 	}
 	
 	
-	public void setSpatialExtent(SpatialExtent spatialExtent)
+	public void setSpatialExtent(STTSpatialExtent spatialExtent)
 	{
 		if (this.spatialExtent != spatialExtent)
         {
@@ -224,13 +224,13 @@ public abstract class AbstractProvider implements DataProvider
 	}
 
 
-	public SpatialExtent getMaxSpatialExtent()
+	public STTSpatialExtent getMaxSpatialExtent()
 	{
 		return maxSpatialExtent;
 	}
 
 
-	public void setMaxSpatialExtent(SpatialExtent maxSpatialExtent)
+	public void setMaxSpatialExtent(STTSpatialExtent maxSpatialExtent)
 	{
 		this.maxSpatialExtent = maxSpatialExtent;
 	}

@@ -25,7 +25,7 @@ import org.vast.stt.data.BlockListIterator;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import org.vast.stt.project.Projection;
 import org.vast.stt.project.Projection.Crs;
 
@@ -275,9 +275,9 @@ public abstract class AbstractStyler implements DataStyler
     /**
      * Computes and return the bbox of this object in world coordinates
      */
-    public SpatialExtent getBoundingBox()
+    public STTSpatialExtent getBoundingBox()
     {
-        SpatialExtent bbox = new SpatialExtent();
+        STTSpatialExtent bbox = new STTSpatialExtent();
         
         // get a fresh iterator
         if (dataNode != null && dataNode.isNodeStructureReady())

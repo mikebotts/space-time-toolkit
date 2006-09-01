@@ -51,7 +51,7 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
+    public void fitViewToBbox(STTSpatialExtent bbox, Scene scene, boolean adjustZRange)
     {
         ViewSettings view = scene.getViewSettings();
         

@@ -13,7 +13,7 @@
 
 package org.vast.stt.dynamics;
 
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 
 
 /**
@@ -32,10 +32,10 @@ import org.vast.stt.project.SpatialExtent;
  */
 public abstract class SpatialExtentUpdater extends DynamicUpdater
 {
-    protected SpatialExtent spatialExtent;
+    protected STTSpatialExtent spatialExtent;
     
     
-    public void setSpatialExtent(SpatialExtent spatialExtent)
+    public void setSpatialExtent(STTSpatialExtent spatialExtent)
     {
         this.spatialExtent = spatialExtent;
     }

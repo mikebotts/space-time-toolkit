@@ -5,7 +5,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
 import org.vast.stt.project.SceneItem;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import org.vast.stt.project.ViewSettings;
 
 
@@ -38,7 +38,7 @@ public class FitView implements Command
     }
     
     
-    protected void fit(SpatialExtent bbox, boolean adjustZRange)
+    protected void fit(STTSpatialExtent bbox, boolean adjustZRange)
     {
         if (bbox == null || bbox.isNull())
             return;
@@ -53,7 +53,7 @@ public class FitView implements Command
 
     public void execute()
     {
-        SpatialExtent bbox = null;
+        STTSpatialExtent bbox = null;
         
         if (item == null)
         {

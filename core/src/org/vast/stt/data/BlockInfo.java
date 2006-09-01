@@ -13,7 +13,7 @@
 
 package org.vast.stt.data;
 
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import org.vast.stt.project.STTTimeExtent;
 
 
@@ -33,22 +33,22 @@ import org.vast.stt.project.STTTimeExtent;
  */
 public class BlockInfo
 {
-    protected SpatialExtent spatialExtent;
+    protected STTSpatialExtent spatialExtent;
     protected STTTimeExtent timeExtent;
     //protected double geometryStepAverage;
     //protected double geometryStepVariance;
     
     
-    public SpatialExtent getSpatialExtent()
+    public STTSpatialExtent getSpatialExtent()
     {
         if (spatialExtent == null)
-            spatialExtent = new SpatialExtent();
+            spatialExtent = new STTSpatialExtent();
         
         return spatialExtent;
     }
 
 
-    public void setSpatialExtent(SpatialExtent spatialExtent)
+    public void setSpatialExtent(STTSpatialExtent spatialExtent)
     {
         this.spatialExtent = spatialExtent;
     }

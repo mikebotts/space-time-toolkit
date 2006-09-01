@@ -119,9 +119,9 @@ public class SceneItem implements STTEventListener
      * Computes item bounding box in world coordinate and return it
      * @return
      */
-    public SpatialExtent getBoundingBox()
+    public STTSpatialExtent getBoundingBox()
     {
-        SpatialExtent bbox = new SpatialExtent();
+        STTSpatialExtent bbox = new STTSpatialExtent();
         
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < stylers.size(); i++)
@@ -131,7 +131,7 @@ public class SceneItem implements STTEventListener
             if (!nextStyler.getSymbolizer().isEnabled())
                 continue;
             
-            SpatialExtent nextBox = nextStyler.getBoundingBox();
+            STTSpatialExtent nextBox = nextStyler.getBoundingBox();
             bbox.add(nextBox);
         }
         

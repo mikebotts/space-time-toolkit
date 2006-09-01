@@ -14,7 +14,7 @@
 package org.vast.stt.data.tiling;
 
 import java.util.ArrayList;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.physics.SpatialExtent;
 
 
 /**
@@ -31,7 +31,7 @@ import org.vast.stt.project.SpatialExtent;
  * @date Aug 10, 2006
  * @version 1.0
  */
-public class QuadTreeItem
+public class QuadTreeItem extends SpatialExtent
 {
     private final static int N = 1;
     private final static int E = 2;
@@ -42,8 +42,6 @@ public class QuadTreeItem
     private final static int SE = S+E;
     private final static int SW = S+W;
     
-    protected double minX, minY;
-    protected double maxX, maxY;
     protected double tileSize;
     protected double distance;
     protected byte quadrant;
@@ -309,63 +307,6 @@ public class QuadTreeItem
             // if we didn't add it yet, add at end of list
             matchingItems.add(this);
         }
-    }
-    
-    
-    /**
-     * 
-     * TODO contains method description
-     * @param bbox
-     * @return
-     */
-    public boolean contains(SpatialExtent bbox)
-    {
-        double bboxX1 = bbox.getMinX();
-        double bboxX2 = bbox.getMaxX();
-        double bboxY1 = bbox.getMinY();
-        double bboxY2 = bbox.getMaxY();
-        
-        if (bboxX1 < minX || bboxX1 > maxX)
-            return false;
-        
-        if (bboxX2 < minX || bboxX2 > maxX)
-            return false;
-        
-        if (bboxY1 < minY || bboxY1 > maxY)
-            return false;
-        
-        if (bboxY2 < minY || bboxY2 > maxY)
-            return false;
-        
-        return true;
-    }
-    
-    
-    /**
-     * Finds out where the bbox is relative to this tile
-     * @param bbox
-     * @return
-     */
-    public boolean intersects(SpatialExtent bbox)
-    {
-        double bboxX1 = bbox.getMinX();
-        double bboxX2 = bbox.getMaxX();
-        double bboxY1 = bbox.getMinY();
-        double bboxY2 = bbox.getMaxY();
-        
-        if (bboxX1 < minX && bboxX2 < minX)
-            return false;
-        
-        if (bboxX1 > maxX && bboxX2 > maxX)
-            return false;
-        
-        if (bboxY1 < minY && bboxY2 < minY)
-            return false;
-        
-        if (bboxY1 > maxY && bboxY2 > maxY)
-            return false;
-        
-        return true;
     }
     
     
