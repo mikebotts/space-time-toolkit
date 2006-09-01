@@ -43,7 +43,7 @@ public interface Projection
     public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
     
-    public abstract void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange);
+    public abstract void fitViewToBbox(STTSpatialExtent bbox, Scene scene, boolean adjustZRange);
     
     
     public abstract MotionConstraint getDefaultTranslationConstraint();

@@ -33,7 +33,7 @@ import org.vast.stt.data.tiling.QuadTreeItem;
 import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
 
@@ -168,7 +168,7 @@ public class MsRoadsProvider extends AbstractProvider
     public MsRoadsProvider()
 	{
         quadTree = new QuadTree();
-        SpatialExtent initBbox = new SpatialExtent();
+        STTSpatialExtent initBbox = new STTSpatialExtent();
         initBbox.setMinX(-Math.PI);
         initBbox.setMaxX(+Math.PI);
         initBbox.setMinY(-Math.PI);
@@ -222,7 +222,7 @@ public class MsRoadsProvider extends AbstractProvider
             init();
         
         // convert extent to mercator projection
-        SpatialExtent mercatorExtent = new SpatialExtent();
+        STTSpatialExtent mercatorExtent = new STTSpatialExtent();
         double minX = spatialExtent.getMinX() * DTR;
         double maxX = spatialExtent.getMaxX() * DTR;
         double minY = latToY(spatialExtent.getMinY() * DTR);

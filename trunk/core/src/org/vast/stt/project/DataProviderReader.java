@@ -114,7 +114,7 @@ public class DataProviderReader
     {
          if (spElt != null)
          {
-             SpatialExtent spatialExtent = provider.getSpatialExtent();
+             STTSpatialExtent spatialExtent = provider.getSpatialExtent();
              
              // read bbox
              String coordText = dom.getElementValue(spElt, "BoundingBox/coordinates");

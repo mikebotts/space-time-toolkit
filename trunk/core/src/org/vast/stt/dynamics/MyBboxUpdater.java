@@ -19,7 +19,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Scene;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 import org.vast.stt.project.ViewSettings;
 import org.vast.stt.renderer.Renderer;
 
@@ -45,7 +45,7 @@ public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListe
     private ViewSettings view;
     
     
-    public MyBboxUpdater(SpatialExtent spatialExtent)
+    public MyBboxUpdater(STTSpatialExtent spatialExtent)
     {
         setSpatialExtent(spatialExtent);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();

@@ -274,9 +274,9 @@ public class Scene implements STTEventProducer, STTEventListener
      * Computes scene bounding box in world coordinate and return it
      * @return
      */
-    public SpatialExtent getBoundingBox()
+    public STTSpatialExtent getBoundingBox()
     {
-        SpatialExtent bbox = new SpatialExtent();
+        STTSpatialExtent bbox = new STTSpatialExtent();
         
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < sceneItems.size(); i++)
@@ -286,7 +286,7 @@ public class Scene implements STTEventProducer, STTEventListener
             if (!nextItem.isVisible())
                 continue;
             
-            SpatialExtent nextBox = nextItem.getBoundingBox();
+            STTSpatialExtent nextBox = nextItem.getBoundingBox();
             bbox.add(nextBox);
         }
         

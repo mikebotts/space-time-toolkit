@@ -69,7 +69,7 @@ public interface DataStyler
     public void computeBoundingBox();
 	
 	
-	public SpatialExtent getBoundingBox();
+	public STTSpatialExtent getBoundingBox();
     
     
     public void accept(StylerVisitor visitor);

@@ -21,7 +21,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
-import org.vast.stt.project.SpatialExtent;
+import org.vast.stt.project.STTSpatialExtent;
 
 
 public class BboxWidget implements SelectionListener
@@ -187,12 +187,12 @@ public class BboxWidget implements SelectionListener
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
-	public SpatialExtent getSpatialExtent(){
+	public STTSpatialExtent getSpatialExtent(){
 		double nlat = getValue(nlatText);
 		double slat = getValue(slatText);
 		double wlon = getValue(wlonText);
 		double elon = getValue(elonText);
-		SpatialExtent ext = new SpatialExtent();
+		STTSpatialExtent ext = new STTSpatialExtent();
 		ext.setMinX(wlon);
 		ext.setMinY(slat);
 		ext.setMaxX(elon);
@@ -201,7 +201,7 @@ public class BboxWidget implements SelectionListener
 	}
 	
 	//  Use org.vast.stt.util.SpatialExtent, or Bbox here? 
-	public void setSpatialExtent(SpatialExtent bbox){
+	public void setSpatialExtent(STTSpatialExtent bbox){
 		setValue(nlatText, bbox.getMaxY());
 		setValue(slatText, bbox.getMinY());
 		setValue(wlonText, bbox.getMinX());
@@ -214,7 +214,7 @@ public class BboxWidget implements SelectionListener
 		if(formatIndex == currentLlFormat)
 			return;
 		currentLlFormat = formatIndex;
-		SpatialExtent bbox = this.getSpatialExtent();
+		STTSpatialExtent bbox = this.getSpatialExtent();
 		double minX = bbox.getMinX();
 		double maxX = bbox.getMaxX();
 		double minY = bbox.getMinY();
@@ -247,7 +247,7 @@ public class BboxWidget implements SelectionListener
 		DataProvider prov = item.getDataProvider();
 		//  If provider is null, this widget isn't supported.
 		if(prov!=null) {
-			SpatialExtent ext = prov.getSpatialExtent();
+			STTSpatialExtent ext = prov.getSpatialExtent();
 			this.setSpatialExtent(ext);
 		}
 	}
@@ -281,7 +281,7 @@ public class BboxWidget implements SelectionListener
             double elon = getValue(elonText);
             int latTiles = (int)getValue(latTilesText);
             int lonTiles = (int)getValue(lonTilesText);
-            SpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
+            STTSpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
             bbox.setMaxX(elon);
             bbox.setMinX(wlon);
             bbox.setMaxY(nlat);

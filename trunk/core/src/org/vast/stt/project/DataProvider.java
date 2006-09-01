@@ -72,10 +72,10 @@ public interface DataProvider extends Resource, STTEventListener, STTEventProduc
 	public DataNode getDataNode();
 	
 	
-	public SpatialExtent getSpatialExtent();
+	public STTSpatialExtent getSpatialExtent();
 	
 	
-	public void setSpatialExtent(SpatialExtent spatialExtent);
+	public void setSpatialExtent(STTSpatialExtent spatialExtent);
 	
   
 	public STTTimeExtent getTimeExtent();
@@ -84,7 +84,7 @@ public interface DataProvider extends Resource, STTEventListener, STTEventProduc
 	public void setTimeExtent(STTTimeExtent timeExtent);
 	
 	
-	public SpatialExtent getMaxSpatialExtent();
+	public STTSpatialExtent getMaxSpatialExtent();
 	
 	
 	public STTTimeExtent getMaxTimeExtent();
