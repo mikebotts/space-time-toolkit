@@ -73,13 +73,13 @@ public class TextureStyler extends AbstractStyler
         AbstractDataBlock nextGridBlock = nextGrid.getData();
         gridBlocks.blockIndexer.setData(nextGridBlock);
         gridBlocks.blockIndexer.reset();
-        gridBlocks.blockIndexer.getData(0,0,0);
+        gridBlocks.blockIndexer.getData(getIndexList(0,0,0));
         
         // setup texture indexer with new data 
         AbstractDataBlock nextTexBlock = nextTexture.getData();
         texBlocks.blockIndexer.setData(nextTexBlock);
         texBlocks.blockIndexer.reset();
-        texBlocks.blockIndexer.getData(0,0,0);
+        texBlocks.blockIndexer.getData(getIndexList(0,0,0));
         
         // copy current item in the patch object
         patch.grid.block = nextGrid;
@@ -96,7 +96,8 @@ public class TextureStyler extends AbstractStyler
     {
         //pixel.r = (float)x / (float)patch.texture.width;
         //pixel.g = (float)y / (float)patch.texture.height;
-        dataLists[1].blockIndexer.getData(y, x, 0);
+        int[] index = getIndexList(y, x, 0);
+        dataLists[1].blockIndexer.getData(index);
         return pixel;
     }
     
@@ -104,7 +105,8 @@ public class TextureStyler extends AbstractStyler
     public GridPointGraphic getGridPoint(int u, int v, float uScale, float vScale, boolean normalize)
     {
         point.x = point.y = point.z = 0.0;
-        dataLists[0].blockIndexer.getData(v, u, 0);
+        int[] index = getIndexList(v, u, 0);
+        dataLists[0].blockIndexer.getData(index);
         
         // compute texture coordinates
         if (normalize)
@@ -143,7 +145,7 @@ public class TextureStyler extends AbstractStyler
         AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
-        listInfo.blockIndexer.getData(0,0,0);
+        //listInfo.blockIndexer.getData(0,0,0);
         
         // see what's needed on this block
         prepareBlock(nextItem);

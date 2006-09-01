@@ -68,6 +68,7 @@ public abstract class AbstractStyler implements DataStyler
     protected Crs geometryCrs;
     protected boolean addToExtent, wantComputeExtent, forceComputeExtent;
     protected BlockInfo currentBlockInfo;
+    protected int[] indexList = new int[3];
     
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
@@ -134,6 +135,15 @@ public abstract class AbstractStyler implements DataStyler
         {
             builder.addVisitor(componentPath, newMapper);
         }
+    }
+    
+    
+    protected int[] getIndexList(int u, int v, int w)
+    {
+        indexList[0] = u;
+        indexList[1] = v;
+        indexList[2] = w;
+        return indexList;
     }
     
     

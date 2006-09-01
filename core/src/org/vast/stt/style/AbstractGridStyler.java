@@ -37,7 +37,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
 {
     protected GridSymbolizer symbolizer;
     protected GridPatchGraphic patch;
-    protected GridPointGraphic point;
+    protected GridPointGraphic point;    
     
 	
 	public AbstractGridStyler()
@@ -67,7 +67,9 @@ public abstract class AbstractGridStyler extends AbstractStyler
         AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
-        listInfo.blockIndexer.getData(0,0,0);
+        
+        // to make sure we visit array size data
+        listInfo.blockIndexer.getData(getIndexList(0,0,0));
         
         // see what's needed on this block
         prepareBlock(nextItem);
@@ -82,7 +84,8 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public GridPointGraphic getPoint(int u, int v)
     {
         point.x = point.y = point.z = 0.0;
-        dataLists[0].blockIndexer.getData(v, u, 0);
+        int[] index = getIndexList(v, u, 0);
+        dataLists[0].blockIndexer.getData(index);
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
