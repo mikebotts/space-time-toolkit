@@ -78,16 +78,16 @@ public interface DataProvider extends Resource, STTEventListener, STTEventProduc
 	public void setSpatialExtent(SpatialExtent spatialExtent);
 	
   
-	public TimeExtent getTimeExtent();
+	public STTTimeExtent getTimeExtent();
 	
 	
-	public void setTimeExtent(TimeExtent timeExtent);
+	public void setTimeExtent(STTTimeExtent timeExtent);
 	
 	
 	public SpatialExtent getMaxSpatialExtent();
 	
 	
-	public TimeExtent getMaxTimeExtent();
+	public STTTimeExtent getMaxTimeExtent();
 	
 	
 	public boolean isSpatialSubsetSupported();

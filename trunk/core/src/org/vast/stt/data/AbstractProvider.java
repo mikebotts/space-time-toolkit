@@ -21,7 +21,7 @@ import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.SpatialExtent;
-import org.vast.stt.project.TimeExtent;
+import org.vast.stt.project.STTTimeExtent;
 import org.vast.util.ExceptionSystem;
 
 
@@ -50,9 +50,9 @@ public abstract class AbstractProvider implements DataProvider
     protected boolean redoUpdate = true;
 	protected InputStream dataStream;
 	protected DataNode dataNode;
-	protected TimeExtent timeExtent;
+	protected STTTimeExtent timeExtent;
     protected SpatialExtent spatialExtent;
-	protected TimeExtent maxTimeExtent;
+	protected STTTimeExtent maxTimeExtent;
 	protected SpatialExtent maxSpatialExtent;
     protected Thread updateThread;
     protected STTEventListeners listeners;
@@ -68,7 +68,7 @@ public abstract class AbstractProvider implements DataProvider
     public AbstractProvider()
     {
         this.dataNode = new DataNode();
-        this.setTimeExtent(new TimeExtent());
+        this.setTimeExtent(new STTTimeExtent());
         this.setSpatialExtent(new SpatialExtent());
         listeners = new STTEventListeners(2);
     }
@@ -203,13 +203,13 @@ public abstract class AbstractProvider implements DataProvider
 	}
 
 
-	public TimeExtent getTimeExtent()
+	public STTTimeExtent getTimeExtent()
 	{
 		return timeExtent;
 	}
 
 
-	public void setTimeExtent(TimeExtent timeExtent)
+	public void setTimeExtent(STTTimeExtent timeExtent)
 	{
         if (this.timeExtent != timeExtent)
         {
@@ -236,13 +236,13 @@ public abstract class AbstractProvider implements DataProvider
 	}
 
 
-	public TimeExtent getMaxTimeExtent()
+	public STTTimeExtent getMaxTimeExtent()
 	{
 		return maxTimeExtent;
 	}
 
 
-	public void setMaxTimeExtent(TimeExtent maxTimeExtent)
+	public void setMaxTimeExtent(STTTimeExtent maxTimeExtent)
 	{
 		this.maxTimeExtent = maxTimeExtent;
 	}

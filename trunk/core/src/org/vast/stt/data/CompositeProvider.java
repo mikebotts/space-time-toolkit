@@ -19,7 +19,7 @@ import java.util.List;
 import org.vast.stt.project.DataProvider;
 import org.vast.stt.project.Resource;
 import org.vast.stt.project.SpatialExtent;
-import org.vast.stt.project.TimeExtent;
+import org.vast.stt.project.STTTimeExtent;
 
 
 /**
@@ -101,13 +101,13 @@ public abstract class CompositeProvider implements DataProvider
     }
 
 
-    public TimeExtent getTimeExtent()
+    public STTTimeExtent getTimeExtent()
     {
         return providerList.get(0).getTimeExtent();
     }
 
 
-    public void setTimeExtent(TimeExtent timeExtent)
+    public void setTimeExtent(STTTimeExtent timeExtent)
     {
         for (int i = 0; i < providerList.size(); i++)
             providerList.get(i).setTimeExtent(timeExtent);
@@ -134,7 +134,7 @@ public abstract class CompositeProvider implements DataProvider
     }
 
 
-    public TimeExtent getMaxTimeExtent()
+    public STTTimeExtent getMaxTimeExtent()
     {
         //TODO same as getMaxSpatialExtent
         return null;

@@ -13,7 +13,7 @@
 
 package org.vast.stt.dynamics;
 
-import org.vast.stt.project.TimeExtent;
+import org.vast.stt.project.STTTimeExtent;
 
 
 /**
@@ -32,10 +32,10 @@ import org.vast.stt.project.TimeExtent;
  */
 public abstract class TimeExtentUpdater extends DynamicUpdater
 {
-    protected TimeExtent timeExtent;
+    protected STTTimeExtent timeExtent;
     
     
-    public void setTimeExtent(TimeExtent timeExtent)
+    public void setTimeExtent(STTTimeExtent timeExtent)
     {
         this.timeExtent = timeExtent;
     }
