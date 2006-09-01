@@ -245,7 +245,7 @@ public class SOSProvider extends OWSProvider
 			double start = this.query.getTime().getStartTime();
 			double stop = this.query.getTime().getStopTime();
 			this.timeExtent.setBaseTime(start);
-			this.timeExtent.setLagTimeDelta(stop - start);
+			this.timeExtent.setLeadTimeDelta(stop - start);
 		}
 	}
 
