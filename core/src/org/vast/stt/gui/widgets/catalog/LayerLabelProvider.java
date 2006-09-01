@@ -130,7 +130,7 @@ public class LayerLabelProvider extends LabelProvider {
 	public String getTimeText(TimeInfo ti){
 		String isoStart = DateTimeFormat.formatIso(ti.getStartTime(), 0); 
 		String isoStop = DateTimeFormat.formatIso(ti.getStopTime(), 0); 
-		return isoStart + "/" + isoStop + "/" + ti.getStepTime();
+		return isoStart + "/" + isoStop + "/" + ti.getTimeStep();
 	}
 }
 
