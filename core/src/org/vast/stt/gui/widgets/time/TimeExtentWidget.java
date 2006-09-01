@@ -17,7 +17,7 @@ import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataItem;
-import org.vast.stt.project.TimeExtent;
+import org.vast.stt.project.STTTimeExtent;
 
 public class TimeExtentWidget implements SelectionListener, TimeListener
 {	
@@ -150,7 +150,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		this.dataItem = item;
 		mainGroup.setText(item.getName());
 		//  set the fields 
-		TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+		STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 		if(timeExtent == null)
 			return;
 		biasSpinner.setValue(timeExtent.getTimeBias());
@@ -187,7 +187,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 				e1.printStackTrace();
 			}
 		} else if(e.widget == biasCombo){
-			TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+			STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
 			timeExtent.setTimeBias(timeExtent.getTimeBias() * sense);
 		} else {
@@ -200,7 +200,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
         if (this.dataItem != null)
         {
             // update time extent object
-            TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
             timeExtent.setAbsoluteTime(absTimeSpinner.getValue());
             timeExtent.setBaseTime(absTimeSpinner.getValue());
             timeExtent.setLagTimeDelta(lagSpinner.getValue());
