@@ -487,8 +487,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -508,8 +508,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -529,8 +529,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -550,8 +550,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T04:05:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T03:05:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:35:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -571,8 +571,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:35:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T04:05:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T03:05:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:35:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -592,8 +592,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -613,8 +613,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:10:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:40:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
@@ -634,8 +634,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:30:00Z</gml:endPosition>
+                                 <gml:beginPosition>2003-01-01T02:30:00Z</gml:beginPosition>
+                                 <gml:endPosition>2003-01-01T03:00:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
