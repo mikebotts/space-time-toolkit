@@ -1,7 +1,7 @@
 package org.vast.stt.gui.widgets.catalog;
 
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.TransferData;
 import org.vast.ows.OWSLayerCapabilities;
@@ -15,27 +15,10 @@ import org.vast.stt.project.DataFolder;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
 
-public class SceneTreeDropListener extends ViewerDropAdapter {
-
-	DataEntry currentDropLocation;
-	DataFolder currentDropFolder;
-	
+public class SceneTreeDropListener extends ViewerDropAdapter 
+{
 	public SceneTreeDropListener(StructuredViewer viewer){
 		super(viewer);
-	}
-	
-	//
-	private boolean setDropLocation(){
-		//  set drop location based on where user has dropped item
-		//  it's either an item or Folder.
-		if(currentDropLocation instanceof DataFolder) {
-			currentDropFolder = (DataFolder)currentDropLocation;
-			return true;
-		}
-		//  it MUST be a DataItem. Recurse up and find parent DataFolder, if possible
-		DataItem targetItem = (DataItem)currentDropLocation;
-		
-		return false;
 	}
 	
    /**
@@ -44,14 +27,6 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
     *  OWSLayerCapabilities
     */
    public boolean performDrop(Object data) {
-//	   System.err.println("Perf drop, vieweer is " + this.getViewer());
-	   //  First, go ahead and figure out where we're dropping
-	   if(currentDropLocation == null)
-		   return false;
-	   boolean dropOk = setDropLocation();
-	   if(!dropOk)
-		   return false;  // illegal drop location
-	   
 	   OWSLayerCapabilities caps = (OWSLayerCapabilities)data;
 	   DataItem newItem = new DataItem();
 	   newItem.setName(caps.getName());
@@ -83,29 +58,24 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
     * Method declared on ViewerDropAdapter
     */
    public boolean validateDrop(Object target, int op, TransferData type) {
-	   if(target == null) {
-		   currentDropLocation = null;
-		   return false;  // don't allow drop outside of tree data
-	   } else if(target instanceof DataEntry){
-		   currentDropLocation = (DataEntry)target;
-	   } else {
-		   System.err.println("Unknown target - " + target);
-		   return false;
-	   }
-	   
 	   boolean dropOk = LayerTransfer.getInstance().isSupportedType(type);
-	   
+	   dropOk = dropOk && (target instanceof DataEntry);
 	   return dropOk;
    }
 	
    protected boolean dropItem(DataItem item){
-	   if(currentDropFolder == null)
-		   return false;
-	   
-	   currentDropFolder.add(item);
+	   DataEntry dropTarget = (DataEntry)this.getCurrentTarget();
+	   if(dropTarget instanceof DataFolder) {
+		   ((DataFolder)dropTarget).add(item);
+		   this.getViewer().refresh();
+		   return true;
+	   }
+	   //  dropTarget MUST be a DataItem
+	   TreeViewer vwr = (TreeViewer)this.getViewer();
+	   //  didn't work...
+	   vwr.add(dropTarget, item);
 	   this.getViewer().refresh();
 	   return true;
-
    }
    
    protected DataProvider createSensorMLProvider(OWSLayerCapabilities caps){
