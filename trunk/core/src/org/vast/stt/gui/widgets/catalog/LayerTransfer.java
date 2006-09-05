@@ -14,6 +14,7 @@
 package org.vast.stt.gui.widgets.catalog;
 
 import org.eclipse.swt.dnd.ByteArrayTransfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.vast.ows.OWSLayerCapabilities;
 
 /**
@@ -22,7 +23,8 @@ import org.vast.ows.OWSLayerCapabilities;
  * </p>
  *
  * <p><b>Description:</b><br/>
- *  TODO: Add Description
+ *  LayerTransfer bypasses the "ByteArrayTransfer/serialization" technique, 
+ *  and directly sets the sourceCaps as the object to be transferred.  
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -32,15 +34,17 @@ import org.vast.ows.OWSLayerCapabilities;
  */
 
 public class LayerTransfer extends ByteArrayTransfer {
-	
+	private static LayerTransfer instance = new LayerTransfer();
 	private static final String TYPE_NAME = "layer-transfer-format";
 	private static final int TYPEID = registerType(TYPE_NAME);
-	//  what internal thing do I really want here?
+	//  The object to be Transferred
 	private OWSLayerCapabilities caps;
 	
-	//  
-	public LayerTransfer(OWSLayerCapabilities caps){
-		this.caps = caps;
+	public static LayerTransfer getInstance() {
+		return instance;
+	}
+
+	private LayerTransfer(){
 	}
 	
 	protected int[] getTypeIds() {
@@ -50,5 +54,25 @@ public class LayerTransfer extends ByteArrayTransfer {
 	protected String[] getTypeNames() {
 		return new String[] { TYPE_NAME };
 	}
+
+	//  This doesn't really use the byte array.  This was the simplest way
+	//  to get the DND to work.  There may be some platformn-dependent issues
+	//  that we're risking here, but I doubt it.  TC 9/4/06
+	protected void javaToNative(Object object, TransferData transferData) {
+		this.caps = ((OWSLayerCapabilities) object);
+		
+		byte [] dum = new byte[1];
+		//if (bytes != null)
+		super.javaToNative(dum, transferData);
+	}
+
+	//  This doesn't really use the byte array.  This was the simplest way
+	//  to get the DND to work.  There may be some platformn-dependent issues
+	//  that we're risking here, but I doubt it.  TC 9/4/06
+	protected Object nativeToJava(TransferData transferData) {
+		byte[] bytes = (byte[]) super.nativeToJava(transferData);
+		return this.caps;
+	}
+	
 }
 

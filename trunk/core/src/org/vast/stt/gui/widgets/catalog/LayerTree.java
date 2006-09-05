@@ -54,8 +54,15 @@ public class LayerTree implements ITreeContentProvider {
 		
 		//  Add Drag support
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
-		Transfer[] transfers = new Transfer[] { new LayerTransfer(null)};
-		treeViewer.addDragSupport(ops, transfers, new LayerTreeDragListener(treeViewer));
+		Transfer[] transfers = new Transfer[] { LayerTransfer.getInstance()};
+		LayerTreeDragListener dragListener = new LayerTreeDragListener(treeViewer);
+		treeViewer.addDragSupport(ops, transfers, dragListener);
+		treeViewer.addSelectionChangedListener(dragListener);
+		
+		//  Test Drop Support here
+		//ops = DND.DROP_COPY  | DND.DROP_MOVE;
+	    //Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
+	    //treeViewer.addDropSupport(ops, dropfers, new SceneTreeDropListener(treeViewer));
 	}  
 	
 	public Control getControl(){
