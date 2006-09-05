@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -38,6 +40,8 @@ import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.gui.widgets.catalog.LayerTransfer;
+import org.vast.stt.gui.widgets.catalog.SceneTreeDropListener;
 import org.vast.stt.project.DataEntry;
 import org.vast.stt.project.DataFolder;
 import org.vast.stt.project.DataItem;
@@ -148,6 +152,11 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
 		sceneTree.addDoubleClickListener(this);
+		//  add SceneTreeView as a LayerTree Drop listener
+		int ops = DND.DROP_COPY | DND.DROP_MOVE;
+	    Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
+	    sceneTree.addDropSupport(ops, dropfers, new SceneTreeDropListener(sceneTree));
+	    
 		getSite().setSelectionProvider(sceneTree);
         super.createPartControl(parent);
 	}
