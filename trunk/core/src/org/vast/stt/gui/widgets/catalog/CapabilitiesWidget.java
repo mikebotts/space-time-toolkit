@@ -42,10 +42,13 @@ import org.vast.ows.wms.WMSCapabilitiesReader;
 
 /**
  * <p><b>Title:</b>
- *  TODO:  Capabilities Widget
+ *  Capabilities Widget
  * </p>
  *
  * <p><b>Description:</b><br/>
+ *  Widget for selecting Caps Servers from a user-defined list, reading
+ *  caps docs from those servers, and loading available layers into a 
+ *  treeViewer.  Layers may be dragged from the TreeViewer to the SceneTreeView.
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -149,6 +152,7 @@ public class CapabilitiesWidget implements SelectionListener
 	
 	/**
 	 *  get the Capabilities from the currently selected server
+	 *  TODO:  spawn another thread for this and add Prog Bars
 	 */
 	protected void getCapabilities(String server, ServiceType type){
 		System.err.println("Get caps for " + server);
