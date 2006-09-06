@@ -1,5 +1,7 @@
 package org.vast.stt.gui.widgets.catalog;
 
+import java.util.Iterator;
+
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -10,10 +12,13 @@ import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.DataEntry;
 import org.vast.stt.project.DataFolder;
 import org.vast.stt.project.DataItem;
 import org.vast.stt.project.DataProvider;
+import org.vast.stt.project.DataTree;
 
 public class SceneTreeDropListener extends ViewerDropAdapter 
 {
@@ -72,10 +77,49 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 	   }
 	   //  dropTarget MUST be a DataItem
 	   TreeViewer vwr = (TreeViewer)this.getViewer();
-	   //  didn't work...
-	   vwr.add(dropTarget, item);
+	   //  Itterate the DataTree to find the target item,
+	   //  and insert it there, then refresh
+	   Object [] expElms = vwr.getExpandedElements();
+	   //  ASSumes DataTree is always 0th tree element, which I think 
+	   //  is a valid assumption
+	   DataTree tree = (DataTree)expElms[0];
+	   DataEntry entryTmp = null;
+
+	   Iterator<DataEntry> it = tree.iterator();
+	   boolean done = false;
+	   int index = 0;
+	   while(it.hasNext() && !done){
+		   entryTmp = it.next();
+		   if(entryTmp instanceof DataFolder){
+			   done = recurseFolder((DataFolder)entryTmp, (DataItem)dropTarget, item);
+		   } else {
+			   if(entryTmp == dropTarget) {
+				   tree.add(index, item);
+				   break;
+			   }
+		   }
+		   index++;
+	   }
+       item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
 	   this.getViewer().refresh();
 	   return true;
+   }
+   
+   protected boolean recurseFolder(DataFolder folder, DataItem dropTarget, DataItem newItem){
+	   Iterator<DataEntry> it = folder.iterator();
+	   DataEntry entryTmp;
+	   int index = 0;
+	   while(it.hasNext()){
+		   entryTmp = it.next();
+		   if(entryTmp instanceof DataFolder){
+			   recurseFolder((DataFolder)entryTmp, dropTarget, newItem);
+		   } else if(entryTmp == dropTarget) { 
+			   folder.add(index, newItem);
+			   return true;
+		   }
+		   index++;
+	   }
+	   return false;
    }
    
    protected DataProvider createSensorMLProvider(OWSLayerCapabilities caps){
