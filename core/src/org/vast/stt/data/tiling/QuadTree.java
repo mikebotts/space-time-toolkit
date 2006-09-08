@@ -14,8 +14,7 @@
 package org.vast.stt.data.tiling;
 
 import java.util.ArrayList;
-
-import org.vast.stt.project.STTSpatialExtent;
+import org.vast.physics.SpatialExtent;
 
 
 /**
@@ -49,7 +48,7 @@ public class QuadTree
      * Init the tree by setting the bbox as the root tile
      * @param bbox
      */
-    public void init(STTSpatialExtent bbox)
+    public void init(SpatialExtent bbox)
     {
         rootItem = new QuadTreeItem(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
     }
@@ -65,7 +64,7 @@ public class QuadTree
      */
     public void findItems(ArrayList<QuadTreeItem> matchingItems, 
                           ArrayList<QuadTreeItem> unusedItems,
-                          STTSpatialExtent bbox, int maxLevel, double maxDistance)
+                          SpatialExtent bbox, int maxLevel, double maxDistance)
     {        
         // compute bbox surface
         double bboxSize = Math.abs(bbox.getMaxX() - bbox.getMinX()) * Math.abs(bbox.getMaxY() - bbox.getMinY());
@@ -88,7 +87,7 @@ public class QuadTree
         
         QuadTree tree = new QuadTree();
         
-        STTSpatialExtent bbox = new STTSpatialExtent();
+        SpatialExtent bbox = new SpatialExtent();
         bbox.setMinX(-10);
         bbox.setMaxX(+10);
         bbox.setMinY(-10);
