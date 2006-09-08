@@ -90,7 +90,10 @@ public class DataProviderReader
         }
         else if (providerElt.getLocalName().equals("MsRoadsProvider"))
         {
-            provider = new MsRoadsProvider();                           
+            provider = new VirtualEarthProvider();
+            String layerId = dom.getElementValue(providerElt, "layerId");
+            if (layerId != null)
+                ((VirtualEarthProvider)provider).setLayer(layerId);
         }
         else
             return null;

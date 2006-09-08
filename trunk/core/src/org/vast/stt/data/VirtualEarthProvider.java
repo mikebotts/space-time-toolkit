@@ -28,6 +28,7 @@ import org.vast.data.DataArray;
 import org.vast.data.DataBlockFactory;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.tiling.QuadTree;
 import org.vast.stt.data.tiling.QuadTreeItem;
 import org.vast.stt.dynamics.MyBboxUpdater;
@@ -57,12 +58,14 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class MsRoadsProvider extends AbstractProvider
+public class VirtualEarthProvider extends AbstractProvider
 {
     private final static double DTR = Math.PI/180;
     protected QuadTree quadTree;
     protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
     protected DataArray gridData;
+    protected String layerId = "roads";
+    protected SpatialExtent maxBbox;
     
     
     class GetTileRunnable implements Runnable
@@ -80,7 +83,7 @@ public class MsRoadsProvider extends AbstractProvider
             try
             {
                 // create treeObject
-                BlockListItem[] blockArray = new BlockListItem[2];                    
+                BlockListItem[] blockArray = new BlockListItem[2];       
                 
                 // create quad id
                 StringBuffer quadId = new StringBuffer();
@@ -88,7 +91,13 @@ public class MsRoadsProvider extends AbstractProvider
                 String q = quadId.toString();
 
                 // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
-                String urlString = "http://r" + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/r" + q + ".png?g=25";
+                char layerChar = layerId.charAt(0);
+                String urlString = "http://" + layerChar + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/" + layerChar + q;
+                if (layerChar == 'r')
+                    urlString += ".png?g=25";
+                else
+                    urlString += ".jpeg?g=25";
+                
                 //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
@@ -110,9 +119,31 @@ public class MsRoadsProvider extends AbstractProvider
                 RenderedImage img = rop.createInstance();
                 imgStream.close();
                 
-                // wrap image data with a DataBlock
-                byte[] data = ((DataBufferByte)img.getData().getDataBuffer()).getData();
-                DataBlock imageryDataBlock = DataBlockFactory.createBlock(data);
+                // if DataBufferByte, just wrap image data with a DataBlock
+                DataBuffer buf = img.getData().getDataBuffer();
+                DataBlock imageryDataBlock = null;
+                if (buf instanceof DataBufferByte)
+                {
+                    byte[] data = ((DataBufferByte)buf).getData();
+                    imageryDataBlock = DataBlockFactory.createBlock(data);
+                }
+                else if (buf instanceof DataBufferInt)
+                {
+                    int[] data = ((DataBufferInt)buf).getData();
+                    byte[] byteData = new byte[data.length*3];
+                    
+                    for (int i=0; i<data.length; i++)
+                    {
+                        int b = i*3;
+                        byteData[b] = (byte)(data[i] & 0xFF);
+                        byteData[b+1] = (byte)((data[i] >> 8) & 0xFF);
+                        byteData[b+2] = (byte)((data[i] >> 16) & 0xFF);
+                    }
+                    
+                    imageryDataBlock = DataBlockFactory.createBlock(byteData);
+                }
+                else
+                    throw new IllegalStateException("DataBuffer Type not supported");
                 
                 // build grid
                 int gridWidth = 10;
@@ -165,15 +196,24 @@ public class MsRoadsProvider extends AbstractProvider
     }
         
     
-    public MsRoadsProvider()
+    public VirtualEarthProvider()
 	{
         quadTree = new QuadTree();
-        STTSpatialExtent initBbox = new STTSpatialExtent();
-        initBbox.setMinX(-Math.PI);
-        initBbox.setMaxX(+Math.PI);
-        initBbox.setMinY(-Math.PI);
-        initBbox.setMaxY(+Math.PI);
-        quadTree.init(initBbox);
+//        SpatialExtent initBbox = new STTSpatialExtent();
+//        initBbox.setMinX(-Math.PI);
+//        initBbox.setMaxX(+Math.PI);
+//        initBbox.setMinY(-Math.PI);
+//        initBbox.setMaxY(+Math.PI);
+//        quadTree.init(initBbox);
+        
+        // also set max requestable bbox
+        maxBbox = new SpatialExtent();
+        maxBbox.setMinX(-Math.PI);
+        maxBbox.setMaxX(+Math.PI);
+        maxBbox.setMinY(-Math.PI);
+        maxBbox.setMaxY(+Math.PI);
+        quadTree.init(maxBbox);
+        
         this.autoUpdate = true;
 	}
 
@@ -227,10 +267,10 @@ public class MsRoadsProvider extends AbstractProvider
         double maxX = spatialExtent.getMaxX() * DTR;
         double minY = latToY(spatialExtent.getMinY() * DTR);
         double maxY = latToY(spatialExtent.getMaxY() * DTR);
-        mercatorExtent.setMinX(Math.max(minX, -Math.PI));
-        mercatorExtent.setMaxX(Math.min(maxX, +Math.PI));
-        mercatorExtent.setMinY(Math.max(minY, -Math.PI));
-        mercatorExtent.setMaxY(Math.min(maxY, +Math.PI));
+        mercatorExtent.setMinX(Math.max(minX, maxBbox.getMinX()));
+        mercatorExtent.setMaxX(Math.min(maxX, maxBbox.getMaxX()));
+        mercatorExtent.setMinY(Math.max(minY, maxBbox.getMinY()));
+        mercatorExtent.setMaxY(Math.min(maxY, maxBbox.getMaxY()));
         
         // query tree for matching and unused items
         ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
@@ -371,6 +411,12 @@ public class MsRoadsProvider extends AbstractProvider
             new MyBboxUpdater(spatialExtent);
         }
         return dataNode;
+    }
+    
+    
+    public void setLayer(String layerId)
+    {
+        this.layerId = layerId;
     }
     
     
