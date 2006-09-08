@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<STTProject xmlns="http://vast.uah.edu/stt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx"
+<STTProject xmlns="http://vast.uah.edu/stt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx"
    xsi:schemaLocation="http://vast.uah.edu/stt ./ProjectFile.xsd" >
    <!-- Global metadata about the project -->
    <Identification>
@@ -15,7 +15,7 @@
             <name>World View</name>
             <time>
                <TimeSettings>
-                  <currentTime>2004-01-01T12:00:00Z</currentTime>
+                  <currentTime>2006-06-01T03:00:00Z</currentTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
                   <stepTime>60</stepTime>
@@ -25,10 +25,10 @@
             <view>
                <ViewSettings>
                   <backgroundColor>#000000</backgroundColor>
-                  <projection>LLA -90</projection>
+                  <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>-1.72 0 10</cameraPos>
-                  <targetPos>-1.72 0 0</targetPos>
+                  <cameraPos>0 0 10</cameraPos>
+                  <targetPos>0 0 0</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>6.0</orthoWidth>
                   <orthoHeight>4.0</orthoHeight>
@@ -42,7 +42,7 @@
                   <name>NASA Project</name>
                   <member>
                      <DataList>
-                        <name>Geographic Data</name>
+                        <name>GIS Data</name>
                         <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
@@ -90,6 +90,227 @@
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>AL State Boundaries</name>
+                              <dataProvider xlink:href="#AL_STATE"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>AL County Boundaries</name>
+                              <dataProvider xlink:href="#AL_COUNTIES"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#222222</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>AL Interstates</name>
+                              <dataProvider xlink:href="#AL_INTERSTATES"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">5</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>3</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>  
+                              <style>
+                                 <sld:TextSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Label>
+                                       <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
+                                    </sld:Label>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:TextSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem enabled="false">
+                              <name>AL Highways</name>
+                              <dataProvider xlink:href="#AL_HIGHWAYS"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Base Maps</name>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Roads Imagery (Flat)</name>
+                              <dataProvider href="#MS_ROADS"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000ff</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -159,6 +380,86 @@
                                        <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:GridMeshSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Model Data</name>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Max Surface Temperature</name>
+                              <dataProvider href="#PROVIDER_13"/>
+                              <style>
+                                 <sldx:GridFillSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>surfaceTemp/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>surfaceTemp/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill-blue">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 1.0 82.5 1.0 87.5 0.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-green">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 1.0 87.5 1.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>                           
+                                       <sld:CssParameter name="fill-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 0.0 87.5 1.0 90 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 -100.0 -100.0 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                    </sld:Fill>
+                                 </sldx:GridFillSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridMeshSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>surfaceTemp/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>surfaceTemp/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#00FFFF</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridMeshSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -301,7 +602,7 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
@@ -333,7 +634,7 @@
                                     </sldx:Dimensions>
                                     <sld:Fill>
                                        <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
                                     </sld:Fill>
                                  </sldx:GridFillSymbolizer>
                               </style>
@@ -587,6 +888,9 @@
             <member>
                <OWSDataProvider id="PROVIDER_04">
                   <name>NOAA12 AMSU-A Footprints</name>
+                  <timeExtent>
+                     <autoUpdate href="#SCENE_01"/>
+                  </timeExtent>
                   <layerId>NOAA12-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
@@ -671,6 +975,9 @@
             <member>
                <OWSDataProvider id="PROVIDER_09">
                   <name>SPOT5 Footprints</name>
+                  <timeExtent>
+                     <autoUpdate href="#SCENE_01"/>
+                  </timeExtent>
                   <layerId>SPOT5</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
@@ -692,6 +999,9 @@
             <member>
                <OWSDataProvider id="PROVIDER_10">
                   <name>TRMM TMI Footprints</name>
+                  <timeExtent>
+                     <autoUpdate href="#SCENE_01"/>
+                  </timeExtent>
                   <layerId>TRMM-TMI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
@@ -713,6 +1023,9 @@
             <member>
                <OWSDataProvider id="PROVIDER_11">
                   <name>CALIPSO LIDAR Footprints</name>
+                  <timeExtent>
+                     <autoUpdate href="#SCENE_01"/>
+                  </timeExtent>
                   <layerId>CALIPSO-LIDAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
@@ -734,6 +1047,9 @@
             <member>
                <OWSDataProvider id="PROVIDER_12">
                   <name>CLOUDSAT RADAR Footprints</name>
+                  <timeExtent>
+                     <autoUpdate href="#SCENE_01"/>
+                  </timeExtent>
                   <layerId>CLOUDSAT-RADAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
@@ -747,6 +1063,72 @@
                            </ogc:During>
                         </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="AL_STATE">
+                  <name>Alabama borders</name>
+                  <description>Alabama border data</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/states/AL_state.swe"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="AL_COUNTIES">
+                  <name>Alabama counties</name>
+                  <description>Alabama county border data</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/counties/countySwe.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/counties/AL_county.swe"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="AL_HIGHWAYS">
+                  <name>Alabama highways</name>
+                  <description>Alabama Interstate data</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/roads/highways/highway.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/roads/highways/AL_highways.swe"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="AL_INTERSTATES">
+                  <name>Alabama interstates</name>
+                  <description>Alabama Interstate data</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/interstate.xml"/>
+                  <rawData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/AL_interstates.swe"/>
+               </SWEDataProvider>
+            </member>
+            <member>
+               <MsRoadsProvider id="MS_ROADS">
+                  <name>World Roads</name>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </MsRoadsProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_13">
+                  <name>Temperature Data</name>
+                  <layerId>MaxT_SFC</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>MaxT_SFC</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimeInstant>
+                                 <gml:timePosition>2006-06-06T13:00:00Z</gml:timePosition>
+                              </gml:TimeInstant>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-binary-base64</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
