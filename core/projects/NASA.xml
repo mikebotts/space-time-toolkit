@@ -61,8 +61,8 @@
                                        </sld:CssParameter>                                       
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>                             
@@ -293,7 +293,7 @@
                                  </sldx:TextureSymbolizer>
                               </style>
                               <style>
-                                 <sldx:GridBorderSymbolizer enabled="true">
+                                 <sldx:GridBorderSymbolizer enabled="false">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
@@ -311,6 +311,143 @@
                                        <sld:CssParameter name="stroke-width">2</sld:CssParameter>
                                     </sld:Stroke>
                                  </sldx:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Aerial Imagery (Flat)</name>
+                              <dataProvider href="#MS_IMAGERY"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Hybrid Imagery (Aerial + Roads)</name>
+                              <dataProvider href="#MS_HYBRID"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>SRTM Data</name>
+                              <dataProvider xlink:href="#SRTM_CHAIN"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/longitude</ogc:PropertyName>
+                                             <Gain>0.017453292519943295769236907684886</Gain>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/latitude</ogc:PropertyName>
+                                             <Gain>0.017453292519943295769236907684886</Gain>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
+                                             <Gain>1e-6</Gain>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>coverageData/width</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>coverageData/length</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill-red">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
+                                             <Gain>0.0025</Gain>
+                                             <Offset>-0.5</Offset>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-blue">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
+                                             <Gain>-0.0025</Gain>
+                                             <Offset>1.5</Offset>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-green">
+                                          <LinearAdjustment>
+                                             <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
+                                             <Gain>-0.0025</Gain>
+                                             <Offset>1.0</Offset>
+                                          </LinearAdjustment>
+                                       </sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
                               </style>
                            </DataItem>
                         </member>
@@ -1105,8 +1242,43 @@
                </SWEDataProvider>
             </member>
             <member>
+               <SensorMLProvider id="SRTM_CHAIN">
+                  <name>SRTM DEM</name>
+                  <description>SRTM Digital Elevation Model</description>
+                  <spatialExtent tiling="5x5">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="./SRTM_Process.xml#WCS_PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
                <MsRoadsProvider id="MS_ROADS">
                   <name>World Roads</name>
+                  <layerId>roads</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </MsRoadsProvider>
+            </member>
+            <member>
+               <MsRoadsProvider id="MS_IMAGERY">
+                  <name>World Imagery</name>
+                  <layerId>aerial</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </MsRoadsProvider>
+            </member>
+            <member>
+               <MsRoadsProvider id="MS_HYBRID">
+                  <name>World Imagery</name>
+                  <layerId>hybrid</layerId>
                   <spatialExtent>
                      <BoundingBox srsName="EPSG:4326">
                         <gml:coordinates>-180,-90 180,90</gml:coordinates>
