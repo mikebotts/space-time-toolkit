@@ -41,7 +41,7 @@ import com.sun.media.jai.codec.PNGDecodeParam;
 
 /**
  * <p><b>Title:</b><br/>
- * Windows Live Local Provider
+ * Windows Live Local Virtual Earth Provider
  * </p>
  *
  * <p><b>Description:</b><br/>
@@ -199,12 +199,6 @@ public class VirtualEarthProvider extends AbstractProvider
     public VirtualEarthProvider()
 	{
         quadTree = new QuadTree();
-//        SpatialExtent initBbox = new STTSpatialExtent();
-//        initBbox.setMinX(-Math.PI);
-//        initBbox.setMaxX(+Math.PI);
-//        initBbox.setMinY(-Math.PI);
-//        initBbox.setMaxY(+Math.PI);
-//        quadTree.init(initBbox);
         
         // also set max requestable bbox
         maxBbox = new SpatialExtent();
@@ -376,7 +370,13 @@ public class VirtualEarthProvider extends AbstractProvider
     
     protected double yToLat(double y)
     {
-        double lat = 2 * Math.atan(Math.exp(y)) - Math.PI/2;
+        double lat = 0;
+        
+        if (Math.abs(y) < Math.PI-(1e-4))
+            lat = 2 * Math.atan(Math.exp(y)) - Math.PI/2;
+        else
+            lat = Math.signum(y)*Math.PI/2;
+        
         return lat;
     }
     
