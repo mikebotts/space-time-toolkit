@@ -67,7 +67,8 @@ public class MasterTimeView extends SceneView
         switch (e.type)
         {
             case SCENE_TIME_CHANGED:
-                refreshViewAsync();
+                if (e.source != masterTimeWidget)
+                    refreshViewAsync();
         }
     }
 }

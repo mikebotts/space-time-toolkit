@@ -12,6 +12,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.Scene;
 import org.vast.util.DateTime;
 
@@ -115,6 +117,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     public void timeChanged(TimeSpinner spinner, double newTime)
     {
         scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
+        scene.getTimeSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
     }
 
 
