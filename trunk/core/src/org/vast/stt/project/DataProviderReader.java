@@ -28,6 +28,8 @@ import org.vast.process.DataProcess;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.SystemReader;
 import org.vast.stt.data.*;
+import org.vast.stt.dynamics.SceneTimeUpdater;
+import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.w3c.dom.*;
 
 
@@ -55,6 +57,12 @@ public class DataProviderReader
 	{
         objectIds = new Hashtable<String, Object>();
 	}
+    
+    
+    public DataProviderReader(Hashtable<String, Object> objectIds)
+    {
+        this.objectIds = objectIds;
+    }
 	
 	
     /**
@@ -157,7 +165,18 @@ public class DataProviderReader
     {
         if (timeElt != null)
         {
-            // TODO read time extent info
+            STTTimeExtent timeExtent = provider.getTimeExtent();            
+            
+            // read autoUpdate element
+            if (dom.existElement(timeElt, "autoUpdate"))
+            {
+                String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
+                Scene scene = (Scene)objectIds.get(sceneId);
+                TimeExtentUpdater updater = new SceneTimeUpdater(scene);
+                updater.setTimeExtent(timeExtent);
+                timeExtent.setUpdater(updater);
+                provider.setAutoUpdate(true);
+            }
         }
     }
     
