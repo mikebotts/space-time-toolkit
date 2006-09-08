@@ -88,7 +88,7 @@ public class DataProviderReader
         {
             provider = readSensorMLProvider(dom, providerElt);                           
         }
-        else if (providerElt.getLocalName().equals("MsRoadsProvider"))
+        else if (providerElt.getLocalName().equals("VirtualEarthProvider"))
         {
             provider = new VirtualEarthProvider();
             String layerId = dom.getElementValue(providerElt, "layerId");

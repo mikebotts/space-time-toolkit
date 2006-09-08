@@ -386,14 +386,14 @@
                </SWEDataProvider>
             </member>
             <member>
-               <MsRoadsProvider id="MS_ROADS">
+               <VirtualEarthProvider id="MS_ROADS">
                   <name>World Roads</name>
                   <spatialExtent>
                      <BoundingBox srsName="EPSG:4326">
                         <gml:coordinates>-180,-90 180,90</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-               </MsRoadsProvider>
+               </VirtualEarthProvider>
             </member>
             <member>
                <OWSDataProvider id="PROVIDER_11">
