@@ -54,7 +54,7 @@ public class ProjectReader
 	{
         objectIds = new Hashtable<String, Object>();
 		sldReader = new SLDReader();
-        providerReader = new DataProviderReader();
+        providerReader = new DataProviderReader(objectIds);
 	}
 	
 	
@@ -90,8 +90,8 @@ public class ProjectReader
         if (listElt != null)
             project.setServiceList(readServiceList(listElt));
 		
-		listElt = dom.getElement(projectElt, "ResourceList");
-		project.setResourceList((ResourceList)readResource(listElt));
+		//listElt = dom.getElement(projectElt, "ResourceList");
+		//project.setResourceList((ResourceList)readResource(listElt));
 		
 		listElt = dom.getElement(projectElt, "SceneList");
 		project.setSceneList(readSceneList(listElt));
@@ -274,7 +274,8 @@ public class ProjectReader
 	protected Scene readScene(Element sceneElt)
 	{
 		Scene scene = new Scene();
-		
+        registerObjectID(sceneElt, scene);
+        
 		// set scene properties
 		scene.setName(dom.getElementValue(sceneElt, "name"));
 		
