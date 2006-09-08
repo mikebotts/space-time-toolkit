@@ -157,7 +157,7 @@ public class SOSProvider extends OWSProvider
 	protected void initRequest()
 	{
 	    // update time range
-        query.getTime().setStartTime(timeExtent.getAdjustedLagTime());
+        query.getTime().setBaseTime(timeExtent.getAdjustedLagTime());
         query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
         
         // update bounding box
