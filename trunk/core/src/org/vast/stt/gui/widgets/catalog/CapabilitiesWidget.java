@@ -164,8 +164,8 @@ public class CapabilitiesWidget implements SelectionListener
 		
 		public void run(IProgressMonitor monitor) 
 			throws InvocationTargetException, InterruptedException {
-				monitor.beginTask("Attempting to read Capabilities Document from\n" + server + "...", 
-					IProgressMonitor.UNKNOWN);
+				String msg = "Attempting to read Capabilities Document from " + server + "...";
+				monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
 				caps = readCapabilities(server, type);
 
 		};
