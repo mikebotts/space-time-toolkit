@@ -13,15 +13,18 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -33,9 +36,7 @@ import org.vast.ows.OWSCapabilitiesReader;
 import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.server.OWSServlet;
 import org.vast.ows.sos.SOSCapabilitiesReader;
-import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.wcs.WCSCapabilitiesReader;
 import org.vast.ows.wfs.WFSCapabilitiesReader;
 import org.vast.ows.wms.WMSCapabilitiesReader;
@@ -149,13 +150,61 @@ public class CapabilitiesWidget implements SelectionListener
 		serverCombo.setItems(types);
 		serverCombo.select(0);
 	}
+
+	private class GetCapsRunnable implements IRunnableWithProgress {
+		
+		String server;
+		ServiceType type;
+		List<OWSLayerCapabilities> caps;
+		
+		public GetCapsRunnable(String server, ServiceType type){
+			this.server = server;
+			this.type = type;
+		}
+		
+		public void run(IProgressMonitor monitor) 
+			throws InvocationTargetException, InterruptedException {
+				monitor.beginTask("Attempting to read Capabilities Document from\n" + server + "...", 
+					IProgressMonitor.UNKNOWN);
+				caps = readCapabilities(server, type);
+
+		};
+		
+		public List<OWSLayerCapabilities> getLayerCaps(){
+			return caps;
+		}
+	}
 	
+	protected void getCapabilities(String server, ServiceType type){
+		ProgressMonitorDialog pmd = new ProgressMonitorDialog(
+				PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		
+		GetCapsRunnable runnable = new GetCapsRunnable(server, type);
+		
+		try {
+			pmd.run(true, false, runnable);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<OWSLayerCapabilities> caps = runnable.getLayerCaps();
+		if(caps != null)
+			layerTree.setInput(caps);
+		else {
+            MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+            		"STT Error", "Error reading caps from " + server);
+		}
+	}
+		
 	/**
 	 *  get the Capabilities from the currently selected server
 	 *  TODO:  spawn another thread for this and add Prog Bars
 	 */
-	protected void getCapabilities(String server, ServiceType type){
-		System.err.println("Get caps for " + server);
+	//protected void getCapabilities(String server, ServiceType type, int j){
+	protected List<OWSLayerCapabilities> readCapabilities(String server, ServiceType type){
 		ServerInfo info = capServers.getServerInfo(server, type);
 		OWSCapabilitiesReader reader;
 		switch(type){
@@ -172,23 +221,17 @@ public class CapabilitiesWidget implements SelectionListener
 			reader = new SOSCapabilitiesReader();
 			break;
 		default:
-            MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-            		"STT Error", "Error reading caps from " + info.url);
-			return;
+			return null;
 		}
 		OWSServiceCapabilities caps = null;
 		try {		
 			caps = reader.readCapabilities(info.url, info.version);
 		} catch (OWSException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			return null;
 		}
-		
-		List<OWSLayerCapabilities> layers = caps.getLayers();
-//		for(OWSLayerCapabilities layerTmp: layers){
-//			System.err.println("Layer is " + layerTmp.getName());
-//		}
-		layerTree.setInput(layers);
+		return caps.getLayers();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -199,7 +242,8 @@ public class CapabilitiesWidget implements SelectionListener
 		
 		if(control == getCapsBtn){
 			String server = serverCombo.getText();
-			getCapabilities(server, ServiceType.getServiceType(typesCombo.getText()));
+			ServiceType type = ServiceType.getServiceType(typesCombo.getText());
+			getCapabilities(server, type);
 		} else if(control == typesCombo) {
 			//  repopulate servers with selected type
 			setServerComboItems();
@@ -208,4 +252,3 @@ public class CapabilitiesWidget implements SelectionListener
 		}
 	}
 }
-
