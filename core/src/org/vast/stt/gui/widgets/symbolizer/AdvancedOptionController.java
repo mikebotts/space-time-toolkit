@@ -15,7 +15,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 abstract public class AdvancedOptionController extends OptionController 
 	implements STTEventListener

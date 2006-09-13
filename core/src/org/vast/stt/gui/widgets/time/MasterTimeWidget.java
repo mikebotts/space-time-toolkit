@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.Scene;
+import org.vast.stt.project.scene.Scene;
 import org.vast.util.DateTime;
 
 

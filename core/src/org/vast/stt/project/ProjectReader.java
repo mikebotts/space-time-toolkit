@@ -15,12 +15,15 @@ package org.vast.stt.project;
 
 import java.text.ParseException;
 import java.util.*;
+
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
-import org.vast.math.Vector3d;
-import org.vast.ows.sld.Color;
-import org.vast.ows.sld.SLDReader;
-import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.project.scene.SceneReader;
+import org.vast.stt.project.tree.DataTreeReader;
+import org.vast.stt.provider.ows.OWSProviderReader;
+import org.vast.stt.provider.sml.SMLProviderReader;
+import org.vast.stt.provider.swe.SWEProviderReader;
+import org.vast.stt.provider.ve.VirtualEarthProviderReader;
 import org.vast.util.*;
 import org.w3c.dom.*;
 import org.vast.process.*;
@@ -42,19 +45,26 @@ import org.vast.process.*;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class ProjectReader
+public class ProjectReader extends XMLReader
 {
-	private DOMReader dom;
-    private Hashtable<String, Object> objectIds;
-	private SLDReader sldReader;
-    private DataProviderReader providerReader;
-	
+	private DOMReader dom;    
+	private DataTreeReader dataReader;
+    
 	
 	public ProjectReader()
 	{
         objectIds = new Hashtable<String, Object>();
-		sldReader = new SLDReader();
-        providerReader = new DataProviderReader(objectIds);
+        dataReader = new DataTreeReader();
+        dataReader.setObjectIds(objectIds);
+        
+        // register basic data providers reader/writers            
+        XMLRegistry.registerReader("SWEDataProvider", SWEProviderReader.class);
+        XMLRegistry.registerReader("OWSDataProvider", OWSProviderReader.class);
+        XMLRegistry.registerReader("SensorMLProvider", SMLProviderReader.class);
+        XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
+        
+        // register basic display type reader/writers
+        XMLRegistry.registerReader("Scene", SceneReader.class);
 	}
 	
 	
@@ -90,11 +100,12 @@ public class ProjectReader
         if (listElt != null)
             project.setServiceList(readServiceList(listElt));
 		
-		//listElt = dom.getElement(projectElt, "ResourceList");
-		//project.setResourceList((ResourceList)readResource(listElt));
-		
-		listElt = dom.getElement(projectElt, "SceneList");
-		project.setSceneList(readSceneList(listElt));
+        listElt = dom.getElement(projectElt, "DisplayList");
+        project.setDisplayList(readDisplayList(listElt));
+        
+		listElt = dom.getElement(projectElt, "ResourceList");
+        if (listElt != null)
+            project.setResourceList((ResourceList)readResource(listElt));
 		
 		return project;
 	}
@@ -160,7 +171,7 @@ public class ProjectReader
 		service.setVersion(dom.getElementValue(serviceElt, "version"));
 		
 		// add this new instance to the table
-        registerObjectID(serviceElt, service);
+        registerObjectID(dom, serviceElt, service);
         
 		return service;
 	}
@@ -183,7 +194,7 @@ public class ProjectReader
         if (resourceName.equals("ResourceList"))
             resource = readResourceList(resourceElt);
         else
-            resource = readDataProvider(resourceElt);
+            resource = dataReader.readDataProvider(dom, resourceElt);
         
         // name & description
         resource.setName(dom.getElementValue(resourceElt, "name"));
@@ -217,28 +228,6 @@ public class ProjectReader
 		
 		return resourceList;
 	}
-    
-    
-    /**
-     * Reads a DataProvider description
-     * @param providerElt
-     * @return
-     */
-    protected DataProvider readDataProvider(Element providerElt)
-    {
-        DataProvider provider = null;
-        
-        // try to get the provider from the list
-        Object obj = findExistingObject(providerElt);
-        if (obj != null)
-            return (DataProvider)obj;
-        
-        // otherwise instantiate a new one
-        provider = providerReader.readProvider(dom, providerElt);
-        registerObjectID(providerElt, provider);
-        
-        return provider;
-    }
 	
 	
 	/**
@@ -246,426 +235,52 @@ public class ProjectReader
 	 * @param listElt
 	 * @return
 	 */
-	protected ArrayList<Scene> readSceneList(Element listElt)
+	protected ArrayList<STTDisplay> readDisplayList(Element listElt)
 	{
 		if (listElt == null)
 			return null;
 		
-		NodeList sceneElts = dom.getElements(listElt, "member/Scene");
-		int listSize = sceneElts.getLength();		
-		ArrayList<Scene> sceneList = new ArrayList<Scene>(listSize);
+		NodeList displayElts = dom.getElements(listElt, "member/*");
+		int listSize = displayElts.getLength();		
+		ArrayList<STTDisplay> displayList = new ArrayList<STTDisplay>(listSize);
 		
 		for (int i=0; i<listSize; i++)
 		{
-			Element sceneElt = (Element)sceneElts.item(i);
-			Scene scene = readScene(sceneElt);
-			sceneList.add(scene);
+			Element sceneElt = (Element)displayElts.item(i);
+			STTDisplay display = readDisplay(sceneElt);
+            displayList.add(display);
 		}
 		
-		return sceneList;
-	}
-	
-	
-	/**
-	 * Reads Scene properties and contents
-	 * @param sceneElt
-	 * @return
-	 */
-	protected Scene readScene(Element sceneElt)
-	{
-		Scene scene = new Scene();
-        registerObjectID(sceneElt, scene);
-        
-		// set scene properties
-		scene.setName(dom.getElementValue(sceneElt, "name"));
-		
-		// read time settings
-        Element timeSettingsElt = dom.getElement(sceneElt, "time/TimeSettings");
-        TimeSettings timeSettings = readTimeSettings(timeSettingsElt);
-        scene.setTimeSettings(timeSettings);
-        
-		// read view settings
-		Element viewSettingsElt = dom.getElement(sceneElt, "view/ViewSettings");
-		ViewSettings viewSettings = readViewSettings(viewSettingsElt);
-		scene.setViewSettings(viewSettings);
-		
-		// read data item list
-		Element listElt = dom.getElement(sceneElt, "contents/DataList");
-		DataTree dataTree = readDataTree(listElt, scene);
-		scene.setDataTree(dataTree);
-		
-		return scene;
+		return displayList;
 	}
     
     
     /**
-     * Reads Scene Time Settings
-     * @param timeSettingsElt
+     * Reads a display element
+     * Create the right reader using XMLModuleRegistry
+     * @param displayElt
      * @return
      */
-    protected TimeSettings readTimeSettings(Element timeSettingsElt)
+    protected STTDisplay readDisplay(Element displayElt)
     {
-        // try to get it from the table
-        Object obj = findExistingObject(timeSettingsElt);
+        STTDisplay display = null;
+        
+        // try to get the provider from the list
+        Object obj = findExistingObject(dom, displayElt);
         if (obj != null)
-            return (TimeSettings)obj;
-                
-        String val;
-        TimeSettings timeSettings = new TimeSettings();
-                
-        // current time
-        val = dom.getElementValue(timeSettingsElt, "currentTime");
-        if (val != null)
-        {
-            double julianTime = 0;
-            
-            try
-            {
-                julianTime = DateTimeFormat.parseIso(val);                
-            }
-            catch (ParseException e)
-            {
-            }
-            
-            timeSettings.setCurrentTime(new DateTime(julianTime));
-        }
+            return (STTDisplay)obj;
         
-        // lag time
-        val = dom.getElementValue(timeSettingsElt, "lagTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setLagTime(time);
-        }
-        
-        // lead time
-        val = dom.getElementValue(timeSettingsElt, "leadTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setLeadTime(time);
-        }
-        
-        // step time
-        val = dom.getElementValue(timeSettingsElt, "stepTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setStepTime(time);
-        }
-        
-        // real time mode
-        val = dom.getElementValue(timeSettingsElt, "realTimeMode");
-        if (val.equals("on") || val.equals("yes"))
-        {
-            timeSettings.setRealTime(true);
-        }
-        else
-            timeSettings.setRealTime(false);
-        
-        return timeSettings;
-    }
-	
-	
-	/**
-	 * Reads Scene View Settings (camera, target, ortho, colors...)
-	 * @param viewSettingsElt
-	 * @return
-	 */
-	protected ViewSettings readViewSettings(Element viewSettingsElt)
-	{
-	    // try to get it from the table
-        Object obj = findExistingObject(viewSettingsElt);
-        if (obj != null)
-            return (ViewSettings)obj;
-                
-        String val;
-		ViewSettings viewSettings = new ViewSettings();
-		        
-		// background color
-		String colorText = dom.getElementValue(viewSettingsElt, "backgroundColor");
-		if (colorText != null)
-		{
-			Color backColor = new Color(colorText.substring(1));
-			viewSettings.setBackgroundColor(backColor);
-		}
-        
-        // intended projection
-        String projText = dom.getElementValue(viewSettingsElt, "projection");
-        if (projText != null)
-        {
-            if (projText.equals("ECEF"))
-                viewSettings.setProjection(new Projection_ECEF());
-            else if (projText.startsWith("LLA"))
-            {
-                double centerLon;
-                try
-                {
-                    centerLon = Double.parseDouble(projText.substring(3));
-                }
-                catch (NumberFormatException e)
-                {
-                    centerLon = 0.0;
-                }
-                viewSettings.setProjection(new Projection_LLA(centerLon * Math.PI/180));
-            }
-        }
-		
-		// camera position
-		Vector3d cameraPos = readVector(dom.getElement(viewSettingsElt, "cameraPos"));
-		if (cameraPos != null)
-			viewSettings.setCameraPos(cameraPos);
-		
-		// camera target position
-		Vector3d targetPos = readVector(dom.getElement(viewSettingsElt, "targetPos"));
-		if (targetPos != null)
-			viewSettings.setTargetPos(targetPos);
-		
-		// camera up direction
-		Vector3d upDir = readVector(dom.getElement(viewSettingsElt, "upDirection"));
-		if (upDir != null)
-			viewSettings.setUpDirection(upDir);
-		
-		// ortho projection width
-		val = dom.getElementValue(viewSettingsElt, "orthoWidth");		
-		if (val != null)
-		{
-			double orthoWidth = Double.parseDouble(val);
-			viewSettings.setOrthoWidth(orthoWidth);
-		}
-		
-		// Z buffer / Rendering near clipping plane
-		val = dom.getElementValue(viewSettingsElt, "nearClip");
-		if (val != null)
-		{
-			double nearClip = Double.parseDouble(val);
-			viewSettings.setNearClip(nearClip);
-		}
-		
-		// Z buffer / Rendering far clipping plane
-		val = dom.getElementValue(viewSettingsElt, "farClip");
-		if (val != null)
-		{
-			double farClip = Double.parseDouble(val);
-			viewSettings.setFarClip(farClip);
-		}
-		
-		// Z buffer fudge factor
-		val = dom.getElementValue(viewSettingsElt, "zFudgeFactor");
-		if (val != null)
-		{
-			int zFudge = Integer.parseInt(val);
-			viewSettings.setZDepthFudgeFactor(zFudge);
-		}
-		
-		// add this new instance to the table
-        registerObjectID(viewSettingsElt, viewSettings);
-        
-		return viewSettings;
-	}
-	
-	
-	/**
-	 * Reads 3D vector coordinates from a comma separated number list
-	 * @param vectorElt
-	 * @return
-	 */
-	protected Vector3d readVector(Element vectorElt)
-	{
-		if (vectorElt == null)
-			return null;
-		
-		String[] coords = dom.getElementValue(vectorElt, "").split(" ");
-		
-		double x = Double.parseDouble(coords[0]);
-		double y = Double.parseDouble(coords[1]);
-		double z = Double.parseDouble(coords[2]);
-		
-		Vector3d vect = new Vector3d(x, y, z);		
-		return vect;
-	}
-    
-    
-    /**
-     * Reads the whole Data Tree with items and folders
-     * @param dataListElt
-     * @param parentScene
-     * @return
-     */
-    protected DataTree readDataTree(Element dataTreeElt, Scene parentScene)
-    {
-        DataFolder folder = (DataFolder)readDataEntry(dataTreeElt, parentScene);
-        DataTree dataTree = new DataTree(folder);
-        registerObjectID(dataTreeElt, dataTree);
-        return dataTree;
-    }
-	
-	
-	/**
-	 * Reads any DataEntry type (decides which method to call)
-	 * @param dataEntryElt
-	 * @return
-	 */
-	protected DataEntry readDataEntry(Element dataEntryElt, Scene parentScene)
-	{
-		DataEntry dataEntry = null;
-		
-        // try to get it from the table
-        Object obj = findExistingObject(dataEntryElt);
-        if (obj != null)
-            return (DataEntry)obj;
-        
-        // if not found parse and instantiate a new one        
-		if (dataEntryElt.getLocalName().equals("DataList"))
-			dataEntry = readDataList(dataEntryElt, parentScene);
-		else if (dataEntryElt.getLocalName().equals("DataItem"))
-			dataEntry = readDataItem(dataEntryElt, parentScene);
-		
-		// if successful, setup common parameters
-		if (dataEntry != null)
-		{
-			// name
-			dataEntry.setName(dom.getElementValue(dataEntryElt, "name"));
-		}
-		
-		// add this new instance to the table
-        registerObjectID(dataEntryElt, dataEntry);
-        
-		return dataEntry;
-	}
-	
-	
-	/**
-	 * Reads Data Item List and fill it with DataEntries
-	 * @param listElt
-	 * @return
-	 */
-	protected DataFolder readDataList(Element listElt, Scene parentScene)
-	{
-		NodeList memberElts = dom.getElements(listElt, "member");
-		int listSize = memberElts.getLength();
-        DataFolder dataList = new DataFolder(listSize);
-		
-		// members
-		for (int i=0; i<listSize; i++)
-		{
-			Element propElt = (Element)memberElts.item(i);
-            Element dataElt = dom.getFirstChildElement(propElt);
-			DataEntry dataEntry = readDataEntry(dataElt, parentScene);		
-			if (dataEntry != null)
-            {
-				dataList.add(dataEntry);
-                
-                // set visibility if it's a DataItem
-                if (dataEntry instanceof DataItem)
-                {
-                    String visText = dom.getAttributeValue(propElt, "visible");
-                    if (visText != null && visText.equals("true"))
-                        parentScene.setItemVisibility((DataItem)dataEntry, true);
-                }                    
-            }
-		}
-		
-		return dataList;
-	}
-	
-	
-	/**
-	 * Reads a DataItem entry which includes the data source (query),
-	 * the different style layers and options
-	 * @param dataItemElt
-	 * @return
-	 */
-	protected DataItem readDataItem(Element dataItemElt, Scene parentScene)
-	{
-        DataItem dataItem = new DataItem();
-        
-		// data provider
-		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
-        DataProvider provider = readDataProvider(providerElt);
-        dataItem.setDataProvider(provider);
-		
-		// style/symbolizer list
-		NodeList symElts = dom.getElements(dataItemElt, "style");
-		int listSize = symElts.getLength();
-		
-		// read all stylers
-        for (int i=0; i<listSize; i++)
-        {
-            Element symElt = (Element)symElts.item(i);
-            Symbolizer symbolizer = readSymbolizer(dataItem, symElt);
-            if (symbolizer != null)
-                dataItem.getSymbolizers().add(symbolizer);
-        }
-        
-        // enabled ?
-        String enabled = dom.getAttributeValue(dataItemElt, "enabled");
-        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
-            dataItem.setEnabled(true);
-        else
-            dataItem.setEnabled(false);
-        
-		return dataItem;
-	}
-	
-	
-    /**
-     * Reads an SLD Symbolizer description (uses SLDReader)
-     * @param provider
-     * @param symElt
-     * @return
-     */
-    protected Symbolizer readSymbolizer(DataItem dataItem, Element styleElt)
-    {
-        Element symElt = dom.getFirstChildElement(styleElt);
-        Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);
-        
-        if (symbolizer == null)
-            return null;
-        
+        // otherwise create appropriate reader
+        XMLModuleReader reader = XMLRegistry.createReader(displayElt.getLocalName());
+        reader.setObjectIds(objectIds);
+        display = (STTDisplay)reader.read(dom, displayElt);
+        registerObjectID(dom, displayElt, display);        
+			
         // read name
-        String name = dom.getAttributeValue(styleElt, "name");
-        symbolizer.setName(name);
-        
-        // read enabled attribute
-        if (symbolizer != null)
-        {
-            String enabled = dom.getAttributeValue(symElt, "enabled");
-            if (enabled != null)
-                symbolizer.setEnabled(enabled.equalsIgnoreCase("true") ? true : false);
-        }
-        
-        return symbolizer;
-    }
-    
-    
-    /**
-     * Try to retrieve an object that has already been parsed
-     * and should be referenced instead of creating a new instance.
-     * @param objElt
-     * @return
-     */
-    protected Object findExistingObject(Element objElt)
-    {
-        Object obj = null;
-        String id = dom.getAttributeValue(objElt, "id");
-        if (id != null)
-            obj = objectIds.get(id);
-        return obj;
-    }
-    
-    
-    /**
-     * Add an object to the id->object map table
-     * @param objElt
-     * @param obj
-     */
-    protected void registerObjectID(Element objElt, Object obj)
-    {
-        String id = dom.getAttributeValue(objElt, "id");
-        
-        if ((id != null) && (obj != null))
-            objectIds.put(id, obj);
+        String name = dom.getElementValue(displayElt, "name");
+        display.setName(name);
+               
+        return display;
     }
 	
 	

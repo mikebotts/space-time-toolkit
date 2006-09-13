@@ -1,29 +1,19 @@
 package org.vast.stt.gui.widgets.dataProvider;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.vast.process.DataProcess;
-import org.vast.process.ProcessChain;
-import org.vast.stt.data.SWEProvider;
-import org.vast.stt.data.SensorMLProvider;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.process.WMS_Process;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataProvider;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.provider.DataProvider;
  
 /**
  * <p><b>Title:</b><br/>
@@ -78,10 +68,7 @@ public class DataProviderWidget extends CheckOptionTable
 		providerAL.clear();
 		providerAL.add(newProv);
 		
-		if (newProv instanceof SWEProvider) {
-			System.err.println("DataProvWidget:  Provider type not supported yet: " + newProv);
-		} else 
-			System.err.println("DataProvWidget:  Provider type not recognized: " + newProv);
+		System.err.println("DataProvWidget:  Provider type not supported yet: " + newProv);
 				
 		//optionChooser.buildControls(newProv);
 	}

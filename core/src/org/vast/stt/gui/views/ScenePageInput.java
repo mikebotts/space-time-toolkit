@@ -1,7 +1,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.vast.stt.project.Scene;
+import org.vast.stt.project.scene.Scene;
 
 
 public class ScenePageInput implements IAdaptable

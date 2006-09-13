@@ -68,7 +68,7 @@ public abstract class RealTimeUpdater extends TimeExtentUpdater
     {
         super.setEnabled(enabled);
         
-        if (enabled)
+        if (enabled && !realtimeUpdateThread.isAlive())
             realtimeUpdateThread.start();
     }
 

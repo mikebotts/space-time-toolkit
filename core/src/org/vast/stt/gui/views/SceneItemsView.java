@@ -32,8 +32,8 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.SceneItem;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
 
 
 public class SceneItemsView extends SceneView implements IDoubleClickListener

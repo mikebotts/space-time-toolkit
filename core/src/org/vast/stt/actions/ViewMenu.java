@@ -15,10 +15,10 @@ import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.project.Projection_ECEF;
-import org.vast.stt.project.Projection_LLA;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.scene.Projection_ECEF;
+import org.vast.stt.project.scene.Projection_LLA;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.ViewSettings;
 
 
 /**
@@ -107,7 +107,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
-                currentScene.getRenderer().drawScene();
+                currentScene.getRenderer().drawScene(currentScene);
                 FitView fit = new FitView(currentScene);
                 fit.execute();
             }
@@ -121,7 +121,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
-                currentScene.getRenderer().drawScene();
+                currentScene.getRenderer().drawScene(currentScene);
                 FitView fit = new FitView(currentScene);
                 fit.execute();
             }

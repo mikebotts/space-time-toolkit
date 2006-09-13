@@ -3,10 +3,10 @@ package org.vast.stt.commands;
 
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.SceneItem;
-import org.vast.stt.project.STTSpatialExtent;
-import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.provider.STTSpatialExtent;
 
 
 /**

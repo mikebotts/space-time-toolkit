@@ -3,9 +3,10 @@ package org.vast.stt.renderer;
 
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3d;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.SceneItem;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerVisitor;
 
 
@@ -40,7 +41,10 @@ public abstract class Renderer implements StylerVisitor
     public abstract void init();
     
     
-    public abstract void drawScene();
+    public abstract void drawScene(Scene scene);
+    
+    
+    public abstract void drawItem(SceneItem item);
     
     
     public abstract void cleanup(DataStyler styler, CleanupSection section);
@@ -58,14 +62,11 @@ public abstract class Renderer implements StylerVisitor
     public abstract void resizeView(int width, int height);
 
 
-    public abstract void setupView();
+    public abstract void setupView(ViewSettings viewSettings);
     
     
     public abstract void dispose();
     
-    
-    public abstract void drawItem(SceneItem item);
-       
     
     public int getViewWidth()
     {

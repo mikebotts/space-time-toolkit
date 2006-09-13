@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Text;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.DataGroup;
 import org.vast.stt.data.DataException;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.process.WMS_Process;
 
@@ -30,13 +30,13 @@ import org.vast.stt.process.WMS_Process;
 
 public class WMSOptionHelper  implements SelectionListener {
 	WMSOptionController optionController;  // mainly needed to get controls handle later
-	SensorMLProvider provider;
+    SMLProvider provider;
 	WMS_Process wmsProcess;
 	OptionControl [] controls;
 	private DataComponent paramData;
 	DataGroup wmsParams;
 	
-	public WMSOptionHelper(WMSOptionController oc, WMS_Process wmsProc, SensorMLProvider prov){
+	public WMSOptionHelper(WMSOptionController oc, WMS_Process wmsProc, SMLProvider prov){
 		wmsProcess = wmsProc;
 		this.provider = prov;
         //  will grabbing this handle work?

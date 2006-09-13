@@ -29,9 +29,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockListItem;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.SceneItem;
-import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.scene.ViewSettings;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.*;
 
@@ -128,12 +128,10 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void setupView()
+    public void setupView(ViewSettings view)
     {
         SWTContext.setCurrent();
         JOGLContext.makeCurrent();
-        
-        ViewSettings view = scene.getViewSettings();
         
         // clear back buffer
         Color backColor = view.getBackgroundColor();
@@ -185,9 +183,9 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void drawScene()
+    public void drawScene(Scene scene)
     {
-        setupView();
+        setupView(scene.getViewSettings());
         List<SceneItem> sceneItems = scene.getSceneItems();
         
         for (int i = 0; i < sceneItems.size(); i++)

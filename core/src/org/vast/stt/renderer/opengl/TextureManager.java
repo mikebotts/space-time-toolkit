@@ -19,7 +19,7 @@ import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.project.DataStyler;
+import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.RasterPixelGraphic;
 import org.vast.stt.style.RasterTileGraphic;
 import org.vast.stt.style.TextureStyler;

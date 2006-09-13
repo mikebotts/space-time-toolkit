@@ -22,8 +22,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataEntry;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 /**
  * <p>

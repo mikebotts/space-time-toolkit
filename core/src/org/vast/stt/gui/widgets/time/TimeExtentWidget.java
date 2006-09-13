@@ -16,8 +16,8 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.STTTimeExtent;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.provider.STTTimeExtent;
 
 public class TimeExtentWidget implements SelectionListener, TimeListener
 {	

@@ -3,8 +3,7 @@ package org.vast.stt.gui.widgets.symbolizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.gui.widgets.OptionController;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.ows.sld.*;
 
 

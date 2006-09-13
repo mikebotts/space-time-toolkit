@@ -3,7 +3,7 @@ package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.events.SelectionListener;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
