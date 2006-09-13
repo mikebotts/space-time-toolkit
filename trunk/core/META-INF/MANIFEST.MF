@@ -7,13 +7,26 @@ Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-Localization: plugin
 Export-Package: org.vast.stt.gui.views,
                 org.vast.stt.project,
+                org.vast.stt.project.tree,
+                org.vast.stt.project.scene,
+                org.vast.stt.project.table,
+                org.vast.stt.project.chart,
+                org.vast.stt.provider,
+                org.vast.stt.provider.ows,
+                org.vast.stt.provider.sml,
+                org.vast.stt.provider.tiling,
+                org.vast.stt.data,
+                org.vast.stt.style,
                 org.vast.stt.commands,
                 org.vast.stt.apps
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.swt.opengl
+                org.eclipse.core.runtime,
+                org.eclipse.swt.opengl,
+                org.eclipse.update.ui,
+                org.eclipse.update.core
 Eclipse-AutoStart: true
 Bundle-ClassPath: ../Common/classes,
                   ../Common/lib/xercesImpl.jar, ../Common/lib/vecmath.jar,
-                  ./lib/jogl.jar, ./lib/jai_core.jar, ./lib/jai_codec.jar
+                  ./lib/jogl.jar, ./lib/jai_core.jar, ./lib/jai_codec.jar,
+                  ./lib/jcommon-1.0.2.jar, ./lib/jfreechart-1.0.2.jar
 Bundle-Vendor: UAH VAST
