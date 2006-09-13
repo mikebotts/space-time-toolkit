@@ -15,15 +15,9 @@ package org.vast.stt.project;
 
 import java.text.ParseException;
 import java.util.*;
-
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
-import org.vast.stt.project.scene.SceneReader;
 import org.vast.stt.project.tree.DataTreeReader;
-import org.vast.stt.provider.ows.OWSProviderReader;
-import org.vast.stt.provider.sml.SMLProviderReader;
-import org.vast.stt.provider.swe.SWEProviderReader;
-import org.vast.stt.provider.ve.VirtualEarthProviderReader;
 import org.vast.util.*;
 import org.w3c.dom.*;
 import org.vast.process.*;
@@ -56,15 +50,6 @@ public class ProjectReader extends XMLReader
         objectIds = new Hashtable<String, Object>();
         dataReader = new DataTreeReader();
         dataReader.setObjectIds(objectIds);
-        
-        // register basic data providers reader/writers            
-        XMLRegistry.registerReader("SWEDataProvider", SWEProviderReader.class);
-        XMLRegistry.registerReader("OWSDataProvider", OWSProviderReader.class);
-        XMLRegistry.registerReader("SensorMLProvider", SMLProviderReader.class);
-        XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
-        
-        // register basic display type reader/writers
-        XMLRegistry.registerReader("Scene", SceneReader.class);
 	}
 	
 	
@@ -272,13 +257,21 @@ public class ProjectReader extends XMLReader
         
         // otherwise create appropriate reader
         XMLModuleReader reader = XMLRegistry.createReader(displayElt.getLocalName());
-        reader.setObjectIds(objectIds);
-        display = (STTDisplay)reader.read(dom, displayElt);
-        registerObjectID(dom, displayElt, display);        
+        if (reader != null)
+        {
+            reader.setObjectIds(objectIds);
+            display = (STTDisplay)reader.read(dom, displayElt);            
+        }
 			
-        // read name
-        String name = dom.getElementValue(displayElt, "name");
-        display.setName(name);
+        if (display != null)
+        {
+            // read name
+            String name = dom.getElementValue(displayElt, "name");
+            display.setName(name);
+            
+            // register in ID table
+            registerObjectID(dom, displayElt, display);
+        }
                
         return display;
     }

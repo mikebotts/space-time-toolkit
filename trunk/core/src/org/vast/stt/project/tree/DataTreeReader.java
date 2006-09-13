@@ -34,7 +34,8 @@ import org.w3c.dom.*;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Regroups utility methods to parse . 
+ * Regroups utility methods to read DataTree, DataFolder and
+ * DataItem from project XML. 
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -93,7 +94,7 @@ public class DataTreeReader extends XMLReader
         if (obj != null)
             return (DataEntry)obj;
         
-        // if not found parse and instantiate a new one        
+        // if not found parse and instantiate a new one
 		if (dataEntryElt.getLocalName().equals("DataList"))
 			dataEntry = readDataList(dom, dataEntryElt);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
@@ -101,18 +102,22 @@ public class DataTreeReader extends XMLReader
         else
         {
             XMLModuleReader reader = XMLRegistry.createReader(dataEntryElt.getLocalName());
-            dataEntry = (DataEntry)reader.read(dom, dataEntryElt);
+            if (reader != null)
+            {
+                reader.setObjectIds(this.objectIds);
+                dataEntry = (DataEntry)reader.read(dom, dataEntryElt);
+            }
         }
 		
-		// if successful, setup common parameters
+        // only if we got a result
 		if (dataEntry != null)
-		{
-			// name
-			dataEntry.setName(dom.getElementValue(dataEntryElt, "name"));
+        {
+		    // set name
+            dataEntry.setName(dom.getElementValue(dataEntryElt, "name"));
+            
+		    // add this new instance to the table
+            registerObjectID(dom, dataEntryElt, dataEntry);
 		}
-		
-		// add this new instance to the table
-        registerObjectID(dom, dataEntryElt, dataEntry);
         
 		return dataEntry;
 	}
@@ -177,7 +182,7 @@ public class DataTreeReader extends XMLReader
         for (int i=0; i<listSize; i++)
         {
             Element symElt = (Element)symElts.item(i);
-            Symbolizer symbolizer = readSymbolizer(dom, dataItem, symElt);
+            Symbolizer symbolizer = readSymbolizer(dom, symElt);
             if (symbolizer != null)
                 dataItem.getSymbolizers().add(symbolizer);
         }
@@ -240,7 +245,7 @@ public class DataTreeReader extends XMLReader
      * @param symElt
      * @return
      */
-    public Symbolizer readSymbolizer(DOMReader dom, DataItem dataItem, Element styleElt)
+    public Symbolizer readSymbolizer(DOMReader dom, Element styleElt)
     {
         Element symElt = dom.getFirstChildElement(styleElt);
         Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);

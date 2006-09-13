@@ -288,7 +288,7 @@ public class BboxWidget implements SelectionListener
             bbox.setMinY(slat);
             bbox.setXTiles(lonTiles);
             bbox.setYTiles(latTiles);
-            bbox.dispatchEvent(new STTEvent(bbox, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));            
+            bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));            
         }
         else if(e.widget == fitBtn){
 			double nlat = getValue(nlatText);

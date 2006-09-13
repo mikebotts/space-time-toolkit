@@ -43,6 +43,7 @@ import org.vast.stt.gui.widgets.catalog.SceneTreeDropListener;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 
@@ -300,9 +301,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         }
         
         // if it's a single item, change its visibility
-        else if (selectedEntry instanceof DataItem)
+        else if (selectedEntry instanceof WorldItem)
         {
-            DataItem item = (DataItem)selectedEntry;
+            DataItem item = (WorldItem)selectedEntry;
             boolean visible = scene.isItemVisible(item);
             scene.setItemVisibility(item, !visible);
         }

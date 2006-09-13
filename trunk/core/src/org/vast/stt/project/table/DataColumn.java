@@ -40,8 +40,10 @@ import org.vast.ows.sld.Symbolizer;
  * @date Sep 12, 2006
  * @version 1.0
  */
-public class DataColumn extends Symbolizer
+public class DataColumn
 {
+    protected Symbolizer style;
+    protected String name;
     protected int width;
     
     
@@ -59,5 +61,29 @@ public class DataColumn extends Symbolizer
     public void setWidth(int width)
     {
         this.width = width;
+    }
+
+
+    public Symbolizer getStyle()
+    {
+        return style;
+    }
+
+
+    public void setStyle(Symbolizer style)
+    {
+        this.style = style;
+    }
+
+
+    public String getName()
+    {
+        return name;
+    }
+
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 }
