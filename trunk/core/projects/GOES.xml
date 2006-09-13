@@ -148,7 +148,7 @@
                         <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href="./GoesProcess.xml#GOES_WCS_PROCESS"/>
+                  <process xlink:href="./GOES_Process.xml#GOES_WCS_PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>
