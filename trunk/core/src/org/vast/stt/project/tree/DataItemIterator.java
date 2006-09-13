@@ -32,16 +32,16 @@ import java.util.Iterator;
  * @date Nov 30, 2005
  * @version 1.0
  */
-public class DataObjectIterator implements Iterator<DataObject>
+public class DataItemIterator implements Iterator<DataItem>
 {
-	protected DataObjectIterator childIterator;
+	protected DataItemIterator childIterator;
 	protected int currentIndex;
 	protected DataFolder dataFolder;
 
 
-	public DataObjectIterator(DataFolder dataList)
+	public DataItemIterator(DataFolder dataFolder)
 	{
-		this.dataFolder = dataList;
+		this.dataFolder = dataFolder;
 	}
 
 
@@ -63,10 +63,10 @@ public class DataObjectIterator implements Iterator<DataObject>
 	}
 
 
-	public DataObject next()
+	public DataItem next()
 	{
 		DataEntry nextEntry = dataFolder.get(currentIndex);
-        DataObject nextObject = null;
+        DataItem nextItem = null;
 
 		if (nextEntry instanceof DataFolder)
 		{
@@ -75,22 +75,22 @@ public class DataObjectIterator implements Iterator<DataObject>
 
 			if (childIterator.hasNext())
 			{
-                nextObject = childIterator.next();
+                nextItem = childIterator.next();
 			}
 			else
 			{
 				currentIndex++;
 				childIterator = null;
-                nextObject = next();
+                nextItem = next();
 			}
 		}
 		else
 		{
-            nextObject = (DataObject) nextEntry;
+            nextItem = (DataItem) nextEntry;
 			currentIndex++;
 		}
 
-		return nextObject;
+		return nextItem;
 	}
 
 

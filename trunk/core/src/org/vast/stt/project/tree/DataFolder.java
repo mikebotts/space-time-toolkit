@@ -36,19 +36,19 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 {
 	static final long serialVersionUID = 0;
 	protected String name;
-	protected DataObjectIterator iterator;
+	protected DataItemIterator iterator;
 	
 	
 	public DataFolder()
 	{
-		iterator = new DataObjectIterator(this);
+		iterator = new DataItemIterator(this);
 	}
 	
 	
 	public DataFolder(int listSize)
 	{
 		super(listSize);
-		iterator = new DataObjectIterator(this);
+		iterator = new DataItemIterator(this);
 	}
 	
 
@@ -78,7 +78,7 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 	}
 	
 	
-	public DataObjectIterator getItemIterator()
+	public DataItemIterator getItemIterator()
 	{
 		iterator.reset();
 		return iterator;
