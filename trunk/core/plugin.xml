@@ -33,7 +33,8 @@
          <menu id="STT.HelpMenu" label="&amp;Help">
             <separator name="group1"/>
          </menu>
-         <action class="org.vast.stt.actions.HelpMenu" id="STT.About" label="&amp;About..." menubarPath="STT.HelpMenu/projectGroup"/>
+         <action class="org.vast.stt.actions.HelpMenu" id="STT.About" label="&amp;About..." menubarPath="STT.HelpMenu/group1"/>
+         <action class="org.vast.stt.actions.UpdateMenu" id="STT.Update" label="&amp;Updates..." menubarPath="STT.HelpMenu/group1"/>
          <!-- Project Menu -->
          <menu id="STT.ProjectMenu" label="&amp;Project">
             <separator name="group1"/>
