@@ -161,7 +161,7 @@ public class ProjectWriter
 	 */
 	protected Element writeDisplayList(ArrayList<STTDisplay> displayList, Element parentElt)
 	{
-		Element listElt = dom.addElement(parentElt, "DisplayList");
+		Element listElt = dom.addElement(parentElt, "SceneList");
 		int listSize = displayList.size();
 
 		// add members
