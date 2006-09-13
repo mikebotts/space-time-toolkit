@@ -26,7 +26,7 @@ package org.vast.stt.dynamics;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.Scene;
+import org.vast.stt.project.scene.Scene;
 
 
 /**
@@ -59,7 +59,8 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         switch (e.type)
         {
             case SCENE_TIME_CHANGED:
-                updateTime(scene.getTimeSettings().getCurrentTime().getJulianTime());
+                if (enabled)
+                    updateTime(scene.getTimeSettings().getCurrentTime().getJulianTime());
                 break;
         }        
     }

@@ -29,7 +29,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.Scene;
+import org.vast.stt.project.scene.Scene;
 
 
 /**
@@ -147,7 +147,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         setPartName("Scene: " + scene.getName());
         
         // render whole scene tree
-        scene.getRenderer().drawScene();
+        scene.getRenderer().drawScene(scene);
     }
     
     
@@ -180,7 +180,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     public void paintControl(PaintEvent e)
     {
         if (scene != null)
-            scene.getRenderer().drawScene();
+            scene.getRenderer().drawScene(scene);
     }
     
     
@@ -193,7 +193,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
             
             // redraw the whole scene
-            scene.getRenderer().drawScene();
+            scene.getRenderer().drawScene(scene);
         }
     }
 	

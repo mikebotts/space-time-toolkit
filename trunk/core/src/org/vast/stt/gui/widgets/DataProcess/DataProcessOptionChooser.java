@@ -2,7 +2,7 @@ package org.vast.stt.gui.widgets.DataProcess;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.process.FlatGridGenerator_Process;
 import org.vast.stt.process.WCS_Process;
@@ -28,7 +28,7 @@ import org.vast.stt.process.WMS_Process;
 
 public class DataProcessOptionChooser extends OptionChooser {
 	
-	SensorMLProvider provider;
+    SMLProvider provider;
 	
 	public DataProcessOptionChooser(Composite parent) {
 		super(parent);
@@ -51,7 +51,7 @@ public class DataProcessOptionChooser extends OptionChooser {
 		optComp.redraw();
 	}	
 	
-	public void setProvider(SensorMLProvider prov){
+	public void setProvider(SMLProvider prov){
 		this.provider = prov;
 	}
 }

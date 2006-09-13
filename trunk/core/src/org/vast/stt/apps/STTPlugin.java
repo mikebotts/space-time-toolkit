@@ -1,7 +1,6 @@
 package org.vast.stt.apps;
 
 import java.util.Enumeration;
-
 import org.eclipse.ui.plugin.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
@@ -37,6 +36,7 @@ public class STTPlugin extends AbstractUIPlugin
 		super.start(context);
         try
         {
+            // preload process map file
             String fileLocation = null;
             Enumeration e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
             if (e.hasMoreElements())

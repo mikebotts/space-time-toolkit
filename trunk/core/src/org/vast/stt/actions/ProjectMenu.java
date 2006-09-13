@@ -21,7 +21,8 @@ import org.eclipse.ui.*;
 import org.vast.stt.commands.*;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Project;
-import org.vast.stt.project.Scene;
+import org.vast.stt.project.STTDisplay;
+import org.vast.stt.project.scene.Scene;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
@@ -39,15 +40,20 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         {
             try
             {
-                ArrayList<Scene> sceneList = project.getSceneList();
-                for (int i=0; i<sceneList.size(); i++)
+                ArrayList<STTDisplay> displayList = project.getDisplayList();
+                for (int i=0; i<displayList.size(); i++)
                 {
-                    Scene newScene = sceneList.get(i);
-                    ScenePageInput pageInput = new ScenePageInput(newScene);
-                    IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-                    oldWindow.openPage("STT.Perspective", pageInput);
-                    if (oldWindow.getActivePage().getInput() == null)
-                        oldWindow.close();
+                    STTDisplay nextDisplay = displayList.get(i);
+                    
+                    if (nextDisplay instanceof Scene)
+                    {
+                        Scene scene = (Scene)nextDisplay;
+                        ScenePageInput pageInput = new ScenePageInput(scene);
+                        IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+                        oldWindow.openPage("STT.Perspective", pageInput);
+                        if (oldWindow.getActivePage().getInput() == null)
+                            oldWindow.close();
+                    }
                 }
             }
             catch (WorkbenchException e)

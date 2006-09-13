@@ -3,7 +3,6 @@ package org.vast.stt.gui.widgets.symbolizer;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -22,7 +21,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.ows.sld.*;
 
 

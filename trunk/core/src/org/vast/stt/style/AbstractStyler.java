@@ -23,11 +23,10 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.BlockListIterator;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataStyler;
-import org.vast.stt.project.STTSpatialExtent;
-import org.vast.stt.project.Projection;
-import org.vast.stt.project.Projection.Crs;
+import org.vast.stt.project.scene.Projection;
+import org.vast.stt.project.scene.Projection.Crs;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.provider.STTSpatialExtent;
 
 
 /**

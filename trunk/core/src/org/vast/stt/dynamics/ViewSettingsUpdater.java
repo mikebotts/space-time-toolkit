@@ -13,7 +13,7 @@
 
 package org.vast.stt.dynamics;
 
-import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.scene.ViewSettings;
 
 
 /**

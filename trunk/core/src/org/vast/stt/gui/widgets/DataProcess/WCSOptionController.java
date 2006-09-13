@@ -3,7 +3,7 @@ package org.vast.stt.gui.widgets.DataProcess;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
@@ -29,10 +29,10 @@ import org.vast.stt.process.WCS_Process;
 
 public class WCSOptionController extends OptionController
 {
-	private SensorMLProvider provider;
+	private SMLProvider provider;
 	private WCSOptionHelper optionHelper;
 	
-	public WCSOptionController(Composite parent, WCS_Process wcsProc, SensorMLProvider provider){
+	public WCSOptionController(Composite parent, WCS_Process wcsProc, SMLProvider provider){
 		this.provider = provider;
 		optionHelper = new WCSOptionHelper(this, wcsProc, provider);
 		buildBasicControls(parent);

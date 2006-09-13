@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**

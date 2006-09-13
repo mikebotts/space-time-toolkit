@@ -14,7 +14,6 @@
 package org.vast.stt.project;
 
 import java.util.*;
-
 import org.vast.util.*;
 import org.vast.process.*;
 
@@ -45,9 +44,15 @@ public class Project
 	protected ResourceList resourceList;
 	protected ArrayList<Service> serviceList;	
 	protected ArrayList<DataProcess> processList;
-	protected ArrayList<Scene> sceneList;
+	protected ArrayList<STTDisplay> displayList;
 
 
+    public Project()
+    {
+        displayList = new ArrayList<STTDisplay>();
+    }
+    
+    
 	public String getAuthor()
 	{
 		return author;
@@ -132,15 +137,15 @@ public class Project
 	}
 
 
-	public ArrayList<Scene> getSceneList()
+	public ArrayList<STTDisplay> getDisplayList()
 	{
-		return sceneList;
+		return displayList;
 	}
 
 
-	public void setSceneList(ArrayList<Scene> sceneList)
+	public void setDisplayList(ArrayList<STTDisplay> displayList)
 	{
-		this.sceneList = sceneList;
+		this.displayList = displayList;
 	}
 
 

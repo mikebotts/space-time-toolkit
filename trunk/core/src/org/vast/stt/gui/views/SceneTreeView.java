@@ -13,8 +13,6 @@
 
 package org.vast.stt.gui.views;
 
-import java.util.Iterator;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -42,11 +40,11 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.catalog.LayerTransfer;
 import org.vast.stt.gui.widgets.catalog.SceneTreeDropListener;
-import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataFolder;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.SceneItem;
+import org.vast.stt.project.tree.DataEntry;
+import org.vast.stt.project.tree.DataFolder;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
 
 
 public class SceneTreeView extends SceneView implements IDoubleClickListener
@@ -296,23 +294,9 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         // if it's a list change visibility for all descendants
         if (selectedEntry instanceof DataFolder)
         {
-            DataFolder list = (DataFolder)selectedEntry;
-            Iterator<DataItem> it = list.getItemIterator();
-            boolean getVis = true;
-            boolean visibility = true;
-            
-            while (it.hasNext())
-            {
-                DataItem nextItem = it.next();
-                
-                if (getVis)
-                {
-                    visibility = !scene.isItemVisible(nextItem);
-                    getVis = false;
-                }
-                
-                scene.setItemVisibility(nextItem, visibility);
-            }
+            DataFolder folder = (DataFolder)selectedEntry;
+            boolean visibility = scene.isItemVisible(folder);
+            scene.setItemVisibility(folder, !visibility);
         }
         
         // if it's a single item, change its visibility

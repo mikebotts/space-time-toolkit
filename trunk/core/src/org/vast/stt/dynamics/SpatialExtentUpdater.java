@@ -13,7 +13,7 @@
 
 package org.vast.stt.dynamics;
 
-import org.vast.stt.project.STTSpatialExtent;
+import org.vast.stt.provider.STTSpatialExtent;
 
 
 /**

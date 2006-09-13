@@ -15,7 +15,7 @@ import org.vast.ows.sld.ScalarParameter;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**

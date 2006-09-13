@@ -18,9 +18,9 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.project.Scene;
-import org.vast.stt.project.STTSpatialExtent;
-import org.vast.stt.project.ViewSettings;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.Renderer;
 
 

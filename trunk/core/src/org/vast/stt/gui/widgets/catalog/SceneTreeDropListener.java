@@ -1,7 +1,6 @@
 package org.vast.stt.gui.widgets.catalog;
 
 import java.util.Iterator;
-
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -11,14 +10,14 @@ import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.DataEntry;
-import org.vast.stt.project.DataFolder;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataProvider;
-import org.vast.stt.project.DataTree;
+import org.vast.stt.project.tree.DataEntry;
+import org.vast.stt.project.tree.DataFolder;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.tree.DataTree;
+import org.vast.stt.provider.DataProvider;
 
 public class SceneTreeDropListener extends ViewerDropAdapter 
 {
@@ -123,7 +122,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
    }
    
    protected DataProvider createSensorMLProvider(OWSLayerCapabilities caps){
-	  SensorMLProvider prov = new SensorMLProvider();
+	  SMLProvider prov = new SMLProvider();
 	  
 	  // ... 
 	  

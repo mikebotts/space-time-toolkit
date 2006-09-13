@@ -14,8 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.*;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataStyler;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**

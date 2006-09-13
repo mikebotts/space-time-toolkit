@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.ows.sld.*;
 
 

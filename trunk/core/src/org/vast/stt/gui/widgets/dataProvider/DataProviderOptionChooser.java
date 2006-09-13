@@ -1,16 +1,10 @@
 package org.vast.stt.gui.widgets.dataProvider;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.vast.process.DataProcess;
-import org.vast.process.ProcessChain;
-import org.vast.stt.data.SWEProvider;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.swe.SWEProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.process.WCS_Process;
-import org.vast.stt.process.WMS_Process;
+
 
 /**
  * <p><b>Title:</b><br/>

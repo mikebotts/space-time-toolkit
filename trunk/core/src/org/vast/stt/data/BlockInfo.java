@@ -13,8 +13,8 @@
 
 package org.vast.stt.data;
 
-import org.vast.stt.project.STTSpatialExtent;
-import org.vast.stt.project.STTTimeExtent;
+import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.provider.STTTimeExtent;
 
 
 /**

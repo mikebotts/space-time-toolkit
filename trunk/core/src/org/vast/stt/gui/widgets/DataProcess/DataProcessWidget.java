@@ -3,10 +3,7 @@ package org.vast.stt.gui.widgets.DataProcess;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -19,15 +16,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
-import org.vast.stt.data.SWEProvider;
-import org.vast.stt.data.SensorMLProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.process.WMS_Process;
-import org.vast.stt.project.DataItem;
-import org.vast.stt.project.DataProvider;
-import org.vast.stt.project.DataStyler;
- 
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.provider.DataProvider;
+
+
 /**
  * <p><b>Title:</b><br/>
  * DataProcesWidget
@@ -72,12 +67,12 @@ public class DataProcessWidget extends CheckOptionTable
 		if(prov == null)
 			return;
 		//  Provider should be a SensorMLProvider
-		if(!(prov instanceof SensorMLProvider)) {
+		if(!(prov instanceof SMLProvider)) {
 			System.err.println("SWE Provider not yer supported");
 			return;
 		}
 		
-		setProvider((SensorMLProvider)prov);
+		setProvider((SMLProvider)prov);
 	}
 	
 	/**
@@ -85,8 +80,8 @@ public class DataProcessWidget extends CheckOptionTable
 	 * 
 	 * @param newProv
 	 */
-	public void setProvider(SensorMLProvider newProv){		
-		DataProcess process = ((SensorMLProvider)newProv).getProcess();
+	public void setProvider(SMLProvider newProv){		
+		DataProcess process = ((SMLProvider)newProv).getProcess();
 		//  The provider needs to be propagated down so updateData() can be called
 		//  when options are changed
 		((DataProcessOptionChooser)optionChooser).setProvider(newProv);

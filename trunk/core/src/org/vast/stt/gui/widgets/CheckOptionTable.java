@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.project.DataItem;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
