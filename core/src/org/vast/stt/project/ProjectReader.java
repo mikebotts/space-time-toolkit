@@ -100,7 +100,7 @@ public class ProjectReader extends XMLReader
         if (listElt != null)
             project.setServiceList(readServiceList(listElt));
 		
-        listElt = dom.getElement(projectElt, "DisplayList");
+        listElt = dom.getElement(projectElt, "SceneList");
         project.setDisplayList(readDisplayList(listElt));
         
 		listElt = dom.getElement(projectElt, "ResourceList");
