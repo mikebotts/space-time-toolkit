@@ -22,8 +22,8 @@ import org.vast.stt.project.AbstractDisplay;
 import org.vast.stt.project.scene.Projection;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.project.tree.DataObject;
 import org.vast.stt.project.tree.DataTree;
+import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
@@ -220,12 +220,12 @@ public class Scene extends AbstractDisplay
      */
     public void setItemVisibility(DataFolder folder, boolean visible)
     {
-        Iterator<DataObject> it = folder.getItemIterator();        
+        Iterator<DataItem> it = folder.getItemIterator();        
         while (it.hasNext())
         {
-            DataObject nextObj = it.next();
-            if (nextObj instanceof DataItem)
-                setItemVisibility((DataItem)nextObj, visible);
+            DataItem nextItem = it.next();
+            if (nextItem instanceof WorldItem)
+                setItemVisibility((WorldItem)nextItem, visible);
         }
     }
     
@@ -255,13 +255,13 @@ public class Scene extends AbstractDisplay
      */
     public boolean isItemVisible(DataFolder folder)
     {
-        Iterator<DataObject> it = folder.getItemIterator();
+        Iterator<DataItem> it = folder.getItemIterator();
         while (it.hasNext())
         {
-            DataObject nextObj = it.next();
-            if (nextObj instanceof DataItem)
+            DataItem nextItem = it.next();
+            if (nextItem instanceof WorldItem)
             {
-                if (isItemVisible((DataItem)nextObj))
+                if (isItemVisible((WorldItem)nextItem))
                     return true;
             }
         }

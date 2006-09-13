@@ -24,7 +24,7 @@
 package org.vast.stt.project.table;
 
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.tree.DataObject;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
@@ -41,7 +41,7 @@ import org.vast.stt.project.tree.DataObject;
  * @date Sep 12, 2006
  * @version 1.0
  */
-public class DataTable extends DataObject
+public class DataTable extends DataItem
 {
     protected int rowHeight;
     

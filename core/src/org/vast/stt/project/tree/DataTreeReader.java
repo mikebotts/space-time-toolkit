@@ -97,7 +97,12 @@ public class DataTreeReader extends XMLReader
 		if (dataEntryElt.getLocalName().equals("DataList"))
 			dataEntry = readDataList(dom, dataEntryElt);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
-			dataEntry = readDataItem(dom, dataEntryElt);
+			dataEntry = readWorldItem(dom, dataEntryElt);
+        else
+        {
+            XMLModuleReader reader = XMLRegistry.createReader(dataEntryElt.getLocalName());
+            dataEntry = (DataEntry)reader.read(dom, dataEntryElt);
+        }
 		
 		// if successful, setup common parameters
 		if (dataEntry != null)
@@ -155,9 +160,9 @@ public class DataTreeReader extends XMLReader
 	 * @param dataItemElt
 	 * @return
 	 */
-	public DataItem readDataItem(DOMReader dom, Element dataItemElt)
+	public WorldItem readWorldItem(DOMReader dom, Element dataItemElt)
 	{
-        DataItem dataItem = new DataItem();
+        WorldItem dataItem = new WorldItem();
         
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
