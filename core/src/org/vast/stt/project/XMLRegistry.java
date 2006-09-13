@@ -42,7 +42,10 @@ public class XMLRegistry
     public static XMLModuleReader createReader(String eltName)
     {
         Class readerClass = registeredReaders.get(eltName);
-        return (XMLModuleReader)createInstance(readerClass);
+        if (readerClass == null)
+            return null;
+        else
+            return (XMLModuleReader)createInstance(readerClass);
     }
     
     

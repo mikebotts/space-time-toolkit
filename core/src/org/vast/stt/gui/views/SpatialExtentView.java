@@ -68,7 +68,8 @@ public class SpatialExtentView extends DataItemView
         {
             case ITEM_OPTIONS_CHANGED:
             case PROVIDER_SPATIAL_EXTENT_CHANGED:
-                refreshViewAsync();
+                if (e.source != bboxWidget)
+                    refreshViewAsync();
         }
     }
 }

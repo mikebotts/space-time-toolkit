@@ -7,6 +7,13 @@ import org.osgi.framework.BundleContext;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.ProcessLoader;
 import org.vast.stt.gui.views.ExceptionPopup;
+import org.vast.stt.project.XMLRegistry;
+import org.vast.stt.project.scene.SceneReader;
+import org.vast.stt.project.table.DataTableReader;
+import org.vast.stt.provider.ows.OWSProviderReader;
+import org.vast.stt.provider.sml.SMLProviderReader;
+import org.vast.stt.provider.swe.SWEProviderReader;
+import org.vast.stt.provider.ve.VirtualEarthProviderReader;
 
 
 /**
@@ -34,9 +41,10 @@ public class STTPlugin extends AbstractUIPlugin
 	public void start(BundleContext context) throws Exception
 	{
 		super.start(context);
+        
+		// preload process map file
         try
         {
-            // preload process map file
             String fileLocation = null;
             Enumeration e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
             if (e.hasMoreElements())
@@ -48,6 +56,16 @@ public class STTPlugin extends AbstractUIPlugin
         {
             e.printStackTrace();
         }
+        
+        // register basic data providers reader/writers            
+        XMLRegistry.registerReader("SWEDataProvider", SWEProviderReader.class);
+        XMLRegistry.registerReader("OWSDataProvider", OWSProviderReader.class);
+        XMLRegistry.registerReader("SensorMLProvider", SMLProviderReader.class);
+        XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
+        
+        // register basic display type reader/writers
+        XMLRegistry.registerReader("Scene", SceneReader.class);
+        XMLRegistry.registerReader("DataTable", DataTableReader.class);
 	}
 
 
