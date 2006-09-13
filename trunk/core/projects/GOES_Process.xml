@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" xmlns:swe="http://www.opengis.net/swe" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" version="1.0">
-   <sml:ProcessModel id="WCS_PROCESS">
+   <sml:ProcessModel id="GOES_WCS_PROCESS">
       <sml:inputs>
          <sml:InputList>
             <sml:input name="bbox">
@@ -34,8 +34,9 @@
             <sml:output name="coverageData">
                <swe:DataGroup>
                   <!-- first group is grid point data (i.e. coverage domain) -->
-                  <swe:component name="domainData">
-                     <swe:DataGroup definition="urn:ogc:def:data:grid">
+                  <swe:component name="coverage">
+                  <!--<swe:component name="domainData">-->
+                        <swe:DataGroup definition="urn:ogc:def:data:grid">
                         <!--  first component is (lat, lon, tieptX, tieptY)[][] -->
                         <swe:component name="width">
                            <swe:Count id="GRID_WIDTH"/>
@@ -106,8 +107,8 @@
                      <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                   </swe:component>
                   <swe:component name="layer">
-                     <!--<swe:Category>GOES12_CONUS_REALTIME</swe:Category>-->
-                     <swe:Category>GOES_VISIBLE</swe:Category>
+                     <swe:Category>GOES12_CONUS_REALTIME</swe:Category>
+                     <!--<swe:Category>GOES_VISIBLE</swe:Category>-->
                   </swe:component>
                   <swe:component name="format">
                      <swe:Category definition="urn:ogc:def:identifier:mimeType">application/com-binary-base64</swe:Category>
