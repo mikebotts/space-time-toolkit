@@ -30,16 +30,17 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-//import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.commands.FitView;
+import org.vast.stt.commands.OpenView;
+import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.catalog.LayerTransfer;
 import org.vast.stt.gui.widgets.catalog.SceneTreeDropListener;
+import org.vast.stt.project.table.TableItem;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
@@ -52,7 +53,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg;
+	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg, tableImg;
     private ImageDescriptor fitSceneImg, fitItemImg;
 	private Font treeFont;
 	private Object[] expandedItems;
@@ -76,18 +77,25 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
             {
                 DataItem item = (DataItem)element;
                 
-                if (scene.isItemVisible(item))
+                if (item.getDataProvider() == null || item.getDataProvider().hasError())
+                    return itemErrImg;
+                
+                if (element instanceof WorldItem)
                 {
-                    if (item.getDataProvider() == null || item.getDataProvider().hasError())
-                        return itemErrImg;
-                    else
+                    if (scene.isItemVisible(item))
                         return itemVisImg;
+                    else
+                        return itemHidImg;
+                }
+                else if (element instanceof TableItem)
+                {
+                    return tableImg;
                 }
                 else
-                    return itemHidImg;
-            }
+                    return itemVisImg;
+            }            
             else
-				return itemVisImg;
+				return null;
 		}
 
 		@Override
@@ -178,6 +186,8 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         folderVisImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
         folderHidImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/table.gif");
+        tableImg = descriptor.createImage();
         
         // load menu images
         fitSceneImg = STTPlugin.getImageDescriptor("icons/fitScene.gif");
@@ -308,7 +318,17 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
             scene.setItemVisibility(item, !visible);
         }
         
+        // if it's a DataTable, open TableView
+        else if (selectedEntry instanceof TableItem)
+        {
+            TableItem table = (TableItem)selectedEntry;
+            OpenView openView = new OpenView();
+            openView.setViewID(TableView.ID);
+            openView.setData(table);
+            openView.execute();
+        }
+        
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
-    }  
+    }
 }

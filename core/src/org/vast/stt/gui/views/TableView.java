@@ -13,20 +13,15 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.gui.widgets.table.RichTable;
+import org.vast.stt.project.table.TableItem;
 
 
 /**
@@ -44,10 +39,11 @@ import org.vast.stt.event.STTEvent;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class TableView extends DataItemView implements PaintListener, ControlListener
+public class TableView extends DataItemView
 {
 	public static final String ID = "STT.TableView";
-    protected Canvas canvas;
+    protected RichTable table;
+    protected ScrolledComposite mainSC;
     
     
     public TableView()
@@ -58,9 +54,19 @@ public class TableView extends DataItemView implements PaintListener, ControlLis
     @Override
 	public void createPartControl(Composite parent)
 	{
-		canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
-		canvas.addControlListener(this);
-		canvas.addPaintListener(this);
+        mainSC = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+        FillLayout scLayout = new FillLayout();
+        scLayout.marginHeight = 0;
+        scLayout.marginWidth = 0;
+        mainSC.setLayout(scLayout);
+        
+        table = new RichTable(mainSC, SWT.NONE);
+        mainSC.setContent(table);
+        mainSC.setExpandVertical(true);
+        mainSC.setExpandHorizontal(true);        
+        mainSC.setContent(table);
+        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        
         super.createPartControl(parent);
 	}
     	
@@ -71,18 +77,18 @@ public class TableView extends DataItemView implements PaintListener, ControlLis
 		super.init(site);
 		
         // add show target action to toolbar
-		IAction ShowTargetAction = new Action()
-		{
-			public void run()
-			{
-				//boolean targetshown = scene.getViewSettings().isShowCameraTarget();
-                //scene.getViewSettings().setShowCameraTarget(!targetshown);
-                //scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
-			}
-		};
-        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
-        ShowTargetAction.setToolTipText("Toggle Target Tripod");
-		site.getActionBars().getToolBarManager().add(ShowTargetAction);
+//		IAction ShowTargetAction = new Action()
+//		{
+//			public void run()
+//			{
+//				//boolean targetshown = scene.getViewSettings().isShowCameraTarget();
+//                //scene.getViewSettings().setShowCameraTarget(!targetshown);
+//                //scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+//			}
+//		};
+//        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+//        ShowTargetAction.setToolTipText("Toggle Target Tripod");
+//		site.getActionBars().getToolBarManager().add(ShowTargetAction);
 	}
 	
 	
@@ -90,21 +96,21 @@ public class TableView extends DataItemView implements PaintListener, ControlLis
 	public void dispose()
 	{
         super.dispose();
-        canvas.dispose();
 	}
 	
 	
 	@Override
 	public void setFocus()
 	{
-		canvas.setFocus();
 	}
     
     
     @Override
     public void updateView()
     {
-        
+        setPartName("Table: " + item.getName());
+        table.drawTable(((TableItem)item).getTable());
+        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
     
     
@@ -120,25 +126,9 @@ public class TableView extends DataItemView implements PaintListener, ControlLis
     {       
         switch (e.type)
         {
-            case ITEM_VISIBILITY_CHANGED:
+            case ITEM_SYMBOLIZER_CHANGED:
+            case PROVIDER_DATA_CHANGED:
                 refreshViewAsync();
         }
     }
-    
-    
-    public void paintControl(PaintEvent e)
-    {
-        
-    }
-    
-    
-    public void controlResized(ControlEvent e)
-    {
-        
-    }
-	
-	
-	public void controlMoved(ControlEvent e)
-	{
-	}
 }

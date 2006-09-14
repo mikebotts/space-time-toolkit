@@ -29,6 +29,7 @@ import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
+import org.vast.stt.project.chart.ChartItemReader;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.DataProvider;
 import org.w3c.dom.Element;
@@ -37,11 +38,11 @@ import org.w3c.dom.NodeList;
 
 /**
  * <p><b>Title:</b>
- * Data Table Reader
+ * Table Item Reader
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Reads DataTable options from project XML.
+ * Reads TableItem options from project XML.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -49,14 +50,16 @@ import org.w3c.dom.NodeList;
  * @date Sep 13, 2006
  * @version 1.0
  */
-public class DataTableReader extends XMLReader implements XMLModuleReader
+public class TableItemReader extends XMLReader implements XMLModuleReader
 {
     protected DataTreeReader dataTreeReader;
+    protected ChartItemReader chartItemReader;
     
     
-    public DataTableReader()
+    public TableItemReader()
     {
         dataTreeReader = new DataTreeReader();
+        chartItemReader = new ChartItemReader();
     }
     
     
@@ -65,36 +68,49 @@ public class DataTableReader extends XMLReader implements XMLModuleReader
     {
         super.setObjectIds(objectIds);
         dataTreeReader.setObjectIds(objectIds);
+        chartItemReader.setObjectIds(objectIds);
     }
     
     
-    public Object read(DOMReader dom, Element tableElt)
+    public Object read(DOMReader dom, Element itemElt)
+    {
+        TableItem item = new TableItem();
+        
+        // data provider
+        Element providerElt = dom.getElement(itemElt, "dataProvider/*");
+        DataProvider provider = dataTreeReader.readDataProvider(dom, providerElt);
+        item.setDataProvider(provider);
+        
+        // read table style options
+        DataTable table = readTable(dom, itemElt);
+        item.getSymbolizers().add(table);        
+        
+        // enabled ?
+        String enabled = dom.getAttributeValue(itemElt, "enabled");
+        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
+            item.setEnabled(true);
+        else
+            item.setEnabled(false);
+        
+        return item;
+    }
+    
+    
+    public DataTable readTable(DOMReader dom, Element tableElt)
     {
         DataTable table = new DataTable();
         
-        // data provider
-        Element providerElt = dom.getElement(tableElt, "dataProvider/*");
-        DataProvider provider = dataTreeReader.readDataProvider(dom, providerElt);
-        table.setDataProvider(provider);
-        
         // column list
-        NodeList columnElts = dom.getElements(tableElt, "column/Column");
+        NodeList columnElts = dom.getElements(tableElt, "Column");
         int listSize = columnElts.getLength();
         
-        // read all stylers
+        // read all columns
         for (int i=0; i<listSize; i++)
         {
             Element columnElt = (Element)columnElts.item(i);
             DataColumn nextCol = readColumn(dom, columnElt);            
-            table.getSymbolizers().add(nextCol.getStyle());
+            table.getColumns().add(nextCol);
         }
-        
-        // enabled ?
-        String enabled = dom.getAttributeValue(tableElt, "enabled");
-        if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
-            table.setEnabled(true);
-        else
-            table.setEnabled(false);
         
         return table;
     }
@@ -104,10 +120,27 @@ public class DataTableReader extends XMLReader implements XMLModuleReader
     {
         DataColumn column = new DataColumn();
         
-        Element styleElt = dom.getElement(columnElt, "style");
-        Symbolizer symbolizer = dataTreeReader.readSymbolizer(dom, styleElt);
-        if (symbolizer != null)
-            column.setStyle(symbolizer);
+        // style/symbolizer list
+        NodeList symElts = dom.getElements(columnElt, "style");
+        int listSize = symElts.getLength();
+        
+        // read all stylers
+        for (int i=0; i<listSize; i++)
+        {
+            Element symElt = (Element)symElts.item(i);
+            Symbolizer symbolizer = null;
+            
+            // read column symbolizer (also supports sub chart or table) 
+            if (symElt.getLocalName().endsWith("ChartSymbolizer"))
+                symbolizer = chartItemReader.readChart(dom, symElt);
+            else if (symElt.getLocalName().endsWith("TableSymbolizer"))
+                symbolizer = readTable(dom, symElt);
+            else
+                symbolizer = dataTreeReader.readSymbolizer(dom, symElt);
+            
+            if (symbolizer != null)
+                column.getSymbolizers().add(symbolizer);
+        }
         
         // set column width
         int width = Integer.parseInt(dom.getElementValue(columnElt, "width"));
