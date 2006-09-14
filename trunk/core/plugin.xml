@@ -20,6 +20,8 @@
       <view name="Scene Tree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
       <view name="Scene Items" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
       <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView"/>
+      <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
+      <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="src/icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
