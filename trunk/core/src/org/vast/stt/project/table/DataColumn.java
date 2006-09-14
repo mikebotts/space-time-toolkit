@@ -23,6 +23,7 @@
 
 package org.vast.stt.project.table;
 
+import java.util.ArrayList;
 import org.vast.ows.sld.Symbolizer;
 
 
@@ -42,37 +43,14 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class DataColumn
 {
-    protected Symbolizer style;
     protected String name;
     protected int width;
+    protected ArrayList<Symbolizer> symbolizers;
     
     
     public DataColumn()
     {
-    }
-
-
-    public int getWidth()
-    {
-        return width;
-    }
-
-
-    public void setWidth(int width)
-    {
-        this.width = width;
-    }
-
-
-    public Symbolizer getStyle()
-    {
-        return style;
-    }
-
-
-    public void setStyle(Symbolizer style)
-    {
-        this.style = style;
+        symbolizers = new ArrayList<Symbolizer>();
     }
 
 
@@ -85,5 +63,29 @@ public class DataColumn
     public void setName(String name)
     {
         this.name = name;
+    }
+    
+    
+    public int getWidth()
+    {
+        return width;
+    }
+
+
+    public void setWidth(int width)
+    {
+        this.width = width;
+    }
+
+
+    public ArrayList<Symbolizer> getSymbolizers()
+    {
+        return symbolizers;
+    }
+
+
+    public void setSymbolizers(ArrayList<Symbolizer> symbolizers)
+    {
+        this.symbolizers = symbolizers;
     }
 }

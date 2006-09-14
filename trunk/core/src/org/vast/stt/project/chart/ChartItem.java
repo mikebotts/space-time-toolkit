@@ -23,7 +23,8 @@
 
 package org.vast.stt.project.chart;
 
-import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
@@ -32,7 +33,7 @@ import org.vast.ows.sld.Symbolizer;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Special Type of Symbolizer used to describe a chart type display
+ * Contains all info for a chart style display
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -40,13 +41,12 @@ import org.vast.ows.sld.Symbolizer;
  * @date Sep 12, 2006
  * @version 1.0
  */
-public class DataChart extends Symbolizer
+public class ChartItem extends DataItem
 {
-    
-    
-    public DataChart()
+
+    @Override
+    public void handleEvent(STTEvent e)
     {
         
     }
-
 }

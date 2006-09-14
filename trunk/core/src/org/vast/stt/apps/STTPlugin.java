@@ -8,8 +8,9 @@ import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.ProcessLoader;
 import org.vast.stt.gui.views.ExceptionPopup;
 import org.vast.stt.project.XMLRegistry;
+import org.vast.stt.project.chart.ChartItemReader;
 import org.vast.stt.project.scene.SceneReader;
-import org.vast.stt.project.table.DataTableReader;
+import org.vast.stt.project.table.TableItemReader;
 import org.vast.stt.provider.ows.OWSProviderReader;
 import org.vast.stt.provider.sml.SMLProviderReader;
 import org.vast.stt.provider.swe.SWEProviderReader;
@@ -65,7 +66,8 @@ public class STTPlugin extends AbstractUIPlugin
         
         // register basic display type reader/writers
         XMLRegistry.registerReader("Scene", SceneReader.class);
-        XMLRegistry.registerReader("DataTable", DataTableReader.class);
+        XMLRegistry.registerReader("TableItem", TableItemReader.class);
+        XMLRegistry.registerReader("ChartItem", ChartItemReader.class);
 	}
 
 
