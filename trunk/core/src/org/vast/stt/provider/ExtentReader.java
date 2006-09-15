@@ -107,6 +107,7 @@ public class ExtentReader extends XMLReader
                 updater.setTimeExtent(timeExtent);
                 timeExtent.setUpdater(updater);
                 provider.setAutoUpdate(true);
+                updater.setEnabled(true);
             }
         }
     }
