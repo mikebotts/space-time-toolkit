@@ -152,7 +152,6 @@ public class CapabilitiesWidget implements SelectionListener
 	}
 
 	private class GetCapsRunnable implements IRunnableWithProgress {
-		
 		String server;
 		ServiceType type;
 		List<OWSLayerCapabilities> caps;
@@ -201,9 +200,7 @@ public class CapabilitiesWidget implements SelectionListener
 		
 	/**
 	 *  get the Capabilities from the currently selected server
-	 *  TODO:  spawn another thread for this and add Prog Bars
 	 */
-	//protected void getCapabilities(String server, ServiceType type, int j){
 	protected List<OWSLayerCapabilities> readCapabilities(String server, ServiceType type){
 		ServerInfo info = capServers.getServerInfo(server, type);
 		OWSCapabilitiesReader reader;
