@@ -56,11 +56,17 @@
       <class>org.vast.stt.process.WCS_Process</class>
    </Process>
    
+   <!--  Delete WCS_Process2 when we are no longer testing with it -->
    <Process>
       <uri>urn:ogc:def:process:WCS:2.0</uri>
       <class>org.vast.stt.process.WCS_Process2</class>
    </Process>
    
+   <Process>
+      <uri>urn:ogc:def:process:WCS_image:2.0</uri>
+      <class>org.vast.stt.process.WCS_Image_Process</class>
+   </Process>
+
    <Process>
       <uri>urn:ogc:def:process:flatGridGenerator:1.0</uri>
       <class>org.vast.stt.process.FlatGridGenerator_Process</class>
