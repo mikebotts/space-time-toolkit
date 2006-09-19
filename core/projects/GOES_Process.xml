@@ -34,9 +34,8 @@
             <sml:output name="coverageData">
                <swe:DataGroup>
                   <!-- first group is grid point data (i.e. coverage domain) -->
-                  <swe:component name="coverage">
-                  <!--<swe:component name="domainData">-->
-                        <swe:DataGroup definition="urn:ogc:def:data:grid">
+                  <swe:component name="domainData">
+                     <swe:DataGroup definition="urn:ogc:def:data:grid">
                         <!--  first component is (lat, lon, tieptX, tieptY)[][] -->
                         <swe:component name="width">
                            <swe:Count id="GRID_WIDTH"/>
@@ -44,7 +43,7 @@
                         <swe:component name="length">
                            <swe:Count id="GRID_LENGTH"/>
                         </swe:component>
-                        <swe:component name="coverage">
+                        <swe:component name="grid">
                            <swe:DataArray arraySize="#GRID_LENGTH">
                               <swe:component name="row">
                                  <swe:DataArray arraySize="#GRID_WIDTH">
@@ -73,16 +72,16 @@
                   <!--  second group is imagery data (i.e. coverage range) -->
                   <swe:component name="rangeData">
                      <swe:DataGroup definition="urn:ogc:def:data:grid">
-                        <swe:component name="imageWidth">
-                           <swe:Count id="IMAGE_WIDTH"/>
+                        <swe:component name="width">
+                           <swe:Count id="COVERAGE_WIDTH"/>
                         </swe:component>
-                        <swe:component name="imageHeight">
-                           <swe:Count id="IMAGE_HEIGHT"/>
+                        <swe:component name="length">
+                           <swe:Count id="COVERAGE_LENGTH"/>
                         </swe:component>
-                        <swe:component name="imagery">
-                           <swe:DataArray arraySize="#IMAGE_HEIGHT">
+                        <swe:component name="coverage">
+                           <swe:DataArray arraySize="#COVERAGE_LENGTH">
                               <swe:component name="row">
-                                 <swe:DataArray arraySize="#IMAGE_WIDTH">
+                                 <swe:DataArray arraySize="#COVERAGE_WIDTH">
                                     <swe:component name="data">
                                        <swe:Count min="0" max="255"/>
                                     </swe:component>
@@ -117,10 +116,10 @@
                      <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
                   </swe:component>
                   <swe:component name="skipX">
-                     <swe:Count>5</swe:Count>
+                     <swe:Count>1</swe:Count>
                   </swe:component>
                   <swe:component name="skipY">
-                     <swe:Count>5</swe:Count>
+                     <swe:Count>1</swe:Count>
                   </swe:component>
                </swe:DataGroup>
             </sml:parameter>
