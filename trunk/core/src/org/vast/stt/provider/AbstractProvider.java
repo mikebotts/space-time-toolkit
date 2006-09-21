@@ -110,7 +110,7 @@ public abstract class AbstractProvider implements DataProvider
                         canceled = false;
                         
                         // update data
-                        System.out.println("Updating " + name + "...");
+                        System.out.println("Updating xxx " + name + "...");
                         updateData();
                         
                         synchronized(lock)
@@ -125,7 +125,8 @@ public abstract class AbstractProvider implements DataProvider
                     {
                         error = true;
                         redoUpdate = false;
-                        ExceptionSystem.display(e);
+                        //ExceptionSystem.display(e);
+                        System.err.println("Provider Exception:" + e);
                         dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
                     }
                 }
