@@ -7,10 +7,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -41,7 +44,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0
  */
 public class TimeSpinner 
-	implements TraverseListener, MouseListener, KeyListener, DisposeListener 
+	implements TraverseListener, MouseListener, KeyListener, DisposeListener, FocusListener
 {
 	Group mainGroup;
 	StyledText text;
@@ -126,6 +129,7 @@ public class TimeSpinner
 		gridData.heightHint = 15;
     	upBtn.setLayoutData(gridData);
     	upBtn.addMouseListener(this);
+    	upBtn.addFocusListener(this);
 		downBtn = new Button(spinnerGroup, SWT.ARROW | SWT.DOWN);
 		gridData = new GridData();
 		gridData.heightHint = 15;
@@ -194,26 +198,8 @@ public class TimeSpinner
 			return;
 		btnDown = true;
 		timeUp();
-		Runnable spinThread = new Runnable(){
-			public void run(){
-				try {		
-					Thread.sleep(500l);
-					while(btnDown){
-							Thread.sleep(60l);
-							if(!text.isDisposed()) {
-								text.getDisplay().asyncExec(spinUpThread);
-							}
-					}	
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				//System.err.println("");
-			}
-			
-		};
-		Thread thread = new Thread(spinThread);
-		thread.start();
+		SpinThread spinThread = new SpinThread(spinUpThread);
+		spinThread.start();
 	}
 
 	private void startSpinDownThread(){
@@ -221,28 +207,36 @@ public class TimeSpinner
 			return;
 		btnDown = true;
 		timeDown();
-		Runnable spinThread = new Runnable(){
-			public void run(){
-				try {		
-					Thread.sleep(500l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
-					while(btnDown){
-						Thread.sleep(60l);
-						if(!text.isDisposed()) {
-							text.getDisplay().asyncExec(spinDownThread);
-						}
-					}	
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				//System.err.println("");
-			}
-			
-		};
-		Thread thread = new Thread(spinThread);
-		thread.start();
+		SpinThread spinThread = new SpinThread(spinDownThread);
+		spinThread.start();
+
 	}
 
+	class SpinThread extends Thread {
+		Runnable childThread;
+		
+		SpinThread(Runnable child){
+			childThread = child;
+		}
+		
+		public void run(){
+			try {		
+				Thread.sleep(300l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
+				while(btnDown){
+					Thread.sleep(60l);
+					if(!text.isDisposed()) {
+						text.getDisplay().asyncExec(childThread);
+					}
+				}	
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//System.err.println("");
+		}
+		
+	}
+	
 	private void stopSpinThread(){
 		btnDown = false;
 		text.setFocus();
@@ -329,6 +323,15 @@ public class TimeSpinner
 	 */
 	public void widgetDisposed(DisposeEvent e) {
 		entryFont.dispose();
+	}
+
+	public void focusGained(FocusEvent e) {
+//		System.err.println(" *** Focus Gained");
+	}
+
+	public void focusLost(FocusEvent e) {
+//		System.err.println(" *** Focus Lost");
+		stopSpinThread();
 	}
 	
 }

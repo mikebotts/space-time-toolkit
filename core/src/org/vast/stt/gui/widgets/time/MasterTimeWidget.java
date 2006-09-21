@@ -116,6 +116,8 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 
     public void timeChanged(TimeSpinner spinner, double newTime)
     {
+    	if(scene == null)
+    		return;
         scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
         scene.getTimeSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
     }

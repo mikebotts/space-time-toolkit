@@ -87,6 +87,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		gridData.heightHint = 15;
     	upBtn.setLayoutData(gridData);
     	upBtn.addMouseListener(this);
+    	upBtn.addFocusListener(this);
 		downBtn = new Button(spinnerGroup, SWT.ARROW | SWT.DOWN);
 		gridData = new GridData();
 		gridData.heightHint = 15;
