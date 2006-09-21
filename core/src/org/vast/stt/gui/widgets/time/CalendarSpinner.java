@@ -93,6 +93,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		gridData.heightHint = 15;
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
+    	downBtn.addFocusListener(this);
 
     	tzCombo = new TimeZoneCombo(mainGroup);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);

@@ -135,6 +135,7 @@ public class TimeSpinner
 		gridData.heightHint = 15;
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
+    	downBtn.addFocusListener(this);
 	}
 
 	public void setEnabled(boolean b){
