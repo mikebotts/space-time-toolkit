@@ -36,12 +36,14 @@ public class StepSpinnerDialog extends Dialog {
 		comp.setLayout(new GridLayout(2, true));
 		//  step Spinner
 		stepSpinner = new TimeSpinner(comp, "Time Step");
-		stepSpinner.setValue(DEFAULT_TIME_STEP);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.horizontalSpan = 2;
 		stepSpinner.setLayoutData(gridData);
+		
+		stepSpinner.setValue(DEFAULT_TIME_STEP);
 		stepSpinner.resetCaret();
+		
 		return comp;
 	}
 

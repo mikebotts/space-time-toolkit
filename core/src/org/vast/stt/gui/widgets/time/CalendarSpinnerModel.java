@@ -87,19 +87,19 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 		return new Double(((double)calendar.getTimeInMillis()) / 1000.0); // + fseconds;
     }
 
-    public void increment(){
+    public void increment(int field){
     	Calendar calendar = getGoodCalendar();
 		calendar.set(years, months, days, hours, minutes, seconds);
-		stepCurrentField(calendar, 1);
+		stepCurrentField(calendar, field, 1);
     }
     
-    public void decrement(){
+    public void decrement(int field){
     	Calendar calendar = getGoodCalendar();
     	calendar.set(years, months, days, hours, minutes, seconds);
-		stepCurrentField(calendar, -1);
+		stepCurrentField(calendar, field, -1);
     }
     
-	private void stepCurrentField(Calendar cal, int step){
+	private void stepCurrentField(Calendar cal, int currentField, int step){
 		//  Roll the appropriate field
 		if(currentField == YEAR){
 			cal.add(Calendar.YEAR, step);

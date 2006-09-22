@@ -21,6 +21,6 @@ package org.vast.stt.gui.widgets;
 public interface SpinnerModel {
 	public Object getValue();
 	public void setValue(Object value);
-	public void increment();
-	public void decrement();
+	public void increment(int field);  //  field is the field to inc/dec in a multi-field model
+	public void decrement(int field);  //  ditto
 }

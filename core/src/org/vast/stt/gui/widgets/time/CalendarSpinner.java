@@ -33,12 +33,14 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		super();
 		formatStr = "MMM dd, yyyy HH:mm:ss";
 		tsModel = new CalendarSpinnerModel(formatStr);
+		start = tsModel.getStart();
+		len = tsModel.getLength();
 		initGui(parent, label, orientation);
 
 		//  Set initial time elsewhere
 		this.setValue(1.1e9);
 		text.setCaretOffset(13);
-		tsModel.selectField(text);
+		resetCaret();
 	}
 
 	public CalendarSpinner(Composite parent, String label) {
@@ -68,6 +70,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
 		text.addKeyListener(this);
+		text.addFocusListener(this);
 
 		// SpinnerGroup
 		Composite spinnerGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
@@ -112,7 +115,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 	public void setValue(double jul1970_seconds){
 		tsModel.setValue(new Double(jul1970_seconds));
 		text.setText(tsModel.toString());
-		tsModel.selectField(text);
+		//selectField();
 	}
 		
 	public void widgetDefaultSelected(SelectionEvent e) {

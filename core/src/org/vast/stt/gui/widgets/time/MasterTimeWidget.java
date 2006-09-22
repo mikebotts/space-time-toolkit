@@ -36,7 +36,6 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         stepSpinner.resetCaret();
     }
 
-
     public void init(Composite parent)
     {
         //  Scrolled Composite to hold everything
@@ -88,11 +87,9 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
-
     public void widgetDefaultSelected(SelectionEvent e)
     {
     }
-
 
     public void widgetSelected(SelectionEvent e)
     {
@@ -136,8 +133,8 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         }
         else
         {
-            absTimeSpinner.setValue(0);
-            stepSpinner.setValue(0);
+           ;// absTimeSpinner.setValue(0); // ???
+          // stepSpinner.setValue(60);
         }
     }
 }
