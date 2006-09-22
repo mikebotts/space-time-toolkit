@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -13,7 +14,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -48,6 +48,9 @@ public class TimeSpinner
 {
 	Group mainGroup;
 	StyledText text;
+	int currentField;  // the currently selected Field in the StyledText widget
+	private int currentCaretOffset = 0;
+	Integer [] start, len;  //  Ts Model loads these, but doesn't need them subsequently
 	String formatStr;
 	Font entryFont;
 	Button upBtn, downBtn;
@@ -69,13 +72,14 @@ public class TimeSpinner
 		this();
 		formatStr = "YYYY DDD HH:mm:SS";
 		tsModel = new TimeSpinnerModel("YYYY DDD HH:mm:SS");
+		start = tsModel.getStart();
+		len = tsModel.getLength();
 		initGui(parent, label);
 		//  Should really generate initial data from formatStr, but I don't 
 		//  think it will use this anyway.  In practice, setValue(double) will
 		//  be called at initialization
 		text.setText("0000 000 00:00:00");
-		text.setCaretOffset(13);
-		tsModel.selectField(text);
+		resetCaret();
 	}
 	
 	public void setLayoutData(GridData gridData){
@@ -110,6 +114,7 @@ public class TimeSpinner
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
 		text.addKeyListener(this);
+		text.addFocusListener(this);
 
 		// SpinnerGroup
 		Composite spinnerGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
@@ -148,20 +153,30 @@ public class TimeSpinner
 	}
 
 	private void timeUp(){
-		int caretPos = text.getCaretOffset();
-		tsModel.increment();
+		int caretPos;
+		if(text.isFocusControl())
+			caretPos = text.getCaretOffset();
+		else
+			caretPos = currentCaretOffset;
+		currentField = getCurrentField(caretPos);
+		tsModel.increment(currentField);
 		text.setText(tsModel.toString());
-		text.setCaretOffset(caretPos);
-		tsModel.selectField(text);
+		text.setCaretOffset(caretPos); //  reset cursorPos after text has been refreshed
+		hiliteField(currentField, true);
 		publishTimeChanged();
 	}
 	
 	private void timeDown(){
-		int caretPos = text.getCaretOffset();
-		tsModel.decrement();
+		int caretPos;
+		if(text.isFocusControl())
+			caretPos = text.getCaretOffset();
+		else
+			caretPos = currentCaretOffset;
+		currentField = getCurrentField(caretPos);
+		tsModel.decrement(currentField);
 		text.setText(tsModel.toString());
 		text.setCaretOffset(caretPos);
-		tsModel.selectField(text);
+		hiliteField(currentField, true);
 		publishTimeChanged();
 	}
 	
@@ -235,20 +250,16 @@ public class TimeSpinner
 			}
 			//System.err.println("");
 		}
-		
 	}
 	
 	private void stopSpinThread(){
 		btnDown = false;
 		text.setFocus();
-		//System.err.println("Value is " + tsModel.getValue());
-		//System.err.println("stopUpThread");
 	}
 
 	public void setValue(double value){
 		tsModel.setValue(new Double(value));
 		text.setText(tsModel.toString());
-		tsModel.selectField(text);
 	}
 	
 	public double getValue(){
@@ -256,11 +267,49 @@ public class TimeSpinner
 		return val.doubleValue();
 	}
 	
-	public void resetCaret(){
-		tsModel.resetCaret(text);
+	//  Just figure out the currentField based on caretPos
+	//  Don't do any hi-liting
+	public int getCurrentField(int caretPos){
+        for(int i=0; i<start.length; i++){
+            if(caretPos <= (start[i] + len[i])) 
+            	return i;
+        }
+        
+        System.err.println("TimeSpinnerModel.selectField():  field pos not found");
+        return 0;  //  Default to 0th field, but this is really an error
 	}
-	
-	/**
+
+	public void hiliteField(int field, boolean onOff){
+		//  Set new field to hilite colors
+        Display display = text.getDisplay();
+        Color fgColor, bgColor;
+        if(onOff) {
+        	fgColor = new Color(display, 228,228,228);
+        	bgColor = new Color(display,0,0,128);
+        } else {
+        	fgColor = text.getForeground();
+        	bgColor = text.getBackground();
+        }
+        	
+		StyleRange range = new StyleRange(start[field],len[field],fgColor, bgColor);
+		text.setStyleRange(range);
+	}
+
+	/** 
+     * Convenience method to hilite the minute field when spinner is refreshed
+     * @param text
+     */
+    public void resetCaret(){
+    	currentField = start.length - 2;
+    	currentCaretOffset = start[currentField];
+    	text.setCaretOffset(currentCaretOffset);
+    	hiliteField(currentField, true);
+    }
+    	
+    /********************************************************/
+    ////////   All listener methods from here down  /////////
+    /********************************************************/
+    /**
 	 * Override behavior of up-down-left-right arrow keys
 	 */
 	public void keyTraversed(TraverseEvent e) {
@@ -269,7 +318,9 @@ public class TimeSpinner
 		} else if (e.keyCode == SWT.ARROW_UP) {
 			timeUp();
 		} else {
-			tsModel.selectField(text);
+			hiliteField(currentField, false);
+			currentField = getCurrentField(text.getCaretOffset());
+			hiliteField(currentField, true);
 		}
 	}
 	
@@ -282,16 +333,19 @@ public class TimeSpinner
 			startSpinUpThread();
 		} else if(e.widget == downBtn) {
 			startSpinDownThread();
+		} else if(e.widget == text){
+			hiliteField(currentField, false);
+			currentField = getCurrentField(text.getCaretOffset());
+			hiliteField(currentField, true);
 		}
 	}
-
 
 	public void mouseUp(MouseEvent e) {
 		btnDown = false;
 		if(e.widget == upBtn || e.widget == downBtn) {
 			stopSpinThread();
 		} else  // e.widget == text
-			tsModel.selectField(text);
+			;//selectField();
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -327,12 +381,16 @@ public class TimeSpinner
 	}
 
 	public void focusGained(FocusEvent e) {
-//		System.err.println(" *** Focus Gained");
+		if(e.widget == text) {
+			text.setCaretOffset(currentCaretOffset);
+		}
 	}
 
 	public void focusLost(FocusEvent e) {
-//		System.err.println(" *** Focus Lost");
-		stopSpinThread();
+		if(e.widget == upBtn || e.widget == downBtn)
+			stopSpinThread();
+		else if(e.widget == text) {
+			currentCaretOffset = text.getCaretOffset();
+		}
 	}
-	
 }

@@ -40,7 +40,7 @@ public class TimeSpinnerModel implements SpinnerModel{
     boolean hasFseconds = false;  //  is fraction of seconds present?
     boolean rollEnabled = true;
     boolean allowNegative = false;
-    int currentField = 0;
+    //int currentField = 0; moved to TimeSpinner class
     //TODO: sub these constants out for something like the old Units class
 	static final int SECONDS_PER_MINUTE = 60;
 	static final int SECONDS_PER_HOUR = 3600;
@@ -125,7 +125,7 @@ public class TimeSpinnerModel implements SpinnerModel{
         len = (Integer [])lenList.toArray(new Integer[]{});
     }
 	
-	private void stepCurrentField(int step){
+	private void stepCurrentField(int currentField, int step){
 		if(currentField == YEAR){
             years += step;
             if(years<0)  years = maxYears;
@@ -147,13 +147,13 @@ public class TimeSpinnerModel implements SpinnerModel{
 			
 	}
 
-	public void increment(){
-		stepCurrentField(1);
+	public void increment(int field){
+		stepCurrentField(field, 1);
 		//return toString();
 	}
     
-	public void decrement(){
-		stepCurrentField(-1);
+	public void decrement(int field){
+		stepCurrentField(field, -1);
 		//return toString();
 	}
 	
@@ -250,44 +250,6 @@ public class TimeSpinnerModel implements SpinnerModel{
         }
     }
 
-    //  TODO  fix this.  It doesn't work right, and needs to be moved anyway
-    public void selectField(StyledText text){
-		int caretPos = text.getCaretOffset();
-		//  Force single characer selection
-		text.setSelection(caretPos,caretPos);
-        //System.err.println("** selField: text, caretPos = "  +  text.getText(0,3)+ ", " + caretPos);
-        for(int i=0; i<start.length; i++){
-            if(caretPos <= (start[i] + len[i])) {
-            	//if(i!=currentField) {
-            		//  Set old field to default fg/bg
-                    Display display = PlatformUI.getWorkbench().getDisplay();
-            		StyleRange range = new StyleRange(start[currentField],len[currentField],
-            								text.getForeground(), text.getBackground());
-            		text.setStyleRange(range);
-            		//  Set new field to hilite colors
-                    Color fgColor = new Color(display, 228,228,228);
-            	    Color bgColor = new Color(display,0,0,128);            	    
-            		range = new StyleRange(start[i],len[i],fgColor, bgColor);
-            		currentField = i;
-            		text.setStyleRange(range);
-            	//}
-            	return;
-            }
-            	
-        }
-        System.err.println("TimeSpinnerModel.selectField():  field pos not found");
-        currentField = -1;
-	}
-
-    /** 
-     * Convenience method to hilite the minute field when spinner is refreshed
-     * @param text
-     */
-    public void resetCaret(StyledText text){
-    	text.setCaretOffset(start[start.length -2]);
-    	selectField(text);
-    }
-    
     public Object getValue(){
         double timeStep = years * SECONDS_PER_YEAR;  // no leap year here.
         timeStep += days * SECONDS_PER_DAY;
@@ -334,5 +296,12 @@ public class TimeSpinnerModel implements SpinnerModel{
         seconds = isec;
     }
 
+    public Integer [] getStart() {
+    	return start;
+    }
+    
+    public Integer [] getLength() {
+    	return len;
+    }
     
 }
