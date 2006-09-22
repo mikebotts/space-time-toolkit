@@ -1,4 +1,3 @@
-
 package org.vast.stt.gui.widgets.time;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -17,7 +16,20 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.Scene;
 import org.vast.util.DateTime;
 
-
+/**
+ * <p><b>Title:</b><br/>
+ * MasterTimeWidget
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ *  Widget for MasterTime spinner, stepSpinner, realTime button
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Dec 21, 2005
+ * @version 1.0
+ */
 public final class MasterTimeWidget implements SelectionListener, TimeListener
 {
     private Group mainGroup;
