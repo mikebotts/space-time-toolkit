@@ -221,6 +221,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		{
 			if (e.stateMask == SWT.CTRL)
 				zooming = true;
+			else if (e.stateMask == SWT.SHIFT)
+				translating = true;
 			else
 				rotating = true;
 		}
