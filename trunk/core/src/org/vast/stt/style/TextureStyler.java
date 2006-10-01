@@ -48,6 +48,7 @@ public class TextureStyler extends AbstractStyler
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
         patch = new TexturePatchGraphic();
+        point.a = 255;
 	}
     
     
@@ -276,7 +277,7 @@ public class TextureStyler extends AbstractStyler
             if (param.isConstant())
             {
                 Object value = param.getConstantValue();
-                pixel.a = (Float)value;
+                pixel.a = (Float)value * 255;
             }
             else
             {

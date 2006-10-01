@@ -239,9 +239,12 @@ public class GoogleMapProvider extends AbstractProvider
         // create block list for textures
         DataGroup pixelData = new DataGroup(3);
         pixelData.setName("pixel");
-        pixelData.addComponent("blue", new DataValue(DataType.BYTE));
+        pixelData.addComponent("red", new DataValue(DataType.BYTE));
         pixelData.addComponent("green", new DataValue(DataType.BYTE));
-        pixelData.addComponent("red", new DataValue(DataType.BYTE));                    
+        pixelData.addComponent("blue", new DataValue(DataType.BYTE));
+        if (layerId.equals("roads"))
+            pixelData.addComponent("alpha", new DataValue(DataType.BYTE));
+        
         DataArray rowData = new DataArray(256);
         rowData.addComponent(pixelData);
         rowData.setName("row");                  

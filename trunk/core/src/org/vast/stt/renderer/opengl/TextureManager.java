@@ -333,7 +333,7 @@ public class TextureManager
                 index++;
                 buffer[index] = (byte)pixel.b;
                 index++;
-                buffer[index] = -1;//(byte)pixel.a;
+                buffer[index] = (byte)pixel.a;
                 index++;
             }
             
