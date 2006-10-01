@@ -86,28 +86,29 @@ public class GoogleMapProvider extends AbstractProvider
             try
             {
                 // create treeObject
-                BlockListItem[] blockArray = new BlockListItem[2];       
+                BlockListItem[] blockArray = new BlockListItem[2];
+                String urlString = null;
                 
-                // create quad id
-                GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
-                item.acceptUp(tileNumberGen);
-                String q = tileNumberGen.getTileNumber();
-
-                // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
-//                char layerChar = layerId.charAt(0);
-//                String urlString = "http://" + layerChar + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/" + layerChar + q;
-//                if (layerChar == 'r')
-//                    urlString += ".png?g=25";
-//                else
-//                    urlString += ".jpeg?g=25";
+                if (layerId.startsWith("satellite"))
+                {
+                    // build request URL for satellite data
+                    GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
+                    item.acceptUp(tileNumberGen);
+                    String q = tileNumberGen.getTileNumber();
+                    urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
+                }
+                else if (layerId.startsWith("map"))
+                {
+                    // build request URL for map data
+                    GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
+                    item.acceptUp(tileXYZGen);
+                    int x = tileXYZGen.getX();
+                    int y = tileXYZGen.getY();
+                    int z = tileXYZGen.getZoom();
+                    urlString = "http://mt0.google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
+                }
                 
-                q = q.replace('0', 'q');
-                q = q.replace('1', 'r');
-                q = q.replace('2', 't');
-                q = q.replace('3', 's');
-                String urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
-                
-                //System.out.println(urlString);
+                System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://local.live.com");
