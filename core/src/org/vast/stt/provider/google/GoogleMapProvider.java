@@ -122,7 +122,7 @@ public class GoogleMapProvider extends AbstractProvider
                 System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
-                connection.addRequestProperty("Referer", "http://local.live.com");
+                connection.addRequestProperty("Referer", "http://maps.google.com");
                 //connection.addRequestProperty("Connection", "Keep-Alive");
                 //connection.addRequestProperty("Keep-Alive", "1");
                 //long startTime = System.currentTimeMillis();
