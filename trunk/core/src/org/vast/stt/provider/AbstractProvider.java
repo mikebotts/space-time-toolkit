@@ -110,7 +110,7 @@ public abstract class AbstractProvider implements DataProvider
                         canceled = false;
                         
                         // update data
-                        System.out.println("Updating xxx " + name + "...");
+                        System.out.println("Updating " + name + "...");
                         updateData();
                         
                         synchronized(lock)

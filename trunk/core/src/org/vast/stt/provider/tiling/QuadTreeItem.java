@@ -416,29 +416,22 @@ public class QuadTreeItem extends SpatialExtent
     }
     
     
-    public void appendId2(StringBuffer buf)
+    public void acceptUp(QuadTreeItemVisitor visitor)
     {
+        visitor.visit(this);
         if (parent != null)
+            parent.acceptUp(visitor);
+    }
+    
+    
+    public void acceptDown(QuadTreeItemVisitor visitor)
+    {
+        visitor.visit(this);
+        
+        for (int i=0; i<4; i++)
         {
-            parent.appendId2(buf);
-            switch (quadrant)
-            {
-                case 0:
-                    buf.append('2');
-                    break;
-                    
-                case 1:
-                    buf.append('3');
-                    break;
-                    
-                case 2:
-                    buf.append('1');
-                    break;
-                    
-                case 3:
-                    buf.append('0');
-                    break;
-            }
+            if (children[i] != null)
+                children[i].acceptDown(visitor);
         }
     }
     

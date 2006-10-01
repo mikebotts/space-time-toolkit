@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.provider.ve;
+package org.vast.stt.provider.google;
 
 import java.awt.image.renderable.ParameterBlock;
 import java.awt.image.*;
@@ -40,7 +40,6 @@ import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTree;
 import org.vast.stt.provider.tiling.QuadTreeItem;
-
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
 
@@ -51,11 +50,10 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Requests Data from Microsoft Live Local servers
- * Ref: http://local.live.com/
- * Requests: http://r1.ortho.tiles.virtualearth.net/tiles/r0231.png?g=25
- *           http://a1.ortho.tiles.virtualearth.net/tiles/a2301.jpeg?g=25
- *           http://h0.ortho.tiles.virtualearth.net/tiles/h1220330.jpeg?g=25
+ * Requests Data from Google Map Keyhole servers
+ * Ref: http://kh{x}.google.com/
+ * Requests: http://kh0.google.com/kh?n=404&v=10&t=tsrrtqqttrtqrsq
+ *           http://mt0.google.com/mt?n=404&v=w2.25&x=0&y=0&zoom=16
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -63,7 +61,7 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class VirtualEarthProvider extends AbstractProvider
+public class GoogleMapProvider extends AbstractProvider
 {
     private final static double DTR = Math.PI/180;
     protected QuadTree quadTree;
@@ -91,20 +89,25 @@ public class VirtualEarthProvider extends AbstractProvider
                 BlockListItem[] blockArray = new BlockListItem[2];       
                 
                 // create quad id
-                VirtualEarthTileNumber tileNumberGen = new VirtualEarthTileNumber();
+                GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
                 item.acceptUp(tileNumberGen);
                 String q = tileNumberGen.getTileNumber();
 
                 // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
-                char layerChar = layerId.charAt(0);
-                String urlString = "http://" + layerChar + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/" + layerChar + q;
-                if (layerChar == 'r')
-                    urlString += ".png?g=25";
-                else
-                    urlString += ".jpeg?g=25";
+//                char layerChar = layerId.charAt(0);
+//                String urlString = "http://" + layerChar + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/" + layerChar + q;
+//                if (layerChar == 'r')
+//                    urlString += ".png?g=25";
+//                else
+//                    urlString += ".jpeg?g=25";
                 
-                System.out.println(urlString);
-                System.out.println(item);
+                q = q.replace('0', 'q');
+                q = q.replace('1', 'r');
+                q = q.replace('2', 't');
+                q = q.replace('3', 's');
+                String urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
+                
+                //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://local.live.com");
@@ -202,7 +205,7 @@ public class VirtualEarthProvider extends AbstractProvider
     }
         
     
-    public VirtualEarthProvider()
+    public GoogleMapProvider()
 	{
         quadTree = new QuadTree();
         

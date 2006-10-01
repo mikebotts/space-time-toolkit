@@ -11,6 +11,7 @@ import org.vast.stt.project.XMLRegistry;
 import org.vast.stt.project.chart.ChartItemReader;
 import org.vast.stt.project.scene.SceneReader;
 import org.vast.stt.project.table.TableItemReader;
+import org.vast.stt.provider.google.GoogleMapProviderReader;
 import org.vast.stt.provider.ows.OWSProviderReader;
 import org.vast.stt.provider.sml.SMLProviderReader;
 import org.vast.stt.provider.swe.SWEProviderReader;
@@ -63,6 +64,7 @@ public class STTPlugin extends AbstractUIPlugin
         XMLRegistry.registerReader("OWSDataProvider", OWSProviderReader.class);
         XMLRegistry.registerReader("SensorMLProvider", SMLProviderReader.class);
         XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
+        XMLRegistry.registerReader("GoogleMapProvider", GoogleMapProviderReader.class);
         
         // register basic display type reader/writers
         XMLRegistry.registerReader("Scene", SceneReader.class);
