@@ -517,6 +517,9 @@
                                        <sld:BlueChannel>
                                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
                                        </sld:BlueChannel>
+                                       <sld:AlphaChannel>
+                                          <sld:SourceChannelName>image/row/pixel/alpha</sld:SourceChannelName>
+                                       </sld:AlphaChannel>
                                     </sld:ChannelSelection>
                                     <sldx:RasterDimensions>
                                        <sld:CssParameter name="width">256</sld:CssParameter>
