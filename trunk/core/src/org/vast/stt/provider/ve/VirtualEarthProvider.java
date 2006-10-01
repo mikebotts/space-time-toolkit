@@ -103,8 +103,7 @@ public class VirtualEarthProvider extends AbstractProvider
                 else
                     urlString += ".jpeg?g=25";
                 
-                System.out.println(urlString);
-                System.out.println(item);
+                //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://local.live.com");

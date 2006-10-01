@@ -49,6 +49,7 @@ public class TextureManager
                = new Hashtable<Symbolizer, GLTextureTable>();
     protected GL gl;
     protected GLU glu;
+    protected boolean forceNoExt = false;
     protected boolean npotSupported;
     protected boolean normalizationRequired;
     
@@ -72,6 +73,16 @@ public class TextureManager
     {
         this.gl = gl;
         this.glu = glu;
+        
+        if(forceNoExt)
+        {
+            MessageSystem.display("--> NPOT textures NOT supported <--", false);
+            MessageSystem.display("--> Textures will be padded with transparent pixels or resampled <--", false);
+            gl.glEnable(GL.GL_TEXTURE_2D);
+            npotSupported = false;
+            normalizationRequired = true;
+            return;
+        }
         
         // find out which texture 2D target to use
         String glExtensions = gl.glGetString(GL.GL_EXTENSIONS);

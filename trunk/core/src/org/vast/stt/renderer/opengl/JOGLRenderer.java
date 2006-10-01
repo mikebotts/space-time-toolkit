@@ -573,6 +573,7 @@ public class JOGLRenderer extends Renderer
             gl.glPolygonOffset(0.5f, zBufferOffset*100);
             textureRenderer.patch = patch;
             textureRenderer.blockCount = 1;
+            textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
             displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer);
             updateZBufferOffset();
         }

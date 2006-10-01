@@ -54,6 +54,7 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * Ref: http://kh{x}.google.com/
  * Requests: http://kh0.google.com/kh?n=404&v=10&t=tsrrtqqttrtqrsq
  *           http://mt0.google.com/mt?n=404&v=w2.25&x=0&y=0&zoom=16
+ *           http://mt0.google.com/mt?n=404&v=w2t.26&x=0&y=0&zoom=16
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -96,6 +97,16 @@ public class GoogleMapProvider extends AbstractProvider
                     item.acceptUp(tileNumberGen);
                     String q = tileNumberGen.getTileNumber();
                     urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
+                }
+                else if (layerId.startsWith("roads"))
+                {
+                    // build request URL for road/boundary data
+                    GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
+                    item.acceptUp(tileXYZGen);
+                    int x = tileXYZGen.getX();
+                    int y = tileXYZGen.getY();
+                    int z = tileXYZGen.getZoom();
+                    urlString = "http://mt0.google.com/mt?n=404&v=w2t.26&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 else if (layerId.startsWith("map"))
                 {
