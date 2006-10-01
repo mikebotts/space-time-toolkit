@@ -432,6 +432,180 @@
                         </member>
                         <member visible="false">
                            <DataItem enabled="true">
+                              <name>Google Map Imagery (Road + Boundary Map)</name>
+                              <dataProvider href="#GOOGLE_MAP"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Google Map Imagery (Roads Overlay)</name>
+                              <dataProvider href="#GOOGLE_ROADS"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Google Map Imagery (Satellite)</name>
+                              <dataProvider href="#GOOGLE_SAT"/>
+                              <style>
+                                 <sldx:TextureSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:GridDimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:GridDimensions>
+                                    <sld:Opacity>1.0</sld:Opacity>
+                                    <sld:ChannelSelection>
+                                       <sld:RedChannel>
+                                          <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                       </sld:RedChannel>
+                                       <sld:GreenChannel>
+                                          <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                       </sld:GreenChannel>
+                                       <sld:BlueChannel>
+                                          <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                       </sld:BlueChannel>
+                                    </sld:ChannelSelection>
+                                    <sldx:RasterDimensions>
+                                       <sld:CssParameter name="width">256</sld:CssParameter>
+                                       <sld:CssParameter name="length">256</sld:CssParameter>
+                                    </sldx:RasterDimensions>
+                                 </sldx:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sldx:GridBorderSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sldx:Dimensions>
+                                       <sld:CssParameter name="width">10</sld:CssParameter>
+                                       <sld:CssParameter name="length">10</sld:CssParameter>
+                                    </sldx:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sldx:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem enabled="true">
                               <name>SRTM Data</name>
                               <dataProvider xlink:href="#SRTM_CHAIN"/>
                               <style>
@@ -1377,6 +1551,39 @@
                      </BoundingBox>
                   </spatialExtent>
                </VirtualEarthProvider>
+            </member>
+            <member>
+               <GoogleMapProvider id="GOOGLE_MAP">
+                  <name>Google Map Imagery</name>
+                  <layerId>map</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </GoogleMapProvider>
+            </member>
+            <member>
+               <GoogleMapProvider id="GOOGLE_ROADS">
+                  <name>Google Map Imagery</name>
+                  <layerId>roads</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </GoogleMapProvider>
+            </member>
+            <member>
+               <GoogleMapProvider id="GOOGLE_SAT">
+                  <name>Google Map Imagery</name>
+                  <layerId>satellite</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </GoogleMapProvider>
             </member>
             <member>
                <OWSDataProvider id="PROVIDER_13">
