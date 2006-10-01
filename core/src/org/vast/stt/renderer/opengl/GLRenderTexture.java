@@ -60,8 +60,8 @@ public class GLRenderTexture extends GLRunnable
     public void run()
     {
         GridPointGraphic point;
-        float uScale = 0.0f;
-        float vScale = 0.0f;
+        float uScale = 1.0f;
+        float vScale = 1.0f;
         int count = 0;
                 
         RasterTileGraphic tex = patch.getTexture();
@@ -69,7 +69,6 @@ public class GLRenderTexture extends GLRunnable
                 
         // select fill mode
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-
         gl.glDisable(GL.GL_CULL_FACE);            
         gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
         
