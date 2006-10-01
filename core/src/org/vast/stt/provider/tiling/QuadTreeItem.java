@@ -219,7 +219,7 @@ public class QuadTreeItem extends SpatialExtent
         double sizeRatio = bboxSize / tileSize;
         
         // we reached the good level
-        if (sizeRatio >= 8 || level == maxLevel)
+        if (sizeRatio >= 4 || level == maxLevel)
         {
             addToMatchingItemsAndSort(matchingItems, bbox);
         }
