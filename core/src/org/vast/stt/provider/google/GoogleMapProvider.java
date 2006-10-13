@@ -76,6 +76,7 @@ public class GoogleMapProvider extends AbstractProvider
     {
         protected QuadTreeItem item;
         
+        
         public GetTileRunnable(QuadTreeItem item)
         {
             this.item = item;
@@ -134,8 +135,7 @@ public class GoogleMapProvider extends AbstractProvider
                 pb.add(imgStream);            
                 PNGDecodeParam pngParams = new PNGDecodeParam();
                 pngParams.setExpandPalette(true);
-                pb.add(pngParams);
-                
+                pb.add(pngParams);                
                 RenderedOp rop = JAI.create("stream", pb);
                 RenderedImage img = rop.createInstance();
                 imgStream.close();
@@ -169,8 +169,8 @@ public class GoogleMapProvider extends AbstractProvider
                 // build grid
                 int gridWidth = 10;
                 int gridLength = 10;
-                double minY = yToLat(item.getMinY());
-                double maxY = yToLat(item.getMaxY());
+                double minY = item.getMinY();
+                double maxY = item.getMaxY();
                 double minX = item.getMinX();
                 double maxX = item.getMaxX();
                 double dX = (maxX - minX) / (gridWidth-1);
@@ -183,12 +183,12 @@ public class GoogleMapProvider extends AbstractProvider
                 {
                     for (int u=0; u<gridWidth; u++)
                     {
-                        double lon = minX + dX * u;
-                        double lat = maxY - dY * v;
+                        double x = minX + dX * u;
+                        double y = maxY - dY * v;
                         
                         // write lat and lon value
-                        gridBlock.setDoubleValue(valCount, lat);
-                        gridBlock.setDoubleValue(valCount+1, lon);
+                        gridBlock.setDoubleValue(valCount, yToLat(y));
+                        gridBlock.setDoubleValue(valCount+1, x);
                         valCount += 2;
                     }
                 }
@@ -203,6 +203,7 @@ public class GoogleMapProvider extends AbstractProvider
                     
                     // remove sub items now that we have the new tile
                     removeChildrenData(item);
+                    removeParent(item);
                     
                     // send event for redraw
                     dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
@@ -321,6 +322,7 @@ public class GoogleMapProvider extends AbstractProvider
             
             // also remove tree item itself from parent
             nextItem.getParent().setChild(nextItem.getQuadrant(), null);
+            //System.out.println("Item unused " + nextItem);
         }
         
         // send event to cleanup stylers
@@ -389,6 +391,36 @@ public class GoogleMapProvider extends AbstractProvider
                 removeChildrenData(childItem);
             }
         }
+    }
+    
+    
+    /**
+     * Remove parent if all its children are shown
+     * @param item
+     */
+    protected void removeParent(QuadTreeItem item)
+    {
+        QuadTreeItem parent = item.getParent();
+        for (byte i=0; i<4; i++)
+        {
+            QuadTreeItem child = parent.getChild(i);
+            if (child.getData() == null)
+                return;
+        }
+        
+        // remove parent blocks from lists
+        BlockListItem[] blockArray = (BlockListItem[])parent.getData();        
+        if (blockArray != null)
+        {                
+            for (int b=0; b<blockArray.length; b++)
+            {
+                // remove items from list
+                if (blockArray[b] != null)
+                    blockLists[b].remove(blockArray[b]);
+            }
+        }
+        
+        removeParent(parent);
     }
     
     

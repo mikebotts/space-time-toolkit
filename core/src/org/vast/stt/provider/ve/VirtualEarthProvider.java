@@ -153,8 +153,8 @@ public class VirtualEarthProvider extends AbstractProvider
                 // build grid
                 int gridWidth = 10;
                 int gridLength = 10;
-                double minY = yToLat(item.getMinY());
-                double maxY = yToLat(item.getMaxY());
+                double minY = item.getMinY();
+                double maxY = item.getMaxY();
                 double minX = item.getMinX();
                 double maxX = item.getMaxX();
                 double dX = (maxX - minX) / (gridWidth-1);
@@ -167,12 +167,12 @@ public class VirtualEarthProvider extends AbstractProvider
                 {
                     for (int u=0; u<gridWidth; u++)
                     {
-                        double lon = minX + dX * u;
-                        double lat = maxY - dY * v;
+                        double x = minX + dX * u;
+                        double y = maxY - dY * v;
                         
                         // write lat and lon value
-                        gridBlock.setDoubleValue(valCount, lat);
-                        gridBlock.setDoubleValue(valCount+1, lon);
+                        gridBlock.setDoubleValue(valCount, yToLat(y));
+                        gridBlock.setDoubleValue(valCount+1, x);
                         valCount += 2;
                     }
                 }

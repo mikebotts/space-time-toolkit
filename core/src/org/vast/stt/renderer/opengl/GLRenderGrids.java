@@ -83,6 +83,8 @@ public class GLRenderGrids extends GLRunnable
                 gl.glLineWidth(patch.lineWidth);
                 gl.glBegin(GL.GL_QUAD_STRIP);
                 
+                //System.err.print("\nLine: " + v);
+                
                 for (int u = 0; u < patch.width; u++)
                 {
                     for (int p=0; p<2; p++)
@@ -99,7 +101,10 @@ public class GLRenderGrids extends GLRunnable
                         gl.glColor4f(point.r, point.g, point.b, point.a);
                         gl.glVertex3d(point.x, point.y, point.z);
                     }
+                    
+                    //System.err.print(" " + u);
                 }
+                
                 
                 gl.glEnd();
             }
