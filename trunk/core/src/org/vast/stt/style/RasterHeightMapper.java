@@ -19,13 +19,14 @@ import org.vast.ows.sld.MappingFunction;
  * @date Apr 3, 2006
  * @version 1.0
  */
-public class RasterHeightMapper extends PropertyMapper
+public class RasterHeightMapper extends DimensionMapper
 {
     RasterTileGraphic raster;
     
     
-    public RasterHeightMapper(RasterTileGraphic raster, MappingFunction mappingFunction)
+    public RasterHeightMapper(int dimensionIndex, RasterTileGraphic raster, MappingFunction mappingFunction)
     {
+        this.dimensionIndex = dimensionIndex;
         this.raster = raster;
         this.mappingFunction = mappingFunction;
         if (mappingFunction != null)
@@ -42,5 +43,11 @@ public class RasterHeightMapper extends PropertyMapper
         }
         else
             raster.height = data.getIntValue();
-    }    
+    }
+    
+    
+    public void setDimensionSize(int size)
+    {
+        raster.height = size;
+    }
 }

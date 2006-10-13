@@ -44,64 +44,68 @@
                         <dataProvider xlink:href="#GOES_PROCESS"/>
                         <style>
                            <sldx:TextureSymbolizer enabled="true">
+                              <sldx:Grid>
+                                 <sldx:Dimensions>
+                                    <sldx:Axis name="width">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                    </sldx:Axis>
+                                    <sldx:Axis name="length">
+                                       <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                    </sldx:Axis>
+                                 </sldx:Dimensions>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                              </sldx:Grid>
+                              <sldx:Raster>
+                                 <sldx:Dimensions>
+                                    <sldx:Axis name="width">
+                                       <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                    </sldx:Axis>
+                                    <sldx:Axis name="height">
+                                       <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                    </sldx:Axis>
+                                 </sldx:Dimensions>
+                                 <sld:Opacity>1.0</sld:Opacity>                              
+                                 <sld:ChannelSelection>
+                                    <sld:GrayChannel>
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                          <Gain>1.0</Gain>
+                                       </LinearAdjustment>
+                                    </sld:GrayChannel>
+                                 </sld:ChannelSelection>
+                              </sldx:Raster>
+                           </sldx:TextureSymbolizer>
+                        </style>
+                        <style>
+                           <sldx:GridMeshSymbolizer enabled="false">
+                              <sldx:Dimensions>
+                                 <sldx:Axis name="width">
+                                    <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                 </sldx:Axis>
+                                 <sldx:Axis name="length">
+                                    <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                 </sldx:Axis>
+                              </sldx:Dimensions>
                               <sld:Geometry>
                                  <sld:CssParameter name="geometry-x">
-                                    <LinearAdjustment>
-                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
-                                       <!-- <Gain>0.017453292519943295769236907684886</Gain> Radians conversion not needed-->
-                                    </LinearAdjustment>
+                                    <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-y">
-                                    <LinearAdjustment>
-                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
-                                       <!--<Gain>0.017453292519943295769236907684886</Gain> -->
-                                    </LinearAdjustment>
+                                    <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
-                              
-                              <!--
-                                 <sldx:GridDimensions>
-                                 <sld:CssParameter name="width">20</sld:CssParameter>
-                                 <sld:CssParameter name="length">20</sld:CssParameter>
-                                 </sldx:GridDimensions>
-                              -->
-                              <sldx:GridDimensions>
-                                 <sld:CssParameter name="width">
-                                    <ogc:PropertyName>coverageData/domainData/width</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="length">
-                                    <ogc:PropertyName>coverageData/domainData/length</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sldx:GridDimensions>
-                              
-                              <sld:Opacity>1.0</sld:Opacity>
-                              
-                              <sld:ChannelSelection>
-                                 <sld:RedChannel>
-                                    <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                 </sld:RedChannel>
-                                 <sld:GreenChannel>
-                                    <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                 </sld:GreenChannel>
-                                 <sld:BlueChannel>
-                                    <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                 </sld:BlueChannel>
-                              </sld:ChannelSelection>
-                              
-                              <sldx:RasterDimensions>
-                                 <sld:CssParameter name="width">
-                                    <ogc:PropertyName>coverageData/rangeData/width</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="length">
-                                    <ogc:PropertyName>coverageData/rangeData/height</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sldx:RasterDimensions>
-                              <!--
-                                 <sld:Stroke>
-                                 <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
                                  <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                                 </sld:Stroke>-->
-                           </sldx:TextureSymbolizer>
+                              </sld:Stroke>
+                           </sldx:GridMeshSymbolizer>
                         </style>
                      </DataItem>
                   </member>
@@ -146,7 +150,7 @@
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <spatialExtent tiling="1x1"> 
                      <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-87.2,33.4 -86.3,34.4</gml:coordinates>
+                        <gml:coordinates>-94.2,23.4 -85.3,44.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./GOES_Process.xml#GOES_WCS_PROCESS"/>

@@ -16,7 +16,6 @@ package org.vast.stt.style;
 import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
-import org.vast.data.IndexerTreeBuilder;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockList;
@@ -110,14 +109,15 @@ public abstract class AbstractStyler implements DataStyler
     
     public void addPropertyMapper(String componentPath, PropertyMapper newMapper)
     {
-        // figure out which list it is
-        String listName = componentPath.substring(0, componentPath.indexOf('/'));
+        // extract list name from component path
+        String listName = componentPath;
+        if (componentPath.indexOf('/') != -1)
+            listName = componentPath.substring(0, componentPath.indexOf('/'));
         
         // retrieve previously created builder or create a new one
         IndexerTreeBuilder builder = treeBuilders.get(listName);
         if (builder == null)
         {
-        	//  dataNode is null here when I am trying to add a new Styler - TC
             BlockList list = dataNode.getList(listName);
             if (list == null) return;
             builder = new IndexerTreeBuilder(list.getBlockStructure());
@@ -134,15 +134,6 @@ public abstract class AbstractStyler implements DataStyler
         {
             builder.addVisitor(componentPath, newMapper);
         }
-    }
-    
-    
-    protected int[] getIndexList(int u, int v, int w)
-    {
-        indexList[0] = u;
-        indexList[1] = v;
-        indexList[2] = w;
-        return indexList;
     }
     
     

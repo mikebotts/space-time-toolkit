@@ -51,37 +51,51 @@ public class ExtentReader extends XMLReader
      */
     public void readSpatialExtent(DataProvider provider, DOMReader dom, Element spElt)
     {
-         if (spElt != null)
+        if (spElt != null)
          {
-             STTSpatialExtent spatialExtent = provider.getSpatialExtent();
+            Element bboxElt = dom.getElement(spElt, "BoundingBox");
+            
+            // try to get the bbox from the list
+            Object obj = findExistingObject(dom, bboxElt);
+            if (obj != null)
+            {
+                provider.setSpatialExtent((STTSpatialExtent)obj);
+                return;
+            }
+            
+            // otherwise change the provider one
+            STTSpatialExtent spatialExtent = provider.getSpatialExtent();
              
-             // read bbox
-             String coordText = dom.getElementValue(spElt, "BoundingBox/coordinates");
-             String [] coords = coordText.split(" |,");
+            // read bbox
+            String coordText = dom.getElementValue(bboxElt, "coordinates");
+            String [] coords = coordText.split(" |,");
              
-             double minX = Double.parseDouble(coords[0]);
-             double minY = Double.parseDouble(coords[1]);
-             double maxX = Double.parseDouble(coords[2]);
-             double maxY = Double.parseDouble(coords[3]);
+            double minX = Double.parseDouble(coords[0]);
+            double minY = Double.parseDouble(coords[1]);
+            double maxX = Double.parseDouble(coords[2]);
+            double maxY = Double.parseDouble(coords[3]);
              
-             spatialExtent.setMinX(minX);
-             spatialExtent.setMinY(minY);
-             spatialExtent.setMaxX(maxX);
-             spatialExtent.setMaxY(maxY);
+            spatialExtent.setMinX(minX);
+            spatialExtent.setMinY(minY);
+            spatialExtent.setMaxX(maxX);
+            spatialExtent.setMaxY(maxY);
              
-             // read tiling info
-             String tileDims = dom.getAttributeValue(spElt, "tiling");
-             if (tileDims != null)
-             {
-                 String[] dims = tileDims.split("x");
+            // read tiling info
+            String tileDims = dom.getAttributeValue(spElt, "tiling");
+            if (tileDims != null)
+            {
+                String[] dims = tileDims.split("x");
+                
+                int tileX = Integer.parseInt(dims[0]);
+                int tileY = Integer.parseInt(dims[1]);
                  
-                 int tileX = Integer.parseInt(dims[0]);
-                 int tileY = Integer.parseInt(dims[1]);
-                 
-                 spatialExtent.setXTiles(tileX);
-                 spatialExtent.setYTiles(tileY);
-                 spatialExtent.setTilingEnabled(true);
-             }
+                spatialExtent.setXTiles(tileX);
+                spatialExtent.setYTiles(tileY);
+                spatialExtent.setTilingEnabled(true);
+            }
+             
+            // store that in the hashtable
+            registerObjectID(dom, spElt, spatialExtent);
          }
     }
     

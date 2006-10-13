@@ -202,6 +202,8 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             outputCoverageWidth.getData().setIntValue(coverageWidth);
             outputCoverageLength.getData().setIntValue(coverageLength);
             
+            ((DataGroup)output.getComponent(0)).combineDataBlocks();
+            ((DataGroup)output.getComponent(1)).combineDataBlocks();
             output.combineDataBlocks();
         }
         catch (Exception e)

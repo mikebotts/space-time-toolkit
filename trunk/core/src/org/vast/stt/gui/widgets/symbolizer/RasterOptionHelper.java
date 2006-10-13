@@ -30,23 +30,25 @@ public class RasterOptionHelper implements SelectionListener
 	}
 	
 	public float getWidth(){
-		Dimensions dims = symbolizer.getRasterDimensions();
-		ScalarParameter widthSP = dims.getWidth();
-
-		if(widthSP.isConstant()) {
-			return ((Float)widthSP.getConstantValue()).floatValue();
-		} else
-			return -1;
+//		Dimensions dims = symbolizer.getRasterDimensions();
+//		ScalarParameter widthSP = dims.getWidth();
+//
+//		if(widthSP.isConstant()) {
+//			return ((Float)widthSP.getConstantValue()).floatValue();
+//		} else
+//			return -1;
+        return -1;
 	}
 	
 	public float getHeight(){
-		Dimensions dims = symbolizer.getRasterDimensions();
-		ScalarParameter lengthSP = dims.getLength();
-
-		if(lengthSP.isConstant()) {
-			return ((Float)lengthSP.getConstantValue()).floatValue();
-		} else
-			return -1;
+//		Dimensions dims = symbolizer.getRasterDimensions();
+//		ScalarParameter lengthSP = dims.getLength();
+//
+//		if(lengthSP.isConstant()) {
+//			return ((Float)lengthSP.getConstantValue()).floatValue();
+//		} else
+//			return -1;
+        return -1;
 	}
 		
 	public void widgetDefaultSelected(SelectionEvent e) {

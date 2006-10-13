@@ -187,6 +187,7 @@ public class QuadTreeItem extends SpatialExtent
         
         if (sizeRatio > 16 || !this.contains(bbox))
         {
+            // create parent if null
             if (parent == null)
             {
                 int dir = whereIs(bbox);
@@ -212,14 +213,13 @@ public class QuadTreeItem extends SpatialExtent
      * @param maxDistance
      */
     public void findChildItems(ArrayList<QuadTreeItem> matchingItems,
-                               ArrayList<QuadTreeItem> unusedItems,
                                SpatialExtent bbox, double bboxSize,
-                               int level, int maxLevel, double maxDistance)
+                               int level, int maxLevel)
     {
         double sizeRatio = bboxSize / tileSize;
         
         // we reached the good level
-        if (sizeRatio >= 4 || level == maxLevel)
+        if (sizeRatio >= 2 || level == maxLevel)
         {
             addToMatchingItemsAndSort(matchingItems, bbox);
         }
@@ -233,13 +233,7 @@ public class QuadTreeItem extends SpatialExtent
                     children[i] = new QuadTreeItem(this, i);
                 
                 if (children[i].intersects(bbox))
-                    children[i].findChildItems(matchingItems, unusedItems, bbox, bboxSize, level+1, maxLevel, maxDistance);
-                else
-                {
-                    boolean delete = children[i].addToUnusedItems(unusedItems, bbox, maxDistance);
-                    if (delete)
-                        children[i] = null;
-                }
+                    children[i].findChildItems(matchingItems, bbox, bboxSize, level+1, maxLevel);
             }
         }
     }
@@ -252,7 +246,7 @@ public class QuadTreeItem extends SpatialExtent
      * @param maxDistance
      * @return
      */
-    protected boolean addToUnusedItems(ArrayList<QuadTreeItem> unusedItems, SpatialExtent bbox, double maxDistance)
+    public void findUnusedItems(ArrayList<QuadTreeItem> unusedItems, SpatialExtent bbox, double maxDistance)
     {
         double dX =  (bbox.getMinX() + bbox.getMaxX() - minX - maxX) / 2;
         double dY =  (bbox.getMinY() + bbox.getMaxY() - minY - maxY) / 2;
@@ -262,18 +256,15 @@ public class QuadTreeItem extends SpatialExtent
         for (byte i=0; i<4; i++)
         {
             if (children[i] != null)
-                children[i].addToUnusedItems(unusedItems, bbox, maxDistance);
+                children[i].findUnusedItems(unusedItems, bbox, maxDistance);
         }
         
         // figure out if the tile is too far
         if (distance > tileSize*maxDistance*maxDistance)
         {
-            // add this tile only if there is data attached to it
-            unusedItems.add(this);        
-            return true;
+            unusedItems.add(this);       
+            parent.children[quadrant] = null;
         }
-        
-        return false;
     }
     
     

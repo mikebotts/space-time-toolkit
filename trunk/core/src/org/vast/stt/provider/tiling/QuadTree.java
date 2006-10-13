@@ -33,8 +33,7 @@ import org.vast.physics.SpatialExtent;
  */
 public class QuadTree
 {
-    protected QuadTreeItem rootItem;
-    protected QuadTreeItem currentItem;
+    protected QuadTreeItem rootItem, topItem;
     protected double upLevelSurfaceRatio = 9;
     protected double downLevelSurfaceRatio = 7;
     
@@ -72,14 +71,20 @@ public class QuadTree
             return;
         
         if (rootItem == null)
+        {
             rootItem = new QuadTreeItem(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+            topItem = rootItem;
+        }
         
         // call findItems recursively in the tree
-        rootItem = rootItem.findTopItem(bbox, bboxSize);
-        rootItem.findChildItems(matchingItems, unusedItems, bbox, bboxSize, 0, maxLevel, maxDistance);
+        topItem = rootItem.findTopItem(bbox, bboxSize);
+        topItem.findChildItems(matchingItems, bbox, bboxSize, 0, maxLevel);
+        rootItem.findUnusedItems(unusedItems, bbox, maxDistance);
     }
     
     
+    
+    // test method to be put in a JUnit Test!
     public static void main(String[] args)
     {
         ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);

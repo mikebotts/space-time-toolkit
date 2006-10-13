@@ -38,6 +38,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
     protected GridSymbolizer symbolizer;
     protected GridPatchGraphic patch;
     protected GridPointGraphic point;    
+    protected int[] gridIndex = new int[3];
     
 	
 	public AbstractGridStyler()
@@ -67,9 +68,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
         AbstractDataBlock nextBlock = nextItem.getData();
         listInfo.blockIndexer.setData(nextBlock);
         listInfo.blockIndexer.reset();
-        
-        // to make sure we visit array size data
-        listInfo.blockIndexer.getData(getIndexList(0,0,0));
+        listInfo.blockIndexer.next(); // to make sure we visit array size data
         
         // see what's needed on this block
         prepareBlock(nextItem);
@@ -84,8 +83,9 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public GridPointGraphic getPoint(int u, int v)
     {
         point.x = point.y = point.z = 0.0;
-        int[] index = getIndexList(v, u, 0);
-        dataLists[0].blockIndexer.getData(index);
+        gridIndex[0] = u;
+        gridIndex[1] = v;
+        dataLists[0].blockIndexer.getData(gridIndex);
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
@@ -139,6 +139,27 @@ public abstract class AbstractGridStyler extends AbstractStyler
         point = new GridPointGraphic();
         this.clearAllMappers();
         
+        // grid width array
+        propertyName = this.symbolizer.getDimensions().get("width");
+        if (propertyName != null)
+        {
+            addPropertyMapper(propertyName, new GridWidthMapper(0, patch, null));
+        }
+        
+        // grid length array
+        propertyName = this.symbolizer.getDimensions().get("length");
+        if (propertyName != null)
+        {
+            addPropertyMapper(propertyName, new GridLengthMapper(1, patch, null));
+        }
+        
+        // grid depth array
+        propertyName = this.symbolizer.getDimensions().get("depth");
+        if (propertyName != null)
+        {
+            addPropertyMapper(propertyName, new GridDepthMapper(2, patch, null));
+        }
+        
         // geometry breaks
         param = this.symbolizer.getGeometry().getBreaks();
         if (param != null)
@@ -180,55 +201,6 @@ public abstract class AbstractGridStyler extends AbstractStyler
             if (propertyName != null)
             {
                 addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-            }
-        }
-        
-        // grid width
-        param = this.symbolizer.getDimensions().getWidth();
-        if (param != null)       
-        {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.width = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GridWidthMapper(patch, param.getMappingFunction()));
-                }
-            }
-        }
-        
-        // grid length
-        param = this.symbolizer.getDimensions().getLength();
-        if (param != null)       
-        {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.length = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GridLengthMapper(patch, param.getMappingFunction()));
-                }
-            }
-        }
-        
-        // grid depth
-        param = this.symbolizer.getDimensions().getDepth();
-        if (param != null)       
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GridDepthMapper(patch, param.getMappingFunction()));
             }
         }
 	}

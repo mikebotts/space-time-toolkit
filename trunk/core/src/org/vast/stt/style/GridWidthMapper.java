@@ -19,13 +19,14 @@ import org.vast.ows.sld.MappingFunction;
  * @date Apr 3, 2006
  * @version 1.0
  */
-public class GridWidthMapper extends PropertyMapper
+public class GridWidthMapper extends DimensionMapper
 {
     GridPatchGraphic patch;
     
     
-    public GridWidthMapper(GridPatchGraphic patch, MappingFunction mappingFunction)
+    public GridWidthMapper(int dimensionIndex, GridPatchGraphic patch, MappingFunction mappingFunction)
     {
+        this.dimensionIndex = dimensionIndex;
         this.patch = patch;
         this.mappingFunction = mappingFunction;
         if (mappingFunction != null)
@@ -42,5 +43,11 @@ public class GridWidthMapper extends PropertyMapper
         }
         else
             patch.width = data.getIntValue();
-    }    
+    }
+    
+    
+    public void setDimensionSize(int size)
+    {
+        patch.width = size;
+    }
 }

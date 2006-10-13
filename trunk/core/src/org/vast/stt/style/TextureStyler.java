@@ -41,8 +41,11 @@ public class TextureStyler extends AbstractStyler
     protected TexturePatchGraphic patch;
     protected RasterPixelGraphic pixel;
     protected GridPointGraphic point;
+    protected ListInfo gridBlocks, texBlocks;
+    protected int[] gridIndex = new int[4];
+    protected int[] texIndex = new int[4];
     
-	
+    
 	public TextureStyler()
 	{
         pixel = new RasterPixelGraphic();
@@ -54,9 +57,6 @@ public class TextureStyler extends AbstractStyler
     
     public TexturePatchGraphic nextTile()
     {
-        ListInfo gridBlocks = dataLists[0];
-        ListInfo texBlocks = dataLists[1];
-        
         // if no more items one of the lists, just return null
         if (!(gridBlocks.blockIterator.hasNext() && texBlocks.blockIterator.hasNext()))
         {
@@ -64,23 +64,30 @@ public class TextureStyler extends AbstractStyler
             return null;
         }
         
-        // otherwise get blocks for next tile
+        // get grid block for next tile
         BlockListItem nextGrid = gridBlocks.blockIterator.next();
-        BlockListItem nextTexture = texBlocks.blockIterator.next();
         
-        // TODO implement block filtering here
-        
-        // setup grid indexer with new data 
+        // setup grid indexer with new data
         AbstractDataBlock nextGridBlock = nextGrid.getData();
         gridBlocks.blockIndexer.setData(nextGridBlock);
         gridBlocks.blockIndexer.reset();
-        gridBlocks.blockIndexer.getData(getIndexList(0,0,0));
+        gridBlocks.blockIndexer.next(); // to make sure we visit array size data
         
-        // setup texture indexer with new data 
-        AbstractDataBlock nextTexBlock = nextTexture.getData();
-        texBlocks.blockIndexer.setData(nextTexBlock);
-        texBlocks.blockIndexer.reset();
-        texBlocks.blockIndexer.getData(getIndexList(0,0,0));
+        // if texture is coming from a different list
+        // get next texture block
+        BlockListItem nextTexture;
+        if (gridBlocks == texBlocks)
+            nextTexture = nextGrid;
+        else
+        {
+            nextTexture = texBlocks.blockIterator.next();
+            
+            // setup texture indexer with new data 
+            AbstractDataBlock nextTexBlock = nextTexture.getData();
+            texBlocks.blockIndexer.setData(nextTexBlock);
+            texBlocks.blockIndexer.reset();
+            texBlocks.blockIndexer.next(); // to make sure we visit array size data
+        }
         
         // copy current item in the patch object
         patch.grid.block = nextGrid;
@@ -95,10 +102,9 @@ public class TextureStyler extends AbstractStyler
     
     public RasterPixelGraphic getPixel(int x, int y)
     {
-        //pixel.r = (float)x / (float)patch.texture.width;
-        //pixel.g = (float)y / (float)patch.texture.height;
-        int[] index = getIndexList(y, x, 0);
-        dataLists[1].blockIndexer.getData(index);
+        texIndex[2] = x;
+        texIndex[3] = y;
+        texBlocks.blockIndexer.getData(texIndex);
         return pixel;
     }
     
@@ -106,8 +112,9 @@ public class TextureStyler extends AbstractStyler
     public GridPointGraphic getGridPoint(int u, int v, float uScale, float vScale, boolean normalize)
     {
         point.x = point.y = point.z = 0.0;
-        int[] index = getIndexList(v, u, 0);
-        dataLists[0].blockIndexer.getData(index);
+        gridIndex[0] = u;
+        gridIndex[1] = v;
+        gridBlocks.blockIndexer.getData(gridIndex);
         
         // compute texture coordinates
         if (normalize)
@@ -157,7 +164,7 @@ public class TextureStyler extends AbstractStyler
     
     private GridPointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext())
+        if (gridBlocks.blockIndexer.hasNext())
         {
             point.x = point.y = point.z = 0.0;            
             dataLists[0].blockIndexer.next();
@@ -199,6 +206,20 @@ public class TextureStyler extends AbstractStyler
         point = new GridPointGraphic();
         this.clearAllMappers();
         
+        // grid width array
+        propertyName = this.symbolizer.getGridDimensions().get("width");
+        if (propertyName != null)
+        {
+            addPropertyMapper(propertyName, new GridWidthMapper(0, patch.getGrid(), null));
+        }
+        
+        // grid length array
+        propertyName = this.symbolizer.getGridDimensions().get("length");
+        if (propertyName != null)
+        {
+            addPropertyMapper(propertyName, new GridLengthMapper(1, patch.getGrid(), null));
+        }
+        
         // grid geometry X
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
@@ -231,43 +252,22 @@ public class TextureStyler extends AbstractStyler
                 addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
             }
         }
+                
+        // make sure we keep a handle to the block list containing grid data
+        gridBlocks = dataLists[dataLists.length-1];
         
-        // grid width
-        param = this.symbolizer.getGridDimensions().getWidth();
-        if (param != null)       
+        // raster width array
+        propertyName = this.symbolizer.getRasterDimensions().get("width");
+        if (propertyName != null)
         {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.grid.width = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GridWidthMapper(patch.grid, param.getMappingFunction()));
-                }
-            }
+            addPropertyMapper(propertyName, new RasterWidthMapper(2, patch.getTexture(), null));
         }
         
-        // grid length
-        param = this.symbolizer.getGridDimensions().getLength();
-        if (param != null)       
+        // raster height array
+        propertyName = this.symbolizer.getRasterDimensions().get("height");
+        if (propertyName != null)
         {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.grid.length = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GridLengthMapper(patch.grid, param.getMappingFunction()));
-                }
-            }
+            addPropertyMapper(propertyName, new RasterHeightMapper(3, patch.getTexture(), null));
         }
         
         // global texture opacity
@@ -349,44 +349,9 @@ public class TextureStyler extends AbstractStyler
                 }
             }
         }
-        
-        // image width
-        param = this.symbolizer.getRasterDimensions().getWidth();
-        if (param != null)       
-        {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.texture.width = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new RasterWidthMapper(patch.texture, param.getMappingFunction()));
-                }
-            }
-        }
-        
-        // image height
-        param = this.symbolizer.getRasterDimensions().getLength();
-        if (param != null)       
-        {
-            if (param.isConstant())
-            {
-                Object value = param.getConstantValue();
-                patch.texture.height = ((Float)value).intValue();
-            }
-            else
-            {
-                propertyName = param.getPropertyName();                
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new RasterHeightMapper(patch.texture, param.getMappingFunction()));
-                }
-            }
-        }
+                
+        // make sure we keep a handle to the block list containing image data
+        texBlocks = dataLists[dataLists.length-1];
 	}
 	
 	

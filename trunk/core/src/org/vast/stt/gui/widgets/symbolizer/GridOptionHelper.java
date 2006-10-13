@@ -111,32 +111,35 @@ public class GridOptionHelper
 		
 	
 	public int getGridWidth(){
-		ScalarParameter widthSP = symbolizer.getDimensions().getWidth();
-		//  for SRTM width,length,depth are all properties taken from coverageData/width...
-		//  how to get these values?
-		if(widthSP == null)
-			return -1;
-		if(widthSP.isConstant())
-			return ((Integer)widthSP.getConstantValue()).intValue();
-		return -1; // what to do here?
+//		ScalarParameter widthSP = symbolizer.getDimensions().getWidth();
+//		//  for SRTM width,length,depth are all properties taken from coverageData/width...
+//		//  how to get these values?
+//		if(widthSP == null)
+//			return -1;
+//		if(widthSP.isConstant())
+//			return ((Integer)widthSP.getConstantValue()).intValue();
+//		return -1; // what to do here?
+        return -1;
 	}
 	
 	public int getGridLength(){
-		ScalarParameter lengthSP = symbolizer.getDimensions().getLength();
-		if(lengthSP == null)
-			return -1;
-		if(lengthSP.isConstant())
-			return ((Integer)lengthSP.getConstantValue()).intValue();
-		return -1; // what to do here?
+//		ScalarParameter lengthSP = symbolizer.getDimensions().getLength();
+//		if(lengthSP == null)
+//			return -1;
+//		if(lengthSP.isConstant())
+//			return ((Integer)lengthSP.getConstantValue()).intValue();
+//		return -1; // what to do here?
+        return -1;
 	}
 	
 	public int getGridDepth(){
-		ScalarParameter depthSP = symbolizer.getDimensions().getDepth();
-		if(depthSP == null)
-			return -1;
-		if(depthSP.isConstant())
-			return ((Integer)depthSP.getConstantValue()).intValue();
-		return -1; // what to do here?
+//		ScalarParameter depthSP = symbolizer.getDimensions().getDepth();
+//		if(depthSP == null)
+//			return -1;
+//		if(depthSP.isConstant())
+//			return ((Integer)depthSP.getConstantValue()).intValue();
+//		return -1; // what to do here?
+        return -1;
 	}
 	
 }
