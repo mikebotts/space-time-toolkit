@@ -6,9 +6,8 @@
    </ProcessPackage>
    
    <Process>
-      <uri>urn:ogc:def:process:dewPoint:v1.0</uri>
-      <uri>urn:ogc:def:process:dewPoint:v2.0</uri>
-      <class>org.sensorML.process.DewPoint_Process</class>
+      <uri>urn:ogc:def:process:counter</uri>
+      <class>org.sensorML.process.Counter_Process</class>
    </Process>
    
    <Process>
@@ -40,6 +39,11 @@
       <uri>urn:ogc:def:process:rayIntersectEllipsoid:1.0</uri>
       <class>org.sensorML.process.RayIntersectEllipsoid_Process</class>
    </Process>
+      
+   <Process>
+      <uri>urn:ogc:def:process:SOS:1.0</uri>
+      <class>org.sensorML.process.SOS_Process</class>
+   </Process>
    
    <Process>
       <uri>urn:ogc:def:process:Video:1.0</uri>
@@ -49,14 +53,13 @@
    <Process>
       <uri>urn:ogc:def:process:WMS:1.0</uri>
       <class>org.vast.stt.process.WMS_Process</class>
-   </Process>
+   </Process> 
    
    <Process>
       <uri>urn:ogc:def:process:WCS:1.0</uri>
       <class>org.vast.stt.process.WCS_Process</class>
    </Process>
    
-   <!--  Delete WCS_Process2 when we are no longer testing with it -->
    <Process>
       <uri>urn:ogc:def:process:WCS:2.0</uri>
       <class>org.vast.stt.process.WCS_Process2</class>
@@ -66,7 +69,7 @@
       <uri>urn:ogc:def:process:WCS_image:2.0</uri>
       <class>org.vast.stt.process.WCS_Image_Process</class>
    </Process>
-
+   
    <Process>
       <uri>urn:ogc:def:process:flatGridGenerator:1.0</uri>
       <class>org.vast.stt.process.FlatGridGenerator_Process</class>
