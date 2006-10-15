@@ -3,6 +3,7 @@ package org.vast.stt.gui.widgets.symbolizer;
 
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -17,12 +18,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
+import org.vast.ows.sld.Geometry;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.ows.sld.*;
+import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.StylerFactory;
 
 
 /**
@@ -47,10 +51,10 @@ public class SymbolizerWidget extends CheckOptionTable
 
     public SymbolizerWidget(Composite parent)
     {
-        checkboxTableLabel = "Rendering Options:";
+        checkboxTableLabel = "Graphics:";
         init(parent);
         setCheckboxTableContentProvider(new StyleTableContentProvider());
-        setCheckboxTableLabelProvider(new StyleTableLabelProvider());
+        setCheckboxTableLabelProvider(new SymTableLabelProvider());
     }
 
 
@@ -103,28 +107,8 @@ public class SymbolizerWidget extends CheckOptionTable
         //  Add Checkbox to stylers Set and rerender Table
         dataItem.getSymbolizers().add(symbolizer);
         activeSymbolizer = null;
-        //  Change options panel to show Point options
         checkboxTableViewer.setInput(dataItem.getSymbolizers());
     }
-
-
-    /**
-     * create a new styler and call addStyle() with it
-     */
-//    public void createNewStyler(String stylerName, StylerType stylerType)
-//    {
-//        DataStyler newStyler = StylerFactory.createDefaultStyler(stylerName, stylerType, dataItem);
-//        if (newStyler != null)
-//        {
-//            //  Hack to set geom
-//            newStyler.getSymbolizer().setGeometry(activeStyler.getSymbolizer().getGeometry());
-//            newStyler.setName(stylerName);
-//            newStyler.updateDataMappings();
-//            newStyler.setEnabled(false);
-//            addStyle(newStyler);
-//        }
-//
-//    }
 
 
     private void removeSymbolizer(Symbolizer symbolizer)
@@ -197,7 +181,7 @@ public class SymbolizerWidget extends CheckOptionTable
         Control control = (Control) e.getSource();
         if (control == addButton)
         {
-            openAddStyleDialog();
+            openAddSymDialog();
         }
         else if (control == deleteButton)
         {
@@ -214,13 +198,13 @@ public class SymbolizerWidget extends CheckOptionTable
         }
         else if (control == advancedButton)
         {
-            createAdvancedStyleDialog();
+            createAdvancedSymDialog();
         }
     }
 
 
     //  TODO:  Disable Advanced Button until Data is in DataNode?
-    private void createAdvancedStyleDialog()
+    private void createAdvancedSymDialog()
     {
         try
         {
@@ -235,15 +219,27 @@ public class SymbolizerWidget extends CheckOptionTable
     }
 
 
-    private void openAddStyleDialog()
+    private void openAddSymDialog()
     {
+    	if(dataItem == null)
+    		return;
         AddSymbolizerDialog asd = new AddSymbolizerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
         int rc = asd.getReturnCode();
         if (rc == IDialogConstants.OK_ID)
         {
-            //createNewStyler(asd.getStylerName(), asd.getStylerType());
+            //  I still need to create a Styler to get a Symbolizer, right?
+        	Geometry geom;
+        	if(activeSymbolizer != null)
+        		geom = activeSymbolizer.getGeometry();
+        	else 
+                //  How to assign default geom?  Take from existing symbolizer, or force 
+                //  user selection with wizard/dialog
+        		geom = new Geometry();
+        	DataStyler styler = StylerFactory.createDefaultStyler(asd.getStylerName().trim(), 
+        							asd.getStylerType(), dataItem, geom);
+        	Symbolizer sym = styler.getSymbolizer();
+        	this.addSymbolizer(sym);
         }
-
     }
 }
 
@@ -268,7 +264,7 @@ class StyleTableContentProvider implements IStructuredContentProvider
 }
 
 
-class StyleTableLabelProvider extends LabelProvider
+class SymTableLabelProvider extends LabelProvider
 {
 
     public Image getImage(Object element)
