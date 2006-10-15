@@ -122,7 +122,7 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
             gridData_4.widthHint = 30;
             addButton.setLayoutData(gridData_4);
             addButton.setText("+");
-            addButton.setToolTipText("Add styler");
+            addButton.setToolTipText("Add Graphic");
 
             deleteButton = new Button(mainGroup, SWT.NONE);
             final GridData gridData_5 = new GridData();
