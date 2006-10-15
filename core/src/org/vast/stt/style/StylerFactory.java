@@ -86,7 +86,7 @@ public class StylerFactory
      * @param provider
      * @return the newly created styler
      */
-    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataItem dataItem)
+    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataItem dataItem, Geometry geom)
     {
         DataStyler newStyler = null;
         switch (stylerType)
@@ -99,8 +99,15 @@ public class StylerFactory
             break;
         default:
             System.err.println("StylerType not supported in createNewStyler()");
-            break;
+            return null;
         }
+        if(newStyler == null) {
+            System.err.println("StylerFactory.createNewStyler failed for: " + stylerType);
+            return null;
+        }
+        newStyler.getSymbolizer().setName(stylerName);
+        newStyler.getSymbolizer().setGeometry(geom);
+        
         return newStyler;
     }
 
