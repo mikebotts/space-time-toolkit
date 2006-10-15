@@ -13,7 +13,7 @@
       <view name="Bbox" class="org.vast.stt.gui.views.SpatialExtentView" id="STT.SpatialExtentView"/>
       <view name="Time" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
       <view name="Master Time" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
-      <view name="Style" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
+      <view name="Graphics" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
       <!--<view name="CatalogView" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>-->
       <view name="CapabilitiesView" class="org.vast.stt.gui.views.CapabilitiesView" id="STT.CapabilitiesView"/>
       <view name="Data" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
