@@ -247,8 +247,8 @@ public class OptionControl extends Composite implements KeyListener
 		//  Add color label
 		colorLabel = new Label(this, 0x0);
 		colorLabel.setText("       ");
-//		setColorLabelColor(sldColor);
-//		colorLabel.setBackground(colorLabelColor);
+		if(sldColor!=null)
+			setColorLabelColor(sldColor);
 		activeControl = new Button(this, SWT.PUSH);
 		Button button = (Button)activeControl;
 		button.setText("...");
@@ -360,7 +360,8 @@ public class OptionControl extends Composite implements KeyListener
 	
 	public void keyPressed(KeyEvent e) {
 		//  if e.control == numericText
-		e.doit = (e.keyCode >=48 && e.keyCode <= 57);
+		//  accept only numbers and decimal point
+		e.doit = ( (e.keyCode >=48 && e.keyCode <= 57) || e.keyCode == 46 );
 	}
 
 	public void keyReleased(KeyEvent e) {
