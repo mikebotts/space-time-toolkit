@@ -39,7 +39,7 @@ public class AddSymbolizerDialog extends Dialog {
 	
 	protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("Add Styler");
+        shell.setText("Add Graphic");
     }
 
 	protected Control createDialogArea(Composite parent) {
@@ -49,7 +49,7 @@ public class AddSymbolizerDialog extends Dialog {
 		//  Type Combo
 		Label typeLabel = new Label(comp, SWT.RIGHT);
 		GridData gridData = new GridData();
-		typeLabel.setText("Styler Type:");
+		typeLabel.setText("Graphic Type:");
 		
 		typeCombo = new Combo(comp, SWT.READ_ONLY);
 		typeCombo.setItems(stylerTypeStr);
@@ -60,13 +60,15 @@ public class AddSymbolizerDialog extends Dialog {
 		nameLabel.setText("Name:");
 		
 		nameText = new Text(comp, SWT.RIGHT);
-		nameText.setText("     styler");
-		nameText.selectAll();
+		String str = "   New Graphic";
+		nameText.setText(str);
 		gridData = new GridData();
 		//gridData.minimumHeight = 20;
 		//gridData.minimumWidth = 60;
 		nameText.setLayoutData(gridData);
-	
+		//  No matter where I put selectAll(), by the time the actual dialog is opened
+		//  the text is NOT selected.  Grrr!!!
+//		nameText.selectAll();
 		return comp;
 	}
 
