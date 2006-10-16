@@ -21,7 +21,6 @@ import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.ViewSettings;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.renderer.Renderer;
 
 
 /**
@@ -40,17 +39,15 @@ import org.vast.stt.renderer.Renderer;
  */
 public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
-    private final static double RTD = 180 / Math.PI;
-    private Renderer renderer;
+    private Scene scene;
     private ViewSettings view;
-    
+        
     
     public MyBboxUpdater(STTSpatialExtent spatialExtent)
     {
         setSpatialExtent(spatialExtent);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
-        Scene scene = input.getScene();
-        renderer = scene.getRenderer();
+        scene = input.getScene();
         view = scene.getViewSettings();
         view.addListener(this);
     }
@@ -61,16 +58,7 @@ public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListe
         switch (e.type)
         {
             case SCENE_VIEW_CHANGED:
-                double centerX = view.getTargetPos().x * RTD;
-                double centerY = view.getTargetPos().y * RTD;
-                double dX = view.getOrthoWidth()/2 * RTD;
-                double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
-                
-                spatialExtent.setMinX(Math.max(centerX - dX, -180));
-                spatialExtent.setMaxX(Math.min(centerX + dX, +180));
-                spatialExtent.setMinY(Math.max(centerY - dY, -90));
-                spatialExtent.setMaxY(Math.min(centerY + dY, +90));
-                
+                view.getProjection().fitBboxToView(spatialExtent, scene);                
                 spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
                 break;
         }        

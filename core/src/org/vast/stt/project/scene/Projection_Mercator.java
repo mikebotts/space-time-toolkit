@@ -15,8 +15,8 @@ package org.vast.stt.project.scene;
 
 import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
@@ -40,6 +40,7 @@ public class Projection_Mercator implements Projection
     protected final static double PI = Math.PI;
     protected final static double HALF_PI = Math.PI/2;
     protected final static double TWO_PI = 2*Math.PI;
+    protected final static double RTD = 180 / Math.PI;
     
     protected double centerLongitude = 0.0;
     protected double xSav = Double.NaN;
@@ -115,7 +116,7 @@ public class Projection_Mercator implements Projection
     }
     
     
-    public void fitViewToBbox(STTSpatialExtent bbox, Scene scene, boolean adjustZRange)
+    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
     {
         ViewSettings view = scene.getViewSettings();
         
@@ -156,6 +157,23 @@ public class Projection_Mercator implements Projection
             view.setOrthoWidth(dx);
         else
             view.setOrthoWidth(dy * viewAspectRatio);
+    }
+    
+    
+    public void fitBboxToView(SpatialExtent bbox, Scene scene)
+    {
+        ViewSettings view = scene.getViewSettings();
+        Renderer renderer = scene.getRenderer();
+        
+        double centerX = view.getTargetPos().x * RTD;
+        double centerY = view.getTargetPos().y * RTD;
+        double dX = view.getOrthoWidth()/2 * RTD;
+        double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
+        
+        bbox.setMinX(Math.max(centerX - dX, -180));
+        bbox.setMaxX(Math.min(centerX + dX, +180));
+        bbox.setMinY(Math.max(centerY - dY, -90));
+        bbox.setMaxY(Math.min(centerY + dY, +90));
     }
     
     

@@ -14,9 +14,11 @@
 package org.vast.stt.project.scene;
 
 import org.vast.math.Vector3d;
+import org.vast.physics.Datum;
 import org.vast.physics.MapProjection;
+import org.vast.physics.RayIntersectEllipsoid;
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
@@ -37,6 +39,8 @@ import org.vast.stt.style.PrimitiveGraphic;
  */
 public class Projection_ECEF implements Projection
 {
+    protected final static double RTD = 180 / Math.PI;
+    
     
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
     {
@@ -52,7 +56,7 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public void fitViewToBbox(STTSpatialExtent bbox, Scene scene, boolean adjustZRange)
+    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
     {
         ViewSettings view = scene.getViewSettings();
         
@@ -119,6 +123,40 @@ public class Projection_ECEF implements Projection
             view.setOrthoWidth(oldWidth * dx / viewWidth);
         else
             view.setOrthoWidth(oldWidth * dy / viewHeight);
+    }
+    
+    
+    public void fitBboxToView(SpatialExtent bbox, Scene scene)
+    {
+        ViewSettings view = scene.getViewSettings(); 
+        Renderer renderer = scene.getRenderer();
+        
+        RayIntersectEllipsoid rie = new RayIntersectEllipsoid(new Datum());
+        Vector3d pos = view.getCameraPos();
+        Vector3d dir = view.getTargetPos().copy();
+        dir.sub(pos);
+        double[] intersect = rie.getIntersection(pos, dir);
+        
+        if (rie.getFoundFlag())
+        {
+            double[] llaCenter = MapProjection.ECFtoLLA(intersect[0], intersect[1], intersect[2], null);
+            double centerX = llaCenter[1] * RTD;
+            double centerY = llaCenter[0] * RTD;
+            double dX = view.getOrthoWidth()/2 * 90/6378137;
+            double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
+            
+            bbox.setMinX(Math.max(centerX - dX, -180));
+            bbox.setMaxX(Math.min(centerX + dX, +180));
+            bbox.setMinY(Math.max(centerY - dY, -90));
+            bbox.setMaxY(Math.min(centerY + dY, +90));
+        }
+        else
+        {
+            bbox.setMinX(-180);
+            bbox.setMaxX(+180);
+            bbox.setMinY(-90);
+            bbox.setMaxY(+90);
+        }        
     }
     
     
