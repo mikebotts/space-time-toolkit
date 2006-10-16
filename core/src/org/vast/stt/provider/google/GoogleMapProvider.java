@@ -84,7 +84,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
                     item.accept(tileNumberGen);
                     String q = tileNumberGen.getTileNumber();
-                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=10&t=t" + q;
+                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=11&t=t" + q;
                 }
                 else if (layerId.startsWith("roads"))
                 {
@@ -110,14 +110,14 @@ public class GoogleMapProvider extends TiledMapProvider
                 // increment server number
                 serverNum++;
                 if (serverNum > 3)
-                    serverNum = 0;
-                
+                    serverNum = 0;                
+                                        
                 System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://maps.google.com");
-                //connection.addRequestProperty("Connection", "Keep-Alive");
-                //connection.addRequestProperty("Keep-Alive", "1");
+                connection.addRequestProperty("Connection", "keep-alive");
+                connection.addRequestProperty("Keep-Alive", "300");
                 //long startTime = System.currentTimeMillis();
                 InputStream is = connection.getInputStream();
                 //long connectTime = System.currentTimeMillis();
