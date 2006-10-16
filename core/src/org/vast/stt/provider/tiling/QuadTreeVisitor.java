@@ -14,7 +14,7 @@
 package org.vast.stt.provider.tiling;
 
 
-public interface QuadTreeItemVisitor
+public interface QuadTreeVisitor
 {
     public void visit(QuadTreeItem item);
 }

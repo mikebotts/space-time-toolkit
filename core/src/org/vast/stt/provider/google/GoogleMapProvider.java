@@ -18,28 +18,20 @@ import java.awt.image.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 import org.ogc.cdm.common.DataBlock;
-import org.ogc.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataArray;
 import org.vast.data.DataBlockFactory;
-import org.vast.data.DataGroup;
-import org.vast.data.DataValue;
-import org.vast.physics.SpatialExtent;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.provider.tiling.QuadTree;
 import org.vast.stt.provider.tiling.QuadTreeItem;
+import org.vast.stt.provider.tiling.TiledMapProvider;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
 
@@ -62,15 +54,11 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class GoogleMapProvider extends AbstractProvider
+public class GoogleMapProvider extends TiledMapProvider
 {
     private final static double DTR = Math.PI/180;
-    protected QuadTree quadTree;
-    protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
-    protected DataArray gridData;
     protected String layerId = "roads";
-    protected SpatialExtent maxBbox;
-    
+        
     
     class GetTileRunnable implements Runnable
     {
@@ -95,7 +83,7 @@ public class GoogleMapProvider extends AbstractProvider
                 {
                     // build request URL for satellite data
                     GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
-                    item.acceptUp(tileNumberGen);
+                    item.accept(tileNumberGen);
                     String q = tileNumberGen.getTileNumber();
                     urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
                 }
@@ -103,7 +91,7 @@ public class GoogleMapProvider extends AbstractProvider
                 {
                     // build request URL for road/boundary data
                     GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
-                    item.acceptUp(tileXYZGen);
+                    item.accept(tileXYZGen);
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
@@ -113,14 +101,14 @@ public class GoogleMapProvider extends AbstractProvider
                 {
                     // build request URL for map data
                     GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
-                    item.acceptUp(tileXYZGen);
+                    item.accept(tileXYZGen);
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
                     urlString = "http://mt0.google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 
-                System.out.println(urlString);
+                //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://maps.google.com");
@@ -201,7 +189,7 @@ public class GoogleMapProvider extends AbstractProvider
                     blockArray[0] = blockLists[0].addBlock((AbstractDataBlock)imageryDataBlock);
                     blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridBlock);
                     
-                    // remove sub items now that we have the new tile
+                    // remove sub and super items now that we have the new tile
                     removeChildrenData(item);
                     removeParent(item);
                     
@@ -215,61 +203,6 @@ public class GoogleMapProvider extends AbstractProvider
                     e.printStackTrace();
             }           
         }        
-    }
-        
-    
-    public GoogleMapProvider()
-	{
-        quadTree = new QuadTree();
-        
-        // also set max requestable bbox
-        maxBbox = new SpatialExtent();
-        maxBbox.setMinX(-Math.PI);
-        maxBbox.setMaxX(+Math.PI);
-        maxBbox.setMinY(-Math.PI);
-        maxBbox.setMaxY(+Math.PI);
-        quadTree.init(maxBbox);
-        
-        this.autoUpdate = true;
-	}
-
-
-    @Override
-    public void init() throws DataException
-    {
-        // create block list for textures
-        DataGroup pixelData = new DataGroup(3);
-        pixelData.setName("pixel");
-        pixelData.addComponent("red", new DataValue(DataType.BYTE));
-        pixelData.addComponent("green", new DataValue(DataType.BYTE));
-        pixelData.addComponent("blue", new DataValue(DataType.BYTE));
-        if (layerId.equals("roads"))
-            pixelData.addComponent("alpha", new DataValue(DataType.BYTE));
-        
-        DataArray rowData = new DataArray(256);
-        rowData.addComponent(pixelData);
-        rowData.setName("row");                  
-        DataArray imageData = new DataArray(256);
-        imageData.addComponent(rowData);
-        imageData.setName("image");
-        blockLists[0] = dataNode.createList(imageData);
-        System.out.println(imageData);
-        
-        // create block list for grid
-        DataGroup pointData = new DataGroup(2);
-        pointData.setName("point");
-        pointData.addComponent("lat", new DataValue(DataType.FLOAT));
-        pointData.addComponent("lon", new DataValue(DataType.FLOAT));                   
-        rowData = new DataArray(10);
-        rowData.addComponent(pointData);
-        rowData.setName("row");                  
-        gridData = new DataArray(10);
-        gridData.addComponent(rowData);
-        gridData.setName("grid");
-        blockLists[1] = dataNode.createList(gridData);
-        System.out.println(gridData);
-        
-        dataNode.setNodeStructureReady(true);
     }
     
     
@@ -291,51 +224,17 @@ public class GoogleMapProvider extends AbstractProvider
         mercatorExtent.setMinY(Math.max(minY, maxBbox.getMinY()));
         mercatorExtent.setMaxY(Math.min(maxY, maxBbox.getMaxY()));
         
-        // query tree for matching and unused items
-        ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
-        ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
-        quadTree.findItems(matchingItems, unusedItems, mercatorExtent, 18, 5);
-        
-        // clean up old items
-        int unusedItemCount = unusedItems.size();
-        ArrayList<BlockListItem> deletedItems = new ArrayList<BlockListItem>(unusedItemCount*2);
-        for (int i=0; i<unusedItemCount; i++)
-        {
-            QuadTreeItem nextItem = unusedItems.get(i);
-            BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
-            nextItem.setData(null);
-            
-            if (blockArray != null)
-            {
-                for (int b=0; b<blockArray.length; b++)
-                {
-                    if (blockArray[b] != null)
-                    {
-                        // remove BlockListItem from list
-                        blockLists[b].remove(blockArray[b]);
-                        
-                        // added to deletedItems list
-                        deletedItems.add(blockArray[b]);
-                    }
-                }
-            }
-            
-            // also remove tree item itself from parent
-            nextItem.getParent().setChild(nextItem.getQuadrant(), null);
-            //System.out.println("Item unused " + nextItem);
-        }
-        
-        // send event to cleanup stylers
-        if (deletedItems.size() > 0)
-        {
-            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
-            //System.out.println(deletedItems.size() + " items deleted");
-        }
-        
+        // query tree for matching and unused items 
+        selectedItems.clear();
+        deletedItems.clear();        
+        tileSelector.setROI(mercatorExtent);
+        tileSelector.setCurrentLevel(0);
+        quadTree.accept(tileSelector);
+                
         // get items to display
-        for (int i=0; i<matchingItems.size(); i++)
+        for (int i=0; i<selectedItems.size(); i++)
         {
-            QuadTreeItem nextItem = matchingItems.get(i);
+            QuadTreeItem nextItem = selectedItems.get(i);
             
             if (canceled)
                 return;
@@ -351,110 +250,22 @@ public class GoogleMapProvider extends AbstractProvider
             else
             {
                 BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
+                
                 for (int b=0; b<blockArray.length; b++)
                 {
                     blockLists[b].remove(blockArray[b]);
                     blockLists[b].add(blockArray[b]);
                 }
+                
+                // remove children and parent of that item 
                 removeChildrenData(nextItem);
-            }
-        }
-    }
-    
-    
-    /**
-     * Recursively remove children data from blockLists
-     * but keep the underlying data in cache.
-     * @param item
-     * @param list
-     */
-    protected void removeChildrenData(QuadTreeItem item)
-    {
-        // loop through children
-        for (byte i=0; i<4; i++)
-        {
-            QuadTreeItem childItem = item.getChild(i);
-            if (childItem != null)
-            {
-                BlockListItem[] blockArray = (BlockListItem[])childItem.getData();
-                
-                if (blockArray != null)
-                {                
-                    for (int b=0; b<blockArray.length; b++)
-                    {
-                        // remove items from list
-                        if (blockArray[b] != null)
-                            blockLists[b].remove(blockArray[b]);
-                    }
-                }
-                
-                removeChildrenData(childItem);
-            }
-        }
-    }
-    
-    
-    /**
-     * Remove parent if all its children are shown
-     * @param item
-     */
-    protected void removeParent(QuadTreeItem item)
-    {
-        QuadTreeItem parent = item.getParent();
-        for (byte i=0; i<4; i++)
-        {
-            QuadTreeItem child = parent.getChild(i);
-            if (child.getData() == null)
-                return;
-        }
-        
-        // remove parent blocks from lists
-        BlockListItem[] blockArray = (BlockListItem[])parent.getData();        
-        if (blockArray != null)
-        {                
-            for (int b=0; b<blockArray.length; b++)
-            {
-                // remove items from list
-                if (blockArray[b] != null)
-                    blockLists[b].remove(blockArray[b]);
+                removeParent(nextItem);
             }
         }
         
-        removeParent(parent);
-    }
-    
-    
-    protected double yToLat(double y)
-    {
-        double lat = 0;
-        if (Math.abs(y) < Math.PI-(1e-4))
-            //lat = 2 * Math.atan(Math.exp(y)) - Math.PI/2;
-            lat = Math.PI/2 - 2 * Math.atan(Math.exp(-y));
-        else
-            lat = Math.signum(y)*Math.PI/2;
-        
-        return lat;
-    }
-    
-    
-    protected double latToY(double lat)
-    {
-        double sinLat = Math.sin(lat);
-        double y = 0.5 * Math.log((1 + sinLat) / (1 - sinLat));
-        return y;
-    }
-    
-    
-    @Override
-    public void clearData()
-    {
-//        error = false;
-//        
-//        if (dataNode != null)
-//        {
-//            dataNode.clearAll();
-//            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
-//        }       
+        // send event to cleanup stylers cache
+        if (deletedItems.size() > 0)
+            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
     }
     
     
@@ -473,17 +284,7 @@ public class GoogleMapProvider extends AbstractProvider
     public void setLayer(String layerId)
     {
         this.layerId = layerId;
-    }
-    
-    
-    public boolean isSpatialSubsetSupported()
-    {
-        return true;
-    }
-
-
-    public boolean isTimeSubsetSupported()
-    {
-        return false;
+        if (layerId.equals("roads"))
+            useAlpha = true;
     }
 }
