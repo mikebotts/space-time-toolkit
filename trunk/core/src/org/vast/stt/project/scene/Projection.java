@@ -13,8 +13,8 @@
 
 package org.vast.stt.project.scene;
 
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -44,7 +44,10 @@ public interface Projection
     public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
     
-    public abstract void fitViewToBbox(STTSpatialExtent bbox, Scene scene, boolean adjustZRange);
+    public abstract void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange);
+    
+    
+    public abstract void fitBboxToView(SpatialExtent bbox, Scene scene);
     
     
     public abstract MotionConstraint getDefaultTranslationConstraint();
