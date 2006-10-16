@@ -126,7 +126,7 @@ public class TextureStyler extends AbstractStyler
         {
             point.tx = (float)u / (float)(patch.grid.width-1) * ((float)patch.texture.width);//-1);
             point.ty = (float)v / (float)(patch.grid.length-1) * ((float)patch.texture.height);//-1);
-            System.out.println(point.tx + "," + point.ty);
+            //System.out.println(point.tx + "," + point.ty);
         }
         
         // adjust geometry to fit projection
