@@ -366,13 +366,13 @@
                                        <sld:Opacity>1.0</sld:Opacity>
                                        <sld:ChannelSelection>
                                           <sld:RedChannel>
-                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
                                           </sld:RedChannel>
                                           <sld:GreenChannel>
                                              <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
                                           </sld:GreenChannel>
                                           <sld:BlueChannel>
-                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
                                           </sld:BlueChannel>
                                        </sld:ChannelSelection>                                       
                                     </sldx:Raster>
@@ -440,13 +440,13 @@
                                        <sld:Opacity>1.0</sld:Opacity>
                                        <sld:ChannelSelection>
                                           <sld:RedChannel>
-                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
                                           </sld:RedChannel>
                                           <sld:GreenChannel>
                                              <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
                                           </sld:GreenChannel>
                                           <sld:BlueChannel>
-                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
                                           </sld:BlueChannel>
                                        </sld:ChannelSelection>                                       
                                     </sldx:Raster>
