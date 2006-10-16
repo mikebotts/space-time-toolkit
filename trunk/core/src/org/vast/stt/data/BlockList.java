@@ -108,20 +108,16 @@ public class BlockList
     
     public BlockListItem addBlock(AbstractDataBlock dataBlock)
     {
-        lastBlock = new BlockListItem(dataBlock, lastBlock, null);
-        
-        if (firstBlock == null)
-            firstBlock = lastBlock;
-        
-        size++;
-        
-        return lastBlock;
+        BlockListItem newBlock = new BlockListItem(dataBlock, lastBlock, null);
+        add(newBlock);        
+        return newBlock;
     }
     
     
     public void add(BlockListItem newItem)
     {
         newItem.prevBlock = lastBlock;
+        newItem.nextBlock = null;
         
         if (lastBlock != null)
             lastBlock.nextBlock = newItem;

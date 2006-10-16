@@ -24,7 +24,7 @@
 package org.vast.stt.provider.google;
 
 import org.vast.stt.provider.tiling.QuadTreeItem;
-import org.vast.stt.provider.tiling.QuadTreeItemVisitor;
+import org.vast.stt.provider.tiling.QuadTreeVisitor;
 
 
 /**
@@ -41,7 +41,7 @@ import org.vast.stt.provider.tiling.QuadTreeItemVisitor;
  * @date Sep 30, 2006
  * @version 1.0
  */
-public class GoogleMapTileXYZ implements QuadTreeItemVisitor
+public class GoogleMapTileXYZ implements QuadTreeVisitor
 {
     protected int x, y, zoom;
     protected int xMul, yMul;
@@ -57,7 +57,9 @@ public class GoogleMapTileXYZ implements QuadTreeItemVisitor
     
     public void visit(QuadTreeItem item)
     {
-        if (item.getParent() == null)
+        // go further only if there is a parent
+        QuadTreeItem parent = item.getParent();
+        if (parent == null)
             return;
         
         switch (item.getQuadrant())
@@ -82,6 +84,8 @@ public class GoogleMapTileXYZ implements QuadTreeItemVisitor
         zoom++;
         xMul *= 2;
         yMul *= 2;
+        
+        parent.accept(this);
     }
 
 

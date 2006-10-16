@@ -13,7 +13,6 @@
 
 package org.vast.stt.provider.tiling;
 
-import java.util.ArrayList;
 import org.vast.physics.SpatialExtent;
 
 
@@ -67,7 +66,7 @@ public class QuadTreeItem extends SpatialExtent
         this();
         this.parent = parentBlock;
         this.quadrant = quadrant;
-        
+                
         double dX = (parentBlock.maxX - parentBlock.minX) / 2;
         double dY = (parentBlock.maxY - parentBlock.minY) / 2;
         tileSize = Math.abs(dX) * Math.abs(dY);
@@ -102,6 +101,8 @@ public class QuadTreeItem extends SpatialExtent
                 maxY = minY + dY;
                 break;
         }
+        
+        parentBlock.setChild(quadrant, this);
     }
     
     
@@ -164,6 +165,13 @@ public class QuadTreeItem extends SpatialExtent
     }
     
     
+    /**
+     * Constructs a QuadTreeItem with the given coordinates
+     * @param minX
+     * @param minY
+     * @param maxX
+     * @param maxY
+     */
     public QuadTreeItem(double minX, double minY, double maxX, double maxY)
     {
         this();
@@ -175,136 +183,36 @@ public class QuadTreeItem extends SpatialExtent
     }
     
     
-    /**
-     * Expand tree until the root tile contains the bbox
-     * @param bbox
-     * @param bboxSize
-     * @return
-     */
-    public QuadTreeItem findTopItem(SpatialExtent bbox, double bboxSize)
-    {
-        double sizeRatio = bboxSize / tileSize;
-        
-        if (sizeRatio > 16 || !this.contains(bbox))
-        {
-            // create parent if null
-            if (parent == null)
-            {
-                int dir = whereIs(bbox);
-                parent = new QuadTreeItem(this, dir, false);
-            }
-            
-            return parent.findTopItem(bbox, bboxSize);
-        }
-        else        
-            return this;
-    }
-    
-    
-    /**
-     * Finds all child items that intersects that bbox and
-     * are at the right level of details.
-     * @param matchingItems
-     * @param unusedItems
-     * @param bbox
-     * @param bboxSize
-     * @param level
-     * @param maxLevel
-     * @param maxDistance
-     */
-    public void findChildItems(ArrayList<QuadTreeItem> matchingItems,
-                               SpatialExtent bbox, double bboxSize,
-                               int level, int maxLevel)
-    {
-        double sizeRatio = bboxSize / tileSize;
-        
-        // we reached the good level
-        if (sizeRatio >= 2 || level == maxLevel)
-        {
-            addToMatchingItemsAndSort(matchingItems, bbox);
-        }
-        
-        // go down in the tree
-        else
-        {
-            for (byte i=0; i<4; i++)
-            {
-                if (children[i] == null)
-                    children[i] = new QuadTreeItem(this, i);
-                
-                if (children[i].intersects(bbox))
-                    children[i].findChildItems(matchingItems, bbox, bboxSize, level+1, maxLevel);
-            }
-        }
-    }
-
-    
-    /**
-     * Add item and all children to unused items if far away enough from bbox
-     * @param unusedItems
-     * @param bbox
-     * @param maxDistance
-     * @return
-     */
-    public void findUnusedItems(ArrayList<QuadTreeItem> unusedItems, SpatialExtent bbox, double maxDistance)
-    {
-        double dX =  (bbox.getMinX() + bbox.getMaxX() - minX - maxX) / 2;
-        double dY =  (bbox.getMinY() + bbox.getMaxY() - minY - maxY) / 2;
-        double distance = dX*dX + dY*dY;
-        
-        // loop through children
-        for (byte i=0; i<4; i++)
-        {
-            if (children[i] != null)
-                children[i].findUnusedItems(unusedItems, bbox, maxDistance);
-        }
-        
-        // figure out if the tile is too far
-        if (distance > tileSize*maxDistance*maxDistance)
-        {
-            unusedItems.add(this);       
-            parent.children[quadrant] = null;
-        }
-    }
-    
-    
-    /**
-     * Add the item in the list at the right position so that the list
-     * is sorted from closest to farthest to the center of the bbox
-     * @param matchingItems
-     * @param bbox
-     */
-    protected void addToMatchingItemsAndSort(ArrayList<QuadTreeItem> matchingItems, SpatialExtent bbox)
-    {
-        double dX =  (bbox.getMinX() + bbox.getMaxX() - minX - maxX) / 2;
-        double dY =  (bbox.getMinY() + bbox.getMaxY() - minY - maxY) / 2;
-        distance = dX*dX + dY*dY;
-        
-        if (matchingItems.isEmpty())
-        {
-            matchingItems.add(this);
-        }
-        else
-        {
-            for (int i=0; i<matchingItems.size(); i++)
-            {
-                if (matchingItems.get(i).distance >= distance)
-                {
-                    matchingItems.add(i, this);
-                    return;
-                }
-            }
-            
-            // if we didn't add it yet, add at end of list
-            matchingItems.add(this);
-        }
-    }
-    
+//    /**
+//     * Expand tree until the root tile contains the bbox
+//     * @param bbox
+//     * @param bboxSize
+//     * @return
+//     */
+//    public QuadTreeItem findTopItem(SpatialExtent bbox, double bboxSize)
+//    {
+//        double sizeRatio = bboxSize / tileSize;
+//        
+//        if (sizeRatio > 16 || !this.contains(bbox))
+//        {
+//            // create parent if null
+//            if (parent == null)
+//            {
+//                int dir = whereIs(bbox);
+//                parent = new QuadTreeItem(this, dir, false);
+//            }
+//            
+//            return parent.findTopItem(bbox, bboxSize);
+//        }
+//        else        
+//            return this;
+//    }
+   
     
     /**
      * Finds out where the bbox is relative to this tile
      * @param bbox
-     * @return
+     * @return one of N,E,S,W,NE,SE,SW,NW
      */
     public int whereIs(SpatialExtent bbox)
     {
@@ -395,59 +303,6 @@ public class QuadTreeItem extends SpatialExtent
     }
     
     
-    public void appendId(StringBuffer buf)
-    {
-        if (parent != null)
-        {
-            parent.appendId(buf);
-            buf.append(quadrant);
-        }
-        else
-            buf.append('q');
-    }
-    
-    
-    public void acceptUp(QuadTreeItemVisitor visitor)
-    {
-        visitor.visit(this);
-        if (parent != null)
-            parent.acceptUp(visitor);
-    }
-    
-    
-    public void acceptDown(QuadTreeItemVisitor visitor)
-    {
-        visitor.visit(this);
-        
-        for (int i=0; i<4; i++)
-        {
-            if (children[i] != null)
-                children[i].acceptDown(visitor);
-        }
-    }
-    
-    
-    public String toString()
-    {
-        StringBuffer buf = new StringBuffer();
-        appendId(buf);
-        buf.append(": ");
-        buf.append(maxX-minX);
-        buf.append(" x ");
-        buf.append(maxY-minY);
-        buf.append(" (");
-        buf.append(minX);
-        buf.append(",");
-        buf.append(minY);
-        buf.append(" - ");
-        buf.append(maxX);
-        buf.append(",");
-        buf.append(maxY);
-        buf.append(")");
-        return buf.toString();
-    }
-
-
     public QuadTreeItem getChild(int i)
     {
         return children[i];
@@ -475,5 +330,62 @@ public class QuadTreeItem extends SpatialExtent
     public byte getQuadrant()
     {
         return quadrant;
+    }
+
+
+    public double getTileSize()
+    {
+        return tileSize;
+    }
+
+
+    public double getDistance()
+    {
+        return distance;
+    }
+
+
+    public void setDistance(double distance)
+    {
+        this.distance = distance;
+    }
+    
+    
+    public void accept(QuadTreeVisitor visitor)
+    {
+        visitor.visit(this);
+    }
+    
+    
+    protected void appendId(StringBuffer buf)
+    {
+        if (parent != null)
+        {
+            parent.appendId(buf);
+            buf.append(quadrant);
+        }
+        else
+            buf.append('q');
+    }
+    
+    
+    public String toString()
+    {
+        StringBuffer buf = new StringBuffer();
+        appendId(buf);
+        buf.append(": ");
+        buf.append(maxX-minX);
+        buf.append(" x ");
+        buf.append(maxY-minY);
+        buf.append(" (");
+        buf.append(minX);
+        buf.append(",");
+        buf.append(minY);
+        buf.append(" - ");
+        buf.append(maxX);
+        buf.append(",");
+        buf.append(maxY);
+        buf.append(")");
+        return buf.toString();
     }
 }

@@ -18,29 +18,18 @@ import java.awt.image.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 import org.ogc.cdm.common.DataBlock;
-import org.ogc.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataArray;
 import org.vast.data.DataBlockFactory;
-import org.vast.data.DataGroup;
-import org.vast.data.DataValue;
-import org.vast.physics.SpatialExtent;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
-import org.vast.stt.data.DataNode;
-import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.provider.tiling.QuadTree;
 import org.vast.stt.provider.tiling.QuadTreeItem;
-
+import org.vast.stt.provider.tiling.TiledMapProvider;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
 
@@ -63,14 +52,10 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class VirtualEarthProvider extends AbstractProvider
+public class VirtualEarthProvider extends TiledMapProvider
 {
     private final static double DTR = Math.PI/180;
-    protected QuadTree quadTree;
-    protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
-    protected DataArray gridData;
     protected String layerId = "roads";
-    protected SpatialExtent maxBbox;
     
     
     class GetTileRunnable implements Runnable
@@ -92,7 +77,7 @@ public class VirtualEarthProvider extends AbstractProvider
                 
                 // create quad id
                 VirtualEarthTileNumber tileNumberGen = new VirtualEarthTileNumber();
-                item.acceptUp(tileNumberGen);
+                item.accept(tileNumberGen);
                 String q = tileNumberGen.getTileNumber();
 
                 // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
@@ -187,6 +172,7 @@ public class VirtualEarthProvider extends AbstractProvider
                     
                     // remove sub items now that we have the new tile
                     removeChildrenData(item);
+                    removeParent(item);
                     
                     // send event for redraw
                     dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
@@ -198,58 +184,6 @@ public class VirtualEarthProvider extends AbstractProvider
                     e.printStackTrace();
             }           
         }        
-    }
-        
-    
-    public VirtualEarthProvider()
-	{
-        quadTree = new QuadTree();
-        
-        // also set max requestable bbox
-        maxBbox = new SpatialExtent();
-        maxBbox.setMinX(-Math.PI);
-        maxBbox.setMaxX(+Math.PI);
-        maxBbox.setMinY(-Math.PI);
-        maxBbox.setMaxY(+Math.PI);
-        quadTree.init(maxBbox);
-        
-        this.autoUpdate = true;
-	}
-
-
-    @Override
-    public void init() throws DataException
-    {
-        // create block list for textures
-        DataGroup pixelData = new DataGroup(3);
-        pixelData.setName("pixel");
-        pixelData.addComponent("blue", new DataValue(DataType.BYTE));
-        pixelData.addComponent("green", new DataValue(DataType.BYTE));
-        pixelData.addComponent("red", new DataValue(DataType.BYTE));                    
-        DataArray rowData = new DataArray(256);
-        rowData.addComponent(pixelData);
-        rowData.setName("row");                  
-        DataArray imageData = new DataArray(256);
-        imageData.addComponent(rowData);
-        imageData.setName("image");
-        blockLists[0] = dataNode.createList(imageData);
-        System.out.println(imageData);
-        
-        // create block list for grid
-        DataGroup pointData = new DataGroup(2);
-        pointData.setName("point");
-        pointData.addComponent("lat", new DataValue(DataType.FLOAT));
-        pointData.addComponent("lon", new DataValue(DataType.FLOAT));                   
-        rowData = new DataArray(10);
-        rowData.addComponent(pointData);
-        rowData.setName("row");                  
-        gridData = new DataArray(10);
-        gridData.addComponent(rowData);
-        gridData.setName("grid");
-        blockLists[1] = dataNode.createList(gridData);
-        System.out.println(gridData);
-        
-        dataNode.setNodeStructureReady(true);
     }
     
     
@@ -271,50 +205,17 @@ public class VirtualEarthProvider extends AbstractProvider
         mercatorExtent.setMinY(Math.max(minY, maxBbox.getMinY()));
         mercatorExtent.setMaxY(Math.min(maxY, maxBbox.getMaxY()));
         
-        // query tree for matching and unused items
-        ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
-        ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
-        quadTree.findItems(matchingItems, unusedItems, mercatorExtent, 18, 5);
-        
-        // clean up old items
-        int unusedItemCount = unusedItems.size();
-        ArrayList<BlockListItem> deletedItems = new ArrayList<BlockListItem>(unusedItemCount*2);
-        for (int i=0; i<unusedItemCount; i++)
-        {
-            QuadTreeItem nextItem = unusedItems.get(i);
-            BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
-            nextItem.setData(null);
-            
-            if (blockArray != null)
-            {
-                for (int b=0; b<blockArray.length; b++)
-                {
-                    if (blockArray[b] != null)
-                    {
-                        // remove BlockListItem from list
-                        blockLists[b].remove(blockArray[b]);
-                        
-                        // added to deletedItems list
-                        deletedItems.add(blockArray[b]);
-                    }
-                }
-            }
-            
-            // also remove tree item itself from parent
-            nextItem.getParent().setChild(nextItem.getQuadrant(), null);
-        }
-        
-        // send event to cleanup stylers
-        if (deletedItems.size() > 0)
-        {
-            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
-            //System.out.println(deletedItems.size() + " items deleted");
-        }
+        // query tree for matching and unused items 
+        selectedItems.clear();
+        deletedItems.clear();        
+        tileSelector.setROI(mercatorExtent);
+        tileSelector.setCurrentLevel(0);
+        this.quadTree.accept(tileSelector);
         
         // get items to display
-        for (int i=0; i<matchingItems.size(); i++)
+        for (int i=0; i<selectedItems.size(); i++)
         {
-            QuadTreeItem nextItem = matchingItems.get(i);
+            QuadTreeItem nextItem = selectedItems.get(i);
             
             if (canceled)
                 return;
@@ -335,104 +236,21 @@ public class VirtualEarthProvider extends AbstractProvider
                     blockLists[b].remove(blockArray[b]);
                     blockLists[b].add(blockArray[b]);
                 }
+                
+                // remove children and parent of that item 
                 removeChildrenData(nextItem);
+                removeParent(nextItem);
             }
         }
-    }
-    
-    
-    /**
-     * Recursively remove children data from blockLists
-     * but keep the underlying data in cache.
-     * @param item
-     * @param list
-     */
-    protected void removeChildrenData(QuadTreeItem item)
-    {
-        // loop through children
-        for (byte i=0; i<4; i++)
-        {
-            QuadTreeItem childItem = item.getChild(i);
-            if (childItem != null)
-            {
-                BlockListItem[] blockArray = (BlockListItem[])childItem.getData();
-                
-                if (blockArray != null)
-                {                
-                    for (int b=0; b<blockArray.length; b++)
-                    {
-                        // remove items from list
-                        if (blockArray[b] != null)
-                            blockLists[b].remove(blockArray[b]);
-                    }
-                }
-                
-                removeChildrenData(childItem);
-            }
-        }
-    }
-    
-    
-    protected double yToLat(double y)
-    {
-        double lat = 0;
-        if (Math.abs(y) < Math.PI-(1e-4))
-            //lat = 2 * Math.atan(Math.exp(y)) - Math.PI/2;
-            lat = Math.PI/2 - 2 * Math.atan(Math.exp(-y));
-        else
-            lat = Math.signum(y)*Math.PI/2;
         
-        return lat;
+        // send event to cleanup stylers cache
+        if (deletedItems.size() > 0)
+            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
     }
-    
-    
-    protected double latToY(double lat)
-    {
-        double sinLat = Math.sin(lat);
-        double y = 0.5 * Math.log((1 + sinLat) / (1 - sinLat));
-        return y;
-    }
-    
-    
-    @Override
-    public void clearData()
-    {
-//        error = false;
-//        
-//        if (dataNode != null)
-//        {
-//            dataNode.clearAll();
-//            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
-//        }       
-    }
-    
-    
-    @Override
-    public DataNode getDataNode()
-    {
-        if (!dataNode.isNodeStructureReady())
-        {
-            //startUpdate(false);
-            new MyBboxUpdater(spatialExtent);
-        }
-        return dataNode;
-    }
-    
+        
     
     public void setLayer(String layerId)
     {
         this.layerId = layerId;
-    }
-    
-    
-    public boolean isSpatialSubsetSupported()
-    {
-        return true;
-    }
-
-
-    public boolean isTimeSubsetSupported()
-    {
-        return false;
     }
 }

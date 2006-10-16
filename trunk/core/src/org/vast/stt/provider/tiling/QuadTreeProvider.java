@@ -76,8 +76,7 @@ public class QuadTreeProvider extends AbstractProvider
             init();
         
         ArrayList<QuadTreeItem> matchingItems = new ArrayList<QuadTreeItem>(30);
-        ArrayList<QuadTreeItem> unusedItems = new ArrayList<QuadTreeItem>(30);
-        quadTree.findItems(matchingItems, unusedItems, spatialExtent, 100, 1);
+
 
         for (int i=0; i<matchingItems.size(); i++)
         {
