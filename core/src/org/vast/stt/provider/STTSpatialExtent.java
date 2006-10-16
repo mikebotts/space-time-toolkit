@@ -133,6 +133,7 @@ public class STTSpatialExtent extends SpatialExtent implements STTEventProducer
     public void setUpdater(SpatialExtentUpdater updater)
     {
         this.updater = updater;
+        updater.setSpatialExtent(this);
     }
     
     

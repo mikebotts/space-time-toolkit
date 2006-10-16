@@ -90,6 +90,7 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
     public void setUpdater(TimeExtentUpdater updater)
     {
         this.updater = updater;
+        updater.setTimeExtent(this);
     }
 
     
