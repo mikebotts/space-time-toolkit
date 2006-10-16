@@ -118,7 +118,6 @@ public class ExtentReader extends XMLReader
                 String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
                 Scene scene = (Scene)objectIds.get(sceneId);
                 TimeExtentUpdater updater = new SceneTimeUpdater(scene);
-                updater.setTimeExtent(timeExtent);
                 timeExtent.setUpdater(updater);
                 provider.setAutoUpdate(true);
                 updater.setEnabled(true);

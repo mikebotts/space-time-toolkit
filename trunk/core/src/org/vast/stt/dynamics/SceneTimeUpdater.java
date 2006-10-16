@@ -23,10 +23,13 @@
 
 package org.vast.stt.dynamics;
 
+import java.util.List;
+
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
 
 
 /**
@@ -69,7 +72,20 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
     protected void updateTime(double sceneTime)
     {
         this.timeExtent.setBaseTime(sceneTime);
-        this.timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+        boolean visibleDataFound = false;
+        
+        // find all dataItems using this dataProvider
+        List<SceneItem> sceneItems = scene.getSceneItems();
+        for (int i=0; i<sceneItems.size(); i++)
+        {
+            SceneItem nextItem = sceneItems.get(i);
+            if (nextItem.getDataItem().getDataProvider().getTimeExtent() == this.timeExtent)
+                visibleDataFound = true;
+        }
+        
+        // send event only if data is currently visible if this scene
+        if (visibleDataFound)
+            this.timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
     }
     
 
