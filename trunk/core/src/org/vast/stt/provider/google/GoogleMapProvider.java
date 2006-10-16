@@ -25,8 +25,6 @@ import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
-import org.vast.stt.data.DataNode;
-import org.vast.stt.dynamics.MyBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.STTSpatialExtent;
@@ -58,6 +56,7 @@ public class GoogleMapProvider extends TiledMapProvider
 {
     private final static double DTR = Math.PI/180;
     protected String layerId = "roads";
+    protected int serverNum = 0;
         
     
     class GetTileRunnable implements Runnable
@@ -85,7 +84,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
                     item.accept(tileNumberGen);
                     String q = tileNumberGen.getTileNumber();
-                    urlString = "http://kh3.google.com/kh?n=404&v=10&t=t" + q;
+                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=10&t=t" + q;
                 }
                 else if (layerId.startsWith("roads"))
                 {
@@ -95,7 +94,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
-                    urlString = "http://mt0.google.com/mt?n=404&v=w2t.26&x=" + x + "&y=" + y + "&zoom=" + z;
+                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2t.26&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 else if (layerId.startsWith("map"))
                 {
@@ -105,10 +104,15 @@ public class GoogleMapProvider extends TiledMapProvider
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
-                    urlString = "http://mt0.google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
+                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 
-                //System.out.println(urlString);
+                // increment server number
+                serverNum++;
+                if (serverNum > 3)
+                    serverNum = 0;
+                
+                System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://maps.google.com");
@@ -266,18 +270,6 @@ public class GoogleMapProvider extends TiledMapProvider
         // send event to cleanup stylers cache
         if (deletedItems.size() > 0)
             dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
-    }
-    
-    
-    @Override
-    public DataNode getDataNode()
-    {
-        if (!dataNode.isNodeStructureReady())
-        {
-            //startUpdate(false);
-            new MyBboxUpdater(spatialExtent);
-        }
-        return dataNode;
     }
     
     
