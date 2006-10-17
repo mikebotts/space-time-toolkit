@@ -173,7 +173,7 @@ public class TextureManager
     protected void createTexture(TextureStyler styler, RasterTileGraphic tex, GLTexture texInfo)
     {
         // fetch texture data from styler
-        fillRGBAData(styler, tex, texInfo);
+        fillTexData(styler, tex, texInfo);
         
         // if texture was successfully constructed, bind it with GL
         if (tex.hasRasterData)
@@ -187,11 +187,28 @@ public class TextureManager
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
             
-            // create texture in GL memory
-            gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, GL.GL_RGBA,
-                            tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
-                            0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, tex.rasterData);
+            // figure out image format
+            int format = 0;
+            switch (tex.bands)
+            {
+                case 1:
+                    format = GL.GL_LUMINANCE;
+                    break;
+                
+                case 3:    
+                    format = GL.GL_RGB;
+                    break;
+                    
+                case 4:    
+                    format = GL.GL_RGBA;
+                    break;                
+            }
             
+            // create texture in GL memory
+            gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
+                    tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
+                    0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
+
             // erase temp buffer
             tex.rasterData = null;
             
@@ -275,12 +292,12 @@ public class TextureManager
     
     
     /**
-     * Create an RGBA texture based on data passed by styler
+     * Create a texture based on data passed by styler
      * @param styler
      * @param tex
      * @param texInfo
      */
-    protected void fillRGBAData(TextureStyler styler, RasterTileGraphic tex, GLTexture texInfo)
+    protected void fillTexData(TextureStyler styler, RasterTileGraphic tex, GLTexture texInfo)
     {
         int paddedWidth = tex.width;
         int paddedHeight = tex.height;
@@ -323,7 +340,8 @@ public class TextureManager
         }
         
         // create byte buffer of the right size
-        byte[] buffer = new byte[paddedWidth*paddedHeight*4];
+        ByteBuffer buffer = ByteBuffer.allocateDirect(paddedWidth*paddedHeight*tex.bands);
+        //byte[] buffer = new byte[paddedWidth*paddedHeight*tex.bands];
         int index = 0;
         
         for (int j=0; j<trueHeight; j++)
@@ -331,33 +349,38 @@ public class TextureManager
             for (int i=0; i<trueWidth; i++)
             {
                 RasterPixelGraphic pixel = styler.getPixel(i, j);
-                buffer[index] = (byte)pixel.r;
+                //buffer[index] = (byte)pixel.r;
+                buffer.put(index, (byte)pixel.r);
                 index++;
-                buffer[index] = (byte)pixel.g;
-                index++;
-                buffer[index] = (byte)pixel.b;
-                index++;
-                buffer[index] = (byte)pixel.a;
-                index++;
+                
+                // only if RGB
+                if (tex.bands > 1)
+                {
+                    //buffer[index] = (byte)pixel.g;
+                    buffer.put(index, (byte)pixel.g);
+                    index++;
+                    //buffer[index] = (byte)pixel.b;
+                    buffer.put(index, (byte)pixel.b);
+                    index++;
+                }
+                
+                // only if RGBA
+                if (tex.bands == 2 || tex.bands == 4)
+                {
+                    //buffer[index] = (byte)pixel.a;
+                    buffer.put(index, (byte)pixel.a);
+                    index++;
+                }
             }
             
             // skip padding bytes
-            index += texInfo.widthPadding*4;
+            index += texInfo.widthPadding*tex.bands;
         }
         
-        tex.rasterData = ByteBuffer.wrap(buffer);
+        //tex.rasterData = ByteBuffer.wrap(buffer);
+        tex.rasterData = buffer;
         tex.hasRasterData = true;
         tex.hasColorMapData = false;
-    }
-    
-    
-    /**
-     * Create an RGB texture based on data passed by styler
-     * @param tex
-     */
-    protected void fillRGBData(DataStyler styler, RasterTileGraphic texture)
-    {
-        
     }
 
 

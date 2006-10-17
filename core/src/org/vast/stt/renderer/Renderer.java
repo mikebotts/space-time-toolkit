@@ -70,7 +70,7 @@ public abstract class Renderer implements StylerVisitor
     public abstract void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos);
     
     
-    public abstract PickedObject[] pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ);
+    public abstract void pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ);
 
 
     public abstract void resizeView(int width, int height);

@@ -187,6 +187,19 @@ public class DataTreeReader extends XMLReader
                 dataItem.getSymbolizers().add(symbolizer);
         }
         
+        // popup list
+        NodeList popupElts = dom.getElements(dataItemElt, "popup");
+        listSize = popupElts.getLength();
+        
+        // read all stylers
+        for (int i=0; i<listSize; i++)
+        {
+            Element popupElt = (Element)popupElts.item(i);
+            Symbolizer symbolizer = readSymbolizer(dom, popupElt);
+            if (symbolizer != null)
+                dataItem.getPopups().add(symbolizer);
+        }
+        
         // enabled ?
         String enabled = dom.getAttributeValue(dataItemElt, "enabled");
         if ((enabled != null) && (enabled.equalsIgnoreCase("true")))
