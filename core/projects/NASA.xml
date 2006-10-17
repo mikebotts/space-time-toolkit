@@ -1834,7 +1834,7 @@
                   <description>Grid for Region of Interest</description>
                   <spatialExtent tiling="1x1"> 
                      <BoundingBox id="ROI" srsName="EPSG:4326">
-                        <gml:coordinates>-85.2,23.4 -75.3,34.4</gml:coordinates>
+                        <gml:coordinates>-95.2,33.4 -85.3,44.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
