@@ -105,6 +105,11 @@ public class TextureManager
         
         // enable right texture target
         gl.glEnable(OpenGLCaps.TEXTURE_2D_TARGET);
+        
+        // Display max texture size
+        int[] size = new int[1];
+        gl.glGetIntegerv(GL.GL_MAX_TEXTURE_SIZE, size, 0);
+        MessageSystem.display("--> Maximum texture size is " + size[0] + " <--", false);
     }
     
     
@@ -192,7 +197,7 @@ public class TextureManager
             switch (tex.bands)
             {
                 case 1:
-                    format = GL.GL_LUMINANCE;
+                    format = GL.GL_R;
                     break;
                 
                 case 3:    
@@ -330,9 +335,9 @@ public class TextureManager
             // display warning message if padding is needed
             if (padded)
             {
-                System.err.println("Texture will be padded to have a power of two size:");
-                System.err.println("   original size: " + trueWidth + " x " + trueHeight);
-                System.err.println("     padded size: " + paddedWidth + " x " + paddedHeight);
+                MessageSystem.display("Texture will be padded to have a power of two size.\n" +
+                                      "   original size: " + trueWidth + " x " + trueHeight + "\n" +
+                                      "     padded size: " + paddedWidth + " x " + paddedHeight, false);
                 
                 texInfo.widthPadding = paddedWidth - trueWidth;
                 texInfo.heightPadding = paddedHeight - trueHeight;
@@ -341,6 +346,7 @@ public class TextureManager
         
         // create byte buffer of the right size
         ByteBuffer buffer = ByteBuffer.allocateDirect(paddedWidth*paddedHeight*tex.bands);
+        //System.err.println("Creating " + paddedWidth + "x" + paddedHeight + " Texture");
         //byte[] buffer = new byte[paddedWidth*paddedHeight*tex.bands];
         int index = 0;
         
