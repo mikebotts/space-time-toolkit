@@ -41,6 +41,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
 {
     private Scene scene;
     private ViewSettings view;
+    private long lastUpdateTime = -1;
         
     
     public SceneBboxUpdater(STTSpatialExtent spatialExtent)
@@ -55,12 +56,18 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     
     public void handleEvent(STTEvent e)
     {
-        switch (e.type)
+        long currentTime = System.currentTimeMillis();
+        
+        if (currentTime - lastUpdateTime > 100) // limit updates to 1 per 100ms
         {
-            case SCENE_VIEW_CHANGED:
-                view.getProjection().fitBboxToView(spatialExtent, scene);                
-                spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
-                break;
-        }        
+            lastUpdateTime = currentTime;
+            switch (e.type)
+            {
+                case SCENE_VIEW_CHANGED:
+                    view.getProjection().fitBboxToView(spatialExtent, scene);                
+                    spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+                    break;
+            }
+        }
     }
 }
