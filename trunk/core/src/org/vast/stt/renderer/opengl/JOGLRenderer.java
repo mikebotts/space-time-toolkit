@@ -17,6 +17,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
@@ -33,7 +34,7 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.scene.ViewSettings;
-import org.vast.stt.renderer.PickedObject;
+import org.vast.stt.renderer.PopupRenderer;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.*;
 
@@ -73,6 +74,8 @@ public class JOGLRenderer extends Renderer
     protected float oldZBufferOffset;
     protected boolean resetZOffset;
     protected boolean contextInUse;
+    protected Hashtable<Integer, SceneItem> selectableItems;
+    protected PopupRenderer popupRenderer;
 
     protected GLRenderPoints pointRenderer;
     protected GLRenderLines lineRenderer;
@@ -84,7 +87,7 @@ public class JOGLRenderer extends Renderer
 
     public JOGLRenderer()
     {
-
+        selectableItems = new Hashtable<Integer, SceneItem>();        
     }
     
     
@@ -223,7 +226,7 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public PickedObject[] pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ)
+    public void pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ)
     {
         ViewSettings view = scene.getViewSettings();
                 
@@ -261,6 +264,7 @@ public class JOGLRenderer extends Renderer
         gl.glPushName(0);
         
         // draw pickable items
+        selectableItems.clear();
         List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
         {
@@ -272,23 +276,23 @@ public class JOGLRenderer extends Renderer
             if (!nextItem.getDataItem().isEnabled())
                 continue;
             
-            //if (!nextItem.getDataItem().hasFeedback())
-            //    continue;
+            if (!nextItem.getDataItem().hasFeedback())
+                continue;
             
+            selectableItems.put(nextItem.hashCode(), nextItem);
             drawOneItem(nextItem);
         }
         
-        int nbRecords = gl.glRenderMode(GL.GL_RENDER);
-        
+        gl.glRenderMode(GL.GL_RENDER);        
         releaseContext();
         
         // read selection buffer
-        System.out.print(nbRecords + " obj: ");
-        for (int i=0; i<4; i++)
-            System.out.print(selectBuffer.get(i) + " ");
-        System.out.println();
-        
-        return null;
+        SceneItem selectedItem = selectableItems.get(selectBuffer.get(3));
+        if (selectedItem != null)
+        {
+            //System.out.println(selectedItem.getName());
+            popupRenderer.showPopup((int)x, (int)y, selectedItem);
+        }
     }
     
     
@@ -313,7 +317,7 @@ public class JOGLRenderer extends Renderer
         }
         
         // swap buffers        
-        SWTContext.swapBuffers();        
+        SWTContext.swapBuffers();
         releaseContext();
     }
        
@@ -410,7 +414,8 @@ public class JOGLRenderer extends Renderer
         polygonRenderer = new GLRenderPolygons(gl, glu);
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
-        textureRenderer = new GLRenderTexture(gl, glu);        
+        textureRenderer = new GLRenderTexture(gl, glu);
+        popupRenderer = new PopupRenderer(canvas);
         
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LESS);

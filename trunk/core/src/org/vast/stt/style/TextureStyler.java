@@ -205,6 +205,7 @@ public class TextureStyler extends AbstractStyler
         // reset all parameters
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
+        patch.getTexture().bands = 3;
         this.clearAllMappers();
         
         // grid width array
@@ -326,23 +327,13 @@ public class TextureStyler extends AbstractStyler
             }
         }
         
-        // pixel alpha
-        channel = this.symbolizer.getAlphaChannel();
-        if (channel != null)
-        {
-            propertyName = channel.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, channel.getMappingFunction()));
-            }
-        }
-        
         // pixel gray
         if (!colors)
         {
             channel = this.symbolizer.getGrayChannel();
             if (channel != null)
             {
+                patch.getTexture().bands = 1;
                 propertyName = channel.getPropertyName();
                 if (propertyName != null)
                 {
@@ -350,6 +341,19 @@ public class TextureStyler extends AbstractStyler
                 }
             }
         }
+        
+        // pixel alpha
+        channel = this.symbolizer.getAlphaChannel();
+        if (channel != null)
+        {
+            patch.getTexture().bands++;
+            propertyName = channel.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, channel.getMappingFunction()));
+            }
+        }
+        
                 
         // make sure we keep a handle to the block list containing image data
         texBlocks = dataLists[dataLists.length-1];

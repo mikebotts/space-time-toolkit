@@ -182,7 +182,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             CoverageReader reader = new CoverageReader();
             dataStream = requestBuilder.sendRequest(query, false);
             reader.parse(dataStream);
-          
+
             dataParser = reader.getDataParser();  // Just instantiates ASCII or BINARY parser and returns it
             DataComponent serverData = dataParser.getDataComponents();
             dataParser.setDataHandler(this);            

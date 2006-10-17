@@ -16,6 +16,7 @@ package org.vast.stt.gui.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -54,20 +55,20 @@ public class TableView extends DataItemView
     @Override
 	public void createPartControl(Composite parent)
 	{
-        mainSC = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-        FillLayout scLayout = new FillLayout();
-        scLayout.marginHeight = 0;
-        scLayout.marginWidth = 0;
-        mainSC.setLayout(scLayout);
-        
-        table = new RichTable(mainSC, SWT.NONE);
-        mainSC.setContent(table);
-        mainSC.setExpandVertical(true);
-        mainSC.setExpandHorizontal(true);        
-        mainSC.setContent(table);
-        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        
-        super.createPartControl(parent);
+//        mainSC = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+//        FillLayout scLayout = new FillLayout();
+//        scLayout.marginHeight = 0;
+//        scLayout.marginWidth = 0;
+//        mainSC.setLayout(scLayout);
+//        
+//        table = new RichTable(mainSC, SWT.NONE);
+//        mainSC.setContent(table);
+//        mainSC.setExpandVertical(true);
+//        mainSC.setExpandHorizontal(true);        
+//        mainSC.setContent(table);
+//        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        table = new RichTable(parent, SWT.NONE);
+        table.drawTable(null);
 	}
     	
 	
@@ -110,7 +111,7 @@ public class TableView extends DataItemView
     {
         setPartName("Table: " + item.getName());
         table.drawTable(((TableItem)item).getTable());
-        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        //mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
     
     
