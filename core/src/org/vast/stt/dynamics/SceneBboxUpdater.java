@@ -25,11 +25,11 @@ import org.vast.stt.provider.STTSpatialExtent;
 
 /**
  * <p><b>Title:</b>
- * MyBboxUpdater
+ * SceneBboxUpdater
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO MyBboxUpdater type description
+ * Used to update provide using the current scene visible bbox
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -37,13 +37,13 @@ import org.vast.stt.provider.STTSpatialExtent;
  * @date Aug 11, 2006
  * @version 1.0
  */
-public class MyBboxUpdater extends SpatialExtentUpdater implements STTEventListener
+public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
     private Scene scene;
     private ViewSettings view;
         
     
-    public MyBboxUpdater(STTSpatialExtent spatialExtent)
+    public SceneBboxUpdater(STTSpatialExtent spatialExtent)
     {
         setSpatialExtent(spatialExtent);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
