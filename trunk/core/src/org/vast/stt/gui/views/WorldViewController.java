@@ -54,6 +54,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean rotating;
 	private boolean translating;
 	private boolean zooming;
+    private boolean noMove;
 	
 
 	public WorldViewController()
@@ -217,7 +218,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseDown(MouseEvent e)
 	{
-		if (e.button == 1)
+        noMove = true;
+        
+        if (e.button == 1)
 		{
 			if (e.stateMask == SWT.CTRL)
 				zooming = true;
@@ -240,7 +243,13 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseUp(MouseEvent e)
 	{
-		rotating = false;
+		if (noMove)
+		{
+            Renderer renderer = scene.getRenderer();
+            renderer.pick(scene, e.x, e.y, 0, 5, 5, 0);
+        }
+        
+        rotating = false;
 		translating = false;
 		zooming = false;
 		((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
@@ -249,6 +258,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseMove(MouseEvent e)
 	{
+        noMove = false;
+        
         if (rotating || translating || zooming)
 		{           
             if (rotating)

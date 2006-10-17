@@ -230,9 +230,10 @@ public class TextureManager
                     GLTexture texInfo = textureEnum.nextElement();
                     if (texInfo.id > 0)
                     {
+                        // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         textureTable.remove(texInfo);
-                        //System.err.println("Tex #" + texInfo.id + " deleted");
                     }
                 }
                 
@@ -262,9 +263,10 @@ public class TextureManager
                     GLTexture texInfo = textureTable.get(objects[i]);
                     if (texInfo != null && texInfo.id > 0)
                     {
+                        //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         textureTable.remove(texInfo);
-                        //System.err.println("Tex #" + texInfo.id + " deleted");
                     }
                 }
             }

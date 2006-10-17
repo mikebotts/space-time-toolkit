@@ -55,8 +55,7 @@ public class Scene extends AbstractDisplay
 
     public Scene()
     {
-        renderer = new JOGLRenderer();
-        renderer.setScene(this);        
+        renderer = new JOGLRenderer();      
         sceneItems = new ArrayList<SceneItem>();
     }
 
