@@ -73,7 +73,7 @@ public class TextureManager
     {
         this.gl = gl;
         this.glu = glu;
-        
+
         if(forceNoExt)
         {
             MessageSystem.display("--> NPOT textures NOT supported <--", false);
