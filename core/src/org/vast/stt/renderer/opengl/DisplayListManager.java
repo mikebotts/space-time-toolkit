@@ -208,6 +208,7 @@ public class DisplayListManager
                     if (nextDL.id > 0)
                     {
                         gl.glDeleteLists(nextDL.id, 1);
+                        dlTable.remove(nextDL);
                         //System.err.println("DL #" + nextDL.id + " deleted");
                     }
                 }
@@ -240,6 +241,7 @@ public class DisplayListManager
                     if (nextDL != null && nextDL.id > 0)
                     {
                         gl.glDeleteLists(nextDL.id, 1);
+                        dlTable.remove(nextDL);
                         //System.err.println("DL #" + nextDL.id + " deleted");
                     }
                 }

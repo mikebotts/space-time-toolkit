@@ -231,6 +231,7 @@ public class TextureManager
                     if (texInfo.id > 0)
                     {
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        textureTable.remove(texInfo);
                         //System.err.println("Tex #" + texInfo.id + " deleted");
                     }
                 }
@@ -262,6 +263,7 @@ public class TextureManager
                     if (texInfo != null && texInfo.id > 0)
                     {
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                        textureTable.remove(texInfo);
                         //System.err.println("Tex #" + texInfo.id + " deleted");
                     }
                 }
