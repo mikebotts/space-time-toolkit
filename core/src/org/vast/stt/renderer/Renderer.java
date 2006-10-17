@@ -1,3 +1,15 @@
+/***************************************************************
+ (c) Copyright 2005, University of Alabama in Huntsville (UAH)
+ ALL RIGHTS RESERVED
+
+ This software is the property of UAH.
+ It cannot be duplicated, used, or distributed without the
+ express written consent of UAH.
+
+ This software developed by the Vis Analysis Systems Technology
+ (VAST) within the Earth System Science Lab under the direction
+ of Mike Botts (mike.botts@atmos.uah.edu)
+ ***************************************************************/
 
 package org.vast.stt.renderer;
 
@@ -35,7 +47,6 @@ public abstract class Renderer implements StylerVisitor
     
     
     protected Canvas canvas;
-    protected Scene scene;
 
 
     public abstract void init();
@@ -57,6 +68,9 @@ public abstract class Renderer implements StylerVisitor
 
 
     public abstract void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos);
+    
+    
+    public abstract PickedObject[] pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ);
 
 
     public abstract void resizeView(int width, int height);
@@ -89,17 +103,5 @@ public abstract class Renderer implements StylerVisitor
     public void setCanvas(Canvas canvas)
     {
         this.canvas = canvas;
-    }
-
-
-    public Scene getScene()
-    {
-        return scene;
-    }
-
-
-    public void setScene(Scene scene)
-    {
-        this.scene = scene;
     }
 }

@@ -44,10 +44,12 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
 {
 	protected String name;
 	protected boolean enabled = true;
+    protected boolean feedback = false;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
     protected STTEventListeners listeners;
     protected ArrayList<Symbolizer> symbolizers;
+    //protected ArrayList<Symbolizer> popups;
     
     
     public DataItem()
@@ -102,6 +104,18 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
         if (dataProvider != null)
             dataProvider.setError(false);
 	}
+    
+    
+    public boolean hasFeedback()
+    {
+        return feedback;
+    }
+
+
+    public void setFeedback(boolean feedback)
+    {
+        this.feedback = feedback;
+    }
     
     
     public List<Symbolizer> getSymbolizers()

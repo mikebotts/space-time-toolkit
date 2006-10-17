@@ -207,9 +207,10 @@ public class DisplayListManager
                     GLDisplayList nextDL = subLists.nextElement();
                     if (nextDL.id > 0)
                     {
+                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         gl.glDeleteLists(nextDL.id, 1);
+                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         dlTable.remove(nextDL);
-                        //System.err.println("DL #" + nextDL.id + " deleted");
                     }
                 }
                 
@@ -240,9 +241,10 @@ public class DisplayListManager
                     GLDisplayList nextDL = dlTable.get(objects[i]);
                     if (nextDL != null && nextDL.id > 0)
                     {
+                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         gl.glDeleteLists(nextDL.id, 1);
+                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         dlTable.remove(nextDL);
-                        //System.err.println("DL #" + nextDL.id + " deleted");
                     }
                 }
             }            

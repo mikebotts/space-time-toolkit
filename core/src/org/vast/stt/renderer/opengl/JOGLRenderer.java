@@ -13,9 +13,11 @@
 
 package org.vast.stt.renderer.opengl;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.GLDrawable;
@@ -24,7 +26,6 @@ import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
 import com.sun.opengl.util.GLUT;
-
 import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
@@ -32,6 +33,7 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.Renderer;
 import org.vast.stt.style.*;
 
@@ -70,6 +72,7 @@ public class JOGLRenderer extends Renderer
     protected float zBufferOffset;
     protected float oldZBufferOffset;
     protected boolean resetZOffset;
+    protected boolean contextInUse;
 
     protected GLRenderPoints pointRenderer;
     protected GLRenderLines lineRenderer;
@@ -85,11 +88,38 @@ public class JOGLRenderer extends Renderer
     }
     
     
+    protected synchronized void getContext()
+    {
+        if (javax.media.opengl.GLContext.getCurrent() == JOGLContext)
+            return;
+        
+        try
+        {
+            while (contextInUse)
+                wait();
+            
+            contextInUse = true;
+            SWTContext.setCurrent();
+            JOGLContext.makeCurrent();
+        }
+        catch (InterruptedException e)
+        {
+        }
+    }
+    
+    
+    protected synchronized void releaseContext()
+    {
+        JOGLContext.release();
+        contextInUse = false;
+        notifyAll();
+    }
+    
+    
     @Override
     public void cleanup(DataStyler styler, CleanupSection section)
     {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
+        getContext();
         
         switch (section)
         {
@@ -107,15 +137,14 @@ public class JOGLRenderer extends Renderer
                 break;
         }
         
-        JOGLContext.release();
+        releaseContext();
     }
     
     
     @Override
     public void cleanup(DataStyler styler, Object[] objects, CleanupSection section)
     {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
+        getContext();
         
         switch (section)
         {
@@ -133,16 +162,21 @@ public class JOGLRenderer extends Renderer
                 break;
         }
         
-        JOGLContext.release();
+        releaseContext();
     }
     
     
     @Override
     public void setupView(ViewSettings view)
     {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
-        
+        getContext();
+        setupMatrices(view);
+        releaseContext();
+    }
+    
+    
+    protected void setupMatrices(ViewSettings view)
+    {
         // clear back buffer
         Color backColor = view.getBackgroundColor();
         gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
@@ -151,7 +185,6 @@ public class JOGLRenderer extends Renderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-
         Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
@@ -174,30 +207,98 @@ public class JOGLRenderer extends Renderer
         
         // draw camera target if requested
         if (view.isShowCameraTarget())
-            this.drawCameraTarget();
+            this.drawCameraTarget(view);
         
         zBufferOffset = 100.0f;
-        
-        JOGLContext.release();
     }
     
     
     @Override
     public void resizeView(int width, int height)
     {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
+        getContext();
         SWTContext.resize(0, 0, width, height);
-        JOGLContext.release();
+        releaseContext();
+    }
+    
+    
+    @Override
+    public PickedObject[] pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ)
+    {
+        ViewSettings view = scene.getViewSettings();
+                
+        getContext();
+        
+        // prepare selection buffer and switch to GL_SELECT mode
+        ByteBuffer buffer = ByteBuffer.allocateDirect(16);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        IntBuffer selectBuffer = buffer.asIntBuffer();
+        gl.glSelectBuffer(selectBuffer.capacity(), selectBuffer);
+        gl.glRenderMode(GL.GL_SELECT);        
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
+        
+        // set up projection
+        gl.glMatrixMode(GL.GL_PROJECTION);
+        gl.glLoadIdentity();
+        glu.gluPickMatrix(x, viewPort[3]-y, dX, dY, viewPort, 0);
+        Rectangle clientArea = canvas.getClientArea();
+        float width = (float) view.getOrthoWidth();
+        float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
+        float farClip = (float) view.getFarClip();
+        float nearClip = (float) view.getNearClip();
+        gl.glOrtho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, nearClip, farClip);
+        
+        // set up 3D camera position from ViewSettings
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glLoadIdentity();
+        Vector3d eye = view.getCameraPos();
+        Vector3d center = view.getTargetPos();
+        Vector3d up = view.getUpDirection();
+        glu.gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
+        
+        // init name stack
+        gl.glInitNames();
+        gl.glPushName(0);
+        
+        // draw pickable items
+        List<SceneItem> sceneItems = scene.getSceneItems();
+        for (int i = 0; i < sceneItems.size(); i++)
+        {
+            SceneItem nextItem = sceneItems.get(i);
+
+            if (!nextItem.isVisible())
+                continue;
+            
+            if (!nextItem.getDataItem().isEnabled())
+                continue;
+            
+            //if (!nextItem.getDataItem().hasFeedback())
+            //    continue;
+            
+            drawOneItem(nextItem);
+        }
+        
+        int nbRecords = gl.glRenderMode(GL.GL_RENDER);
+        
+        releaseContext();
+        
+        // read selection buffer
+        System.out.print(nbRecords + " obj: ");
+        for (int i=0; i<4; i++)
+            System.out.print(selectBuffer.get(i) + " ");
+        System.out.println();
+        
+        return null;
     }
     
     
     @Override
     public void drawScene(Scene scene)
     {
-        setupView(scene.getViewSettings());
-        List<SceneItem> sceneItems = scene.getSceneItems();
+        getContext();        
+        setupMatrices(scene.getViewSettings());
         
+        List<SceneItem> sceneItems = scene.getSceneItems();        
         for (int i = 0; i < sceneItems.size(); i++)
         {
             SceneItem nextItem = sceneItems.get(i);
@@ -208,31 +309,34 @@ public class JOGLRenderer extends Renderer
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            drawItem(nextItem);
+            drawOneItem(nextItem);
         }
         
-        // swap buffers
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
-        SWTContext.swapBuffers();
-        JOGLContext.release();
+        // swap buffers        
+        SWTContext.swapBuffers();        
+        releaseContext();
     }
        
     
     @Override
     public void drawItem(SceneItem sceneItem)
     {
-        SWTContext.setCurrent();
-        JOGLContext.makeCurrent();
-        resetZOffset = false;
-        sceneItem.accept(this);
-        JOGLContext.release();
+        getContext();        
+        drawOneItem(sceneItem);
+        releaseContext();
     }
     
     
-    protected void drawCameraTarget()
+    protected void drawOneItem(SceneItem sceneItem)
     {
-        ViewSettings view = scene.getViewSettings();
+        resetZOffset = false;
+        gl.glLoadName(sceneItem.hashCode());
+        sceneItem.accept(this);
+    }
+    
+    
+    protected void drawCameraTarget(ViewSettings view)
+    {
         double x = view.getTargetPos().x;
         double y = view.getTargetPos().y;
         double z = view.getTargetPos().z;
@@ -289,7 +393,7 @@ public class JOGLRenderer extends Renderer
             JOGLContext = drawable.createContext(contextList.get(0));
         contextList.add(JOGLContext);
         
-        JOGLContext.setSynchronized(true);
+        //JOGLContext.setSynchronized(true);
         JOGLContext.makeCurrent();
         
         //JOGLContext.setGL(new DebugGL(JOGLContext.getGL()));
@@ -326,7 +430,7 @@ public class JOGLRenderer extends Renderer
 //        gl.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, FloatBuffer.wrap(new float[] {0.0f, 0.0f, -2.0f, 1.0f}));
 //        gl.glEnable(GL.GL_LIGHT1);
         
-        JOGLContext.release();
+        releaseContext();
     }
 
 
@@ -337,11 +441,10 @@ public class JOGLRenderer extends Renderer
         {
             // dispose context and remove from list
             contextList.remove(JOGLContext);            
-            SWTContext.setCurrent();
-            JOGLContext.makeCurrent();
-            JOGLContext.release();
+            getContext();            
             SWTContext.dispose();
             JOGLContext.destroy();
+            releaseContext();
             SWTContext = null;
             JOGLContext = null;
         }
