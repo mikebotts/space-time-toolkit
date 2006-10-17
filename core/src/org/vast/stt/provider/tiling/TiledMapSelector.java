@@ -98,10 +98,10 @@ public class TiledMapSelector extends ExtentSelector
             if (tooFar)
             {
                 item.getParent().setChild(item.getQuadrant(), null);
+                item.setParent(null);
                 item.setData(null);
-                // System.out.println("Item deleted " + item);                
-            }
-                
+                // System.out.println("Item deleted " + item);
+            }                
         }
         
         // loop through children
