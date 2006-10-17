@@ -85,9 +85,27 @@ public class JOGLRenderer extends Renderer
     }
     
     
+//    protected synchronized void getContext()
+//    {
+//        while (JOGLContext.)
+//        
+//        SWTContext.setCurrent();
+//        JOGLContext.makeCurrent();
+//    }
+//    
+//    
+//    protected synchronized void releaseContext()
+//    {
+//        
+//    }
+    
+    
     @Override
     public void cleanup(DataStyler styler, CleanupSection section)
     {
+        SWTContext.setCurrent();
+        JOGLContext.makeCurrent();
+        
         switch (section)
         {
             case ALL:
@@ -103,12 +121,17 @@ public class JOGLRenderer extends Renderer
                 displayListManager.clearDisplayLists(styler);
                 break;
         }
+        
+        JOGLContext.release();
     }
     
     
     @Override
     public void cleanup(DataStyler styler, Object[] objects, CleanupSection section)
     {
+        SWTContext.setCurrent();
+        JOGLContext.makeCurrent();
+        
         switch (section)
         {
             case ALL:
@@ -124,6 +147,8 @@ public class JOGLRenderer extends Renderer
                 displayListManager.clearDisplayLists(styler, objects);
                 break;
         }
+        
+        JOGLContext.release();
     }
     
     
@@ -141,7 +166,7 @@ public class JOGLRenderer extends Renderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        
+
         Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
@@ -279,6 +304,7 @@ public class JOGLRenderer extends Renderer
             JOGLContext = drawable.createContext(contextList.get(0));
         contextList.add(JOGLContext);
         
+        JOGLContext.setSynchronized(true);
         JOGLContext.makeCurrent();
         
         //JOGLContext.setGL(new DebugGL(JOGLContext.getGL()));
