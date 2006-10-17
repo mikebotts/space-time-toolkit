@@ -110,15 +110,15 @@ public abstract class AbstractProvider implements DataProvider
                         canceled = false;
                         
                         // update data
-                        System.out.println("Updating " + name + "...");
+                        //System.out.println("Updating " + name + "...");
                         updateData();
                         
                         synchronized(lock)
                         {
                             if (!canceled)
                                 redoUpdate = false;
-                            else
-                                System.out.println("Update canceled");
+                            //else
+                                //System.out.println("Update canceled");
                         }
                     }
                     catch (DataException e)

@@ -112,14 +112,18 @@ public class GoogleMapProvider extends TiledMapProvider
                 if (serverNum > 3)
                     serverNum = 0;                
                                         
-                System.out.println(urlString);
+                //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://maps.google.com");
                 connection.addRequestProperty("Connection", "keep-alive");
                 connection.addRequestProperty("Keep-Alive", "300");
-                //long startTime = System.currentTimeMillis();
-                InputStream is = connection.getInputStream();
+                
+                // return if connection cannot be made
+                InputStream is = null;
+                try {is = connection.getInputStream();}
+                catch (Exception e) {return;}
+                
                 //long connectTime = System.currentTimeMillis();
                 MemoryCacheSeekableStream imgStream = new MemoryCacheSeekableStream(is);
 
