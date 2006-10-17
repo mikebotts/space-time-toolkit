@@ -85,21 +85,6 @@ public class JOGLRenderer extends Renderer
     }
     
     
-//    protected synchronized void getContext()
-//    {
-//        while (JOGLContext.)
-//        
-//        SWTContext.setCurrent();
-//        JOGLContext.makeCurrent();
-//    }
-//    
-//    
-//    protected synchronized void releaseContext()
-//    {
-//        
-//    }
-    
-    
     @Override
     public void cleanup(DataStyler styler, CleanupSection section)
     {
