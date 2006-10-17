@@ -34,7 +34,7 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.dynamics.MyBboxUpdater;
+import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.tiling.QuadTree;
 
@@ -201,7 +201,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         if (!dataNode.isNodeStructureReady())
         {
             //startUpdate(false);
-            new MyBboxUpdater(spatialExtent);
+            new SceneBboxUpdater(spatialExtent);
         }
         return dataNode;
     }

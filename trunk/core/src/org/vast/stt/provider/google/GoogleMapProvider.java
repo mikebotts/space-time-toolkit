@@ -116,8 +116,8 @@ public class GoogleMapProvider extends TiledMapProvider
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://maps.google.com");
-                connection.addRequestProperty("Connection", "keep-alive");
-                connection.addRequestProperty("Keep-Alive", "300");
+                //connection.addRequestProperty("Connection", "keep-alive");
+                //connection.addRequestProperty("Keep-Alive", "300");
                 
                 // return if connection cannot be made
                 InputStream is = null;

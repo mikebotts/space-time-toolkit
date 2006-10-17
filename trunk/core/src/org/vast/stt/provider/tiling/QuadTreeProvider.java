@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.dynamics.MyBboxUpdater;
+import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
@@ -115,7 +115,7 @@ public class QuadTreeProvider extends AbstractProvider
     @Override
     public DataNode getDataNode()
     {
-        new MyBboxUpdater(spatialExtent);
+        new SceneBboxUpdater(spatialExtent);
         return super.getDataNode();
     }
     
