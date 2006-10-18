@@ -197,7 +197,11 @@ public class TextureManager
             switch (tex.bands)
             {
                 case 1:
-                    format = GL.GL_R;
+                    format = GL.GL_LUMINANCE;
+                    break;
+                    
+                case 2:
+                    format = GL.GL_LUMINANCE_ALPHA;
                     break;
                 
                 case 3:    
@@ -213,7 +217,7 @@ public class TextureManager
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
                     tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
                     0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
-
+            
             // erase temp buffer
             tex.rasterData = null;
             
@@ -346,7 +350,7 @@ public class TextureManager
         
         // create byte buffer of the right size
         ByteBuffer buffer = ByteBuffer.allocateDirect(paddedWidth*paddedHeight*tex.bands);
-        //System.err.println("Creating " + paddedWidth + "x" + paddedHeight + " Texture");
+        System.err.println("Creating " + paddedWidth + "x" + paddedHeight + " Texture");
         //byte[] buffer = new byte[paddedWidth*paddedHeight*tex.bands];
         int index = 0;
         
