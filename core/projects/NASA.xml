@@ -1027,20 +1027,20 @@
                                              <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
                                           </sldx:Axis>
                                        </sldx:Dimensions>
-                                       <sld:Opacity>10.0</sld:Opacity>
+                                       <sld:Opacity>1.0</sld:Opacity>
                                        <sld:ChannelSelection>
                                           <sld:GrayChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <Gain>10.0</Gain>
+                                                <Gain>2.0</Gain>
                                              </LinearAdjustment>
                                           </sld:GrayChannel>
-                                          <sld:AlphaChannel>
+                                          <!--<sld:AlphaChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
                                                 <Gain>3.0</Gain>
                                              </LinearAdjustment>
-                                          </sld:AlphaChannel>
+                                          </sld:AlphaChannel>-->
                                        </sld:ChannelSelection>
                                     </sldx:Raster>
                                  </sldx:TextureSymbolizer>
@@ -1152,6 +1152,11 @@
                                     </sld:Stroke>
                                  </sldx:GridBorderSymbolizer>
                               </style>
+                              <popup>
+                                 <sld:TextSymbolizer>
+                                    <sld:Label>NOAA-15</sld:Label>
+                                 </sld:TextSymbolizer>
+                              </popup>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -1216,6 +1221,11 @@
                               </style>
                               <style href="#GRID_MESH"/>
                               <style href="#GRID_BORDER"/>
+                              <popup>
+                                 <sld:TextSymbolizer>
+                                    <sld:Label>NOAA-15</sld:Label>
+                                 </sld:TextSymbolizer>
+                              </popup>
                            </DataItem>
                         </member>
                         <member visible="false">
