@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Alex (UAH) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.opengis.net/sld" targetNamespace="http://www.opengis.net/sld">
+	<xsd:complexType name="_SymbolizerType" abstract="true"/>
+	<xsd:element name="_Symbolizer" type="_SymbolizerType" abstract="true"/>
+	<xsd:element name="PropertyName"/>
+	<xsd:element name="_MappingFunction" type="_MappingFunctionType" abstract="true"/>
+	<xsd:complexType name="_MappablePropertyType" abstract="true" mixed="true">
+		<xsd:choice>
+			<xsd:element ref="PropertyName"/>
+			<xsd:element ref="_MappingFunction"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="_MappingFunctionType" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="PropertyName"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="opacity" type="_MappablePropertyType"/>
+	<xsd:element name="Graphic"/>
+</xsd:schema>
