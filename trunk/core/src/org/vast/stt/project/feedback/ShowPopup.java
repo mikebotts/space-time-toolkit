@@ -52,7 +52,7 @@ public class ShowPopup extends UserAction
     protected boolean showCloseButton;
     protected float autoCloseDelay;
     protected boolean autoUpdate; // if true, popup content will be updated when data changes
-    protected Symbolizer style; // DataTable, DataChart, Label, Raster and Video supported
+    protected Symbolizer content; // DataTable, DataChart, Label, Raster and Video supported
 
 
     public float getAutoCloseDelay()
@@ -115,15 +115,15 @@ public class ShowPopup extends UserAction
     }
 
 
-    public Symbolizer getStyle()
+    public Symbolizer getContent()
     {
-        return style;
+        return content;
     }
 
 
-    public void setStyle(Symbolizer style)
+    public void setContent(Symbolizer style)
     {
-        this.style = style;
+        this.content = style;
     }
 
 

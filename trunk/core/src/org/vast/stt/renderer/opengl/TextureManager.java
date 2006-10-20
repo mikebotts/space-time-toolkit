@@ -350,7 +350,7 @@ public class TextureManager
         
         // create byte buffer of the right size
         ByteBuffer buffer = ByteBuffer.allocateDirect(paddedWidth*paddedHeight*tex.bands);
-        System.err.println("Creating " + paddedWidth + "x" + paddedHeight + " Texture");
+        //System.err.println("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
         //byte[] buffer = new byte[paddedWidth*paddedHeight*tex.bands];
         int index = 0;
         
@@ -381,6 +381,8 @@ public class TextureManager
                     buffer.put(index, (byte)pixel.a);
                     index++;
                 }
+                
+                //System.out.println(i + "," + j + ": " + pixel.r + "," + pixel.g + "," + pixel.b);
             }
             
             // skip padding bytes

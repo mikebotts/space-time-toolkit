@@ -28,16 +28,16 @@ import org.vast.stt.project.feedback.UserEvent.EventType;
 public class UserAction
 {
     protected EventType eventType;
-    protected float delay;
+    protected int delay;
 
 
-    public float getDelay()
+    public int getDelay()
     {
         return delay;
     }
 
 
-    public void setDelay(float delay)
+    public void setDelay(int delay)
     {
         this.delay = delay;
     }

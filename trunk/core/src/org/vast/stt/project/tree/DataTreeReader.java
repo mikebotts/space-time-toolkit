@@ -21,6 +21,8 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.XMLRegistry;
+import org.vast.stt.project.feedback.FeedbackActionReader;
+import org.vast.stt.project.feedback.UserAction;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.ExtentReader;
@@ -47,6 +49,7 @@ public class DataTreeReader extends XMLReader
 {
     protected SLDReader sldReader;
     protected ExtentReader extentReader;
+    protected FeedbackActionReader actionReader;
     protected Scene parentScene;
     
 	
@@ -54,6 +57,7 @@ public class DataTreeReader extends XMLReader
 	{
         sldReader = new SLDReader();
         extentReader = new ExtentReader();
+        actionReader = new FeedbackActionReader();
 	}
     
     
@@ -62,6 +66,7 @@ public class DataTreeReader extends XMLReader
     {
         super.setObjectIds(objectIds);
         extentReader.setObjectIds(objectIds);
+        actionReader.setObjectIds(objectIds);
     }
     
     
@@ -188,16 +193,16 @@ public class DataTreeReader extends XMLReader
         }
         
         // popup list
-        NodeList popupElts = dom.getElements(dataItemElt, "popup");
-        listSize = popupElts.getLength();
+        NodeList feedbackElts = dom.getElements(dataItemElt, "feedback");
+        listSize = feedbackElts.getLength();
         
         // read all stylers
         for (int i=0; i<listSize; i++)
         {
-            Element popupElt = (Element)popupElts.item(i);
-            Symbolizer symbolizer = readSymbolizer(dom, popupElt);
-            if (symbolizer != null)
-                dataItem.getPopups().add(symbolizer);
+            Element feedbackElt = (Element)feedbackElts.item(i);
+            UserAction action = (UserAction)actionReader.read(dom, feedbackElt);
+            if (action != null)
+                dataItem.getActions().add(action);
         }
         
         // enabled ?
