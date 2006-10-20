@@ -365,7 +365,7 @@ public class TextureManager
                 index++;
                 
                 // only if RGB
-                if (tex.bands > 1)
+                if (tex.bands > 2)
                 {
                     //buffer[index] = (byte)pixel.g;
                     buffer.put(index, (byte)pixel.g);
