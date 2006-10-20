@@ -95,7 +95,7 @@ public class ExtentReader extends XMLReader
             }
              
             // store that in the hashtable
-            registerObjectID(dom, spElt, spatialExtent);
+            registerObjectID(dom, bboxElt, spatialExtent);
          }
     }
     
