@@ -204,7 +204,7 @@ public class TextureManager
                     format = GL.GL_LUMINANCE_ALPHA;
                     break;
                 
-                case 3:    
+                case 3:
                     format = GL.GL_RGB;
                     break;
                     
@@ -214,6 +214,7 @@ public class TextureManager
             }
             
             // create texture in GL memory
+            gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
             gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
                     tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
                     0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
