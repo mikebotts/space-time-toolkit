@@ -107,7 +107,6 @@
                   </swe:component>
                   <swe:component name="layer">
                      <swe:Category>GOES12_CONUS_REALTIME</swe:Category>
-                     <!--<swe:Category>GOES12_CONUS_REALTIME_IR</swe:Category>-->
                   </swe:component>
                   <swe:component name="format">
                      <swe:Category definition="urn:ogc:def:identifier:mimeType">application/com-binary-base64</swe:Category>
