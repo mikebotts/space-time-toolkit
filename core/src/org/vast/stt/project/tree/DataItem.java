@@ -20,6 +20,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
+import org.vast.stt.project.feedback.UserAction;
 import org.vast.stt.provider.DataProvider;
 
 
@@ -48,14 +49,14 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
 	protected DataProvider dataProvider;
     protected STTEventListeners listeners;
     protected ArrayList<Symbolizer> symbolizers;
-    protected ArrayList<Symbolizer> popups;
+    protected ArrayList<UserAction> actions;
     
     
     public DataItem()
 	{
         listeners = new STTEventListeners(2);
         symbolizers = new ArrayList<Symbolizer>(2);
-        popups = new ArrayList<Symbolizer>(1);
+        actions = new ArrayList<UserAction>(1);
 	}
 	
 
@@ -108,7 +109,7 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
     
     public boolean hasFeedback()
     {
-        return !popups.isEmpty();
+        return !actions.isEmpty();
     }
     
     
@@ -118,9 +119,9 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
     }
     
     
-    public List<Symbolizer> getPopups()
+    public List<UserAction> getActions()
     {
-        return popups;
+        return actions;
     }
 
 
