@@ -2051,8 +2051,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-02T07:33:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-10-02T07:41:00Z</gml:endPosition>
+                                 <gml:beginPosition>2006-10-02T09:14:00Z</gml:beginPosition>
+                                 <gml:endPosition>2006-10-02T09:22:00Z</gml:endPosition>
                                  <timeStep>P1S</timeStep>
                               </gml:TimePeriod>
                            </ogc:During>
