@@ -23,13 +23,16 @@
 
 package org.vast.stt.project.chart;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
 
 
 /**
  * <p><b>Title:</b>
- * Data Chart
+ * Chart Item
  * </p>
  *
  * <p><b>Description:</b><br/>
@@ -43,10 +46,32 @@ import org.vast.stt.project.tree.DataItem;
  */
 public class ChartItem extends DataItem
 {
-
+    protected ChartSymbolizer chartInfo;
+    
+    
     @Override
     public void handleEvent(STTEvent e)
     {
         
+    }
+
+
+    public ChartSymbolizer getChartInfo()
+    {
+        return chartInfo;
+    }
+
+
+    public void setChartInfo(ChartSymbolizer chartInfo)
+    {
+        this.chartInfo = chartInfo;
+    }
+    
+    
+    public List<Symbolizer> getSymbolizers()
+    {
+        ArrayList<Symbolizer> graphStyles = new ArrayList<Symbolizer>();
+        
+        return graphStyles;
     }
 }

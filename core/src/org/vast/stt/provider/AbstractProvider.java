@@ -46,7 +46,6 @@ public abstract class AbstractProvider implements DataProvider
     protected String description;
 	protected boolean canceled = false;
     protected boolean error = false;
-    protected boolean autoUpdate = false;
     protected boolean redoUpdate = true;
 	protected InputStream dataStream;
 	protected DataNode dataNode;
@@ -246,18 +245,6 @@ public abstract class AbstractProvider implements DataProvider
 	{
 		this.maxTimeExtent = maxTimeExtent;
 	}
-    
-    
-    public boolean getAutoUpdate()
-    {
-        return autoUpdate;
-    }
-    
-    
-    public void setAutoUpdate(boolean autoUpdate)
-    {
-        this.autoUpdate = autoUpdate;
-    }
 
 
     public String getDescription()
@@ -290,8 +277,7 @@ public abstract class AbstractProvider implements DataProvider
         {
             case PROVIDER_TIME_EXTENT_CHANGED:
             case PROVIDER_SPATIAL_EXTENT_CHANGED:
-                if (autoUpdate)
-                    startUpdate(true);
+                startUpdate(true);
                 dispatchEvent(e.copy());
                 break;
         }

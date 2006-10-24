@@ -82,8 +82,8 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
         item.setDataProvider(provider);
         
         // read table style options
-        DataTable table = readTable(dom, itemElt);
-        item.getSymbolizers().add(table);        
+        TableSymbolizer table = readTable(dom, itemElt);
+        item.setTableInfo(table);
         
         // enabled ?
         String enabled = dom.getAttributeValue(itemElt, "enabled");
@@ -96,9 +96,9 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
     }
     
     
-    public DataTable readTable(DOMReader dom, Element tableElt)
+    public TableSymbolizer readTable(DOMReader dom, Element tableElt)
     {
-        DataTable table = new DataTable();
+        TableSymbolizer table = new TableSymbolizer();
         
         // column list
         NodeList columnElts = dom.getElements(tableElt, "Column");
@@ -127,19 +127,20 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
         // read all stylers
         for (int i=0; i<listSize; i++)
         {
-            Element symElt = (Element)symElts.item(i);
+            Element styleElt = (Element)symElts.item(i);
             Symbolizer symbolizer = null;
+            Element symElt = dom.getFirstChildElement(styleElt);
             
-            // read column symbolizer (also supports sub chart or table) 
+            // read column symbolizer (also supports sub chart or table)
             if (symElt.getLocalName().endsWith("ChartSymbolizer"))
-                symbolizer = chartItemReader.readChart(dom, symElt);
+                symbolizer = chartItemReader.readChart(dom, styleElt);
             else if (symElt.getLocalName().endsWith("TableSymbolizer"))
-                symbolizer = readTable(dom, symElt);
+                symbolizer = readTable(dom, styleElt);
             else
-                symbolizer = dataTreeReader.readSymbolizer(dom, symElt);
+                symbolizer = dataTreeReader.readSymbolizer(dom, styleElt);
             
             if (symbolizer != null)
-                column.getSymbolizers().add(symbolizer);
+                column.setSymbolizer(symbolizer);
         }
         
         // set column width

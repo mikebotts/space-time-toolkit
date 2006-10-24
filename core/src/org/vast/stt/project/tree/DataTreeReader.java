@@ -150,12 +150,12 @@ public class DataTreeReader extends XMLReader
             {
                 dataList.add(dataEntry);
                 
-                // set visibility if it's a DataItem
-                if (dataEntry instanceof DataItem)
+                // set visibility if it's a WorldItem
+                if (dataEntry instanceof WorldItem)
                 {
                     String visText = dom.getAttributeValue(propElt, "visible");
                     if (visText != null && visText.equals("true"))
-                        parentScene.setItemVisibility((DataItem)dataEntry, true);
+                        parentScene.setItemVisibility((WorldItem)dataEntry, true);
                 }                    
             }
 		}

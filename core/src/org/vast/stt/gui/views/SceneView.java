@@ -122,6 +122,8 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
         
         if (scene != null)
             scene.removeListener(this);
+        
+        super.dispose();
     }
 
 

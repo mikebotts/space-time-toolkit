@@ -23,7 +23,39 @@
 
 package org.vast.stt.project.tree;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.vast.ows.sld.Symbolizer;
+
+
+/**
+ * <p><b>Title:</b>
+ * World Item
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * This type of DataItem will be rendered in the 3D scene.
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Alexandre Robin
+ * @date Oct 23, 2006
+ * @version 1.0
+ */
 public class WorldItem extends DataItem
 {
-
+    protected ArrayList<Symbolizer> symbolizers;
+    
+    
+    public WorldItem()
+    {
+        super();
+        symbolizers = new ArrayList<Symbolizer>(2);
+    }
+    
+    
+    public List<Symbolizer> getSymbolizers()
+    {
+        return symbolizers;
+    }
 }

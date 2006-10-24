@@ -119,7 +119,6 @@ public class ExtentReader extends XMLReader
                 Scene scene = (Scene)objectIds.get(sceneId);
                 TimeExtentUpdater updater = new SceneTimeUpdater(scene);
                 timeExtent.setUpdater(updater);
-                provider.setAutoUpdate(true);
                 updater.setEnabled(true);
             }
         }

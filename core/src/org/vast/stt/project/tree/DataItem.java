@@ -26,7 +26,7 @@ import org.vast.stt.provider.DataProvider;
 
 /**
  * <p><b>Title:</b><br/>
- * DataItem Descriptor
+ * DataItem
  * </p>
  *
  * <p><b>Description:</b><br/>
@@ -47,17 +47,18 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
 	protected boolean enabled = true;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
-    protected STTEventListeners listeners;
-    protected ArrayList<Symbolizer> symbolizers;
+    protected STTEventListeners listeners;    
     protected ArrayList<UserAction> actions;
     
     
     public DataItem()
 	{
-        listeners = new STTEventListeners(2);
-        symbolizers = new ArrayList<Symbolizer>(2);
+        listeners = new STTEventListeners(2);        
         actions = new ArrayList<UserAction>(1);
 	}
+    
+    
+    public abstract List<Symbolizer> getSymbolizers(); 
 	
 
 	public String getName()
@@ -110,12 +111,6 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
     public boolean hasFeedback()
     {
         return !actions.isEmpty();
-    }
-    
-    
-    public List<Symbolizer> getSymbolizers()
-    {
-        return symbolizers;
     }
     
     

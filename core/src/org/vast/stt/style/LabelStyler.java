@@ -55,7 +55,8 @@ public class LabelStyler extends AbstractStyler
             dataLists[0].blockIndexer.next();
             
             // adjust geometry to fit projection
-            projection.adjust(geometryCrs, label);
+            if (projection != null)
+                projection.adjust(geometryCrs, label);
             
             // add point to bbox if needed            
             addToExtent(currentBlockInfo, label);
