@@ -96,8 +96,10 @@ public class GLRenderTexture extends GLRunnable
                         {
                             gl.glEnd();
                             gl.glBegin(GL.GL_QUAD_STRIP);
+                            if (p == 0) u--;
+                            point.graphBreak = false;
+                            break;
                         }
-                        point.graphBreak = false;
                         
                         gl.glTexCoord2f(point.tx, point.ty);
                         gl.glVertex3d(point.x, point.y, point.z);
