@@ -278,7 +278,7 @@ public abstract class AbstractProvider implements DataProvider
             case PROVIDER_TIME_EXTENT_CHANGED:
             case PROVIDER_SPATIAL_EXTENT_CHANGED:
                 startUpdate(true);
-                dispatchEvent(e.copy());
+                //dispatchEvent(e.copy());
                 break;
         }
     }

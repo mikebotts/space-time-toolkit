@@ -173,8 +173,6 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
             case PROVIDER_DATA_CHANGED:
             case PROVIDER_DATA_CLEARED:
             case PROVIDER_DATA_REMOVED:
-            case PROVIDER_TIME_EXTENT_CHANGED:
-            case PROVIDER_SPATIAL_EXTENT_CHANGED:
                 dispatchEvent(event.copy());
                 break;
                 
