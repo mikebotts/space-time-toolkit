@@ -44,6 +44,7 @@ public abstract class AbstractProvider implements DataProvider
 {
     protected String name;
     protected String description;
+    protected boolean enabled = true;
 	protected boolean canceled = false;
     protected boolean error = false;
     protected boolean redoUpdate = true;
@@ -75,7 +76,7 @@ public abstract class AbstractProvider implements DataProvider
     
     public synchronized void startUpdate(boolean force)
     {
-        if (error)
+        if (!enabled || error)
             return;
         
         // if updating, continue only if force is true
@@ -293,6 +294,18 @@ public abstract class AbstractProvider implements DataProvider
     public void setError(boolean error)
     {
         this.error = error;
+    }
+    
+    
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+    
+    
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
     }
     
     

@@ -92,8 +92,8 @@ public class VirtualEarthProvider extends TiledMapProvider
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.addRequestProperty("Referer", "http://local.live.com");
-                //connection.addRequestProperty("Connection", "Keep-Alive");
-                //connection.addRequestProperty("Keep-Alive", "1");
+                connection.addRequestProperty("Connection", "keep-alive");
+                connection.addRequestProperty("Keep-Alive", "300");
                 //long startTime = System.currentTimeMillis();
                 InputStream is = connection.getInputStream();
                 //long connectTime = System.currentTimeMillis();

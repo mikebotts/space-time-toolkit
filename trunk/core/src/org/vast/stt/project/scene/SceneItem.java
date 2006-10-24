@@ -105,7 +105,10 @@ public class SceneItem implements STTEventListener
             if (visible)
                 this.dataItem.addListener(this);
             else
-                this.dataItem.removeListener(this);            
+                this.dataItem.removeListener(this);
+            
+            // TODO check if dataItem is not visible in another view!
+            this.dataItem.setEnabled(visible);
         }
         
         this.visible = visible;
