@@ -103,8 +103,12 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+        
         if (dataProvider != null)
+        {
             dataProvider.setError(false);
+            dataProvider.setEnabled(enabled);
+        }
 	}
     
     
