@@ -951,19 +951,39 @@
                                  </style>
                               </Column>
                               <Column>
-                                 <name>Temp</name>
+                                 <name>Lat</name>
                                  <width>200</width>
                                  <style>
-                                    <XYChartSymbolizer enabled="true">
+                                    <sld:TextSymbolizer enabled="true">
                                        <sld:Label>
-                                          <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
                                        </sld:Label>
                                        <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          <sld:CssParameter name="fill">#CC6677</sld:CssParameter>
                                        </sld:Fill>
-                                    </XYChartSymbolizer>
+                                    </sld:TextSymbolizer>
                                  </style>
                               </Column>
+                              <!--<Column>
+                                 <name>Data</name>
+                                 <width>200</width>
+                                 <style>
+                                    <TableSymbolizer enabled="true">
+                                       <name>Temperature Table</name>
+                                       <Column>
+                                          <name>Temp</name>
+                                          <width>200</width>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                                </sld:Label>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </Column>
+                                    </TableSymbolizer>
+                                 </style>
+                              </Column>-->
                            </TableItem>
                         </member>                        
                      </DataList>
@@ -1039,15 +1059,15 @@
                                           <sld:GrayChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <Gain>2.0</Gain>
-                                             </LinearAdjustment>
-                                          </sld:GrayChannel>
-                                          <!--<sld:AlphaChannel>
-                                             <LinearAdjustment>
-                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
                                                 <Gain>3.0</Gain>
                                              </LinearAdjustment>
-                                          </sld:AlphaChannel>-->
+                                          </sld:GrayChannel>
+                                          <sld:AlphaChannel>
+                                             <LinearAdjustment>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <Gain>5.0</Gain>
+                                             </LinearAdjustment>
+                                          </sld:AlphaChannel>
                                        </sld:ChannelSelection>
                                     </sld:Raster>
                                  </sld:TextureSymbolizer>
@@ -1169,6 +1189,86 @@
                               </style>
                            </DataItem>
                         </member>
+                        <member>
+                           <DataItem enabled="true">
+                              <name>GOES Data Lookup along Nadir Track</name>
+                              <dataProvider xlink:href="#GOES_INTERSECT_PROVIDER"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>intersection_data/trackLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke-blue">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                             <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 127 88</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-green">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                             <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 127 88</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                             <TableValues>-128 87 -1 0 0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 127 88</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill-blue">
+                                                <LookUpTable1D>
+                                                   <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                                   <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 127 88</TableValues>
+                                                </LookUpTable1D>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="fill-green">
+                                                <LookUpTable1D>
+                                                   <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                                   <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 127 88</TableValues>
+                                                </LookUpTable1D>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="fill-red">
+                                                <LookUpTable1D>
+                                                   <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                                   <TableValues>-128 87 -1 0 0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 127 88</TableValues>
+                                                </LookUpTable1D>
+                                             </sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>4</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>                        
                      </DataList>
                   </member>
                   <member>
@@ -1936,6 +2036,28 @@
                            </ogc:During>
                         </eventTime>
                         <resultFormat>application/com-binary-base64</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
+                  <name>GOES Data Lookup</name>
+                  <layerId>CALIPSO-LIDAR</layerId>
+                  <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>CALIPSO-LIDAR</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2006-10-02T07:33:00Z</gml:beginPosition>
+                                 <gml:endPosition>2006-10-02T07:41:00Z</gml:endPosition>
+                                 <timeStep>P1S</timeStep>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
