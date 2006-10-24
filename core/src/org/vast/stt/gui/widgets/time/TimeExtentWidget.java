@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
@@ -173,16 +172,10 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.widget == useAbsTimeBtn){
+            setUseAbsoluteTime(useAbsTimeBtn.getSelection());            
+		} else if(e.widget == updateNowBtn){
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
             timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
-		} else if(e.widget == updateNowBtn){
-			try {
-			//	timeChanged(null, -1.0);
-				dataItem.getDataProvider().updateData();
-			} catch (DataException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		} else if(e.widget == biasCombo){
 			STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
