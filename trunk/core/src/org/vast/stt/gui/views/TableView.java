@@ -14,15 +14,15 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.table.RichTable;
 import org.vast.stt.project.table.TableItem;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
@@ -44,7 +44,6 @@ public class TableView extends DataItemView
 {
 	public static final String ID = "STT.TableView";
     protected RichTable table;
-    protected ScrolledComposite mainSC;
     
     
     public TableView()
@@ -55,20 +54,7 @@ public class TableView extends DataItemView
     @Override
 	public void createPartControl(Composite parent)
 	{
-//        mainSC = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-//        FillLayout scLayout = new FillLayout();
-//        scLayout.marginHeight = 0;
-//        scLayout.marginWidth = 0;
-//        mainSC.setLayout(scLayout);
-//        
-//        table = new RichTable(mainSC, SWT.NONE);
-//        mainSC.setContent(table);
-//        mainSC.setExpandVertical(true);
-//        mainSC.setExpandHorizontal(true);        
-//        mainSC.setContent(table);
-//        mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         table = new RichTable(parent, SWT.NONE);
-        table.drawTable(null);
 	}
     	
 	
@@ -91,27 +77,14 @@ public class TableView extends DataItemView
 //        ShowTargetAction.setToolTipText("Toggle Target Tripod");
 //		site.getActionBars().getToolBarManager().add(ShowTargetAction);
 	}
-	
-	
-	@Override
-	public void dispose()
-	{
-        super.dispose();
-	}
-	
-	
-	@Override
-	public void setFocus()
-	{
-	}
-    
+	   
     
     @Override
     public void updateView()
     {
         setPartName("Table: " + item.getName());
-        table.drawTable(((TableItem)item).getTable());
-        //mainSC.setMinSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        table.setTable((TableItem)item, ((TableItem)item).getTableInfo());
+        table.updateTable();
     }
     
     
@@ -123,13 +96,26 @@ public class TableView extends DataItemView
     
     
     @Override
-    public void handleEvent(STTEvent e)
+    public void handleEvent(STTEvent event)
     {       
-        switch (e.type)
+        switch (event.type)
         {
             case ITEM_SYMBOLIZER_CHANGED:
+                Symbolizer symbolizer = (Symbolizer)event.source;
+                table.updateSymbolizer(symbolizer);
+                
             case PROVIDER_DATA_CHANGED:
                 refreshViewAsync();
         }
+    }
+
+
+    @Override
+    public void setDataItem(DataItem dataItem)
+    {
+        super.setDataItem(dataItem);
+        TableItem tableItem = (TableItem)dataItem;
+        table.setTable(tableItem, tableItem.getTableInfo());
+        refreshViewAsync();
     }
 }

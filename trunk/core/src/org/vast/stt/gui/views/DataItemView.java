@@ -118,6 +118,8 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
         
         if (item != null)
             item.removeListener(this);
+        
+        super.dispose();
     }
     
     

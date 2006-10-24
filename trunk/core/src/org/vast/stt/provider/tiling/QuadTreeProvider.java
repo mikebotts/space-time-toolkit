@@ -49,9 +49,7 @@ public class QuadTreeProvider extends AbstractProvider
     public QuadTreeProvider(DataProvider subProvider)
 	{
         quadTree = new QuadTree();
-        this.subProvider = subProvider;
-        this.autoUpdate = true;
-        
+        this.subProvider = subProvider;        
         subProvider.getSpatialExtent().removeAllListeners();
         subProvider.getTimeExtent().removeAllListeners();        
         this.setSpatialExtent(subProvider.getSpatialExtent());

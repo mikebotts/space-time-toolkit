@@ -161,7 +161,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		useAbsTimeBtn.setSelection(timeExtent.getUseAbsoluteTime());
 		//timeExtent.getAbsoluteTimeZone();
 		//  
-		continuousUpdateBtn.setSelection(dataItem.getDataProvider().getAutoUpdate());
+		//continuousUpdateBtn.setSelection(dataItem.getDataProvider().getAutoUpdate());
 	}
 	
 
@@ -173,11 +173,8 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.widget == useAbsTimeBtn){
-			setUseAbsoluteTime(useAbsTimeBtn.getSelection());
-		} else if (e.widget == continuousUpdateBtn) {
-			boolean contUp = continuousUpdateBtn.getSelection();
-            if (dataItem != null)
-                dataItem.getDataProvider().setAutoUpdate(contUp);
+            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
 		} else if(e.widget == updateNowBtn){
 			try {
 			//	timeChanged(null, -1.0);
@@ -205,7 +202,9 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             timeExtent.setBaseTime(absTimeSpinner.getValue());
             timeExtent.setLagTimeDelta(lagSpinner.getValue());
             timeExtent.setLeadTimeDelta(leadSpinner.getValue());
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
+            
+            if (continuousUpdateBtn.getSelection() == true)
+                timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
         }
     }	
 }

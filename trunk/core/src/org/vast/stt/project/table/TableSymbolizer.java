@@ -21,18 +21,20 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.chart;
+package org.vast.stt.project.table;
+
+import java.util.ArrayList;
 
 import org.vast.ows.sld.Symbolizer;
 
 
 /**
  * <p><b>Title:</b>
- * Data Chart
+ * Data Table
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Special Type of Symbolizer used to describe a chart type display
+ * Special Type of Symbolizer used to describe a table type display
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -40,13 +42,39 @@ import org.vast.ows.sld.Symbolizer;
  * @date Sep 12, 2006
  * @version 1.0
  */
-public class DataChart extends Symbolizer
+public class TableSymbolizer extends Symbolizer
 {
+    protected int rowHeight;
+    protected ArrayList<DataColumn> columns;
     
     
-    public DataChart()
+    public TableSymbolizer()
     {
-        
+        columns = new ArrayList<DataColumn>();
+        geometry = null;
+    }
+    
+
+    public int getRowHeight()
+    {
+        return rowHeight;
     }
 
+
+    public void setRowHeight(int rowHeight)
+    {
+        this.rowHeight = rowHeight;
+    }
+
+
+    public ArrayList<DataColumn> getColumns()
+    {
+        return columns;
+    }
+
+
+    public void setColumns(ArrayList<DataColumn> columns)
+    {
+        this.columns = columns;
+    }
 }

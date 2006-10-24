@@ -68,8 +68,6 @@ public abstract class TiledMapProvider extends AbstractProvider
         deletedItems = new ArrayList<BlockListItem>(100);
         tileSelector = new TiledMapSelector(3, 5, 18);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
-        
-        this.autoUpdate = true;
 	}
 
 

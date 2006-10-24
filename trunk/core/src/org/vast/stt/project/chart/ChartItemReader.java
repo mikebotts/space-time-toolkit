@@ -76,8 +76,8 @@ public class ChartItemReader extends XMLReader implements XMLModuleReader
         item.setDataProvider(provider);
         
         // read table style options
-        DataChart chart = readChart(dom, itemElt);
-        item.getSymbolizers().add(chart);        
+        ChartSymbolizer chart = readChart(dom, itemElt);
+        item.setChartInfo(chart);        
         
         // enabled ?
         String enabled = dom.getAttributeValue(itemElt, "enabled");
@@ -90,9 +90,9 @@ public class ChartItemReader extends XMLReader implements XMLModuleReader
     }
     
     
-    public DataChart readChart(DOMReader dom, Element tableElt)
+    public ChartSymbolizer readChart(DOMReader dom, Element tableElt)
     {
-        DataChart chart = new DataChart();
+        ChartSymbolizer chart = new ChartSymbolizer();
         
         // column list
         NodeList columnElts = dom.getElements(tableElt, "column/Column");

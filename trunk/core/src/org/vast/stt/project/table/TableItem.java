@@ -23,24 +23,31 @@
 
 package org.vast.stt.project.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
 
+
+/**
+ * <p><b>Title:</b>
+ * Table Item
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * TODO TableItem type description
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Alexandre Robin
+ * @date Oct 23, 2006
+ * @version 1.0
+ */
 public class TableItem extends DataItem
 {
-    protected DataTable table;
-
-
-    public DataTable getTable()
-    {
-        return table;
-    }
-
-
-    public void setTable(DataTable table)
-    {
-        this.table = table;
-    }
+    protected TableSymbolizer tableInfo;
     
     
     @Override
@@ -61,5 +68,36 @@ public class TableItem extends DataItem
                 dispatchEvent(event.copy());
                 break;
         }        
+    }
+
+
+    public TableSymbolizer getTableInfo()
+    {
+        return tableInfo;
+    }
+
+
+    public void setTableInfo(TableSymbolizer tableInfo)
+    {
+        this.tableInfo = tableInfo;
+    }
+    
+    
+    public List<Symbolizer> getSymbolizers()
+    {
+        ArrayList<Symbolizer> columnStyles = new ArrayList<Symbolizer>();
+        
+        if (tableInfo != null)
+        {
+            List<DataColumn> cols = tableInfo.getColumns();
+            for (int i=0; i<cols.size(); i++)
+            {
+                Symbolizer sym = cols.get(i).getSymbolizer();
+                if (sym != null)
+                    columnStyles.add(sym);
+            }
+        }
+        
+        return columnStyles;
     }
 }

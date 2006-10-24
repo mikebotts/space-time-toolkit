@@ -23,7 +23,6 @@
 
 package org.vast.stt.project.table;
 
-import java.util.ArrayList;
 import org.vast.ows.sld.Symbolizer;
 
 
@@ -33,7 +32,7 @@ import org.vast.ows.sld.Symbolizer;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Type of Symbolizer used to describe Table columns.
+ * Object containing a Table column style options
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -45,12 +44,11 @@ public class DataColumn
 {
     protected String name;
     protected int width;
-    protected ArrayList<Symbolizer> symbolizers;
-    
+    protected Symbolizer symbolizer;
+        
     
     public DataColumn()
     {
-        symbolizers = new ArrayList<Symbolizer>();
     }
 
 
@@ -78,14 +76,14 @@ public class DataColumn
     }
 
 
-    public ArrayList<Symbolizer> getSymbolizers()
+    public Symbolizer getSymbolizer()
     {
-        return symbolizers;
+        return symbolizer;
     }
 
 
-    public void setSymbolizers(ArrayList<Symbolizer> symbolizers)
+    public void setSymbolizer(Symbolizer symbolizer)
     {
-        this.symbolizers = symbolizers;
+        this.symbolizer = symbolizer;
     }
 }

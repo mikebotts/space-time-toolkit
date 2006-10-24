@@ -82,7 +82,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
                 
                 if (element instanceof WorldItem)
                 {
-                    if (scene.isItemVisible(item))
+                    if (scene.isItemVisible((WorldItem)item))
                         return itemVisImg;
                     else
                         return itemHidImg;
@@ -223,7 +223,7 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
                     DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
                     if (selectedEntry instanceof DataItem)
                     {
-                        SceneItem sceneItem = scene.findItem((DataItem)selectedEntry);
+                        SceneItem sceneItem = scene.findItem((WorldItem)selectedEntry);
                         if (sceneItem != null && sceneItem.isVisible())
                         {
                             FitView cmd = new FitView(scene, sceneItem);
@@ -314,8 +314,8 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
         else if (selectedEntry instanceof WorldItem)
         {
             DataItem item = (WorldItem)selectedEntry;
-            boolean visible = scene.isItemVisible(item);
-            scene.setItemVisibility(item, !visible);
+            boolean visible = scene.isItemVisible((WorldItem)item);
+            scene.setItemVisibility((WorldItem)item, !visible);
         }
         
         // if it's a DataTable, open TableView

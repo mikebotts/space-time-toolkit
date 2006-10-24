@@ -21,8 +21,8 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.AbstractDisplay;
 import org.vast.stt.project.scene.Projection;
 import org.vast.stt.project.tree.DataFolder;
-import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.Renderer;
@@ -146,7 +146,7 @@ public class Scene extends AbstractDisplay
      * @param dataItem
      * @return
      */
-    public SceneItem findItem(DataItem dataItem)
+    public SceneItem findItem(WorldItem dataItem)
     {
         // try to find entry in sceneItems list
         for (int i=0; i<sceneItems.size(); i++)
@@ -164,7 +164,7 @@ public class Scene extends AbstractDisplay
      * Removes an item from the scene and cleanup all cached data
      * @param dataItem
      */
-    public void removeItem(DataFolder folder, DataItem dataItem)
+    public void removeItem(DataFolder folder, WorldItem dataItem)
     {
         folder.remove(dataItem);
         SceneItem sceneItem = findItem(dataItem);        
@@ -185,7 +185,7 @@ public class Scene extends AbstractDisplay
      * @param dataItem
      * @param visible
      */
-    public void setItemVisibility(DataItem dataItem, boolean visible)
+    public void setItemVisibility(WorldItem dataItem, boolean visible)
     {       
         SceneItem sceneItem = findItem(dataItem);
         
@@ -234,7 +234,7 @@ public class Scene extends AbstractDisplay
      * @param dataItem
      * @return true if item is visible, false otherwise
      */
-    public boolean isItemVisible(DataItem dataItem)
+    public boolean isItemVisible(WorldItem dataItem)
     {
         for (int i=0; i<sceneItems.size(); i++)
         {
