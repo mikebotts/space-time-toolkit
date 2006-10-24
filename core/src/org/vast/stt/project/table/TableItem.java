@@ -25,9 +25,7 @@ package org.vast.stt.project.table;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -50,27 +48,6 @@ public class TableItem extends DataItem
     protected TableSymbolizer tableInfo;
     
     
-    @Override
-    public void handleEvent(STTEvent event)
-    {
-        switch(event.type)
-        {
-            case PROVIDER_DATA_CHANGED:
-            case PROVIDER_DATA_CLEARED:
-            case PROVIDER_DATA_REMOVED:
-            case PROVIDER_TIME_EXTENT_CHANGED:
-            case PROVIDER_SPATIAL_EXTENT_CHANGED:
-                dispatchEvent(event.copy());
-                break;
-                
-            case PROVIDER_ERROR:
-                this.enabled = false;
-                dispatchEvent(event.copy());
-                break;
-        }        
-    }
-
-
     public TableSymbolizer getTableInfo()
     {
         return tableInfo;

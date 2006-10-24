@@ -26,7 +26,6 @@ package org.vast.stt.project.chart;
 import java.util.ArrayList;
 import java.util.List;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -47,13 +46,6 @@ import org.vast.stt.project.tree.DataItem;
 public class ChartItem extends DataItem
 {
     protected ChartSymbolizer chartInfo;
-    
-    
-    @Override
-    public void handleEvent(STTEvent e)
-    {
-        
-    }
 
 
     public ChartSymbolizer getChartInfo()
