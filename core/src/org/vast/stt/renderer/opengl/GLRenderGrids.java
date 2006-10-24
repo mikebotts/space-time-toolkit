@@ -95,9 +95,11 @@ public class GLRenderGrids extends GLRunnable
                         {
                             gl.glEnd();
                             gl.glBegin(GL.GL_QUAD_STRIP);
+                            if (p == 0) u--;
+                            point.graphBreak = false;
+                            break;
                         }
-                        point.graphBreak = false;
-                        
+                                                
                         gl.glColor4f(point.r, point.g, point.b, point.a);
                         gl.glVertex3d(point.x, point.y, point.z);
                     }
