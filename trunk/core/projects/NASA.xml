@@ -2053,10 +2053,18 @@
                               <gml:TimePeriod>
                                  <gml:beginPosition>2006-10-02T09:14:00Z</gml:beginPosition>
                                  <gml:endPosition>2006-10-02T09:22:00Z</gml:endPosition>
-                                 <timeStep>P1S</timeStep>
+                                 <gml:timeStep>P1S</gml:timeStep>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
+                        <!--<featureOfInterest>
+                           <ogc:BBOX>
+                              <gml:Envelope>
+                                 <gml:lowerCorner>-116.628948 33.064695</gml:lowerCorner>
+                                 <gml:upperCorner>-116.628952 33.064699</gml:upperCorner>
+                              </gml:Envelope>
+                           </ogc:BBOX>
+                        </featureOfInterest>-->
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
