@@ -101,6 +101,9 @@ public class StylerFactory
         case line:
             newStyler = StylerFactory.createDefaultLineStyler(dataItem);
             break;
+        case texture:
+            newStyler = StylerFactory.createDefaultTextureStyler(dataItem);
+            break;
         default:
             System.err.println("StylerType not supported in createNewStyler()");
             return null;
@@ -175,4 +178,22 @@ public class StylerFactory
 
         return styler;
     }
+
+    /**
+    * @param provider - the dataProvider to use for the new Styler
+    * @return new TextureStyler
+    */
+   private static TextureStyler createDefaultTextureStyler(DataItem dataItem)
+   {
+	   TextureStyler styler = new TextureStyler();
+	   styler.setDataItem(dataItem);
+	   
+	   TextureSymbolizer symbolizer = new TextureSymbolizer();
+	   styler.setSymbolizer(symbolizer);
+	   Dimensions dims = new Dimensions();
+	   //symbolizer.set
+	   //  HOW to set defaults for dims and channels?
+	   
+	   return styler;
+   }
 }
