@@ -417,12 +417,12 @@ public class JOGLRenderer extends Renderer
      */
     protected void drawROI(Scene scene)
     {
-        gl.glPushAttrib(GL.GL_COLOR_BUFFER_BIT);
-        gl.glDepthFunc(GL.GL_ALWAYS);
+        //gl.glPushAttrib(GL.GL_COLOR_BUFFER_BIT);
+        //gl.glDepthFunc(GL.GL_ALWAYS);
         
         
         
-        gl.glPopAttrib();
+        //gl.glPopAttrib();
     }
 
 
