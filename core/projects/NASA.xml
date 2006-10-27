@@ -30,7 +30,7 @@
                </TimeSettings>
             </time>
             <view>
-               <ViewSettings>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
@@ -637,7 +637,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Google Map Imagery (Satellite)</name>
                               <dataProvider href="#GOOGLE_SAT"/>
                               <style>
@@ -711,7 +711,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>SRTM Data</name>
                               <dataProvider xlink:href="#SRTM_CHAIN"/>
                               <style>
@@ -772,7 +772,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Landsat Imagery (Flat)</name>
                               <dataProvider href="#DATASET_01"/>
                               <style>
@@ -850,7 +850,7 @@
                      <DataList>
                         <name>Coverage Data</name>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Max Surface Temperature</name>
                               <dataProvider href="#PROVIDER_13"/>
                               <style>
@@ -985,14 +985,14 @@
                                  </style>
                               </Column>-->
                            </TableItem>
-                        </member>                        
+                        </member>
                      </DataList>
                   </member>
                   <member>
                      <DataList>
                         <name>Track Intersection</name>
                         <member>
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Region Of Interest</name>
                               <dataProvider xlink:href="#FLATGRID_PROCESS"/>
                               <style>
@@ -1022,7 +1022,7 @@
                            </DataItem>
                         </member>
                         <member>
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>GOES VIS Imagery</name>
                               <dataProvider xlink:href="#GOES_VIS"/>
                               <style>
@@ -1099,7 +1099,7 @@
                            </DataItem>
                         </member>
                         <member>
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>GOES IR Imagery</name>
                               <dataProvider xlink:href="#GOES_IR"/>
                               <style>
@@ -1190,8 +1190,8 @@
                            </DataItem>
                         </member>
                         <member>
-                           <DataItem enabled="true">
-                              <name>GOES Data Lookup along Nadir Track</name>
+                           <DataItem>
+                              <name>GOES Lookup on Nadir Track</name>
                               <dataProvider xlink:href="#GOES_INTERSECT_PROVIDER"/>
                               <style>
                                  <sld:LineSymbolizer enabled="true">
@@ -1204,7 +1204,7 @@
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
                                           <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
-                                       </sld:CssParameter>                                       
+                                       </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
                                        <sld:CssParameter name="stroke-blue">
@@ -1268,14 +1268,82 @@
                                  </sld:PointSymbolizer>
                               </style>
                            </DataItem>
-                        </member>                        
+                        </member>
+                        <!--<member visible="false">
+                           <TableItem enabled="true">
+                              <name>GOES Data Table</name>
+                              <dataProvider href="#PROVIDER_13"/>
+                              <Column>
+                                 <name>Begin Time</name>
+                                 <style>
+                                    <sld:TextSymbolizer enabled="true">
+                                       <sld:Label>
+                                          <ogc:PropertyName>intersection_data/beginTime</ogc:PropertyName>
+                                       </sld:Label>
+                                       <sld:Fill>
+                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                       </sld:Fill>
+                                    </sld:TextSymbolizer>
+                                 </style>
+                              </Column>
+                              <Column>
+                                 <name>End Time</name>
+                                 <style>
+                                    <sld:TextSymbolizer enabled="true">
+                                       <sld:Label>
+                                          <ogc:PropertyName>intersection_data/endTime</ogc:PropertyName>
+                                       </sld:Label>
+                                       <sld:Fill>
+                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                       </sld:Fill>
+                                    </sld:TextSymbolizer>
+                                 </style>
+                              </Column>
+                              <Column>
+                                 <name>Match Ratio</name>
+                                 <style>
+                                    <sld:TextSymbolizer enabled="true">
+                                       <sld:Label>
+                                          <ogc:PropertyName>intersection_data/matchRatio</ogc:PropertyName>
+                                       </sld:Label>
+                                       <sld:Fill>
+                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                       </sld:Fill>
+                                    </sld:TextSymbolizer>
+                                 </style>
+                              </Column>
+                              <Column>
+                                 <name>Data</name>
+                                 <width>200</width>
+                                 <style>
+                                    <TableSymbolizer enabled="true">
+                                       <name>Temperature Table</name>
+                                       <root>
+                                          <ogc:PropertyName></ogc:PropertyName>
+                                       </root>
+                                       <Column>
+                                          <name>Temp</name>
+                                          <width>200</width>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                                </sld:Label>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </Column>
+                                    </TableSymbolizer>
+                                 </style>
+                              </Column>
+                           </TableItem>
+                        </member> -->                       
                      </DataList>
                   </member>
                   <member>
                      <DataList>
                         <name>Satellite Swaths</name>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>NOAA15 AMSU-A Footprints</name>
                               <dataProvider href="#PROVIDER_01"/>
                               <style>
@@ -1363,7 +1431,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>NOAA15 AVHRR Footprints</name>
                               <dataProvider href="#PROVIDER_03"/>
                               <style>
@@ -1395,7 +1463,7 @@
                            </DataItem>
                         </member>                        
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>NOAA12 AMSU-A Footprints</name>
                               <dataProvider href="#PROVIDER_04"/>
                               <style>
@@ -1432,7 +1500,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>NOAA12 AVHRR Footprints</name>
                               <dataProvider href="#PROVIDER_06"/>
                               <style>
@@ -1464,7 +1532,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>AQUA MODIS Footprints</name>
                               <dataProvider href="#PROVIDER_08"/>
                               <style>
@@ -1496,7 +1564,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>SPOT-5 Footprints</name>
                               <dataProvider href="#PROVIDER_09"/>
                               <style>
@@ -1528,7 +1596,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>TRMM TMI Footprints</name>
                               <dataProvider href="#PROVIDER_10"/>
                               <style>
@@ -1560,7 +1628,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>CALIPSO - LIDAR Footprints</name>
                               <dataProvider href="#PROVIDER_11"/>
                               <style>
@@ -1582,7 +1650,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>CLOUDSAT - RADAR Footprints</name>
                               <dataProvider href="#PROVIDER_12"/>
                               <style>
@@ -2044,8 +2112,9 @@
             <member>
                <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
                   <name>GOES Data Lookup</name>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <layerId>CALIPSO-LIDAR</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
+                  <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>CALIPSO-LIDAR</offering>
                         <eventTime>
@@ -2057,14 +2126,6 @@
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
-                        <!--<featureOfInterest>
-                           <ogc:BBOX>
-                              <gml:Envelope>
-                                 <gml:lowerCorner>-116.628948 33.064695</gml:lowerCorner>
-                                 <gml:upperCorner>-116.628952 33.064699</gml:upperCorner>
-                              </gml:Envelope>
-                           </ogc:BBOX>
-                        </featureOfInterest>-->
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
