@@ -22,4 +22,5 @@ public class GraphicObject
 {
     public RendererInfo rendererInfo;
     public BlockListItem block;
+    public boolean discard;
 }

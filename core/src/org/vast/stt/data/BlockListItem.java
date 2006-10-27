@@ -35,6 +35,7 @@ public class BlockListItem
     protected AbstractDataBlock data;    
     protected BlockListItem nextBlock;
     protected BlockListItem prevBlock;
+    protected boolean hidden;
     
     
     public BlockListItem(AbstractDataBlock data, BlockListItem prevBlock, BlockListItem nextBlock)
@@ -75,5 +76,17 @@ public class BlockListItem
     public void setInfo(BlockInfo info)
     {
         this.info = info;
+    }
+    
+    
+    public boolean isHidden()
+    {
+        return hidden;
+    }
+
+
+    public void setHidden(boolean hidden)
+    {
+        this.hidden = hidden;
     }
 }

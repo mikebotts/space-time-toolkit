@@ -36,6 +36,7 @@ import org.vast.stt.project.table.DataColumn;
 import org.vast.stt.project.table.TableSymbolizer;
 import org.vast.stt.project.table.TableItem;
 import org.vast.stt.style.*;
+import org.vast.util.DateTimeFormat;
 
 
 public class RichTable extends Composite implements StylerVisitor
@@ -205,6 +206,17 @@ public class RichTable extends Composite implements StylerVisitor
         }        
         
         Label widget = new Label(currentCell, SWT.SHADOW_NONE);
+        
+        try
+        {
+            double time = Double.parseDouble(label.text);
+            if (time > 1e9)
+                label.text = DateTimeFormat.formatIso(time, 0);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+        
         widget.setText(label.text);
         widget.setForeground(getColor(label.r, label.g, label.b));
         widget.setBackground(this.getDisplay().getSystemColor(SWT.COLOR_WHITE));
