@@ -936,54 +936,60 @@
                            <TableItem enabled="true">
                               <name>Temperature Table</name>
                               <dataProvider href="#PROVIDER_13"/>
-                              <Column>
-                                 <name>Temp</name>
-                                 <width>200</width>
-                                 <style>
-                                    <sld:TextSymbolizer enabled="true">
-                                       <sld:Label>
-                                          <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
-                                       </sld:Label>
-                                       <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
-                                       </sld:Fill>
-                                    </sld:TextSymbolizer>
-                                 </style>
-                              </Column>
-                              <Column>
-                                 <name>Lat</name>
-                                 <width>200</width>
-                                 <style>
-                                    <sld:TextSymbolizer enabled="true">
-                                       <sld:Label>
-                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
-                                       </sld:Label>
-                                       <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6677</sld:CssParameter>
-                                       </sld:Fill>
-                                    </sld:TextSymbolizer>
-                                 </style>
-                              </Column>
-                              <!--<Column>
-                                 <name>Data</name>
-                                 <width>200</width>
-                                 <style>
-                                    <TableSymbolizer enabled="true">
-                                       <name>Temperature Table</name>
-                                       <Column>
-                                          <name>Temp</name>
-                                          <width>200</width>
-                                          <style>
-                                             <sld:TextSymbolizer enabled="true">
-                                                <sld:Label>
-                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
-                                                </sld:Label>
-                                             </sld:TextSymbolizer>
-                                          </style>
-                                       </Column>
-                                    </TableSymbolizer>
-                                 </style>
-                              </Column>-->
+                              <column>
+                                 <Column>
+                                    <name>Temp</name>
+                                    <width>200</width>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <column>
+                                 <Column>
+                                    <name>Lat</name>
+                                    <width>200</width>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6677</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <!--<column>
+                                 <Column>
+                                    <name>Data</name>
+                                    <width>200</width>
+                                    <style>
+                                       <TableSymbolizer enabled="true">
+                                          <name>Temperature Table</name>
+                                          <Column>
+                                             <name>Temp</name>
+                                             <width>200</width>
+                                             <style>
+                                                <sld:TextSymbolizer enabled="true">
+                                                   <sld:Label>
+                                                      <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                                   </sld:Label>
+                                                </sld:TextSymbolizer>
+                                             </style>
+                                          </Column>
+                                       </TableSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>-->
                            </TableItem>
                         </member>
                      </DataList>
@@ -1269,74 +1275,98 @@
                               </style>
                            </DataItem>
                         </member>
-                        <!--<member visible="false">
+                        <member visible="false">
                            <TableItem enabled="true">
                               <name>GOES Data Table</name>
-                              <dataProvider href="#PROVIDER_13"/>
-                              <Column>
-                                 <name>Begin Time</name>
-                                 <style>
-                                    <sld:TextSymbolizer enabled="true">
-                                       <sld:Label>
-                                          <ogc:PropertyName>intersection_data/beginTime</ogc:PropertyName>
-                                       </sld:Label>
-                                       <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
-                                       </sld:Fill>
-                                    </sld:TextSymbolizer>
-                                 </style>
-                              </Column>
-                              <Column>
-                                 <name>End Time</name>
-                                 <style>
-                                    <sld:TextSymbolizer enabled="true">
-                                       <sld:Label>
-                                          <ogc:PropertyName>intersection_data/endTime</ogc:PropertyName>
-                                       </sld:Label>
-                                       <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
-                                       </sld:Fill>
-                                    </sld:TextSymbolizer>
-                                 </style>
-                              </Column>
-                              <Column>
-                                 <name>Match Ratio</name>
-                                 <style>
-                                    <sld:TextSymbolizer enabled="true">
-                                       <sld:Label>
-                                          <ogc:PropertyName>intersection_data/matchRatio</ogc:PropertyName>
-                                       </sld:Label>
-                                       <sld:Fill>
-                                          <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
-                                       </sld:Fill>
-                                    </sld:TextSymbolizer>
-                                 </style>
-                              </Column>
-                              <Column>
-                                 <name>Data</name>
-                                 <width>200</width>
-                                 <style>
-                                    <TableSymbolizer enabled="true">
-                                       <name>Temperature Table</name>
-                                       <root>
-                                          <ogc:PropertyName></ogc:PropertyName>
-                                       </root>
-                                       <Column>
-                                          <name>Temp</name>
-                                          <width>200</width>
-                                          <style>
-                                             <sld:TextSymbolizer enabled="true">
-                                                <sld:Label>
-                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
-                                                </sld:Label>
-                                             </sld:TextSymbolizer>
-                                          </style>
-                                       </Column>
-                                    </TableSymbolizer>
-                                 </style>
-                              </Column>
+                              <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
+                              <column>
+                                 <Column>
+                                    <name>Sat ID</name>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>intersection_data/instrumentID</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <column>
+                                 <Column>
+                                    <name>Begin Time</name>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>intersection_data/beginTime</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <column>
+                                 <Column>
+                                    <name>End Time</name>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>intersection_data/endTime</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <column>
+                                 <Column>
+                                    <name>Match Ratio (%)</name>
+                                    <style>
+                                       <sld:TextSymbolizer enabled="true">
+                                          <sld:Label>
+                                             <ogc:PropertyName>intersection_data/matchRatio</ogc:PropertyName>
+                                          </sld:Label>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:TextSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>
+                              <!--<column>
+                                 <Column>
+                                    <name>Data</name>
+                                    <style>
+                                       <TableSymbolizer enabled="true">
+                                          <name>IR Value Table</name>
+                                          <baseArray>
+                                             <ogc:PropertyName>intersection_data/goes_data</ogc:PropertyName>
+                                          </baseArray>
+                                          <column>
+                                             <Column>
+                                                <name>Temp</name>
+                                                <width>200</width>
+                                                <style>
+                                                   <sld:TextSymbolizer enabled="true">
+                                                      <sld:Label>
+                                                         <ogc:PropertyName>intersection_data/goes_data/element/ir_value</ogc:PropertyName>
+                                                      </sld:Label>
+                                                   </sld:TextSymbolizer>
+                                                </style>
+                                             </Column>
+                                          </column>
+                                       </TableSymbolizer>
+                                    </style>
+                                 </Column>
+                              </column>-->
                            </TableItem>
-                        </member> -->                       
+                        </member>                       
                      </DataList>
                   </member>
                   <member>
