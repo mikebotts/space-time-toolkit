@@ -69,6 +69,7 @@ public class ViewSettings implements STTEventProducer
     
 	// camera modes
 	protected CameraMode cameraMode;
+    protected double arcballRadius = -1;
     
     // intended view projection
     protected Projection projection;
@@ -88,6 +89,8 @@ public class ViewSettings implements STTEventProducer
     
     // other options
     protected boolean showCameraTarget = true;
+    protected boolean showArcball = false;
+    protected boolean showItemROI = false;
     
     protected STTEventListeners listeners;
     protected ViewSettingsUpdater updater;
@@ -272,6 +275,42 @@ public class ViewSettings implements STTEventProducer
     public void setShowCameraTarget(boolean showCameraTarget)
     {
         this.showCameraTarget = showCameraTarget;
+    }
+    
+    
+    public boolean isShowArcball()
+    {
+        return showArcball;
+    }
+
+
+    public void setShowArcball(boolean showArcball)
+    {
+        this.showArcball = showArcball;
+    }
+
+
+    public boolean isShowItemROI()
+    {
+        return showItemROI;
+    }
+
+
+    public void setShowItemROI(boolean showCurrentROI)
+    {
+        this.showItemROI = showCurrentROI;
+    }
+    
+    
+    public double getArcballRadius()
+    {
+        return arcballRadius;
+    }
+
+
+    public void setArcballRadius(double arcballRadius)
+    {
+        this.arcballRadius = arcballRadius;
     }
     
     

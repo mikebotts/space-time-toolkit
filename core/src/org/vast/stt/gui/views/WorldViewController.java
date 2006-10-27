@@ -91,7 +91,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             oldZ.normalize();
             
             // arcball radius
-            double r = viewSettings.getOrthoWidth() / 2;
+            double r = viewSettings.getArcballRadius();
+            if (r < 0)
+                r = viewSettings.getOrthoWidth() / 2;
 
             // pos of point 0 on arcball
             P0.sub(C);

@@ -15,6 +15,7 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.PaintEvent;
@@ -23,10 +24,9 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.Scene;
@@ -74,20 +74,37 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	public void init(IViewSite site) throws PartInitException
 	{
 		super.init(site);
-		
+        ImageDescriptor descriptor;
+        
         // add show target action to toolbar
 		IAction ShowTargetAction = new Action()
 		{
 			public void run()
 			{
-				boolean targetshown = scene.getViewSettings().isShowCameraTarget();
-                scene.getViewSettings().setShowCameraTarget(!targetshown);
+				boolean targetShown = scene.getViewSettings().isShowCameraTarget();
+                scene.getViewSettings().setShowCameraTarget(!targetShown);
                 scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 			}
-		};
-        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+		};        
+        descriptor = STTPlugin.getImageDescriptor("icons/tripod.gif");
+        ShowTargetAction.setImageDescriptor(descriptor);
         ShowTargetAction.setToolTipText("Toggle Target Tripod");
 		site.getActionBars().getToolBarManager().add(ShowTargetAction);
+        
+		// add show arcball action to toolbar
+        IAction ShowArcballAction = new Action()
+        {
+            public void run()
+            {
+                boolean arcballShown = scene.getViewSettings().isShowArcball();
+                scene.getViewSettings().setShowArcball(!arcballShown);
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+            }
+        };
+        descriptor = STTPlugin.getImageDescriptor("icons/arcball.gif");
+        ShowArcballAction.setImageDescriptor(descriptor);
+        ShowArcballAction.setToolTipText("Toggle Arcball");
+        site.getActionBars().getToolBarManager().add(ShowArcballAction);
 	}
 	
 	

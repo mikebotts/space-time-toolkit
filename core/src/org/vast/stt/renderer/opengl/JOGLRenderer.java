@@ -23,6 +23,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
@@ -182,7 +183,7 @@ public class JOGLRenderer extends Renderer
     {
         // clear back buffer
         Color backColor = view.getBackgroundColor();
-        gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
+        gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 0.0f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
         // set up projection
@@ -207,10 +208,6 @@ public class JOGLRenderer extends Renderer
         gl.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM, 0);
         gl.glGetDoublev(GL.GL_PROJECTION_MATRIX, projM, 0);
         gl.glGetIntegerv(GL.GL_VIEWPORT, viewPort, 0);
-        
-        // draw camera target if requested
-        if (view.isShowCameraTarget())
-            this.drawCameraTarget(view);
         
         zBufferOffset = 100.0f;
     }
@@ -299,9 +296,11 @@ public class JOGLRenderer extends Renderer
     @Override
     public void drawScene(Scene scene)
     {
-        getContext();        
-        setupMatrices(scene.getViewSettings());
+        getContext();
+        ViewSettings view = scene.getViewSettings();
+        setupMatrices(view);
         
+        // draw all items
         List<SceneItem> sceneItems = scene.getSceneItems();        
         for (int i = 0; i < sceneItems.size(); i++)
         {
@@ -315,6 +314,18 @@ public class JOGLRenderer extends Renderer
 
             drawOneItem(nextItem);
         }
+
+        // draw camera target if enabled
+        if (view.isShowCameraTarget())
+            this.drawCameraTarget(view);
+        
+        // draw camera target if enabled
+        if (view.isShowArcball())
+            this.drawArcball(view);
+        
+        // draw camera target if enabled
+        if (view.isShowItemROI())
+            this.drawROI(scene);
         
         // swap buffers        
         SWTContext.swapBuffers();
@@ -339,11 +350,19 @@ public class JOGLRenderer extends Renderer
     }
     
     
+    /**
+     * Draws the tripod representing the camera target
+     * @param view
+     */
     protected void drawCameraTarget(ViewSettings view)
     {
         double x = view.getTargetPos().x;
         double y = view.getTargetPos().y;
         double z = view.getTargetPos().z;
+        
+        //gl.glPushAttrib(GL.GL_COLOR_BUFFER_BIT);
+        //gl.glBlendFunc(GL.GL_ONE_MINUS_DST_ALPHA, GL.GL_DST_ALPHA);
+        
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
@@ -363,6 +382,47 @@ public class JOGLRenderer extends Renderer
         gl.glEnd();
         
         gl.glPopMatrix();
+        //gl.glPopAttrib();
+    }
+    
+    
+    /**
+     * Draws circles symbolizing the Arcball size and orientation
+     * @param view
+     */
+    protected void drawArcball(ViewSettings view)
+    {
+        double x = view.getTargetPos().x;
+        double y = view.getTargetPos().y;
+        double z = view.getTargetPos().z;
+        
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, z);
+        
+        double radius = view.getArcballRadius();
+
+        gl.glColor4f(0.8f, 1.0f, 0.8f, 0.1f);
+        gl.glLineWidth(2.0f);
+        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
+        GLUquadric sphereObj = glu.gluNewQuadric();
+        glu.gluSphere(sphereObj, radius, 24, 24);
+        
+        gl.glPopMatrix();
+    }
+    
+    
+    /**
+     * Draws a surface representing the ROI of the currently selected item
+     * @param scene
+     */
+    protected void drawROI(Scene scene)
+    {
+        gl.glPushAttrib(GL.GL_COLOR_BUFFER_BIT);
+        gl.glDepthFunc(GL.GL_ALWAYS);
+        
+        
+        
+        gl.glPopAttrib();
     }
 
 
