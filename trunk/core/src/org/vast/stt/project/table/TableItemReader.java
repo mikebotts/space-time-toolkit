@@ -82,7 +82,7 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
         item.setDataProvider(provider);
         
         // read table style options
-        TableSymbolizer table = readTable(dom, itemElt);
+        TableSymbolizer table = readTableSymbolizer(dom, itemElt);
         item.setTableInfo(table);
         
         // enabled ?
@@ -96,12 +96,12 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
     }
     
     
-    public TableSymbolizer readTable(DOMReader dom, Element tableElt)
+    public TableSymbolizer readTableSymbolizer(DOMReader dom, Element tableElt)
     {
         TableSymbolizer table = new TableSymbolizer();
         
         // column list
-        NodeList columnElts = dom.getElements(tableElt, "Column");
+        NodeList columnElts = dom.getElements(tableElt, "column/Column");
         int listSize = columnElts.getLength();
         
         // read all columns
@@ -133,9 +133,9 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
             
             // read column symbolizer (also supports sub chart or table)
             if (symElt.getLocalName().endsWith("ChartSymbolizer"))
-                symbolizer = chartItemReader.readChart(dom, styleElt);
+                symbolizer = chartItemReader.readChartSymbolizer(dom, styleElt);
             else if (symElt.getLocalName().endsWith("TableSymbolizer"))
-                symbolizer = readTable(dom, styleElt);
+                symbolizer = readTableSymbolizer(dom, styleElt);
             else
                 symbolizer = dataTreeReader.readSymbolizer(dom, styleElt);
             
@@ -144,8 +144,9 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
         }
         
         // set column width
-        int width = Integer.parseInt(dom.getElementValue(columnElt, "width"));
-        column.setWidth(width);
+        String width = dom.getElementValue(columnElt, "width");
+        if (width != null)
+            column.setWidth(Integer.parseInt(width));
         
         // set name
         column.setName(dom.getElementValue(columnElt, "name"));

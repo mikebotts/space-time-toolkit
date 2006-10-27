@@ -76,7 +76,7 @@ public class ChartItemReader extends XMLReader implements XMLModuleReader
         item.setDataProvider(provider);
         
         // read table style options
-        ChartSymbolizer chart = readChart(dom, itemElt);
+        ChartSymbolizer chart = readChartSymbolizer(dom, itemElt);
         item.setChartInfo(chart);        
         
         // enabled ?
@@ -90,7 +90,7 @@ public class ChartItemReader extends XMLReader implements XMLModuleReader
     }
     
     
-    public ChartSymbolizer readChart(DOMReader dom, Element tableElt)
+    public ChartSymbolizer readChartSymbolizer(DOMReader dom, Element tableElt)
     {
         ChartSymbolizer chart = new ChartSymbolizer();
         

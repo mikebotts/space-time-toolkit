@@ -42,8 +42,9 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class DataColumn
 {
+    public final static int AUTO_SIZE = -1;
     protected String name;
-    protected int width;
+    protected int width = AUTO_SIZE;
     protected Symbolizer symbolizer;
         
     
