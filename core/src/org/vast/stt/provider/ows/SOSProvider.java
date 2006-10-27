@@ -162,6 +162,7 @@ public class SOSProvider extends OWSProvider
 	    // update time range
         query.getTime().setBaseTime(timeExtent.getAdjustedLagTime());
         query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+        query.getTime().setTimeStep(timeExtent.getTimeStep());
         
         // update bounding box
         query.getBbox().setMinX(spatialExtent.getMinX());
