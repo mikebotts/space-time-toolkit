@@ -44,7 +44,7 @@ public abstract class AbstractProvider implements DataProvider
 {
     protected String name;
     protected String description;
-    protected boolean enabled = true;
+    protected boolean enabled = false;
 	protected boolean canceled = false;
     protected boolean error = false;
     protected boolean redoUpdate = true;
@@ -277,10 +277,20 @@ public abstract class AbstractProvider implements DataProvider
         switch (e.type)
         {
             case PROVIDER_TIME_EXTENT_CHANGED:
+                if (this.isTimeSubsetSupported())
+                {
+                    startUpdate(true);
+                    dispatchEvent(e.copy());
+                    break;
+                }
+                    
             case PROVIDER_SPATIAL_EXTENT_CHANGED:
-                startUpdate(true);
-                //dispatchEvent(e.copy());
-                break;
+                if (this.isSpatialSubsetSupported())
+                {
+                    startUpdate(true);
+                    dispatchEvent(e.copy());
+                    break;
+                }
         }
     }
     

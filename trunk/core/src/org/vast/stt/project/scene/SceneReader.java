@@ -182,7 +182,28 @@ public class SceneReader extends XMLReader implements XMLModuleReader
                 
         String val;
         ViewSettings viewSettings = new ViewSettings();
-                
+        
+        // camera target tripod
+        String showTripod = dom.getAttributeValue(viewSettingsElt, "@showTripod");
+        if (showTripod != null && showTripod.equalsIgnoreCase("true"))
+            viewSettings.setShowCameraTarget(true);
+        else
+            viewSettings.setShowCameraTarget(false);
+        
+        // arcball circles
+        String showArcball = dom.getAttributeValue(viewSettingsElt, "@showArcball");
+        if (showArcball != null && showArcball.equalsIgnoreCase("true"))
+            viewSettings.setShowArcball(true);
+        else
+            viewSettings.setShowArcball(false);
+        
+        // selected item ROI
+        String showROI = dom.getAttributeValue(viewSettingsElt, "@showROI");
+        if (showROI != null && showROI.equalsIgnoreCase("true"))
+            viewSettings.setShowItemROI(true);
+        else
+            viewSettings.setShowItemROI(false);
+        
         // background color
         String colorText = dom.getElementValue(viewSettingsElt, "backgroundColor");
         if (colorText != null)

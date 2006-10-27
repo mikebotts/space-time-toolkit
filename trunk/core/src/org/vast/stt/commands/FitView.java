@@ -45,6 +45,7 @@ public class FitView implements Command
         
         ViewSettings view = scene.getViewSettings();
         view.getProjection().fitViewToBbox(bbox, scene, adjustZRange);
+        view.setArcballRadius(bbox.getDiagonalDistance()/2);
         
         // send event to redraw
         view.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));

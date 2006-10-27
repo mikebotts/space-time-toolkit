@@ -48,15 +48,16 @@ public class Scene extends AbstractDisplay
 	protected DataTree dataTree;
     protected Renderer renderer;
 	protected ViewSettings viewSettings;
-	protected TimeSettings timeSettings;
-    
+	protected TimeSettings timeSettings;    
     protected ArrayList<SceneItem> sceneItems;
-
+    protected ArrayList<SceneItem> selectedItems;
+    
 
     public Scene()
     {
         renderer = new JOGLRenderer();      
         sceneItems = new ArrayList<SceneItem>();
+        selectedItems = new ArrayList<SceneItem>(1);
     }
 
 
@@ -138,6 +139,12 @@ public class Scene extends AbstractDisplay
     public List<SceneItem> getSceneItems()
     {
         return this.sceneItems;
+    }
+    
+    
+    public List<SceneItem> getSelectedItems()
+    {
+        return selectedItems;
     }
     
     

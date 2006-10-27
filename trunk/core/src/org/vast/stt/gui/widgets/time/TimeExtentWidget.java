@@ -195,6 +195,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             timeExtent.setBaseTime(absTimeSpinner.getValue());
             timeExtent.setLagTimeDelta(lagSpinner.getValue());
             timeExtent.setLeadTimeDelta(leadSpinner.getValue());
+            timeExtent.setTimeStep(stepSpinner.getValue());
             
             if (continuousUpdateBtn.getSelection() == true)
                 timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
