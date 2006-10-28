@@ -51,7 +51,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     protected ArrayList<BlockListItem> deletedItems;
     
     
-    public TiledMapProvider()
+    public TiledMapProvider(double sizeRatio, int maxLevel)
 	{
         quadTree = new QuadTree();
         
@@ -66,7 +66,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         // setup objects for tile selection
         selectedItems = new ArrayList<QuadTreeItem>(30);
         deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(3, 5, 18);
+        tileSelector = new TiledMapSelector(sizeRatio, 5, maxLevel);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
 	}
 

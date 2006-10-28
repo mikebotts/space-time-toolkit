@@ -59,6 +59,12 @@ public class GoogleMapProvider extends TiledMapProvider
     protected int serverNum = 0;
         
     
+    public GoogleMapProvider()
+    {
+        super(3, 19);
+    }
+    
+    
     class GetTileRunnable implements Runnable
     {
         protected QuadTreeItem item;
