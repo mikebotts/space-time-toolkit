@@ -58,6 +58,12 @@ public class VirtualEarthProvider extends TiledMapProvider
     protected String layerId = "roads";
     
     
+    public VirtualEarthProvider()
+    {
+        super(3, 18);
+    }
+    
+    
     class GetTileRunnable implements Runnable
     {
         protected QuadTreeItem item;
