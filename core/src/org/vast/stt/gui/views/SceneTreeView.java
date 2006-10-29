@@ -13,15 +13,19 @@
 
 package org.vast.stt.gui.views;
 
+import java.util.Iterator;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -49,7 +53,7 @@ import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 
 
-public class SceneTreeView extends SceneView implements IDoubleClickListener
+public class SceneTreeView extends SceneView implements ISelectionChangedListener, IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
@@ -163,7 +167,8 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
 	    Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
 	    sceneTree.addDropSupport(ops, dropfers, new SceneTreeDropListener(sceneTree));
-	    
+        sceneTree.addSelectionChangedListener(this);
+
 		getSite().setSelectionProvider(sceneTree);
         super.createPartControl(parent);
 	}
@@ -294,6 +299,29 @@ public class SceneTreeView extends SceneView implements IDoubleClickListener
     {
         sceneTree.setInput(null);
         expandedItems = new Object[0];
+    }
+    
+    
+    public void selectionChanged(SelectionChangedEvent event)
+    {
+        ISelection selection = event.getSelection();
+        scene.getSelectedItems().clear();
+        
+        // handle case of null selection
+        if (selection == null)
+            return;
+        
+        Iterator iterator = ((IStructuredSelection)selection).iterator();
+        while (iterator.hasNext())
+        {
+            DataEntry selectedEntry = (DataEntry)iterator.next();
+            if (selectedEntry instanceof WorldItem)
+            {
+                SceneItem item = scene.findItem((WorldItem)selectedEntry);
+                if (item != null && item.isVisible())
+                    scene.getSelectedItems().add(item);
+            }
+        }
     }
 
 

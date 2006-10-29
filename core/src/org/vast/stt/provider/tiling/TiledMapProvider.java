@@ -49,9 +49,10 @@ public abstract class TiledMapProvider extends AbstractProvider
     protected TiledMapSelector tileSelector;
     protected ArrayList<QuadTreeItem> selectedItems;
     protected ArrayList<BlockListItem> deletedItems;
+    protected int tileSize;
     
     
-    public TiledMapProvider(double sizeRatio, int maxLevel)
+    public TiledMapProvider(int tileSize, int maxLevel)
 	{
         quadTree = new QuadTree();
         
@@ -66,8 +67,9 @@ public abstract class TiledMapProvider extends AbstractProvider
         // setup objects for tile selection
         selectedItems = new ArrayList<QuadTreeItem>(30);
         deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(sizeRatio, 5, maxLevel);
+        tileSelector = new TiledMapSelector(3, 5, maxLevel);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
+        this.tileSize = tileSize;
 	}
 
 
@@ -198,9 +200,11 @@ public abstract class TiledMapProvider extends AbstractProvider
     {
         if (!dataNode.isNodeStructureReady())
         {
-            //startUpdate(false);
-            new SceneBboxUpdater(spatialExtent);
+            SceneBboxUpdater updater = new SceneBboxUpdater(spatialExtent, tileSize, tileSize);
+            updater.updateBbox();
+            startUpdate(true);            
         }
+        
         return dataNode;
     }
     

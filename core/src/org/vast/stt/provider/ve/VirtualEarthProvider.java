@@ -60,7 +60,7 @@ public class VirtualEarthProvider extends TiledMapProvider
     
     public VirtualEarthProvider()
     {
-        super(3, 18);
+        super(256, 18);
     }
     
     
@@ -216,6 +216,7 @@ public class VirtualEarthProvider extends TiledMapProvider
         deletedItems.clear();        
         tileSelector.setROI(mercatorExtent);
         tileSelector.setCurrentLevel(0);
+        tileSelector.setSizeRatio(spatialExtent.getXTiles());
         this.quadTree.accept(tileSelector);
         
         // get items to display

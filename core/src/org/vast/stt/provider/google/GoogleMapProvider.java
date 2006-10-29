@@ -61,7 +61,7 @@ public class GoogleMapProvider extends TiledMapProvider
     
     public GoogleMapProvider()
     {
-        super(3, 19);
+        super(256, 19);
     }
     
     
@@ -243,6 +243,7 @@ public class GoogleMapProvider extends TiledMapProvider
         deletedItems.clear();        
         tileSelector.setROI(mercatorExtent);
         tileSelector.setCurrentLevel(0);
+        tileSelector.setSizeRatio(spatialExtent.getXTiles());
         quadTree.accept(tileSelector);
                 
         // get items to display

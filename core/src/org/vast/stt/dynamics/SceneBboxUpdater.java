@@ -41,7 +41,8 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
 {
     private Scene scene;
     private ViewSettings view;
-    private long lastUpdateTime = -1;
+    private int tileSizeX, tileSizeY;
+    //private long lastUpdateTime = -1;
         
     
     public SceneBboxUpdater(STTSpatialExtent spatialExtent)
@@ -54,20 +55,37 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     }
     
     
+    public SceneBboxUpdater(STTSpatialExtent spatialExtent, int tileSizeX, int tileSizeY)
+    {
+        this(spatialExtent);
+        spatialExtent.setTilingEnabled(true);
+        this.tileSizeX = tileSizeX;
+        this.tileSizeY = tileSizeY;
+    }
+    
+    
+    public void updateBbox()
+    {
+        view.getProjection().fitBboxToView(spatialExtent, scene);
+        spatialExtent.setXTiles(view.getViewWidth() / tileSizeX);
+        spatialExtent.setYTiles(view.getViewHeight() / tileSizeY);
+    }
+    
+    
     public void handleEvent(STTEvent e)
     {
-        long currentTime = System.currentTimeMillis();
+        //long currentTime = System.currentTimeMillis();
         
-        if (currentTime - lastUpdateTime > 100) // limit updates to 1 per 100ms
-        {
-            lastUpdateTime = currentTime;
+        //if (currentTime - lastUpdateTime > 1000) // limit updates to 1 per 100ms
+        //{
+            //lastUpdateTime = currentTime;
             switch (e.type)
             {
                 case SCENE_VIEW_CHANGED:
-                    view.getProjection().fitBboxToView(spatialExtent, scene);                
+                    updateBbox();
                     spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
                     break;
             }
-        }
+        //}
     }
 }
