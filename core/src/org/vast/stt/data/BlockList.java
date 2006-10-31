@@ -35,11 +35,9 @@ public class BlockList
 {
     protected int size = 0;
     protected DataComponent blockStructure;
-    protected BlockListItem currentBlock;
     protected BlockListItem firstBlock;
     protected BlockListItem lastBlock;
     //protected BlockListItem[] fastAccessBlocks; // use if random access needed
-    protected boolean hasNext;
     
     
     public BlockList()
@@ -56,10 +54,8 @@ public class BlockList
     
     public void clear()
     {
-        hasNext = false;
         firstBlock = null;
         lastBlock = null;
-        currentBlock = null;
         size = 0;
     }
     

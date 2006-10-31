@@ -81,12 +81,6 @@ public class TableStyler extends AbstractStyler
             ((RichTable)visitor).visit(this);
         }        
     }
-    
-    
-    @Override
-    public void computeBoundingBox()
-    {
-    }
 
 
     @Override
@@ -94,5 +88,12 @@ public class TableStyler extends AbstractStyler
     {
         super.resetIterators();
         currentColumn = 0;
+    }
+    
+    
+    @Override
+    public void computeBoundingBox()
+    {
+
     }
 }

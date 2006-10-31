@@ -70,9 +70,9 @@ public class RasterStyler extends AbstractStyler
     {
         return pixel;
     }
-
-
-	public void updateDataMappings()
+    
+    
+    public void updateDataMappings()
 	{
         ScalarParameter param;
         String propertyName = null;   
@@ -141,10 +141,11 @@ public class RasterStyler extends AbstractStyler
             visitor.visit(this);
         }		
 	}
-
-
+    
+    
     @Override
     public void computeBoundingBox()
     {
+        // NOT REALLY APPLICABLE HERE SINCE THERE IS NO GEOMETRY...
     }
 }

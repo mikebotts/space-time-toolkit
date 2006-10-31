@@ -66,7 +66,7 @@ public class Projection_ECEF implements Projection
         // change camera target to center of bbox or 0,0,0
         Vector3d center = bbox.getCenter();
         Vector3d newCameraPos = new Vector3d();
-        newCameraPos.sub(center);
+        newCameraPos.add(center);
         
         if (newCameraPos.length() < 1e6)
         {
@@ -78,7 +78,8 @@ public class Projection_ECEF implements Projection
         {
             // change camera pos
             newCameraPos.normalize();
-            newCameraPos.scale(-dist*10);
+            newCameraPos.scale(dist*10);
+            newCameraPos.add(center);
             view.setCameraPos(newCameraPos);
             
             // change camera up direction
@@ -93,12 +94,10 @@ public class Projection_ECEF implements Projection
             view.setTargetPos(center);
         }
         
-        // adjust z range        
+        // adjust z range
+        view.setNearClip(dist);
         if (adjustZRange)
-        {
             view.setFarClip(dist*20);
-            view.setNearClip(dist);
-        }
         
         // now use renderer to find projection of bbox on screen
         Renderer renderer = scene.getRenderer();

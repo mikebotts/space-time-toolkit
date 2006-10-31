@@ -203,7 +203,7 @@ public class RichTable extends Composite implements StylerVisitor
                 moreRows = false;
                 return;
             }
-        }        
+        }    
         
         Label widget = new Label(currentCell, SWT.SHADOW_NONE);
         

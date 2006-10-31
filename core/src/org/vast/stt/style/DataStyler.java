@@ -67,7 +67,7 @@ public interface DataStyler
     public boolean hasMoreBlocks();
     
     
-    public void computeBoundingBox();
+    public void resetBoundingBox();
 	
 	
 	public STTSpatialExtent getBoundingBox();

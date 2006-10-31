@@ -126,12 +126,10 @@ public class Projection_LLA implements Projection
         // change camera up direction
         view.getUpDirection().set(0, 1, 0);
         
-        // adjust z range        
+        // adjust z range
+        view.setNearClip(dist);
         if (adjustZRange)
-        {
             view.setFarClip(dist*20);
-            view.setNearClip(dist);
-        }
                 
         // get dimensions of projection of bbox
         double dx = Math.abs(bbox.getMaxX() - bbox.getMinX());

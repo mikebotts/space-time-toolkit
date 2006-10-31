@@ -151,7 +151,11 @@ public class SceneItem implements STTEventListener
     protected void cleanup()
     {
         for (int i = 0; i < stylers.size(); i++)
-            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.ALL);
+        {
+            DataStyler styler = stylers.get(i);
+            parentScene.getRenderer().cleanup(styler, CleanupSection.ALL);
+            styler.resetBoundingBox();
+        }
     }
     
     
@@ -162,7 +166,22 @@ public class SceneItem implements STTEventListener
     {
         for (int i = 0; i < stylers.size(); i++)
         {
-            parentScene.getRenderer().cleanup(stylers.get(i), deletedObjects, CleanupSection.ALL);
+            DataStyler styler = stylers.get(i);
+            parentScene.getRenderer().cleanup(styler, deletedObjects, CleanupSection.ALL);
+            styler.resetBoundingBox();
+        }
+    }
+    
+    
+    /**
+     * Resets bounding box of all stylers
+     */
+    protected void resetBoundingBox()
+    {
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            DataStyler styler = stylers.get(i);
+            styler.resetBoundingBox();
         }
     }
     
@@ -206,6 +225,8 @@ public class SceneItem implements STTEventListener
                 stylerTable.remove(sym);
             }                
         }
+        
+        styler.resetBoundingBox();
     }
     
     
@@ -236,12 +257,16 @@ public class SceneItem implements STTEventListener
                             
             case PROVIDER_DATA_CLEARED:
                 cleanup();
-                return;
+                break;
                 
             case PROVIDER_DATA_REMOVED:
                 Object[] deletedItems = (Object[])event.source;
                 cleanup(deletedItems);
-                return;
+                break;
+                
+            case PROVIDER_DATA_CHANGED:
+                resetBoundingBox();
+                break;
         }
         
         if (visible)

@@ -91,7 +91,7 @@ public class GLRenderLines extends GLRunnable
                     gl.glEnd();
                     gl.glBegin(GL.GL_LINE_STRIP);
                 }
-    
+
                 point.graphBreak = false;
                 begin = true;
                 gl.glColor4f(point.r, point.g, point.b, point.a);

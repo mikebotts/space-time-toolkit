@@ -58,9 +58,6 @@ public class LabelStyler extends AbstractStyler
             if (projection != null)
                 projection.adjust(geometryCrs, label);
             
-            // add point to bbox if needed            
-            addToExtent(currentBlockInfo, label);
-            
             return label;
         }
         
@@ -71,11 +68,12 @@ public class LabelStyler extends AbstractStyler
     @Override
     public void computeBoundingBox()
     {
-        this.wantComputeExtent = true;
         this.resetIterators();
-                
+        PrimitiveGraphic point;
+        
         while (nextBlock() != null)
-            while (nextPoint() != null);
+            while ((point = nextPoint()) != null)
+                addToExtent(point);
     }
 
 
