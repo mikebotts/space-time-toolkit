@@ -273,7 +273,7 @@ public class JOGLRenderer extends Renderer
             if (!nextItem.getDataItem().isEnabled())
                 continue;
             
-            if (!nextItem.getDataItem().hasFeedback())
+            if (!nextItem.getDataItem().hasEvent())
                 continue;
             
             selectableItems.put(nextItem.hashCode(), nextItem);
@@ -336,7 +336,7 @@ public class JOGLRenderer extends Renderer
     @Override
     public void drawItem(SceneItem sceneItem)
     {
-        getContext();        
+        getContext();
         drawOneItem(sceneItem);
         releaseContext();
     }

@@ -34,6 +34,7 @@ public class BlockListIterator implements Iterator<BlockListItem>
 {
     protected BlockList list;
     protected BlockListItem currentBlock;
+    protected boolean hasNext;
     
     
     public BlockListIterator(BlockList list)
@@ -45,7 +46,7 @@ public class BlockListIterator implements Iterator<BlockListItem>
     
     public boolean hasNext()
     {
-        return list.hasNext;
+        return hasNext;
     }
     
     
@@ -54,7 +55,7 @@ public class BlockListIterator implements Iterator<BlockListItem>
         BlockListItem block = currentBlock;
         currentBlock = currentBlock.nextBlock;
         if (currentBlock == null)
-            list.hasNext = false;
+            hasNext = false;
         return block;
     }
     
@@ -62,19 +63,16 @@ public class BlockListIterator implements Iterator<BlockListItem>
     public void reset()
     {
         if (list.firstBlock == null)
-            list.hasNext = false;
+            hasNext = false;
         else
-            list.hasNext = true;
+            hasNext = true;
         currentBlock = list.firstBlock;
     }
     
     
     public void remove()
     {
-        currentBlock.prevBlock.nextBlock = currentBlock.nextBlock;
-        currentBlock.nextBlock.prevBlock = currentBlock.prevBlock;
-        currentBlock = currentBlock.nextBlock;
-        list.size--;
+        // TODO remove in BlockListIterator
     }
 
 

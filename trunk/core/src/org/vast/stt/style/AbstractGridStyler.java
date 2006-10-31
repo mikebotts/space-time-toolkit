@@ -89,9 +89,6 @@ public abstract class AbstractGridStyler extends AbstractStyler
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
-
-        // add point to bbox if needed
-        addToExtent(currentBlockInfo, point);
         
         return point;
     }
@@ -106,9 +103,6 @@ public abstract class AbstractGridStyler extends AbstractStyler
             
             // adjust geometry to fit projection
             projection.adjust(geometryCrs, point);
-
-            // add point to bbox if needed            
-            addToExtent(currentBlockInfo, point);
             
             return point;
         }
@@ -120,11 +114,12 @@ public abstract class AbstractGridStyler extends AbstractStyler
     @Override
     public void computeBoundingBox()
     {
-        this.wantComputeExtent = true;
         this.resetIterators();
-                
+        PrimitiveGraphic point;
+        
         while (nextPatch() != null)
-            while (nextPoint() != null);
+            while ((point = nextPoint()) != null)
+                addToExtent(point);
     }
 
 

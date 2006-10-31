@@ -112,7 +112,7 @@ public abstract class DataItem implements DataEntry, STTEventListener, STTEventP
 	}
     
     
-    public boolean hasFeedback()
+    public boolean hasEvent()
     {
         return !actions.isEmpty();
     }

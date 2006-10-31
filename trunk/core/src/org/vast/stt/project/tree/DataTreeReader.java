@@ -192,15 +192,15 @@ public class DataTreeReader extends XMLReader
                 dataItem.getSymbolizers().add(symbolizer);
         }
         
-        // popup list
-        NodeList feedbackElts = dom.getElements(dataItemElt, "feedback");
-        listSize = feedbackElts.getLength();
+        // event list
+        NodeList eventElts = dom.getElements(dataItemElt, "event");
+        listSize = eventElts.getLength();
         
         // read all stylers
         for (int i=0; i<listSize; i++)
         {
-            Element feedbackElt = (Element)feedbackElts.item(i);
-            UserAction action = (UserAction)actionReader.read(dom, feedbackElt);
+            Element eventElt = (Element)eventElts.item(i);
+            UserAction action = (UserAction)actionReader.read(dom, eventElt);
             if (action != null)
                 dataItem.getActions().add(action);
         }

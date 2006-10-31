@@ -64,21 +64,23 @@ public abstract class AbstractStyler implements DataStyler
     protected ListInfo[] dataLists;
     protected Projection projection;
     protected Crs geometryCrs;
-    protected boolean addToExtent, wantComputeExtent, forceComputeExtent;
+    protected boolean computeExtent = true;
     protected BlockInfo currentBlockInfo;
     protected int[] indexList = new int[3];
+    protected STTSpatialExtent bbox;
     
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
     public abstract void updateDataMappings();
-    public abstract void computeBoundingBox();
-    
+    protected abstract void computeBoundingBox();
+        
     
     public AbstractStyler()
     {
         treeBuilders = new Hashtable<String, IndexerTreeBuilder>();
         dataLists = new ListInfo[0];
         geometryCrs = Crs.EPSG4329;
+        bbox = new STTSpatialExtent();
     }
     
     
@@ -103,7 +105,7 @@ public abstract class AbstractStyler implements DataStyler
     public void setProjection(Projection projection)
     {
         this.projection = projection;
-        this.wantComputeExtent = true;
+        computeExtent = true;
     }
     
     
@@ -148,13 +150,6 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i];
             info.blockIterator.reset();
         }
-        
-        forceComputeExtent = false;
-        if (wantComputeExtent)
-        {
-            forceComputeExtent = true;
-            wantComputeExtent = false;
-        }
     }
     
     
@@ -165,31 +160,25 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    protected void addToExtent(BlockInfo blockInfo, PrimitiveGraphic point)
-    {
-        if (addToExtent)
-        {
-            blockInfo.getSpatialExtent().resizeToContain(point.x, point.y, point.z);
-        }
-    }
+    
     
     
     protected void prepareBlock(BlockListItem block)
     {
-        currentBlockInfo = block.getInfo();
-        
-        if (forceComputeExtent)
-        {
-            currentBlockInfo.getSpatialExtent().nullify();
-            addToExtent = true;
-        }
-        else
-        {
-            if (currentBlockInfo.getSpatialExtent().isNull())
-                addToExtent = true;
-            else
-                addToExtent = false;
-        }
+//        currentBlockInfo = block.getInfo();
+//        
+//        if (forceComputeExtent)
+//        {
+//            currentBlockInfo.getSpatialExtent().nullify();
+//            addToExtent = true;
+//        }
+//        else
+//        {
+//            if (currentBlockInfo.getSpatialExtent().isNull())
+//                addToExtent = true;
+//            else
+//                addToExtent = false;
+//        }
     }
     
     
@@ -224,7 +213,7 @@ public abstract class AbstractStyler implements DataStyler
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
 
-            prepareBlock(nextItem);
+//            prepareBlock(nextItem);
         }           
                         
         return nextItem;
@@ -262,26 +251,27 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    /**
-     * Computes and return the bbox of this object in world coordinates
-     */
-    public STTSpatialExtent getBoundingBox()
+    protected void addToExtent(PrimitiveGraphic point)
     {
-        STTSpatialExtent bbox = new STTSpatialExtent();
-        
-        // get a fresh iterator
-        if (dataNode != null && dataNode.isNodeStructureReady())
+        bbox.resizeToContain(point.x, point.y, point.z);
+    }
+    
+    
+    public void resetBoundingBox()
+    {
+        computeExtent = true;
+    }
+    
+   
+    public STTSpatialExtent getBoundingBox()
+    {      
+        if (computeExtent)
         {
-            BlockListIterator iterator = dataLists[0].blockIterator.getList().getIterator();
-            
-            while (iterator.hasNext())
-            {
-                BlockInfo info = iterator.next().getInfo();
-                if (info != null)
-                    bbox.add(info.getSpatialExtent());
-            }
+            bbox.nullify();
+            this.computeBoundingBox();
+            computeExtent = false;
         }
-        
+            
         return bbox;
     }
 }
