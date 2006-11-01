@@ -23,8 +23,8 @@ import org.vast.stt.provider.ve.VirtualEarthProviderReader;
  */
 public class STTPlugin extends AbstractUIPlugin
 {
-    public static final String ID = "org.vast.stt.main";
-    private static STTPlugin plugin;     
+    public static String ID;
+    private static STTPlugin plugin;
 
 
 	/**
@@ -42,7 +42,7 @@ public class STTPlugin extends AbstractUIPlugin
 	public void start(BundleContext context) throws Exception
 	{
 		super.start(context);
-        
+        STTPlugin.ID = context.getBundle().getSymbolicName();
 		// preload process map file
         try
         {
