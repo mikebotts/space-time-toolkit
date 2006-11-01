@@ -554,11 +554,9 @@ public class JOGLRenderer extends SceneRenderer
         if (JOGLContext != null && SWTContext != null)
         {
             // dispose context and remove from list
-            contextList.remove(JOGLContext);            
-            getContext();            
+            contextList.remove(JOGLContext);           
             SWTContext.dispose();
             JOGLContext.destroy();
-            releaseContext();
             SWTContext = null;
             JOGLContext = null;
         }

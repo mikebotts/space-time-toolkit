@@ -137,7 +137,7 @@ public class SymbolizerWidget extends CheckOptionTable
     {
         StructuredSelection selection = (StructuredSelection) e.getSelection();
         Symbolizer symbolizer = (Symbolizer) selection.getFirstElement();
-        System.err.println("sel,activ Symb is" + symbolizer + ", " + activeSymbolizer);
+        //System.err.println("sel,activ Symb is" + symbolizer + ", " + activeSymbolizer);
         
         //  Check for empty selection (happens when buildControls() is called)
         if (symbolizer == null)
@@ -157,7 +157,7 @@ public class SymbolizerWidget extends CheckOptionTable
         //  Check to see if selected Styler has really changed
         if (symbolizer == activeSymbolizer)
         {
-            System.err.println("Selection not really changed");
+            //System.err.println("Selection not really changed");
             return;
         }
         //System.err.println("Selection CHANGED");
