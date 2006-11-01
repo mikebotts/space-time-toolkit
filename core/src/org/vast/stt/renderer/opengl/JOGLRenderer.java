@@ -465,7 +465,7 @@ public class JOGLRenderer extends SceneRenderer
         {        
             STTSpatialExtent extent = provider.getSpatialExtent();
             
-            if (extent.getUpdater() == null)
+            if (!extent.isNull() && extent.getUpdater() == null)
             {
                 gl.glLoadName(sceneItem.hashCode());
                 bboxRenderer.drawROI(scene, extent, onlyHandles);

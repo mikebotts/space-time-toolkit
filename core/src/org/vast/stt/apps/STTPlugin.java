@@ -23,9 +23,8 @@ import org.vast.stt.provider.ve.VirtualEarthProviderReader;
  */
 public class STTPlugin extends AbstractUIPlugin
 {
-
-	//The shared instance.
-	private static STTPlugin plugin;
+    public static final String ID = "org.vast.stt.main";
+    private static STTPlugin plugin;     
 
 
 	/**
@@ -101,6 +100,6 @@ public class STTPlugin extends AbstractUIPlugin
 	 */
 	public static ImageDescriptor getImageDescriptor(String path)
 	{
-		return AbstractUIPlugin.imageDescriptorFromPlugin("org.vast.STT", path);
+		return AbstractUIPlugin.imageDescriptorFromPlugin(STTPlugin.ID, path);
 	}
 }
