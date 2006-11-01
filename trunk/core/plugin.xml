@@ -73,7 +73,7 @@
    </extension>
    <extension id="STT3" point="org.eclipse.core.runtime.products">
       <product
-            application="org.vast.STT.MainApp"
-            name="Space Time Toolkit v3"/>
+            application="org.vast.stt.main.MainApp"
+            name="Space Time Toolkit v3.0"/>
    </extension>
 </plugin>
