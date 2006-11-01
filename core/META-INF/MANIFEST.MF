@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: STT Plug-in
-Bundle-SymbolicName: org.vast.STT; singleton:=true
-Bundle-Version: 1.0.0
+Bundle-SymbolicName: org.vast.stt.main; singleton:=true
+Bundle-Version: 3.0.0
 Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-Localization: plugin
 Export-Package: org.vast.stt.gui.views,
