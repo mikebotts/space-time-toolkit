@@ -22,7 +22,7 @@ import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.Projection;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.renderer.Renderer.CleanupSection;
+import org.vast.stt.renderer.SceneRenderer.CleanupSection;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.StylerVisitor;

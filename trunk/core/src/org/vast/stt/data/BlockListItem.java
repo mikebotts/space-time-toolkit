@@ -31,7 +31,7 @@ import org.vast.data.AbstractDataBlock;
  */
 public class BlockListItem
 {
-    protected BlockInfo info;
+    //protected BlockInfo info;
     protected AbstractDataBlock data;    
     protected BlockListItem nextBlock;
     protected BlockListItem prevBlock;
@@ -64,19 +64,19 @@ public class BlockListItem
     }
 
 
-    public BlockInfo getInfo()
-    {
-        if (info == null)
-            info = new BlockInfo();
-        
-        return info;
-    }
-
-
-    public void setInfo(BlockInfo info)
-    {
-        this.info = info;
-    }
+//    public BlockInfo getInfo()
+//    {
+//        if (info == null)
+//            info = new BlockInfo();
+//        
+//        return info;
+//    }
+//
+//
+//    public void setInfo(BlockInfo info)
+//    {
+//        this.info = info;
+//    }
     
     
     public boolean isHidden()

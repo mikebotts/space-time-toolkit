@@ -17,7 +17,6 @@ import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.data.BlockInfo;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.BlockListIterator;
@@ -65,7 +64,6 @@ public abstract class AbstractStyler implements DataStyler
     protected Projection projection;
     protected Crs geometryCrs;
     protected boolean computeExtent = true;
-    protected BlockInfo currentBlockInfo;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
     
@@ -160,25 +158,20 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    
+    protected boolean checkTime(double time)
+    {
+        if (Double.isNaN(time))
+            return true;
+        else
+        {
+            return false;
+        }
+    }
     
     
     protected void prepareBlock(BlockListItem block)
     {
-//        currentBlockInfo = block.getInfo();
-//        
-//        if (forceComputeExtent)
-//        {
-//            currentBlockInfo.getSpatialExtent().nullify();
-//            addToExtent = true;
-//        }
-//        else
-//        {
-//            if (currentBlockInfo.getSpatialExtent().isNull())
-//                addToExtent = true;
-//            else
-//                addToExtent = false;
-//        }
+
     }
     
     
@@ -213,7 +206,7 @@ public abstract class AbstractStyler implements DataStyler
             nextIndexer.reset();
             nextIndexer.setData(nextBlock);
 
-//            prepareBlock(nextItem);
+            prepareBlock(nextItem);
         }           
                         
         return nextItem;

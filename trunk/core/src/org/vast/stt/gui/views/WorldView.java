@@ -105,6 +105,21 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
         ShowArcballAction.setImageDescriptor(descriptor);
         ShowArcballAction.setToolTipText("Toggle Arcball");
         site.getActionBars().getToolBarManager().add(ShowArcballAction);
+        
+        // add show ROI action to toolbar
+        IAction ShowROIAction = new Action()
+        {
+            public void run()
+            {
+                boolean roiShown = scene.getViewSettings().isShowItemROI();
+                scene.getViewSettings().setShowItemROI(!roiShown);
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+            }
+        };
+        descriptor = STTPlugin.getImageDescriptor("icons/bbox.gif");
+        ShowROIAction.setImageDescriptor(descriptor);
+        ShowROIAction.setToolTipText("Toggle ROI");
+        site.getActionBars().getToolBarManager().add(ShowROIAction);
 	}
 	
 	

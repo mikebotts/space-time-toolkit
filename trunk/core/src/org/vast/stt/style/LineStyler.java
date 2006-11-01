@@ -82,10 +82,14 @@ public class LineStyler extends AbstractStyler
     
     public LinePointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext())
+        while (dataLists[0].blockIndexer.hasNext())
         {
             point.x = point.y = point.z = 0.0;            
             dataLists[0].blockIndexer.next();
+            
+            // get next one until time is ok
+            //if (!checkTime(point.t))
+            //    continue;
             
             // adjust geometry to fit projection
             projection.adjust(geometryCrs, point);

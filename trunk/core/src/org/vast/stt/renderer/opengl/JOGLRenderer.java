@@ -35,8 +35,12 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.renderer.PickFilter;
+import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.PopupRenderer;
-import org.vast.stt.renderer.Renderer;
+import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.*;
 
 
@@ -55,7 +59,7 @@ import org.vast.stt.style.*;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class JOGLRenderer extends Renderer
+public class JOGLRenderer extends SceneRenderer
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
     protected org.eclipse.swt.opengl.GLContext SWTContext;
@@ -84,6 +88,7 @@ public class JOGLRenderer extends Renderer
     protected GLRenderGrids gridRenderer;
     protected GLRenderGridBorder gridBorderRenderer;
     protected GLRenderTexture textureRenderer;
+    protected GLRenderBBOX bboxRenderer;
     
 
     public JOGLRenderer()
@@ -223,14 +228,14 @@ public class JOGLRenderer extends Renderer
     
     
     @Override
-    public void pick(Scene scene, double x, double y, double z, double dX, double dY, int dZ)
+    public PickedObject pick(Scene scene, PickFilter filter)
     {
         ViewSettings view = scene.getViewSettings();
                 
         getContext();
         
         // prepare selection buffer and switch to GL_SELECT mode
-        ByteBuffer buffer = ByteBuffer.allocateDirect(16);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4*5);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         IntBuffer selectBuffer = buffer.asIntBuffer();
         gl.glSelectBuffer(selectBuffer.capacity(), selectBuffer);
@@ -240,7 +245,7 @@ public class JOGLRenderer extends Renderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPickMatrix(x, viewPort[3]-y, dX, dY, viewPort, 0);
+        glu.gluPickMatrix(filter.x, viewPort[3]-filter.y, filter.dX, filter.dY, viewPort, 0);
         Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
@@ -262,25 +267,43 @@ public class JOGLRenderer extends Renderer
         
         // draw pickable items
         selectableItems.clear();
-        List<SceneItem> sceneItems = scene.getSceneItems();
-        for (int i = 0; i < sceneItems.size(); i++)
+        
+        if (filter.onlyBoundingBox && !scene.getSelectedItems().isEmpty())
         {
-            SceneItem nextItem = sceneItems.get(i);
-
-            if (!nextItem.isVisible())
-                continue;
+            SceneItem selectedItem = scene.getSelectedItems().get(0);
+            selectableItems.put(selectedItem.hashCode(), selectedItem);
+            gl.glLoadName(selectedItem.hashCode());
+            this.drawROI(scene, true);
+        }
+        else
+        {
+            // get all or only selected items
+            List<SceneItem> items = null;
+            if (filter.onlySelectedItems)
+                items = scene.getSelectedItems();
+            else
+                items = scene.getSceneItems();
             
-            if (!nextItem.getDataItem().isEnabled())
-                continue;
-            
-            if (!nextItem.getDataItem().hasEvent())
-                continue;
-            
-            selectableItems.put(nextItem.hashCode(), nextItem);
-            drawOneItem(nextItem);
+            // loop through all items and render them in selection mode
+            for (int i = 0; i < items.size(); i++)
+            {
+                SceneItem nextItem = items.get(i);
+    
+                if (!nextItem.isVisible())
+                    continue;
+                
+                if (!nextItem.getDataItem().isEnabled())
+                    continue;
+                
+                if (filter.onlyWithEvent && !nextItem.getDataItem().hasEvent())
+                    continue;
+                
+                selectableItems.put(nextItem.hashCode(), nextItem);
+                drawOneItem(nextItem);
+            }
         }
         
-        gl.glRenderMode(GL.GL_RENDER);        
+        gl.glRenderMode(GL.GL_RENDER);
         releaseContext();
         
         // read selection buffer
@@ -288,8 +311,23 @@ public class JOGLRenderer extends Renderer
         if (selectedItem != null)
         {
             //System.out.println(selectedItem.getName());
-            popupRenderer.showPopup((int)x, (int)y, selectedItem);
+            PickedObject pickedItem = new PickedObject();
+            pickedItem.item = selectedItem;
+            
+            int nameCount = selectBuffer.get(0)-1;
+            pickedItem.indices = new int[nameCount];
+            
+            for (int i=0; i<nameCount; i++)
+            {
+                int name = selectBuffer.get(4 + i);
+                pickedItem.indices[i] = name;
+            }
+            
+            return pickedItem;
+//          popupRenderer.showPopup((int)x, (int)y, selectedItem);
         }
+        
+        return null;
     }
     
     
@@ -325,7 +363,7 @@ public class JOGLRenderer extends Renderer
         
         // draw camera target if enabled
         if (view.isShowItemROI())
-            this.drawROI(scene);
+            this.drawROI(scene, false);
         
         // swap buffers        
         SWTContext.swapBuffers();
@@ -415,14 +453,24 @@ public class JOGLRenderer extends Renderer
      * Draws a surface representing the ROI of the currently selected item
      * @param scene
      */
-    protected void drawROI(Scene scene)
+    protected void drawROI(Scene scene, boolean onlyHandles)
     {
-        //gl.glPushAttrib(GL.GL_COLOR_BUFFER_BIT);
-        //gl.glDepthFunc(GL.GL_ALWAYS);
+        if (scene.getSelectedItems().isEmpty())
+            return;
         
+        SceneItem sceneItem = scene.getSelectedItems().get(0);
+        DataProvider provider = sceneItem.getDataItem().getDataProvider();
         
-        
-        //gl.glPopAttrib();
+        if (provider.isSpatialSubsetSupported())
+        {        
+            STTSpatialExtent extent = provider.getSpatialExtent();
+            
+            if (extent.getUpdater() == null)
+            {
+                gl.glLoadName(sceneItem.hashCode());
+                bboxRenderer.drawROI(scene, extent, onlyHandles);
+            }
+        }
     }
 
 
@@ -474,7 +522,8 @@ public class JOGLRenderer extends Renderer
         polygonRenderer = new GLRenderPolygons(gl, glu);
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
-        textureRenderer = new GLRenderTexture(gl, glu);
+        textureRenderer = new GLRenderTexture(gl, glu);        
+        bboxRenderer = new GLRenderBBOX(gl, glu);
         popupRenderer = new PopupRenderer(canvas);
         
         gl.glClearDepth(1.0f);

@@ -319,7 +319,10 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
             {
                 SceneItem item = scene.findItem((WorldItem)selectedEntry);
                 if (item != null && item.isVisible())
+                {
                     scene.getSelectedItems().add(item);
+                    scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                }
             }
         }
     }

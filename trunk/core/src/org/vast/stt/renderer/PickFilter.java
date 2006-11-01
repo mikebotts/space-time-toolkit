@@ -11,28 +11,14 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.style;
+package org.vast.stt.renderer;
 
 
-/**
- * <p><b>Title:</b><br/>
- * Primitive Graphic
- * </p>
- *
- * <p><b>Description:</b><br/>
- * TODO PrimitiveGraphic type description
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Mar 31, 2006
- * @version 1.0
- */
-public abstract class PrimitiveGraphic extends GraphicObject
+public class PickFilter
 {
     public double x, y, z;
-    public double t = Double.NaN;
-    public float r, g, b;
-    public float a = 1.0f;
-    public boolean graphBreak;
+    public double dX, dY;
+    public boolean onlySelectedItems;
+    public boolean onlyBoundingBox;
+    public boolean onlyWithEvent;
 }

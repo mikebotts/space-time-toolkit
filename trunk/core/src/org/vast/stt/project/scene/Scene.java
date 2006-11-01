@@ -25,7 +25,7 @@ import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.renderer.Renderer;
+import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 
 
@@ -46,7 +46,7 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
 public class Scene extends AbstractDisplay
 {
 	protected DataTree dataTree;
-    protected Renderer renderer;
+    protected SceneRenderer renderer;
 	protected ViewSettings viewSettings;
 	protected TimeSettings timeSettings;    
     protected ArrayList<SceneItem> sceneItems;
@@ -124,13 +124,13 @@ public class Scene extends AbstractDisplay
 	}
     
     
-    public Renderer getRenderer()
+    public SceneRenderer getRenderer()
     {
         return renderer;
     }
 
 
-    public void setRenderer(Renderer renderer)
+    public void setRenderer(SceneRenderer renderer)
     {
         this.renderer = renderer;
     }
