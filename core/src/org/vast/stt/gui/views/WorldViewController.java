@@ -15,13 +15,20 @@ package org.vast.stt.gui.views;
 
 import org.vast.math.Quat4d;
 import org.vast.math.Vector3d;
+import org.vast.physics.MapProjection;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.scene.Projection;
+import org.vast.stt.project.scene.Projection_ECEF;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.ViewSettings;
 import org.vast.stt.project.scene.ViewSettings.CameraMode;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.renderer.Renderer;
+import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.renderer.PickFilter;
+import org.vast.stt.renderer.PickedObject;
+import org.vast.stt.renderer.SceneRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -51,14 +58,19 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
     private Vector3d C = new Vector3d();
 	private int xOld;
 	private int yOld;
+    private int corner;
 	private boolean rotating;
 	private boolean translating;
 	private boolean zooming;
+    private boolean resizing;
     private boolean noMove;
-	
+	private PickFilter pickFilter;
+    private final static double RTD = 180/Math.PI;
+    
 
 	public WorldViewController()
 	{
+        pickFilter = new PickFilter();
 	}
 	
 	
@@ -69,7 +81,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         
         if (rotConstraint != MotionConstraint.NO_MOTION)
         {
-            Renderer renderer = scene.getRenderer();
+            SceneRenderer renderer = scene.getRenderer();
 
             // actual camera position
             Vector3d up = viewSettings.getUpDirection();
@@ -143,7 +155,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         
         if (transConstraint != MotionConstraint.NO_MOTION)
         {
-            Renderer renderer = scene.getRenderer();
+            SceneRenderer renderer = scene.getRenderer();
             
             renderer.unproject(x0, -y0, 0.0, P0);
             renderer.unproject(x1, -y1, 0.0, P1);
@@ -222,6 +234,31 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	{
         noMove = true;
         
+        if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
+        {
+            SceneRenderer renderer = scene.getRenderer();
+            pickFilter.x = e.x;
+            pickFilter.y = e.y;
+            pickFilter.dX = 5;
+            pickFilter.dY = 5;
+            pickFilter.onlyBoundingBox = true;
+            pickFilter.onlySelectedItems = false;
+            pickFilter.onlyWithEvent = false;
+            PickedObject obj = renderer.pick(scene, pickFilter);
+            
+            if (obj != null && obj.indices.length > 0)
+            {
+                if (obj.indices[0] < 0)
+                {
+                    corner = -obj.indices[0];
+                    resizing = true;
+                    xOld = e.x;
+                    yOld = e.y;
+                    return;
+                }
+            }
+        }
+        
         if (e.button == 1)
 		{
 			if (e.stateMask == SWT.CTRL)
@@ -232,10 +269,10 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 				rotating = true;
 		}
 		
-		if (e.button == 3)
+        if (e.button == 3)
 			translating = true;
 		
-		if (e.button == 2)
+        if (e.button == 2)
 			zooming = true;
 		
 		xOld = e.x;
@@ -247,13 +284,27 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	{
 		if (noMove)
 		{
-            Renderer renderer = scene.getRenderer();
-            renderer.pick(scene, e.x, e.y, 0, 5, 5, 0);
+            SceneRenderer renderer = scene.getRenderer();
+            pickFilter.x = e.x;
+            pickFilter.y = e.y;
+            pickFilter.dX = 5;
+            pickFilter.dY = 5;
+            pickFilter.onlyBoundingBox = false;
+            pickFilter.onlySelectedItems = false;
+            pickFilter.onlyWithEvent = true;
+            renderer.pick(scene, pickFilter);
+        }
+        else if (resizing)
+        {
+            DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
+            provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
         }
         
         rotating = false;
 		translating = false;
 		zooming = false;
+        resizing = false;
+        
 		((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 	}
 
@@ -288,6 +339,68 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 			yOld = e.y;
 			updateView();
 		}
+        
+        else if (resizing)
+        {
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+            STTSpatialExtent bbox = scene.getSelectedItems().get(0).getDataItem().getDataProvider().getSpatialExtent();
+            int viewHeight = scene.getRenderer().getViewHeight();
+            Projection projection = scene.getViewSettings().getProjection();
+            projection.pointOnMap(e.x, viewHeight-e.y, scene, P0);
+            
+            if (Double.isNaN(P0.x))
+                return;
+            
+            // hack to convert from ECEF to LLA
+            if (projection instanceof Projection_ECEF)
+            {
+                double[] lla = MapProjection.ECFtoLLA(P0.x, P0.y, P0.z, null);
+                
+                if (lla[1] > Math.PI)
+                    lla[1] -= 2*Math.PI;
+                
+                else if (lla[1] < -Math.PI)
+                    lla[1] += 2*Math.PI;
+                
+                P0.y = lla[0];
+                P0.x = lla[1];
+                P0.z = lla[2];
+            }
+            
+            switch (corner)
+            {
+                case 1:
+                    bbox.setMinX(P0.x * RTD);
+                    bbox.setMinY(P0.y * RTD);
+                    break;
+                    
+                case 2:
+                    bbox.setMinX(P0.x * RTD);
+                    bbox.setMaxY(P0.y * RTD);
+                    break;
+                    
+                case 3:
+                    bbox.setMaxX(P0.x * RTD);
+                    bbox.setMaxY(P0.y * RTD);
+                    break;
+                    
+                case 4:
+                    bbox.setMaxX(P0.x * RTD);
+                    bbox.setMinY(P0.y * RTD);
+                    break;
+                    
+                case 5:
+                    double dX = (bbox.getMaxX() - bbox.getMinX()) / 2;
+                    double dY = (bbox.getMaxY() - bbox.getMinY()) / 2;
+                    bbox.setMinX(P0.x * RTD - dX);
+                    bbox.setMaxX(P0.x * RTD + dX);
+                    bbox.setMinY(P0.y * RTD - dY);
+                    bbox.setMaxY(P0.y * RTD + dY);
+                    break;
+            }
+            
+            updateView();
+        }
 	}
 
 

@@ -16,7 +16,7 @@ package org.vast.stt.project.scene;
 import org.vast.math.Vector3d;
 import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.renderer.Renderer;
+import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -136,7 +136,7 @@ public class Projection_LLA implements Projection
         double dy = Math.abs(bbox.getMaxY() - bbox.getMinY());
         
         // set new orthowidth
-        Renderer renderer = scene.getRenderer();
+        SceneRenderer renderer = scene.getRenderer();
         double viewWidth = (double)renderer.getViewWidth();
         double viewHeight = (double)renderer.getViewHeight();
         double viewAspectRatio = viewWidth / viewHeight;
@@ -152,7 +152,7 @@ public class Projection_LLA implements Projection
     public void fitBboxToView(SpatialExtent bbox, Scene scene)
     {
         ViewSettings view = scene.getViewSettings(); 
-        Renderer renderer = scene.getRenderer();
+        SceneRenderer renderer = scene.getRenderer();
         
         double centerX = view.getTargetPos().x * RTD;
         double centerY = view.getTargetPos().y * RTD;
@@ -163,6 +163,31 @@ public class Projection_LLA implements Projection
         bbox.setMaxX(Math.min(centerX + dX, +180));
         bbox.setMinY(Math.max(centerY - dY, -90));
         bbox.setMaxY(Math.min(centerY + dY, +90));
+    }
+    
+    
+    public void pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    {
+        ViewSettings view = scene.getViewSettings();
+        
+        Vector3d cameraPos = view.getCameraPos();
+        Vector3d winPos = new Vector3d();
+        scene.getRenderer().project(cameraPos.x, cameraPos.y, cameraPos.z, winPos);
+        scene.getRenderer().unproject(x, y, winPos.z, pos);
+        
+        Vector3d viewDir = view.getTargetPos().copy();
+        viewDir.sub(view.getCameraPos());
+        
+        double s = -pos.z / viewDir.z;
+        
+        pos.x += viewDir.x * s;
+        pos.y += viewDir.y * s;
+        pos.z = 0.0;
+        
+        pos.x = Math.max(-Math.PI, pos.x);
+        pos.x = Math.min(Math.PI, pos.x);
+        pos.y = Math.max(-Math.PI/2, pos.y);
+        pos.y = Math.min(Math.PI/2, pos.y);
     }
     
     

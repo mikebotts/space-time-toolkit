@@ -19,7 +19,7 @@ import org.vast.physics.MapProjection;
 import org.vast.physics.RayIntersectEllipsoid;
 import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
-import org.vast.stt.renderer.Renderer;
+import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
 
@@ -40,6 +40,13 @@ import org.vast.stt.style.PrimitiveGraphic;
 public class Projection_ECEF implements Projection
 {
     protected final static double RTD = 180 / Math.PI;
+    protected RayIntersectEllipsoid rie;
+    
+    
+    public Projection_ECEF()
+    {
+        rie = new RayIntersectEllipsoid(new Datum());
+    }
     
     
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
@@ -100,7 +107,7 @@ public class Projection_ECEF implements Projection
             view.setFarClip(dist*20);
         
         // now use renderer to find projection of bbox on screen
-        Renderer renderer = scene.getRenderer();
+        SceneRenderer renderer = scene.getRenderer();
         renderer.setupView(view);
         Vector3d winPoint1 = new Vector3d();
         Vector3d winPoint2 = new Vector3d();
@@ -128,9 +135,8 @@ public class Projection_ECEF implements Projection
     public void fitBboxToView(SpatialExtent bbox, Scene scene)
     {
         ViewSettings view = scene.getViewSettings(); 
-        Renderer renderer = scene.getRenderer();
+        SceneRenderer renderer = scene.getRenderer();
         
-        RayIntersectEllipsoid rie = new RayIntersectEllipsoid(new Datum());
         Vector3d pos = view.getCameraPos();
         Vector3d dir = view.getTargetPos().copy();
         dir.sub(pos);
@@ -156,6 +162,32 @@ public class Projection_ECEF implements Projection
             bbox.setMinY(-90);
             bbox.setMaxY(+90);
         }        
+    }
+    
+    
+    public void pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    {
+        ViewSettings view = scene.getViewSettings();
+        
+        Vector3d cameraPos = view.getCameraPos();
+        Vector3d winPos = new Vector3d();
+        scene.getRenderer().project(cameraPos.x, cameraPos.y, cameraPos.z, winPos);
+        scene.getRenderer().unproject(x, y, winPos.z, pos);
+        
+        Vector3d viewDir = view.getTargetPos().copy();
+        viewDir.sub(view.getCameraPos());
+        
+        double[] intersect = rie.getIntersection(pos, viewDir);
+        if (rie.getFoundFlag())
+        {
+            pos.set(intersect);
+        }
+        else
+        {
+            pos.x = Double.NaN;
+            pos.y = Double.NaN;
+            pos.z = Double.NaN;
+        }
     }
     
     

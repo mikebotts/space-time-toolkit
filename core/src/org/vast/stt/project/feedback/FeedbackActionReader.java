@@ -63,6 +63,6 @@ public class FeedbackActionReader extends XMLReader implements XMLModuleReader
     public Object read(DOMReader dom, Element elt)
     {
         // TODO Auto-generated method stub
-        return null;
+        return new ShowPopup();
     }
 }

@@ -1065,15 +1065,15 @@
                                           <sld:GrayChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <Gain>3.0</Gain>
+                                                <Gain>1.0</Gain>
                                              </LinearAdjustment>
                                           </sld:GrayChannel>
-                                          <sld:AlphaChannel>
+                                          <!--<sld:AlphaChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
                                                 <Gain>5.0</Gain>
                                              </LinearAdjustment>
-                                          </sld:AlphaChannel>
+                                          </sld:AlphaChannel>-->
                                        </sld:ChannelSelection>
                                     </sld:Raster>
                                  </sld:TextureSymbolizer>
@@ -1273,10 +1273,20 @@
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
                               </style>
+                              <event type="left-click">
+                                 <ShowPopup autoClose="true">
+                                    <title>My Popup</title>
+                                    <content>
+                                       <sld:TextSymbolizer>
+                                          <sld:Label>GOEs Lookup</sld:Label>
+                                       </sld:TextSymbolizer>
+                                    </content>
+                                 </ShowPopup>                                
+                              </event>
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <TableItem enabled="true">
+                           <TableItem>
                               <name>GOES Data Table</name>
                               <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
                               <column>
@@ -1448,7 +1458,7 @@
                                     </sld:Stroke>
                                  </sld:GridBorderSymbolizer>
                               </style>
-                              <feedback type="left-click">
+                              <event type="left-click">
                                  <ShowPopup autoClose="true">
                                     <title>My Popup</title>
                                     <content>
@@ -1457,7 +1467,7 @@
                                        </sld:TextSymbolizer>
                                     </content>
                                  </ShowPopup>                                
-                              </feedback>
+                              </event>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -1522,11 +1532,6 @@
                               </style>
                               <style href="#GRID_MESH"/>
                               <style href="#GRID_BORDER"/>
-                              <popup>
-                                 <sld:TextSymbolizer>
-                                    <sld:Label>NOAA-15</sld:Label>
-                                 </sld:TextSymbolizer>
-                              </popup>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -2168,8 +2173,8 @@
                   <description>Grid for Region of Interest</description>
                   <spatialExtent tiling="1x1"> 
                      <BoundingBox id="ROI" srsName="EPSG:4326">
-                        <!--<gml:coordinates>-95.2,33.4 -85.3,44.4</gml:coordinates>-->
-                        <gml:coordinates>-102.2,15.4 -92.3,25.4</gml:coordinates>
+                        <!--<gml:coordinates>-102.2,15.4 -92.3,25.4</gml:coordinates>-->
+                        <gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
