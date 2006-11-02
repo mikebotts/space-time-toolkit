@@ -24,6 +24,7 @@ import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.ViewSettings;
 import org.vast.stt.project.scene.ViewSettings.CameraMode;
 import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -228,6 +229,73 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
     		}
         }
 	}
+    
+    
+    protected void doChangeROI(int x0, int y0, int x1, int y1)
+    {
+        DataItem selectedItem = scene.getSelectedItems().get(0).getDataItem();
+        DataProvider provider = selectedItem.getDataProvider();
+        STTSpatialExtent bbox = provider.getSpatialExtent();
+        provider.setEnabled(false);
+        
+        int viewHeight = scene.getRenderer().getViewHeight();
+        Projection projection = scene.getViewSettings().getProjection();
+        projection.pointOnMap(x1, viewHeight-y1, scene, P0);
+        
+        if (Double.isNaN(P0.x))
+            return;
+        
+        // hack to convert from ECEF to LLA
+        if (projection instanceof Projection_ECEF)
+        {
+            double[] lla = MapProjection.ECFtoLLA(P0.x, P0.y, P0.z, null);
+            
+            if (lla[1] > Math.PI)
+                lla[1] -= 2*Math.PI;
+            
+            else if (lla[1] < -Math.PI)
+                lla[1] += 2*Math.PI;
+            
+            P0.y = lla[0];
+            P0.x = lla[1];
+            P0.z = lla[2];
+        }
+        
+        switch (corner)
+        {
+            case 1:
+                bbox.setMinX(P0.x * RTD);
+                bbox.setMinY(P0.y * RTD);
+                break;
+                
+            case 2:
+                bbox.setMinX(P0.x * RTD);
+                bbox.setMaxY(P0.y * RTD);
+                break;
+                
+            case 3:
+                bbox.setMaxX(P0.x * RTD);
+                bbox.setMaxY(P0.y * RTD);
+                break;
+                
+            case 4:
+                bbox.setMaxX(P0.x * RTD);
+                bbox.setMinY(P0.y * RTD);
+                break;
+                
+            case 5:
+                double dX = (bbox.getMaxX() - bbox.getMinX()) / 2;
+                double dY = (bbox.getMaxY() - bbox.getMinY()) / 2;
+                bbox.setMinX(P0.x * RTD - dX);
+                bbox.setMaxX(P0.x * RTD + dX);
+                bbox.setMinY(P0.y * RTD - dY);
+                bbox.setMaxY(P0.y * RTD + dY);
+                break;
+        }
+        
+        // send event to update spatial extent listeners
+        bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+    }
 	
 
 	public void mouseDown(MouseEvent e)
@@ -297,6 +365,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         else if (resizing)
         {
             DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
+            provider.setEnabled(true);
             provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
         }
         
@@ -313,94 +382,39 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	{
         noMove = false;
         
-        if (rotating || translating || zooming)
-		{           
-            if (rotating)
-			{
-				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
-				doRotation(xOld, yOld, e.x, e.y);				
-			}
-			
-			else if (translating)
-			{
-				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-				doTranslation(xOld, yOld, e.x, e.y);				
-			}
-			
-			else if (zooming)
-			{
-				((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
-                int viewHeight = scene.getRenderer().getCanvas().getClientArea().height;
-				double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewHeight);
-				doZoom(-amount);
-			}
-			
-			xOld = e.x;
-			yOld = e.y;
-			updateView();
-		}
+        if (rotating)
+        {
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
+            doRotation(xOld, yOld, e.x, e.y);
+            xOld = e.x;
+            yOld = e.y;
+        }
+        
+        else if (translating)
+        {
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+            doTranslation(xOld, yOld, e.x, e.y);
+            xOld = e.x;
+            yOld = e.y;
+        }
+        
+        else if (zooming)
+        {
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
+            int viewHeight = scene.getRenderer().getCanvas().getClientArea().height;
+            double amount = 2.0 * ((double)(e.y - yOld)) / ((double)viewHeight);
+            doZoom(-amount);
+            xOld = e.x;
+            yOld = e.y;
+        }
         
         else if (resizing)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-            STTSpatialExtent bbox = scene.getSelectedItems().get(0).getDataItem().getDataProvider().getSpatialExtent();
-            int viewHeight = scene.getRenderer().getViewHeight();
-            Projection projection = scene.getViewSettings().getProjection();
-            projection.pointOnMap(e.x, viewHeight-e.y, scene, P0);
-            
-            if (Double.isNaN(P0.x))
-                return;
-            
-            // hack to convert from ECEF to LLA
-            if (projection instanceof Projection_ECEF)
-            {
-                double[] lla = MapProjection.ECFtoLLA(P0.x, P0.y, P0.z, null);
-                
-                if (lla[1] > Math.PI)
-                    lla[1] -= 2*Math.PI;
-                
-                else if (lla[1] < -Math.PI)
-                    lla[1] += 2*Math.PI;
-                
-                P0.y = lla[0];
-                P0.x = lla[1];
-                P0.z = lla[2];
-            }
-            
-            switch (corner)
-            {
-                case 1:
-                    bbox.setMinX(P0.x * RTD);
-                    bbox.setMinY(P0.y * RTD);
-                    break;
-                    
-                case 2:
-                    bbox.setMinX(P0.x * RTD);
-                    bbox.setMaxY(P0.y * RTD);
-                    break;
-                    
-                case 3:
-                    bbox.setMaxX(P0.x * RTD);
-                    bbox.setMaxY(P0.y * RTD);
-                    break;
-                    
-                case 4:
-                    bbox.setMaxX(P0.x * RTD);
-                    bbox.setMinY(P0.y * RTD);
-                    break;
-                    
-                case 5:
-                    double dX = (bbox.getMaxX() - bbox.getMinX()) / 2;
-                    double dY = (bbox.getMaxY() - bbox.getMinY()) / 2;
-                    bbox.setMinX(P0.x * RTD - dX);
-                    bbox.setMaxX(P0.x * RTD + dX);
-                    bbox.setMinY(P0.y * RTD - dY);
-                    bbox.setMaxY(P0.y * RTD + dY);
-                    break;
-            }
-            
-            updateView();
+            doChangeROI(xOld, yOld, e.x, e.y);
         }
+        
+        updateView();
 	}
 
 

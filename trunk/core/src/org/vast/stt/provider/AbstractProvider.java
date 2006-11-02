@@ -280,7 +280,6 @@ public abstract class AbstractProvider implements DataProvider
                 if (this.isTimeSubsetSupported())
                 {
                     startUpdate(true);
-                    dispatchEvent(e.copy());
                     break;
                 }
                     
@@ -288,7 +287,6 @@ public abstract class AbstractProvider implements DataProvider
                 if (this.isSpatialSubsetSupported())
                 {
                     startUpdate(true);
-                    dispatchEvent(e.copy());
                     break;
                 }
         }
