@@ -43,6 +43,7 @@ public class STTPlugin extends AbstractUIPlugin
 	{
 		super.start(context);
         STTPlugin.ID = context.getBundle().getSymbolicName();
+        
 		// preload process map file
         try
         {

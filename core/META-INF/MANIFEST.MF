@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.vast.stt.main; singleton:=true
 Bundle-Version: 3.0.0
 Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-Localization: plugin
+Eclipse-BuddyPolicy: global
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt.opengl,
@@ -13,8 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.vast.common,
  org.apache.xerces
 Eclipse-AutoStart: true
-Bundle-ClassPath: ./classes, ./lib/jogl.jar, ./lib/jai_core.jar, ./lib/jai_codec.jar,
-                  ./lib/jcommon-1.0.2.jar, ./lib/jfreechart-1.0.2.jar
+Bundle-ClassPath: classes/, lib/jogl.jar, lib/jai_core.jar, lib/jai_codec.jar,
+                  lib/jcommon-1.0.2.jar, lib/jfreechart-1.0.2.jar
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,

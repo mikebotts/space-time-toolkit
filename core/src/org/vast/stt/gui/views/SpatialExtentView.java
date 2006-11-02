@@ -16,6 +16,7 @@ package org.vast.stt.gui.views;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.bbox.BboxWidget;
+import org.vast.stt.project.tree.DataItem;
 
 
 /**
@@ -40,10 +41,33 @@ public class SpatialExtentView extends DataItemView
     BboxWidget bboxWidget;
 
 
+    @Override
     public void createPartControl(Composite parent)
     {
         bboxWidget = new BboxWidget(parent);
         super.createPartControl(parent);
+    }
+    
+    
+    @Override
+    public void setDataItem(DataItem dataItem)
+    {
+        if (item != dataItem)
+        {
+            if (item != null)
+            {
+                item.removeListener(this);
+                item.getDataProvider().getSpatialExtent().removeListener(this);
+            }
+            
+            item = dataItem;
+            
+            if (item != null)
+            {
+                item.addListener(this);
+                item.getDataProvider().getSpatialExtent().addListener(this);
+            }
+        }
     }
 
 
