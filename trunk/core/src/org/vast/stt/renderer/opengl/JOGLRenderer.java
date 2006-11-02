@@ -523,7 +523,7 @@ public class JOGLRenderer extends SceneRenderer
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
         textureRenderer = new GLRenderTexture(gl, glu);        
-        bboxRenderer = new GLRenderBBOX(gl, glu);
+        bboxRenderer = new GLRenderBBOX(this, gl, glu);
         popupRenderer = new PopupRenderer(canvas);
         
         gl.glClearDepth(1.0f);

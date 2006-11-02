@@ -270,7 +270,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
     {       
         switch (e.type)
         {
-            case SCENE_OPTIONS_CHANGED:            
+            case SCENE_OPTIONS_CHANGED:
             case SCENE_TREE_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
@@ -340,6 +340,8 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
             DataFolder folder = (DataFolder)selectedEntry;
             boolean visibility = scene.isItemVisible(folder);
             scene.setItemVisibility(folder, !visibility);
+            sceneTree.refresh(folder, true);
+            scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
         }
         
         // if it's a single item, change its visibility
@@ -348,6 +350,9 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
             DataItem item = (WorldItem)selectedEntry;
             boolean visible = scene.isItemVisible((WorldItem)item);
             scene.setItemVisibility((WorldItem)item, !visible);
+            sceneTree.refresh(item, true);
+            sceneTree.setSelection(sceneTree.getSelection());
+            scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
         }
         
         // if it's a DataTable, open TableView
@@ -359,8 +364,5 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
             openView.setData(table);
             openView.execute();
         }
-        
-        updateView();
-        scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
     }
 }

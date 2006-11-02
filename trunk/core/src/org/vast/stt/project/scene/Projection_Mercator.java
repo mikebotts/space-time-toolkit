@@ -61,21 +61,10 @@ public class Projection_Mercator implements Projection
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
     {
         // execute crs transform
-        switch (sourceCrs)
-        {
-            case EPSG4329:
-                double[] ecef = MapProjection.LLAtoMerc(point.y, point.x, point.z);
-                point.x = ecef[0];
-                point.y = ecef[1];
-                point.z = ecef[2];
-                break;
-        }
+        project(sourceCrs, point);
         
-        // adjust longitude to -PI:PI range
-        point.x = adjustX(point.x);
-        
-        // adjust latitude to PI range
-        point.y = adjustY(point.y);
+        // clip geometry to map boundary
+        clip(point);
         
         // break geometry if needed
         if (xSav != Double.NaN && !point.graphBreak)
@@ -89,6 +78,30 @@ public class Projection_Mercator implements Projection
         
         xSav = point.x;
         ySav = point.y;
+    }
+    
+    
+    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
+        switch (sourceCrs)
+        {
+            case EPSG4329:
+                double[] ecef = MapProjection.LLAtoMerc(point.y, point.x, point.z);
+                point.x = ecef[0];
+                point.y = ecef[1];
+                point.z = ecef[2];
+                break;
+        }
+    }
+    
+    
+    public void clip(PrimitiveGraphic point)
+    {
+        // adjust longitude to -PI:PI range
+        point.x = adjustX(point.x);
+        
+        // adjust latitude to PI range
+        point.y = adjustY(point.y);
     }
     
     

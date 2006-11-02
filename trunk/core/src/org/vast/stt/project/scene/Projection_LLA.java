@@ -60,13 +60,10 @@ public class Projection_LLA implements Projection
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
     {
         // execute crs transform
-        // ECEF to LLA, etc...
+        project(sourceCrs, point);
         
-        // adjust longitude to TWO_PI range
-        point.x = adjustLongitude(point.x);
-        
-        // adjust latitude to PI range
-        point.y = adjustLatitude(point.y);
+        // clip geometry to map boundary
+        clip(point);
         
         // break geometry if needed
         if (xSav != Double.NaN && !point.graphBreak)
@@ -80,6 +77,22 @@ public class Projection_LLA implements Projection
         
         xSav = point.x;
         ySav = point.y;
+    }
+    
+    
+    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
+        // TODO project method in LLA projection
+    }
+    
+    
+    public void clip(PrimitiveGraphic point)
+    {
+        // adjust longitude to TWO_PI range
+        point.x = adjustLongitude(point.x);
+        
+        // adjust latitude to PI range
+        point.y = adjustLatitude(point.y);
     }
     
     

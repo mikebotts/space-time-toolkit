@@ -45,6 +45,12 @@ public interface Projection
     public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
     
+    public abstract void project(Crs sourceCrs, PrimitiveGraphic point);
+    
+    
+    public abstract void clip(PrimitiveGraphic point);
+    
+    
     public abstract void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange);
     
     
