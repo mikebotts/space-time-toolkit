@@ -4,7 +4,7 @@
 <stringAttribute key="product" value="org.vast.stt.main.STT3"/>
 <booleanAttribute key="usefeatures" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
-<booleanAttribute key="useProduct" value="false"/>
+<booleanAttribute key="useProduct" value="true"/>
 <booleanAttribute key="tracing" value="false"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_SET" value="New Profiling Set1155758738031"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
@@ -19,12 +19,12 @@
 <booleanAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILE_TO_FILE" value="false"/>
 <stringAttribute key="application" value="org.vast.stt.main.MainApp"/>
 <booleanAttribute key="org.eclipse.hyades.trace.ui.ATTR_PROFILING_LIMIT_INVOCATIONS" value="false"/>
-<booleanAttribute key="clearws" value="true"/>
 <stringAttribute key="org.eclipse.hyades.trace.ui.ATTR_DESTINATION_MONITOR" value="DefaultMonitor"/>
+<booleanAttribute key="clearws" value="true"/>
 <booleanAttribute key="org.eclipse.hyades.trace.ui.ATTR_AUTO_MONITORING" value="false"/>
 <stringAttribute key="location1" value="c:\temp\workspace-STT3"/>
-<stringAttribute key="vmargs" value="-Xms256M -Xmx1024M"/>
 <booleanAttribute key="default" value="false"/>
+<stringAttribute key="vmargs" value="-Xms256M -Xmx1024M"/>
 <booleanAttribute key="clearConfig" value="false"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 <stringAttribute key="extplugins" value="org.apache.xerces;org.eclipse.core.commands;org.eclipse.core.expressions;org.eclipse.core.runtime;org.eclipse.help;org.eclipse.jface;org.eclipse.osgi;org.eclipse.swt;org.eclipse.swt.opengl;org.eclipse.swt.opengl.win32;org.eclipse.swt.win32.win32.x86;org.eclipse.ui;org.eclipse.ui.forms;org.eclipse.ui.workbench;org.eclipse.update.configurator;org.eclipse.update.core;org.eclipse.update.ui;"/>
