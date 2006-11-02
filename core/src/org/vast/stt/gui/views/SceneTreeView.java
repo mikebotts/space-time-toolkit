@@ -308,23 +308,24 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
         scene.getSelectedItems().clear();
         
         // handle case of null selection
-        if (selection == null)
-            return;
-        
-        Iterator iterator = ((IStructuredSelection)selection).iterator();
-        while (iterator.hasNext())
-        {
-            DataEntry selectedEntry = (DataEntry)iterator.next();
-            if (selectedEntry instanceof WorldItem)
+        if (selection != null)
+        {        
+            Iterator iterator = ((IStructuredSelection)selection).iterator();
+            while (iterator.hasNext())
             {
-                SceneItem item = scene.findItem((WorldItem)selectedEntry);
-                if (item != null && item.isVisible())
+                DataEntry selectedEntry = (DataEntry)iterator.next();
+                if (selectedEntry instanceof WorldItem)
                 {
-                    scene.getSelectedItems().add(item);
-                    scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                    SceneItem item = scene.findItem((WorldItem)selectedEntry);
+                    if (item != null && item.isVisible())
+                    {
+                        scene.getSelectedItems().add(item);                    
+                    }
                 }
             }
         }
+        
+        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
     }
 
 
