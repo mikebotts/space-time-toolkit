@@ -107,11 +107,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     @Override
     public void setFocus()
     {
-    	//  setFocus was being called 3 times when view tabs were switched, so I have 
-    	//  commented out the refreshView() call.  Don't think it was really needed.  8/2/06
-    	
-    	//System.err.println("Set focus for "  + this);
-//    	refreshView();
+        
     }
     
     
