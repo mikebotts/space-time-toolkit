@@ -245,7 +245,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         if (Double.isNaN(P0.x))
             return;
         
-        // hack to convert from ECEF to LLA
+        // hack to convert from ECEF back to LLA
         if (projection instanceof Projection_ECEF)
         {
             double[] lla = MapProjection.ECFtoLLA(P0.x, P0.y, P0.z, null);
@@ -261,35 +261,42 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             P0.z = lla[2];
         }
         
+        P0.x *= RTD;
+        P0.y *= RTD;
+        
         switch (corner)
         {
             case 1:
-                bbox.setMinX(P0.x * RTD);
-                bbox.setMinY(P0.y * RTD);
+                bbox.setMinX(P0.x);
+                bbox.setMinY(P0.y);
                 break;
                 
             case 2:
-                bbox.setMinX(P0.x * RTD);
-                bbox.setMaxY(P0.y * RTD);
+                bbox.setMinX(P0.x);
+                bbox.setMaxY(P0.y);
                 break;
                 
             case 3:
-                bbox.setMaxX(P0.x * RTD);
-                bbox.setMaxY(P0.y * RTD);
+                bbox.setMaxX(P0.x);
+                bbox.setMaxY(P0.y);
                 break;
                 
             case 4:
-                bbox.setMaxX(P0.x * RTD);
-                bbox.setMinY(P0.y * RTD);
+                bbox.setMaxX(P0.x);
+                bbox.setMinY(P0.y);
                 break;
                 
             case 5:
                 double dX = (bbox.getMaxX() - bbox.getMinX()) / 2;
                 double dY = (bbox.getMaxY() - bbox.getMinY()) / 2;
-                bbox.setMinX(P0.x * RTD - dX);
-                bbox.setMaxX(P0.x * RTD + dX);
-                bbox.setMinY(P0.y * RTD - dY);
-                bbox.setMaxY(P0.y * RTD + dY);
+                P0.x = Math.max(-179.99 + dX, P0.x);
+                P0.x = Math.min(+179.99 - dX, P0.x);
+                P0.y = Math.max(-89.99 + dY, P0.y);
+                P0.y = Math.min(+89.99 - dY, P0.y);
+                bbox.setMinX(P0.x - dX);
+                bbox.setMaxX(P0.x + dX);
+                bbox.setMinY(P0.y - dY);
+                bbox.setMaxY(P0.y + dY);
                 break;
         }
         
@@ -388,6 +395,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             doRotation(xOld, yOld, e.x, e.y);
             xOld = e.x;
             yOld = e.y;
+            updateView();
         }
         
         else if (translating)
@@ -396,6 +404,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             doTranslation(xOld, yOld, e.x, e.y);
             xOld = e.x;
             yOld = e.y;
+            updateView();
         }
         
         else if (zooming)
@@ -406,15 +415,15 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             doZoom(-amount);
             xOld = e.x;
             yOld = e.y;
+            updateView();
         }
         
         else if (resizing)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
             doChangeROI(xOld, yOld, e.x, e.y);
+            updateView();
         }
-        
-        updateView();
 	}
 
 

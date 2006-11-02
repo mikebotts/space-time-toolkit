@@ -50,7 +50,7 @@
                   <member>
                      <DataList>
                         <name>GIS Data</name>
-                        <member visible="false">
+                        <member visible="true">
                            <DataItem enabled="true">
                               <name>Coast Lines - 100km</name>
                               <dataProvider href="#DATASET_04"/>
@@ -118,7 +118,7 @@
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#000000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">2</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
@@ -143,7 +143,7 @@
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#222222</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
@@ -153,26 +153,7 @@
                         <member>
                            <DataItem enabled="true">
                               <name>AL Interstates</name>
-                              <dataProvider xlink:href="#AL_INTERSTATES"/>
-                              <style>
-                                 <sld:LineSymbolizer enabled="true">
-                                    <sld:Geometry>
-                                       <sld:CssParameter name="geometry-breaks">
-                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                                       </sld:CssParameter>                                       
-                                    </sld:Geometry>
-                                    <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">5</sld:CssParameter>
-                                    </sld:Stroke>
-                                 </sld:LineSymbolizer>
-                              </style>
+                              <dataProvider xlink:href="#AL_INTERSTATES"/>                              
                               <style>
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
@@ -189,6 +170,25 @@
                                     <sld:Stroke>
                                        <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">5</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>

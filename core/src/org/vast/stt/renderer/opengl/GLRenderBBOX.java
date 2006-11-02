@@ -15,6 +15,8 @@ package org.vast.stt.renderer.opengl;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+
+import org.vast.math.Vector3d;
 import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.ViewSettings;
@@ -41,15 +43,21 @@ public class GLRenderBBOX
 {   
     protected GL gl;
     protected GLU glu;
+    protected JOGLRenderer renderer;
     protected final static double DTR = Math.PI/180;
     protected PointGraphic point = new PointGraphic();
     protected ViewSettings view;
+    protected Vector3d bboxCorner1 = new Vector3d();
+    protected Vector3d bboxCorner2 = new Vector3d();
+    protected Vector3d screenCorner1 = new Vector3d();
+    protected Vector3d screenCorner2 = new Vector3d();
     
     
-    public GLRenderBBOX(GL gl, GLU glu)
+    public GLRenderBBOX(JOGLRenderer renderer, GL gl, GLU glu)
     {
         this.gl = gl;
         this.glu = glu;
+        this.renderer = renderer;
     }
     
     
@@ -129,8 +137,34 @@ public class GLRenderBBOX
             gl.glEnd();        
         }
         
+        // compute handle size
+        // compute screen diagonal size in world coordinates
+        renderer.unproject(0, 0, 0, screenCorner1);
+        renderer.unproject(renderer.getViewWidth(), renderer.getViewHeight(), 0, screenCorner2);
+        screenCorner1.sub(screenCorner2);
+        double screenSize = screenCorner1.length();
+        
+        // compute bbox diagonal size in world coordinates
+        point.x = minX;
+        point.y = minY;
+        point.z = 0;
+        view.getProjection().adjust(Crs.EPSG4329, point);
+        bboxCorner1.x = point.x;
+        bboxCorner1.y = point.y;
+        bboxCorner1.z = point.z;
+        point.x = maxX;
+        point.y = maxY;
+        point.z = 0;
+        view.getProjection().adjust(Crs.EPSG4329, point);
+        bboxCorner2.x = point.x;
+        bboxCorner2.y = point.y;
+        bboxCorner2.z = point.z;
+        bboxCorner1.sub(bboxCorner2);
+        double bboxSize = bboxCorner1.length();
+        
         // draw handles
-        double s = dX/6;//view.getOrthoWidth() / view.getViewWidth() / ratio * 50;
+        double s = Math.sqrt(dX*dX+dY*dY)/18;
+        s *= screenSize/bboxSize;
         
         for (int g=0; g<2; g++)
         {
@@ -170,7 +204,9 @@ public class GLRenderBBOX
                     point.y = cY;
                     point.x += (j==0 || j==1) ? -s : s;
                     point.y += (j==0 || j==2) ? -s : s;
-                    drawPoint(point);
+                    point.z = 0;
+                    view.getProjection().project(Crs.EPSG4329, point);
+                    gl.glVertex3d(point.x, point.y, point.z);
                 }
                 
                 gl.glEnd();

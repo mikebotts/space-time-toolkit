@@ -51,6 +51,12 @@ public class Projection_ECEF implements Projection
     
     public void adjust(Crs sourceCrs, PrimitiveGraphic point)
     {
+        project(sourceCrs, point);
+    }
+    
+    
+    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
         switch (sourceCrs)
         {
             case EPSG4329:
@@ -60,6 +66,12 @@ public class Projection_ECEF implements Projection
                 point.z = ecef[2];
                 break;
         }
+    }
+    
+    
+    public void clip(PrimitiveGraphic point)
+    {
+        
     }
     
     
