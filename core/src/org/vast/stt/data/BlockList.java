@@ -46,6 +46,14 @@ public class BlockList
     }
     
     
+    public BlockList copy()
+    {
+        BlockList newList = new BlockList();
+        newList.blockStructure = this.blockStructure.copy();
+        return newList;
+    }
+    
+    
     public BlockListIterator getIterator()
     {
         return new BlockListIterator(this);
@@ -98,13 +106,13 @@ public class BlockList
         item.prevBlock = null;
         
         // reduce list size
-        size--;
+        size--;        
     }
     
     
     public BlockListItem addBlock(AbstractDataBlock dataBlock)
     {
-        BlockListItem newBlock = new BlockListItem(dataBlock, lastBlock, null);
+        BlockListItem newBlock = new BlockListItem(dataBlock, null, null);
         add(newBlock);        
         return newBlock;
     }
@@ -112,6 +120,8 @@ public class BlockList
     
     public void add(BlockListItem newItem)
     {
+        this.remove(newItem);
+        
         newItem.prevBlock = lastBlock;
         newItem.nextBlock = null;
         

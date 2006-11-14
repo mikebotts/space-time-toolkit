@@ -74,7 +74,12 @@ public class SpatialExtentView extends DataItemView
     @Override
     public void updateView()
     {
-        bboxWidget.setDataItem(item);        
+        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+        if (pageInput != null)
+        {
+            bboxWidget.setScene(pageInput.getScene());        
+            bboxWidget.setDataItem(item);
+        }
     }
 
 

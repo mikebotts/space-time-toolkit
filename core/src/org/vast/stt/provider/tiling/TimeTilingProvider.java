@@ -40,13 +40,13 @@ import org.vast.stt.provider.STTSpatialExtent;
  * @date Feb 28, 2006
  * @version 1.0
  */
-public class QuadTreeProvider extends AbstractProvider
+public class TimeTilingProvider extends AbstractProvider
 {
     protected DataProvider subProvider;
     protected QuadTree quadTree;
     
     
-    public QuadTreeProvider(DataProvider subProvider)
+    public TimeTilingProvider(DataProvider subProvider)
 	{
         quadTree = new QuadTree();
         this.subProvider = subProvider;        

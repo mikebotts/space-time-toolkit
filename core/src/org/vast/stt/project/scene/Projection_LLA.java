@@ -129,21 +129,25 @@ public class Projection_LLA implements Projection
         
         // change camera target to center of bbox on XY plane       
         Vector3d center = bbox.getCenter();
-        center.z = 0.0;
-        view.setTargetPos(center);
+        view.getTargetPos().x = center.x;
+        view.getTargetPos().y = center.y;
+        view.getTargetPos().z = 0.0;
         
         // change camera pos
-        Vector3d newCameraPos = new Vector3d(center.x, center.y, dist*10);
-        view.setCameraPos(newCameraPos);
+        view.getCameraPos().x = center.x;
+        view.getCameraPos().y = center.y;
+        
+        //adjust z range and camera distance
+        if (adjustZRange)
+        {
+            view.getCameraPos().z = dist*10;
+            view.setNearClip(dist);            
+            view.setFarClip(dist*20);
+        }
         
         // change camera up direction
         view.getUpDirection().set(0, 1, 0);
         
-        // adjust z range
-        view.setNearClip(dist);
-        if (adjustZRange)
-            view.setFarClip(dist*20);
-                
         // get dimensions of projection of bbox
         double dx = Math.abs(bbox.getMaxX() - bbox.getMinX());
         double dy = Math.abs(bbox.getMaxY() - bbox.getMinY());
@@ -179,7 +183,7 @@ public class Projection_LLA implements Projection
     }
     
     
-    public void pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    public boolean pointOnMap(int x, int y, Scene scene, Vector3d pos)
     {
         ViewSettings view = scene.getViewSettings();
         
@@ -191,16 +195,18 @@ public class Projection_LLA implements Projection
         Vector3d viewDir = view.getTargetPos().copy();
         viewDir.sub(view.getCameraPos());
         
-        double s = -pos.z / viewDir.z;
-        
+        double s = -pos.z / viewDir.z;        
         pos.x += viewDir.x * s;
         pos.y += viewDir.y * s;
         pos.z = 0.0;
         
-        pos.x = Math.max(-Math.PI, pos.x);
-        pos.x = Math.min(Math.PI, pos.x);
-        pos.y = Math.max(-Math.PI/2, pos.y);
-        pos.y = Math.min(Math.PI/2, pos.y);
+        if (pos.x > getMaxLongitude() || pos.x < getMinLongitude())
+            return false;
+        
+        if (pos.y > Math.PI/2 || pos.y < -Math.PI/2)
+            return false;
+
+        return true;
     }
     
     

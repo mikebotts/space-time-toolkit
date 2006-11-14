@@ -35,12 +35,16 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.dynamics.SceneBboxUpdater;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
+import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTree;
 
 
 public abstract class TiledMapProvider extends AbstractProvider
 {
+    private final static double DTR = Math.PI/180;
     protected QuadTree quadTree;
     protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
     protected DataArray gridData;
@@ -50,6 +54,14 @@ public abstract class TiledMapProvider extends AbstractProvider
     protected ArrayList<QuadTreeItem> selectedItems;
     protected ArrayList<BlockListItem> deletedItems;
     protected int tileSize;
+    
+    
+    protected abstract void getNewTile(QuadTreeItem item);
+    
+    
+    public TiledMapProvider()
+    {        
+    }
     
     
     public TiledMapProvider(int tileSize, int maxLevel)
@@ -65,9 +77,9 @@ public abstract class TiledMapProvider extends AbstractProvider
         quadTree.init(maxBbox);
 
         // setup objects for tile selection
-        selectedItems = new ArrayList<QuadTreeItem>(30);
+        selectedItems = new ArrayList<QuadTreeItem>(100);
         deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(3, 5, maxLevel);
+        tileSelector = new TiledMapSelector(3, 3, maxLevel);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
         this.tileSize = tileSize;
 	}
@@ -92,7 +104,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         imageData.addComponent(rowData);
         imageData.setName("image");
         blockLists[0] = dataNode.createList(imageData);
-        System.out.println(imageData);
+        //System.out.println(imageData);
         
         // create block list for grid
         DataGroup pointData = new DataGroup(2);
@@ -106,14 +118,108 @@ public abstract class TiledMapProvider extends AbstractProvider
         gridData.addComponent(rowData);
         gridData.setName("grid");
         blockLists[1] = dataNode.createList(gridData);
-        System.out.println(gridData);
+        //System.out.println(gridData);
         
         dataNode.setNodeStructureReady(true);
     }
     
     
     @Override
-    public abstract void updateData() throws DataException;
+    public void updateData() throws DataException
+    {
+        // init DataNode if not done yet
+        if (!dataNode.isNodeStructureReady())
+            init();
+        
+        // convert extent to mercator projection
+        STTSpatialExtent mercatorExtent = new STTSpatialExtent();
+        double minX = spatialExtent.getMinX() * DTR;
+        double maxX = spatialExtent.getMaxX() * DTR;
+        double minY = latToY(spatialExtent.getMinY() * DTR);
+        double maxY = latToY(spatialExtent.getMaxY() * DTR);
+        mercatorExtent.setMinX(minX);
+        mercatorExtent.setMaxX(maxX);
+        mercatorExtent.setMinY(minY);
+        mercatorExtent.setMaxY(maxY);
+        
+        // query tree for matching and unused items 
+        selectedItems.clear();
+        deletedItems.clear();        
+        tileSelector.setROI(mercatorExtent);
+        tileSelector.setCurrentLevel(0);
+        tileSelector.setSizeRatio(spatialExtent.getXTiles());
+        quadTree.accept(tileSelector);
+        
+        // first round of cached items to display
+        for (int i=0; i<selectedItems.size(); i++)
+        {
+            QuadTreeItem nextItem = selectedItems.get(i);
+            
+            if (canceled)
+                break;
+            
+            if (nextItem.getData() == null)
+            {
+                // find first parent ready to display
+                QuadTreeItem parentItem = nextItem.getParent();
+                while (parentItem != null && parentItem.getData() == null)
+                    parentItem = parentItem.getParent();
+                
+                // add parent to list if it's not already there
+                if (parentItem != null && parentItem.getData() != null)
+                {
+                    BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
+                    for (int b=0; b<blockArray.length; b++)
+                    {
+                        if (!blockArray[b].isLinked())
+                            blockLists[b].add(blockArray[b]);
+                    }
+                }            
+            }
+            else
+            {
+                BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
+                for (int b=0; b<blockArray.length; b++)
+                    blockLists[b].add(blockArray[b]);
+                
+                // remove children and parent of that item
+                removeChildrenData(nextItem);
+                removeHiddenParent(nextItem);
+            }
+        }
+        
+        // send event for redraw
+        if (!canceled)
+            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+
+        // second round of new items to display
+        for (int i=0; i<selectedItems.size(); i++)
+        {
+            QuadTreeItem nextItem = selectedItems.get(i);
+            
+            if (canceled)
+                break;
+            
+            if (nextItem.getData() == null)
+            {
+                getNewTile(nextItem);
+            }
+        }
+        
+        // send event to cleanup stylers cache
+        if (deletedItems.size() > 0)
+        {
+            //System.out.println("-" + deletedItems.size()/2);
+            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
+        }
+    }
+    
+    
+    @Override
+    public void clearData()
+    {
+        
+    }
     
     
     /**
@@ -139,25 +245,64 @@ public abstract class TiledMapProvider extends AbstractProvider
      */
     protected void removeParent(QuadTreeItem item)
     {
+        boolean skip = false;
         QuadTreeItem parent = item.getParent();
         if (parent == null)
-            return;
-                
-        // remove parent blocks
-        BlockListItem[] blockArray = (BlockListItem[])parent.getData();
-        if (blockArray != null)
-        {                
-            for (int b=0; b<blockArray.length; b++)
+            return;        
+        
+        // skip if one of needed children is not loaded
+        for (int i=0; i<4; i++)
+        {
+            QuadTreeItem child = parent.getChild(i);
+            if (child != null && child.isNeeded())
             {
-                // remove items from list
-                if (blockArray[b] != null)
-                    blockLists[b].remove(blockArray[b]);
+                if (child.getData() == null)
+                    skip = true;
             }
+        }
+        
+        // remove parent blocks
+        if (!skip)
+        {
+            BlockListItem[] blockArray = (BlockListItem[])parent.getData();
+            if (blockArray != null)
+            {                
+                for (int b=0; b<blockArray.length; b++)
+                {
+                    // remove items from list
+                    if (blockArray[b] != null)
+                        blockLists[b].remove(blockArray[b]);
+                }
+            }
+            
+            parent.needed = false;
         }
         
         //System.out.println("Item unselected " + item);
         
         removeParent(parent);
+    }
+    
+    
+    protected void removeHiddenParent(QuadTreeItem item)
+    {
+//        QuadTreeItem parent = item.getParent();
+//        if (parent == null)
+//            return;
+//        
+//        // skip if one of the children is not loaded
+//        for (int i=0; i<4; i++)
+//        {
+//            QuadTreeItem child = parent.getChild(i);
+//            
+//            if (child == null)
+//                return;
+//            
+//            if (child.getData() == null)
+//                return;
+//        }
+        
+        removeParent(item);
     }
     
     
@@ -178,20 +323,11 @@ public abstract class TiledMapProvider extends AbstractProvider
     {
         double sinLat = Math.sin(lat);
         double y = 0.5 * Math.log((1 + sinLat) / (1 - sinLat));
+        
+        y = Math.max(y, -Math.PI);
+        y = Math.min(y, Math.PI);
+        
         return y;
-    }
-    
-    
-    @Override
-    public void clearData()
-    {
-//        error = false;
-//        
-//        if (dataNode != null)
-//        {
-//            dataNode.clearAll();
-//            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
-//        }       
     }
     
     

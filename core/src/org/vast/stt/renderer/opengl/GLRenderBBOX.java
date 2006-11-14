@@ -163,7 +163,7 @@ public class GLRenderBBOX
         double bboxSize = bboxCorner1.length();
         
         // draw handles
-        double s = Math.sqrt(dX*dX+dY*dY)/18;
+        double s = Math.sqrt(dX*dX+dY*dY)/20;
         s *= screenSize/bboxSize;
         
         for (int g=0; g<2; g++)

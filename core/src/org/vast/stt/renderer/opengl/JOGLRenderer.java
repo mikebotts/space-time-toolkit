@@ -245,7 +245,7 @@ public class JOGLRenderer extends SceneRenderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPickMatrix(filter.x, viewPort[3]-filter.y, filter.dX, filter.dY, viewPort, 0);
+        glu.gluPickMatrix(filter.x, filter.y, filter.dX, filter.dY, viewPort, 0);
         Rectangle clientArea = canvas.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
@@ -430,6 +430,9 @@ public class JOGLRenderer extends SceneRenderer
      */
     protected void drawArcball(ViewSettings view)
     {
+        gl.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glDepthFunc(GL.GL_ALWAYS);
+        
         double x = view.getTargetPos().x;
         double y = view.getTargetPos().y;
         double z = view.getTargetPos().z;
@@ -439,13 +442,16 @@ public class JOGLRenderer extends SceneRenderer
         
         double radius = view.getArcballRadius();
 
+        gl.glPolygonOffset(0.0f, -10);
         gl.glColor4f(0.8f, 1.0f, 0.8f, 0.1f);
         gl.glLineWidth(2.0f);
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
+        gl.glPolygonMode(GL.GL_FRONT, GL.GL_LINE);
+        gl.glEnable(GL.GL_CULL_FACE);
         GLUquadric sphereObj = glu.gluNewQuadric();
         glu.gluSphere(sphereObj, radius, 24, 24);
         
         gl.glPopMatrix();
+        gl.glPopAttrib();
     }
     
     
@@ -554,11 +560,13 @@ public class JOGLRenderer extends SceneRenderer
         if (JOGLContext != null && SWTContext != null)
         {
             // dispose context and remove from list
-            contextList.remove(JOGLContext);           
+            contextList.remove(JOGLContext);
             SWTContext.dispose();
             JOGLContext.destroy();
             SWTContext = null;
             JOGLContext = null;
+            DisplayListManager.DLTables.clear();
+            TextureManager.symTextureTables.clear();
         }
     }
     

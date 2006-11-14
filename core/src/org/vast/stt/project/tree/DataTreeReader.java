@@ -14,7 +14,6 @@
 package org.vast.stt.project.tree;
 
 import java.util.*;
-
 import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
@@ -26,7 +25,7 @@ import org.vast.stt.project.feedback.UserAction;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.ExtentReader;
-import org.vast.stt.provider.tiling.QuadTreeProvider;
+import org.vast.stt.provider.tiling.SpatialTilingProvider;
 import org.w3c.dom.*;
 
 
@@ -251,7 +250,7 @@ public class DataTreeReader extends XMLReader
         // read quadTree option
         String text = dom.getAttributeValue(providerElt, "quadTree");
         if (text != null && text.equalsIgnoreCase("true"))
-            provider = new QuadTreeProvider(provider);
+            provider = new SpatialTilingProvider(provider);
         
         return provider;
     }

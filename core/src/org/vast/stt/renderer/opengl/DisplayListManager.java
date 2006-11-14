@@ -45,8 +45,9 @@ public class DisplayListManager
                = new Hashtable<HashKey, GLDisplayListTable>();
     protected GL gl;
     protected GLU glu;
+    protected int listCount = 0;
     
-    
+    // use to build a unique hash code for a combination of symbolizer/projection
     class HashKey
     {
         int hashCode;
@@ -182,6 +183,9 @@ public class DisplayListManager
             //System.err.println("DL #" + oldID + " deleted");
         }
         
+        //listCount++;
+        //System.out.println(listCount);
+        
         //System.err.println("DL #" + dlInfo.id + " created");
     }
     
@@ -210,8 +214,10 @@ public class DisplayListManager
                         // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         gl.glDeleteLists(nextDL.id, 1);
                         // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
-                        dlTable.remove(nextDL);
+                        // listCount--;
                     }
+                    
+                    dlTable.remove(nextDL);
                 }
                 
                 DLTables.remove(hashKey);
@@ -239,15 +245,24 @@ public class DisplayListManager
                 for (int i=0; i<objects.length; i++)
                 {
                     GLDisplayList nextDL = dlTable.get(objects[i]);
-                    if (nextDL != null && nextDL.id > 0)
+                    if (nextDL != null)
                     {
-                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
-                        gl.glDeleteLists(nextDL.id, 1);
-                        // System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         dlTable.remove(nextDL);
+                        
+                        if (nextDL.id > 0)
+                        {
+                            //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
+                            gl.glDeleteLists(nextDL.id, 1);
+                            //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
+                            //listCount--;
+                        }
                     }
+                    
+                    
                 }
-            }            
+            }
+            
+            //System.out.println(listCount);
         }
     }
 }
