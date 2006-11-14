@@ -41,7 +41,7 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
 {
     protected STTEventListeners listeners;
     protected TimeExtentUpdater updater;
-    protected double absoluteTime = 0.0;
+    protected double absoluteTime = 0.0;   
     protected boolean useAbsoluteTime = false;
 
     

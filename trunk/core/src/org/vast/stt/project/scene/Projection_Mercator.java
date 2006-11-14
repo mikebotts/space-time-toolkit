@@ -190,9 +190,9 @@ public class Projection_Mercator implements Projection
     }
     
     
-    public void pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    public boolean pointOnMap(int x, int y, Scene scene, Vector3d pos)
     {
-        
+        return false;
     }
     
     

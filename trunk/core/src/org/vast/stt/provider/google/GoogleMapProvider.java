@@ -24,10 +24,8 @@ import org.ogc.cdm.common.DataBlock;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
 import org.vast.stt.data.BlockListItem;
-import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.TiledMapProvider;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
@@ -54,7 +52,6 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  */
 public class GoogleMapProvider extends TiledMapProvider
 {
-    private final static double DTR = Math.PI/180;
     protected String layerId = "roads";
     protected int serverNum = 0;
         
@@ -205,7 +202,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     
                     // remove sub and super items now that we have the new tile
                     removeChildrenData(item);
-                    removeParent(item);
+                    removeHiddenParent(item);
                     
                     // send event for redraw
                     dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
@@ -221,66 +218,12 @@ public class GoogleMapProvider extends TiledMapProvider
     
     
     @Override
-    public void updateData() throws DataException
+    protected void getNewTile(QuadTreeItem item)
     {
-        // init DataNode if not done yet
-        if (!dataNode.isNodeStructureReady())
-            init();
-        
-        // convert extent to mercator projection
-        STTSpatialExtent mercatorExtent = new STTSpatialExtent();
-        double minX = spatialExtent.getMinX() * DTR;
-        double maxX = spatialExtent.getMaxX() * DTR;
-        double minY = latToY(spatialExtent.getMinY() * DTR);
-        double maxY = latToY(spatialExtent.getMaxY() * DTR);
-        mercatorExtent.setMinX(Math.max(minX, maxBbox.getMinX()));
-        mercatorExtent.setMaxX(Math.min(maxX, maxBbox.getMaxX()));
-        mercatorExtent.setMinY(Math.max(minY, maxBbox.getMinY()));
-        mercatorExtent.setMaxY(Math.min(maxY, maxBbox.getMaxY()));
-        
-        // query tree for matching and unused items 
-        selectedItems.clear();
-        deletedItems.clear();        
-        tileSelector.setROI(mercatorExtent);
-        tileSelector.setCurrentLevel(0);
-        tileSelector.setSizeRatio(spatialExtent.getXTiles());
-        quadTree.accept(tileSelector);
-                
-        // get items to display
-        for (int i=0; i<selectedItems.size(); i++)
-        {
-            QuadTreeItem nextItem = selectedItems.get(i);
-            
-            if (canceled)
-                return;
-            
-            if (nextItem.getData() == null)
-            {
-                GetTileRunnable getTile = new GetTileRunnable(nextItem);
-                //Thread newThread = new Thread(getTile, nextItem.toString());
-                //newThread.start();
-                getTile.run();
-                continue;
-            }
-            else
-            {
-                BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
-                
-                for (int b=0; b<blockArray.length; b++)
-                {
-                    blockLists[b].remove(blockArray[b]);
-                    blockLists[b].add(blockArray[b]);
-                }
-                
-                // remove children and parent of that item 
-                removeChildrenData(nextItem);
-                removeParent(nextItem);
-            }
-        }
-        
-        // send event to cleanup stylers cache
-        if (deletedItems.size() > 0)
-            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
+        GetTileRunnable getTile = new GetTileRunnable(item);
+        //Thread newThread = new Thread(getTile, nextItem.toString());
+        //newThread.start();
+        getTile.run();
     }
     
     

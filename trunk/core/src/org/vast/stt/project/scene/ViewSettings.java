@@ -71,7 +71,7 @@ public class ViewSettings implements STTEventProducer
     
 	// camera modes
 	protected CameraMode cameraMode;
-    protected double arcballRadius = -1;
+    protected double arcballRadius = -1;   
     
     // intended view projection
     protected Projection projection;

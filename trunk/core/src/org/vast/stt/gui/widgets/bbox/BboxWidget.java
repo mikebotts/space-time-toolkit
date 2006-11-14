@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
@@ -26,7 +27,8 @@ import org.vast.stt.provider.STTSpatialExtent;
 
 public class BboxWidget implements SelectionListener
 {
-	DataItem dataItem;
+    Scene scene;
+    DataItem dataItem;
 	Text nlatText, slatText, wlonText, elonText;
     Text latTilesText, lonTilesText;
 	Combo formatCombo;
@@ -251,6 +253,10 @@ public class BboxWidget implements SelectionListener
 			this.setSpatialExtent(ext);
 		}
 	}
+    
+    public void setScene(Scene scene){
+        this.scene = scene;
+    }
 	
 	public double getValue(Text text){
 		double value;
@@ -291,11 +297,9 @@ public class BboxWidget implements SelectionListener
             bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));            
         }
         else if(e.widget == fitBtn){
-			double nlat = getValue(nlatText);
-			double slat = getValue(slatText);
-			double wlon = getValue(wlonText);
-			double elon = getValue(elonText);
-			System.out.println("Fit: " + wlon + ", " + slat + " ==> " + elon + ", " + nlat);
+            STTSpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
+            scene.getViewSettings().getProjection().fitBboxToView(bbox, scene);
+            bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
 		} else if (e.widget == formatCombo){
 			//System.err.println("Selection Index = " + formatCombo.getSelectionIndex());
 			this.setFormat(formatCombo.getSelectionIndex());

@@ -52,6 +52,7 @@ public class TextureManager
     protected boolean forceNoExt = false;
     protected boolean npotSupported;
     protected boolean normalizationRequired;
+    protected int texCount = 0;
     
     
     class GLTexture
@@ -232,7 +233,10 @@ public class TextureManager
                 gl.glDeleteTextures(1, new int[] {oldID}, 0);
                 //System.err.println("Tex #" + oldID + " deleted");
             }
-                        
+            
+            //texCount++;
+            //System.out.println(texCount);
+            
             //System.err.println("Tex #" + texInfo.id + " created");
         }
     }
@@ -260,8 +264,10 @@ public class TextureManager
                         // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
                         // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
-                        textureTable.remove(texInfo);
+                        //texCount--;
                     }
+                    
+                    textureTable.remove(texInfo);
                 }
                 
                 symTextureTables.remove(sym);
@@ -288,15 +294,23 @@ public class TextureManager
                 for (int i=0; i<objects.length; i++)
                 {
                     GLTexture texInfo = textureTable.get(objects[i]);
-                    if (texInfo != null && texInfo.id > 0)
+                    if (texInfo != null)
                     {
-                        //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
-                        gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                        //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
-                        textureTable.remove(texInfo);
+                        textureTable.remove(texInfo);                        
+                        if (texInfo.id > 0)
+                        {
+                            //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
+                            gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
+                            //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
+                            //texCount--;
+                        }
                     }
+                    
+                    
                 }
             }
+            
+            //System.out.println(texCount);
         }
     }
     

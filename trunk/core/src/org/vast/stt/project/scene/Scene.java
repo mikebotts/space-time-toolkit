@@ -47,6 +47,7 @@ public class Scene extends AbstractDisplay
 {
 	protected DataTree dataTree;
     protected SceneRenderer renderer;
+    protected CameraControl cameraController;
 	protected ViewSettings viewSettings;
 	protected TimeSettings timeSettings;    
     protected ArrayList<SceneItem> sceneItems;
@@ -58,6 +59,7 @@ public class Scene extends AbstractDisplay
         renderer = new JOGLRenderer();      
         sceneItems = new ArrayList<SceneItem>();
         selectedItems = new ArrayList<SceneItem>(1);
+        cameraController = new CameraControl_Base(this);
     }
 
 
@@ -122,6 +124,18 @@ public class Scene extends AbstractDisplay
                 this.timeSettings.addListener(this);
         }
 	}
+    
+    
+    public CameraControl getCameraController()
+    {
+        return cameraController;
+    }
+
+
+    public void setCameraController(CameraControl cameraController)
+    {
+        this.cameraController = cameraController;
+    }
     
     
     public SceneRenderer getRenderer()

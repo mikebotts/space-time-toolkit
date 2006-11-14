@@ -47,6 +47,7 @@ public class QuadTreeItem extends SpatialExtent
     protected Object data;
     protected QuadTreeItem parent;
     protected QuadTreeItem[] children;  // 0->3 from lower left, counter clockwise
+    protected boolean needed;
     
     
     public QuadTreeItem()
@@ -354,6 +355,18 @@ public class QuadTreeItem extends SpatialExtent
     public void accept(QuadTreeVisitor visitor)
     {
         visitor.visit(this);
+    }
+    
+    
+    public boolean isNeeded()
+    {
+        return needed;
+    }
+
+
+    public void setNeeded(boolean needed)
+    {
+        this.needed = needed;
     }
     
     

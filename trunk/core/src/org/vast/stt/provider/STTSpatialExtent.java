@@ -37,12 +37,12 @@ import org.vast.stt.event.STTEventProducer;
  */
 public class STTSpatialExtent extends SpatialExtent implements STTEventProducer
 {
-    protected boolean tilingEnabled;
+    protected STTEventListeners listeners;
+    protected SpatialExtentUpdater updater;
     protected int xTiles = 1;
     protected int yTiles = 1;
     protected int zTiles = 1;
-    protected STTEventListeners listeners;
-    protected SpatialExtentUpdater updater;
+    protected boolean tilingEnabled;
 
 
     public STTSpatialExtent()

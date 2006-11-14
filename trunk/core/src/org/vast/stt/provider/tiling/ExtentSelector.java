@@ -49,7 +49,8 @@ import org.vast.stt.provider.tiling.QuadTreeVisitor;
  */
 public abstract class ExtentSelector implements QuadTreeVisitor
 {
-    protected SpatialExtent roi;
+    protected SpatialExtent roi1, roi2;
+    protected boolean splitROI;
     protected double roiSize;
     protected double sizeRatio; // ratio roiSize/tileSize
     protected int maxLevel, currentLevel;
@@ -79,37 +80,60 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     
     public void visit(QuadTreeItem item)
     {
-        if (item.intersects(roi))
+        if (item.intersects(roi1) || item.intersects(roi2))
         {
             if (item.getTileSize() * sizeRatio < roiSize)
             {
                 selectItem(item);
-                return;
             }
-            
-            // enforce all children
-            for (byte i=0; i<4; i++)
+            else
             {
-                if (item.getChild(i) == null)
-                    new QuadTreeItem(item, i);
+                // enforce all children
+                for (byte i=0; i<4; i++)
+                {
+                    if (item.getChild(i) == null)
+                        new QuadTreeItem(item, i);
+                }
+                
+                currentLevel++;            
+                if (currentLevel < maxLevel)
+                    visitChildren(item);            
+                currentLevel--;
             }
             
-            //deselectItem(item);
-            currentLevel++;            
-            if (currentLevel < maxLevel)
-                visitChildren(item);            
-            currentLevel--;
+            item.needed = true;
         }
         else
         {
             deselectItem(item);
+            item.needed = false;
         }
     }
 
 
     public void setROI(SpatialExtent roi)
     {
-        this.roi = roi;
+        this.roi1 = roi.copy();
+        this.roi2 = roi.copy();
+        splitROI = false;
+        
+        // adjust rois
+        if (roi.getMinX() < -Math.PI)
+        {
+            roi1.setMinX(-Math.PI);
+            roi2.setMinX(roi.getMinX() + 2*Math.PI);
+            roi2.setMaxX(Math.PI);
+            splitROI = true;
+        }
+        else if (roi.getMaxX() > Math.PI)
+        {
+            roi1.setMaxX(Math.PI);
+            roi2.setMinX(-Math.PI);
+            roi2.setMaxX(roi.getMaxX() - 2*Math.PI);
+            splitROI = true;
+        }
+        
+        // precompute bbox size
         this.roiSize = Math.abs(roi.getMaxX() - roi.getMinX()) * Math.abs(roi.getMaxY() - roi.getMinY());
     }
 

@@ -63,10 +63,19 @@ public class TiledMapSelector extends ExtentSelector
      */
     protected double distanceTo(QuadTreeItem item)
     {
-        double dX = (roi.getMinX() + roi.getMaxX() - item.getMinX() - item.getMaxX()) / 2;
-        double dY = (roi.getMinY() + roi.getMaxY() - item.getMinY() - item.getMaxY()) / 2;
-        double distance2 = dX*dX + dY*dY;
-        return distance2;
+        double dX1 = (roi1.getMinX() + roi1.getMaxX() - item.getMinX() - item.getMaxX()) / 2;
+        double dY1 = (roi1.getMinY() + roi1.getMaxY() - item.getMinY() - item.getMaxY()) / 2;
+        double dist1 = dX1*dX1 + dY1*dY1;
+        
+        if (splitROI)
+        {
+            double dX2 = (roi2.getMinX() + roi2.getMaxX() - item.getMinX() - item.getMaxX()) / 2;
+            double dY2 = (roi2.getMinY() + roi2.getMaxY() - item.getMinY() - item.getMaxY()) / 2;
+            double dist2 = dX2*dX2 + dY2*dY2;
+            return Math.min(dist1, dist2);
+        }
+        
+        return dist1;
     }
     
     
@@ -125,11 +134,9 @@ public class TiledMapSelector extends ExtentSelector
     @Override
     protected void selectItem(QuadTreeItem item)
     {
-        double dX =  (roi.getMinX() + roi.getMaxX() - item.getMinX() - item.getMaxX()) / 2;
-        double dY =  (roi.getMinY() + roi.getMaxY() - item.getMinY() - item.getMaxY()) / 2;
-        double distance = dX*dX + dY*dY;
+        double distance = distanceTo(item);
         item.setDistance(distance);
-        
+
         if (selectedItems.isEmpty())
         {
             selectedItems.add(item);

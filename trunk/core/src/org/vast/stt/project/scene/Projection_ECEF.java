@@ -41,11 +41,13 @@ public class Projection_ECEF implements Projection
 {
     protected final static double RTD = 180 / Math.PI;
     protected RayIntersectEllipsoid rie;
+    protected Datum datum;
     
     
     public Projection_ECEF()
     {
-        rie = new RayIntersectEllipsoid(new Datum());
+        datum = new Datum();
+        rie = new RayIntersectEllipsoid(datum);
     }
     
     
@@ -147,8 +149,6 @@ public class Projection_ECEF implements Projection
     public void fitBboxToView(SpatialExtent bbox, Scene scene)
     {
         ViewSettings view = scene.getViewSettings(); 
-        SceneRenderer renderer = scene.getRenderer();
-        
         Vector3d pos = view.getCameraPos();
         Vector3d dir = view.getTargetPos().copy();
         dir.sub(pos);
@@ -158,14 +158,17 @@ public class Projection_ECEF implements Projection
         {
             double[] llaCenter = MapProjection.ECFtoLLA(intersect[0], intersect[1], intersect[2], null);
             double centerX = llaCenter[1] * RTD;
+            if (centerX > 180)
+                centerX -= 360;
             double centerY = llaCenter[0] * RTD;
             double dX = view.getOrthoWidth()/2 * 90/6378137;
-            double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
-            
-            bbox.setMinX(Math.max(centerX - dX, -180));
-            bbox.setMaxX(Math.min(centerX + dX, +180));
-            bbox.setMinY(Math.max(centerY - dY, -90));
-            bbox.setMaxY(Math.min(centerY + dY, +90));
+            dX = Math.min(dX, 90);
+            double dY = dX;
+
+            bbox.setMinX(centerX - dX);
+            bbox.setMaxX(centerX + dX);
+            bbox.setMinY(centerY - dY);
+            bbox.setMaxY(centerY + dY);
         }
         else
         {
@@ -177,7 +180,7 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public void pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    public boolean pointOnMap(int x, int y, Scene scene, Vector3d pos)
     {
         ViewSettings view = scene.getViewSettings();
         
@@ -193,13 +196,10 @@ public class Projection_ECEF implements Projection
         if (rie.getFoundFlag())
         {
             pos.set(intersect);
+            return true;
         }
-        else
-        {
-            pos.x = Double.NaN;
-            pos.y = Double.NaN;
-            pos.z = Double.NaN;
-        }
+        
+        return false;
     }
     
     

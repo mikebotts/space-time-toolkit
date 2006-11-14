@@ -57,7 +57,7 @@ public interface Projection
     public abstract void fitBboxToView(SpatialExtent bbox, Scene scene);
     
     
-    public abstract void pointOnMap(int x, int z, Scene scene, Vector3d pos);
+    public abstract boolean pointOnMap(int x, int y, Scene scene, Vector3d pos);
     
     
     public abstract MotionConstraint getDefaultTranslationConstraint();
