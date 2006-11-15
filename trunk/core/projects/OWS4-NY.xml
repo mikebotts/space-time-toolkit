@@ -553,6 +553,80 @@
                            </DataItem>
                         </member>
                         <member visible="false">
+                           <DataItem enabled="true">
+                              <name>Worldwind Satellite Imagery</name>
+                              <dataProvider href="#WORLDWIND"/>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>image/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>image</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:ChannelSelection>
+                                          <sld:RedChannel>
+                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                          </sld:BlueChannel>
+                                       </sld:ChannelSelection>                                       
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
                            <DataItem>
                               <name>SRTM Data</name>
                               <dataProvider xlink:href="#SRTM_CHAIN"/>
@@ -1092,6 +1166,17 @@
                      </BoundingBox>
                   </spatialExtent>
                </VirtualEarthProvider>
+            </member>
+            <member>
+               <WorldwindProvider id="WORLDWIND">
+                  <name>Worldwind Imagery</name>
+                  <layerId>satellite</layerId>
+                  <spatialExtent>
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+               </WorldwindProvider>
             </member>
             <member>
                <GoogleMapProvider id="GOOGLE_MAP">

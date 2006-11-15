@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.provider.google;
+package org.vast.sttx.provider.worldwind;
 
 import java.awt.image.renderable.ParameterBlock;
 import java.awt.image.*;
@@ -24,25 +24,27 @@ import org.ogc.cdm.common.DataBlock;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
 import org.vast.stt.data.BlockListItem;
+import org.vast.stt.data.DataException;
+import org.vast.data.DataArray;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.TiledMapProvider;
+import org.vast.stt.provider.tiling.TiledMapSelector;
+
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Google Map Provider
+ * Windows Live Local Virtual Earth Provider
  * </p>
  *
  * <p><b>Description:</b><br/>
  * Requests Data from Google Map Keyhole servers
- * Ref: http://kh{x}.google.com/
- * Requests: http://kh0.google.com/kh?n=404&v=10&t=tsrrtqqttrtqrsq
- *           http://mt0.google.com/mt?n=404&v=w2.25&x=0&y=0&zoom=16
- *           http://mt0.google.com/mt?n=404&v=w2t.26&x=0&y=0&zoom=16
+ * Ref: http://worldwind25.arc.nasa.gov
+ * Requests: http://worldwind25.arc.nasa.gov/tile/tile.aspx?T=bmng.topo.bathy.200411&L=2&X=19&Y=11
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -50,15 +52,18 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Nov 14, 2005
  * @version 1.0
  */
-public class GoogleMapProvider extends TiledMapProvider
+public class WorldwindMapProvider extends TiledMapProvider
 {
-    protected String layerId = "roads";
-    protected int serverNum = 0;
+    protected String layerId = "satellite";
+    protected int serverNum = 24;
         
     
-    public GoogleMapProvider()
+    public WorldwindMapProvider()
     {
-        super(256, 19);
+        super(512, 17);
+        tileSelector = new TiledMapSelector(3, 3, 3, 17);
+        tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
+        useAlpha = false;
     }
     
     
@@ -83,42 +88,26 @@ public class GoogleMapProvider extends TiledMapProvider
                 
                 if (layerId.startsWith("satellite"))
                 {
-                    // build request URL for satellite data
-                    GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
-                    item.accept(tileNumberGen);
-                    String q = tileNumberGen.getTileNumber();
-                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=11&t=t" + q;
-                }
-                else if (layerId.startsWith("roads"))
-                {
                     // build request URL for road/boundary data
-                    GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
+                    WorldwindMapTileXYZ tileXYZGen = new WorldwindMapTileXYZ();
                     item.accept(tileXYZGen);
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2t.26&x=" + x + "&y=" + y + "&zoom=" + z;
+                    urlString = "http://worldwind" + serverNum +
+                                ".arc.nasa.gov/tile/tile.aspx?T=bmng.topo.bathy.200411&L=" + z + "&X=" + x + "&Y=" + (y-1);
                 }
-                else if (layerId.startsWith("map"))
-                {
-                    // build request URL for map data
-                    GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
-                    item.accept(tileXYZGen);
-                    int x = tileXYZGen.getX();
-                    int y = tileXYZGen.getY();
-                    int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
-                }
+                
+                System.out.println(urlString);
                 
                 // increment server number
                 serverNum++;
-                if (serverNum > 3)
-                    serverNum = 0;                
+                if (serverNum > 25)
+                    serverNum = 24;                
                                         
                 //System.out.println(urlString);
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
-                connection.addRequestProperty("Referer", "http://maps.google.com");
                 connection.addRequestProperty("Connection", "keep-alive");
                 connection.addRequestProperty("Keep-Alive", "300");
                 
@@ -131,14 +120,14 @@ public class GoogleMapProvider extends TiledMapProvider
                 MemoryCacheSeekableStream imgStream = new MemoryCacheSeekableStream(is);
 
                 ParameterBlock pb = new ParameterBlock();
-                pb.add(imgStream); 
+                pb.add(imgStream);
                 
                 if (connection.getContentType().equals("image/png"))
                 {
                     PNGDecodeParam pngParams = new PNGDecodeParam();
                     pngParams.setExpandPalette(true);
                     pb.add(pngParams);
-                }                
+                }
                 
                 RenderedOp rop = JAI.create("stream", pb);
                 RenderedImage img = rop.createInstance();
@@ -223,6 +212,17 @@ public class GoogleMapProvider extends TiledMapProvider
     
     
     @Override
+    public void init() throws DataException
+    {
+        super.init();
+        DataArray imgArray = (DataArray)blockLists[0].getBlockStructure();
+        imgArray.setSize(512);
+        DataArray rowArray = (DataArray)imgArray.getComponent(0);
+        rowArray.setSize(512);
+    }
+    
+    
+    @Override
     protected void getNewTile(QuadTreeItem item)
     {
         GetTileRunnable getTile = new GetTileRunnable(item);
@@ -235,7 +235,7 @@ public class GoogleMapProvider extends TiledMapProvider
     public void setLayer(String layerId)
     {
         this.layerId = layerId;
-        if (layerId.equals("roads"))
-            useAlpha = true;
+        //if (layerId.equals("roads"))
+        //    useAlpha = true;
     }
 }

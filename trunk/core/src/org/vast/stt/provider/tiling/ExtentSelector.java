@@ -53,13 +53,14 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     protected boolean splitROI;
     protected double roiSize;
     protected double sizeRatio; // ratio roiSize/tileSize
-    protected int maxLevel, currentLevel;
+    protected int maxLevel, minLevel, currentLevel;
     
     
-    public ExtentSelector(double sizeRatio, int maxLevel)
+    public ExtentSelector(double sizeRatio, int minLevel, int maxLevel)
     {
         this.sizeRatio = sizeRatio;        
         this.maxLevel = maxLevel;
+        this.minLevel = minLevel;
     }
     
     
@@ -82,7 +83,7 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     {
         if (item.intersects(roi1) || item.intersects(roi2))
         {
-            if (item.getTileSize() * sizeRatio < roiSize)
+            if (currentLevel >= minLevel && item.getTileSize() * sizeRatio < roiSize)
             {
                 selectItem(item);
             }

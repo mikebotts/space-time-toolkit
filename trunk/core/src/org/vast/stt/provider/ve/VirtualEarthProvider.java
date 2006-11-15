@@ -102,10 +102,14 @@ public class VirtualEarthProvider extends TiledMapProvider
                 MemoryCacheSeekableStream imgStream = new MemoryCacheSeekableStream(is);
 
                 ParameterBlock pb = new ParameterBlock();
-                pb.add(imgStream);            
-                PNGDecodeParam pngParams = new PNGDecodeParam();
-                pngParams.setExpandPalette(true);
-                pb.add(pngParams);
+                pb.add(imgStream);
+                
+                if (connection.getContentType().equals("image/png"))
+                {
+                    PNGDecodeParam pngParams = new PNGDecodeParam();
+                    pngParams.setExpandPalette(true);
+                    pb.add(pngParams);
+                }
                 
                 RenderedOp rop = JAI.create("stream", pb);
                 RenderedImage img = rop.createInstance();
@@ -119,21 +123,21 @@ public class VirtualEarthProvider extends TiledMapProvider
                     byte[] data = ((DataBufferByte)buf).getData();
                     imageryDataBlock = DataBlockFactory.createBlock(data);
                 }
-                else if (buf instanceof DataBufferInt)
-                {
-                    int[] data = ((DataBufferInt)buf).getData();
-                    byte[] byteData = new byte[data.length*3];
-                    
-                    for (int i=0; i<data.length; i++)
-                    {
-                        int b = i*3;
-                        byteData[b] = (byte)(data[i] & 0xFF);
-                        byteData[b+1] = (byte)((data[i] >> 8) & 0xFF);
-                        byteData[b+2] = (byte)((data[i] >> 16) & 0xFF);
-                    }
-                    
-                    imageryDataBlock = DataBlockFactory.createBlock(byteData);
-                }
+//                else if (buf instanceof DataBufferInt)
+//                {
+//                    int[] data = ((DataBufferInt)buf).getData();
+//                    byte[] byteData = new byte[data.length*3];
+//                    
+//                    for (int i=0; i<data.length; i++)
+//                    {
+//                        int b = i*3;
+//                        byteData[b] = (byte)(data[i] & 0xFF);
+//                        byteData[b+1] = (byte)((data[i] >> 8) & 0xFF);
+//                        byteData[b+2] = (byte)((data[i] >> 16) & 0xFF);
+//                    }
+//                    
+//                    imageryDataBlock = DataBlockFactory.createBlock(byteData);
+//                }
                 else
                     throw new IllegalStateException("DataBuffer Type not supported");
                 

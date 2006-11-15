@@ -66,7 +66,7 @@ public class SpatialTilingProvider extends TiledMapProvider
         // setup objects for tile selection
         selectedItems = new ArrayList<QuadTreeItem>(100);
         deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(3, 3, 18);        
+        tileSelector = new TiledMapSelector(3, 3, 0, 18);        
         tileSize = 256;
     }
     
