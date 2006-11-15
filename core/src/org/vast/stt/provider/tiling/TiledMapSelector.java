@@ -38,9 +38,9 @@ public class TiledMapSelector extends ExtentSelector
     protected double maxDistance2; // square of max distance in number of tiles
     
     
-    public TiledMapSelector(double sizeRatio, double maxDistance, int maxLevel)
+    public TiledMapSelector(double sizeRatio, double maxDistance, int minLevel, int maxLevel)
     {
-        super(sizeRatio, maxLevel);
+        super(sizeRatio, minLevel, maxLevel);
         this.maxDistance2 = maxDistance * maxDistance;
     }
     
