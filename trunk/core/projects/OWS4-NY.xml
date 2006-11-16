@@ -7,7 +7,7 @@
    xmlns:ogc="http://www.opengis.net/ogc"
    xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe"
-   xsi:schemaLocation="http://vast.uah.edu/stt/v3 ./ProjectFile.xsd" >
+   xsi:schemaLocation="http://vast.uah.edu/stt/v3 ./ProjectFile.xsd">
    <!-- Global metadata about the project -->
    <Identification>
       <name>OWS-4 Demo Project</name>
@@ -628,6 +628,87 @@
                         </member>
                         <member visible="false">
                            <DataItem>
+                              <name>Landsat Imagery (Flat)</name>
+                              <dataProvider href="#LANDSAT_FLAT"/>
+                              <style>
+                                 <sld:TextureSymbolizer id="LANDSAT_TEXTURE_STYLE" enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>imageData/image</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:ChannelSelection>
+                                          <sld:RedChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                          </sld:BlueChannel>
+                                       </sld:ChannelSelection>                                       
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer id="LANDSAT_BORDER_STYLE" enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>Landsat Imagery (Topo)</name>
+                              <dataProvider href="#LANDSAT_TOPO"/>
+                              <style href="#LANDSAT_TEXTURE_STYLE"/>                                 
+                              <style href="#LANDSAT_BORDER_STYLE"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
                               <name>SRTM Data</name>
                               <dataProvider xlink:href="#SRTM_CHAIN"/>
                               <style>
@@ -686,80 +767,7 @@
                                  </sld:GridMeshSymbolizer>
                               </style>
                            </DataItem>
-                        </member>
-                        <member visible="false">
-                           <DataItem>
-                              <name>Landsat Imagery (Flat)</name>
-                              <dataProvider href="#DATASET_01"/>
-                              <style>
-                                 <sld:TextureSymbolizer enabled="true">
-                                    <sld:Grid>
-                                       <sld:Dimensions>
-                                          <sld:Axis name="width">
-                                             <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
-                                          </sld:Axis>
-                                          <sld:Axis name="length">
-                                             <ogc:PropertyName>gridData/grid</ogc:PropertyName>
-                                          </sld:Axis>
-                                       </sld:Dimensions>
-                                       <sld:Geometry>
-                                          <sld:CssParameter name="geometry-x">
-                                             <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
-                                          </sld:CssParameter>
-                                          <sld:CssParameter name="geometry-y">
-                                             <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
-                                          </sld:CssParameter>
-                                       </sld:Geometry>
-                                    </sld:Grid>
-                                    <sld:Raster>
-                                       <sld:Dimensions>
-                                          <sld:Axis name="width">
-                                             <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
-                                          </sld:Axis>
-                                          <sld:Axis name="height">
-                                             <ogc:PropertyName>imageData/image</ogc:PropertyName>
-                                          </sld:Axis>
-                                       </sld:Dimensions>
-                                       <sld:Opacity>1.0</sld:Opacity>
-                                       <sld:ChannelSelection>
-                                          <sld:RedChannel>
-                                             <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
-                                          </sld:RedChannel>
-                                          <sld:GreenChannel>
-                                             <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
-                                          </sld:GreenChannel>
-                                          <sld:BlueChannel>
-                                             <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
-                                          </sld:BlueChannel>
-                                       </sld:ChannelSelection>                                       
-                                    </sld:Raster>
-                                 </sld:TextureSymbolizer>
-                              </style>
-                              <style>
-                                 <sld:GridMeshSymbolizer enabled="true">
-                                    <sld:Dimensions>
-                                       <sld:Axis name="width">
-                                          <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
-                                       </sld:Axis>
-                                       <sld:Axis name="length">
-                                          <ogc:PropertyName>gridData/grid</ogc:PropertyName>
-                                       </sld:Axis>
-                                    </sld:Dimensions>
-                                    <sld:Geometry>
-                                       <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                    </sld:Geometry>
-                                    <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
-                                    </sld:Stroke>
-                                 </sld:GridMeshSymbolizer>
-                              </style>
-                           </DataItem>
-                        </member>
+                        </member>                        
                      </DataList>
                   </member>
                   <member>
@@ -1081,7 +1089,40 @@
                               </style>
                            </DataItem>
                         </member>
-                                            
+                        <member>
+                           <ChartScene>
+                              <name>Chart of Temp vs. Time</name>
+                              <contents>
+                                 <DataList>
+                                    <member visible="false">
+                                       <DataItem enabled="true">
+                                          <name>Temperature</name>
+                                          <dataProvider href="#NY_KJFK_SOS"/>
+                                          <style>
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-breaks">
+                                                      <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>                             
+                                       </DataItem>
+                                    </member>
+                                 </DataList>
+                              </contents>
+                           </ChartScene>
+                        </member>                
                      </DataList>
                   </member>
                </DataList>
@@ -1111,7 +1152,7 @@
                </SWEDataProvider>
             </member>
             <member>
-               <SensorMLProvider id="DATASET_01" quadTree="true">
+               <SensorMLProvider id="LANDSAT_FLAT" quadTree="true">
                   <name>Landsat WMS</name>
                   <description>Landsat Data on top of flat grid</description>
                   <spatialExtent tiling="1x1">
@@ -1120,6 +1161,18 @@
                      </BoundingBox>
                   </spatialExtent>
                   <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="LANDSAT_TOPO" quadTree="true">
+                  <name>Landsat WMS + SRTM Topo</name>
+                  <description>Landsat Data on top of SRTM Topo</description>
+                  <spatialExtent tiling="1x1">
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process href="./WMS_SRTM_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>
@@ -1258,7 +1311,6 @@
             <member>
                <OWSDataProvider id="NY_KJFK_SOS">
                   <name>New York KJFK Weather SOS</name>
-                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>WeatherNY</offering>

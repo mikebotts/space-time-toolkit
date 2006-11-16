@@ -19,15 +19,15 @@ import org.eclipse.swt.widgets.Text;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
 public class BboxWidget implements SelectionListener
 {
-    Scene scene;
+    WorldScene scene;
     DataItem dataItem;
 	Text nlatText, slatText, wlonText, elonText;
     Text latTilesText, lonTilesText;
@@ -254,7 +254,7 @@ public class BboxWidget implements SelectionListener
 		}
 	}
     
-    public void setScene(Scene scene){
+    public void setScene(WorldScene scene){
         this.scene = scene;
     }
 	

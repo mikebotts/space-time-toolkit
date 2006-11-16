@@ -11,11 +11,11 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 import org.vast.math.Vector3d;
 import org.vast.physics.SpatialExtent;
-import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
+import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
 
@@ -120,7 +120,7 @@ public class Projection_LLA implements Projection
     }
     
     
-    public void fitViewToBbox(SpatialExtent bbox, Scene scene, boolean adjustZRange)
+    public void fitViewToBbox(SpatialExtent bbox, WorldScene scene, boolean adjustZRange)
     {
         ViewSettings view = scene.getViewSettings();
         
@@ -166,7 +166,7 @@ public class Projection_LLA implements Projection
     }
     
     
-    public void fitBboxToView(SpatialExtent bbox, Scene scene)
+    public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
     {
         ViewSettings view = scene.getViewSettings(); 
         SceneRenderer renderer = scene.getRenderer();
@@ -183,7 +183,7 @@ public class Projection_LLA implements Projection
     }
     
     
-    public boolean pointOnMap(int x, int y, Scene scene, Vector3d pos)
+    public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos)
     {
         ViewSettings view = scene.getViewSettings();
         

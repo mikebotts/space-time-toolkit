@@ -18,8 +18,8 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
@@ -39,7 +39,7 @@ import org.vast.stt.provider.STTSpatialExtent;
  */
 public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
-    private Scene scene;
+    private WorldScene scene;
     private ViewSettings view;
     private int tileSizeX, tileSizeY;
     //private long lastUpdateTime = -1;

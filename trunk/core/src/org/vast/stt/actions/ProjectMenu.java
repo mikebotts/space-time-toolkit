@@ -22,7 +22,7 @@ import org.vast.stt.commands.*;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.STTDisplay;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.world.WorldScene;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
@@ -45,9 +45,9 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                 {
                     STTDisplay nextDisplay = displayList.get(i);
                     
-                    if (nextDisplay instanceof Scene)
+                    if (nextDisplay instanceof WorldScene)
                     {
-                        Scene scene = (Scene)nextDisplay;
+                        WorldScene scene = (WorldScene)nextDisplay;
                         ScenePageInput pageInput = new ScenePageInput(scene);
                         IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                         oldWindow.openPage("STT.Perspective", pageInput);

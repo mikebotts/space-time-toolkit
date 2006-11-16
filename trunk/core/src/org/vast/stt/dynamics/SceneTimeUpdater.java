@@ -28,8 +28,9 @@ import java.util.List;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneItem;
 
 
 /**
@@ -48,10 +49,10 @@ import org.vast.stt.project.scene.SceneItem;
  */
 public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListener
 {
-    protected Scene scene;
+    protected WorldScene scene;
     
     
-    public SceneTimeUpdater(Scene scene)
+    public SceneTimeUpdater(WorldScene scene)
     {
         this.setScene(scene);
     }
@@ -75,7 +76,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         boolean visibleDataFound = false;
         
         // find all dataItems using this dataProvider
-        List<SceneItem> sceneItems = scene.getSceneItems();
+        List<WorldSceneItem> sceneItems = scene.getSceneItems();
         for (int i=0; i<sceneItems.size(); i++)
         {
             SceneItem nextItem = sceneItems.get(i);
@@ -89,7 +90,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
     }
     
 
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
         scene.getTimeSettings().addListener(this);

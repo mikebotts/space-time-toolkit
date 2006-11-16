@@ -21,11 +21,11 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 import org.vast.math.Quat4d;
 import org.vast.math.Vector3d;
-import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
+import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 
 
@@ -49,7 +49,7 @@ import org.vast.stt.renderer.SceneRenderer;
 public class CameraControl_Map extends CameraControl_Base
 {
     
-    public CameraControl_Map(Scene scene)
+    public CameraControl_Map(WorldScene scene)
     {
         super(scene);
     }

@@ -32,9 +32,10 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockListItem;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.world.WorldSceneItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -228,7 +229,7 @@ public class JOGLRenderer extends SceneRenderer
     
     
     @Override
-    public PickedObject pick(Scene scene, PickFilter filter)
+    public PickedObject pick(WorldScene scene, PickFilter filter)
     {
         ViewSettings view = scene.getViewSettings();
                 
@@ -278,7 +279,7 @@ public class JOGLRenderer extends SceneRenderer
         else
         {
             // get all or only selected items
-            List<SceneItem> items = null;
+            List<WorldSceneItem> items = null;
             if (filter.onlySelectedItems)
                 items = scene.getSelectedItems();
             else
@@ -332,14 +333,14 @@ public class JOGLRenderer extends SceneRenderer
     
     
     @Override
-    public void drawScene(Scene scene)
+    public void drawScene(WorldScene scene)
     {
         getContext();
         ViewSettings view = scene.getViewSettings();
         setupMatrices(view);
         
         // draw all items
-        List<SceneItem> sceneItems = scene.getSceneItems();        
+        List<WorldSceneItem> sceneItems = scene.getSceneItems();        
         for (int i = 0; i < sceneItems.size(); i++)
         {
             SceneItem nextItem = sceneItems.get(i);
@@ -459,7 +460,7 @@ public class JOGLRenderer extends SceneRenderer
      * Draws a surface representing the ROI of the currently selected item
      * @param scene
      */
-    protected void drawROI(Scene scene, boolean onlyHandles)
+    protected void drawROI(WorldScene scene, boolean onlyHandles)
     {
         if (scene.getSelectedItems().isEmpty())
             return;

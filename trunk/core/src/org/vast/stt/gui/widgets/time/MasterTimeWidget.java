@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.util.DateTime;
 
 /**
@@ -38,7 +38,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     private Button rtBtn;
     private Button setBtn;
     private double timeStep = 60.0; //  timeStep in seconds
-    private Scene scene;
+    private WorldScene scene;
 
 
     public MasterTimeWidget(Composite parent)
@@ -132,7 +132,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     }
 
 
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
         

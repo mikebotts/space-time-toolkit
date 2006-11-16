@@ -18,9 +18,9 @@ import javax.media.opengl.glu.GLU;
 
 import org.vast.math.Vector3d;
 import org.vast.physics.SpatialExtent;
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.ViewSettings;
-import org.vast.stt.project.scene.Projection.Crs;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.world.Projection.Crs;
 import org.vast.stt.style.PointGraphic;
 
 
@@ -61,7 +61,7 @@ public class GLRenderBBOX
     }
     
     
-    public void drawROI(Scene scene, SpatialExtent extent, boolean onlyHandles)
+    public void drawROI(WorldScene scene, SpatialExtent extent, boolean onlyHandles)
     {
         gl.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT);
         gl.glDepthFunc(GL.GL_ALWAYS);                

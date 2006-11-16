@@ -32,8 +32,8 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.world.WorldScene;
 
 
 public class SceneItemsView extends SceneView implements IDoubleClickListener
@@ -94,9 +94,9 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
 
 		public Object[] getElements(Object inputElement)
 		{
-			if (inputElement instanceof Scene)
+			if (inputElement instanceof WorldScene)
 			{
-				return ((Scene)inputElement).getSceneItems().toArray();
+				return ((WorldScene)inputElement).getSceneItems().toArray();
 			}
 			return null;
 		}		

@@ -21,12 +21,12 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 import org.vast.math.Quat4d;
 import org.vast.math.Vector3d;
-import org.vast.stt.project.scene.ViewSettings.CameraMode;
-import org.vast.stt.project.scene.ViewSettings.MotionConstraint;
+import org.vast.stt.project.world.ViewSettings.CameraMode;
+import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 
 
@@ -46,19 +46,19 @@ import org.vast.stt.renderer.SceneRenderer;
  */
 public class CameraControl_Base implements CameraControl
 {
-    protected Scene scene;
+    protected WorldScene scene;
     protected Vector3d P0 = new Vector3d();
     protected Vector3d P1 = new Vector3d();
     protected Vector3d C = new Vector3d();
     
     
-    public CameraControl_Base(Scene scene)
+    public CameraControl_Base(WorldScene scene)
     {
         this.setScene(scene);
     }
     
     
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
     }

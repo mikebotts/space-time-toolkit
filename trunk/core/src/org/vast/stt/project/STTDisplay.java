@@ -25,6 +25,7 @@ package org.vast.stt.project;
 
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventProducer;
+import org.vast.stt.project.tree.DataEntry;
 
 
 /**
@@ -41,8 +42,7 @@ import org.vast.stt.event.STTEventProducer;
  * @date Sep 12, 2006
  * @version 1.0
  */
-public interface STTDisplay extends STTEventProducer, STTEventListener
+public interface STTDisplay extends DataEntry, STTEventProducer, STTEventListener
 {
-    public String getName();
-    public void setName(String name);
+
 }

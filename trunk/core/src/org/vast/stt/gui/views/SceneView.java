@@ -19,7 +19,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -40,7 +40,7 @@ import org.vast.stt.project.scene.Scene;
  */
 public abstract class SceneView extends ViewPart implements IPageListener, STTEventListener
 {
-    protected Scene scene;
+    protected WorldScene scene;
     protected boolean updating = false;
     protected Runnable runRefresh = new Runnable()
     {
@@ -85,7 +85,7 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     }
     
     
-    public void setScene(Scene sc)
+    public void setScene(WorldScene sc)
     {
         if (scene != sc)
         {

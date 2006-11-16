@@ -84,11 +84,17 @@ public class DataItemIterator implements Iterator<DataItem>
                 nextItem = next();
 			}
 		}
-		else
+		else if (nextEntry instanceof DataItem)
 		{
             nextItem = (DataItem) nextEntry;
 			currentIndex++;
 		}
+        else
+        {
+            currentIndex++;
+            if (this.hasNext())
+                nextItem = next();
+        }
 
 		return nextItem;
 	}

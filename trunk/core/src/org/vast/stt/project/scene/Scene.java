@@ -19,7 +19,7 @@ import java.util.List;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.AbstractDisplay;
-import org.vast.stt.project.scene.Projection;
+import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataItem;
@@ -43,24 +43,23 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class Scene extends AbstractDisplay
+public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
 {
 	protected DataTree dataTree;
-    protected SceneRenderer renderer;
-    protected CameraControl cameraController;
-	protected ViewSettings viewSettings;
-	protected TimeSettings timeSettings;    
-    protected ArrayList<SceneItem> sceneItems;
-    protected ArrayList<SceneItem> selectedItems;
+    protected SceneRenderer renderer; 
+    protected ArrayList<ItemType> sceneItems;
+    protected ArrayList<ItemType> selectedItems;
     
 
     public Scene()
     {
         renderer = new JOGLRenderer();      
-        sceneItems = new ArrayList<SceneItem>();
-        selectedItems = new ArrayList<SceneItem>(1);
-        cameraController = new CameraControl_Base(this);
+        sceneItems = new ArrayList<ItemType>();
+        selectedItems = new ArrayList<ItemType>(1);
     }
+    
+    
+    protected abstract ItemType createNewItem();
 
 
 	public DataTree getDataTree()
@@ -82,60 +81,6 @@ public class Scene extends AbstractDisplay
                 this.dataTree.addListener(this);
         }
     }
-
-
-	public ViewSettings getViewSettings()
-	{
-		return viewSettings;
-	}
-
-
-	public void setViewSettings(ViewSettings viewSettings)
-	{
-        if (this.viewSettings != viewSettings)
-        {
-            if (this.viewSettings != null)
-                this.viewSettings.removeListener(this);
-            
-            this.viewSettings = viewSettings;
-            
-            if (this.viewSettings != null)
-                this.viewSettings.addListener(this);
-        }
-	}
-
-
-	public TimeSettings getTimeSettings()
-	{
-		return timeSettings;
-	}
-
-
-	public void setTimeSettings(TimeSettings timeSettings)
-	{
-        if (this.timeSettings != timeSettings)
-        {
-            if (this.timeSettings != null)
-                this.timeSettings.removeListener(this);
-            
-            this.timeSettings = timeSettings;
-            
-            if (this.timeSettings != null)
-                this.timeSettings.addListener(this);
-        }
-	}
-    
-    
-    public CameraControl getCameraController()
-    {
-        return cameraController;
-    }
-
-
-    public void setCameraController(CameraControl cameraController)
-    {
-        this.cameraController = cameraController;
-    }
     
     
     public SceneRenderer getRenderer()
@@ -150,13 +95,13 @@ public class Scene extends AbstractDisplay
     }
     
     
-    public List<SceneItem> getSceneItems()
+    public List<ItemType> getSceneItems()
     {
         return this.sceneItems;
     }
     
     
-    public List<SceneItem> getSelectedItems()
+    public List<ItemType> getSelectedItems()
     {
         return selectedItems;
     }
@@ -167,12 +112,12 @@ public class Scene extends AbstractDisplay
      * @param dataItem
      * @return
      */
-    public SceneItem findItem(WorldItem dataItem)
+    public ItemType findItem(WorldItem dataItem)
     {
         // try to find entry in sceneItems list
         for (int i=0; i<sceneItems.size(); i++)
         {
-            SceneItem nextItem = sceneItems.get(i);
+            ItemType nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem)
                 return nextItem;
         }
@@ -217,10 +162,9 @@ public class Scene extends AbstractDisplay
         else
         {
             // if not found create a new SceneItem
-            SceneItem newSceneItem = new SceneItem(this);
+            ItemType newSceneItem = createNewItem();
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
-            newSceneItem.setProjection(viewSettings.getProjection());
             
             // prepare all stylers
             List<Symbolizer> symbolizers = dataItem.getSymbolizers();
@@ -317,12 +261,6 @@ public class Scene extends AbstractDisplay
     {
         switch (event.type)
         {
-            case SCENE_PROJECTION_CHANGED:
-                Projection newProjection = viewSettings.getProjection();
-                for (int i = 0; i < sceneItems.size(); i++)
-                    sceneItems.get(i).setProjection(newProjection);
-                break;
-                
             case SCENE_VIEW_CHANGED:
                 dispatchEvent(event.copy());
                 break;

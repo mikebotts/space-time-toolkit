@@ -29,7 +29,7 @@ import org.eclipse.ui.PartInitException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -141,7 +141,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     
     
     @Override
-    public void setScene(Scene sc)
+    public void setScene(WorldScene sc)
     {
         if (scene != sc)
         {

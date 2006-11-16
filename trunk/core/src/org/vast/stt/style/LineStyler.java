@@ -92,7 +92,8 @@ public class LineStyler extends AbstractStyler
             //    continue;
             
             // adjust geometry to fit projection
-            projection.adjust(geometryCrs, point);
+            if (projection != null)
+                projection.adjust(geometryCrs, point);
 
             return point;
         }

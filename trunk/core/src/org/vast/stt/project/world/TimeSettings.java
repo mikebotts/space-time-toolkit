@@ -11,7 +11,7 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;

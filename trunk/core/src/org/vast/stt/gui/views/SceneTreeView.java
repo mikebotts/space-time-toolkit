@@ -44,20 +44,23 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.catalog.LayerTransfer;
 import org.vast.stt.gui.widgets.catalog.SceneTreeDropListener;
+import org.vast.stt.project.chart.ChartScene;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.table.TableItem;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.WorldItem;
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneItem;
 
 
 public class SceneTreeView extends SceneView implements ISelectionChangedListener, IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg, tableImg;
+	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg, tableImg, chartImg, globeImg;
     private ImageDescriptor fitSceneImg, fitItemImg;
 	private Font treeFont;
 	private Object[] expandedItems;
@@ -94,10 +97,25 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
                 else if (element instanceof TableItem)
                 {
                     return tableImg;
-                }
+                }                
                 else
                     return itemVisImg;
-            }            
+            }
+            else if (element instanceof Scene)
+            {
+                if (element instanceof WorldScene)
+                {
+                    return globeImg;
+                }
+                else if (element instanceof ChartScene)
+                {
+                    return chartImg;
+                }
+                else
+                {
+                    return folderVisImg;
+                }
+            }
             else
 				return null;
 		}
@@ -114,7 +132,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
 	class TreeContentProvider implements ITreeContentProvider
 	{
 		public void dispose()
-		{						
+		{
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
@@ -123,11 +141,16 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
 
 		public Object[] getChildren(Object parentElement)
 		{
-			if (parentElement instanceof DataFolder)
+			if (parentElement instanceof Scene)
 			{
-				return ((DataFolder)parentElement).toArray();
+				return (((Scene<? extends SceneItem>)parentElement).getDataTree()).toArray();
 			}
-			return null;
+            else if (parentElement instanceof DataFolder)
+            {
+                return ((DataFolder)parentElement).toArray();
+            }
+            else
+                return null;
 		}
 
 		public Object getParent(Object element)
@@ -137,7 +160,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
 
 		public boolean hasChildren(Object element)
 		{
-			if (element instanceof DataFolder)
+			if (element instanceof Scene || element instanceof DataFolder)
 				return true;
 			else
 				return false;
@@ -145,11 +168,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
 
 		public Object[] getElements(Object inputElement)
 		{
-			if (inputElement instanceof Scene)
-			{
-				return new Object[] {((Scene)inputElement).getDataTree()};
-			}
-			return null;
+			return new Object[] {scene};
 		}		
 	}
 
@@ -193,6 +212,10 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
         folderHidImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/table.gif");
         tableImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/chart.gif");
+        chartImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/globe.gif");
+        globeImg = descriptor.createImage();   
         
         // load menu images
         fitSceneImg = STTPlugin.getImageDescriptor("icons/fitScene.gif");
@@ -252,13 +275,15 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
         itemErrImg.dispose();
         folderVisImg.dispose();
         folderHidImg.dispose();
+        tableImg.dispose();
+        chartImg.dispose();
 		treeFont.dispose();
         super.dispose();
 	}
     
     
     @Override
-    public void setScene(Scene sc)
+    public void setScene(WorldScene sc)
     {
         super.setScene(sc);
         expandedItems = new Object[0];
@@ -286,7 +311,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
         selectedItem = sceneTree.getSelection();
         
         // load new data in tree
-        sceneTree.setInput(scene);
+        sceneTree.setInput(scene.getDataTree());
         
         // restore expanded/selected elements
         for (int i=0; i<expandedItems.length; i++)
@@ -316,7 +341,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
                 DataEntry selectedEntry = (DataEntry)iterator.next();
                 if (selectedEntry instanceof WorldItem)
                 {
-                    SceneItem item = scene.findItem((WorldItem)selectedEntry);
+                    WorldSceneItem item = scene.findItem((WorldItem)selectedEntry);
                     if (item != null && item.isVisible())
                     {
                         scene.getSelectedItems().add(item);                    

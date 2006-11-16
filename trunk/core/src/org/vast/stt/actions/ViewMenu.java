@@ -15,10 +15,10 @@ import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.project.scene.Projection_ECEF;
-import org.vast.stt.project.scene.Projection_LLA;
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.project.world.Projection_ECEF;
+import org.vast.stt.project.world.Projection_LLA;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
 
 
 /**
@@ -57,8 +57,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                Scene currentScene = pageInput.getScene();
-                Scene newScene = new Scene();
+                WorldScene currentScene = pageInput.getScene();
+                WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(currentScene.getViewSettings());
                 newScene.setTimeSettings(currentScene.getTimeSettings());
                 newScene.setDataTree(currentScene.getDataTree());
@@ -80,8 +80,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                Scene currentScene = pageInput.getScene();
-                Scene newScene = new Scene();
+                WorldScene currentScene = pageInput.getScene();
+                WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(new ViewSettings());
                 newScene.setTimeSettings(currentScene.getTimeSettings());
                 newScene.setDataTree(currentScene.getDataTree());
@@ -103,7 +103,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                Scene currentScene = pageInput.getScene();
+                WorldScene currentScene = pageInput.getScene();
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
@@ -117,7 +117,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                Scene currentScene = pageInput.getScene();
+                WorldScene currentScene = pageInput.getScene();
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));

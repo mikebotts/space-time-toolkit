@@ -24,12 +24,10 @@
 package org.vast.stt.project.table;
 
 import java.util.Hashtable;
-
 import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
-import org.vast.stt.project.chart.ChartItemReader;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.DataProvider;
 import org.w3c.dom.Element;
@@ -53,13 +51,13 @@ import org.w3c.dom.NodeList;
 public class TableItemReader extends XMLReader implements XMLModuleReader
 {
     protected DataTreeReader dataTreeReader;
-    protected ChartItemReader chartItemReader;
+    //protected ChartItemReader chartItemReader;
     
     
     public TableItemReader()
     {
         dataTreeReader = new DataTreeReader();
-        chartItemReader = new ChartItemReader();
+        //chartItemReader = new ChartItemReader();
     }
     
     
@@ -68,7 +66,7 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
     {
         super.setObjectIds(objectIds);
         dataTreeReader.setObjectIds(objectIds);
-        chartItemReader.setObjectIds(objectIds);
+        //chartItemReader.setObjectIds(objectIds);
     }
     
     
@@ -133,7 +131,7 @@ public class TableItemReader extends XMLReader implements XMLModuleReader
             
             // read column symbolizer (also supports sub chart or table)
             if (symElt.getLocalName().endsWith("ChartSymbolizer"))
-                symbolizer = chartItemReader.readChartSymbolizer(dom, styleElt);
+                symbolizer = null;//chartItemReader.readChartSymbolizer(dom, styleElt);
             else if (symElt.getLocalName().endsWith("TableSymbolizer"))
                 symbolizer = readTableSymbolizer(dom, styleElt);
             else

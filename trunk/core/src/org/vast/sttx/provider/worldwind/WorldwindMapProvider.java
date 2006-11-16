@@ -61,7 +61,7 @@ public class WorldwindMapProvider extends TiledMapProvider
     public WorldwindMapProvider()
     {
         super(512, 17);
-        tileSelector = new TiledMapSelector(3, 3, 3, 17);
+        tileSelector = new TiledMapSelector(3, 3, 3, 7);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
         useAlpha = false;
     }
