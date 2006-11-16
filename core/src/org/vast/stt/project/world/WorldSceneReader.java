@@ -21,7 +21,7 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -33,6 +33,12 @@ import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
+import org.vast.stt.project.world.Projection_ECEF;
+import org.vast.stt.project.world.Projection_LLA;
+import org.vast.stt.project.world.Projection_Mercator;
+import org.vast.stt.project.world.TimeSettings;
+import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.util.DateTime;
 import org.vast.util.DateTimeFormat;
 import org.w3c.dom.Element;
@@ -40,11 +46,11 @@ import org.w3c.dom.Element;
 
 /**
  * <p><b>Title:</b>
- * Scene Reader
+ * World Scene Reader
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Create Scene object and read options and contents from project XML
+ * Create WorldScene object and read options and contents from project XML
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -52,12 +58,12 @@ import org.w3c.dom.Element;
  * @date Sep 11, 2006
  * @version 1.0
  */
-public class SceneReader extends XMLReader implements XMLModuleReader
+public class WorldSceneReader extends XMLReader implements XMLModuleReader
 {
     protected DataTreeReader dataTreeReader;
     
     
-    public SceneReader()
+    public WorldSceneReader()
     {
         dataTreeReader = new DataTreeReader();
     }
@@ -73,7 +79,7 @@ public class SceneReader extends XMLReader implements XMLModuleReader
 
     public Object read(DOMReader dom, Element sceneElt)
     {
-        Scene scene = new Scene();
+        WorldScene scene = new WorldScene();
         registerObjectID(dom, sceneElt, scene);
         
         // set scene properties

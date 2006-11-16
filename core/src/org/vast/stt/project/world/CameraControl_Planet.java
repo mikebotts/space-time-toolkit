@@ -21,17 +21,21 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.scene;
+package org.vast.stt.project.world;
 
 
 /**
  * <p><b>Title:</b>
- * Camera Control
+ * Planet Camera Control
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Base interface for all mouse based camera controllers.
- * This allows derivation of controllers with different behaviors.
+ * Camera Controller for use with planet centric views.
+ * In normal mode, it constrains the camera target on the
+ * ellipsoid, so that a translation is effectively a circular
+ * translation around the planet center and a rotation is
+ * around the target on the surface.
+ * (i.e. this is close to google earth and world wind behavior)
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -39,15 +43,14 @@ package org.vast.stt.project.scene;
  * @date Nov 11, 2006
  * @version 1.0
  */
-public interface CameraControl
+public class CameraControl_Planet extends CameraControl_Base
 {
-    public void setScene(Scene scene);
+       
+    public CameraControl_Planet(WorldScene scene)
+    {
+        super(scene);
+    }
+       
+
     
-    public void doRotation(int x0, int y0, int x1, int y1);
-    
-    public void doTranslation(int x0, int y0, int x1, int y1);
-    
-    public void doZoom(int x0, int y0, int x1, int y1);
-        
-    public void doZoom(double amount); 
 }

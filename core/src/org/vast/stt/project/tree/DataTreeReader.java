@@ -99,7 +99,7 @@ public class DataTreeReader extends XMLReader
             return (DataEntry)obj;
         
         // if not found parse and instantiate a new one
-		if (dataEntryElt.getLocalName().equals("DataList"))
+        if (dataEntryElt.getLocalName().equals("DataList"))
 			dataEntry = readDataList(dom, dataEntryElt);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
 			dataEntry = readWorldItem(dom, dataEntryElt);

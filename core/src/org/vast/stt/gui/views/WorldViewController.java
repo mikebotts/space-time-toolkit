@@ -17,10 +17,10 @@ import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Projection;
-import org.vast.stt.project.scene.Projection_ECEF;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.Projection;
+import org.vast.stt.project.world.Projection_ECEF;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -49,7 +49,7 @@ import org.eclipse.swt.events.*;
  */
 public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
-	protected Scene scene;
+	protected WorldScene scene;
     private Vector3d P0 = new Vector3d();
 	private int xOld;
 	private int yOld;
@@ -285,13 +285,13 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	}
 
 
-	public Scene getScene()
+	public WorldScene getScene()
     {
         return scene;
     }
 
 
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
     }

@@ -11,32 +11,39 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.dynamics;
+package org.vast.stt.project.chart;
 
-import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.style.DataStyler;
 
 
 /**
  * <p><b>Title:</b>
- * View Settings Updater
+ * Chart Scene Item
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO ViewSettingsUpdater type description
+ * Chart entry carrying a DataItem and its stylers
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Aug 21, 2006
+ * @date Jul 12, 2006
  * @version 1.0
  */
-public abstract class ViewSettingsUpdater extends DynamicUpdater
+public class ChartSceneItem extends SceneItem
 {
-    protected ViewSettings viewSettings;
-
     
-    public void setViewSettings(ViewSettings viewSettings)
+    
+    public ChartSceneItem(ChartScene scene)
     {
-        this.viewSettings = viewSettings;
+        super(scene);
+    }    
+        
+    
+    protected void prepareStyler(DataStyler styler)
+    {
+        
     }
+
 }

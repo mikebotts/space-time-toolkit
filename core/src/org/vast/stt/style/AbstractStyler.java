@@ -21,9 +21,9 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.BlockListIterator;
 import org.vast.stt.data.DataNode;
-import org.vast.stt.project.scene.Projection;
-import org.vast.stt.project.scene.Projection.Crs;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.Projection;
+import org.vast.stt.project.world.Projection.Crs;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
@@ -107,6 +107,12 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
+    /**
+     * Adds a property mapper at the right spot in the indexer tree
+     * This method will create a new ListInfo if not created yet
+     * @param componentPath
+     * @param newMapper
+     */
     public void addPropertyMapper(String componentPath, PropertyMapper newMapper)
     {
         // extract list name from component path

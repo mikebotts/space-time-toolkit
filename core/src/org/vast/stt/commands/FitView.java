@@ -3,9 +3,9 @@ package org.vast.stt.commands;
 
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
@@ -21,18 +21,18 @@ import org.vast.stt.provider.STTSpatialExtent;
 
 public class FitView implements Command
 {
-    private Scene scene;
+    private WorldScene scene;
     private SceneItem item;
 
 
-    public FitView(Scene scene, SceneItem item)
+    public FitView(WorldScene scene, SceneItem item)
     {
         this.scene = scene;
         this.item = item;
     }
 
 
-    public FitView(Scene scene)
+    public FitView(WorldScene scene)
     {
         this.scene = scene;
     }
@@ -82,7 +82,7 @@ public class FitView implements Command
     }
 
 
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
     }

@@ -15,9 +15,9 @@ package org.vast.stt.renderer;
 
 import org.eclipse.swt.widgets.Canvas;
 import org.vast.math.Vector3d;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.scene.ViewSettings;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerVisitor;
 
@@ -52,7 +52,7 @@ public abstract class SceneRenderer implements StylerVisitor
     public abstract void init();
     
     
-    public abstract void drawScene(Scene scene);
+    public abstract void drawScene(WorldScene scene);
     
     
     public abstract void drawItem(SceneItem item);
@@ -70,7 +70,7 @@ public abstract class SceneRenderer implements StylerVisitor
     public abstract void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos);
     
     
-    public abstract PickedObject pick(Scene scene, PickFilter filter);
+    public abstract PickedObject pick(WorldScene scene, PickFilter filter);
 
 
     public abstract void resizeView(int width, int height);

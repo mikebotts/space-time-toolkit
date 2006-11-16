@@ -25,9 +25,9 @@ package org.vast.stt.project.feedback;
 
 import java.util.ArrayList;
 
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.ViewSettings;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.ViewSettings;
 
 /**
  * <p><b>Title:</b>
@@ -48,7 +48,7 @@ import org.vast.stt.project.tree.DataItem;
  */
 public class ShowScene extends UserAction
 {
-    protected Scene scene;
+    protected WorldScene scene;
     protected ViewSettings viewSettings;
     protected boolean adjustView;
     protected ArrayList<DataItem> visibleItems;
@@ -66,13 +66,13 @@ public class ShowScene extends UserAction
     }
 
 
-    public Scene getScene()
+    public WorldScene getScene()
     {
         return scene;
     }
 
 
-    public void setScene(Scene scene)
+    public void setScene(WorldScene scene)
     {
         this.scene = scene;
     }

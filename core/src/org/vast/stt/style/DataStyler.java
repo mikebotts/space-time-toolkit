@@ -14,8 +14,8 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.project.scene.Projection;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.Projection;
 import org.vast.stt.provider.STTSpatialExtent;
 
 

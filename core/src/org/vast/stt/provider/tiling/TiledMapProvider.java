@@ -150,7 +150,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         tileSelector.setSizeRatio(spatialExtent.getXTiles());
         quadTree.accept(tileSelector);
         
-        // first round of cached items to display
+        // first round of cached background items to display
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);
@@ -176,7 +176,17 @@ public abstract class TiledMapProvider extends AbstractProvider
                     }
                 }            
             }
-            else
+        }
+        
+        // 2nd round of cached items to display
+        for (int i=0; i<selectedItems.size(); i++)
+        {
+            QuadTreeItem nextItem = selectedItems.get(i);
+            
+            if (canceled)
+                break;
+            
+            if (nextItem.getData() != null)
             {
                 BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
                 for (int b=0; b<blockArray.length; b++)
@@ -192,7 +202,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         if (!canceled)
             dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 
-        // second round of new items to display
+        // 3rd round of new items to load and display
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);

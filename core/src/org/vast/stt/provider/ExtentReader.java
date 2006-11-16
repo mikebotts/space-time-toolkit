@@ -17,7 +17,7 @@ import org.vast.io.xml.DOMReader;
 import org.vast.stt.dynamics.SceneTimeUpdater;
 import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.project.XMLReader;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.world.WorldScene;
 import org.w3c.dom.*;
 
 
@@ -116,7 +116,7 @@ public class ExtentReader extends XMLReader
             if (dom.existElement(timeElt, "autoUpdate"))
             {
                 String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
-                Scene scene = (Scene)objectIds.get(sceneId);
+                WorldScene scene = (WorldScene)objectIds.get(sceneId);
                 TimeExtentUpdater updater = new SceneTimeUpdater(scene);
                 timeExtent.setUpdater(updater);
                 updater.setEnabled(true);

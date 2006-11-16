@@ -19,7 +19,6 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.scene.Projection;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.SceneRenderer.CleanupSection;
@@ -42,21 +41,24 @@ import org.vast.stt.style.StylerVisitor;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public class SceneItem implements STTEventListener
+public abstract class SceneItem implements STTEventListener
 {
-    protected Scene parentScene;
+    protected Scene<? extends SceneItem> parentScene;
     protected DataItem dataItem;
     protected ArrayList<DataStyler> stylers;
     protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
 
-    public SceneItem(Scene scene)
+    public SceneItem(Scene<? extends SceneItem> scene)
     {
         stylers = new ArrayList<DataStyler>(1);
         stylerTable = new Hashtable<Symbolizer, DataStyler>();
         parentScene = scene;
     }
+    
+    
+    protected abstract void prepareStyler(DataStyler styler);
     
     
     public DataItem getDataItem()
@@ -148,7 +150,7 @@ public class SceneItem implements STTEventListener
     /**
      * Clears all rendering cache related to this item
      */
-    protected void cleanup()
+    public void cleanup()
     {
         for (int i = 0; i < stylers.size(); i++)
         {
@@ -162,7 +164,7 @@ public class SceneItem implements STTEventListener
     /**
      * Clears all rendering cache associated to the given array of objects
      */
-    protected void cleanup(Object[] deletedObjects)
+    public void cleanup(Object[] deletedObjects)
     {
         for (int i = 0; i < stylers.size(); i++)
         {
@@ -204,7 +206,7 @@ public class SceneItem implements STTEventListener
             
             styler = StylerFactory.createStyler(sym);
             styler.setDataItem(dataItem);
-            styler.setProjection(parentScene.getViewSettings().getProjection());
+            prepareStyler(styler);
             stylers.add(styler);
             stylerTable.put(sym, styler);
         }
@@ -227,22 +229,6 @@ public class SceneItem implements STTEventListener
         }
         
         styler.resetBoundingBox();
-    }
-    
-    
-    /**
-     * Sets the new projection on all stylers and make sure
-     * cached geometry is cleaned up
-     * @param projection
-     */
-    protected void setProjection(Projection projection)
-    {
-        for (int i = 0; i < stylers.size(); i++)
-        {
-            DataStyler nextStyler = stylers.get(i);
-            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.GEOMETRY);
-            nextStyler.setProjection(projection);
-        }
     }
 
 

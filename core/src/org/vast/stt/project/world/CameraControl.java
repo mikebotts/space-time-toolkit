@@ -21,49 +21,33 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.chart;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.project.tree.DataItem;
+package org.vast.stt.project.world;
 
 
 /**
  * <p><b>Title:</b>
- * Chart Item
+ * Camera Control
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Contains all info for a chart style display
+ * Base interface for all mouse based camera controllers.
+ * This allows derivation of controllers with different behaviors.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Sep 12, 2006
+ * @date Nov 11, 2006
  * @version 1.0
  */
-public class ChartItem extends DataItem
+public interface CameraControl
 {
-    protected ChartSymbolizer chartInfo;
-
-
-    public ChartSymbolizer getChartInfo()
-    {
-        return chartInfo;
-    }
-
-
-    public void setChartInfo(ChartSymbolizer chartInfo)
-    {
-        this.chartInfo = chartInfo;
-    }
+    public void setScene(WorldScene scene);
     
+    public void doRotation(int x0, int y0, int x1, int y1);
     
-    public List<Symbolizer> getSymbolizers()
-    {
-        ArrayList<Symbolizer> graphStyles = new ArrayList<Symbolizer>();
+    public void doTranslation(int x0, int y0, int x1, int y1);
+    
+    public void doZoom(int x0, int y0, int x1, int y1);
         
-        return graphStyles;
-    }
+    public void doZoom(double amount); 
 }

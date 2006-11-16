@@ -18,9 +18,9 @@ import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import org.vast.stt.data.BlockListItem;
-import org.vast.stt.project.scene.Projection;
-import org.vast.stt.project.scene.Projection_ECEF;
-import org.vast.stt.project.scene.Projection_LLA;
+import org.vast.stt.project.world.Projection;
+import org.vast.stt.project.world.Projection_ECEF;
+import org.vast.stt.project.world.Projection_LLA;
 import org.vast.stt.style.DataStyler;
 
 

@@ -20,10 +20,10 @@ import java.util.ArrayList;
 //import java.util.Hashtable;
 
 import org.vast.io.xml.*;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.util.DateTimeFormat;
 import org.w3c.dom.*;
 
@@ -168,7 +168,7 @@ public class ProjectWriter
 		for (int i = 0; i < listSize; i++)
 		{
 			Element memberElt = dom.addElement(listElt, "+member");
-			Scene scene = (Scene)displayList.get(i);
+			WorldScene scene = (WorldScene)displayList.get(i);
 			writeScene(scene, memberElt);
 		}
 		
@@ -181,7 +181,7 @@ public class ProjectWriter
 	 * @param scene
 	 * @param parentElt
 	 */
-	protected Element writeScene(Scene scene, Element parentElt)
+	protected Element writeScene(WorldScene scene, Element parentElt)
 	{
 		// add scene element
 		Element sceneElt = dom.addElement(parentElt, "Scene");

@@ -11,32 +11,39 @@
  of Mike Botts (mike.botts@atmos.uah.edu)
  ***************************************************************/
 
-package org.vast.stt.dynamics;
+package org.vast.stt.project.chart;
 
-import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.scene.SceneItem;
 
 
 /**
- * <p><b>Title:</b>
- * View Settings Updater
+ * <p><b>Title:</b><br/>
+ * Chart Scene Descriptor
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO ViewSettingsUpdater type description
+ * Encapsulate the current state of a chart scene.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Aug 21, 2006
+ * @date Nov 2, 2005
  * @version 1.0
  */
-public abstract class ViewSettingsUpdater extends DynamicUpdater
+public class ChartScene extends Scene<SceneItem>
 {
-    protected ViewSettings viewSettings;
+    
+    public ChartScene()
+    {
+        super();
+    }
 
     
-    public void setViewSettings(ViewSettings viewSettings)
+    @Override
+    protected ChartSceneItem createNewItem()
     {
-        this.viewSettings = viewSettings;
+        return new ChartSceneItem(this);
     }
+	
 }
