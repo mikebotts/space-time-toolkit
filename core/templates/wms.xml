@@ -1,0 +1,48 @@
+<sld:TextureSymbolizer enabled="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xlink="http://www.w3.org/1999/xlink" 
+	xmlns:ogc="http://www.opengis.net/ogc" 
+	xmlns:sld="http://www.opengis.net/sld" 
+	xmlns:sldx="http://vast.uah.edu/sldx" 
+	xmlns:gml="http://www.opengis.net/gml" 
+	xmlns:swe="http://www.opengis.net/swe">
+	<sld:Grid>
+		<sld:Dimensions>
+			<sld:Axis name="width">
+				<ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+			</sld:Axis>
+			<sld:Axis name="length">
+				<ogc:PropertyName>gridData/grid</ogc:PropertyName>
+			</sld:Axis>
+		</sld:Dimensions>
+		<sld:Geometry>
+			<sld:CssParameter name="geometry-x">
+				<ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+			</sld:CssParameter>
+			<sld:CssParameter name="geometry-y">
+				<ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+			</sld:CssParameter>
+		</sld:Geometry>
+	</sld:Grid>
+	<sld:Raster>
+		<sld:Dimensions>
+			<sld:Axis name="width">
+				<ogc:PropertyName>imageData/image/row</ogc:PropertyName>
+			</sld:Axis>
+			<sld:Axis name="height">
+				<ogc:PropertyName>imageData/image</ogc:PropertyName>
+			</sld:Axis>
+		</sld:Dimensions>
+		<sld:Opacity>1.0</sld:Opacity>
+		<sld:ChannelSelection>
+			<sld:RedChannel>
+				<sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+			</sld:RedChannel>
+			<sld:GreenChannel>
+				<sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+			</sld:GreenChannel>
+			<sld:BlueChannel>
+				<sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+			</sld:BlueChannel>
+		</sld:ChannelSelection>                                       
+	</sld:Raster>
+</sld:TextureSymbolizer>
