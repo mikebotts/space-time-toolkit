@@ -51,13 +51,14 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
 	public void run(IAction action)
 	{
 		String actionID = action.getId();
+        ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+        WorldScene currentScene = (WorldScene)pageInput.getScene();
         
         if (actionID.endsWith("CloneScene1"))
         {
-            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
+            
             if (pageInput != null)
             {
-                WorldScene currentScene = pageInput.getScene();
                 WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(currentScene.getViewSettings());
                 newScene.setTimeSettings(currentScene.getTimeSettings());
@@ -77,10 +78,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
         }
         else if (actionID.endsWith("CloneScene2"))
         {
-            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                WorldScene currentScene = pageInput.getScene();
                 WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(new ViewSettings());
                 newScene.setTimeSettings(currentScene.getTimeSettings());
@@ -100,10 +99,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
         }
         else if (actionID.endsWith("ProjectECEF"))
         {
-            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                WorldScene currentScene = pageInput.getScene();
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
@@ -114,10 +111,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
         }
         else if (actionID.endsWith("ProjectLLA"))
         {
-            ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
             if (pageInput != null)
             {
-                WorldScene currentScene = pageInput.getScene();
                 ViewSettings viewSettings = currentScene.getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
@@ -132,7 +127,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             try
             {
                 String viewID = actionID.substring(8);
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();                
                 page.showView("STT." + viewID);
             }
             catch (PartInitException e)

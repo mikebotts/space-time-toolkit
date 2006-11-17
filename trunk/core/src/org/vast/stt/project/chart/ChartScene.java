@@ -14,7 +14,7 @@
 package org.vast.stt.project.chart;
 
 import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.renderer.JFreeChart.ChartRenderer;
 
 
 /**
@@ -31,12 +31,13 @@ import org.vast.stt.project.scene.SceneItem;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class ChartScene extends Scene<SceneItem>
+public class ChartScene extends Scene<ChartSceneItem>
 {
     
     public ChartScene()
     {
         super();
+        renderer = new ChartRenderer();
     }
 
     
@@ -44,6 +45,5 @@ public class ChartScene extends Scene<SceneItem>
     protected ChartSceneItem createNewItem()
     {
         return new ChartSceneItem(this);
-    }
-	
+    }	
 }

@@ -56,7 +56,7 @@ import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneItem;
 
 
-public class SceneTreeView extends SceneView implements ISelectionChangedListener, IDoubleClickListener
+public class SceneTreeView extends SceneView<WorldScene> implements ISelectionChangedListener, IDoubleClickListener
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
@@ -187,9 +187,8 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
 	    Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
 	    sceneTree.addDropSupport(ops, dropfers, new SceneTreeDropListener(sceneTree));
         sceneTree.addSelectionChangedListener(this);
-
+        getSite().getPage().addPartListener(this);
 		getSite().setSelectionProvider(sceneTree);
-        super.createPartControl(parent);
 	}
 	
 	
@@ -251,7 +250,7 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
                     DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
                     if (selectedEntry instanceof DataItem)
                     {
-                        SceneItem sceneItem = scene.findItem((WorldItem)selectedEntry);
+                        SceneItem<?> sceneItem = scene.findItem((WorldItem)selectedEntry);
                         if (sceneItem != null && sceneItem.isVisible())
                         {
                             FitView cmd = new FitView(scene, sceneItem);
@@ -380,13 +379,23 @@ public class SceneTreeView extends SceneView implements ISelectionChangedListene
             scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
         }
         
-        // if it's a DataTable, open TableView
+        // if it's a Table, open TableView
         else if (selectedEntry instanceof TableItem)
         {
             TableItem table = (TableItem)selectedEntry;
             OpenView openView = new OpenView();
             openView.setViewID(TableView.ID);
             openView.setData(table);
+            openView.execute();
+        }
+        
+        // if it's a Chart, open ChartView
+        else if (selectedEntry instanceof ChartScene)
+        {
+            ChartScene chart = (ChartScene)selectedEntry;
+            OpenView openView = new OpenView();
+            openView.setViewID(ChartView.ID);
+            openView.setData(chart);
             openView.execute();
         }
     }

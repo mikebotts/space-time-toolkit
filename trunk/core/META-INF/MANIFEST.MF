@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.apache.xerces
 Eclipse-AutoStart: true
 Bundle-ClassPath: classes/, lib/jogl.jar, lib/jai_core.jar, lib/jai_codec.jar,
-                  lib/jcommon-1.0.2.jar, lib/jfreechart-1.0.2.jar
+                  lib/jcommon-1.0.5.jar, lib/jfreechart-1.0.2.jar
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,
@@ -39,11 +39,15 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.project.scene,
  org.vast.stt.project.table,
  org.vast.stt.project.tree,
+ org.vast.stt.project.world,
  org.vast.stt.provider,
+ org.vast.stt.provider.google,
  org.vast.stt.provider.ows,
  org.vast.stt.provider.sml,
  org.vast.stt.provider.swe,
  org.vast.stt.provider.tiling,
+ org.vast.stt.provider.ve,
  org.vast.stt.renderer,
+ org.vast.stt.renderer.JFreeChart,
  org.vast.stt.renderer.opengl,
  org.vast.stt.style

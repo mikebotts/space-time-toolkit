@@ -49,7 +49,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     {
         spatialExtent.setUpdater(this);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
-        scene = input.getScene();
+        scene = (WorldScene)input.getScene();
         view = scene.getViewSettings();
         view.addListener(this);
     }

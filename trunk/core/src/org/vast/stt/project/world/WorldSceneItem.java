@@ -34,7 +34,7 @@ import org.vast.stt.style.DataStyler;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public class WorldSceneItem extends SceneItem
+public class WorldSceneItem extends SceneItem<WorldScene>
 {
     
     public WorldSceneItem(WorldScene scene)

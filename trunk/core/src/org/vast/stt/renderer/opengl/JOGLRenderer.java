@@ -32,6 +32,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockListItem;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
@@ -60,7 +61,7 @@ import org.vast.stt.style.*;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class JOGLRenderer extends SceneRenderer
+public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implements StylerVisitor
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
     protected org.eclipse.swt.opengl.GLContext SWTContext;
@@ -195,7 +196,7 @@ public class JOGLRenderer extends SceneRenderer
         // set up projection
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        Rectangle clientArea = canvas.getClientArea();
+        Rectangle clientArea = composite.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
         float farClip = (float) view.getFarClip();
@@ -229,8 +230,9 @@ public class JOGLRenderer extends SceneRenderer
     
     
     @Override
-    public PickedObject pick(WorldScene scene, PickFilter filter)
+    public PickedObject pick(Scene<WorldSceneItem> sc, PickFilter filter)
     {
+        WorldScene scene = (WorldScene)sc;
         ViewSettings view = scene.getViewSettings();
                 
         getContext();
@@ -247,7 +249,7 @@ public class JOGLRenderer extends SceneRenderer
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
         glu.gluPickMatrix(filter.x, filter.y, filter.dX, filter.dY, viewPort, 0);
-        Rectangle clientArea = canvas.getClientArea();
+        Rectangle clientArea = composite.getClientArea();
         float width = (float) view.getOrthoWidth();
         float height = (float) view.getOrthoWidth() * clientArea.height / clientArea.width;
         float farClip = (float) view.getFarClip();
@@ -288,7 +290,7 @@ public class JOGLRenderer extends SceneRenderer
             // loop through all items and render them in selection mode
             for (int i = 0; i < items.size(); i++)
             {
-                SceneItem nextItem = items.get(i);
+                SceneItem<?> nextItem = items.get(i);
     
                 if (!nextItem.isVisible())
                     continue;
@@ -333,17 +335,21 @@ public class JOGLRenderer extends SceneRenderer
     
     
     @Override
-    public void drawScene(WorldScene scene)
+    public void drawScene(Scene<WorldSceneItem> sc)
     {
+        if (composite.isDisposed())
+            return;
+        
         getContext();
+        WorldScene scene = (WorldScene)sc;
         ViewSettings view = scene.getViewSettings();
         setupMatrices(view);
         
         // draw all items
-        List<WorldSceneItem> sceneItems = scene.getSceneItems();        
+        List<WorldSceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem nextItem = sceneItems.get(i);
+            SceneItem<?> nextItem = sceneItems.get(i);
 
             if (!nextItem.isVisible())
                 continue;
@@ -373,7 +379,7 @@ public class JOGLRenderer extends SceneRenderer
        
     
     @Override
-    public void drawItem(SceneItem sceneItem)
+    public void drawItem(SceneItem<?> sceneItem)
     {
         getContext();
         drawOneItem(sceneItem);
@@ -465,7 +471,7 @@ public class JOGLRenderer extends SceneRenderer
         if (scene.getSelectedItems().isEmpty())
             return;
         
-        SceneItem sceneItem = scene.getSelectedItems().get(0);
+        SceneItem<?> sceneItem = scene.getSelectedItems().get(0);
         DataProvider provider = sceneItem.getDataItem().getDataProvider();
         
         if (provider.isSpatialSubsetSupported())
@@ -500,7 +506,7 @@ public class JOGLRenderer extends SceneRenderer
     @Override
     public void init()
     {
-        SWTContext = new org.eclipse.swt.opengl.GLContext(canvas);
+        SWTContext = new org.eclipse.swt.opengl.GLContext(composite);
         SWTContext.setCurrent();
         //JOGLContext = GLDrawableFactory.getFactory().createExternalGLContext();
         GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
@@ -531,7 +537,7 @@ public class JOGLRenderer extends SceneRenderer
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
         textureRenderer = new GLRenderTexture(gl, glu);        
         bboxRenderer = new GLRenderBBOX(this, gl, glu);
-        popupRenderer = new PopupRenderer(canvas);
+        popupRenderer = new PopupRenderer(composite);
         
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LESS);
@@ -561,13 +567,14 @@ public class JOGLRenderer extends SceneRenderer
         if (JOGLContext != null && SWTContext != null)
         {
             // dispose context and remove from list
+            releaseContext();
             contextList.remove(JOGLContext);
             SWTContext.dispose();
             JOGLContext.destroy();
             SWTContext = null;
             JOGLContext = null;
             DisplayListManager.DLTables.clear();
-            TextureManager.symTextureTables.clear();
+            TextureManager.symTextureTables.clear();            
         }
     }
     

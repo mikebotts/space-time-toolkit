@@ -32,19 +32,19 @@ import org.vast.stt.project.scene.SceneItem;
 
 public class PopupRenderer
 {
-    protected Canvas canvas;
+    protected Composite composite;
     
     
-    public PopupRenderer(Canvas canvas)
+    public PopupRenderer(Composite composite)
     {
-        this.canvas = canvas;
+        this.composite = composite;
     }
     
     
-    public void showPopup(int x, int y, SceneItem item)
+    public void showPopup(int x, int y, SceneItem<?> item)
     {
-        Display display = canvas.getDisplay();
-        Shell tip = new Shell(canvas.getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.TOOL);
+        Display display = composite.getDisplay();
+        Shell tip = new Shell(composite.getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.TOOL);
         tip.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
         FillLayout layout = new FillLayout ();
         layout.marginWidth = 2;
@@ -53,7 +53,7 @@ public class PopupRenderer
         label.setForeground (display.getSystemColor (SWT.COLOR_INFO_FOREGROUND));
         label.setBackground (display.getSystemColor (SWT.COLOR_INFO_BACKGROUND));
         label.setText (item.getName());
-        Point pt = canvas.toDisplay(x,y);
+        Point pt = composite.toDisplay(x,y);
         Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
         tip.setBounds (pt.x, pt.y, size.x, size.y);
         tip.setVisible (true);
