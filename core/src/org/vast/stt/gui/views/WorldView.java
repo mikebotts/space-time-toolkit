@@ -47,7 +47,7 @@ import org.vast.stt.project.world.WorldScene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class WorldView extends SceneView implements PaintListener, ControlListener
+public class WorldView extends SceneView<WorldScene> implements PaintListener, ControlListener
 {
 	public static final String ID = "STT.WorldView";
 	private Canvas canvas;
@@ -63,10 +63,10 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     @Override
 	public void createPartControl(Composite parent)
 	{
-		canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
+        canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
 		canvas.addControlListener(this);
 		canvas.addPaintListener(this);
-        super.createPartControl(parent);
+        getSite().getPage().addPartListener(this);
 	}
     	
 	
@@ -126,7 +126,7 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
 	@Override
 	public void dispose()
 	{
-        super.dispose();        
+        super.dispose();
         if (scene != null)
             scene.getRenderer().dispose();
         canvas.dispose();
@@ -151,10 +151,10 @@ public class WorldView extends SceneView implements PaintListener, ControlListen
     
             // call parent method !!
             super.setScene(sc);
-            setPartName("Scene: " + scene.getName());
+            setPartName(scene.getName());
             
             // init the renderer
-            scene.getRenderer().setCanvas(canvas);
+            scene.getRenderer().setParent(canvas);
             scene.getRenderer().init();
             
             // init size

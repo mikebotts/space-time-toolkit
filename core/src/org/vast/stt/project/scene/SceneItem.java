@@ -41,16 +41,16 @@ import org.vast.stt.style.StylerVisitor;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public abstract class SceneItem implements STTEventListener
+public abstract class SceneItem<SceneType extends Scene<?>> implements STTEventListener
 {
-    protected Scene<? extends SceneItem> parentScene;
+    protected SceneType parentScene;
     protected DataItem dataItem;
     protected ArrayList<DataStyler> stylers;
     protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
 
-    public SceneItem(Scene<? extends SceneItem> scene)
+    public SceneItem(SceneType scene)
     {
         stylers = new ArrayList<DataStyler>(1);
         stylerTable = new Hashtable<Symbolizer, DataStyler>();

@@ -31,7 +31,7 @@ import org.vast.stt.style.DataStyler;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public class ChartSceneItem extends SceneItem
+public class ChartSceneItem extends SceneItem<ChartScene>
 {
     
     
@@ -42,8 +42,6 @@ public class ChartSceneItem extends SceneItem
         
     
     protected void prepareStyler(DataStyler styler)
-    {
-        
+    {        
     }
-
 }

@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.bbox.BboxWidget;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -77,7 +78,7 @@ public class SpatialExtentView extends DataItemView
         ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
         if (pageInput != null)
         {
-            bboxWidget.setScene(pageInput.getScene());        
+            bboxWidget.setScene((WorldScene)pageInput.getScene());        
             bboxWidget.setDataItem(item);
         }
     }

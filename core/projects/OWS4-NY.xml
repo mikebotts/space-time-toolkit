@@ -1091,32 +1091,51 @@
                         </member>
                         <member>
                            <ChartScene>
-                              <name>Chart of Temp vs. Time</name>
+                              <name>Weather Charts</name>
                               <contents>
                                  <DataList>
-                                    <member visible="false">
+                                    <member visible="true">
                                        <DataItem enabled="true">
                                           <name>Temperature</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
-                                          <style>
+                                          <style name="Temperature (C)">
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
-                                                   <sld:CssParameter name="geometry-breaks">
-                                                      <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                                                   </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                                      <ogc:PropertyName>weatherData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                                      <ogc:PropertyName>weatherData/temperature</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
-                                                   <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
                                                    <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                                 </sld:Stroke>
                                              </sld:LineSymbolizer>
-                                          </style>                             
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                    <member visible="true">
+                                       <DataItem enabled="true">
+                                          <name>Pressure</name>
+                                          <dataProvider href="#NY_KJFK_SOS"/>
+                                          <style name="Pressure (Pa)">
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>weatherData/time</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>weatherData/pressure</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>                            
                                        </DataItem>
                                     </member>
                                  </DataList>
@@ -1310,23 +1329,39 @@
             </member>
             <member>
                <OWSDataProvider id="NY_KJFK_SOS">
-                  <name>New York KJFK Weather SOS</name>
-                  <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
+                  <name>New York KJFK Weather SOS</name>                  
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/weather">
                      <GetObservation service="SOS" version="0.0.31">
-                        <offering>WeatherNY</offering>
+                        <offering>WEATHER_DATA</offering>
                         <eventTime>
-                           <ogc:TEquals>
+                           <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2006-10-23T06:15:00</gml:beginPosition>
                                  <gml:endPosition>2006-10-24T06:15:00</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:TEquals>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                     </GetObservation>
+                  </request>
+                  <!--
+                  <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>WeatherNY</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2006-10-23T06:15:00</gml:beginPosition>
+                                 <gml:endPosition>2006-10-24T06:15:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
                         </eventTime>
                         <procedure>urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</procedure>
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:temperature</observedProperty>
                         <resultFormat>text/xml;subtype="OM"</resultFormat>
                      </GetObservation>
                   </request>
+                  -->
                </OWSDataProvider>
             </member>
          </ResourceList>

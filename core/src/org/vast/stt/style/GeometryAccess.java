@@ -21,31 +21,9 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project;
+package org.vast.stt.style;
 
-import org.vast.stt.event.STTEventListener;
-import org.vast.stt.event.STTEventProducer;
-import org.vast.stt.project.tree.DataEntry;
-
-
-/**
- * <p><b>Title:</b>
- * STTDisplay
- * </p>
- *
- * <p><b>Description:</b><br/>
- * Base Interface for all types of data displays
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Sep 12, 2006
- * @version 1.0
- */
-public interface STTDisplay extends DataEntry, STTEventProducer, STTEventListener
+public interface GeometryAccess
 {
-    
-    public String getRendererClass();
 
-    public void setRendererClass(String rendererClass);
 }

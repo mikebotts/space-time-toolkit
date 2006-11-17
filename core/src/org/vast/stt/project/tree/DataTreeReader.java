@@ -195,7 +195,7 @@ public class DataTreeReader extends XMLReader
         NodeList eventElts = dom.getElements(dataItemElt, "event");
         listSize = eventElts.getLength();
         
-        // read all stylers
+        // read all actions
         for (int i=0; i<listSize; i++)
         {
             Element eventElt = (Element)eventElts.item(i);

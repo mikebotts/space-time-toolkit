@@ -41,6 +41,7 @@ public class LineStyler extends AbstractStyler
     protected LinePointGraphic point;
     protected LineSegmentGraphic segment;
     protected int oldBlockCount = 0;
+    protected int[] lineIndex = new int[1];
         
 	
 	public LineStyler()
@@ -99,6 +100,20 @@ public class LineStyler extends AbstractStyler
         }
         
         return null;
+    }
+    
+    
+    public LinePointGraphic getPoint(int u)
+    {
+        point.x = point.y = point.z = 0.0;
+        lineIndex[0] = u;
+        dataLists[0].blockIndexer.getData(lineIndex);
+        
+        // adjust geometry to fit projection
+        if (projection != null)
+            projection.adjust(geometryCrs, point);
+        
+        return point;
     }
     
     

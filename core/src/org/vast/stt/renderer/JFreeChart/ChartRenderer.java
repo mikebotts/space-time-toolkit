@@ -24,125 +24,159 @@
 package org.vast.stt.renderer.JFreeChart;
 
 import java.awt.Frame;
-import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.Plot;
 import org.vast.math.Vector3d;
-import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.chart.ChartScene;
+import org.vast.stt.project.chart.ChartSceneItem;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
-import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.GridBorderStyler;
-import org.vast.stt.style.GridFillStyler;
-import org.vast.stt.style.GridMeshStyler;
-import org.vast.stt.style.LabelStyler;
-import org.vast.stt.style.LineStyler;
-import org.vast.stt.style.PointStyler;
-import org.vast.stt.style.PolygonStyler;
-import org.vast.stt.style.RasterStyler;
-import org.vast.stt.style.TextureStyler;
 
 
-public class ChartRenderer extends SceneRenderer
+/**
+ * <p><b>Title:</b>
+ * Chart Renderer
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Chart renderer using the JFreeChart library
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Alexandre Robin
+ * @date Nov 16, 2006
+ * @version 1.0
+ */
+public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
 {
-    protected Frame rootFrame;
-    protected JFreeChart chart;
-    protected ArrayList<DataStyler> stylers;
+    protected ChartPanel chartPanel;
+    protected PlotBuilder plotBuilder = new PlotBuilder();
     
     
-    public ChartRenderer(Composite parent)
+    public ChartRenderer()
     {
-        rootFrame = SWT_AWT.new_Frame(parent);
-    }
-    
-    
-    public void visit(LineStyler styler)
-    {
-        
-    }
-
-
-    public void handleEvent(STTEvent e)
-    {
-        switch (e.type)
-        {
-            case ITEM_OPTIONS_CHANGED:
-            case ITEM_SYMBOLIZER_CHANGED:
-                
-        }        
     }
 
 
     @Override
     public void init()
     {
-        // TODO Auto-generated method stub
-        
+        composite.setLayout(new FillLayout());
+        Composite swt_awt = new Composite(composite, SWT.EMBEDDED);
+        Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
+        swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
+        chartPanel = new ChartPanel(null);
+        chartPanel.setPopupMenu(null);
+        rootFrame.add(chartPanel);
     }
 
 
     @Override
-    public void drawScene(WorldScene scene)
+    public void drawScene(Scene<ChartSceneItem> sc)
     {
-        //chart = ChartFactory.createXYLineChart();
+        plotBuilder.reset();
+        Plot plot = null;
         
-        // visit all stylers
+        if (composite.isDisposed())
+            return;
+        
+        // draw all items
+        ChartScene scene = (ChartScene)sc;
+        List<ChartSceneItem> sceneItems = scene.getSceneItems();
+        for (int i = 0; i < sceneItems.size(); i++)
+        {
+            SceneItem<?> nextItem = sceneItems.get(i);
+
+            if (!nextItem.isVisible())
+                continue;
+
+            if (!nextItem.getDataItem().isEnabled())
+                continue;
+
+            plot = drawChartItem(nextItem, plot);
+        }
+        
+        if (plot != null)
+        {
+            // create a new chart
+            JFreeChart chart = new JFreeChart(plot);
+            chart.setTitle(scene.getName());
+            
+            // assign to panel
+            chartPanel.setChart(chart);
+            chartPanel.repaint();
+        }
+    }
+
+
+    @Override
+    public void drawItem(SceneItem<?> item)
+    {
+        plotBuilder.reset();
+        Plot plot = drawChartItem(item, null);
+        
+        // create a new chart
+        JFreeChart chart = new JFreeChart(plot);
+        chart.setTitle(item.getName());
+        
+        // assign to panel
+        chartPanel.setChart(chart);
+        chartPanel.repaint();
+    }
+    
+    
+    protected Plot drawChartItem(SceneItem<?> item, Plot plot)
+    {
+        // build plot using plotBuilder
+        List<DataStyler> stylers = item.getStylers();
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler nextStyler = stylers.get(i);
-            if (nextStyler.getSymbolizer().isEnabled())
-                nextStyler.accept(null);
-        }
+            plot = plotBuilder.addToPlot(plot, nextStyler);
+        }        
         
-        rootFrame.add(new ChartPanel(chart, false, false, false, true, true));        
-    }
-
-
-    @Override
-    public void drawItem(SceneItem item)
-    {
-        // TODO Auto-generated method stub        
+        return plot;
     }
 
 
     @Override
     public void cleanup(DataStyler styler, CleanupSection section)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
     public void cleanup(DataStyler styler, Object[] objects, CleanupSection section)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
     public void project(double worldX, double worldY, double worldZ, Vector3d viewPos)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
     public void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
-    public PickedObject pick(WorldScene scene, PickFilter filter)
+    public PickedObject pick(Scene<ChartSceneItem> scene, PickFilter filter)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -150,68 +184,17 @@ public class ChartRenderer extends SceneRenderer
     @Override
     public void resizeView(int width, int height)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
     public void setupView(ViewSettings viewSettings)
     {
-        // TODO Auto-generated method stub        
     }
 
 
     @Override
     public void dispose()
     {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(PointStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(PolygonStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(LabelStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(GridMeshStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(GridFillStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(GridBorderStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(RasterStyler styler)
-    {
-        // TODO Auto-generated method stub        
-    }
-
-
-    public void visit(TextureStyler styler)
-    {
-        // TODO Auto-generated method stub        
     }
 }

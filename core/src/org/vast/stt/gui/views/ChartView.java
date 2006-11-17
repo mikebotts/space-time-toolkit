@@ -13,30 +13,27 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.chart.ChartScene;
 
 
 /**
  * <p><b>Title:</b>
- * World View
+ * Chart View
  * </p>
  *
  * <p><b>Description:</b><br/>
- * The world view is the 2D/3D view where the data items of
- * the scene are rendered using the provided renderer.
+ * The chart view is a 2D view used to display simple charts.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -44,10 +41,10 @@ import org.vast.stt.event.STTEvent;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class ChartView extends DataItemView implements PaintListener, ControlListener
+public class ChartView extends SceneView<ChartScene> implements PaintListener, ControlListener
 {
 	public static final String ID = "STT.ChartView";
-    protected Canvas canvas;
+	private Canvas canvas;
     
     
     public ChartView()
@@ -61,35 +58,22 @@ public class ChartView extends DataItemView implements PaintListener, ControlLis
 		canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
 		canvas.addControlListener(this);
 		canvas.addPaintListener(this);
-        super.createPartControl(parent);
 	}
     	
 	
 	@Override
 	public void init(IViewSite site) throws PartInitException
 	{
-		super.init(site);
-		
-        // add show target action to toolbar
-		IAction ShowTargetAction = new Action()
-		{
-			public void run()
-			{
-				//boolean targetshown = scene.getViewSettings().isShowCameraTarget();
-                //scene.getViewSettings().setShowCameraTarget(!targetshown);
-                //scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
-			}
-		};
-        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
-        ShowTargetAction.setToolTipText("Toggle Target Tripod");
-		site.getActionBars().getToolBarManager().add(ShowTargetAction);
+		super.init(site);		
 	}
 	
 	
 	@Override
 	public void dispose()
 	{
-        super.dispose();
+        super.dispose();        
+        if (scene != null)
+            scene.getRenderer().dispose();
         canvas.dispose();
 	}
 	
@@ -102,16 +86,50 @@ public class ChartView extends DataItemView implements PaintListener, ControlLis
     
     
     @Override
+    public void setScene(ChartScene sc)
+    {
+        if (scene != sc)
+        {
+            // make sure we dispose previous renderer
+            if (scene != null)
+                scene.getRenderer().dispose();
+    
+            // call parent method !!
+            super.setScene(sc);
+            setPartName(scene.getName());
+            
+            // init the renderer
+            scene.getRenderer().setParent(canvas);
+            scene.getRenderer().init();
+            
+            // create and register view controller
+            //canvas.addMouseListener(controller);
+            //canvas.addMouseMoveListener(controller);
+            //canvas.addListener(SWT.MouseWheel , controller);
+            
+            // register view as listener to the scene
+            scene.addListener(this);
+        }
+    }
+    
+    
+    @Override
     public void updateView()
     {
-        
+        // render whole scene tree
+        scene.getRenderer().drawScene(scene);
     }
     
     
     @Override
     public void clearView()
     {
-        
+        // Clears the world view and unregister listeners
+        //canvas.removeMouseListener(controller);
+        //canvas.removeMouseMoveListener(controller);
+        //canvas.removeListener(SWT.MouseWheel , controller);
+        canvas.redraw();
+        setPartName("Nothing Open");
     }
     
     
@@ -120,6 +138,9 @@ public class ChartView extends DataItemView implements PaintListener, ControlLis
     {       
         switch (e.type)
         {
+            case SCENE_OPTIONS_CHANGED:            
+            case SCENE_VIEW_CHANGED:
+            case SCENE_ITEM_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
         }
@@ -128,13 +149,22 @@ public class ChartView extends DataItemView implements PaintListener, ControlLis
     
     public void paintControl(PaintEvent e)
     {
-        
+        if (scene != null)
+            scene.getRenderer().drawScene(scene);
     }
     
     
     public void controlResized(ControlEvent e)
     {
-        
+        if (scene != null)
+        {
+            // update view size
+            Rectangle clientArea = canvas.getClientArea();
+            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
+            
+            // redraw the whole scene
+            scene.getRenderer().drawScene(scene);
+        }
     }
 	
 	

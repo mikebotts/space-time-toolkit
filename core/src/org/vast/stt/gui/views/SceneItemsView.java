@@ -36,7 +36,7 @@ import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 
 
-public class SceneItemsView extends SceneView implements IDoubleClickListener
+public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneItemsView";
 	private TreeViewer sceneTree;
@@ -51,7 +51,7 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
         @Override
 		public Image getImage(Object element)
 		{
-			SceneItem item = (SceneItem)element;
+			SceneItem<?> item = (SceneItem<?>)element;
             if (item.isVisible())
                 return itemVisImg;
             else
@@ -61,7 +61,7 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
 		@Override
 		public String getText(Object element)
 		{
-			return ((SceneItem)element).getName();
+			return ((SceneItem<?>)element).getName();
 		}		
 	}
 	
@@ -112,7 +112,6 @@ public class SceneItemsView extends SceneView implements IDoubleClickListener
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
 		sceneTree.addDoubleClickListener(this);
-        super.createPartControl(parent);
 	}
 	
 	

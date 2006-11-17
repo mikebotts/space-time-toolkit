@@ -14,12 +14,12 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IPageListener;
-import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.scene.Scene;
 
 
 /**
@@ -38,9 +38,9 @@ import org.vast.stt.project.world.WorldScene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView extends ViewPart implements IPageListener, STTEventListener
+public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener, STTEventListener
 {
-    protected WorldScene scene;
+    protected SceneType scene;
     protected boolean updating = false;
     protected Runnable runRefresh = new Runnable()
     {
@@ -48,6 +48,7 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     };
 
 
+    public abstract void createPartControl(Composite parent);
     public abstract void updateView();
     public abstract void clearView();
     
@@ -78,14 +79,14 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     {
         ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
         if (pageInput != null)
-            setScene(pageInput.getScene());
+            setScene((SceneType)pageInput.getScene());
         else 
             setScene(null);
         refreshView();
     }
     
     
-    public void setScene(WorldScene sc)
+    public void setScene(SceneType sc)
     {
         if (scene != sc)
         {
@@ -97,14 +98,6 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
             if (scene != null)
                 scene.addListener(this);
         }
-    }
-
-    
-    @Override
-    public void createPartControl(Composite parent)
-    {
-        getSite().getWorkbenchWindow().addPageListener(this);
-        assignScene();
     }
     
 
@@ -118,8 +111,6 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
     @Override
     public void dispose()
     {
-        getSite().getWorkbenchWindow().removePageListener(this);
-        
         if (scene != null)
             scene.removeListener(this);
         
@@ -132,25 +123,35 @@ public abstract class SceneView extends ViewPart implements IPageListener, STTEv
      */
     public void handleEvent(STTEvent e)
     {
+        // by default the view will refresh on all events!!
+        // override this method to filter on event type
         refreshViewAsync();
     }
 
-
-    /**
-     * handle page events (new scene loaded)
-     */
-    public void pageActivated(IWorkbenchPage page)
-    {
-        assignScene();
+    
+    public void partOpened(IWorkbenchPart part)
+    {  
+        if (part == this)
+            assignScene();
     }
-
-
-    public void pageClosed(IWorkbenchPage page)
-    {
+    
+    
+    public void partActivated(IWorkbenchPart part)
+    {    
     }
-
-
-    public void pageOpened(IWorkbenchPage page)
-    {        
-    }    
+    
+    
+    public void partBroughtToTop(IWorkbenchPart part)
+    { 
+    }
+    
+    
+    public void partClosed(IWorkbenchPart part)
+    {  
+    }
+    
+    
+    public void partDeactivated(IWorkbenchPart part)
+    {  
+    }
 }

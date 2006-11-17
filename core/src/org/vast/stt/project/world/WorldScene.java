@@ -15,6 +15,7 @@ package org.vast.stt.project.world;
 
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.renderer.opengl.JOGLRenderer;
 
 
 /**
@@ -41,6 +42,7 @@ public class WorldScene extends Scene<WorldSceneItem>
     public WorldScene()
     {
         super();
+        renderer = new JOGLRenderer();
         cameraController = new CameraControl_Base(this);
     }
     

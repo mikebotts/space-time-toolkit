@@ -17,10 +17,12 @@ import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -150,7 +152,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         
         if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
         {
-            SceneRenderer renderer = scene.getRenderer();
+            SceneRenderer<Scene<WorldSceneItem>> renderer = scene.getRenderer();
             pickFilter.x = e.x;
             pickFilter.y = e.y;
             pickFilter.dX = 5;
@@ -198,7 +200,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	{
 		if (noMove)
 		{
-            SceneRenderer renderer = scene.getRenderer();
+            SceneRenderer<Scene<WorldSceneItem>> renderer = scene.getRenderer();
             pickFilter.x = e.x;
             pickFilter.y = e.y;
             pickFilter.dX = 5;

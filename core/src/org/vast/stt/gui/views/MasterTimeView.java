@@ -16,6 +16,7 @@ package org.vast.stt.gui.views;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.time.MasterTimeWidget;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -33,7 +34,7 @@ import org.vast.stt.gui.widgets.time.MasterTimeWidget;
  * @version 1.0
  * 
  */
-public class MasterTimeView extends SceneView
+public class MasterTimeView extends SceneView<WorldScene>
 {
     public static final String ID = "STT.MasterTimeView";
     protected MasterTimeWidget masterTimeWidget;
@@ -42,15 +43,14 @@ public class MasterTimeView extends SceneView
     @Override
     public void createPartControl(Composite parent)
     {
-        masterTimeWidget = new MasterTimeWidget(parent);
-        super.createPartControl(parent);                
+        masterTimeWidget = new MasterTimeWidget(parent);              
     }
 
 
     @Override
     public void updateView()
     {
-        masterTimeWidget.setScene(scene);
+        masterTimeWidget.setScene((WorldScene)scene);
     }
 
 

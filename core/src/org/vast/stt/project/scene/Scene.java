@@ -26,7 +26,6 @@ import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.SceneRenderer;
-import org.vast.stt.renderer.opengl.JOGLRenderer;
 
 
 /**
@@ -43,17 +42,16 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
+public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDisplay
 {
 	protected DataTree dataTree;
-    protected SceneRenderer renderer; 
+    protected SceneRenderer<Scene<ItemType>> renderer; 
     protected ArrayList<ItemType> sceneItems;
     protected ArrayList<ItemType> selectedItems;
     
 
     public Scene()
     {
-        renderer = new JOGLRenderer();      
         sceneItems = new ArrayList<ItemType>();
         selectedItems = new ArrayList<ItemType>(1);
     }
@@ -83,13 +81,13 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
     }
     
     
-    public SceneRenderer getRenderer()
+    public SceneRenderer<Scene<ItemType>> getRenderer()
     {
         return renderer;
     }
 
 
-    public void setRenderer(SceneRenderer renderer)
+    public void setRenderer(SceneRenderer<Scene<ItemType>> renderer)
     {
         this.renderer = renderer;
     }
@@ -112,7 +110,7 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
      * @param dataItem
      * @return
      */
-    public ItemType findItem(WorldItem dataItem)
+    public ItemType findItem(DataItem dataItem)
     {
         // try to find entry in sceneItems list
         for (int i=0; i<sceneItems.size(); i++)
@@ -130,10 +128,10 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
      * Removes an item from the scene and cleanup all cached data
      * @param dataItem
      */
-    public void removeItem(DataFolder folder, WorldItem dataItem)
+    public void removeItem(DataFolder folder, DataItem dataItem)
     {
         folder.remove(dataItem);
-        SceneItem sceneItem = findItem(dataItem);        
+        SceneItem<?> sceneItem = findItem(dataItem);        
         
         // if SceneItem was created, cleanup as well
         if (sceneItem != null)
@@ -151,7 +149,7 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
      * @param dataItem
      * @param visible
      */
-    public void setItemVisibility(WorldItem dataItem, boolean visible)
+    public void setItemVisibility(DataItem dataItem, boolean visible)
     {       
         SceneItem sceneItem = findItem(dataItem);
         
@@ -199,11 +197,11 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
      * @param dataItem
      * @return true if item is visible, false otherwise
      */
-    public boolean isItemVisible(WorldItem dataItem)
+    public boolean isItemVisible(DataItem dataItem)
     {
         for (int i=0; i<sceneItems.size(); i++)
         {
-            SceneItem nextItem = sceneItems.get(i);
+            SceneItem<?> nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem && nextItem.isVisible())
                 return true;
         }
@@ -244,7 +242,7 @@ public abstract class Scene<ItemType extends SceneItem> extends AbstractDisplay
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem nextItem = sceneItems.get(i);
+            SceneItem<?> nextItem = sceneItems.get(i);
             
             if (!nextItem.isVisible())
                 continue;

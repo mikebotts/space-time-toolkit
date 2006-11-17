@@ -13,13 +13,12 @@
 
 package org.vast.stt.renderer;
 
-import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
 import org.vast.math.Vector3d;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.StylerVisitor;
 
 
 /**
@@ -36,7 +35,7 @@ import org.vast.stt.style.StylerVisitor;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public abstract class SceneRenderer implements StylerVisitor
+public abstract class SceneRenderer<SceneType extends Scene<? extends SceneItem>>
 {
     public enum CleanupSection
     {
@@ -46,16 +45,16 @@ public abstract class SceneRenderer implements StylerVisitor
     }
     
     
-    protected Canvas canvas;
+    protected Composite composite;
 
 
     public abstract void init();
     
     
-    public abstract void drawScene(WorldScene scene);
+    public abstract void drawScene(SceneType scene);
     
     
-    public abstract void drawItem(SceneItem item);
+    public abstract void drawItem(SceneItem<?> item);
     
     
     public abstract void cleanup(DataStyler styler, CleanupSection section);
@@ -70,7 +69,7 @@ public abstract class SceneRenderer implements StylerVisitor
     public abstract void unproject(double viewX, double viewY, double viewZ, Vector3d worldPos);
     
     
-    public abstract PickedObject pick(WorldScene scene, PickFilter filter);
+    public abstract PickedObject pick(SceneType scene, PickFilter filter);
 
 
     public abstract void resizeView(int width, int height);
@@ -84,24 +83,24 @@ public abstract class SceneRenderer implements StylerVisitor
     
     public int getViewWidth()
     {
-        return canvas.getClientArea().width;
+        return composite.getClientArea().width;
     }
     
     
     public int getViewHeight()
     {
-        return canvas.getClientArea().height;
+        return composite.getClientArea().height;
     }
 
 
-    public Canvas getCanvas()
+    public Composite getParent()
     {
-        return canvas;
+        return composite;
     }
 
 
-    public void setCanvas(Canvas canvas)
+    public void setParent(Composite composite)
     {
-        this.canvas = canvas;
+        this.composite = composite;
     }
 }
