@@ -62,7 +62,7 @@ public class CameraControl_Map extends CameraControl_Base
         
         if (rotConstraint != MotionConstraint.NO_MOTION)
         {
-            SceneRenderer renderer = scene.getRenderer();
+            SceneRenderer<?> renderer = scene.getRenderer();
 
             // actual camera position
             Vector3d up = viewSettings.getUpDirection();

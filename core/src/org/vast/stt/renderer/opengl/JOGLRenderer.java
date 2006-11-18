@@ -223,6 +223,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     @Override
     public void resizeView(int width, int height)
     {
+        super.resizeView(width, height);
         getContext();
         SWTContext.resize(0, 0, width, height);
         releaseContext();

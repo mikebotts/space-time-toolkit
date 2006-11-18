@@ -223,8 +223,6 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             // update view size
             Rectangle clientArea = canvas.getClientArea();
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            scene.getViewSettings().setViewWidth(clientArea.width);
-            scene.getViewSettings().setViewHeight(clientArea.height);
             
             // redraw the whole scene
             scene.getRenderer().drawScene(scene);

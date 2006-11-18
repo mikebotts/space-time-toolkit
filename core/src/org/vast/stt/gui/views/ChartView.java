@@ -109,6 +109,7 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
             
             // register view as listener to the scene
             scene.addListener(this);
+            refreshView();
         }
     }
     

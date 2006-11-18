@@ -77,7 +77,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
         Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
         swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
         chartPanel = new ChartPanel(null);
-        chartPanel.setPopupMenu(null);
+        //chartPanel.setPopupMenu(null);
         rootFrame.add(chartPanel);
     }
 
@@ -178,12 +178,6 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
     public PickedObject pick(Scene<ChartSceneItem> scene, PickFilter filter)
     {
         return null;
-    }
-
-
-    @Override
-    public void resizeView(int width, int height)
-    {
     }
 
 

@@ -64,11 +64,12 @@ public class STTEventListeners extends ArrayList<STTEventListener>
      */
     public void dispatchEvent(STTEvent event)
     {
-        for (int i=0; i<this.size(); i++)
-        {
-            STTEventListener next = this.get(i);
-            if (next != event.source)
-                next.handleEvent(event);
-        }
+//        for (int i=0; i<this.size(); i++)
+//        {
+//            STTEventListener next = this.get(i);
+//            if (next != event.source)
+//                next.handleEvent(event);
+//        }
+        STTEventManager.getInstance().dispatchEvent(event, this);
     }
 }

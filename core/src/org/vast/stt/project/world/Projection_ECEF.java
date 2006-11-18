@@ -121,7 +121,7 @@ public class Projection_ECEF implements Projection
             view.setFarClip(dist*20);
         
         // now use renderer to find projection of bbox on screen
-        SceneRenderer renderer = scene.getRenderer();
+        SceneRenderer<?> renderer = scene.getRenderer();
         renderer.setupView(view);
         Vector3d winPoint1 = new Vector3d();
         Vector3d winPoint2 = new Vector3d();
@@ -161,14 +161,15 @@ public class Projection_ECEF implements Projection
             if (centerX > 180)
                 centerX -= 360;
             double centerY = llaCenter[0] * RTD;
-            double dX = view.getOrthoWidth()/2 * 90/6378137;
-            dX = Math.min(dX, 90);
+            double c = Math.min(6378137, view.getOrthoWidth()/2);
+            double dX = Math.asin(c/6378137) * RTD * (1 + Math.abs(centerY)/90);
             double dY = dX;
+            if (90 - Math.abs(centerY) < dX) dX = 180;
 
             bbox.setMinX(centerX - dX);
             bbox.setMaxX(centerX + dX);
-            bbox.setMinY(centerY - dY);
-            bbox.setMaxY(centerY + dY);
+            bbox.setMinY(Math.max(centerY - dY, -90));
+            bbox.setMaxY(Math.min(centerY + dY, +90));
         }
         else
         {
