@@ -153,7 +153,7 @@ public class Projection_LLA implements Projection
         double dy = Math.abs(bbox.getMaxY() - bbox.getMinY());
         
         // set new orthowidth
-        SceneRenderer renderer = scene.getRenderer();
+        SceneRenderer<?> renderer = scene.getRenderer();
         double viewWidth = (double)renderer.getViewWidth();
         double viewHeight = (double)renderer.getViewHeight();
         double viewAspectRatio = viewWidth / viewHeight;
@@ -168,13 +168,13 @@ public class Projection_LLA implements Projection
     
     public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
     {
-        ViewSettings view = scene.getViewSettings(); 
-        SceneRenderer renderer = scene.getRenderer();
+        ViewSettings view = scene.getViewSettings();
+        SceneRenderer<?> renderer = scene.getRenderer();
         
         double centerX = view.getTargetPos().x * RTD;
         double centerY = view.getTargetPos().y * RTD;
         double dX = view.getOrthoWidth()/2 * RTD;
-        double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
+        double dY = dX * renderer.getViewHeight()/ renderer.getViewWidth();
         
         bbox.setMinX(Math.max(centerX - dX, -180));
         bbox.setMaxX(Math.min(centerX + dX, +180));

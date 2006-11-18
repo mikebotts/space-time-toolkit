@@ -66,8 +66,7 @@ public class ViewSettings implements STTEventProducer
 
 	// parameters defining ortho field of view
 	protected double orthoWidth;
-    protected int viewWidth;
-    protected int viewHeight;
+	//protected double orthoHeight;
     
 	// camera modes
 	protected CameraMode cameraMode;
@@ -194,30 +193,6 @@ public class ViewSettings implements STTEventProducer
 	{
 		this.orthoWidth = orthoWidth;
 	}
-    
-    
-    public int getViewHeight()
-    {
-        return viewHeight;
-    }
-
-
-    public void setViewHeight(int viewHeight)
-    {
-        this.viewHeight = viewHeight;
-    }
-
-
-    public int getViewWidth()
-    {
-        return viewWidth;
-    }
-
-
-    public void setViewWidth(int viewWidth)
-    {
-        this.viewWidth = viewWidth;
-    }
 
 
 	public double getCameraFov()

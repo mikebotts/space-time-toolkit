@@ -160,7 +160,7 @@ public class Projection_Mercator implements Projection
         double dy = Math.abs(bbox.getMaxY() - bbox.getMinY());
         
         // set new orthowidth
-        SceneRenderer renderer = scene.getRenderer();
+        SceneRenderer<?> renderer = scene.getRenderer();
         double viewWidth = (double)renderer.getViewWidth();
         double viewHeight = (double)renderer.getViewHeight();
         double viewAspectRatio = viewWidth / viewHeight;
@@ -176,7 +176,7 @@ public class Projection_Mercator implements Projection
     public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
     {
         ViewSettings view = scene.getViewSettings();
-        SceneRenderer renderer = scene.getRenderer();
+        SceneRenderer<?> renderer = scene.getRenderer();
         
         double centerX = view.getTargetPos().x * RTD;
         double centerY = view.getTargetPos().y * RTD;

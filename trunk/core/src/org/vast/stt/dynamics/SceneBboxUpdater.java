@@ -19,7 +19,6 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
@@ -40,7 +39,6 @@ import org.vast.stt.provider.STTSpatialExtent;
 public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
     private WorldScene scene;
-    private ViewSettings view;
     private int tileSizeX, tileSizeY;
     //private long lastUpdateTime = -1;
         
@@ -50,8 +48,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
         spatialExtent.setUpdater(this);
         ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
         scene = (WorldScene)input.getScene();
-        view = scene.getViewSettings();
-        view.addListener(this);
+        scene.getViewSettings().addListener(this);
     }
     
     
@@ -66,9 +63,9 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     
     public void updateBbox()
     {
-        view.getProjection().fitBboxToView(spatialExtent, scene);
-        spatialExtent.setXTiles(view.getViewWidth() / tileSizeX);
-        spatialExtent.setYTiles(view.getViewHeight() / tileSizeY);
+        scene.getViewSettings().getProjection().fitBboxToView(spatialExtent, scene);
+        spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX);
+        spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY);
     }
     
     

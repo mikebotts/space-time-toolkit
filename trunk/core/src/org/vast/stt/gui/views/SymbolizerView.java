@@ -65,9 +65,9 @@ public class SymbolizerView extends DataItemView
             case ITEM_OPTIONS_CHANGED:
             case ITEM_SYMBOLIZER_CHANGED:
                 System.err.println("SymWid.handleEvt = " + e);
-//              refreshViewAsync();
+                refreshViewAsync();
                 //  This may need to be done via asynchExec()
-                symbolizerWidget.loadOptions();
+                //symbolizerWidget.loadOptions();
         }
     }
 }

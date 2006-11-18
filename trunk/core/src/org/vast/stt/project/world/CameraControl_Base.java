@@ -71,7 +71,7 @@ public class CameraControl_Base implements CameraControl
         
         if (rotConstraint != MotionConstraint.NO_MOTION)
         {
-            SceneRenderer renderer = scene.getRenderer();
+            SceneRenderer<?> renderer = scene.getRenderer();
 
             // actual camera position
             Vector3d up = viewSettings.getUpDirection();
@@ -214,8 +214,8 @@ public class CameraControl_Base implements CameraControl
 
     public void doZoom(int x0, int y0, int x1, int y1)
     {
-        ViewSettings viewSettings = scene.getViewSettings();
-        double amount = 2.0 * ((double)(y0 - y1)) / ((double)viewSettings.getViewHeight());
+        SceneRenderer<?> renderer = scene.getRenderer();
+        double amount = 2.0 * ((double)(y0 - y1)) / ((double)renderer.getViewHeight());
         doZoom(amount);
     }
     

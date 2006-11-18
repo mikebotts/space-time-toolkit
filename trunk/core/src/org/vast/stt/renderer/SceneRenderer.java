@@ -42,11 +42,11 @@ public abstract class SceneRenderer<SceneType extends Scene<? extends SceneItem>
         ALL,
         GEOMETRY,
         TEXTURES,
-    }
-    
+    }    
     
     protected Composite composite;
-
+    protected int viewWidth, viewHeight;
+    
 
     public abstract void init();
     
@@ -72,27 +72,37 @@ public abstract class SceneRenderer<SceneType extends Scene<? extends SceneItem>
     public abstract PickedObject pick(SceneType scene, PickFilter filter);
 
 
-    public abstract void resizeView(int width, int height);
-
-
     public abstract void setupView(ViewSettings viewSettings);
     
     
     public abstract void dispose();
     
     
+    public void resizeView(int width, int height)
+    {
+        this.viewHeight = height;
+        this.viewWidth = width;
+    }
+
+
     public int getViewWidth()
     {
-        return composite.getClientArea().width;
+        return viewWidth;
     }
-    
-    
+
+
     public int getViewHeight()
     {
-        return composite.getClientArea().height;
+        return viewHeight;
     }
-
-
+    
+    
+    public double getAspectRatio()
+    {
+        return (double)viewWidth/(double)viewHeight;
+    }
+    
+    
     public Composite getParent()
     {
         return composite;
