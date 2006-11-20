@@ -67,7 +67,7 @@ public class SpatialTilingProvider extends TiledMapProvider
         selectedItems = new ArrayList<QuadTreeItem>(100);
         deletedItems = new ArrayList<BlockListItem>(100);
         tileSelector = new TiledMapSelector(3, 3, 0, 18);        
-        tileSize = 256;
+        tileSize = 512;
     }
     
     
@@ -155,6 +155,22 @@ public class SpatialTilingProvider extends TiledMapProvider
     
     
     @Override
+    protected SpatialExtent transformBbox(SpatialExtent extent)
+    {
+        SpatialExtent newExtent = new SpatialExtent();
+        double minX = spatialExtent.getMinX();
+        double maxX = spatialExtent.getMaxX();
+        double minY = spatialExtent.getMinY();
+        double maxY = spatialExtent.getMaxY();
+        newExtent.setMinX(minX);
+        newExtent.setMaxX(maxX);
+        newExtent.setMinY(minY);
+        newExtent.setMaxY(maxY);
+        return newExtent;
+    }
+    
+    
+    @Override
     public void updateData() throws DataException
     {
         // init DataNode if not done yet
@@ -164,12 +180,12 @@ public class SpatialTilingProvider extends TiledMapProvider
         // query tree for matching and unused items
         selectedItems.clear();
         deletedItems.clear();        
-        tileSelector.setROI(spatialExtent);
+        tileSelector.setROI(spatialExtent.copy());
         tileSelector.setCurrentLevel(0);
         tileSelector.setSizeRatio(spatialExtent.getXTiles());
         quadTree.accept(tileSelector);
         
-        // first round of cached items to display
+//      first round of cached background items to display
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);
@@ -195,7 +211,17 @@ public class SpatialTilingProvider extends TiledMapProvider
                     }
                 }            
             }
-            else
+        }
+        
+        // 2nd round of cached items to display
+        for (int i=0; i<selectedItems.size(); i++)
+        {
+            QuadTreeItem nextItem = selectedItems.get(i);
+            
+            if (canceled)
+                break;
+            
+            if (nextItem.getData() != null)
             {
                 BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
                 for (int b=0; b<blockArray.length; b++)
@@ -211,7 +237,7 @@ public class SpatialTilingProvider extends TiledMapProvider
         if (!canceled)
             dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 
-        // second round of new items to display
+        // 3rd round of new items to load and display
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);
