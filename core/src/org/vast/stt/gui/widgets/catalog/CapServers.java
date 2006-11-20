@@ -15,12 +15,15 @@ package org.vast.stt.gui.widgets.catalog;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
+import org.vast.stt.apps.STTPlugin;
+import org.vast.util.ExceptionSystem;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -149,9 +152,17 @@ public class CapServers {
 	}	
 	
 	public void readServers() throws DOMReaderException {
-		InputStream is = this.getClass().getResourceAsStream("Servers.xml");
-		//InputStream is = STTPlugin.getResource("Servers.xml");
-		DOMReader dom = new DOMReader(is, false);
+	   String fileLocation = null;
+	   Enumeration e = STTPlugin.getDefault().getBundle().findEntries("conf", "Servers.xml", false);
+	   if (e.hasMoreElements())
+           fileLocation = (String)e.nextElement().toString();
+	   
+	   if(fileLocation == null) {
+		   ExceptionSystem.display(new Exception("STT error: Cannot find conf\\Servers.xml"));
+		   return;
+	   }		
+		
+		DOMReader dom = new DOMReader(fileLocation, false);
 		Element rootElt = dom.getRootElement();
 		
 		NodeList serverNodes = rootElt.getElementsByTagName("Server");
