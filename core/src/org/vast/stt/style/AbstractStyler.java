@@ -43,11 +43,11 @@ import org.vast.stt.provider.STTSpatialExtent;
  */
 public abstract class AbstractStyler implements DataStyler
 {
-    class ListInfo
+    protected class ListInfo
     {
         protected BlockListIterator blockIterator;
         protected DataIndexer blockIndexer;
-        
+        protected int indexOffset = 0; // when a data index is along the list dimension itself
         
         public ListInfo(BlockList blockList, DataIndexer dataIndexer)
         {
@@ -66,6 +66,7 @@ public abstract class AbstractStyler implements DataStyler
     protected boolean computeExtent = true;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
+    
     
     
     public abstract void setSymbolizer(Symbolizer symbolizer);

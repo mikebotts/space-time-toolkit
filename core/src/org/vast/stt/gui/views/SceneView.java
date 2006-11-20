@@ -41,10 +41,30 @@ import org.vast.stt.project.scene.Scene;
 public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener, STTEventListener
 {
     protected SceneType scene;
-    protected boolean updating = false;
+    protected boolean refreshThreadStarted = true;
+    
     protected Runnable runRefresh = new Runnable()
     {
         public void run() {refreshView();}
+    };
+    
+    protected Thread refreshThread = new Thread()
+    {
+        @Override
+        public void run()
+        {
+            try
+            {
+                while (refreshThreadStarted)
+                {
+                    synchronized(this) { wait(); }                    
+                    getSite().getShell().getDisplay().syncExec(runRefresh);
+                }
+            }
+            catch (InterruptedException e)
+            {
+            }
+        }
     };
 
 
@@ -59,19 +79,26 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
      */
     protected void refreshView()
     {
-        updating = true;
         if (scene != null)
             updateView();
         else
             clearView();
-        updating = false;
     }
     
     
-    protected void refreshViewAsync()
+    protected synchronized void refreshViewAsync()
     {
-        if (!updating)
-            getSite().getShell().getDisplay().asyncExec(runRefresh);
+        if (!refreshThread.isAlive())
+        {
+            refreshThread.setName(scene.getName() + " Refresh Thread");
+            refreshThreadStarted = true;
+            refreshThread.start();            
+        }
+        
+        synchronized (refreshThread)
+        {
+            refreshThread.notify();
+        }
     }
     
     
@@ -114,6 +141,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
         if (scene != null)
             scene.removeListener(this);
         
+        refreshThreadStarted = false;
         super.dispose();
     }
 
@@ -132,7 +160,9 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     public void partOpened(IWorkbenchPart part)
     {  
         if (part == this)
+        {
             assignScene();
+        }
     }
     
     

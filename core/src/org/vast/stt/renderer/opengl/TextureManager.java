@@ -407,7 +407,6 @@ public class TextureManager
         //tex.rasterData = ByteBuffer.wrap(buffer);
         tex.rasterData = buffer;
         tex.hasRasterData = true;
-        tex.hasColorMapData = false;
     }
 
 

@@ -27,15 +27,18 @@ import org.jfree.data.DomainOrder;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.xy.XYDataset;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.DataStyler1D;
+import org.vast.stt.style.PrimitiveGraphic;
 
 
 public class ChartXYDataset implements XYDataset
 {
-    protected DataStyler styler;
+    protected DataStyler1D styler;
+    protected int previousItem = -1;
+    protected PrimitiveGraphic point;
+    
 
-
-    public ChartXYDataset(DataStyler styler)
+    public ChartXYDataset(DataStyler1D styler)
     {
         this.styler = styler;
     }
@@ -49,7 +52,8 @@ public class ChartXYDataset implements XYDataset
 
     public int getItemCount(int arg0)
     {
-        return 100;
+        return styler.getNumPoints();
+        //return 100;
     }
 
 
@@ -61,7 +65,18 @@ public class ChartXYDataset implements XYDataset
 
     public double getXValue(int series, int item)
     {
-        return Math.PI*((double)item)/50;
+        if (item == previousItem)
+        {
+            return point.x;
+        }
+        else
+        {
+            previousItem = item;
+            point = styler.getPoint(item);
+            return point.x;
+        }
+        
+        //return Math.PI*((double)item)/50;
     }
 
 
@@ -73,7 +88,16 @@ public class ChartXYDataset implements XYDataset
 
     public double getYValue(int series, int item)
     {
-        return Math.sin(Math.PI*((double)item)/50);
+        if (item == previousItem)
+        {
+            return point.y;
+        }
+        else
+        {
+            previousItem = item;
+            point = styler.getPoint(item);
+            return point.y;
+        }
     }
 
 
@@ -116,17 +140,4 @@ public class ChartXYDataset implements XYDataset
     public void setGroup(DatasetGroup arg0)
     {       
     }
-
-
-    public DataStyler getStyler()
-    {
-        return styler;
-    }
-
-
-    public void setStyler(DataStyler styler)
-    {
-        this.styler = styler;
-    }
-
 }
