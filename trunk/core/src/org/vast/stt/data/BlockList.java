@@ -35,8 +35,10 @@ public class BlockList
 {
     protected int size = 0;
     protected DataComponent blockStructure;
-    protected BlockListItem firstBlock;
-    protected BlockListItem lastBlock;
+    protected BlockListItem firstItem;
+    protected BlockListItem lastItem;
+    protected BlockListItem currentItem;
+    protected int currentIndex = -1;
     //protected BlockListItem[] fastAccessBlocks; // use if random access needed
     
     
@@ -62,8 +64,10 @@ public class BlockList
     
     public void clear()
     {
-        firstBlock = null;
-        lastBlock = null;
+        firstItem = null;
+        lastItem = null;
+        currentItem = null;
+        currentIndex = -1;
         size = 0;
     }
     
@@ -72,24 +76,24 @@ public class BlockList
     {
         boolean endItem = false;
         
-        if (item.nextBlock == null && item.prevBlock == null)
+        if (item.nextItem == null && item.prevItem == null)
             return;
         
         // if item is first in list
-        if (item == firstBlock)
+        if (item == firstItem)
         {
-            firstBlock = item.nextBlock;
-            if (firstBlock != null)
-                firstBlock.prevBlock = null;
+            firstItem = item.nextItem;
+            if (firstItem != null)
+                firstItem.prevItem = null;
             endItem = true;
         }
         
         // if item is last in list
-        if (item == lastBlock)
+        if (item == lastItem)
         {
-            lastBlock = item.prevBlock;
-            if (lastBlock != null)
-                lastBlock.nextBlock = null;
+            lastItem = item.prevItem;
+            if (lastItem != null)
+                lastItem.nextItem = null;
             endItem = true;
         }
         
@@ -97,13 +101,13 @@ public class BlockList
         if (!endItem)
         {
             // connect previous to next
-            item.prevBlock.nextBlock = item.nextBlock;
-            item.nextBlock.prevBlock = item.prevBlock;
+            item.prevItem.nextItem = item.nextItem;
+            item.nextItem.prevItem = item.prevItem;
         }
         
         // set both prev and next to null
-        item.nextBlock = null;
-        item.prevBlock = null;
+        item.nextItem = null;
+        item.prevItem = null;
         
         // reduce list size
         size--;        
@@ -112,9 +116,9 @@ public class BlockList
     
     public BlockListItem addBlock(AbstractDataBlock dataBlock)
     {
-        BlockListItem newBlock = new BlockListItem(dataBlock, null, null);
-        add(newBlock);        
-        return newBlock;
+        BlockListItem newItem = new BlockListItem(dataBlock, null, null);
+        add(newItem);        
+        return newItem;
     }
     
     
@@ -122,18 +126,61 @@ public class BlockList
     {
         this.remove(newItem);
         
-        newItem.prevBlock = lastBlock;
-        newItem.nextBlock = null;
+        newItem.prevItem = lastItem;
+        newItem.nextItem = null;
         
-        if (lastBlock != null)
-            lastBlock.nextBlock = newItem;
+        if (lastItem != null)
+            lastItem.nextItem = newItem;
         
-        if (firstBlock == null)
-            firstBlock = newItem;
+        if (firstItem == null)
+            firstItem = newItem;
         
-        lastBlock = newItem;
+        lastItem = newItem;
         
         size++;
+    }
+    
+    
+    public AbstractDataBlock get(int index)
+    {
+        BlockListItem item = null;
+        
+        int distCurrent = index - currentIndex;
+        int distFirst = index;
+        //int distLast = size - 1 - index;
+            
+        if (currentIndex != -1 && Math.abs(distCurrent) <= distFirst)
+        {
+            item = currentItem;
+            
+            if (distCurrent >= 0)
+            {
+                while (item.nextItem != null && currentIndex != index)
+                {
+                    item = item.nextItem;
+                    currentIndex++;
+                }
+            }
+            else
+            {
+                while (item.prevItem != null && currentIndex != index)
+                {
+                    item = item.prevItem;
+                    currentIndex--;
+                }
+            }
+        }
+        else
+        {
+            item = firstItem;
+            int i;
+            for (i=0; i<index && item.nextItem != null; i++)
+                item = item.nextItem;
+            currentIndex = i;
+        }
+        
+        currentItem = item;
+        return item.data;
     }
     
     

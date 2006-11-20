@@ -83,8 +83,9 @@ public class PlotBuilder implements StylerVisitor
             plot.setRangeGridlinePaint(Color.white);
             
             axisName = "Time (s)";
-            plot.setDomainAxis(new NumberAxis(axisName));
-            
+            NumberAxis domainAxis = new NumberAxis(axisName);
+            domainAxis.setAutoRangeIncludesZero(false);
+            plot.setDomainAxis(domainAxis);
             
             this.plot = plot;
         }
@@ -108,7 +109,9 @@ public class PlotBuilder implements StylerVisitor
             plot.setRenderer(datasetCount, renderer);
             plot.setDataset(datasetCount, data);
             String axisName = styler.getSymbolizer().getName();
-            plot.setRangeAxis(datasetCount, new NumberAxis(axisName));
+            NumberAxis rangeAxis = new NumberAxis(axisName);
+            rangeAxis.setAutoRangeIncludesZero(false);
+            plot.setRangeAxis(datasetCount, rangeAxis);
         }
     }
 

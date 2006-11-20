@@ -35,7 +35,7 @@ import org.vast.stt.data.BlockListItem;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LineStyler extends AbstractStyler
+public class LineStyler extends AbstractStyler implements DataStyler1D
 {
     protected LineSymbolizer symbolizer;
     protected LinePointGraphic point;
@@ -74,7 +74,7 @@ public class LineStyler extends AbstractStyler
         // see what's needed on this block
         prepareBlock(nextItem);
         
-        // copy current item in the patch object
+        // copy current item in the segment object
         segment.block = nextItem;
         
         return segment;
@@ -103,11 +103,31 @@ public class LineStyler extends AbstractStyler
     }
     
     
+    public int getNumPoints()
+    {
+        if (dataLists[0].indexOffset == 0)
+            return dataLists[0].blockIterator.getList().getSize();
+        else
+            return segment.segmentSize;
+    }
+    
+    
     public LinePointGraphic getPoint(int u)
     {
-        point.x = point.y = point.z = 0.0;
-        lineIndex[0] = u;
-        dataLists[0].blockIndexer.getData(lineIndex);
+        point.x = point.y = point.z = 0.0;        
+        
+        if (dataLists[0].indexOffset == 0)
+        {
+            AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
+            dataLists[0].blockIndexer.setData(dataBlock);
+            dataLists[0].blockIndexer.reset();
+            dataLists[0].blockIndexer.next();
+        }
+        else
+        {
+            lineIndex[0] = u;
+            dataLists[0].blockIndexer.getData(lineIndex);
+        }
         
         // adjust geometry to fit projection
         if (projection != null)

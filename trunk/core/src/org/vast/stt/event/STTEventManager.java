@@ -114,7 +114,7 @@ public class STTEventManager implements Runnable
     {
         if (!started)
         {
-            dispatchThread = new Thread(this);
+            dispatchThread = new Thread(this, "STT Event Dispatcher");
             started = true;
             dispatchThread.start();
         }

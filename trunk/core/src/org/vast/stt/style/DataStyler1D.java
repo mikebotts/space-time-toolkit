@@ -13,43 +13,28 @@
 
 package org.vast.stt.style;
 
-import java.nio.Buffer;
-
 
 /**
  * <p><b>Title:</b><br/>
- * Raster Tile Graphic
+ * Data Styler 1D
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Represents a tile of a raster. A tile is the atomic piece
- * of a composite tiled raster.
+ * Interface for stylers providing access to graphic objects using
+ * a 1D index.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Nov 21, 2005
  * @version 1.0
  */
-public class RasterTileGraphic extends GraphicObject
+public interface DataStyler1D extends DataStyler
 {
-	public enum BufferType
-    {
-        LUM, LUMA, R, G, B, RGB, BGR, RGBA, BGRA
-    }    
+
+    public int getNumPoints();
     
-    public int tileNumber;
     
-    public int width = 0;
-    public int height = 0;
-    public int bands = 3;
-    public float opacity = 1.0f;
-    public int widthPadding = 0;
-    public int heightPadding = 0;
+	public PrimitiveGraphic getPoint(int u);
     
-    // if no transform is applied, image data can be made
-    // accessible to the renderer directly using these fields
-    public Buffer rasterData;
-    public BufferType rasterType;
-    public boolean hasRasterData;
 }

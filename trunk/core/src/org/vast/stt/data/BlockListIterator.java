@@ -33,7 +33,7 @@ import java.util.Iterator;
 public class BlockListIterator implements Iterator<BlockListItem>
 {
     protected BlockList list;
-    protected BlockListItem currentBlock;
+    protected BlockListItem currentItem;
     protected boolean hasNext;
     
     
@@ -52,21 +52,21 @@ public class BlockListIterator implements Iterator<BlockListItem>
     
     public BlockListItem next()
     {
-        BlockListItem block = currentBlock;
-        currentBlock = currentBlock.nextBlock;
-        if (currentBlock == null)
+        BlockListItem item = currentItem;
+        currentItem = currentItem.nextItem;
+        if (currentItem == null)
             hasNext = false;
-        return block;
+        return item;
     }
     
     
     public void reset()
     {
-        if (list.firstBlock == null)
+        if (list.firstItem == null)
             hasNext = false;
         else
             hasNext = true;
-        currentBlock = list.firstBlock;
+        currentItem = list.firstItem;
     }
     
     

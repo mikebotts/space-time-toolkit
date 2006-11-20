@@ -33,22 +33,22 @@ public class BlockListItem
 {
     //protected BlockInfo info;
     protected AbstractDataBlock data;    
-    protected BlockListItem nextBlock;
-    protected BlockListItem prevBlock;
+    protected BlockListItem nextItem;
+    protected BlockListItem prevItem;
     protected boolean hidden;
     
     
     public BlockListItem(AbstractDataBlock data, BlockListItem prevBlock, BlockListItem nextBlock)
     {
         this.data = data;
-        this.prevBlock = prevBlock;
-        this.nextBlock = nextBlock;
+        this.prevItem = prevBlock;
+        this.nextItem = nextBlock;
         
         if (prevBlock != null)
-            prevBlock.nextBlock = this;
+            prevBlock.nextItem = this;
         
         if (nextBlock != null)
-            nextBlock.prevBlock = this;
+            nextBlock.prevItem = this;
     }
     
 
@@ -93,6 +93,6 @@ public class BlockListItem
     
     public boolean isLinked()
     {
-        return (nextBlock != null || prevBlock != null);
+        return (nextItem != null || prevItem != null);
     }
 }
