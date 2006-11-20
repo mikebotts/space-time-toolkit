@@ -13,9 +13,18 @@
 
 package org.vast.stt.style;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+
+import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.*;
+import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.project.table.TableSymbolizer;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.util.ExceptionHandler;
+import org.vast.util.ExceptionSystem;
 
 
 /**
@@ -87,7 +96,8 @@ public class StylerFactory
      * Construct a new styler with the given name, stylerType, and DataProvider
      * @param stylerName
      * @param stylerType
-     * @param provider
+     * @param dataItem
+     * @param geometry
      * @return the newly created styler
      */
     public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataItem dataItem, Geometry geom)
@@ -183,16 +193,34 @@ public class StylerFactory
     * @param provider - the dataProvider to use for the new Styler
     * @return new TextureStyler
     */
-   private static TextureStyler createDefaultTextureStyler(DataItem dataItem)
+   public static TextureStyler createDefaultTextureStyler(DataItem dataItem)
    {
 	   TextureStyler styler = new TextureStyler();
 	   styler.setDataItem(dataItem);
 	   
-	   TextureSymbolizer symbolizer = new TextureSymbolizer();
-	   styler.setSymbolizer(symbolizer);
-	   Dimensions dims = new Dimensions();
-	   //symbolizer.set
-	   //  HOW to set defaults for dims and channels?
+	   SLDReader sldReader = new SLDReader();
+	   InputStream fileIs = null;
+	   DOMReader dom;
+	   TextureSymbolizer sym = null;
+	   try {
+		   String fileLocation = null;
+		   Enumeration e = STTPlugin.getDefault().getBundle().findEntries("templates", "wms.xml", false);
+		   if (e.hasMoreElements())
+               fileLocation = (String)e.nextElement().toString();
+		   
+		   if(fileLocation == null) {
+			   ExceptionSystem.display(new Exception("STT error: Cannot find template\\wms.xml"));
+			   return null;
+		   }
+			   
+		   dom = new DOMReader(fileLocation, false);
+		   sym = sldReader.readTexture(dom, dom.getRootElement());
+	   } catch (Exception e){
+		   e.printStackTrace();
+	   } 
+	   
+	   styler.setSymbolizer(sym);
+	   styler.setDataItem(dataItem);
 	   
 	   return styler;
    }
