@@ -24,7 +24,6 @@
 package org.vast.stt.provider.tiling;
 
 import java.util.ArrayList;
-
 import org.ogc.cdm.common.DataType;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
@@ -38,7 +37,6 @@ import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
-import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTree;
 
 
@@ -124,15 +122,9 @@ public abstract class TiledMapProvider extends AbstractProvider
     }
     
     
-    @Override
-    public void updateData() throws DataException
+    protected SpatialExtent transformBbox(SpatialExtent extent)
     {
-        // init DataNode if not done yet
-        if (!dataNode.isNodeStructureReady())
-            init();
-        
-        // convert extent to mercator projection
-        STTSpatialExtent mercatorExtent = new STTSpatialExtent();
+        SpatialExtent mercatorExtent = new SpatialExtent();
         double minX = spatialExtent.getMinX() * DTR;
         double maxX = spatialExtent.getMaxX() * DTR;
         double minY = latToY(spatialExtent.getMinY() * DTR);
@@ -141,11 +133,24 @@ public abstract class TiledMapProvider extends AbstractProvider
         mercatorExtent.setMaxX(maxX);
         mercatorExtent.setMinY(minY);
         mercatorExtent.setMaxY(maxY);
+        return mercatorExtent;
+    }
+    
+    
+    @Override
+    public void updateData() throws DataException
+    {
+        // init DataNode if not done yet
+        if (!dataNode.isNodeStructureReady())
+            init();
+        
+        // convert extent to mercator projection
+        SpatialExtent newExtent = transformBbox(spatialExtent);        
         
         // query tree for matching and unused items 
         selectedItems.clear();
         deletedItems.clear();        
-        tileSelector.setROI(mercatorExtent);
+        tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
         tileSelector.setSizeRatio(spatialExtent.getXTiles());
         quadTree.accept(tileSelector);
