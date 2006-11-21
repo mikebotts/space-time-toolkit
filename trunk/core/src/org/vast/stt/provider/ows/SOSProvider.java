@@ -25,6 +25,7 @@ import org.vast.ows.sos.SOSRequestWriter;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
+import org.vast.util.DateTime;
 
 
 /**
@@ -68,9 +69,11 @@ public class SOSProvider extends OWSProvider
             // create reader
             SOSObservationReader reader = new SOSObservationReader();
             
-            // create null request here
-            double startTime = query.getTime().getStartTime();
-            query.getTime().setStopTime(startTime);
+            // create template request here
+            //double time = new DateTime().getJulianTime();
+            //query.getTime().setBaseTime(time - 3600);
+            //query.getTime().setDeltaTimes(0, 0);
+            //query.setResponseMode(SOSQuery.ResponseMode.RESULT_TEMPLATE);
             
             // select request type (post or get)
             boolean usePost = true;
@@ -115,6 +118,7 @@ public class SOSProvider extends OWSProvider
         {    
             // init request using spatial + time extent
             initRequest();
+            query.setResponseMode(SOSQuery.ResponseMode.INLINE);
             
 			// create reader
 			SOSObservationReader reader = new SOSObservationReader();

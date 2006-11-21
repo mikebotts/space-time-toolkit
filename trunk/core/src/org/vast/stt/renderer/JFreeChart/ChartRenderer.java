@@ -27,6 +27,8 @@ import java.awt.Frame;
 import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jfree.chart.ChartPanel;
@@ -58,10 +60,12 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 16, 2006
  * @version 1.0
  */
-public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
+public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implements PaintListener
 {
     protected ChartPanel chartPanel;
     protected PlotBuilder plotBuilder = new PlotBuilder();
+    //protected Image chartImg;
+    //protected PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
     
     
     public ChartRenderer()
@@ -79,6 +83,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
         chartPanel = new ChartPanel(null);
         //chartPanel.setPopupMenu(null);
         rootFrame.add(chartPanel);
+        //composite.addPaintListener(this);
     }
 
 
@@ -115,7 +120,12 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
             
             // assign to panel
             chartPanel.setChart(chart);
-            chartPanel.repaint();
+            //chart.draw((Graphics2D)img1.getGraphics(), img1.getGraphics().getClipBounds());
+            //BufferedImage img = chart.createBufferedImage(800, 600);
+            //byte[] data = ((DataBufferByte)img1.getData().getDataBuffer()).getData();
+            //ImageData imgData = new ImageData(img1.getWidth(), img1.getHeight(), img1.getColorModel().getPixelSize(), palette);
+            //imgData.setPixels(0, 0, img1.getWidth(), data, 0);
+            //chartImg = new Image(composite.getDisplay(), imgData);
         }
     }
 
@@ -132,7 +142,6 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
         
         // assign to panel
         chartPanel.setChart(chart);
-        chartPanel.repaint();
     }
     
     
@@ -190,5 +199,12 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>>
     @Override
     public void dispose()
     {
+    }
+
+
+    public void paintControl(PaintEvent e)
+    {
+        //if (chartImg != null)
+        //    e.gc.drawImage(chartImg, 0, 0);        
     }
 }

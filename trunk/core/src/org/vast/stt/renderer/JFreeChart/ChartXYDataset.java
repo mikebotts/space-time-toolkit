@@ -53,7 +53,6 @@ public class ChartXYDataset implements XYDataset
     public int getItemCount(int arg0)
     {
         return styler.getNumPoints();
-        //return 100;
     }
 
 
@@ -75,8 +74,6 @@ public class ChartXYDataset implements XYDataset
             point = styler.getPoint(item);
             return point.x;
         }
-        
-        //return Math.PI*((double)item)/50;
     }
 
 
@@ -109,7 +106,7 @@ public class ChartXYDataset implements XYDataset
 
     public Comparable getSeriesKey(int series)
     {
-        return "Series1";
+        return styler.getSymbolizer().getName();
     }
 
 

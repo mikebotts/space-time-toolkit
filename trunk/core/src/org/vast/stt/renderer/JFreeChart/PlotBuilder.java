@@ -24,6 +24,7 @@
 package org.vast.stt.renderer.JFreeChart;
 
 import java.awt.Color;
+import java.text.NumberFormat;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
@@ -73,6 +74,8 @@ public class PlotBuilder implements StylerVisitor
 
     public void visit(LineStyler styler)
     {
+        styler.resetIterators();
+        
         if (plot == null)
         {
             String axisName;
@@ -85,7 +88,7 @@ public class PlotBuilder implements StylerVisitor
             axisName = "Time (s)";
             NumberAxis domainAxis = new NumberAxis(axisName);
             domainAxis.setAutoRangeIncludesZero(false);
-            plot.setDomainAxis(domainAxis);
+            plot.setDomainAxis(datasetCount, domainAxis);
             
             this.plot = plot;
         }
@@ -111,7 +114,11 @@ public class PlotBuilder implements StylerVisitor
             String axisName = styler.getSymbolizer().getName();
             NumberAxis rangeAxis = new NumberAxis(axisName);
             rangeAxis.setAutoRangeIncludesZero(false);
+            NumberFormat format = NumberFormat.getNumberInstance();
+            format.setMaximumFractionDigits(2);
+            rangeAxis.setNumberFormatOverride(format);
             plot.setRangeAxis(datasetCount, rangeAxis);
+            plot.mapDatasetToRangeAxis(datasetCount, datasetCount);
         }
     }
 
