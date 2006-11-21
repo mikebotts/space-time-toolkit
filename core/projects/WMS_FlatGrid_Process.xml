@@ -102,7 +102,8 @@
                                  <swe:Category definition="urn:ogc:def:identifier:URL">file://D:/STT3/cache/</swe:Category>
                               </swe:component>
                               <swe:component name="layer">
-                                 <swe:Category>global_mosaic</swe:Category>
+                                 <!--<swe:Category>global_mosaic</swe:Category>-->
+                                 <swe:Category>BMNG</swe:Category>
                               </swe:component>
                               <swe:component name="format">
                                  <swe:Category definition="urn:ogc:def:identifier:mimeType">image/jpeg</swe:Category>
