@@ -93,7 +93,8 @@
                         <sml:parameter name="wmsOptions">
                            <swe:DataGroup fixed="true">
                               <swe:component name="endPoint">
-                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://terraservice.net/ogcmap.ashx</swe:Category>
+                                 <!--<swe:Category definition="urn:ogc:def:identifier:URL">http://terraservice.net/ogcmap.ashx</swe:Category>-->
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://wms.jpl.nasa.gov/wms.cgi</swe:Category>
                               </swe:component>
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
@@ -102,7 +103,8 @@
                                  <swe:Category definition="urn:ogc:def:identifier:URL">file://D:/STT3/cache/</swe:Category>
                               </swe:component>
                               <swe:component name="layer">
-                                 <swe:Category>DRG</swe:Category>
+                                 <!--<swe:Category>DRG</swe:Category>-->
+                                 <swe:Category>BMNG</swe:Category>
                               </swe:component>
                               <swe:component name="format">
                                  <swe:Category definition="urn:ogc:def:identifier:mimeType">image/jpeg</swe:Category>
@@ -111,7 +113,7 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">1.1.1</swe:Category>
                               </swe:component>
                               <swe:component name="imageWidth">
-                                 <swe:Count>256</swe:Count>
+                                 <swe:Count>512</swe:Count>
                               </swe:component>
                               <swe:component name="imageHeight">
                                  <swe:Count>256</swe:Count>

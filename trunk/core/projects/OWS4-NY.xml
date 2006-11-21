@@ -703,8 +703,79 @@
                            <DataItem>
                               <name>Landsat Imagery (Topo)</name>
                               <dataProvider href="#LANDSAT_TOPO"/>
-                              <style href="#LANDSAT_TEXTURE_STYLE"/>                                 
-                              <style href="#LANDSAT_BORDER_STYLE"/>
+                              <style>
+                                 <sld:TextureSymbolizer id="LANDSAT_TEXTURE_STYLE" enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>gridData/coverage/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>gridData/coverage</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>gridData/coverage/row/point/longitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>gridData/coverage/row/point/latitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-z">
+                                             <LinearAdjustment>
+                                                <ogc:PropertyName>gridData/coverage/row/point/elevation</ogc:PropertyName>
+                                                <Gain>1e-6</Gain>
+                                             </LinearAdjustment>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>imageData/image</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:ChannelSelection>
+                                          <sld:RedChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                          </sld:BlueChannel>
+                                       </sld:ChannelSelection>                                       
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer id="LANDSAT_BORDER_STYLE" enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>gridData/coverage/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>gridData/coverage</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/coverage/row/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/coverage/row/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
                            </DataItem>
                         </member>
                         <member visible="false">
@@ -1098,14 +1169,14 @@
                                        <DataItem enabled="true">
                                           <name>Temperature</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
-                                          <style name="Temperature (C)">
+                                          <style name="Temperature (F)">
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>weatherData/time</ogc:PropertyName>
+                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>weatherData/temperature</ogc:PropertyName>
+                                                      <ogc:PropertyName>dataComponents/temperature</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -1120,14 +1191,14 @@
                                        <DataItem enabled="true">
                                           <name>Pressure</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
-                                          <style name="Pressure (Pa)">
+                                          <style name="Pressure (mbar)">
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>weatherData/time</ogc:PropertyName>
+                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>weatherData/pressure</ogc:PropertyName>
+                                                      <ogc:PropertyName>dataComponents/pressure</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -1328,8 +1399,8 @@
                </SensorMLProvider>
             </member>
             <member>
-               <OWSDataProvider id="NY_KJFK_SOS">
-                  <name>New York KJFK Weather SOS</name>                  
+               <OWSDataProvider id="UAH_SOS">
+                  <name>UAH Weather SOS</name>                  
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/weather">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>WEATHER_DATA</offering>
@@ -1337,31 +1408,35 @@
                            <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2006-10-23T06:15:00</gml:beginPosition>
-                                 <gml:endPosition>2006-10-24T06:15:00</gml:endPosition>
+                                 <gml:endPosition>2006-10-24T06:15:20</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                      </GetObservation>
                   </request>
-                  <!--
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="NY_KJFK_SOS">
+                  <name>New York KJFK Weather SOS</name>
                   <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>WeatherNY</offering>
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-23T06:15:00</gml:beginPosition>
-                                 <gml:endPosition>2006-10-24T06:15:00</gml:endPosition>
+                                 <gml:beginPosition>2006-11-10T16:15:00</gml:beginPosition>
+                                 <gml:endPosition>2006-11-21T16:15:00</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
                         <procedure>urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</procedure>
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:temperature</observedProperty>
+                        <observedProperty>urn:x-ogc:def:phenomenon:OGC:pressure</observedProperty>
                         <resultFormat>text/xml;subtype="OM"</resultFormat>
                      </GetObservation>
                   </request>
-                  -->
                </OWSDataProvider>
             </member>
          </ResourceList>
