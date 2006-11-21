@@ -13,14 +13,12 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.vast.stt.event.STTEvent;
@@ -44,7 +42,7 @@ import org.vast.stt.project.chart.ChartScene;
 public class ChartView extends SceneView<ChartScene> implements PaintListener, ControlListener
 {
 	public static final String ID = "STT.ChartView";
-	private Canvas canvas;
+    private Composite composite;
     
     
     public ChartView()
@@ -55,9 +53,9 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
     @Override
 	public void createPartControl(Composite parent)
 	{
-		canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
-		canvas.addControlListener(this);
-		canvas.addPaintListener(this);
+		composite = parent;
+        composite.addControlListener(this);
+        composite.addPaintListener(this);
 	}
     	
 	
@@ -74,14 +72,13 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
         super.dispose();        
         if (scene != null)
             scene.getRenderer().dispose();
-        canvas.dispose();
 	}
 	
 	
 	@Override
 	public void setFocus()
 	{
-		canvas.setFocus();
+        composite.setFocus();
 	}
     
     
@@ -99,7 +96,7 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
             setPartName(scene.getName());
             
             // init the renderer
-            scene.getRenderer().setParent(canvas);
+            scene.getRenderer().setParent(composite);
             scene.getRenderer().init();
             
             // create and register view controller
@@ -129,7 +126,7 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
         //canvas.removeMouseListener(controller);
         //canvas.removeMouseMoveListener(controller);
         //canvas.removeListener(SWT.MouseWheel , controller);
-        canvas.redraw();
+        composite.redraw();
         setPartName("Nothing Open");
     }
     
@@ -160,11 +157,11 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
         if (scene != null)
         {
             // update view size
-            Rectangle clientArea = canvas.getClientArea();
+            Rectangle clientArea = composite.getClientArea();
             scene.getRenderer().resizeView(clientArea.width, clientArea.height);
             
             // redraw the whole scene
-            scene.getRenderer().drawScene(scene);
+            //scene.getRenderer().drawScene(scene);
         }
     }
 	

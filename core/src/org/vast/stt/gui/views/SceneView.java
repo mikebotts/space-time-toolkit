@@ -160,9 +160,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     public void partOpened(IWorkbenchPart part)
     {  
         if (part == this)
-        {
             assignScene();
-        }
     }
     
     
