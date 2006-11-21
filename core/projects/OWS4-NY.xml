@@ -1167,9 +1167,9 @@
                                  <DataList>
                                     <member visible="true">
                                        <DataItem enabled="true">
-                                          <name>Temperature</name>
+                                          <name>Temperature (F)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
-                                          <style name="Temperature (F)">
+                                          <style>
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
@@ -1189,9 +1189,9 @@
                                     </member>
                                     <member visible="true">
                                        <DataItem enabled="true">
-                                          <name>Pressure</name>
+                                          <name>Pressure (PSI)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
-                                          <style name="Pressure (mbar)">
+                                          <style>
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
@@ -1202,11 +1202,32 @@
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
-                                                   <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke">#000055</sld:CssParameter>
                                                    <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                                 </sld:Stroke>
                                              </sld:LineSymbolizer>
-                                          </style>                            
+                                          </style>
+                                          <style>
+                                             <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>dataComponents/pressure</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                   <sld:Mark>
+                                                      <sld:WellKnownName>circle</sld:WellKnownName>
+                                                      <sld:Fill>
+                                                         <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
+                                                      </sld:Fill>
+                                                   </sld:Mark>
+                                                   <sld:Size>5</sld:Size>
+                                                </sld:Graphic>
+                                             </sld:PointSymbolizer>
+                                          </style>
                                        </DataItem>
                                     </member>
                                  </DataList>
@@ -1398,7 +1419,7 @@
                   <process xlink:href="./GOES_IR_Process.xml#GOES_WCS_PROCESS"/>
                </SensorMLProvider>
             </member>
-            <member>
+            <!--<member>
                <OWSDataProvider id="UAH_SOS">
                   <name>UAH Weather SOS</name>                  
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/weather">
@@ -1416,7 +1437,7 @@
                      </GetObservation>
                   </request>
                </OWSDataProvider>
-            </member>
+            </member>-->
             <member>
                <OWSDataProvider id="NY_KJFK_SOS">
                   <name>New York KJFK Weather SOS</name>

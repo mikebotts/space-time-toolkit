@@ -13,6 +13,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
@@ -35,11 +36,12 @@ import org.vast.ows.sld.Symbolizer;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class PointStyler extends AbstractStyler
+public class PointStyler extends AbstractStyler implements DataStyler1D
 {
     protected PointGraphic point;
     protected PointSymbolizer symbolizer;	
-    	
+    protected int[] pointIndex = new int[1];
+    
 	
 	public PointStyler()
 	{
@@ -61,6 +63,40 @@ public class PointStyler extends AbstractStyler
         }
         
         return null;
+    }
+    
+    
+    public int getNumPoints()
+    {
+        if (dataLists[0].indexOffset == 0)
+            return dataLists[0].blockIterator.getList().getSize();
+        else
+            return 0;
+    }
+    
+    
+    public PointGraphic getPoint(int u)
+    {
+        point.x = point.y = point.z = 0.0;        
+        
+        if (dataLists[0].indexOffset == 0)
+        {
+            AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
+            dataLists[0].blockIndexer.setData(dataBlock);
+            dataLists[0].blockIndexer.reset();
+            dataLists[0].blockIndexer.next();
+        }
+        else
+        {
+            pointIndex[0] = u;
+            dataLists[0].blockIndexer.getData(pointIndex);
+        }
+        
+        // adjust geometry to fit projection
+        if (projection != null)
+            projection.adjust(geometryCrs, point);
+        
+        return point;
     }
     
     

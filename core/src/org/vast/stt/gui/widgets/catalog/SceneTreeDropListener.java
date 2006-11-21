@@ -40,7 +40,6 @@ import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.TextureStyler;
-import org.vast.stt.test.WMSTest;
 import org.vast.util.ExceptionSystem;
 
 public class SceneTreeDropListener extends ViewerDropAdapter 
