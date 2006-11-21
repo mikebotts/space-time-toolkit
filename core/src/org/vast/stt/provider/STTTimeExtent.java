@@ -41,8 +41,6 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
 {
     protected STTEventListeners listeners;
     protected TimeExtentUpdater updater;
-    protected double absoluteTime = 0.0;   
-    protected boolean useAbsoluteTime = false;
 
     
     public STTTimeExtent()
@@ -54,30 +52,6 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
     public STTTimeExtent(double baseJulianTime)
     {
         super(baseJulianTime);
-    }
-    
-    
-    public double getAbsoluteTime()
-    {
-        return absoluteTime;
-    }
-
-
-    public void setAbsoluteTime(double absoluteTime)
-    {
-        this.absoluteTime = absoluteTime;
-    }
-
-
-    public boolean getUseAbsoluteTime()
-    {
-        return useAbsoluteTime;
-    }
-
-
-    public void setUseAbsoluteTime(boolean useAbsoluteTime)
-    {
-        this.useAbsoluteTime = useAbsoluteTime;
     }
 
         
