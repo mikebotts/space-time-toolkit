@@ -43,7 +43,8 @@ public class MasterTimeView extends SceneView<WorldScene>
     @Override
     public void createPartControl(Composite parent)
     {
-        masterTimeWidget = new MasterTimeWidget(parent);              
+        masterTimeWidget = new MasterTimeWidget(parent);
+        getSite().getPage().addPartListener(this);
     }
 
 

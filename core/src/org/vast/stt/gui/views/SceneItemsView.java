@@ -112,6 +112,7 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
 		sceneTree.addDoubleClickListener(this);
+        getSite().getPage().addPartListener(this);
 	}
 	
 	
