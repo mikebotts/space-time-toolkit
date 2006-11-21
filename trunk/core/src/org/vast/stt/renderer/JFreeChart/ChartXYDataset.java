@@ -36,10 +36,12 @@ public class ChartXYDataset implements XYDataset
     protected DataStyler1D styler;
     protected int previousItem = -1;
     protected PrimitiveGraphic point;
+    protected String name;
     
 
-    public ChartXYDataset(DataStyler1D styler)
+    public ChartXYDataset(String name, DataStyler1D styler)
     {
+        this.name = name;
         this.styler = styler;
     }
     
@@ -106,7 +108,7 @@ public class ChartXYDataset implements XYDataset
 
     public Comparable getSeriesKey(int series)
     {
-        return styler.getSymbolizer().getName();
+        return name;
     }
 
 

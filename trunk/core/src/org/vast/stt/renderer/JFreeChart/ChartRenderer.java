@@ -33,7 +33,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.Plot;
 import org.vast.math.Vector3d;
 import org.vast.stt.project.chart.ChartScene;
 import org.vast.stt.project.chart.ChartSceneItem;
@@ -63,7 +62,7 @@ import org.vast.stt.style.DataStyler;
 public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implements PaintListener
 {
     protected ChartPanel chartPanel;
-    protected PlotBuilder plotBuilder = new PlotBuilder();
+    protected XYPlotBuilder plotBuilder = new XYPlotBuilder();
     //protected Image chartImg;
     //protected PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
     
@@ -90,11 +89,11 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
     @Override
     public void drawScene(Scene<ChartSceneItem> sc)
     {
-        plotBuilder.reset();
-        Plot plot = null;
-        
         if (composite.isDisposed())
             return;
+        
+        // initialize plot builder
+        plotBuilder.createPlot();
         
         // draw all items
         ChartScene scene = (ChartScene)sc;
@@ -109,53 +108,50 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            plot = drawChartItem(nextItem, plot);
+            drawChartItem(nextItem);
         }
         
-        if (plot != null)
+        // create a new chart and assign to panel
+        if (plotBuilder.isReady())
         {
-            // create a new chart
-            JFreeChart chart = new JFreeChart(plot);
+            JFreeChart chart = new JFreeChart(plotBuilder.getPlot());
             chart.setTitle(scene.getName());
-            
-            // assign to panel
             chartPanel.setChart(chart);
-            //chart.draw((Graphics2D)img1.getGraphics(), img1.getGraphics().getClipBounds());
-            //BufferedImage img = chart.createBufferedImage(800, 600);
-            //byte[] data = ((DataBufferByte)img1.getData().getDataBuffer()).getData();
-            //ImageData imgData = new ImageData(img1.getWidth(), img1.getHeight(), img1.getColorModel().getPixelSize(), palette);
-            //imgData.setPixels(0, 0, img1.getWidth(), data, 0);
-            //chartImg = new Image(composite.getDisplay(), imgData);
         }
+        //chart.draw((Graphics2D)img1.getGraphics(), img1.getGraphics().getClipBounds());
+        //BufferedImage img = chart.createBufferedImage(800, 600);
+        //byte[] data = ((DataBufferByte)img1.getData().getDataBuffer()).getData();
+        //ImageData imgData = new ImageData(img1.getWidth(), img1.getHeight(), img1.getColorModel().getPixelSize(), palette);
+        //imgData.setPixels(0, 0, img1.getWidth(), data, 0);
+        //chartImg = new Image(composite.getDisplay(), imgData);
     }
 
 
     @Override
     public void drawItem(SceneItem<?> item)
     {
-        plotBuilder.reset();
-        Plot plot = drawChartItem(item, null);
+        plotBuilder.createPlot();
+        drawChartItem(item);
         
-        // create a new chart
-        JFreeChart chart = new JFreeChart(plot);
+        // create a new chart and assign to panel
+        JFreeChart chart = new JFreeChart(plotBuilder.getPlot());
         chart.setTitle(item.getName());
-        
-        // assign to panel
         chartPanel.setChart(chart);
     }
     
     
-    protected Plot drawChartItem(SceneItem<?> item, Plot plot)
+    protected void drawChartItem(SceneItem<?> item)
     {
         // build plot using plotBuilder
+        plotBuilder.addAxisToPlot(item.getDataItem());
         List<DataStyler> stylers = item.getStylers();
+        
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler nextStyler = stylers.get(i);
-            plot = plotBuilder.addToPlot(plot, nextStyler);
-        }        
-        
-        return plot;
+            if (nextStyler.getSymbolizer().isEnabled())
+                plotBuilder.addDataToPlot(nextStyler, item.getDataItem());
+        }
     }
 
 

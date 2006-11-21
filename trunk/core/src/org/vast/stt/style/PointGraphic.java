@@ -30,8 +30,14 @@ package org.vast.stt.style;
  */
 public class PointGraphic extends PrimitiveGraphic
 {
+    public enum ShapeType
+    {
+        SQUARE, CIRCLE, TRIANGLE, STAR
+    }
+    
     public float orientation;
 	public float size = 1.0f;
 	public byte[] icon;
     public boolean smooth = false;
+    public ShapeType shape = ShapeType.CIRCLE;
 }
