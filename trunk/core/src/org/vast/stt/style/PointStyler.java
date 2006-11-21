@@ -19,6 +19,8 @@ import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.style.PointGraphic.ShapeType;
+import org.vast.util.MessageSystem;
 
 
 /**
@@ -232,6 +234,34 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                     if (propertyName != null)
                     {
                         addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));              
+                    }
+                }
+            }
+            
+            // shape
+            param = ((GraphicMark)glyph).getShape();
+            if (param != null)
+            {
+                if (param.isConstant())
+                {
+                    String shapeName = (String)param.getValue();
+                    if (shapeName.equalsIgnoreCase("square"))
+                        point.shape = ShapeType.SQUARE;
+                    else if (shapeName.equalsIgnoreCase("circle"))
+                        point.shape = ShapeType.CIRCLE;
+                    else if (shapeName.equalsIgnoreCase("triangle"))
+                        point.shape = ShapeType.TRIANGLE;
+                    else if (shapeName.equalsIgnoreCase("star"))
+                        point.shape = ShapeType.STAR;
+                    else
+                        MessageSystem.display("Unknown shape: " + shapeName, true);
+                }
+                else
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        //addPropertyMapper(propertyName, new GenericShapeMapper(point, param.getMappingFunction()));              
                     }
                 }
             }

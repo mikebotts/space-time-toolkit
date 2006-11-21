@@ -1219,15 +1219,15 @@
                                                 </sld:Geometry>
                                                 <sld:Graphic>
                                                    <sld:Mark>
-                                                      <sld:WellKnownName>circle</sld:WellKnownName>
+                                                      <sld:WellKnownName>triangle</sld:WellKnownName>
                                                       <sld:Fill>
                                                          <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
                                                       </sld:Fill>
                                                    </sld:Mark>
-                                                   <sld:Size>5</sld:Size>
+                                                   <sld:Size>8</sld:Size>
                                                 </sld:Graphic>
                                              </sld:PointSymbolizer>
-                                          </style>
+                                          </style>                                       
                                        </DataItem>
                                     </member>
                                  </DataList>
