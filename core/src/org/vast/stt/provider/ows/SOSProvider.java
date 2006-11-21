@@ -25,7 +25,6 @@ import org.vast.ows.sos.SOSRequestWriter;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
-import org.vast.util.DateTime;
 
 
 /**
