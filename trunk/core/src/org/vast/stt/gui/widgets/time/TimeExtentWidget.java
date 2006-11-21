@@ -11,27 +11,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.STTTimeExtent;
 
+
 public class TimeExtentWidget implements SelectionListener, TimeListener
 {	
-	Label itemLabel;
-	TimeZoneCombo tzCombo;
-	Button useAbsTimeBtn;
-	Button continuousUpdateBtn;
-	Button updateNowBtn;
-	TimeSpinner biasSpinner;
+    //private TimeZoneCombo tzCombo;
+    private Button overrideTimeBtn;
+    private Button continuousUpdateBtn;
+    private Button updateNowBtn;    
 	private DataItem dataItem;
 	private Group mainGroup;
+    private TimeSpinner biasSpinner;
 	private TimeSpinner stepSpinner;
 	private TimeSpinner leadSpinner;
 	private TimeSpinner lagSpinner;
-	private CalendarSpinner absTimeSpinner;
+	private CalendarSpinner manualTimeSpinner;
 	private Combo biasCombo;
 	final Color BLUE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
 	final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
@@ -97,23 +96,20 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		lagSpinner.setLayoutData(gridData);
         lagSpinner.addTimeListener(this);
 
-		absTimeSpinner = new CalendarSpinner(mainGroup, "Absolute Time", SWT.VERTICAL);
+		manualTimeSpinner = new CalendarSpinner(mainGroup, "Manual Time", SWT.VERTICAL);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		gridData.verticalIndent = 10;
-		absTimeSpinner.setLayoutData(gridData);
-        absTimeSpinner.addTimeListener(this);
+		manualTimeSpinner.setLayoutData(gridData);
+        manualTimeSpinner.addTimeListener(this);
 
-		//  Add UseAbsTime toggle
-		useAbsTimeBtn = new Button(mainGroup, SWT.CHECK);
-		useAbsTimeBtn.setText("Use Absolute Time");
-		useAbsTimeBtn.addSelectionListener(this);
+		//  Add Override Time toggle
+		overrideTimeBtn = new Button(mainGroup, SWT.CHECK);
+		overrideTimeBtn.setText("Override Base Time");
+		overrideTimeBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;  
 		gridData.horizontalSpan = 2;
-		useAbsTimeBtn.setLayoutData(gridData);
-		//  TODO  init with real dataItem
-		//setUseAbsoluteTime(dataItem.getDataProvider().getTimeExtent().getUseAbsoluteTime());
-		setUseAbsoluteTime(false);
+		overrideTimeBtn.setLayoutData(gridData);
 		
 		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
 		continuousUpdateBtn.setText("Enable Continuous Update");
@@ -139,10 +135,13 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	}
 
 	private void setUseAbsoluteTime(boolean b){
-		//TimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-		//timeExtent.setUseAbsoluteTime(b);
-		absTimeSpinner.setEnabled(b);
-		//absTimeSpinner.setBackground()
+		STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+        
+        // disable auto updater if abs time is selected
+        if (timeExtent.getUpdater() != null)
+            timeExtent.getUpdater().setEnabled(!b);
+        
+		manualTimeSpinner.setEnabled(b);
 	}
 	
 	public void setDataItem(DataItem item){
@@ -156,11 +155,11 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		stepSpinner.setValue(timeExtent.getTimeStep());
-		absTimeSpinner.setValue(timeExtent.getBaseTime());//timeExtent.getAbsoluteTime());
-		useAbsTimeBtn.setSelection(timeExtent.getUseAbsoluteTime());
-		//timeExtent.getAbsoluteTimeZone();
-		//  
-		//continuousUpdateBtn.setSelection(dataItem.getDataProvider().getAutoUpdate());
+		manualTimeSpinner.setValue(timeExtent.getBaseTime());
+        
+        boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
+        manualTimeSpinner.setEnabled(!useAutoTime);
+		overrideTimeBtn.setSelection(!useAutoTime);
 	}
 	
 
@@ -171,8 +170,8 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.widget == useAbsTimeBtn){
-            setUseAbsoluteTime(useAbsTimeBtn.getSelection());            
+		if(e.widget == overrideTimeBtn){
+            setUseAbsoluteTime(overrideTimeBtn.getSelection());            
 		} else if(e.widget == updateNowBtn){
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
             timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
@@ -191,11 +190,11 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
         {
             // update time extent object
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-            timeExtent.setAbsoluteTime(absTimeSpinner.getValue());
-            timeExtent.setBaseTime(absTimeSpinner.getValue());
+            timeExtent.setBaseTime(manualTimeSpinner.getValue());
             timeExtent.setLagTimeDelta(lagSpinner.getValue());
             timeExtent.setLeadTimeDelta(leadSpinner.getValue());
             timeExtent.setTimeStep(stepSpinner.getValue());
+            timeExtent.setTimeBias(biasSpinner.getValue());
             
             if (continuousUpdateBtn.getSelection() == true)
                 timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
