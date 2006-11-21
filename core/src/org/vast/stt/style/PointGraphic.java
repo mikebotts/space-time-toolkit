@@ -39,5 +39,5 @@ public class PointGraphic extends PrimitiveGraphic
 	public float size = 1.0f;
 	public byte[] icon;
     public boolean smooth = false;
-    public ShapeType shape = ShapeType.CIRCLE;
+    public ShapeType shape = ShapeType.SQUARE;
 }
