@@ -1,3 +1,16 @@
+/***************************************************************
+ (c) Copyright 2005, University of Alabama in Huntsville (UAH)
+ ALL RIGHTS RESERVED
+
+ This software is the property of UAH.
+ It cannot be duplicated, used, or distributed without the
+ express written consent of UAH.
+
+ This software developed by the Vis Analysis Systems Technology
+ (VAST) within the Earth System Science Lab under the direction
+ of Mike Botts (mike.botts@atmos.uah.edu)
+ ***************************************************************/
+
 package org.vast.stt.gui.widgets.catalog;
 
 import java.io.FileInputStream;
@@ -27,7 +40,6 @@ import org.vast.sensorML.reader.ProcessReader;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.views.ExceptionPopup;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
@@ -41,6 +53,21 @@ import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.TextureStyler;
 import org.vast.util.ExceptionSystem;
+
+/**
+ * <p><b>Title:</b>
+ *  SceneTreeDropListener
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ *  Performs Drops onto the SceneTree
+ * </p>
+ *
+ * <p>Copyright (c) 2006</p>
+ * @author Tony Cook
+ * @date Nov 2006
+ * @version 1.0
+ */
 
 public class SceneTreeDropListener extends ViewerDropAdapter 
 {
@@ -98,23 +125,35 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 	
    protected boolean dropItem(DataItem item){
 	   DataEntry dropTarget = (DataEntry)this.getCurrentTarget();
+	   TreeViewer vwr = (TreeViewer)this.getViewer();
+	   //  If target is a folder, drop into folder and open it
 	   if(dropTarget instanceof DataFolder) {
 		   ((DataFolder)dropTarget).add(item);
-		   this.getViewer().refresh();
+		   item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
+//		   vwr.reveal(item);  //  vwr.reveal() does not work as advertised in Eclipse 3.1!!!
+		   vwr.expandToLevel(dropTarget, 2);  //  ensure dropped item is visible
+		   vwr.refresh();
 		   return true;
 	   }
-	   //  dropTarget MUST be a DataItem
-	   TreeViewer vwr = (TreeViewer)this.getViewer();
-	   //  Itterate the DataTree to find the target item,
-	   //  and insert it there, then refresh
-	   Object [] expElms = vwr.getExpandedElements();
+	   DataTree tree = null;
+	   //  If target is scene (Un-expanded tree), drop at root of Tree and expand
+	   if(dropTarget instanceof WorldScene){
+		   tree = ((WorldScene)dropTarget).getDataTree();
+		   tree.add(0, item);
+		   item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
+		   vwr.expandToLevel(2);   //  ensure dropped item is visible
+		   vwr.refresh();
+		   return true;
+	   }
 	   
-	   //  ASSumes WorldScene is always 0th tree element, which I think 
-	   //  is a valid assumption
-	   WorldScene scene = (WorldScene)expElms[0];
-	   DataTree tree = scene.getDataTree();
+	   //  If we get here, WorldScene MUST be expandedElements[0];
+	   Object [] elems = vwr.getExpandedElements();
+	   WorldScene scene = (WorldScene)elems[0];
+	   tree = scene.getDataTree();
+	   
+	   //  Iterate the DataTree to find the target item,
+	   //  and insert it there, then refresh
 	   DataEntry entryTmp = null;
-
 	   Iterator<DataEntry> it = tree.iterator();
 	   boolean done = false;
 	   int index = 0;
@@ -131,7 +170,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 		   index++;
 	   }
        item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
-	   this.getViewer().refresh();
+	   vwr.refresh();
 	   return true;
    }
    
