@@ -72,6 +72,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 		   TextureStyler styler = StylerFactory.createDefaultTextureStyler(newItem);
        	   //  add dataItem to target DataFolder
 		   styler.setDataItem(newItem);
+           styler.getSymbolizer().setEnabled(true);
 		   newItem.getSymbolizers().add(styler.getSymbolizer());
 		   return dropItem(newItem);
 	   } else if (data instanceof WCSLayerCapabilities) {
@@ -108,7 +109,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 	   //  and insert it there, then refresh
 	   Object [] expElms = vwr.getExpandedElements();
 	   
-	   //  ASSumes DataTree is always 0th tree element, which I think 
+	   //  ASSumes WorldScene is always 0th tree element, which I think 
 	   //  is a valid assumption
 	   WorldScene scene = (WorldScene)expElms[0];
 	   DataTree tree = scene.getDataTree();
@@ -167,7 +168,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
     		  return null;
     	  }
     	  
-    	  DOMReader dom = new DOMReader(processFileUrl+"#WMS_PROCESS", false);
+    	  DOMReader dom = new DOMReader(processFileUrl+"#PROCESS", false);
     	  ProcessReader processReader = new ProcessReader(dom);
     	  processReader.setReadMetadata(false);
     	  processReader.setCreateExecutableProcess(true);
