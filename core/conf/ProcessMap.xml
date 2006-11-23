@@ -6,8 +6,13 @@
    </ProcessPackage>
    
    <Process>
-      <uri>urn:ogc:def:process:counter</uri>
+      <uri>urn:ogc:def:process:counter:1.0</uri>
       <class>org.sensorML.process.Counter_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:arrayBuilder:1.0</uri>
+      <class>org.sensorML.process.ArrayBuilder_Process</class>
    </Process>
    
    <Process>
@@ -26,6 +31,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:locationTransform:1.0</uri>
+      <class>org.sensorML.process.LocationTransform_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:timeTransform:1.0</uri>
       <class>org.sensorML.process.TimeTransform_Process</class>
    </Process>
@@ -39,15 +49,15 @@
       <uri>urn:ogc:def:process:rayIntersectEllipsoid:1.0</uri>
       <class>org.sensorML.process.RayIntersectEllipsoid_Process</class>
    </Process>
-      
+   
    <Process>
-      <uri>urn:ogc:def:process:SOS:1.0</uri>
-      <class>org.sensorML.process.SOS_Process</class>
+      <uri>urn:ogc:def:process:ECEFToLLA:1.0</uri>
+      <class>org.sensorML.process.ECEFToLLA_Process</class>
    </Process>
    
    <Process>
-      <uri>urn:ogc:def:process:Video:1.0</uri>
-      <class>org.vast.stt.process.Video_Process</class>
+      <uri>urn:ogc:def:process:LLAToECEF:1.0</uri>
+      <class>org.sensorML.process.LLAToECEF_Process</class>
    </Process>
    
    <Process>
@@ -68,6 +78,11 @@
    <Process>
       <uri>urn:ogc:def:process:WCS_image:2.0</uri>
       <class>org.vast.stt.process.WCS_Image_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:SOS:1.0</uri>
+      <class>org.vast.stt.process.SOS_Process</class>
    </Process>
    
    <Process>
