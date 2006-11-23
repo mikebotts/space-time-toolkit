@@ -1181,7 +1181,13 @@
                                        <sld:Mark>
                                           <sld:WellKnownName>triangle</sld:WellKnownName>
                                           <sld:Fill>
-                                             <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
+                                             <sld:CssParameter name="fill-green">0.3</sld:CssParameter>
+                                             <sld:CssParameter name="fill-red">
+                                                <LinearAdjustment>
+                                                   <ogc:PropertyName>imageData/image/row/data</ogc:PropertyName>
+                                                   <Gain>-2</Gain>
+                                                </LinearAdjustment>                                                
+                                             </sld:CssParameter>
                                           </sld:Fill>
                                        </sld:Mark>
                                        <sld:Size>1</sld:Size>

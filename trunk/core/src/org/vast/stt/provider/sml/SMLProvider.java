@@ -69,7 +69,7 @@ public class SMLProvider extends AbstractProvider
             
             for (int i=0; i<outputCount; i++)
             {
-                BlockList blockList = dataNode.createList(outputs.getComponent(i));
+                BlockList blockList = dataNode.createList(outputs.getComponent(i).copy());
                 blockListArray.add(blockList);
             }
             
