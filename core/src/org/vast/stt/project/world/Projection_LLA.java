@@ -43,7 +43,7 @@ public class Projection_LLA implements Projection
     protected final static double RTD = 180 / Math.PI;
     
     protected double centerLongitude = 0.0;
-    protected double altitudeDamping = 5e-7;
+    protected double altitudeDamping = 1e-6;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
     
