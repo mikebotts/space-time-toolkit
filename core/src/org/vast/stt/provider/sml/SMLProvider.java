@@ -126,21 +126,25 @@ public class SMLProvider extends AbstractProvider
                     if (canceled)
                         return;
                     
-                    process.createNewOutputBlocks();
-                    process.execute();
-                    
-                    if (canceled)
-                        return;
-                    
-                    // transfer block for each output
-                    for (int c=0; c<blockListArray.size(); c++)
+                    do
                     {
-                        BlockList blockList = blockListArray.get(c);
-                        blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                        process.createNewOutputBlocks();
+                        process.execute();
+                        
+                        if (canceled)
+                            return;
+                        
+                        // transfer block for each output
+                        for (int c=0; c<blockListArray.size(); c++)
+                        {
+                            BlockList blockList = blockListArray.get(c);
+                            blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                        }
+                        
+                        // send event for redraw
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                     }
-                    
-                    // send event for redraw
-                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                    while (!process.getInputConnections().get(0).isNeeded());
                 }
             }
             
