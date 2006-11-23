@@ -14,6 +14,7 @@
 package org.vast.stt.project.world;
 
 import org.vast.math.Vector3d;
+import org.vast.physics.MapProjection;
 import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
@@ -42,6 +43,7 @@ public class Projection_LLA implements Projection
     protected final static double RTD = 180 / Math.PI;
     
     protected double centerLongitude = 0.0;
+    protected double altitudeDamping = 5e-7;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
     
@@ -82,7 +84,19 @@ public class Projection_LLA implements Projection
     
     public void project(Crs sourceCrs, PrimitiveGraphic point)
     {
-        // TODO project method in LLA projection
+        switch (sourceCrs)
+        {
+            case EPSG4329:
+                point.z = altitudeDamping * point.z;
+                break;
+                
+            case ECEF:
+                double[] lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
+                point.x = lla[1];
+                point.y = lla[0];
+                point.z = lla[2];
+                break;
+        }
     }
     
     

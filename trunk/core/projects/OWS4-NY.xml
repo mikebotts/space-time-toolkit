@@ -1165,7 +1165,31 @@
                               <name>NY Doppler Radar</name>
                               <dataProvider xlink:href="#DOPPLER_SOS"/>
                               <style>
-                                 <sld:TextureSymbolizer enabled="true">
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/array/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/array/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>gridData/array/point/altitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>triangle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>1</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="false">
                                     <sld:Grid>
                                        <sld:Dimensions>
                                           <sld:Axis name="width">
@@ -1298,7 +1322,7 @@
                                                    <sld:Size>8</sld:Size>
                                                 </sld:Graphic>
                                              </sld:PointSymbolizer>
-                                          </style>                                       
+                                          </style>
                                        </DataItem>
                                     </member>
                                  </DataList>
