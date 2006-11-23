@@ -14,8 +14,6 @@
 package org.vast.stt.provider.sml;
 
 import java.util.ArrayList;
-
-import org.ogc.cdm.common.DataBlock;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.*;
 import org.vast.process.DataProcess;
@@ -119,11 +117,10 @@ public class SMLProvider extends AbstractProvider
                     DataComponent timeInput = process.getInputList().getComponent("time");
                     if (timeInput != null)
                     {
-                        DataBlock timeData = new DataBlockDouble(3);
-                        timeData.setDoubleValue(0, this.timeExtent.getAdjustedLagTime());
-                        timeData.setDoubleValue(1, this.timeExtent.getAdjustedLeadTime());
-                        timeData.setDoubleValue(2, this.timeExtent.getTimeStep());
-                        timeInput.setData(timeData);
+                        timeInput.getComponent("start").getData().setDoubleValue(timeExtent.getAdjustedLagTime());
+                        timeInput.getComponent("stop").getData().setDoubleValue(timeExtent.getAdjustedLeadTime());
+                        if (timeInput.getComponent("step") != null)
+                            timeInput.getComponent("step").getData().setDoubleValue(timeExtent.getTimeStep());
                     }
                     
                     if (canceled)

@@ -13,11 +13,14 @@
 
 package org.vast.stt.provider;
 
+import java.text.ParseException;
+
 import org.vast.io.xml.DOMReader;
 import org.vast.stt.dynamics.SceneTimeUpdater;
 import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.util.DateTimeFormat;
 import org.w3c.dom.*;
 
 
@@ -111,15 +114,42 @@ public class ExtentReader extends XMLReader
         if (timeElt != null)
         {
             STTTimeExtent timeExtent = provider.getTimeExtent();
+            String val = null;
             
-            // read autoUpdate element
-            if (dom.existElement(timeElt, "autoUpdate"))
+            try
             {
-                String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
-                WorldScene scene = (WorldScene)objectIds.get(sceneId);
-                TimeExtentUpdater updater = new SceneTimeUpdater(scene);
-                timeExtent.setUpdater(updater);
-                updater.setEnabled(true);
+                // read base time
+                val = dom.getElementValue(timeElt, "baseTime");
+                if (val.equalsIgnoreCase("now"))
+                    timeExtent.setBaseAtNow(true);
+                else
+                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+                
+                // read lag time
+                val = dom.getElementValue(timeElt, "lagTime");
+                timeExtent.setLagTimeDelta(Double.parseDouble(val));
+                
+                // read lead time
+                val = dom.getElementValue(timeElt, "leadTime");
+                timeExtent.setLeadTimeDelta(Double.parseDouble(val));
+                
+                // read step time
+                val = dom.getElementValue(timeElt, "stepTime");
+                timeExtent.setTimeStep(Double.parseDouble(val));
+                
+                // read autoUpdate element
+                if (dom.existElement(timeElt, "autoUpdate"))
+                {
+                    String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
+                    WorldScene scene = (WorldScene)objectIds.get(sceneId);
+                    TimeExtentUpdater updater = new SceneTimeUpdater(scene);
+                    timeExtent.setUpdater(updater);
+                    updater.setEnabled(true);
+                }
+            }
+            catch (ParseException e)
+            {
+                throw new IllegalStateException("Invalid time: " + val);
             }
         }
     }
