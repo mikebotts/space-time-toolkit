@@ -264,4 +264,16 @@ public class Projection_LLA implements Projection
     {
         this.centerLongitude = centerLongitude;
     }
+
+
+    public double getAltitudeDamping()
+    {
+        return altitudeDamping;
+    }
+
+
+    public void setAltitudeDamping(double altitudeDamping)
+    {
+        this.altitudeDamping = altitudeDamping;
+    }
 }
