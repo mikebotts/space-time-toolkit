@@ -118,25 +118,29 @@ public class ExtentReader extends XMLReader
             
             try
             {
-                // read base time
-                val = dom.getElementValue(timeElt, "baseTime");
-                if (val.equalsIgnoreCase("now"))
-                    timeExtent.setBaseAtNow(true);
-                else
-                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+                Element extentElt = dom.getElement(timeElt, "TimeExtent");
                 
-                // read lag time
-                val = dom.getElementValue(timeElt, "lagTime");
-                timeExtent.setLagTimeDelta(Double.parseDouble(val));
-                
-                // read lead time
-                val = dom.getElementValue(timeElt, "leadTime");
-                timeExtent.setLeadTimeDelta(Double.parseDouble(val));
-                
-                // read step time
-                val = dom.getElementValue(timeElt, "stepTime");
-                timeExtent.setTimeStep(Double.parseDouble(val));
-                
+                if (extentElt != null)
+                {
+                    // read base time
+                    val = dom.getElementValue(extentElt, "baseTime");
+                    if (val.equalsIgnoreCase("now"))
+                        timeExtent.setBaseAtNow(true);
+                    else
+                        timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+                    
+                    // read lag time
+                    val = dom.getElementValue(extentElt, "lagTime");
+                    timeExtent.setLagTimeDelta(Double.parseDouble(val));
+                    
+                    // read lead time
+                    val = dom.getElementValue(extentElt, "leadTime");
+                    timeExtent.setLeadTimeDelta(Double.parseDouble(val));
+                    
+                    // read step time
+                    val = dom.getElementValue(extentElt, "stepTime");
+                    timeExtent.setTimeStep(Double.parseDouble(val));
+                }
                 // read autoUpdate element
                 if (dom.existElement(timeElt, "autoUpdate"))
                 {

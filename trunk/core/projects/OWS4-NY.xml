@@ -1517,10 +1517,12 @@
                <SensorMLProvider id="DOPPLER_SOS">
                   <name>DOPPLER SOS</name>
                   <timeExtent>
-                     <baseTime>now</baseTime>
-                     <lagTime>0</lagTime>
-                     <leadTime>0</leadTime>
-                     <stepTime>60</stepTime>
+                     <TimeExtent>
+                        <baseTime>now</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>60</stepTime>
+                    </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Doppler_Process.xml#DOPPLER_PROCESS"/>
                </SensorMLProvider>
