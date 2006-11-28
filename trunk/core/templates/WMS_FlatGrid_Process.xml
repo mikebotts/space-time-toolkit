@@ -90,6 +90,8 @@
                   </sml:outputs>
                   <sml:parameters>
                      <sml:ParameterList>
+                        <!-- These need to be blank or default values for the template file version-
+                             using values is screwing up my logic for dropping WMS -->
                         <sml:parameter name="wmsOptions">
                            <swe:DataGroup fixed="true">
                               <swe:component name="endPoint">
@@ -98,7 +100,6 @@
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                               </swe:component>
-                          
                               <swe:component name="layer">
                                  <swe:Category>global_mosaic</swe:Category>
                               </swe:component>
@@ -109,13 +110,19 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">1.1.1</swe:Category>
                               </swe:component>
                               <swe:component name="imageWidth">
-                                 <swe:Count>512</swe:Count>
+                                 <swe:Count>456</swe:Count>
                               </swe:component>
                               <swe:component name="imageHeight">
-                                 <swe:Count>256</swe:Count>
+                                 <swe:Count>234</swe:Count>
                               </swe:component>
                               <swe:component name="imageTransparency">
                                  <swe:Boolean>false</swe:Boolean>
+                              </swe:component>
+                              <swe:component name="srs">
+                                 <swe:Category>EPSG:4326</swe:Category>
+                              </swe:component>
+                              <swe:component name="styles">
+                                 <swe:Category></swe:Category>
                               </swe:component>
                            </swe:DataGroup>
                         </sml:parameter>
