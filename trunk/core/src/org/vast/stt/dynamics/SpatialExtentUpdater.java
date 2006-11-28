@@ -39,4 +39,7 @@ public abstract class SpatialExtentUpdater extends DynamicUpdater
     {
         this.spatialExtent = spatialExtent;
     }
+    
+    
+    public abstract void update();
 }

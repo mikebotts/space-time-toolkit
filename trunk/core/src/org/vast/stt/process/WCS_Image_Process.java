@@ -30,13 +30,10 @@ import org.ogc.cdm.common.DataComponent;
 import org.ogc.cdm.common.DataHandler;
 import org.ogc.cdm.reader.DataStreamParser;
 import org.vast.data.*;
-import org.vast.io.xml.DOMReader;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
 import org.vast.ows.wcs.WCSRequestWriter;
 import org.vast.process.*;
-import org.vast.sensorML.reader.ProcessLoader;
-import org.vast.sensorML.reader.ProcessReader;
 
 
 /**
@@ -180,7 +177,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
-            dataStream = requestBuilder.sendRequest(query, false);
+            dataStream = requestBuilder.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
 
             dataParser = reader.getDataParser();  // Just instantiates ASCII or BINARY parser and returns it
@@ -310,58 +307,5 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     {
         // TODO Auto-generated method stub
         
-    }
-    
-	public static void main(String args[])
-	{
-        try
-        {
-            // load file and set up process reader
-            String processFileUrl = WCS_Image_Process.class.getResource("GOES_Process.xml").toString();
-            DOMReader dom = new DOMReader(processFileUrl+"#GOES_WCS_PROCESS", false);
-            ProcessReader processReader = new ProcessReader(dom);
-            processReader.setReadMetadata(false);
-            processReader.setCreateExecutableProcess(true);
-            
-            // load process map and parse process chain
-            String processMapUrl = WCS_Image_Process.class.getResource("ProcessMap.xml").toString();
-            ProcessLoader.reloadMaps(processMapUrl);
-            DataProcess process = processReader.readProcess(dom.getBaseElement());
-            
-            // intitialize process and print out info
-            process.init();
-            System.out.println(process);
-            
-            // set bbox input values
-            DataBlock bboxData = new DataBlockDouble(4);
-            bboxData.setDoubleValue(0, 33.2);
-            bboxData.setDoubleValue(1, -89.8);
-            bboxData.setDoubleValue(2, 33.8);
-            bboxData.setDoubleValue(3, -89.1);
-            process.getInputList().getComponent("bbox").setData(bboxData);
-            
-            //System.out.println("Image buffer will be: " + process.getOutputList().getComponent(0).getComponent(2).getData());
-            System.out.println("Process Running...");
-            process.execute();
-            
-            WCS_Image_Process proc = (WCS_Image_Process)process;
-            DataGroup rangeData = (DataGroup)proc.output.getComponent("rangeData");
-            DataValue imWidth = (DataValue)rangeData.getComponent("width");
-            DataValue imHeight = (DataValue)rangeData.getComponent("length");
-            DataArray outputImage = (DataArray)rangeData.getComponent("coverage");
-//            DataArray outputImage = (DataArray)process.getOutputList().getComponent(0).getComponent("image");
-            DataBlock data = outputImage.getData();
-            
-            // print blue component values
-            for (int i=0; i<data.getAtomCount(); i++)
-            {
-                System.out.print(data.getByteValue(i) + ",");                  
-            }
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-    
+    }    
 }

@@ -51,7 +51,7 @@
                      <DataList>
                         <name>GIS Data</name>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Coast Lines - 100km</name>
                               <dataProvider href="#DATASET_04"/>
                               <style>
@@ -68,7 +68,7 @@
                                        </sld:CssParameter>                                       
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                                       <sld:CssParameter name="stroke">#AAAAAA</sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
@@ -76,7 +76,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Boundaries</name>
                               <dataProvider href="#DATASET_03"/>
                               <style>
@@ -106,7 +106,7 @@
                      <DataList>
                         <name>Base Maps</name>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Roads Imagery (Flat)</name>
                               <dataProvider href="#MS_ROADS"/>
                               <style>
@@ -180,7 +180,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Aerial Imagery (Flat)</name>
                               <dataProvider href="#MS_IMAGERY"/>
                               <style>
@@ -254,7 +254,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Hybrid Imagery (Aerial + Roads)</name>
                               <dataProvider href="#MS_HYBRID"/>
                               <style>
@@ -328,7 +328,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Google Map Imagery (Road + Boundary Map)</name>
                               <dataProvider href="#GOOGLE_MAP"/>
                               <style>
@@ -402,7 +402,7 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <DataItem enabled="true">
+                           <DataItem>
                               <name>Google Map Imagery (Roads Overlay)</name>
                               <dataProvider href="#GOOGLE_ROADS"/>
                               <style>
@@ -551,81 +551,7 @@
                                  </sld:GridBorderSymbolizer>
                               </style>
                            </DataItem>
-                        </member>
-                        <member visible="false">
-                           <DataItem enabled="true">
-                              <name>Worldwind Satellite Imagery</name>
-                              <dataProvider href="#WORLDWIND"/>
-                              <style>
-                                 <sld:TextureSymbolizer enabled="true">
-                                    <sld:Grid>
-                                       <sld:Dimensions>
-                                          <sld:Axis name="width">
-                                             <ogc:PropertyName>grid/row</ogc:PropertyName>
-                                          </sld:Axis>
-                                          <sld:Axis name="length">
-                                             <ogc:PropertyName>grid</ogc:PropertyName>
-                                          </sld:Axis>
-                                       </sld:Dimensions>
-                                       <sld:Geometry>
-                                          <sld:CssParameter name="geometry-x">
-                                             <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
-                                          </sld:CssParameter>
-                                          <sld:CssParameter name="geometry-y">
-                                             <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
-                                          </sld:CssParameter>
-                                       </sld:Geometry>
-                                    </sld:Grid>
-                                    <sld:Raster>
-                                       <sld:Dimensions>
-                                          <sld:Axis name="width">
-                                             <ogc:PropertyName>image/row</ogc:PropertyName>
-                                          </sld:Axis>
-                                          <sld:Axis name="height">
-                                             <ogc:PropertyName>image</ogc:PropertyName>
-                                          </sld:Axis>
-                                       </sld:Dimensions>
-                                       <sld:Opacity>1.0</sld:Opacity>
-                                       <sld:ChannelSelection>
-                                          <sld:RedChannel>
-                                             <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
-                                          </sld:RedChannel>
-                                          <sld:GreenChannel>
-                                             <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
-                                          </sld:GreenChannel>
-                                          <sld:BlueChannel>
-                                             <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
-                                          </sld:BlueChannel>
-                                       </sld:ChannelSelection>                                       
-                                    </sld:Raster>
-                                 </sld:TextureSymbolizer>
-                              </style>
-                              <style>
-                                 <sld:GridBorderSymbolizer enabled="false">
-                                    <sld:Dimensions>
-                                       <sld:Axis name="width">
-                                          <ogc:PropertyName>grid/row</ogc:PropertyName>
-                                       </sld:Axis>
-                                       <sld:Axis name="length">
-                                          <ogc:PropertyName>grid</ogc:PropertyName>
-                                       </sld:Axis>
-                                    </sld:Dimensions>
-                                    <sld:Geometry>
-                                       <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                    </sld:Geometry>
-                                    <sld:Stroke>
-                                       <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                                    </sld:Stroke>
-                                 </sld:GridBorderSymbolizer>
-                              </style>
-                           </DataItem>
-                        </member>
+                        </member>                        
                         <member visible="false">
                            <DataItem>
                               <name>Landsat Imagery (Flat)</name>
@@ -843,7 +769,7 @@
                   </member>
                   <member>
                      <DataList>
-                        <name>Coverage Data</name>
+                        <name>Model Data</name>
                         <member visible="false">
                            <DataItem>
                               <name>Max Surface Temperature</name>
@@ -895,7 +821,7 @@
                                  </sld:GridFillSymbolizer>
                               </style>
                               <style>
-                                 <sld:GridMeshSymbolizer enabled="true">
+                                 <sld:GridMeshSymbolizer enabled="false">
                                     <sld:Dimensions>
                                        <sld:Axis name="width">
                                           <ogc:PropertyName>surfaceTemp/grid/row</ogc:PropertyName>
@@ -928,66 +854,36 @@
                            </DataItem>
                         </member>
                         <member visible="false">
-                           <TableItem enabled="true">
-                              <name>Temperature Table</name>
-                              <dataProvider href="#PROVIDER_13"/>
-                              <column>
-                                 <Column>
-                                    <name>Temp</name>
-                                    <width>200</width>
-                                    <style>
-                                       <sld:TextSymbolizer enabled="true">
-                                          <sld:Label>
-                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
-                                          </sld:Label>
+                           <DataItem>
+                              <name>Chemical Dispersion Plume</name>                              
+                              <dataProvider xlink:href="#PLUME_SOS"/>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>plumeData/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>plumeData/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>plumeData/altitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
                                           <sld:Fill>
-                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                             <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
                                           </sld:Fill>
-                                       </sld:TextSymbolizer>
-                                    </style>
-                                 </Column>
-                              </column>
-                              <column>
-                                 <Column>
-                                    <name>Lat</name>
-                                    <width>200</width>
-                                    <style>
-                                       <sld:TextSymbolizer enabled="true">
-                                          <sld:Label>
-                                             <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
-                                          </sld:Label>
-                                          <sld:Fill>
-                                             <sld:CssParameter name="fill">#CC6677</sld:CssParameter>
-                                          </sld:Fill>
-                                       </sld:TextSymbolizer>
-                                    </style>
-                                 </Column>
-                              </column>
-                              <!--<column>
-                                 <Column>
-                                    <name>Data</name>
-                                    <width>200</width>
-                                    <style>
-                                       <TableSymbolizer enabled="true">
-                                          <name>Temperature Table</name>
-                                          <Column>
-                                             <name>Temp</name>
-                                             <width>200</width>
-                                             <style>
-                                                <sld:TextSymbolizer enabled="true">
-                                                   <sld:Label>
-                                                      <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
-                                                   </sld:Label>
-                                                </sld:TextSymbolizer>
-                                             </style>
-                                          </Column>
-                                       </TableSymbolizer>
-                                    </style>
-                                 </Column>
-                              </column>-->
-                           </TableItem>
+                                       </sld:Mark>
+                                       <sld:Size>3</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
                         </member>
-                     </DataList>
+                      </DataList>
                   </member>
                   <member>
                      <DataList>
@@ -1362,24 +1258,16 @@
                </SWEDataProvider>
             </member>
             <member>
-               <SensorMLProvider id="LANDSAT_FLAT" quadTree="true">
+               <SensorMLProvider id="LANDSAT_FLAT">
                   <name>Landsat WMS</name>
-                  <spatialExtent tiling="1x1">
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                   <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>
-               <SensorMLProvider id="LANDSAT_TOPO" quadTree="true">
+               <SensorMLProvider id="LANDSAT_TOPO">
                   <name>Landsat WMS + SRTM Topo</name>
-                  <spatialExtent tiling="1x1">
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                   <process href="./WMS_SRTM_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
@@ -1398,77 +1286,42 @@
                <VirtualEarthProvider id="MS_ROADS">
                   <name>World Roads</name>
                   <layerId>roads</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </member>
             <member>
                <VirtualEarthProvider id="MS_IMAGERY">
                   <name>World Imagery</name>
                   <layerId>aerial</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </member>
             <member>
                <VirtualEarthProvider id="MS_HYBRID">
                   <name>World Imagery</name>
                   <layerId>hybrid</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
-            </member>
-            <member>
-               <WorldwindProvider id="WORLDWIND">
-                  <name>Worldwind Imagery</name>
-                  <layerId>satellite</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
-               </WorldwindProvider>
             </member>
             <member>
                <GoogleMapProvider id="GOOGLE_MAP">
                   <name>Google Map Imagery</name>
                   <layerId>map</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </member>
             <member>
                <GoogleMapProvider id="GOOGLE_ROADS">
                   <name>Google Map Imagery</name>
                   <layerId>roads</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </member>
             <member>
                <GoogleMapProvider id="GOOGLE_SAT">
                   <name>Google Map Imagery</name>
                   <layerId>satellite</layerId>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </member>
             <member>
@@ -1521,8 +1374,8 @@
                         <baseTime>now</baseTime>
                         <lagTime>0</lagTime>
                         <leadTime>0</leadTime>
-                        <stepTime>60</stepTime>
-                    </TimeExtent>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Doppler_Process.xml#DOPPLER_PROCESS"/>
                </SensorMLProvider>
@@ -1545,6 +1398,29 @@
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:temperature</observedProperty>
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:pressure</observedProperty>
                         <resultFormat>text/xml;subtype="OM"</resultFormat>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PLUME_SOS">
+                  <name>NY Chemical Plume</name>
+                  <layerId>PLUME_DATA</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>PLUME_DATA</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-09-16T15:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2005-09-16T23:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <procedure>urn:vast:sensor:plumeModel</procedure>
+                        <observedProperty>PARTICLE_LOCATIONS</observedProperty>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
                </OWSDataProvider>

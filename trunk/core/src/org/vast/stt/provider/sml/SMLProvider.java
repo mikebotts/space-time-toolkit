@@ -121,13 +121,13 @@ public class SMLProvider extends AbstractProvider
                         double start, stop, step;
                         
                         // get start time
-                        if (timeExtent.isBeginNow())
+                        if (timeExtent.isBeginNow() || timeExtent.isBaseAtNow())
                             start = TimeExtent.NOW;
                         else
                             start = timeExtent.getAdjustedLagTime();
                         
                         // get stop time
-                        if (timeExtent.isEndNow())
+                        if (timeExtent.isEndNow() || timeExtent.isBaseAtNow())
                             stop = TimeExtent.NOW;
                         else
                             stop = timeExtent.getAdjustedLeadTime();

@@ -207,7 +207,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                         
                         // select request type (post or get)
                         boolean usePost = (query.getPostServer() != null);
-                        dataStream = requestBuilder.sendRequest(query, usePost);
+                        dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
                             
                         // parse response
                         reader.parse(dataStream);
@@ -313,15 +313,22 @@ public class SOS_Process extends DataProcess implements DataHandler
             double stop = intputStopTime.getData().getDoubleValue();
             double step = inputStepTime.getData().getDoubleValue();
             
-            if (start == TimeExtent.NOW)
-                query.getTime().setBeginNow(true);
+            if (start == TimeExtent.NOW && stop == TimeExtent.NOW)
+            {
+                query.getTime().setBaseAtNow(true);
+            }
             else
-                query.getTime().setStartTime(start);
-            
-            if (stop == TimeExtent.NOW)
-                query.getTime().setEndNow(true);
-            else
-                query.getTime().setStopTime(stop);
+            {
+                if (start == TimeExtent.NOW)
+                    query.getTime().setBeginNow(true);
+                else
+                    query.getTime().setStartTime(start);
+                
+                if (stop == TimeExtent.NOW)
+                    query.getTime().setEndNow(true);
+                else
+                    query.getTime().setStopTime(stop);
+            }
             
             query.getTime().setTimeStep(step);
         }

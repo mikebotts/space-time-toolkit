@@ -76,7 +76,7 @@ public class SOSProvider extends OWSProvider
             
             // select request type (post or get)
             boolean usePost = true;
-            dataStream = requestBuilder.sendRequest(query, usePost);
+            dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
                         
             // parse response
             reader.parse(dataStream);
@@ -127,7 +127,7 @@ public class SOSProvider extends OWSProvider
             
 			// select request type (post or get)
             boolean usePost = true;
-            dataStream = requestBuilder.sendRequest(query, usePost);
+            dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
             
             if (canceled)
                 return;
