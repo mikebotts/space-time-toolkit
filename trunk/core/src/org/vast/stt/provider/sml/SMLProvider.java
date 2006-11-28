@@ -16,6 +16,7 @@ package org.vast.stt.provider.sml;
 import java.util.ArrayList;
 import org.ogc.cdm.common.DataComponent;
 import org.vast.data.*;
+import org.vast.physics.TimeExtent;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
@@ -117,10 +118,28 @@ public class SMLProvider extends AbstractProvider
                     DataComponent timeInput = process.getInputList().getComponent("time");
                     if (timeInput != null)
                     {
-                        timeInput.getComponent("start").getData().setDoubleValue(timeExtent.getAdjustedLagTime());
-                        timeInput.getComponent("stop").getData().setDoubleValue(timeExtent.getAdjustedLeadTime());
+                        double start, stop, step;
+                        
+                        // get start time
+                        if (timeExtent.isBeginNow())
+                            start = TimeExtent.NOW;
+                        else
+                            start = timeExtent.getAdjustedLagTime();
+                        
+                        // get stop time
+                        if (timeExtent.isEndNow())
+                            stop = TimeExtent.NOW;
+                        else
+                            stop = timeExtent.getAdjustedLeadTime();
+                        
+                        // get step time
+                        step = timeExtent.getTimeStep();
+                        
+                        // set values to chain time input
+                        timeInput.getComponent("start").getData().setDoubleValue(start);
+                        timeInput.getComponent("stop").getData().setDoubleValue(stop);
                         if (timeInput.getComponent("step") != null)
-                            timeInput.getComponent("step").getData().setDoubleValue(timeExtent.getTimeStep());
+                            timeInput.getComponent("step").getData().setDoubleValue(step);
                     }
                     
                     if (canceled)
