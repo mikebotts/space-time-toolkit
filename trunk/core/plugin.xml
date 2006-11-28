@@ -14,7 +14,7 @@
       <view name="Time" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
       <view name="Master Time" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
       <view name="Graphics" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
-      <!--<view name="CatalogView" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>-->
+      <view name="CatalogView" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>
       <view name="CapabilitiesView" class="org.vast.stt.gui.views.CapabilitiesView" id="STT.CapabilitiesView"/>
       <view name="Data" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
       <view name="Scene Tree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
@@ -63,6 +63,7 @@
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSpatialExtentView" label="Show Bbox Options" menubarPath="STT.ViewMenu/group3"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSymbolizerView" label="Show Style Options" menubarPath="STT.ViewMenu/group3"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowCapabilitiesView" label="Show Capabilities Options" menubarPath="STT.ViewMenu/group3"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowCatalogView" label="Show Catalog Search" menubarPath="STT.ViewMenu/group3"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowDataProviderView" label="Show Data Options" menubarPath="STT.ViewMenu/group3"/>
          <!-- File Menu -->
          <menu id="STT.FileMenu" label="&amp;File">
