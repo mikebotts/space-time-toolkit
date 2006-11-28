@@ -18,21 +18,33 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.TransferData;
+import org.ogc.cdm.common.DataComponent;
+import org.vast.data.DataBlockBoolean;
+import org.vast.data.DataBlockInt;
+import org.vast.data.DataBlockString;
+import org.vast.data.DataGroup;
+import org.vast.data.DataValue;
 import org.vast.io.xml.DOMReader;
 import org.vast.io.xml.DOMReaderException;
 import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
+import org.vast.ows.util.Bbox;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
+import org.vast.ows.wms.WMSCapabilitiesReader;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.DataProcess;
+import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
 import org.vast.sensorML.SMLException;
 import org.vast.sensorML.reader.ProcessLoader;
@@ -40,6 +52,7 @@ import org.vast.sensorML.reader.ProcessReader;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
@@ -191,10 +204,12 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 	   return false;
    }
    
+   //  TODO  Hardwired for WMS now- generalize
    protected DataProvider createSensorMLProvider(OWSLayerCapabilities caps){
 	  SMLProvider prov = new SMLProvider();
-	  DataProcess process = null;
-	
+	  ProcessChain process = null;
+	  WMS_Process wmsProc = null;
+	  
       try  {
 	      // Input mappings
     	  Enumeration e = STTPlugin.getDefault().getBundle().findEntries("templates", "WMS_FlatGrid_Process.xml", false);
@@ -218,18 +233,94 @@ public class SceneTreeDropListener extends ViewerDropAdapter
     	  if (e.hasMoreElements())
     		  processMapUrl = (String)e.nextElement().toString();
     	  ProcessLoader.reloadMaps(processMapUrl);
-    	  process = processReader.readProcess(dom.getBaseElement());
+    	  process = (ProcessChain)processReader.readProcess(dom.getBaseElement());
     	  
-    	  // intitialize process and print out info
+    	  //  Bold assumptions into processChain structure...
+    	  WMSLayerCapabilities wmsCaps = (WMSLayerCapabilities)caps;
+    	  OWSServiceCapabilities owsCaps = wmsCaps.getParent();
+    	  wmsProc = (WMS_Process)process.getProcessList().get(0);
+    	  DataGroup wmsParams = (DataGroup)wmsProc.getParameterList();
+    	  DataGroup wmsOptions = (DataGroup)wmsParams.getComponent(0);
+    	  //  Options
+    	  //  TODO add some convenience methods and break this all out to separate class
+    	  //  service endPt
+    	  DataValue endPt = (DataValue)wmsOptions.getComponent("endPoint");
+    	  DataBlockString dbs = new DataBlockString(1);
+    	  //  Use 1st get Server for now
+    	  Map serversMap = owsCaps.getGetServers();
+    	  String getMapUrl = (String)serversMap.get("GetMap");
+    	  dbs.setStringValue(getMapUrl);
+    	  endPt.setData(dbs);
+    	  //  layer
+    	  DataValue layerDV = (DataValue)wmsOptions.getComponent("layer");
+    	  String layerStr = wmsCaps.getName();
+    	  dbs = new DataBlockString(1);
+    	  dbs.setStringValue(layerStr);
+    	  layerDV.setData(dbs);
+    	  // format
+    	  DataValue formatDV = (DataValue)wmsOptions.getComponent("format");
+    	  List<String> formatList = wmsCaps.getFormatList();
+    	  String formatStr;
+    	  if(formatList.contains("image/png"))
+    		  formatStr = "image/png";
+    	  else
+    		  formatStr = formatList.get(0);
+    	  dbs = new DataBlockString(1);
+    	  dbs.setStringValue(formatStr);
+    	  formatDV.setData(dbs);
+    	  // version- comes from Servers.xml, leave as default
+    	  //  imageW & H -0 default to 512x512
+    	  DataValue widthDV = (DataValue)wmsOptions.getComponent("imageWidth");
+    	  DataBlockInt dbi = new DataBlockInt(1);
+    	  dbi.setIntValue(512);
+    	  widthDV.setData(dbi);
+    	  DataValue heightDV = (DataValue)wmsOptions.getComponent("imageHeight");
+    	  dbi = new DataBlockInt(1);
+    	  dbi.setIntValue(512);
+    	  heightDV.setData(dbi);
+    	  // trasnparency
+    	  DataValue transDV = (DataValue)wmsOptions.getComponent("imageTransparency");
+    	  DataBlockBoolean dbb = new DataBlockBoolean(1);
+    	  dbb.setBooleanValue(wmsCaps.isOpaque());
+    	  transDV.setData(dbb);
+    	  //  SRS - no provision to set 
+    	  List<String> srsList = wmsCaps.getSrsList();
+    	  dbs = new DataBlockString(1);
+    	  if(srsList.contains("EPSG:4326") || srsList.size() == 0)
+    		  dbs.setStringValue("EPSG:4326");
+    	  else
+    		  dbs.setStringValue(srsList.get(0));
+    	  DataValue srsDV = (DataValue)wmsOptions.getComponent("srs");
+    	  srsDV.setData(dbs);
+    	  
+    	  //  Styles
+    	  List<String> stylesList = wmsCaps.getStyleList();
+    	  dbs = new DataBlockString(1);
+    	  if(stylesList != null && stylesList.size()>0 ) {
+    		  dbs.setStringValue(stylesList.get(0));
+	    	  DataValue stylesDV = (DataValue)wmsOptions.getComponent("styles");
+	    	  stylesDV.setData(dbs);
+    	  }
+    	  
+    	  // set bbox input values (override these with caps vals?
+    	  List<Bbox>bboxList = wmsCaps.getBboxList();
+    	  STTSpatialExtent ext = new STTSpatialExtent();
+    	  Bbox bbox = new Bbox();
+    	  if(bboxList != null || bboxList.size()>0) {
+    		  bbox = bboxList.get(0);
+	    	  ext.setMinX(bbox.getMinX());
+	    	  ext.setMaxX(bbox.getMaxX());
+	    	  ext.setMinY(bbox.getMinY());
+	    	  ext.setMaxY(bbox.getMaxY());
+//	    	  ext.setMinX(-74.220226);
+//	    	  ext.setMaxX(-74.073766);
+//	    	  ext.setMinY(40.630227);
+//	    	  ext.setMaxY(40.741717);
+	    	  prov.setSpatialExtent(ext);
+    	  }
+    	  // intitialize process with new params
     	  process.init();
     	  
-    	  // set bbox input values
-    	  STTSpatialExtent ext = new STTSpatialExtent();
-    	  ext.setMinX(-90.0);
-    	  ext.setMaxX(-86.0);
-    	  ext.setMinY(34.0);
-    	  ext.setMaxY(38.0);
-    	  prov.setSpatialExtent(ext);
 	      
       } catch (ProcessException e){
     	  e.printStackTrace(System.err);
@@ -240,8 +331,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
       }	  	  
       
       prov.setProcess(process);
-      System.err.println(process);
-	  
+      System.err.println(wmsProc);
       
 	  return prov;
    }
