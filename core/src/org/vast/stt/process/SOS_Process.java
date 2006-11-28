@@ -74,6 +74,8 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected boolean hasTime, hasBbox; 
     protected boolean done, error, outputReady;
     protected Hashtable<DataComponent, UnitConverter> converters;
+    protected Vector3d obsLocation;
+    protected String obsName, obsProcedure;
     
 
     public SOS_Process()
@@ -215,12 +217,9 @@ public class SOS_Process extends DataProcess implements DataHandler
                         dataParser.setDataHandler(handler);
                         
                         // get procedure, name and location
-                        outputObsName.getData().setStringValue(reader.getObservationName());
-                        outputObsProcedure.getData().setStringValue(reader.getProcedure());
-                        Vector3d location = reader.getFoiLocation();
-                        outputObsLocation.getData().setDoubleValue(0, location.x);
-                        outputObsLocation.getData().setDoubleValue(1, location.y);
-                        outputObsLocation.getData().setDoubleValue(2, location.z);
+                        obsName = reader.getObservationName();
+                        obsProcedure = reader.getProcedure();
+                        obsLocation = reader.getFoiLocation();                        
                         
                          // start parsing
                         dataParser.parse(reader.getDataStream());
@@ -377,7 +376,14 @@ public class SOS_Process extends DataProcess implements DataHandler
             synchronized (this)
             {
                 outputObsData.setData(data);
-                this.setAvailability(obsInfoConnections, true);
+                
+                // also write observation info
+                outputObsName.getData().setStringValue(obsName);
+                outputObsProcedure.getData().setStringValue(obsProcedure);
+                outputObsLocation.getData().setDoubleValue(0, obsLocation.x);
+                outputObsLocation.getData().setDoubleValue(1, obsLocation.y);
+                outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
+                
                 outputReady = true;
                 this.notify();
                 this.wait();
