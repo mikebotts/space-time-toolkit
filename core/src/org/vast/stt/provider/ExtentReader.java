@@ -16,7 +16,9 @@ package org.vast.stt.provider;
 import java.text.ParseException;
 
 import org.vast.io.xml.DOMReader;
+import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
+import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.world.WorldScene;
@@ -54,52 +56,65 @@ public class ExtentReader extends XMLReader
      */
     public void readSpatialExtent(DataProvider provider, DOMReader dom, Element spElt)
     {
+        // get provider spatial extent
+        STTSpatialExtent spatialExtent = provider.getSpatialExtent();
+        
         if (spElt != null)
-         {
+        {
             Element bboxElt = dom.getElement(spElt, "BoundingBox");
             
-            // try to get the bbox from the list
-            Object obj = findExistingObject(dom, bboxElt);
-            if (obj != null)
+            if (bboxElt != null)
             {
-                provider.setSpatialExtent((STTSpatialExtent)obj);
-                return;
+                // try to get the bbox from the list
+                Object obj = findExistingObject(dom, bboxElt);
+                if (obj != null)
+                {
+                    provider.setSpatialExtent((STTSpatialExtent)obj);
+                    return;
+                }          
+            
+                // read bbox
+                String coordText = dom.getElementValue(bboxElt, "coordinates");
+                String [] coords = coordText.split(" |,");
+                 
+                double minX = Double.parseDouble(coords[0]);
+                double minY = Double.parseDouble(coords[1]);
+                double maxX = Double.parseDouble(coords[2]);
+                double maxY = Double.parseDouble(coords[3]);
+                 
+                spatialExtent.setMinX(minX);
+                spatialExtent.setMinY(minY);
+                spatialExtent.setMaxX(maxX);
+                spatialExtent.setMaxY(maxY);
+                 
+                // read tiling info
+                String tileDims = dom.getAttributeValue(spElt, "tiling");
+                if (tileDims != null)
+                {
+                    String[] dims = tileDims.split("x");
+                    
+                    int tileX = Integer.parseInt(dims[0]);
+                    int tileY = Integer.parseInt(dims[1]);
+                     
+                    spatialExtent.setXTiles(tileX);
+                    spatialExtent.setYTiles(tileY);
+                    spatialExtent.setTilingEnabled(true);
+                }
+                 
+                // store that in the hashtable
+                registerObjectID(dom, bboxElt, spatialExtent);
             }
             
-            // otherwise change the provider one
-            STTSpatialExtent spatialExtent = provider.getSpatialExtent();
-             
-            // read bbox
-            String coordText = dom.getElementValue(bboxElt, "coordinates");
-            String [] coords = coordText.split(" |,");
-             
-            double minX = Double.parseDouble(coords[0]);
-            double minY = Double.parseDouble(coords[1]);
-            double maxX = Double.parseDouble(coords[2]);
-            double maxY = Double.parseDouble(coords[3]);
-             
-            spatialExtent.setMinX(minX);
-            spatialExtent.setMinY(minY);
-            spatialExtent.setMaxX(maxX);
-            spatialExtent.setMaxY(maxY);
-             
-            // read tiling info
-            String tileDims = dom.getAttributeValue(spElt, "tiling");
-            if (tileDims != null)
+            // read autoUpdate element
+            if (dom.existAttribute(spElt, "@autoUpdate"))
             {
-                String[] dims = tileDims.split("x");
-                
-                int tileX = Integer.parseInt(dims[0]);
-                int tileY = Integer.parseInt(dims[1]);
-                 
-                spatialExtent.setXTiles(tileX);
-                spatialExtent.setYTiles(tileY);
-                spatialExtent.setTilingEnabled(true);
+                String sceneId = dom.getAttributeValue(spElt, "@autoUpdate").substring(1);
+                WorldScene scene = (WorldScene)objectIds.get(sceneId);
+                SpatialExtentUpdater updater = new SceneBboxUpdater(scene);
+                spatialExtent.setUpdater(updater);
+                updater.setEnabled(true);
             }
-             
-            // store that in the hashtable
-            registerObjectID(dom, bboxElt, spatialExtent);
-         }
+        }
     }
     
     
@@ -111,17 +126,26 @@ public class ExtentReader extends XMLReader
      */
     public void readTimeExtent(DataProvider provider, DOMReader dom, Element timeElt)
     {
+        // get provider time extent
+        STTTimeExtent timeExtent = provider.getTimeExtent();
+        
         if (timeElt != null)
         {
-            STTTimeExtent timeExtent = provider.getTimeExtent();
-            String val = null;
+            Element extentElt = dom.getElement(timeElt, "TimeExtent");
+            String val = null;            
             
             try
-            {
-                Element extentElt = dom.getElement(timeElt, "TimeExtent");
-                
+            {    
                 if (extentElt != null)
                 {
+                    // try to get the time extent from the list
+                    Object obj = findExistingObject(dom, extentElt);
+                    if (obj != null)
+                    {
+                        provider.setTimeExtent((STTTimeExtent)obj);
+                        return;
+                    }
+                    
                     // read base time
                     val = dom.getElementValue(extentElt, "baseTime");
                     if (val.equalsIgnoreCase("now"))
@@ -140,20 +164,24 @@ public class ExtentReader extends XMLReader
                     // read step time
                     val = dom.getElementValue(extentElt, "stepTime");
                     timeExtent.setTimeStep(Double.parseDouble(val));
-                }
-                // read autoUpdate element
-                if (dom.existElement(timeElt, "autoUpdate"))
-                {
-                    String sceneId = dom.getAttributeValue(timeElt, "autoUpdate/@href").substring(1);
-                    WorldScene scene = (WorldScene)objectIds.get(sceneId);
-                    TimeExtentUpdater updater = new SceneTimeUpdater(scene);
-                    timeExtent.setUpdater(updater);
-                    updater.setEnabled(true);
+                
+                    // store that in the hashtable
+                    registerObjectID(dom, extentElt, timeExtent);
                 }
             }
             catch (ParseException e)
             {
                 throw new IllegalStateException("Invalid time: " + val);
+            }
+            
+            // read autoUpdate element
+            if (dom.existAttribute(timeElt, "@autoUpdate"))
+            {
+                String sceneId = dom.getAttributeValue(timeElt, "@autoUpdate").substring(1);
+                WorldScene scene = (WorldScene)objectIds.get(sceneId);
+                TimeExtentUpdater updater = new SceneTimeUpdater(scene);
+                timeExtent.setUpdater(updater);
+                updater.setEnabled(true);
             }
         }
     }

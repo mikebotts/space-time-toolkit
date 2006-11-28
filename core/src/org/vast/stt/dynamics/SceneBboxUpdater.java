@@ -13,13 +13,10 @@
 
 package org.vast.stt.dynamics;
 
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.provider.STTSpatialExtent;
 
 
 /**
@@ -39,33 +36,41 @@ import org.vast.stt.provider.STTSpatialExtent;
 public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventListener
 {
     private WorldScene scene;
-    private int tileSizeX, tileSizeY;
+    private int tileSizeX = 0;
+    private int tileSizeY = 0;
     //private long lastUpdateTime = -1;
         
     
-    public SceneBboxUpdater(STTSpatialExtent spatialExtent)
+    public SceneBboxUpdater(WorldScene scene)
     {
-        spatialExtent.setUpdater(this);
-        ScenePageInput input = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
-        scene = (WorldScene)input.getScene();
-        scene.getViewSettings().addListener(this);
+        this.setScene(scene);
     }
     
     
-    public SceneBboxUpdater(STTSpatialExtent spatialExtent, int tileSizeX, int tileSizeY)
+    public void setTilesize(int tileSizeX, int tileSizeY)
     {
-        this(spatialExtent);
         spatialExtent.setTilingEnabled(true);
         this.tileSizeX = tileSizeX;
         this.tileSizeY = tileSizeY;
     }
     
     
-    public void updateBbox()
+    public void update()
     {
         scene.getViewSettings().getProjection().fitBboxToView(spatialExtent, scene);
-        spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX);
-        spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY);
+        
+        if (spatialExtent.isTilingEnabled())
+        {
+            spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX);
+            spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY);
+        }
+    }
+    
+    
+    public void setScene(WorldScene scene)
+    {
+        this.scene = scene;
+        scene.getViewSettings().addListener(this);
     }
     
     
@@ -79,7 +84,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
             switch (e.type)
             {
                 case SCENE_VIEW_CHANGED:
-                    updateBbox();
+                    update();
                     spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
                     break;
             }

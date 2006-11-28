@@ -34,6 +34,7 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.dynamics.SceneBboxUpdater;
+import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
@@ -117,6 +118,15 @@ public abstract class TiledMapProvider extends AbstractProvider
         gridData.setName("grid");
         blockLists[1] = dataNode.createList(gridData);
         //System.out.println(gridData);
+        
+        // set tile size in updater
+        SpatialExtentUpdater updater = this.getSpatialExtent().getUpdater();
+        if (updater != null)
+        {
+            if (updater instanceof SceneBboxUpdater)
+                ((SceneBboxUpdater)updater).setTilesize(tileSize, tileSize);
+            updater.update();
+        }
         
         dataNode.setNodeStructureReady(true);
     }
@@ -351,8 +361,6 @@ public abstract class TiledMapProvider extends AbstractProvider
     {
         if (!dataNode.isNodeStructureReady())
         {
-            SceneBboxUpdater updater = new SceneBboxUpdater(spatialExtent, tileSize, tileSize);
-            updater.updateBbox();
             startUpdate(true);            
         }
         

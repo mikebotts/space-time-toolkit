@@ -28,7 +28,6 @@ import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
@@ -38,7 +37,6 @@ import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.process.*;
-
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
@@ -163,16 +161,13 @@ public class WMS_Process extends DataProcess
      */
     public void execute() throws ProcessException
     {
-        URL url = null;
         RenderedImage renderedImage = null;
         
         try
         {
             initRequest();
 
-            String urlString = requestBuilder.buildGetRequest(query);
-            url = new URL(urlString);
-            URLConnection urlCon = url.openConnection();
+            URLConnection urlCon = requestBuilder.sendRequest(query, false);
 
             //  Check on mimeType catches all three types (blank, inimage, xml)
             //  of OGC service exceptions
@@ -180,12 +175,12 @@ public class WMS_Process extends DataProcess
             if (mimeType.contains("xml") || mimeType.startsWith("application"))
             {
                 OWSExceptionReader reader = new OWSExceptionReader();
-                reader.parseException(url.openStream());
+                reader.parseException(urlCon.getInputStream());
             }
             else
             {
                 // use JAI MemorySeekableStream for better performance
-                dataStream = new MemoryCacheSeekableStream(url.openStream());
+                dataStream = new MemoryCacheSeekableStream(urlCon.getInputStream());
 
                 // Create the ParameterBlock and add the SeekableStream to it.
                 ParameterBlock pb = new ParameterBlock();
@@ -220,7 +215,7 @@ public class WMS_Process extends DataProcess
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WMS server:\n" + url.getHost(), e);
+            throw new ProcessException("Error while requesting data from WMS server:\n" + query.getGetServer(), e);
         }
         finally
         {

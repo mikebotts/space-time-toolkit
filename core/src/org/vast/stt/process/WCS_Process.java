@@ -172,7 +172,7 @@ public class WCS_Process extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
-            dataStream = requestBuilder.sendRequest(query, false);
+            dataStream = requestBuilder.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
           
             dataParser = reader.getDataParser();
