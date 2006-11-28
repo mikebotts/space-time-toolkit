@@ -33,9 +33,11 @@ import org.ogc.cdm.common.DataHandler;
 import org.ogc.cdm.common.DataType;
 import org.ogc.cdm.reader.DataStreamParser;
 import org.vast.data.*;
+import org.vast.math.Vector3d;
 import org.vast.ows.sos.SOSObservationReader;
 import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSRequestWriter;
+import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
@@ -61,6 +63,9 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
     protected DataValue inputStartTime, intputStopTime, inputStepTime;
     protected DataComponent outputObsInfo, outputObsData;
+    protected DataValue outputObsName, outputObsProcedure;
+    protected DataGroup outputObsLocation;
+    protected ConnectionList obsInfoConnections;
     protected InputStream dataStream;
     protected SOSQuery query;
     protected SOSRequestWriter requestBuilder;
@@ -114,7 +119,11 @@ public class SOS_Process extends DataProcess implements DataHandler
             }
             
             // Output Data mapping
+            obsInfoConnections = outputConnections.get(0);
             outputObsInfo = outputData.getComponent(0);
+            outputObsName = (DataValue) outputObsInfo.getComponent("name");
+            outputObsProcedure = (DataValue) outputObsInfo.getComponent("procedure");
+            outputObsLocation = (DataGroup) outputObsInfo.getComponent("location");
             outputObsData = outputData.getComponent(1);
         }
         catch (Exception e)
@@ -204,6 +213,14 @@ public class SOS_Process extends DataProcess implements DataHandler
                         reader.parse(dataStream);
                         dataParser = reader.getDataParser();
                         dataParser.setDataHandler(handler);
+                        
+                        // get procedure, name and location
+                        outputObsName.getData().setStringValue(reader.getObservationName());
+                        outputObsProcedure.getData().setStringValue(reader.getProcedure());
+                        Vector3d location = reader.getFoiLocation();
+                        outputObsLocation.getData().setDoubleValue(0, location.x);
+                        outputObsLocation.getData().setDoubleValue(1, location.y);
+                        outputObsLocation.getData().setDoubleValue(2, location.z);
                         
                          // start parsing
                         dataParser.parse(reader.getDataStream());
@@ -296,12 +313,12 @@ public class SOS_Process extends DataProcess implements DataHandler
             double stop = intputStopTime.getData().getDoubleValue();
             double step = inputStepTime.getData().getDoubleValue();
             
-            if (Double.isInfinite(start))
+            if (start == TimeExtent.NOW)
                 query.getTime().setBeginNow(true);
             else
                 query.getTime().setStartTime(start);
             
-            if (Double.isInfinite(stop))
+            if (stop == TimeExtent.NOW)
                 query.getTime().setEndNow(true);
             else
                 query.getTime().setStopTime(stop);
@@ -353,6 +370,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             synchronized (this)
             {
                 outputObsData.setData(data);
+                this.setAvailability(obsInfoConnections, true);
                 outputReady = true;
                 this.notify();
                 this.wait();
