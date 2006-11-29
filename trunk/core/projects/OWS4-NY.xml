@@ -1231,7 +1231,38 @@
                                  </DataList>
                               </contents>
                            </ChartScene>
-                        </member>                
+                        </member>
+                        <member>
+                           <ChartScene>
+                              <name>Environmental Charts</name>
+                              <contents>
+                                 <DataList>
+                                    <member visible="true">
+                                       <DataItem>
+                                          <name>Humidity (%)</name>
+                                          <dataProvider href="#CSIRO_SOS"/>
+                                          <style>
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>dataComponents/HUMIDITY_TEMP</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#FF5555</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>                                    
+                                 </DataList>
+                              </contents>
+                           </ChartScene>
+                        </member>       
                      </DataList>
                   </member>
                </DataList>
@@ -1394,6 +1425,27 @@
                         <procedure>urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</procedure>
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:temperature</observedProperty>
                         <observedProperty>urn:x-ogc:def:phenomenon:OGC:pressure</observedProperty>
+                        <resultFormat>text/xml;subtype="OM"</resultFormat>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="CSIRO_SOS">
+                  <name>New York CSIRO  SOS</name>
+                  <request postUrl="http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>gatton-HUMIDITY_TEMP</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2006-11-10T16:15:00</gml:beginPosition>
+                                 <gml:endPosition>2006-11-21T17:15:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <procedure>urn:ogc:def:procedure:CSIRO:gatton-1-25</procedure>
+                        <observedProperty>urn:ogc:def:phenomenon:CSIRO:HUMIDITY_TEMP</observedProperty>
                         <resultFormat>text/xml;subtype="OM"</resultFormat>
                      </GetObservation>
                   </request>
