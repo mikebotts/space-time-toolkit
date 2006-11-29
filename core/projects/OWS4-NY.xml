@@ -34,11 +34,11 @@
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>0 0 10</cameraPos>
-                  <targetPos>0 0 0</targetPos>
+                  <cameraPos>-1.29106 0.71164 10</cameraPos>
+                  <targetPos>-1.29106 0.71164 0</targetPos>
                   <upDirection>0 1 0</upDirection>
-                  <orthoWidth>6.0</orthoWidth>
-                  <orthoHeight>4.0</orthoHeight>
+                  <orthoWidth>0.01</orthoWidth>
+                  <orthoHeight>0.01</orthoHeight>
                   <nearClip>1</nearClip>
                   <farClip>100</farClip>
                   <zFudgeFactor>1000</zFudgeFactor>
@@ -926,15 +926,15 @@
                                           <sld:GrayChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <Gain>1.0</Gain>
+                                                <Gain>2.0</Gain>
                                              </LinearAdjustment>
                                           </sld:GrayChannel>
-                                          <!--<sld:AlphaChannel>
+                                          <sld:AlphaChannel>
                                              <LinearAdjustment>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <Gain>5.0</Gain>
+                                                <Gain>2.0</Gain>
                                              </LinearAdjustment>
-                                          </sld:AlphaChannel>-->
+                                          </sld:AlphaChannel>
                                        </sld:ChannelSelection>
                                     </sld:Raster>
                                  </sld:TextureSymbolizer>
@@ -1350,7 +1350,7 @@
                   <name>GOES Visible WCS</name>
                   <spatialExtent tiling="1x1"> 
                      <BoundingBox id="ROI" srsName="EPSG:4326">
-                        <gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>
+                        <gml:coordinates>-83.0,35.0 -69.0,43.0</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./GOES_VIS_Process.xml#GOES_WCS_PROCESS"/>
@@ -1359,11 +1359,7 @@
             <member>
                <SensorMLProvider id="GOES_IR">
                   <name>GOES IR WCS</name>
-                  <spatialExtent tiling="1x1"> 
-                     <BoundingBox id="ROI" srsName="EPSG:4326">
-                        <gml:coordinates>-92.2,15.4 -72.3,35.4</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <process xlink:href="./GOES_IR_Process.xml#GOES_WCS_PROCESS"/>
                </SensorMLProvider>
             </member>
