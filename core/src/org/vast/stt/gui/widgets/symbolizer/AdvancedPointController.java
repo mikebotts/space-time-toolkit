@@ -47,7 +47,10 @@ public class AdvancedPointController extends AdvancedOptionController
 		addSelectionListener(this);
 	}
 	
+	//  TODO model this after AdvLineController
 	public void buildControls(){
+		initMappingControls(2);
+		
 		optionControls = new OptionControl[2];
 		//mapFromCombo = new Combo[2];
 		//lutButton = new Button[2];
@@ -60,6 +63,7 @@ public class AdvancedPointController extends AdvancedOptionController
 		optionControls[1] = new OptionControl(parent, 0x0);
 		optionControls[1].createColorButton("Point Color:", pointOptionHelper.getPointColor());
 
+		
 		addMapFromCombos(parent, 1);
 		//  disable color mapFromCombo (consider just not showing this)
 		mapFromCombo[1].setEnabled(false);

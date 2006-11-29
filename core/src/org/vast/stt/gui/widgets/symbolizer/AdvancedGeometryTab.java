@@ -37,7 +37,6 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class AdvancedGeometryTab extends ScrolledComposite implements SelectionListener
 {
-	//Composite parent;
 	Composite mainGroup;
 	String [] mapToLabel = {	"X Coordinate:",
 							   	"Y Coordinate:",
@@ -45,8 +44,6 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 								"t coordinate:",
 								"break coordinate"};
 	Combo [] mapFromCombo;
-	Text [] gainText;
-	Text [] offsetText;
 	Button[] lutButton;
     Symbolizer activeSymbolizer;
 	String [] mappableItems;
@@ -81,25 +78,17 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		//  Add Labels for top row
 		Label toLabel = new Label(mainGroup, SWT.LEFT);
 		Label fromLabel = new Label(mainGroup, SWT.LEFT);
-		//Label gainLabel = new Label(mainGroup, SWT.LEFT);
-		//Label offsetLabel = new Label(mainGroup, SWT.LEFT);
 		Label lutLabel = new Label(mainGroup, SWT.LEFT);
 		toLabel.setText("Map To:");
 		fromLabel.setText("Map From:");
-		//gainLabel.setText("Gain");
-		//ffsetLabel.setText("Offset");
 		lutLabel.setText("Edit");
 		toLabel.setBackground(WHITE);
 		fromLabel.setBackground(WHITE);
-		//gainLabel.setBackground(WHITE);
-		//offsetLabel.setBackground(WHITE);
 		lutLabel.setBackground(WHITE);
 	}
 	
 	public void addMappingRows(){
 		mapFromCombo = new Combo[mapToLabel.length];
-		gainText = new Text[mapToLabel.length];
-		offsetText = new Text[mapToLabel.length];
 		lutButton = new Button[mapToLabel.length];
 		for(int i=0; i<mapToLabel.length; i++){
 			Label label = new Label(mainGroup, SWT.LEFT);
@@ -116,22 +105,7 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 			gd = new GridData();
 			//gd.widthHint = 30;
 			mapFromCombo[i].setLayoutData(gd);
-//			gd = new GridData();
-//			gd.widthHint = 30;
-//			gainText[i] = new Text(mainGroup,SWT.RIGHT );
-//			offsetText[i] = new Text(mainGroup, SWT.RIGHT);
-//			gainText[i].setTextLimit(7);
-//			gainText[i].setLayoutData(gd);
-//			//  make bg gray to distinguish it from bg of parent
-//			gainText[i].setBackground(new Color(display, 210, 210, 210));
-//			gd = new GridData();
-//			gd.widthHint = 30;
-//			offsetText[i].setTextLimit(7);
-//			offsetText[i].setLayoutData(gd);
-//			//  make bg gray to distinguish it from bg of parent
-//			offsetText[i].setBackground(new Color(display, 210, 210, 210));
 
-			//  set inititial vals for gain, offset
 			//  set enabled state
 			lutButton[i] = new Button(mainGroup, SWT.PUSH);
 			lutButton[i].setText("Edit");

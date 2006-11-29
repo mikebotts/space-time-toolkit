@@ -235,9 +235,11 @@ public class SymbolizerWidget extends CheckOptionTable
                 //  How to assign default geom?  Take from existing symbolizer, or force 
                 //  user selection with wizard/dialog
         		geom = new Geometry();
-        	DataStyler styler = StylerFactory.createDefaultStyler(asd.getStylerName().trim(), 
-        							asd.getStylerType(), dataItem, geom);
+        	DataStyler styler = 
+        		StylerFactory.createDefaultStyler(asd.getStylerName().trim(), asd.getStylerType());
+            styler.setDataItem(dataItem);
         	Symbolizer sym = styler.getSymbolizer();
+            sym.setGeometry(geom);
         	this.addSymbolizer(sym);
         }
     }
