@@ -47,19 +47,15 @@ public class LayerLabelProvider extends LabelProvider {
 	public LayerLabelProvider(){
 	}
 
-	public void setCapabilities(OWSLayerCapabilities caps){
-		this.caps = caps;
-	}
-	
 	@Override
 	public String getText(Object element){
-		if(caps instanceof SOSLayerCapabilities)
+		if(element instanceof SOSLayerCapabilities)
 			return getSOSText(element);
-		else if(caps instanceof WMSLayerCapabilities)
+		else if(element instanceof WMSLayerCapabilities)
 			return getWMSText(element);
-		else if(caps instanceof WFSLayerCapabilities)
+		else if(element instanceof WFSLayerCapabilities)
 			return getWFSText(element);
-		else if(caps instanceof WCSLayerCapabilities)
+		else if(element instanceof WCSLayerCapabilities)
 			return getWCSText(element);
 		else
 			return element.toString();
@@ -80,7 +76,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else
 				return "WTF?";
 		} else if (element instanceof OWSLayerCapabilities) {
-			return ((OWSLayerCapabilities)element).getName();
+			return ((OWSLayerCapabilities)element).getId();
 		} else if(element instanceof TimeInfo) {
 			return getTimeText((TimeInfo)element);
 		} else

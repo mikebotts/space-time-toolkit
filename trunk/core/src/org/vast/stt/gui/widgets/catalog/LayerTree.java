@@ -58,11 +58,6 @@ public class LayerTree implements ITreeContentProvider {
 		LayerTreeDragListener dragListener = new LayerTreeDragListener(treeViewer);
 		treeViewer.addDragSupport(ops, transfers, dragListener);
 		treeViewer.addSelectionChangedListener(dragListener);
-		
-		//  Test Drop Support here
-		//ops = DND.DROP_COPY  | DND.DROP_MOVE;
-	    //Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
-	    //treeViewer.addDropSupport(ops, dropfers, new SceneTreeDropListener(treeViewer));
 	}  
 	
 	public Control getControl(){
@@ -89,7 +84,7 @@ public class LayerTree implements ITreeContentProvider {
 			}
 			return null;
 		} else if (parentElement instanceof OWSLayerCapabilities) {
-			labelProv.setCapabilities((OWSLayerCapabilities) parentElement);
+			//labelProv.setCapabilities((OWSLayerCapabilities) parentElement);
 			LayerInfo info = new LayerInfo((OWSLayerCapabilities) parentElement);
 			return info.getOptions();
 		} else if (parentElement instanceof List[]) {
