@@ -97,23 +97,22 @@ public class StylerFactory
      * @param stylerName
      * @param stylerType
      * @param dataItem
-     * @param geometry
      * @return the newly created styler
      */
-    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType, DataItem dataItem, Geometry geom)
+    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType)
     {
         DataStyler newStyler = null;
         switch (stylerType)
         {
         case point:
-            newStyler = StylerFactory.createDefaultPointStyler(dataItem);
+            newStyler = StylerFactory.createDefaultPointStyler();
             break;
         case line:
-            newStyler = StylerFactory.createDefaultLineStyler(dataItem);
+            newStyler = StylerFactory.createDefaultLineStyler();
             break;
-        case texture:
-            newStyler = StylerFactory.createDefaultTextureStyler(dataItem);
-            break;
+//        case texture:
+//            newStyler = StylerFactory.createDefaultTextureStyler();
+//            break;
         default:
             System.err.println("StylerType not supported in createNewStyler()");
             return null;
@@ -123,7 +122,6 @@ public class StylerFactory
             return null;
         }
         newStyler.getSymbolizer().setName(stylerName);
-        newStyler.getSymbolizer().setGeometry(geom);
         
         return newStyler;
     }
@@ -135,28 +133,12 @@ public class StylerFactory
      * @param provider - the dataProvider to use for the new Styler
      * @return PointStyler
      */
-    private static PointStyler createDefaultPointStyler(DataItem dataItem)
+    private static PointStyler createDefaultPointStyler()
     {
         PointStyler styler = new PointStyler();
-        styler.setDataItem(dataItem);
 
-        PointSymbolizer symbolizer = new PointSymbolizer();
+        PointSymbolizer symbolizer = SymbolizerFactory.createDefaultPointSymbolizer();
         styler.setSymbolizer(symbolizer);
-
-        //  size
-        Graphic graphic = new Graphic();
-        ScalarParameter size = new ScalarParameter();
-        size.setConstantValue(new Float(2.0));
-        graphic.setSize(size);
-
-        //  color
-        GraphicMark gm = new GraphicMark();
-        Fill fill = new Fill();
-        fill.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
-        gm.setFill(fill);
-        graphic.getGlyphs().add(gm);
-
-        symbolizer.setGraphic(graphic);
 
         return styler;
     }
@@ -168,23 +150,12 @@ public class StylerFactory
      * @param provider - the dataProvider to use for the new Styler
      * @return new LineStyler
      */
-    private static LineStyler createDefaultLineStyler(DataItem dataItem)
+    private static LineStyler createDefaultLineStyler()
     {
         LineStyler styler = new LineStyler();
-        styler.setDataItem(dataItem);
 
-        LineSymbolizer symbolizer = new LineSymbolizer();
+        LineSymbolizer symbolizer = SymbolizerFactory.createDefaultLineSymbolizer();
         styler.setSymbolizer(symbolizer);
-        Stroke stroke = new Stroke();
-
-        //  width
-        symbolizer.setStroke(stroke);
-        ScalarParameter width = new ScalarParameter();
-        width.setConstantValue(new Float(2.0));
-        stroke.setWidth(width);
-
-        //color
-        stroke.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
 
         return styler;
     }
@@ -193,31 +164,12 @@ public class StylerFactory
     * @param provider - the dataProvider to use for the new Styler
     * @return new TextureStyler
     */
-   public static TextureStyler createDefaultTextureStyler(DataItem dataItem)
+   public static TextureStyler createWMSTextureStyler(DataItem dataItem)
    {
 	   TextureStyler styler = new TextureStyler();
 	   styler.setDataItem(dataItem);
 	   
-	   SLDReader sldReader = new SLDReader();
-	   InputStream fileIs = null;
-	   DOMReader dom;
-	   TextureSymbolizer sym = null;
-	   try {
-		   String fileLocation = null;
-		   Enumeration e = STTPlugin.getDefault().getBundle().findEntries("templates", "wms.xml", false);
-		   if (e.hasMoreElements())
-               fileLocation = (String)e.nextElement().toString();
-		   
-		   if(fileLocation == null) {
-			   ExceptionSystem.display(new Exception("STT error: Cannot find template\\wms.xml"));
-			   return null;
-		   }
-			   
-		   dom = new DOMReader(fileLocation, false);
-		   sym = sldReader.readTexture(dom, dom.getRootElement());
-	   } catch (Exception e){
-		   e.printStackTrace();
-	   } 
+	   TextureSymbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
 	   
 	   styler.setSymbolizer(sym);
 	   styler.setDataItem(dataItem);

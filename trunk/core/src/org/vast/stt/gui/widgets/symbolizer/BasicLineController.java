@@ -29,7 +29,7 @@ import org.vast.stt.gui.widgets.OptionParams;
  * @date Feb 06, 2006
  * @version 1.0
  */
-public class BasicLineController extends OptionController// implements SelectionListener
+public class BasicLineController extends OptionController // implements SelectionListener
 {
 	private LineOptionHelper lineOptionHelper;
 	

@@ -60,7 +60,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 	private Symbolizer activeSymbolizer;
 	private List<Symbolizer> symbolizerList;
 	private Button closeButton;
-	private Button okButton;
+	private Button applyBtn;
 
 	// This dialog's dataItem cannot change, unlike SymbolizerWidget
 	// However, it's list of symbolizers can change if a style is added to the
@@ -180,12 +180,12 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 		buttonComp.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 		buttonComp.setLayout(new GridLayout(2, true));
 
-		okButton = new Button(buttonComp, SWT.CENTER);
+		applyBtn = new Button(buttonComp, SWT.CENTER);
 		gd = new GridData(SWT.END, SWT.CENTER, false, false);
 		gd.widthHint = 60;
-		okButton.setLayoutData(gd);
-		okButton.setText("OK");
-		okButton.addSelectionListener(this);
+		applyBtn.setLayoutData(gd);
+		applyBtn.setText("Apply");
+		applyBtn.addSelectionListener(this);
 
 		closeButton = new Button(buttonComp, SWT.CENTER);
 		gd = new GridData(SWT.END, SWT.CENTER, false, false);
@@ -250,6 +250,8 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 
 		} else if (e.widget == symCombo) {
 			setActiveSymbolizer(symCombo.getSelectionIndex());
+		} else if (e.widget == applyBtn) {
+			//  apply mappings
 		} else if (e.widget == closeButton) {
 			// Remove STTEventListener from item (a little messy still)
 			dataItem.removeListener(advGraphicsTab.optionController);
