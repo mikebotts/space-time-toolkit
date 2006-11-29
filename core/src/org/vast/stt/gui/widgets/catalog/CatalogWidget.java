@@ -13,6 +13,11 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,7 +27,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
+import org.vast.io.xml.DOMReaderException;
+import org.vast.ows.OWSException;
+import org.vast.ows.sos.SOSCapabilitiesReader;
+import org.vast.ows.wrs.WRSQuery;
+import org.vast.ows.wrs.WRSRequestWriter;
+import org.vast.ows.wrs.WRSResponseReader;
 
 /**
  * <p><b>Title:</b>
@@ -33,6 +46,7 @@ import org.eclipse.swt.widgets.Text;
  *    Allow user to search OGC Catalog by keyword, service type, roi, or provider organization
  *    TODO ADD borders to all combos and text fields
  *    TODO add time
+ *    TODO add queries for other service types (only SOS for OWS4 demo)
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -98,8 +112,54 @@ public class CatalogWidget implements SelectionListener
 		submitBtn.setText("Submit");
 		gd = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
 		submitBtn.setLayoutData(gd);
+		submitBtn.addSelectionListener(new SelectionListener(){
+			public void widgetSelected(SelectionEvent e) {
+				submitCatalogQuery();
+			}
+			public void widgetDefaultSelected(SelectionEvent e) {}
+			
+		});
 	}	
 
+	private void submitCatalogQuery(){
+		WRSRequestWriter wrsRW = new WRSRequestWriter();
+		WRSQuery query = new WRSQuery();
+		query.setPostServer("http://dev.ionicsoft.com:8082/ows4catalog/wrs/WRS");
+		query.setVersion("2.0.0");
+		InputStream is = null;
+		List<String>sosUri = null;
+		try {
+			is = wrsRW.sendRequest(query, true).getInputStream();
+			WRSResponseReader wrsReader = new WRSResponseReader();
+			sosUri = wrsReader.parseAllSOS(is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OWSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DOMReaderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(sosUri == null || sosUri.isEmpty()) {
+			 MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					 "STT Warning", "No items found in Catalog Query");
+			 return;
+		}
+		//  Cycle through SOS's and get all ObsOfferings
+		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
+		for(String sosTmp : sosUri){
+			try {
+				capsReader.readCapabilities(sosTmp, "");
+			} catch (OWSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
+	}
+	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		
