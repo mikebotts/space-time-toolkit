@@ -1059,9 +1059,9 @@
                         <member>
                            <DataItem>
                               <name>NY Doppler Radar</name>
-                              <dataProvider xlink:href="#DOPPLER_SOS"/>
+                              <dataProvider xlink:href="#KOKX_SOS"/>
                               <style>
-                                 <sld:PointSymbolizer enabled="true">
+                                 <sld:PointSymbolizer id="RADAR_POINTS" enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
                                           <ogc:PropertyName>gridData/array/point/longitude</ogc:PropertyName>
@@ -1080,31 +1080,31 @@
                                              <sld:CssParameter name="fill-red">
                                                 <LookUpTable1D>
                                                    <ogc:PropertyName>imageData/radial/data</ogc:PropertyName>
-                                                   <TableValues>0 0 15 0 15 0.50 20 0.50 20 0.39 25 0.39 25 0.28 30 0.28 30 0.17 35 0.17 35 0.06 40 0.06 40 0.94 55 0.94 55 0.56 60 0.56 60 0.69 65 0.69 65 0.79 70 0.79 70 0.88 75 0.88 75 0.88 80 1.0
+                                                   <TableValues>0 0.2 5 0.2 5 0.00 15 0.00 15 0.50 20 0.50 20 0.39 25 0.39 25 0.28 30 0.28 30 0.17 35 0.17 35 0.06 40 0.06 40 0.94 55 0.94 55 0.56 60 0.56 60 0.69 65 0.69 65 0.79 70 0.79 70 0.88 75 0.88 75 0.88 80 1.0
                                                    </TableValues>
                                                 </LookUpTable1D>
                                              </sld:CssParameter>
                                              <sld:CssParameter name="fill-green">
                                                 <LookUpTable1D>
                                                    <ogc:PropertyName>imageData/radial/data</ogc:PropertyName>
-                                                   <TableValues>0 0 05 0 05 0.94 10 0.94 10 0.56 15 0.56 15 0.88 20 0.88 20 0.72 25 0.72 25 0.56 30 0.56 30 0.41 35 0.41 35 0.25 40 0.25 40 0.75 45 0.75 45 0.50 50 0.50 50 0.06 55 0.06 55 0.00 60 0.00 60 0.12 65 0.12 65 0.25 70 0.25 70 0.38 75 0.38 75 0.5 80 0.5</TableValues>
+                                                   <TableValues>0 0.2 5 0.2 5 0.94 10 0.94 10 0.56 15 0.56 15 0.88 20 0.88 20 0.72 25 0.72 25 0.56 30 0.56 30 0.41 35 0.41 35 0.25 40 0.25 40 0.75 45 0.75 45 0.50 50 0.50 50 0.06 55 0.06 55 0.00 60 0.00 60 0.12 65 0.12 65 0.25 70 0.25 70 0.38 75 0.38 75 0.5 80 0.5</TableValues>
                                                 </LookUpTable1D>
                                              </sld:CssParameter>
                                              <sld:CssParameter name="fill-blue">
                                                 <LookUpTable1D>
                                                    <ogc:PropertyName>imageData/radial/data</ogc:PropertyName>
-                                                   <TableValues>0 0 05 0 05 0.94 10 0.94 10 0.56 15 0.56 15 0.31 20 0.31 20 0.25 25 0.25 25 0.19 30 0.19 30 0.12 35 0.12 35 0.06 45 0.06 45 0.12 55 0.12 55 0.00 60 0.00 60 0.50 65 0.50 65 0.63 70 0.63 70 0.75 75 0.75 75 0.88 80 0.88</TableValues>
+                                                   <TableValues>0 0.2 5 0.2 5 0.94 10 0.94 10 0.56 15 0.56 15 0.31 20 0.31 20 0.25 25 0.25 25 0.19 30 0.19 30 0.12 35 0.12 35 0.06 45 0.06 45 0.12 55 0.12 55 0.00 60 0.00 60 0.50 65 0.50 65 0.63 70 0.63 70 0.75 75 0.75 75 0.88 80 0.88</TableValues>
                                                 </LookUpTable1D>
                                              </sld:CssParameter>
-                                             <sld:CssParameter name="fill-opacity">
+                                             <!--<sld:CssParameter name="fill-opacity">
                                                 <LookUpTable1D>
                                                    <ogc:PropertyName>imageData/radial/data</ogc:PropertyName>
                                                    <TableValues>0 0 5 0 5 1.0 90 1.0</TableValues>
                                                 </LookUpTable1D>
-                                             </sld:CssParameter>
+                                             </sld:CssParameter>-->
                                           </sld:Fill>
                                        </sld:Mark>
-                                       <sld:Size>1</sld:Size>
+                                       <sld:Size>2</sld:Size>
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
                               </style>
@@ -1173,6 +1173,13 @@
                                     </sld:Stroke>
                                  </sld:GridMeshSymbolizer>
                               </style>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>NY Doppler Radar</name>
+                              <dataProvider xlink:href="#KDIX_SOS"/>
+                              <style xlink:href="#RADAR_POINTS"/>
                            </DataItem>
                         </member>
                         <member>
@@ -1412,7 +1419,7 @@
                </SensorMLProvider>
             </member>
             <member>
-               <SensorMLProvider id="DOPPLER_SOS">
+               <SensorMLProvider id="KOKX_SOS">
                   <name>DOPPLER SOS</name>
                   <timeExtent>
                      <TimeExtent>
@@ -1422,7 +1429,21 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./Doppler_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="./DopplerKOKX_Process.xml#DOPPLER_PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="KDIX_SOS">
+                  <name>DOPPLER SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>now</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./DopplerKDIX_Process.xml#DOPPLER_PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>
