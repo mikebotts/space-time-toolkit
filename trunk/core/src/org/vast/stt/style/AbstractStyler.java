@@ -220,6 +220,26 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
+    public boolean nextItem()
+    {
+        boolean more = false;
+        
+        for (int i = 0; i < dataLists.length; i++)
+        {
+            ListInfo info = dataLists[i]; 
+            DataIndexer nextIndexer = info.blockIndexer;
+            
+            if (nextIndexer.hasNext())
+            {
+                more = true;
+                nextIndexer.next();
+            }
+        }
+        
+        return more;
+    }
+    
+    
     /**
      * Skips the specified number of blocks from the lists
      */

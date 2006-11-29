@@ -53,7 +53,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
     
     public PointGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext())
+        if (nextItem())
         {
             point.x = point.y = point.z = 0.0;
             dataLists[0].blockIndexer.next();
