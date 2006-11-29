@@ -22,20 +22,13 @@
          <sml:OutputList>
             <sml:output name="imageData">
                <swe:DataGroup id="OUTPUT_IMAGE">
-                  <swe:component name="width">
-                     <swe:Count id="IMAGE_WIDTH"/>
+                  <swe:component name="numBins">
+                     <swe:Count id="BIN_COUNT"/>
                   </swe:component>
-                  <swe:component name="height">
-                     <swe:Count id="IMAGE_HEIGHT">1</swe:Count>
-                  </swe:component>
-                  <swe:component name="image">
-                     <swe:DataArray arraySize="#IMAGE_HEIGHT">
-                        <swe:component name="row">
-                           <swe:DataArray arraySize="#IMAGE_WIDTH">
-                              <swe:component name="data">
-                                 <swe:Count min="0" max="255"/>
-                              </swe:component>
-                           </swe:DataArray>
+                  <swe:component name="radial">
+                     <swe:DataArray arraySize="#BIN_COUNT">
+                        <swe:component name="data">
+                           <swe:Count min="0" max="255"/>
                         </swe:component>
                      </swe:DataArray>
                   </swe:component>
@@ -118,7 +111,7 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
                               </swe:component>
                               <swe:component name="offering">
-                                 <swe:Category>KOKX_DOPPLER</swe:Category>
+                                 <swe:Category>KOKX_DOPPLER_TILT0</swe:Category>
                               </swe:component>
                               <swe:component name="observables">
                                  <swe:Category>REFLECTIVITY</swe:Category>
@@ -306,13 +299,13 @@
             <sml:connection>
                <sml:Link>
                   <sml:source ref="sos/outputs/observationData/numBins"/>
-                  <sml:destination ref="this/outputs/imageData/width"/>
+                  <sml:destination ref="this/outputs/imageData/numBins"/>
                </sml:Link>
             </sml:connection>
             <sml:connection>
                <sml:Link>
                   <sml:source ref="sos/outputs/observationData/data"/>
-                  <sml:destination ref="this/outputs/imageData/image"/>
+                  <sml:destination ref="this/outputs/imageData/radial"/>
                </sml:Link>
             </sml:connection>
             <!-- gridData output -->
