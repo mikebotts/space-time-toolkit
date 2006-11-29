@@ -40,6 +40,7 @@ import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sos.SOSCapabilitiesReader;
+import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
 import org.vast.ows.wrs.WRSResponseReader;
@@ -54,6 +55,7 @@ import org.vast.ows.wrs.WRSResponseReader;
  *    TODO ADD borders to all combos and text fields
  *    TODO add time
  *    TODO add queries for other service types (only SOS for OWS4 demo)
+ *    TODO make this and CapWidget extend ScrolledComp (see AdvGeomTab)
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -71,6 +73,14 @@ public class CatalogWidget
 			"Ionic"
 	};
 	LayerTree layerTree;
+	private Text minXText;
+	private Text maxXText;
+	private Text minYText;
+	private Text maxYText;
+	
+	private static final int NO_BBOX_SET = 0;
+	private static final int BBOX_ERROR = -1;
+	private static final int BBOX_OK = 1;
 	
 	public CatalogWidget(Composite parent, int style) {
 		initGui(parent);
@@ -84,7 +94,9 @@ public class CatalogWidget
 		mainGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
 		
 		Group optionGroup = new Group(mainGroup, SWT.BORDER);
-		optionGroup.setLayout(new GridLayout(2, false));
+		GridLayout optLayout = new GridLayout(4, false);
+		optLayout.verticalSpacing = 10;
+		optionGroup.setLayout(optLayout);
 		optionGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
 		optionGroup.setText("Serarch Options");
 
@@ -96,6 +108,7 @@ public class CatalogWidget
 		serverCombo.setItems(catServers);
 		//typesCombo.setItems(new String [] {"WMS", "WCS", "WFS", "SOS"});
 		gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		gd.horizontalSpan = 3;
 		serverCombo.setLayoutData(gd);
 		serverCombo.select(0);
 		serverCombo.addSelectionListener(new SelectionListener(){
@@ -110,24 +123,62 @@ public class CatalogWidget
 		//  Keyword (Text)
 		Label kwLabel = new Label(optionGroup, SWT.LEFT);
 		kwLabel.setText("Keywords:");
-		kwLabel.setToolTipText("Space-Separated keyowrds");
 		Text kwText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
 		gd = new GridData(SWT.FILL,SWT.CENTER, true, false);
-		//gd.minimumWidth = 100;
+		gd.horizontalSpan = 3;
 		kwText.setLayoutData(gd);
+		kwText.setToolTipText("Space-Separated keyowrds");
 		
 		//  Provder (Text)
 		
 		//  ROI (text)
+		//  TODO enforce numeric entry on ROI Text widgets
+		Label minXLabel = new Label(optionGroup, SWT.LEFT);
+		minXLabel.setText("minX:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		minXLabel.setLayoutData(gd);
+		minXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		minXText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		minXText.setLayoutData(gd);
+		
+		Label maxXLabel = new Label(optionGroup, SWT.LEFT);
+		maxXLabel.setText("maxX:");
+		maxXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		maxXText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		maxXText.setLayoutData(gd);
+		
+		Label minYLabel = new Label(optionGroup, SWT.LEFT);
+		minYLabel.setText("minY:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		minYLabel.setLayoutData(gd);
+		minYText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		minYText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		minYText.setLayoutData(gd);
+		
+		Label maxYLabel = new Label(optionGroup, SWT.LEFT);
+		maxYLabel.setText("maxY:");
+		maxYText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		maxYText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		maxYText.setLayoutData(gd);
 		
 		//  Submit Btn (and potentially edit btn to add new Catalog)
 		Button submitBtn = new Button(optionGroup, SWT.PUSH);
 		submitBtn.setText("Submit");
-		gd = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
+		gd = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 4, 1);
 		submitBtn.setLayoutData(gd);
 		submitBtn.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
-				searchCatalog("http://dev.ionicsoft.com:8082/ows4catalog/wrs/WRS", "2.0.0");
+				WRSQuery query = buildQuery();
+				if(query != null)
+					searchCatalog(query);
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {}
 			
@@ -138,14 +189,25 @@ public class CatalogWidget
 		layerTree.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));		
 	}	
 
-	private List<OWSLayerCapabilities> submitCatalogQuery(String server, String version){
-		WRSRequestWriter wrsRW = new WRSRequestWriter();
+	private WRSQuery buildQuery(){
 		WRSQuery query = new WRSQuery();
-		query.setPostServer(server);
-		query.setVersion(version);
+		query.setPostServer("http://dev.ionicsoft.com:8082/ows4catalog/wrs/WRS");
+		query.setVersion("2.0.0");
+		Bbox bbox = query.getBbox();
+		int bboxStatus = loadQueryBbox(query);
+		if(bboxStatus == BBOX_ERROR)
+			return null;
+		
+		return query;
+	}
+	
+	private List<OWSLayerCapabilities> submitCatalogQuery(WRSQuery query){
+		WRSRequestWriter wrsRW = new WRSRequestWriter();
+		
 		InputStream is = null;
 		List<String>sosUri = null;
 		try {
+			wrsRW.showPostOutput = true;
 			is = wrsRW.sendRequest(query, true).getInputStream();
 			WRSResponseReader wrsReader = new WRSResponseReader();
 			sosUri = wrsReader.parseAllSOS(is);
@@ -181,21 +243,18 @@ public class CatalogWidget
 	}
 	
 	private class SearchCatalogRunnable implements IRunnableWithProgress {
-		String server;
-		String version;
 		List<OWSLayerCapabilities> layerCaps;
-		
+		WRSQuery query;
 
-		public SearchCatalogRunnable(String server, String version){
-			this.server = server;
-			this.version = version;
+		public SearchCatalogRunnable(WRSQuery query){
+			this.query = query;
 		}
 		
 		public void run(IProgressMonitor monitor) 
 			throws InvocationTargetException, InterruptedException {
-				String msg = "Attempting to read Catalog at: " + server;
+				String msg = "Attempting to read Catalog at: " + query.getPostServer();
 				monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
-				layerCaps = submitCatalogQuery(server, version);
+				layerCaps = submitCatalogQuery(query);
 		};
 		
 		public List<OWSLayerCapabilities> getLayerCaps(){
@@ -203,11 +262,12 @@ public class CatalogWidget
 		}
 	}
 	
-	protected void searchCatalog(String server, String version) {
+	protected void searchCatalog(WRSQuery query) {
 		ProgressMonitorDialog pmd = new ProgressMonitorDialog(
 				PlatformUI.getWorkbench().getDisplay().getActiveShell());
 		
-		SearchCatalogRunnable runnable = new SearchCatalogRunnable(server, version);
+		SearchCatalogRunnable runnable = new SearchCatalogRunnable(query);
+		//  Load Bbox, keywords...
 		
 		try {
 			pmd.run(true, false, runnable);
@@ -223,8 +283,39 @@ public class CatalogWidget
 			layerTree.setInput(caps);
 		else {
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-            		"STT Error", "Error reading Catalog from " + server);
+            		"STT Error", "Error reading Catalog from " + query.getPostServer());
 		}
 	}
+	
+	private int loadQueryBbox(WRSQuery query){
+		try {
+			String minXstr = minXText.getText().trim();
+			String maxXstr = maxXText.getText().trim();
+			String minYstr = minYText.getText().trim();
+			String maxYstr = maxYText.getText().trim();
+			if(minXstr.length() == 0 && minYstr.length() == 0 &&
+			   maxXstr.length() == 0 && maxYstr.length() == 0) {
+				return NO_BBOX_SET;
+			}
+			double minX = Double.parseDouble(minXstr);
+			double maxX = Double.parseDouble(minXstr);
+			double minY = Double.parseDouble(minXstr);
+			double maxY = Double.parseDouble(minXstr);
+			Bbox bbox = new Bbox();
+			bbox.setMinX(minX);
+			bbox.setMaxX(maxX);
+			bbox.setMinX(minY);
+			bbox.setMaxY(maxY);
+			query.setBbox(bbox);
+			return BBOX_OK;
+		} catch (Exception e) {
+			//  TODO hilite incorrect fields
+			 MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					 "STT Error", "BBox is invalid. Correct and resubmit.");
+			 return BBOX_ERROR;
+		}
+	}
+	
+	
 }	
 
