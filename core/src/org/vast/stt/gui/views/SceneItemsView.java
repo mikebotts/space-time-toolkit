@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.gui.STTDndTransfer;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 
@@ -113,6 +116,10 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
 		sceneTree.setContentProvider(contentProvider);
 		sceneTree.addDoubleClickListener(this);
         getSite().getPage().addPartListener(this);
+        int ops = DND.DROP_COPY | DND.DROP_MOVE;
+        Transfer [] dropfers = new Transfer[] { STTDndTransfer.getInstance()};        
+        sceneTree.addDragSupport(0, dropfers, new SceneItemsDragListener(sceneTree));
+        sceneTree.addDropSupport(ops, dropfers, new SceneItemsDropListener(sceneTree));
 	}
 	
 	
