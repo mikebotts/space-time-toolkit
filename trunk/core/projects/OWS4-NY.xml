@@ -1323,6 +1323,41 @@
                         </member>       
                      </DataList>
                   </member>
+                  <member>
+                     <DataList>
+                        <name>Radiation Sensors</name>
+                        <member visible="false">
+                           <DataItem>
+                              <name>3eTi Radiation Sensor</name>
+                              <dataProvider xlink:href="#RADIATION_SOS"/>
+                              <style>
+                                 <sld:PointSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/array/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/array/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>gridData/array/point/altitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>square</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>2</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
                </DataList>
             </contents>
          </Scene>
@@ -1416,7 +1451,7 @@
             </member>
             <member>
                <OWSDataProvider id="PROVIDER_13">
-                  <name>Temperature Data</name>
+                  <name>Forecast Temperature SOS</name>
                   <layerId>MaxT_SFC</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
                      <GetObservation service="SOS" version="0.0.31">
@@ -1454,7 +1489,7 @@
             </member>
             <member>
                <SensorMLProvider id="KOKX_SOS">
-                  <name>DOPPLER SOS</name>
+                  <name>KOKX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>now</baseTime>
@@ -1468,7 +1503,7 @@
             </member>
             <member>
                <SensorMLProvider id="KDIX_SOS">
-                  <name>DOPPLER SOS</name>
+                  <name>KDIX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>now</baseTime>
@@ -1482,7 +1517,7 @@
             </member>
             <member>
                <SensorMLProvider id="KENX_SOS">
-                  <name>DOPPLER SOS</name>
+                  <name>KENX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>now</baseTime>
@@ -1496,7 +1531,7 @@
             </member>
             <member>
                <OWSDataProvider id="NY_KJFK_SOS">
-                  <name>New York KJFK Weather SOS</name>
+                  <name>KJFK Weather SOS</name>
                   <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>WeatherNY</offering>
@@ -1518,7 +1553,7 @@
             </member>
             <member>
                <OWSDataProvider id="CSIRO_SOS">
-                  <name>New York CSIRO  SOS</name>
+                  <name>CSIRO Weather SOS</name>
                   <request postUrl="http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>gatton-HUMIDITY_TEMP</offering>
@@ -1539,7 +1574,7 @@
             </member>
             <member>
                <OWSDataProvider id="PLUME_SOS">
-                  <name>NY Chemical Plume</name>
+                  <name>NY Chemical Plume SOS</name>
                   <layerId>PLUME_DATA</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
                      <GetObservation service="SOS" version="0.0.31">
@@ -1557,6 +1592,29 @@
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="RADIATION_SOS">
+                  <name>NY Radiation SOS</name>
+                  <layerId>NJ-Transit-Radiation</layerId>
+                  <request postUrl="http://216.221.5.139:8080/sos">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NJ-Transit-Radiation</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>                                 
+                                 <gml:beginPosition>2006-11-29T06:30:00Z</gml:beginPosition>                                 
+                                 <gml:endPosition>2006-11-29T06:35:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>DataValueType</resultModel>
+                        <responseMode>inline</responseMode>                        
+                        <numberOfRecords>10</numberOfRecords>
+                     </GetObservation>                     
                   </request>
                </OWSDataProvider>
             </member>
