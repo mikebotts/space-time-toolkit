@@ -25,12 +25,10 @@ package org.vast.stt.event;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.provider.DataProvider;
 
 
@@ -59,22 +57,6 @@ public class STTProgressService implements IRunnableContext
         {
             try
             {
-//                Runnable guiRun = new Runnable()
-//                {
-//                    public void run()
-//                    {
-//                        try
-//                        {
-//                            PlatformUI.getWorkbench().getActiveWorkbenchWindow().run(fork, cancelable, runnable);
-//                        }
-//                        catch (Exception e)
-//                        {
-//                        }
-//                    }
-//                };
-//                
-//                PlatformUI.getWorkbench().getDisplay().syncExec(guiRun);
-                
                 Job myJob = new Job("Data Update: " + provider.getName())
                 {
 
