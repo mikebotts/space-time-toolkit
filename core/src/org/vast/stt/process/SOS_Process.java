@@ -73,6 +73,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected Thread workerThread;
     protected boolean hasTime, hasBbox; 
     protected boolean done, error, outputReady;
+    protected Exception lastException;
     protected Hashtable<DataComponent, UnitConverter> converters;
     protected Vector3d obsLocation;
     protected String obsName, obsProcedure;
@@ -176,6 +177,8 @@ public class SOS_Process extends DataProcess implements DataHandler
         checkData();
         done = true;
         needSync = true;
+        error = false;
+        lastException = null;
     }
     
     
@@ -227,8 +230,10 @@ public class SOS_Process extends DataProcess implements DataHandler
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
                         error = true;
+                        done = true;
+                        lastException = e;
+                        synchronized (handler) {handler.notify();}
                     }
                     finally
                     {
@@ -254,7 +259,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             {
                 outputReady = false;
                 this.notify();                
-                while (!outputReady)
+                while (!error && !outputReady)
                     this.wait();
             }
             catch (InterruptedException e)
@@ -266,8 +271,8 @@ public class SOS_Process extends DataProcess implements DataHandler
             {
                 String server = query.getPostServer();
                 if (server == null)
-                    server = query.getGetServer();
-                throw new ProcessException("Error while reading data from " + server);
+                    server = query.getGetServer();                
+                throw new ProcessException("Error while reading data from " + server, lastException);
             }
         
             if (done)
