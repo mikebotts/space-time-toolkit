@@ -29,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -75,7 +74,6 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
     @Override
     public void init()
     {
-        composite.setLayout(new FillLayout());
         Composite swt_awt = new Composite(composite, SWT.EMBEDDED);
         Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
         swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
