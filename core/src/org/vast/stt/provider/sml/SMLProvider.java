@@ -170,8 +170,7 @@ public class SMLProvider extends AbstractProvider
         }
         catch (Exception e)
         {
-            throw new DataException("Error while running SensorML process in " +
-                                     this.getName() + " data provider", e);
+            throw new DataException(updateError + this.getName(), e);
         }
     }
     
