@@ -14,7 +14,6 @@
 package org.vast.stt.gui.views;
 
 import java.util.Iterator;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -40,8 +39,6 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.STTDndTransfer;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.tree.DataEntry;
-import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneItem;
 
@@ -128,7 +125,6 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         sceneTree.addDragSupport(0, dropfers, new SceneItemsDragListener(sceneTree));
         sceneTree.addDropSupport(ops, dropfers, new SceneItemsDropListener(sceneTree));
         sceneTree.addSelectionChangedListener(this);
-        getSite().setSelectionProvider(sceneTree);
 	}
 	
 	
@@ -199,14 +195,10 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
             Iterator iterator = ((IStructuredSelection)selection).iterator();
             while (iterator.hasNext())
             {
-                DataEntry selectedEntry = (DataEntry)iterator.next();
-                if (selectedEntry instanceof WorldItem)
+                WorldSceneItem selectedItem = (WorldSceneItem)iterator.next();
+                if (selectedItem != null && ((WorldSceneItem)selectedItem).isVisible())
                 {
-                    WorldSceneItem item = scene.findItem((WorldItem)selectedEntry);
-                    if (item != null && item.isVisible())
-                    {
-                        scene.getSelectedItems().add(item);                    
-                    }
+                    scene.getSelectedItems().add(selectedItem);                    
                 }
             }
         }
@@ -224,5 +216,5 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
-    }  
+    }
 }
