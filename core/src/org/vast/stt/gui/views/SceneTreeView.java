@@ -286,6 +286,9 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
     {
         super.setScene(sc);
         expandedItems = new Object[0];
+        
+        // refresh display
+        refreshViewAsync();
     }
     
     

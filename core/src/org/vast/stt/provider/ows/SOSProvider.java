@@ -54,6 +54,7 @@ public class SOSProvider extends OWSProvider
 	public SOSProvider()
 	{
 		requestBuilder = new SOSRequestWriter();
+        //requestBuilder.showPostOutput = true;
 		dataHandler = new SWEDataHandler(this);
 	}
     
@@ -75,7 +76,7 @@ public class SOSProvider extends OWSProvider
             //query.setResponseMode(SOSQuery.ResponseMode.RESULT_TEMPLATE);
             
             // select request type (post or get)
-            boolean usePost = true;
+            boolean usePost = true;            
             dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
                         
             // parse response

@@ -15,13 +15,15 @@ package org.vast.stt.provider;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.event.STTProgressService;
 import org.vast.util.ExceptionSystem;
 
 
@@ -51,15 +53,16 @@ public abstract class AbstractProvider implements DataProvider
 	protected boolean canceled = false;
     protected boolean error = false;
     protected boolean redoUpdate = true;
+    protected boolean updating = false;
 	protected InputStream dataStream;
 	protected DataNode dataNode;
 	protected STTTimeExtent timeExtent;
     protected STTSpatialExtent spatialExtent;
 	protected STTTimeExtent maxTimeExtent;
 	protected STTSpatialExtent maxSpatialExtent;
-    protected Thread updateThread;
     protected STTEventListeners listeners;
     protected Object lock = new Object();
+    protected STTProgressService progressService;
     
     
     public abstract void init() throws DataException;
@@ -74,10 +77,12 @@ public abstract class AbstractProvider implements DataProvider
         this.setTimeExtent(new STTTimeExtent());
         this.setSpatialExtent(new STTSpatialExtent());
         listeners = new STTEventListeners(2);
+        progressService = new STTProgressService();
+        progressService.setProvider(this);
     }
       
     
-    public synchronized void startUpdate(boolean force)
+    public void startUpdate(boolean force)
     {
         if (!enabled || error)
             return;
@@ -85,7 +90,7 @@ public abstract class AbstractProvider implements DataProvider
         // if updating, continue only if force is true
         synchronized(lock)
         {
-            if (updateThread != null)
+            if (updating)
             {
                 if (!canceled && force)
                 {
@@ -97,13 +102,18 @@ public abstract class AbstractProvider implements DataProvider
                 else
                     return;
             }
+            
+            updating = true;
         }
         
         // start the update thread
-        Runnable runnable = new Runnable()
+        IRunnableWithProgress runnable = new IRunnableWithProgress()
         {
-            public void run()
+            public void run(IProgressMonitor monitor)
             {
+                if (monitor != null)
+                    monitor.beginTask("Updating " + name + " / ", IProgressMonitor.UNKNOWN);
+                
                 do
                 {
                     try
@@ -112,10 +122,6 @@ public abstract class AbstractProvider implements DataProvider
                         clearData();                                
                         canceled = false;
                         
-                        // update data
-                        //System.out.println("Updating " + name + "...");
-                        updateData();
-                        
                         synchronized(lock)
                         {
                             if (!canceled)
@@ -123,6 +129,18 @@ public abstract class AbstractProvider implements DataProvider
                             //else
                                 //System.out.println("Update canceled");
                         }
+                        
+                        // init provider
+                        if (monitor != null)
+                            monitor.subTask("Initializing...");
+                        if (!dataNode.isNodeStructureReady())
+                            init();
+                        
+                        // update data
+                        //System.out.println("Updating " + name + "...");
+                        if (monitor != null)
+                            monitor.subTask("Updating data...");
+                        updateData();
                     }
                     catch (DataException e)
                     {
@@ -140,12 +158,14 @@ public abstract class AbstractProvider implements DataProvider
                     }
                 }
                 while (redoUpdate);
-                updateThread = null;                
+                
+                updating = false;
+                if (monitor != null)
+                    monitor.done();
             }
         };
-        
-        updateThread = new Thread(runnable, "Data update: " + this.name);
-        updateThread.start();
+                
+        progressService.run(true, true, runnable);
     }
     
     
@@ -191,7 +211,7 @@ public abstract class AbstractProvider implements DataProvider
 	
 	public synchronized boolean isUpdating()
 	{
-		return updateThread.isAlive();
+		return updating;
 	}
 
 

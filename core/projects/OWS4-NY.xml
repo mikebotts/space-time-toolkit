@@ -1300,6 +1300,27 @@
                                           <name>Humidity (%)</name>
                                           <dataProvider href="#CSIRO_SOS"/>
                                           <style>
+                                             <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>dataComponents/HUMIDITY_TEMP</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                   <sld:Mark>
+                                                      <sld:WellKnownName>circle</sld:WellKnownName>
+                                                      <sld:Fill>
+                                                         <sld:CssParameter name="fill">#FF7F7F</sld:CssParameter>
+                                                      </sld:Fill>
+                                                   </sld:Mark>
+                                                   <sld:Size>5</sld:Size>
+                                                </sld:Graphic>
+                                             </sld:PointSymbolizer>
+                                          </style>
+                                          <style>
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
@@ -1310,11 +1331,11 @@
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
-                                                   <sld:CssParameter name="stroke">#FF5555</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke">#5555FF</sld:CssParameter>
                                                    <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                                                 </sld:Stroke>
                                              </sld:LineSymbolizer>
-                                          </style>
+                                          </style>                                          
                                        </DataItem>
                                     </member>                                    
                                  </DataList>
@@ -1561,7 +1582,7 @@
                            <ogc:During>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2006-11-10T16:15:00</gml:beginPosition>
-                                 <gml:endPosition>2006-11-21T17:15:00</gml:endPosition>
+                                 <gml:endPosition>2006-11-12T16:15:00</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>

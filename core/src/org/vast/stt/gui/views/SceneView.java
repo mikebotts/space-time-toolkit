@@ -41,7 +41,8 @@ import org.vast.stt.project.scene.Scene;
 public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener, STTEventListener
 {
     protected SceneType scene;
-    protected boolean refreshThreadStarted = true;
+    protected boolean refreshThreadStarted = false;
+    protected boolean refreshRequested = false;
     
     protected Runnable runRefresh = new Runnable()
     {
@@ -57,7 +58,16 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
             {
                 while (refreshThreadStarted)
                 {
-                    synchronized(this) { wait(); }                    
+                    synchronized(this)
+                    {
+                        while (!refreshRequested)
+                            wait();
+                        
+                        if (!refreshThreadStarted)
+                            return;
+                        
+                        refreshRequested = false;
+                    }                    
                     getSite().getShell().getDisplay().syncExec(runRefresh);
                 }
             }
@@ -86,17 +96,18 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     }
     
     
-    protected synchronized void refreshViewAsync()
+    protected void refreshViewAsync()
     {
-        if (!refreshThread.isAlive())
-        {
-            refreshThread.setName(scene.getName() + " Refresh Thread");
-            refreshThreadStarted = true;
-            refreshThread.start();            
-        }
-        
         synchronized (refreshThread)
         {
+            if (!refreshThreadStarted)
+            {
+                refreshThread.setName(this.getClass().getSimpleName() + " Refresh Thread");
+                refreshThreadStarted = true;
+                refreshThread.start();
+            }
+            
+            refreshRequested = true;
             refreshThread.notify();
         }
     }
@@ -106,10 +117,9 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     {
         ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
         if (pageInput != null)
-            setScene((SceneType)pageInput.getScene());
+            setScene((SceneType)pageInput.getScene());            
         else 
-            setScene(null);
-        refreshView();
+            setScene(null);        
     }
     
     
@@ -131,7 +141,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     @Override
     public void setFocus()
     {
-        refreshView();
+        //refreshViewAsync();
     }
 
 
@@ -141,7 +151,13 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
         if (scene != null)
             scene.removeListener(this);
         
-        refreshThreadStarted = false;
+        synchronized (refreshThread)
+        {
+            refreshThreadStarted = false;
+            refreshRequested = true;
+            refreshThread.notifyAll();
+        }
+        
         super.dispose();
     }
 
@@ -165,7 +181,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     
     
     public void partActivated(IWorkbenchPart part)
-    {    
+    {        
     }
     
     

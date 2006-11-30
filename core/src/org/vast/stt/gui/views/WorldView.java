@@ -171,6 +171,9 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             
             // register view as listener to the scene
             scene.addListener(this);
+            
+            // refresh display
+            refreshViewAsync();
         }
     }
     

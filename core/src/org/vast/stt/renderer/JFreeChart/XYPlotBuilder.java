@@ -37,6 +37,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.ui.RectangleInsets;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridBorderStyler;
@@ -119,6 +120,8 @@ public class XYPlotBuilder implements StylerVisitor
         String axisName = "Time (s)";
         NumberAxis domainAxis = new NumberAxis(axisName);
         domainAxis.setAutoRangeIncludesZero(false);
+        domainAxis.setNumberFormatOverride(new DateFormat());
+        domainAxis.setTickLabelInsets(new RectangleInsets(0, 30, 0, 30));
         plot.setDomainAxis(datasetCount, domainAxis);
     }
     
