@@ -19,7 +19,6 @@ import org.vast.data.*;
 import org.vast.physics.TimeExtent;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
-import org.vast.process.ProcessException;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
@@ -62,7 +61,7 @@ public class SMLProvider extends AbstractProvider
             if (process instanceof ProcessChain)
                 ((ProcessChain)process).setChildrenThreadsOn(false);
             
-            process.init();
+            process.initProcess();
             process.createNewInputBlocks();
             
             DataComponent outputs = process.getOutputList();
@@ -76,9 +75,9 @@ public class SMLProvider extends AbstractProvider
             
             dataNode.setNodeStructureReady(true);
         }
-        catch (ProcessException e)
+        catch (Exception e)
         {
-            throw new DataException("Error while parsing process " + process.getName() + "(" + process.getType() + ")", e);
+            throw new DataException("Error while initializing provider " + this.getName(), e);
         }
     }
     
@@ -148,7 +147,7 @@ public class SMLProvider extends AbstractProvider
                     do
                     {
                         process.createNewOutputBlocks();
-                        process.execute();
+                        process.runProcess();
                         
                         if (canceled)
                             return;
@@ -169,9 +168,10 @@ public class SMLProvider extends AbstractProvider
             
             outputs.clearData();
         }
-        catch (ProcessException e)
+        catch (Exception e)
         {
-            throw new DataException("Error while running SensorML process in " + this.getName(), e);
+            throw new DataException("Error while running SensorML process in " +
+                                     this.getName() + " data provider", e);
         }
     }
     
