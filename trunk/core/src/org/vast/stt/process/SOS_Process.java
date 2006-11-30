@@ -128,15 +128,9 @@ public class SOS_Process extends DataProcess implements DataHandler
             outputObsProcedure = (DataValue) outputObsInfo.getComponent("procedure");
             outputObsLocation = (DataGroup) outputObsInfo.getComponent("location");
             outputObsData = outputData.getComponent(1);
-        }
-        catch (Exception e)
-        {
-            throw new ProcessException(ioError, e);
-        }
-        
-        // Read parameters mappings + values
-        try
-        {
+
+            
+            // Read parameters mappings + values
             DataGroup sosParams = (DataGroup)paramData.getComponent("sosOptions");
             
             // service end point url
@@ -170,7 +164,7 @@ public class SOS_Process extends DataProcess implements DataHandler
         }
         catch (Exception e)
         {
-            throw new ProcessException("Invalid Parameters", e);
+            throw new ProcessException(ioError, e);
         }
         
         // check that output is compatible with reqiested data
