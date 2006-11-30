@@ -13,13 +13,17 @@
 
 package org.vast.stt.gui.views;
 
+import java.util.Iterator;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -36,10 +40,13 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.STTDndTransfer;
 import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.tree.DataEntry;
+import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneItem;
 
 
-public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClickListener
+public class SceneItemsView extends SceneView<WorldScene> implements ISelectionChangedListener, IDoubleClickListener
 {
 	public static final String ID = "STT.SceneItemsView";
 	private TreeViewer sceneTree;
@@ -120,6 +127,8 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
         Transfer [] dropfers = new Transfer[] { STTDndTransfer.getInstance()};        
         sceneTree.addDragSupport(0, dropfers, new SceneItemsDragListener(sceneTree));
         sceneTree.addDropSupport(ops, dropfers, new SceneItemsDropListener(sceneTree));
+        sceneTree.addSelectionChangedListener(this);
+        getSite().setSelectionProvider(sceneTree);
 	}
 	
 	
@@ -176,6 +185,33 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
     public void clearView()
     {
         sceneTree.setInput(null);
+    }
+    
+    
+    public void selectionChanged(SelectionChangedEvent event)
+    {
+        ISelection selection = event.getSelection();
+        scene.getSelectedItems().clear();
+        
+        // handle case of null selection
+        if (selection != null)
+        {        
+            Iterator iterator = ((IStructuredSelection)selection).iterator();
+            while (iterator.hasNext())
+            {
+                DataEntry selectedEntry = (DataEntry)iterator.next();
+                if (selectedEntry instanceof WorldItem)
+                {
+                    WorldSceneItem item = scene.findItem((WorldItem)selectedEntry);
+                    if (item != null && item.isVisible())
+                    {
+                        scene.getSelectedItems().add(item);                    
+                    }
+                }
+            }
+        }
+        
+        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
     }
 
 
