@@ -124,10 +124,13 @@ public abstract class AbstractProvider implements DataProvider
                         
                         synchronized(lock)
                         {
-                            if (!canceled)
+                            if (!canceled && !monitor.isCanceled())
                                 redoUpdate = false;
-                            //else
+                            else
+                            {
+                                break;
                                 //System.out.println("Update canceled");
+                            }
                         }
                         
                         // init provider
