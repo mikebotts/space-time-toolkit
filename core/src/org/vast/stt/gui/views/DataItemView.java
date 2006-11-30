@@ -128,7 +128,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
 	 */
     public void selectionChanged(IWorkbenchPart part, ISelection selection)
 	{
-		if (part != null && part instanceof SceneTreeView)
+		if (part != null && (part instanceof SceneTreeView || part instanceof SceneItemsView))
 		{
 		    // handle case of null selection
             if (selection == null)
