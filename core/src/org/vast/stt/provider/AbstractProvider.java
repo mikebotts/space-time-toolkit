@@ -42,6 +42,9 @@ import org.vast.util.ExceptionSystem;
  */
 public abstract class AbstractProvider implements DataProvider
 {
+    protected static final String initError = "Error while initializing data provider ";
+    protected static final String updateError = "Error while updating data provider ";
+    
     protected String name;
     protected String description;
     protected boolean enabled = false;

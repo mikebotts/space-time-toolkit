@@ -77,7 +77,7 @@ public class SMLProvider extends AbstractProvider
         }
         catch (Exception e)
         {
-            throw new DataException("Error while initializing provider " + this.getName(), e);
+            throw new DataException(initError + this.getName(), e);
         }
     }
     
