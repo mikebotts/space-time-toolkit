@@ -70,7 +70,11 @@ public class STTProgressService implements IRunnableContext
                         catch (Exception e)
                         {
                         }
-                        return Status.OK_STATUS;
+                        
+                        if (monitor.isCanceled())
+                            return Status.CANCEL_STATUS;
+                        else
+                            return Status.OK_STATUS;
                     }
                     
                 };
