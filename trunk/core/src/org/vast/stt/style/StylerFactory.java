@@ -13,18 +13,9 @@
 
 package org.vast.stt.style;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-
-import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.*;
-import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.project.table.TableSymbolizer;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.util.ExceptionHandler;
-import org.vast.util.ExceptionSystem;
 
 
 /**

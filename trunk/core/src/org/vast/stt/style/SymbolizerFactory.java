@@ -13,9 +13,7 @@
 
 package org.vast.stt.style;
 
-import java.io.InputStream;
 import java.util.Enumeration;
-
 import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
@@ -86,7 +84,6 @@ public class SymbolizerFactory {
   	
   	public static TextureSymbolizer createWMSTextureSymbolizer(){
   	    SLDReader sldReader = new SLDReader();
-		InputStream fileIs = null;
 		DOMReader dom;
 		TextureSymbolizer sym = null;
 		try {
