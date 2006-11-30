@@ -179,8 +179,11 @@ public abstract class AbstractProvider implements DataProvider
 	
     public DataNode getDataNode()
     {
-        if (!dataNode.isNodeStructureReady())
+        if (!dataNode.isNodeStructureReady() || error)
+        {
+            error = false;
             startUpdate(false);
+        }
         
         return dataNode;
     }
