@@ -44,6 +44,7 @@ import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
 import org.vast.ows.wrs.WRSResponseReader;
+import org.vast.ows.wrs.WRSQuery.QueryType;
 
 /**
  * <p><b>Title:</b>
@@ -81,6 +82,7 @@ public class CatalogWidget
 	private static final int NO_BBOX_SET = 0;
 	private static final int BBOX_ERROR = -1;
 	private static final int BBOX_OK = 1;
+	private Text kwText;
 	
 	public CatalogWidget(Composite parent, int style) {
 		initGui(parent);
@@ -123,7 +125,7 @@ public class CatalogWidget
 		//  Keyword (Text)
 		Label kwLabel = new Label(optionGroup, SWT.LEFT);
 		kwLabel.setText("Keywords:");
-		Text kwText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		kwText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
 		gd = new GridData(SWT.FILL,SWT.CENTER, true, false);
 		gd.horizontalSpan = 3;
 		kwText.setLayoutData(gd);
@@ -197,7 +199,18 @@ public class CatalogWidget
 		int bboxStatus = loadQueryBbox(query);
 		if(bboxStatus == BBOX_ERROR)
 			return null;
-		
+		String kw = kwText.getText();
+		String [] keywords = null;
+		List<QueryType> queryTypeList = new ArrayList<QueryType>(2);
+		if (kw.trim().length() > 0) {
+			keywords = kw.split(", ");
+			query.setKeyword(keywords);
+			queryTypeList.add(QueryType.KEYWORD_SOS);
+		}
+		if(bboxStatus == BBOX_OK) {
+			queryTypeList.add(QueryType.BBOX_SOS);
+		}
+			
 		return query;
 	}
 	
@@ -206,11 +219,29 @@ public class CatalogWidget
 		
 		InputStream is = null;
 		List<String>sosUri = null;
+		
 		try {
 			wrsRW.showPostOutput = true;
+			//  Either request ALL (no filtes set on query)...
 			is = wrsRW.sendRequest(query, true).getInputStream();
+			//  Either we requested ALL SOS (no filtes set on query)...
+			if(query.getQueryTypeList().isEmpty()) {
+				WRSResponseReader wrsReader = new WRSResponseReader();
+				sosUri = wrsReader.parseSOSEndpoint(is);
+				if(sosUri == null || sosUri.isEmpty()) 
+					 return null;
+				return(getOfferings(sosUri));
+			} 
+			//  .. . or we have a 2 step, filtered query
 			WRSResponseReader wrsReader = new WRSResponseReader();
-			sosUri = wrsReader.parseAllSOS(is);
+			// List EOs = wsrReader.parseExtrinsicObjects(is);
+			// for(i=0->all Objs)
+			//		is = wsrRW.findServiceById(eo);
+			//      String uri = wrsReader.parseSOSEndpoint();
+			//      SOSCapblts cap = capsReader.readCapabilities(sosTmp, "0.0.31");
+			//      layerCaps.add(cap);
+			// return layerCaps
+			return null;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,10 +252,12 @@ public class CatalogWidget
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(sosUri == null || sosUri.isEmpty()) {
-			 return null;
-		}
-		//  Cycle through SOS's and get all ObsOfferings
+		
+		return null;
+	}
+		
+	private List<OWSLayerCapabilities> getOfferings(List<String> sosUri){
+//	  Cycle through SOS's and get all ObsOfferings
 		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
 		List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
 		for(String sosTmp : sosUri){
