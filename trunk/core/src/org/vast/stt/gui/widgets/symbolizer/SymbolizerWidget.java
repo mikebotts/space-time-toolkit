@@ -27,6 +27,7 @@ import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
+import org.vast.stt.style.SymbolizerFactory;
 
 
 /**
@@ -235,10 +236,9 @@ public class SymbolizerWidget extends CheckOptionTable
                 //  How to assign default geom?  Take from existing symbolizer, or force 
                 //  user selection with wizard/dialog
         		geom = new Geometry();
-        	DataStyler styler = 
-        		StylerFactory.createDefaultStyler(asd.getStylerName().trim(), asd.getStylerType());
-            styler.setDataItem(dataItem);
-        	Symbolizer sym = styler.getSymbolizer();
+        	//Symbolizer sym = styler.getSymbolizer();
+        	Symbolizer sym = 
+        		SymbolizerFactory.createDefaultSymbolizer(asd.getStylerName().trim(), asd.getSymbolizerType());
             sym.setGeometry(geom);
         	this.addSymbolizer(sym);
         }

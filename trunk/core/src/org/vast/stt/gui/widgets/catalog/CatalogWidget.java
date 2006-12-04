@@ -13,11 +13,16 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.QueryExp;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,6 +45,7 @@ import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sos.SOSCapabilitiesReader;
+import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
@@ -129,7 +135,7 @@ public class CatalogWidget
 		gd = new GridData(SWT.FILL,SWT.CENTER, true, false);
 		gd.horizontalSpan = 3;
 		kwText.setLayoutData(gd);
-		kwText.setToolTipText("Space-Separated keyowrds");
+		kwText.setToolTipText("Keyword for search");
 		
 		//  Provder (Text)
 		
@@ -171,6 +177,12 @@ public class CatalogWidget
 		gd.widthHint = 45;
 		maxYText.setLayoutData(gd);
 		
+		// load test fields (may want to keep this, but will need to mod other logic)
+		minXText.setText("-180.0");
+		maxXText.setText("180.0");
+		minYText.setText("-90.0");
+		maxYText.setText("90.0");
+		
 		//  Submit Btn (and potentially edit btn to add new Catalog)
 		Button submitBtn = new Button(optionGroup, SWT.PUSH);
 		submitBtn.setText("Submit");
@@ -195,32 +207,39 @@ public class CatalogWidget
 		WRSQuery query = new WRSQuery();
 		query.setPostServer("http://dev.ionicsoft.com:8082/ows4catalog/wrs/WRS");
 		query.setVersion("2.0.0");
-		Bbox bbox = query.getBbox();
+		List<QueryType> queryTypeList = new ArrayList<QueryType>(2);
 		int bboxStatus = loadQueryBbox(query);
 		if(bboxStatus == BBOX_ERROR)
 			return null;
-		String kw = kwText.getText();
-		String [] keywords = null;
-		List<QueryType> queryTypeList = new ArrayList<QueryType>(2);
-		if (kw.trim().length() > 0) {
-			keywords = kw.split(", ");
-			query.setKeyword(keywords);
-			queryTypeList.add(QueryType.KEYWORD_SOS);
-		}
 		if(bboxStatus == BBOX_OK) {
 			queryTypeList.add(QueryType.BBOX_SOS);
 		}
-			
+		String keyword = kwText.getText();
+		if (keyword.trim().length() > 0) {
+			query.setKeyword(keyword);
+			queryTypeList.add(QueryType.KEYWORD_SOS);
+		}
+		//  Uncomment for multi keywords, if catalog will support it
+//		String [] keywords = null;
+//		List<QueryType> queryTypeList = new ArrayList<QueryType>(2);
+//		if (kw.trim().length() > 0) {
+//			keywords = kw.split(", ");
+//			query.setKeyword(keywords);
+//			queryTypeList.add(QueryType.KEYWORD_SOS);
+//		}
+		query.setQueryTypeList(queryTypeList);	
+		
 		return query;
 	}
 	
 	private List<OWSLayerCapabilities> submitCatalogQuery(WRSQuery query){
+
+		List<OWSLayerCapabilities> emptyList = new ArrayList<OWSLayerCapabilities> (0);
 		WRSRequestWriter wrsRW = new WRSRequestWriter();
-		
 		InputStream is = null;
-		List<String>sosUri = null;
-		
+
 		try {
+			List<String>sosUri = null;
 			wrsRW.showPostOutput = true;
 			//  Either request ALL (no filtes set on query)...
 			is = wrsRW.sendRequest(query, true).getInputStream();
@@ -229,19 +248,42 @@ public class CatalogWidget
 				WRSResponseReader wrsReader = new WRSResponseReader();
 				sosUri = wrsReader.parseSOSEndpoint(is);
 				if(sosUri == null || sosUri.isEmpty()) 
-					 return null;
+					 return emptyList;
+				is.close();
 				return(getOfferings(sosUri));
 			} 
-			//  .. . or we have a 2 step, filtered query
-			WRSResponseReader wrsReader = new WRSResponseReader();
-			// List EOs = wsrReader.parseExtrinsicObjects(is);
-			// for(i=0->all Objs)
-			//		is = wsrRW.findServiceById(eo);
-			//      String uri = wrsReader.parseSOSEndpoint();
-			//      SOSCapblts cap = capsReader.readCapabilities(sosTmp, "0.0.31");
-			//      layerCaps.add(cap);
-			// return layerCaps
-			return null;
+			//  .. . or we have a 3 step, filtered query
+			//  1) Get all objects matching the initial search
+		    WRSResponseReader wrsReader = new WRSResponseReader();
+		    List<String> extObjIds = wrsReader.parseExtrinsicObjects(is);
+		    if(extObjIds.isEmpty())
+		    	return emptyList;
+		    //  Change query type to serviceSearch
+		    List<QueryType> qlist = new ArrayList<QueryType>(1);
+		    qlist.add(QueryType.SERVICE_SOS);
+		    query.setQueryTypeList(qlist);
+		    List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
+		    for(String id : extObjIds) {
+		    //  2)  For each ID, get the serviceURI
+		    	query.setServiceSearchId(id);
+		    	is = wrsRW.sendRequest(query, true).getInputStream();
+		    	sosUri = wrsReader.parseSOSEndpoint(is);
+		    	if(sosUri.isEmpty())
+		    			continue;//break
+		    	// 3)  Read caps and get Offerings - Note, we have to manually filter this
+		    	//     to find the extObjId offering.  Not very efficient
+		    	List<OWSLayerCapabilities>  caps = getOfferings(sosUri);
+		        layerCaps.addAll(caps);
+		    }
+	        return (layerCaps);
+//			InputStreamReader isr = new InputStreamReader(is);
+//			BufferedWriter writer = new BufferedWriter(new FileWriter("C:/tcook/bbox.xml")); 
+//			int c;
+//			while((c=isr.read())!=-1) {
+//				//System.err.print((char)c);
+//				writer.write(new char[]{(char)c});
+//			}
+//			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,12 +354,14 @@ public class CatalogWidget
 			e.printStackTrace();
 		}
 		List<OWSLayerCapabilities> caps = runnable.getLayerCaps();
-		if(caps != null)
-			layerTree.setInput(caps);
-		else {
+		if(caps == null)
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
             		"STT Error", "Error reading Catalog from " + query.getPostServer());
-		}
+		else if(caps.isEmpty())
+            MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+            		"STT Information", "Catalog Query returned no results");
+		else 
+			layerTree.setInput(caps);
 	}
 	
 	private int loadQueryBbox(WRSQuery query){
@@ -331,13 +375,13 @@ public class CatalogWidget
 				return NO_BBOX_SET;
 			}
 			double minX = Double.parseDouble(minXstr);
-			double maxX = Double.parseDouble(minXstr);
-			double minY = Double.parseDouble(minXstr);
-			double maxY = Double.parseDouble(minXstr);
+			double maxX = Double.parseDouble(maxXstr);
+			double minY = Double.parseDouble(minYstr);
+			double maxY = Double.parseDouble(maxYstr);
 			Bbox bbox = new Bbox();
 			bbox.setMinX(minX);
 			bbox.setMaxX(maxX);
-			bbox.setMinX(minY);
+			bbox.setMinY(minY);
 			bbox.setMaxY(maxY);
 			query.setBbox(bbox);
 			return BBOX_OK;
