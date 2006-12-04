@@ -58,7 +58,9 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         if (nextItem())
         {
             // adjust geometry to fit projection
-            projection.adjust(geometryCrs, point);            
+            if (projection != null)
+                projection.adjust(geometryCrs, point);
+            
             return point;
         }
         

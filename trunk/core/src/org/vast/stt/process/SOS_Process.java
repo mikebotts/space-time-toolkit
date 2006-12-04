@@ -83,6 +83,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         query = new SOSQuery();
         requestBuilder = new SOSRequestWriter();
+        //requestBuilder.showPostOutput = true;
         converters = new Hashtable<DataComponent, UnitConverter>();
     }
 
@@ -149,7 +150,16 @@ public class SOS_Process extends DataProcess implements DataHandler
             String offeringID = sosParams.getComponent("offering").getData().getStringValue();
             query.setOffering(offeringID);
             
-            // observable ID
+            // procedure IDs
+            if (sosParams.existComponent("procedures"))
+            {
+                String procedures = sosParams.getComponent("procedures").getData().getStringValue();            
+                String[] procArray = procedures.split(" ");
+                for (int i=0; i<procArray.length; i++)
+                    query.getProcedures().add(procArray[i]);
+            }
+            
+            // observable IDs
             String observables = sosParams.getComponent("observables").getData().getStringValue();
             String[] obsArray = observables.split(" ");
             for (int i=0; i<obsArray.length; i++)
@@ -171,7 +181,7 @@ public class SOS_Process extends DataProcess implements DataHandler
         checkData();
         done = true;
         needSync = true;
-        error = false;
+        error = false;        
         lastException = null;
     }
     
@@ -216,7 +226,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                         // get procedure, name and location
                         obsName = reader.getObservationName();
                         obsProcedure = reader.getProcedure();
-                        obsLocation = reader.getFoiLocation();                        
+                        obsLocation = reader.getFoiLocation();
                         
                          // start parsing
                         dataParser.parse(reader.getDataStream());
@@ -253,7 +263,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             {
                 outputReady = false;
                 this.notify();                
-                while (!error && !outputReady)
+                while (!done && !error && !outputReady)
                     this.wait();
             }
             catch (InterruptedException e)
@@ -297,7 +307,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             double minX = Math.min(lon1, lon2);
             double maxX = Math.max(lon1, lon2);
             double minY = Math.min(lat1, lat2);
-            double maxY = Math.max(lat1, lat2);        
+            double maxY = Math.max(lat1, lat2);
             query.getBbox().setMinX(minX);
             query.getBbox().setMaxX(maxX);
             query.getBbox().setMinY(minY);
@@ -347,6 +357,8 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             if (dataParser != null)
                 dataParser.stop();
+            
+            synchronized (this) {this.notifyAll();}
         }
         catch (IOException e)
         {
@@ -358,11 +370,6 @@ public class SOS_Process extends DataProcess implements DataHandler
     public void dispose()
     {
         endRequest();
-        
-        synchronized (this)
-        {
-            this.notify();
-        }        
     }
     
     
@@ -374,18 +381,23 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             synchronized (this)
             {
+                // wait for exec to give us the ok to continue
+                while (outputReady)
+                    this.wait();
+                
                 outputObsData.setData(data);
                 
                 // also write observation info
                 outputObsName.getData().setStringValue(obsName);
                 outputObsProcedure.getData().setStringValue(obsProcedure);
-                outputObsLocation.getData().setDoubleValue(0, obsLocation.x);
-                outputObsLocation.getData().setDoubleValue(1, obsLocation.y);
+                outputObsLocation.getData().setDoubleValue(0, obsLocation.x * Math.PI / 180);
+                outputObsLocation.getData().setDoubleValue(1, -obsLocation.y * Math.PI / 180);
                 outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
                 
                 outputReady = true;
-                this.notify();
-                this.wait();
+                
+                // notifies exec caller that data has been parsed
+                this.notify();                
             }
         }
         catch (InterruptedException e)
@@ -398,6 +410,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         DataType dataType = data.getDataType();
         
+        // TODO unit conversion WILL be handled by global chain unit converters
         if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
         {
             UnitConverter converter = converters.get(info);

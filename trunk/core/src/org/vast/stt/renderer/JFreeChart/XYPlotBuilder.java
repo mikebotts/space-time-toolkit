@@ -140,6 +140,8 @@ public class XYPlotBuilder implements StylerVisitor
     public void visit(PointStyler styler)
     {
         styler.resetIterators();
+        if (styler.getNumPoints() == 0)
+            return;
         
         // create dataset and renderer            
         XYDataset dataset = new ChartXYDataset(currentItem.getName(), styler);
@@ -177,7 +179,9 @@ public class XYPlotBuilder implements StylerVisitor
     public void visit(LineStyler styler)
     {
         styler.resetIterators();        
-
+        if (styler.getNumPoints() == 0)
+            return;
+        
         // create dataset and renderer
         XYDataset dataset = new ChartXYDataset(currentItem.getName(), styler);
         XYItemRenderer renderer = new StandardXYItemRenderer(StandardXYItemRenderer.LINES);
