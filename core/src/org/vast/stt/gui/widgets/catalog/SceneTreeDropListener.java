@@ -66,6 +66,7 @@ import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
+import org.vast.stt.style.SymbolizerFactory;
 import org.vast.stt.style.TextureStyler;
 import org.vast.util.ExceptionSystem;
 
@@ -106,22 +107,25 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			DataProvider prov = createSosProvider(caps);
 			newItem.setDataProvider(prov);
 			//  Creat new Styler
-			DataStyler styler = createNewStyler();
-			styler.setDataItem(newItem);
-			styler.getSymbolizer().setEnabled(true);
+//			DataStyler styler = createNewStyler();
+//			styler.setDataItem(newItem);
+//			styler.getSymbolizer().setEnabled(true);
+			Symbolizer sym = createNewSymbolizer();
+			sym.setEnabled(true);
 			//  popup styler geometry mapping widget
 			GeometryDialog geomDialog = 
 				new GeometryDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), newItem);
-			newItem.getSymbolizers().add(styler.getSymbolizer());
+			newItem.getSymbolizers().add(sym);
 			return dropItem(newItem);
 		} else if (data instanceof WMSLayerCapabilities) {
 			newItem.setName(caps.getName());
 			DataProvider prov = createSensorMLProvider(caps);
 			newItem.setDataProvider(prov);
-			TextureStyler styler = StylerFactory.createWMSTextureStyler(newItem);
-			styler.setDataItem(newItem);
-			styler.getSymbolizer().setEnabled(true);
-			newItem.getSymbolizers().add(styler.getSymbolizer());
+			//TextureStyler styler = StylerFactory.createWMSTextureStyler(newItem);
+			Symbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
+			//styler.setDataItem(newItem);
+			sym.setEnabled(true);
+			newItem.getSymbolizers().add(sym);
 			return dropItem(newItem);
 		} else if (data instanceof WCSLayerCapabilities) {
 			System.err.println("Add WCS drop support");
@@ -136,17 +140,18 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		}
 	}
 
-	public DataStyler createNewStyler() {
+	public Symbolizer createNewSymbolizer() {
 		AddSymbolizerDialog asd = new AddSymbolizerDialog(
 				PlatformUI.getWorkbench().getDisplay().getActiveShell());
 		int rc = asd.getReturnCode();
 		if (rc != IDialogConstants.OK_ID) 
 			return null;
 		
-		DataStyler styler = 
-			StylerFactory.createDefaultStyler(asd.getStylerName().trim(), asd.getStylerType());
-		
-		return styler;
+		//DataStyler styler = 
+		//	StylerFactory.createDefaultStyler(asd.getStylerName().trim(), asd.getStylerType());
+		Symbolizer symbolizer = 
+			SymbolizerFactory.createDefaultSymbolizer(asd.getStylerName().trim(), asd.getSymbolizerType());
+		return symbolizer;
 	}
 
 	/**

@@ -11,28 +11,28 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.vast.stt.style.StylerFactory.StylerType;
+import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 
 public class AddSymbolizerDialog extends Dialog {
-	private StylerType[] stylerTypes;  
-	private String [] stylerTypeStr; //= { "point", "line", "grid", "polygon", "raster", "texture", "label"};
+	private SymbolizerType[] symbolizerTypes;  
+	private String [] stylerTypeStr;
 	private Combo typeCombo;
 	private Text nameText;
-	private StylerType type;
+	private SymbolizerType type;
 	private String name;
 	
 	public AddSymbolizerDialog(Shell parent){
 		super(parent);
-		initStylerTypes();
+		initSymbolizerTypes();
 		this.open();
 	}
 
 	//  Generate string [] for types 
-	private void initStylerTypes(){
-		stylerTypes = StylerType.values();
-		stylerTypeStr = new String[stylerTypes.length];
+	private void initSymbolizerTypes(){
+		symbolizerTypes = SymbolizerType.values();
+		stylerTypeStr = new String[symbolizerTypes.length];
 		int i=0;
-		for(StylerType st : stylerTypes){
+		for(SymbolizerType st : symbolizerTypes){
 			stylerTypeStr[i++] = st.toString();
 		}
 	}
@@ -73,12 +73,12 @@ public class AddSymbolizerDialog extends Dialog {
 	}
 
 	protected void okPressed() {
-		type = stylerTypes[typeCombo.getSelectionIndex()];
+		type = symbolizerTypes[typeCombo.getSelectionIndex()];
 		name = nameText.getText();
 		super.okPressed();
 	}
 	
-	public StylerType getStylerType(){
+	public SymbolizerType getSymbolizerType(){
 		return type;
 	}
 	
