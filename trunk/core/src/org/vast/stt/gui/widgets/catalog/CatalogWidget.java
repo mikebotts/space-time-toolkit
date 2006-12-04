@@ -141,26 +141,8 @@ public class CatalogWidget
 		
 		//  ROI (text)
 		//  TODO enforce numeric entry on ROI Text widgets
-		Label minXLabel = new Label(optionGroup, SWT.LEFT);
-		minXLabel.setText("minX:");
-		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
-		minXLabel.setLayoutData(gd);
-		minXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
-		minXText.setTextLimit(15);
-		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
-		gd.widthHint = 45;
-		minXText.setLayoutData(gd);
-		
-		Label maxXLabel = new Label(optionGroup, SWT.LEFT);
-		maxXLabel.setText("maxX:");
-		maxXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
-		maxXText.setTextLimit(15);
-		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
-		gd.widthHint = 45;
-		maxXText.setLayoutData(gd);
-		
 		Label minYLabel = new Label(optionGroup, SWT.LEFT);
-		minYLabel.setText("minY:");
+		minYLabel.setText("minLon:");
 		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
 		minYLabel.setLayoutData(gd);
 		minYText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
@@ -169,19 +151,37 @@ public class CatalogWidget
 		gd.widthHint = 45;
 		minYText.setLayoutData(gd);
 		
+		Label minXLabel = new Label(optionGroup, SWT.LEFT);
+		minXLabel.setText("minLat:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		minXLabel.setLayoutData(gd);
+		minXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		minXText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		minXText.setLayoutData(gd);
+
 		Label maxYLabel = new Label(optionGroup, SWT.LEFT);
-		maxYLabel.setText("maxY:");
+		maxYLabel.setText("maxLon:");
 		maxYText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
 		maxYText.setTextLimit(15);
 		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
 		gd.widthHint = 45;
-		maxYText.setLayoutData(gd);
+		maxYText.setLayoutData(gd);		
+		
+		Label maxXLabel = new Label(optionGroup, SWT.LEFT);
+		maxXLabel.setText("maxLat:");
+		maxXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
+		maxXText.setTextLimit(15);
+		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
+		gd.widthHint = 45;
+		maxXText.setLayoutData(gd);
 		
 		// load test fields (may want to keep this, but will need to mod other logic)
-		minXText.setText("-180.0");
-		maxXText.setText("180.0");
-		minYText.setText("-90.0");
-		maxYText.setText("90.0");
+		minXText.setText("-90.0");
+		maxXText.setText("90.0");
+		minYText.setText("-180.0");
+		maxYText.setText("180.0");
 		
 		//  Submit Btn (and potentially edit btn to add new Catalog)
 		Button submitBtn = new Button(optionGroup, SWT.PUSH);
@@ -341,11 +341,12 @@ public class CatalogWidget
 		ProgressMonitorDialog pmd = new ProgressMonitorDialog(
 				PlatformUI.getWorkbench().getDisplay().getActiveShell());
 		
+		pmd.setCancelable(true);
 		SearchCatalogRunnable runnable = new SearchCatalogRunnable(query);
 		//  Load Bbox, keywords...
 		
 		try {
-			pmd.run(true, false, runnable);
+			pmd.run(true, true, runnable);
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
