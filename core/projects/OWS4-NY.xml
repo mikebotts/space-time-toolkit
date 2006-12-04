@@ -1217,6 +1217,83 @@
                            </DataItem>
                         </member>
                         <member>
+                           <DataItem>
+                              <name>IFGI NY KJFK Sensor</name>
+                              <dataProvider href="#NY_KJFK_SOS"/>
+                              <style>
+                                 <sld:PointSymbolizer id="IFGI_STATION_POINT" enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>observationInfo/location/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>observationInfo/location/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>triangle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>8</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:TextSymbolizer id="IFGI_STATION_LABEL" enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>observationInfo/location/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>observationInfo/location/lat</ogc:PropertyName>
+                                       </sld:CssParameter>                                       
+                                    </sld:Geometry>
+                                    <sld:Label>
+                                       <ogc:PropertyName>observationInfo/name</ogc:PropertyName>
+                                    </sld:Label>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#0066CC</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:TextSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>IFGI NY KLGA Sensor</name>
+                              <dataProvider href="#NY_KLGA_SOS"/>
+                              <style xlink:href="#IFGI_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>IFGI NY KEWR Sensor</name>
+                              <dataProvider href="#NY_KEWR_SOS"/>
+                              <style xlink:href="#IFGI_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>IFGI NY KNYC Sensor</name>
+                              <dataProvider href="#NY_KNYC_SOS"/>
+                              <style xlink:href="#IFGI_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>IFGI NY KTEB Sensor</name>
+                              <dataProvider href="#NY_KTEB_SOS"/>
+                              <style xlink:href="#IFGI_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
                            <ChartScene>
                               <name>Weather Charts</name>
                               <contents>
@@ -1229,10 +1306,10 @@
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>dataComponents/temperature</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/temp</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -1243,7 +1320,7 @@
                                           </style>
                                        </DataItem>
                                     </member>
-                                    <member visible="true">
+                                    <member visible="false">
                                        <DataItem enabled="true">
                                           <name>Pressure (PSI)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
@@ -1551,26 +1628,79 @@
                </SensorMLProvider>
             </member>
             <member>
-               <OWSDataProvider id="NY_KJFK_SOS">
+               <SensorMLProvider id="NY_KNYC_SOS">
+                  <name>KNYC Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>950400</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKNYC</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="NY_KLGA_SOS">
+                  <name>KLGA Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>950400</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKLGA</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="NY_KJFK_SOS">
                   <name>KJFK Weather SOS</name>
-                  <request postUrl="http://mars.uni-muenster.de:8080/52nSosWNY/sos">
-                     <GetObservation service="SOS" version="0.0.31">
-                        <offering>WeatherNY</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-11-10T16:15:00</gml:beginPosition>
-                                 <gml:endPosition>2006-11-21T16:15:00</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
-                        <procedure>urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</procedure>
-                        <observedProperty>urn:x-ogc:def:phenomenon:OGC:temperature</observedProperty>
-                        <observedProperty>urn:x-ogc:def:phenomenon:OGC:pressure</observedProperty>
-                        <resultFormat>text/xml;subtype="OM"</resultFormat>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>950400</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="NY_KEWR_SOS">
+                  <name>KEWR Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>950400</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKEWR</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="NY_KTEB_SOS">
+                  <name>KTEB Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>950400</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKTEB</value>
+               </SensorMLProvider>
             </member>
             <member>
                <OWSDataProvider id="CSIRO_SOS">
@@ -1620,13 +1750,13 @@
                <OWSDataProvider id="RADIATION_SOS">
                   <name>NY Radiation SOS</name>
                   <layerId>NJ-Transit-Radiation</layerId>
-                  <request postUrl="http://216.221.5.139:8080/sos">
+                  <request postUrl="http://216.221.5.139:8080/sos/">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NJ-Transit-Radiation</offering>
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>                                 
-                                 <gml:beginPosition>2006-11-29T06:30:00Z</gml:beginPosition>                                 
+                                 <gml:beginPosition>2006-11-29T06:30:00Z</gml:beginPosition>
                                  <gml:endPosition>2006-11-29T06:35:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
