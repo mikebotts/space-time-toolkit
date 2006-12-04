@@ -34,12 +34,6 @@ import org.vast.stt.project.tree.DataItem;
  */
 public class StylerFactory
 {
-    public static enum StylerType
-    {
-        point, line, grid, polygon, raster, texture, label
-    };
-
-
     public static DataStyler createStyler(Symbolizer sym)
     {
         DataStyler styler = null;
@@ -82,89 +76,4 @@ public class StylerFactory
         return styler;
     }
 
-
-    /**
-     * Construct a new styler with the given name, stylerType, and DataProvider
-     * @param stylerName
-     * @param stylerType
-     * @param dataItem
-     * @return the newly created styler
-     */
-    public static DataStyler createDefaultStyler(String stylerName, StylerType stylerType)
-    {
-        DataStyler newStyler = null;
-        switch (stylerType)
-        {
-        case point:
-            newStyler = StylerFactory.createDefaultPointStyler();
-            break;
-        case line:
-            newStyler = StylerFactory.createDefaultLineStyler();
-            break;
-//        case texture:
-//            newStyler = StylerFactory.createDefaultTextureStyler();
-//            break;
-        default:
-            System.err.println("StylerType not supported in createNewStyler()");
-            return null;
-        }
-        if(newStyler == null) {
-            System.err.println("StylerFactory.createNewStyler failed for: " + stylerType);
-            return null;
-        }
-        newStyler.getSymbolizer().setName(stylerName);
-        
-        return newStyler;
-    }
-
-
-    /**
-     * Convenience method for constructing a new PointStyler with a default 
-     * size and color, and the geometry settings of the input DataProvider 
-     * @param provider - the dataProvider to use for the new Styler
-     * @return PointStyler
-     */
-    private static PointStyler createDefaultPointStyler()
-    {
-        PointStyler styler = new PointStyler();
-
-        PointSymbolizer symbolizer = SymbolizerFactory.createDefaultPointSymbolizer();
-        styler.setSymbolizer(symbolizer);
-
-        return styler;
-    }
-
-
-    /**
-     * Convenience method for constructing a new LineStyler with a default 
-     * size and color, and the geometry settings of the input DataProvider
-     * @param provider - the dataProvider to use for the new Styler
-     * @return new LineStyler
-     */
-    private static LineStyler createDefaultLineStyler()
-    {
-        LineStyler styler = new LineStyler();
-
-        LineSymbolizer symbolizer = SymbolizerFactory.createDefaultLineSymbolizer();
-        styler.setSymbolizer(symbolizer);
-
-        return styler;
-    }
-
-    /**
-    * @param provider - the dataProvider to use for the new Styler
-    * @return new TextureStyler
-    */
-   public static TextureStyler createWMSTextureStyler(DataItem dataItem)
-   {
-	   TextureStyler styler = new TextureStyler();
-	   styler.setDataItem(dataItem);
-	   
-	   TextureSymbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
-	   
-	   styler.setSymbolizer(sym);
-	   styler.setDataItem(dataItem);
-	   
-	   return styler;
-   }
 }

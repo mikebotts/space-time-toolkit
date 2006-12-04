@@ -14,6 +14,7 @@
 package org.vast.stt.style;
 
 import java.util.Enumeration;
+
 import org.vast.io.xml.DOMReader;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
@@ -24,17 +25,17 @@ import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.util.ExceptionSystem;
 
 /**
  * <p><b>Title:</b>
- *  TODO:  Add Title
+ * 	SymbolizerFactory
  * </p>
  *
  * <p><b>Description:</b><br/>
- *  TODO: Add Description
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -45,7 +46,39 @@ import org.vast.util.ExceptionSystem;
 
 public class SymbolizerFactory {
 
-  	public static PointSymbolizer createDefaultPointSymbolizer(){
+	public static enum SymbolizerType
+    {
+        point, line, grid, polygon, raster, texture, label
+    };
+	
+    public static Symbolizer createDefaultSymbolizer(String symName, SymbolizerType symType)
+    {
+        Symbolizer newSymbolizer = null;
+        switch (symType)
+        {
+        case point:
+        	newSymbolizer = SymbolizerFactory.createDefaultPointSymbolizer();
+            break;
+        case line:
+        	newSymbolizer = SymbolizerFactory.createDefaultLineSymbolizer();
+            break;
+//        case texture:
+//            newStyler = StylerFactory.createDefaultTextureStyler();
+//            break;
+        default:
+            System.err.println("SymbolizerFactory not supported in createNewSym()");
+            return null;
+        }
+        if(newSymbolizer == null) {
+            System.err.println("SymbolizerFactory.createNewSym failed for: " + symType);
+            return null;
+        }
+        newSymbolizer.setName(symName);
+        
+        return newSymbolizer;
+    }
+
+    public static PointSymbolizer createDefaultPointSymbolizer(){
 		PointSymbolizer symbolizer = new PointSymbolizer();
 
 		//  size
