@@ -358,7 +358,8 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            drawOneItem(nextItem);
+            try {drawOneItem(nextItem);}
+            catch (RuntimeException e) {e.printStackTrace();}
         }
 
         // draw camera target if enabled
@@ -575,7 +576,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             SWTContext = null;
             JOGLContext = null;
             DisplayListManager.DLTables.clear();
-            TextureManager.symTextureTables.clear();            
+            TextureManager.symTextureTables.clear();
         }
     }
     
@@ -641,70 +642,72 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
      */
     public void visit(LabelStyler styler)
     {
-        LabelGraphic label;
+        LabelGraphic label1, label2;
         styler.resetIterators();
         int minDist = 100;
         byte[] buf = new byte[1];
         buf[0] = (byte) 0x01;
-
+        double xw1, yw1, xw2, yw2;
+        
         gl.glEnable(GL.GL_STENCIL_TEST);
 
         while (styler.nextBlock() != null)
         {
-            while ((label = styler.nextPoint()) != null)
+            while ((label1 = styler.nextPoint()) != null)
             {
-                double x1 = label.x;
-                double y1 = label.y;
-                double z1 = label.z;
+                double x1 = label1.x;
+                double y1 = label1.y;
+                double z1 = label1.z;
 
                 // get projected coordinates
                 glu.gluProject(x1, y1, z1, modelM, 0, projM, 0, viewPort, 0, coords, 0);
-                double xw1 = coords[0];
-                double yw1 = coords[1];
+                xw1 = xw2 = coords[0];
+                yw1 = yw2 = coords[1];
 
                 // get the first far enough point
-                while ((label = styler.nextPoint()) != null)
+                while ((label2 = styler.nextPoint()) != null)
                 {
-                    double x2 = label.x;
-                    double y2 = label.y;
-                    double z2 = label.z;
+                    double x2 = label2.x;
+                    double y2 = label2.y;
+                    double z2 = label2.z;
 
                     // get projected coordinates                    
                     glu.gluProject(x2, y2, z2, modelM, 0, projM, 0, viewPort, 0, coords, 0);
-                    double xw2 = coords[0];
-                    double yw2 = coords[1];
+                    xw2 = coords[0];
+                    yw2 = coords[1];
 
                     // compute distance between two points
                     double dx = Math.abs(xw1 - xw2);
                     double dy = Math.abs(yw1 - yw2);
                     double dist = dx + dy;
-
-                    // print label only if points are more than minDist pixels appart
+                    
+                    // get out only if points are more than minDist pixels appart
                     if (dist > minDist)
-                    {
-                        gl.glColor4f(label.r, label.g, label.b, label.a);
-                        gl.glWindowPos2d((xw1 + xw2) / 2 + label.offsetX, (yw1 + yw2) / 2 + label.offsetY);
+                        break;
+                }
+                
+                // print label
+                gl.glColor4f(label1.r, label1.g, label1.b, label1.a);
+                gl.glWindowPos2d((xw1 + xw2) / 2 + label1.offsetX, (yw1 + yw2) / 2 + label1.offsetY);
 
-                        gl.glGetIntegerv(GL.GL_CURRENT_RASTER_POSITION_VALID, boolResult, 0);
-                        if (boolResult[0] != 0)
-                        {
-                            // draw label
-//                            gl.glStencilFunc(GL.GL_EQUAL, 0x0, 0x1);
-//                            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
-                            glut.glutBitmapString(GLUT.BITMAP_8_BY_13, label.text);
+                gl.glGetIntegerv(GL.GL_CURRENT_RASTER_POSITION_VALID, boolResult, 0);
+                if (boolResult[0] != 0)
+                {
+                    // draw label
+//                    gl.glStencilFunc(GL.GL_EQUAL, 0x0, 0x1);
+//                    gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+                    glut.glutBitmapString(GLUT.BITMAP_8_BY_13, label1.text);
 
-                            // draw mask
-//                            int length = glut.glutBitmapLength(GLUT.BITMAP_8_BY_13, label.text);
-//                            gl.glViewport(viewPort[0] + label.offsetX + length / 2 - 50, viewPort[1] + label.offsetY - 44, viewPort[2], viewPort[3]);
-//                            gl.glRasterPos3d(label.x, label.y, label.z);
-//                            gl.glPixelZoom(100, 100);
-//                            gl.glStencilFunc(GL.GL_ALWAYS, 0x1, 0x1);
-//                            gl.glStencilOp(GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
-//                            gl.glDrawPixels(1, 1, GL.GL_STENCIL_INDEX, GL.GL_BYTE, ByteBuffer.wrap(buf));
+                    // draw mask
+//                    int length = glut.glutBitmapLength(GLUT.BITMAP_8_BY_13, label.text);
+//                    gl.glViewport(viewPort[0] + label.offsetX + length / 2 - 50, viewPort[1] + label.offsetY - 44, viewPort[2], viewPort[3]);
+//                    gl.glRasterPos3d(label.x, label.y, label.z);
+//                    gl.glPixelZoom(100, 100);
+//                    gl.glStencilFunc(GL.GL_ALWAYS, 0x1, 0x1);
+//                    gl.glStencilOp(GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
+//                    gl.glDrawPixels(1, 1, GL.GL_STENCIL_INDEX, GL.GL_BYTE, ByteBuffer.wrap(buf));
 
-                            break;
-                        }
-                    }
+                    break;
                 }
             }
         }

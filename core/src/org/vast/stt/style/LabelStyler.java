@@ -49,11 +49,10 @@ public class LabelStyler extends AbstractStyler
     
     public LabelGraphic nextPoint()
     {
-        if (dataLists[0].blockIndexer.hasNext())
+        label.x = label.y = label.z = 0.0;
+        
+        if (nextItem())
         {
-            label.x = label.y = label.z = 0.0;
-            dataLists[0].blockIndexer.next();
-            
             // adjust geometry to fit projection
             if (projection != null)
                 projection.adjust(geometryCrs, label);

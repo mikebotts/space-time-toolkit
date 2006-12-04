@@ -160,7 +160,7 @@ public class SMLProvider extends AbstractProvider
                         }
                         
                         // send event for redraw
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));                        
                     }
                     while (!process.getInputConnections().get(0).isNeeded());
                 }

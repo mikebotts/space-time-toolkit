@@ -141,7 +141,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     @Override
     public void setFocus()
     {
-        //refreshViewAsync();
+        refreshViewAsync();
     }
 
 
