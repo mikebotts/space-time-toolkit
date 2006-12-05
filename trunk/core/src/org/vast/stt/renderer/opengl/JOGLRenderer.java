@@ -647,7 +647,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         int minDist = 100;
         byte[] buf = new byte[1];
         buf[0] = (byte) 0x01;
-        double xw1, yw1, xw2, yw2;
+        double xw1, yw1, zw1, xw2, yw2;
         
         gl.glEnable(GL.GL_STENCIL_TEST);
 
@@ -663,6 +663,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
                 glu.gluProject(x1, y1, z1, modelM, 0, projM, 0, viewPort, 0, coords, 0);
                 xw1 = xw2 = coords[0];
                 yw1 = yw2 = coords[1];
+                zw1 = coords[2];
 
                 // get the first far enough point
                 while ((label2 = styler.nextPoint()) != null)
@@ -688,7 +689,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
                 
                 // print label
                 gl.glColor4f(label1.r, label1.g, label1.b, label1.a);
-                gl.glWindowPos2d((xw1 + xw2) / 2 + label1.offsetX, (yw1 + yw2) / 2 + label1.offsetY);
+                gl.glWindowPos3d((xw1 + xw2) / 2 + label1.offsetX, (yw1 + yw2) / 2 + label1.offsetY, zw1);
 
                 gl.glGetIntegerv(GL.GL_CURRENT_RASTER_POSITION_VALID, boolResult, 0);
                 if (boolResult[0] != 0)
@@ -696,7 +697,10 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
                     // draw label
 //                    gl.glStencilFunc(GL.GL_EQUAL, 0x0, 0x1);
 //                    gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+                    gl.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT);
+                    gl.glDepthFunc(GL.GL_ALWAYS);
                     glut.glutBitmapString(GLUT.BITMAP_8_BY_13, label1.text);
+                    gl.glPopAttrib();
 
                     // draw mask
 //                    int length = glut.glutBitmapLength(GLUT.BITMAP_8_BY_13, label.text);
