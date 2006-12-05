@@ -51,6 +51,9 @@
                   <swe:component name="temp">
                      <swe:Quantity definition="urn:ogc:phenomenon:temperature" uom="Cel"/>
                   </swe:component>
+                  <swe:component name="pressure">
+                     <swe:Quantity definition="urn:ogc:phenomenon:temperature" uom="mBar"/>
+                  </swe:component>
                </swe:DataGroup>
             </sml:output>
          </sml:OutputList>
@@ -75,7 +78,7 @@
                      <swe:Category>urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</swe:Category>
                   </swe:component>
                   <swe:component name="observables">
-                     <swe:Category>urn:x-ogc:def:phenomenon:OGC:temperature</swe:Category>
+                     <swe:Category>urn:x-ogc:def:phenomenon:OGC:temperature urn:x-ogc:def:phenomenon:OGC:pressure</swe:Category>
                   </swe:component>
                   <swe:component name="format">
                      <swe:Category>text/xml;subtype="OM"</swe:Category>
