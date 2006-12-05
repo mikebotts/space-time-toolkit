@@ -391,7 +391,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             outputObsName.getData().setStringValue(obsName);
             outputObsProcedure.getData().setStringValue(obsProcedure);
             outputObsLocation.getData().setDoubleValue(0, obsLocation.x * Math.PI / 180);
-            outputObsLocation.getData().setDoubleValue(1, -obsLocation.y * Math.PI / 180);
+            outputObsLocation.getData().setDoubleValue(1, obsLocation.y * Math.PI / 180);
             outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
             
             // notify exec thread that next packet has been parsed
