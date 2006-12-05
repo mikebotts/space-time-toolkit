@@ -1348,14 +1348,6 @@
                            </DataItem>
                         </member>
                         <member>
-                           <DataItem>
-                              <name>CSIRO GATTON 4-25</name>
-                              <dataProvider href="#CSIRO_SOS_4"/>
-                              <style  xlink:href="#CSIRO_STATION_POINT"/>
-                              <style xlink:href="#IFGI_STATION_LABEL"/>
-                           </DataItem>
-                        </member>
-                        <member>
                            <ChartScene>
                               <name>Weather Charts</name>
                               <contents>
@@ -1769,9 +1761,9 @@
                   <name>GATTON Weather SOS</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2006-11-10T16:15:00</baseTime>
-                        <lagTime>216000</lagTime>
-                        <leadTime>0</leadTime>
+                        <baseTime>2006-11-08T08:00:00</baseTime>
+                        <lagTime>0</lagTime>
+                        <leadTime>36000</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -1812,45 +1804,6 @@
                   <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-3-25</value>
                </SensorMLProvider>
             </member>
-            <member>
-               <SensorMLProvider id="CSIRO_SOS_4">
-                  <name>GATTON Weather SOS</name>
-                  <timeExtent>
-                     <TimeExtent>
-                        <baseTime>2006-11-10T16:15:00</baseTime>
-                        <lagTime>216000</lagTime>
-                        <leadTime>0</leadTime>
-                        <stepTime>0</stepTime>
-                     </TimeExtent>
-                  </timeExtent>
-                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
-                  <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
-                  <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-4-25</value>
-               </SensorMLProvider>
-            </member>
-            <!--
-            <member>
-               <OWSDataProvider id="CSIRO_SOS">
-                  <name>CSIRO Weather SOS</name>
-                  <request postUrl="http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos">
-                     <GetObservation service="SOS" version="0.0.31">
-                        <offering>gatton-HUMIDITY_TEMP</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-11-10T16:15:00</gml:beginPosition>
-                                 <gml:endPosition>2006-11-12T16:15:00</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
-                        <procedure>urn:ogc:def:procedure:CSIRO:gatton-1-25</procedure>
-                        <observedProperty>urn:ogc:def:phenomenon:CSIRO:HUMIDITY_TEMP</observedProperty>
-                        <resultFormat>text/xml;subtype="OM"</resultFormat>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
-            </member>
-            -->
             <member>
                <OWSDataProvider id="PLUME_SOS">
                   <name>NY Chemical Plume SOS</name>
