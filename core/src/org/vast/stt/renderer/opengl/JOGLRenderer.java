@@ -768,7 +768,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gl.glPolygonOffset(0.0f, zBufferOffset*100 - 10);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);            
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);          
         }
         
         updateZBufferOffset();
@@ -797,9 +797,8 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
             displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);
+            updateZBufferOffset();
         }
-        
-        updateZBufferOffset();
     }
 
 
@@ -828,9 +827,8 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             textureRenderer.blockCount = 1;
             textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
             displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, false);
+            updateZBufferOffset();
         }
-        
-        updateZBufferOffset();
         
         // reload the void texture
         gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, 0);
