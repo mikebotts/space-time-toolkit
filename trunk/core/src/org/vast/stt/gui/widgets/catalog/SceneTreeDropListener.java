@@ -45,14 +45,10 @@ import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
-import org.vast.sensorML.SMLException;
-import org.vast.sensorML.reader.ProcessLoader;
-import org.vast.sensorML.reader.ProcessReader;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.symbolizer.AddSymbolizerDialog;
-import org.vast.stt.gui.widgets.symbolizer.GeometryDialog;
 import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
@@ -61,14 +57,9 @@ import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
-//import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.SymbolizerFactory;
-import org.vast.stt.style.TextureStyler;
 import org.vast.util.ExceptionSystem;
 
 /**
@@ -103,21 +94,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
-			DataProvider prov = createSensorMLProvider(caps);
-			//  For now, use SOSProvider
-			//DataProvider prov = createSosProvider(caps);
-			newItem.setDataProvider(prov);
-			//  Creat new Styler
-//			DataStyler styler = createNewStyler();
-//			styler.setDataItem(newItem);
-//			styler.getSymbolizer().setEnabled(true);
-			Symbolizer sym = createNewSymbolizer();
-			sym.setEnabled(true);
-			//  popup styler geometry mapping widget
-			GeometryDialog geomDialog = 
-				new GeometryDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), newItem);
-			newItem.getSymbolizers().add(sym);
-			return dropItem(newItem);
+			return false;
 		} else if (data instanceof WMSLayerCapabilities) {
 			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
 			return dropItem(item);
@@ -141,8 +118,6 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		if (rc != IDialogConstants.OK_ID) 
 			return null;
 		
-		//DataStyler styler = 
-		//	StylerFactory.createDefaultStyler(asd.getStylerName().trim(), asd.getStylerType());
 		Symbolizer symbolizer = 
 			SymbolizerFactory.createDefaultSymbolizer(asd.getStylerName().trim(), asd.getSymbolizerType());
 		return symbolizer;
@@ -244,59 +219,25 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			DOMReader dom = new DOMReader(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
 			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
+			//  load default fields from caps into SensorMLProvider 
+			loadSensorMLProvider(provider, caps);
 			
 			return worldItem;
 		} catch (Exception e){
 			e.printStackTrace();
 			return null;
 		}
-			
-//		item.setName(caps.getName());
-//		DataProvider prov = createSensorMLProvider(caps);
-//		item.setDataProvider(prov);
-//		Symbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
-//		sym.setEnabled(true);
-//		item.getSymbolizers().add(sym);
-//		
-//		return item;
 	}
 
 	//  TODO  Hardwired for WMS now- generalize
-	protected DataProvider createSensorMLProvider(OWSLayerCapabilities caps) {
-		SMLProvider prov = new SMLProvider();
+	protected void loadSensorMLProvider(SMLProvider provider, OWSLayerCapabilities caps) {
 		ProcessChain process = null;
 		WMS_Process wmsProc = null;
-
+		
 		try {
-			// Input mappings
-			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", "WMS_FlatGrid_Process.xml", false);
-			String processFileUrl = null;
-			if (e.hasMoreElements())
-				processFileUrl = (String) e.nextElement().toString();
-
-			if (processFileUrl == null) {
-				ExceptionSystem
-						.display(new Exception(
-								"STT error: Cannot find template\\WMS_FlatGrid_Process.xml"));
-				return null;
-			}
-
-			DOMReader dom = new DOMReader(processFileUrl + "#PROCESS", false);
-			ProcessReader processReader = new ProcessReader(dom);
-			processReader.setReadMetadata(false);
-			processReader.setCreateExecutableProcess(true);
-
-			// load process map and parse process chain
-			String processMapUrl = null;
-			e = STTPlugin.getDefault().getBundle().findEntries("conf",
-					"ProcessMap.xml", false);
-			if (e.hasMoreElements())
-				processMapUrl = (String) e.nextElement().toString();
-			ProcessLoader.reloadMaps(processMapUrl);
-			process = (ProcessChain) processReader.readProcess(dom
-					.getBaseElement());
-
+			process = (ProcessChain)provider.getProcess();
+			
 			//  Bold assumptions into processChain structure...
 			WMSLayerCapabilities wmsCaps = (WMSLayerCapabilities) caps;
 			OWSServiceCapabilities owsCaps = wmsCaps.getParent();
@@ -376,23 +317,15 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 				ext.setMaxX(bbox.getMaxX());
 				ext.setMinY(bbox.getMinY());
 				ext.setMaxY(bbox.getMaxY());
-				prov.setSpatialExtent(ext);
+				provider.setSpatialExtent(ext);
 			}
 			// intitialize process with new params
 			process.init();
 
 		} catch (ProcessException e) {
 			e.printStackTrace(System.err);
-		} catch (SMLException smlEx) {
-			smlEx.printStackTrace(System.err);
-		} catch (DOMReaderException domEx) {
-			domEx.printStackTrace(System.err);
-		}
-
-		prov.setProcess(process);
+		} 
 		System.err.println(wmsProc);
-
-		return prov;
 	}
 
 
