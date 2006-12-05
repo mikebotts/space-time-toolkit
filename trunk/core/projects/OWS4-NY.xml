@@ -1255,7 +1255,7 @@
                                        <ogc:PropertyName>observationInfo/name</ogc:PropertyName>
                                     </sld:Label>
                                     <sld:Fill>
-                                       <sld:CssParameter name="fill">#0066CC</sld:CssParameter>
+                                       <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
                                     </sld:Fill>
                                  </sld:TextSymbolizer>
                               </style>
