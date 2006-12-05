@@ -38,7 +38,6 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     private WorldScene scene;
     private int tileSizeX = 0;
     private int tileSizeY = 0;
-    //private long lastUpdateTime = -1;
         
     
     public SceneBboxUpdater(WorldScene scene)
@@ -76,18 +75,12 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     
     public void handleEvent(STTEvent e)
     {
-        //long currentTime = System.currentTimeMillis();
-        
-        //if (currentTime - lastUpdateTime > 1000) // limit updates to 1 per 100ms
-        //{
-            //lastUpdateTime = currentTime;
-            switch (e.type)
-            {
-                case SCENE_VIEW_CHANGED:
-                    update();
-                    spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
-                    break;
-            }
-        //}
+        switch (e.type)
+        {
+            case SCENE_VIEW_CHANGED:
+                update();
+                spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+                break;
+        }
     }
 }

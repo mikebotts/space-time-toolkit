@@ -887,7 +887,7 @@
                   </member>
                   <member>
                      <DataList>
-                        <name>Weather Data</name>
+                        <name>Weather Satellites</name>
                         <member>
                            <DataItem>
                               <name>GOES VIS Imagery</name>
@@ -1056,6 +1056,11 @@
                               </style>
                            </DataItem>
                         </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Doppler Radars</name>
                         <member>
                            <DataItem>
                               <name>NY KOKX Doppler Radar</name>
@@ -1216,6 +1221,11 @@
                               <style xlink:href="#RADAR_BINS"/>
                            </DataItem>
                         </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Weather Stations</name>
                         <member>
                            <DataItem>
                               <name>IFGI NY KJFK Sensor</name>
@@ -1290,6 +1300,58 @@
                               <name>IFGI NY KTEB Sensor</name>
                               <dataProvider href="#NY_KTEB_SOS"/>
                               <style xlink:href="#IFGI_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>CSIRO GATTON 1-25</name>
+                              <dataProvider href="#CSIRO_SOS_1"/>
+                              <style>
+                                 <sld:PointSymbolizer id="CSIRO_STATION_POINT" enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>observationInfo/location/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>observationInfo/location/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>triangle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC7FCC</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>8</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>CSIRO GATTON 2-25</name>
+                              <dataProvider href="#CSIRO_SOS_2"/>
+                              <style  xlink:href="#CSIRO_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>CSIRO GATTON 3-25</name>
+                              <dataProvider href="#CSIRO_SOS_3"/>
+                              <style  xlink:href="#CSIRO_STATION_POINT"/>
+                              <style xlink:href="#IFGI_STATION_LABEL"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>CSIRO GATTON 4-25</name>
+                              <dataProvider href="#CSIRO_SOS_4"/>
+                              <style  xlink:href="#CSIRO_STATION_POINT"/>
                               <style xlink:href="#IFGI_STATION_LABEL"/>
                            </DataItem>
                         </member>
@@ -1375,15 +1437,15 @@
                                     <member visible="true">
                                        <DataItem>
                                           <name>Humidity (%)</name>
-                                          <dataProvider href="#CSIRO_SOS"/>
+                                          <dataProvider href="#CSIRO_SOS_1"/>
                                           <style>
                                              <sld:PointSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>dataComponents/HUMIDITY_TEMP</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/measurement</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                 </sld:Geometry>
                                                 <sld:Graphic>
@@ -1401,10 +1463,10 @@
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>dataComponents/HUMIDITY_TEMP</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/measurement</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -1703,6 +1765,71 @@
                </SensorMLProvider>
             </member>
             <member>
+               <SensorMLProvider id="CSIRO_SOS_1">
+                  <name>GATTON Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>216000</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
+                  <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-1-25</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="CSIRO_SOS_2">
+                  <name>GATTON Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>216000</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
+                  <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-2-25</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="CSIRO_SOS_3">
+                  <name>GATTON Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>216000</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
+                  <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-3-25</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="CSIRO_SOS_4">
+                  <name>GATTON Weather SOS</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2006-11-10T16:15:00</baseTime>
+                        <lagTime>216000</lagTime>
+                        <leadTime>0</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
+                  <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-4-25</value>
+               </SensorMLProvider>
+            </member>
+            <!--
+            <member>
                <OWSDataProvider id="CSIRO_SOS">
                   <name>CSIRO Weather SOS</name>
                   <request postUrl="http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos">
@@ -1723,6 +1850,7 @@
                   </request>
                </OWSDataProvider>
             </member>
+            -->
             <member>
                <OWSDataProvider id="PLUME_SOS">
                   <name>NY Chemical Plume SOS</name>
