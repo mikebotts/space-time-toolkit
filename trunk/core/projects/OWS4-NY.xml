@@ -1320,7 +1320,7 @@
                                           </style>
                                        </DataItem>
                                     </member>
-                                    <member visible="false">
+                                    <member visible="true">
                                        <DataItem enabled="true">
                                           <name>Pressure (PSI)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
@@ -1328,10 +1328,10 @@
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>dataComponents/pressure</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/pressure</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -1344,10 +1344,10 @@
                                              <sld:PointSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>dataComponents/dateTime</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>dataComponents/pressure</ogc:PropertyName>
+                                                      <ogc:PropertyName>observationData/pressure</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                 </sld:Geometry>
                                                 <sld:Graphic>
