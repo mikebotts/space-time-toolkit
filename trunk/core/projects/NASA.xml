@@ -2116,7 +2116,6 @@
                            </ogc:During>
                         </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
-                        <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
                </OWSDataProvider>
