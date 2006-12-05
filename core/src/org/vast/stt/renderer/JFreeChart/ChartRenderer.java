@@ -78,6 +78,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
         Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
         swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
         chartPanel = new ChartPanel(null);
+        chartPanel.setDoubleBuffered(true);
         //chartPanel.setPopupMenu(null);
         rootFrame.add(chartPanel);
         //composite.addPaintListener(this);
@@ -114,7 +115,8 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
         {
             JFreeChart chart = new JFreeChart(plotBuilder.getPlot());
             chart.setTitle(scene.getName());
-            chartPanel.setChart(chart);
+            chartPanel.setRefreshBuffer(false);
+            chartPanel.setChart(chart);            
         }
         //chart.draw((Graphics2D)img1.getGraphics(), img1.getGraphics().getClipBounds());
         //BufferedImage img = chart.createBufferedImage(800, 600);

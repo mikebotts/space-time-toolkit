@@ -47,12 +47,27 @@ public abstract class AbstractStyler implements DataStyler
     {
         protected BlockListIterator blockIterator;
         protected DataIndexer blockIndexer;
-        protected int indexOffset = 0; // when a data index is along the list dimension itself
+        protected int indexOffset = -1; // when a data index is along the list dimension itself
         
         public ListInfo(BlockList blockList, DataIndexer dataIndexer)
         {
             this.blockIndexer = dataIndexer;
             this.blockIterator = blockList.getIterator();
+        }
+        
+        public void getBlock(int index)
+        {
+            AbstractDataBlock dataBlock = blockIterator.getList().get(index);
+            blockIndexer.setData(dataBlock);
+            blockIndexer.reset();
+            blockIndexer.next();
+        }
+        
+        public void getData(int[] indexList)
+        {
+            if (indexOffset >= 0)
+                getBlock(indexList[indexOffset]);
+            blockIndexer.getData(indexList);
         }
     }
     
@@ -218,8 +233,13 @@ public abstract class AbstractStyler implements DataStyler
                         
         return nextItem;
     }
+
     
-    
+    /**
+     * Get the next item in all lists that still
+     * have more data.
+     * @return
+     */
     public boolean nextItem()
     {
         boolean more = false;

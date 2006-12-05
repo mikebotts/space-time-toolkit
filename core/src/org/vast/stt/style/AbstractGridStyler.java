@@ -38,7 +38,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
     protected GridSymbolizer symbolizer;
     protected GridPatchGraphic patch;
     protected GridPointGraphic point;    
-    protected int[] gridIndex = new int[3];
+    protected boolean newPatch = true;
     
 	
 	public AbstractGridStyler()
@@ -50,7 +50,23 @@ public abstract class AbstractGridStyler extends AbstractStyler
     
     public GridPatchGraphic nextPatch()
     {
-        ListInfo listInfo = dataLists[0]; 
+        ListInfo listInfo = dataLists[0];
+        
+        // update patch length
+        if (listInfo.indexOffset >= 0)
+        {
+            int listSize = listInfo.blockIterator.getList().getSize();
+            if (newPatch)
+            {
+                newPatch = false;
+                patch.length = listSize;
+                if (listInfo.blockIterator.hasNext())
+                    patch.block = listInfo.blockIterator.next();
+                return patch;
+            }
+            else
+                return null;
+        }        
         
         // if no more items in the list, just return null
         if (!listInfo.blockIterator.hasNext())
@@ -83,9 +99,10 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public GridPointGraphic getPoint(int u, int v)
     {
         point.x = point.y = point.z = 0.0;
-        gridIndex[0] = u;
-        gridIndex[1] = v;
-        dataLists[0].blockIndexer.getData(gridIndex);
+        indexList[0] = u;
+        indexList[1] = v;        
+        
+        dataLists[0].getData(indexList);
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
@@ -145,7 +162,10 @@ public abstract class AbstractGridStyler extends AbstractStyler
         propertyName = this.symbolizer.getDimensions().get("length");
         if (propertyName != null)
         {
-            addPropertyMapper(propertyName, new GridLengthMapper(1, patch, null));
+            if (propertyName.equals("/"))
+                dataLists[0].indexOffset = 1;
+            else    
+                addPropertyMapper(propertyName, new GridLengthMapper(1, patch, null));
         }
         
         // grid depth array
@@ -199,4 +219,12 @@ public abstract class AbstractGridStyler extends AbstractStyler
             }
         }
 	}
+
+
+    @Override
+    public void resetIterators()
+    {
+        super.resetIterators();
+        newPatch = true;
+    }
 }

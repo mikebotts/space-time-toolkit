@@ -40,7 +40,6 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
     protected LineSymbolizer symbolizer;
     protected LinePointGraphic point;
     protected LineSegmentGraphic segment;
-    protected int oldBlockCount = 0;
     protected int[] lineIndex = new int[1];
         
 	
@@ -298,6 +297,8 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
                 }
             }
         }
+        
+        dataLists[0].indexOffset = 0;
     }
     
     
