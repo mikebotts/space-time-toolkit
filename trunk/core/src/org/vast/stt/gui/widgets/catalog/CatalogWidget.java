@@ -13,16 +13,13 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.management.QueryExp;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -45,7 +42,6 @@ import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sos.SOSCapabilitiesReader;
-import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
@@ -263,19 +259,19 @@ public class CatalogWidget
 		    qlist.add(QueryType.SERVICE_SOS);
 		    query.setQueryTypeList(qlist);
 		    List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
+		    Collection <String>uniqueUri = new HashSet<String>();
 		    for(String id : extObjIds) {
 		    //  2)  For each ID, get the serviceURI
 		    	query.setServiceSearchId(id);
 		    	is = wrsRW.sendRequest(query, true).getInputStream();
 		    	sosUri = wrsReader.parseSOSEndpoint(is);
 		    	if(sosUri.isEmpty())
-		    			continue;//break
+		    		continue;
 		    	// 3)  Read caps and get Offerings - Note, we have to manually filter this
 		    	//     to find the extObjId offering.  Not very efficient
-		    	List<OWSLayerCapabilities>  caps = getOfferings(sosUri);
-		        layerCaps.addAll(caps);
+	    		uniqueUri.add(sosUri.get(0));
 		    }
-	        return (layerCaps);
+	        return (getOfferings(uniqueUri));
 //			InputStreamReader isr = new InputStreamReader(is);
 //			BufferedWriter writer = new BufferedWriter(new FileWriter("C:/tcook/bbox.xml")); 
 //			int c;
@@ -298,7 +294,8 @@ public class CatalogWidget
 		return null;
 	}
 		
-	private List<OWSLayerCapabilities> getOfferings(List<String> sosUri){
+	//  for now, just add them all (This may add layers that aren't in our kw or bbox criteria)
+	private List<OWSLayerCapabilities> getOfferings(Collection<String> sosUri){
 //	  Cycle through SOS's and get all ObsOfferings
 		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
 		List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
