@@ -5,6 +5,7 @@
  xmlns:sld="http://www.opengis.net/sld"
  xmlns:ogc="http://www.opengis.net/ogc"
  xmlns:sldx="http://vast.uah.edu/sldx"
+ xmlns:sml="http://www.opengis.net/sensorML"
  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<name>Landsat Imagery (Flat)</name>
 	<dataProvider>
@@ -13,7 +14,7 @@
 			<spatialExtent/>
 			<!--<process href="./WMS_FlatGrid_Process.xml#PROCESS"/>-->
 			<process>
-				<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" version="1.0">
+<!--				<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML http://vast.uah.edu/schemas/sensorML/1.0.30/base/sensorML.xsd" version="1.0">-->
 					<sml:ProcessChain>
 						<!--~~~~~~~~~~~~~~~~~~~-->
 						<!-- Inputs Definition -->
@@ -237,8 +238,7 @@
 							</sml:ConnectionList>
 						</sml:connections>
 					</sml:ProcessChain>
-				</sml:SensorML>
-				
+<!--				</sml:SensorML>-->
 			</process>
 		</SensorMLProvider>
 	</dataProvider>
