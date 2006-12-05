@@ -57,7 +57,7 @@ public class STTProgressService implements IRunnableContext
         {
             try
             {
-                Job myJob = new Job("Data Update: " + provider.getName())
+                Job myJob = new Job("Updating: " + provider.getName())
                 {
 
                     @Override
@@ -79,6 +79,7 @@ public class STTProgressService implements IRunnableContext
                     
                 };
                 
+                //myJob.setUser(true);
                 myJob.schedule();
             }
             catch (Exception e)
@@ -88,7 +89,7 @@ public class STTProgressService implements IRunnableContext
         }
         else
         {
-            Thread updateThread = new Thread("Data Update: " + provider.getName())
+            Thread updateThread = new Thread("Updating: " + provider.getName())
             {
                 public void run()
                 {

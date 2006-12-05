@@ -112,7 +112,7 @@ public abstract class AbstractProvider implements DataProvider
             public void run(IProgressMonitor monitor)
             {
                 if (monitor != null)
-                    monitor.beginTask("Updating " + name + " / ", IProgressMonitor.UNKNOWN);
+                    monitor.beginTask("Updating " + name, IProgressMonitor.UNKNOWN);
                 
                 do
                 {
