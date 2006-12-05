@@ -14,13 +14,13 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.Scene;
-
 
 /**
  * <p><b>Title:</b>
@@ -38,17 +38,19 @@ import org.vast.stt.project.scene.Scene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener, STTEventListener
+public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener2, STTEventListener
 {
     protected SceneType scene;
     protected boolean refreshThreadStarted = false;
     protected boolean refreshRequested = false;
-    
+    protected boolean doRefresh = true;
+    protected Object lock = new Object();
+
     protected Runnable runRefresh = new Runnable()
     {
         public void run() {refreshView();}
     };
-    
+
     protected Thread refreshThread = new Thread()
     {
         @Override
@@ -58,16 +60,17 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
             {
                 while (refreshThreadStarted)
                 {
-                    synchronized(this)
+                    synchronized (lock)
                     {
                         while (!refreshRequested)
-                            wait();
-                        
+                            lock.wait();
+
                         if (!refreshThreadStarted)
                             return;
-                        
+
                         refreshRequested = false;
-                    }                    
+                    }
+                    
                     getSite().getShell().getDisplay().syncExec(runRefresh);
                 }
             }
@@ -79,64 +82,74 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
 
 
     public abstract void createPartControl(Composite parent);
+
+
     public abstract void updateView();
+
+
     public abstract void clearView();
-    
-    
+
+
     /**
      * Method called when the view needs to be refreshed 
      * (i.e. typically after a "CHANGE" event is received)
      */
     protected void refreshView()
     {
-        if (scene != null)
-            updateView();
-        else
-            clearView();
-    }
-    
-    
-    protected void refreshViewAsync()
-    {
-        synchronized (refreshThread)
+        if (doRefresh)
         {
-            if (!refreshThreadStarted)
-            {
-                refreshThread.setName(this.getClass().getSimpleName() + " Refresh Thread");
-                refreshThreadStarted = true;
-                refreshThread.start();
-            }
-            
-            refreshRequested = true;
-            refreshThread.notify();
+            if (scene != null)
+                updateView();
+            else
+                clearView();
         }
     }
+
+
+    protected void refreshViewAsync()
+    {
+        if (doRefresh)
+        {
+            synchronized (lock)
+            {
+                if (!refreshThreadStarted)
+                {
+                    refreshThread.setName(this.getClass().getSimpleName() + " Refresh Thread");
+                    refreshThreadStarted = true;
+                    refreshThread.start();
+                }
     
-    
+                refreshRequested = true;
+                lock.notifyAll();
+            }
+        }
+    }
+
+
     protected void assignScene()
     {
-        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
         if (pageInput != null)
-            setScene((SceneType)pageInput.getScene());            
-        else 
-            setScene(null);        
+            setScene((SceneType) pageInput.getScene());
+        else
+            setScene(null);
     }
-    
-    
+
+
     public void setScene(SceneType sc)
     {
         if (scene != sc)
         {
             if (scene != null)
                 scene.removeListener(this);
-            
+
             this.scene = sc;
-            
+
             if (scene != null)
                 scene.addListener(this);
         }
     }
-    
+
 
     @Override
     public void setFocus()
@@ -150,14 +163,14 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     {
         if (scene != null)
             scene.removeListener(this);
-        
+
         synchronized (refreshThread)
         {
             refreshThreadStarted = false;
             refreshRequested = true;
-            refreshThread.notifyAll();
+            lock.notifyAll();
         }
-        
+
         super.dispose();
     }
 
@@ -172,30 +185,49 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
         refreshViewAsync();
     }
 
-    
-    public void partOpened(IWorkbenchPart part)
-    {  
-        if (part == this)
+
+    public void partOpened(IWorkbenchPartReference partRef)
+    {
+        if (partRef.getPart(false) == this)
             assignScene();
     }
     
     
-    public void partActivated(IWorkbenchPart part)
-    {        
+    public void partVisible(IWorkbenchPartReference partRef)
+    {
+        if (partRef.getPart(false) == this)
+            doRefresh = true;
     }
     
     
-    public void partBroughtToTop(IWorkbenchPart part)
-    { 
+    public void partHidden(IWorkbenchPartReference partRef)
+    {
+        if (partRef.getPart(false) == this)
+            doRefresh = false;
     }
-    
-    
-    public void partClosed(IWorkbenchPart part)
-    {  
+
+
+    public void partActivated(IWorkbenchPartReference partRef)
+    {
     }
-    
-    
-    public void partDeactivated(IWorkbenchPart part)
-    {  
+
+
+    public void partBroughtToTop(IWorkbenchPartReference partRef)
+    {
     }
+
+
+    public void partClosed(IWorkbenchPartReference partRef)
+    {
+    }
+
+
+    public void partDeactivated(IWorkbenchPartReference partRef)
+    {
+    }    
+
+
+    public void partInputChanged(IWorkbenchPartReference partRef)
+    {
+    }    
 }
