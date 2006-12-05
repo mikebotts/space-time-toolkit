@@ -229,8 +229,11 @@ public class SOS_Process extends DataProcess implements DataHandler
                         obsLocation = reader.getFoiLocation();
                         
                          // start parsing
-                        dataParser.parse(reader.getDataStream());
-                        done = true;
+                        synchronized (handler)
+                        {
+                            dataParser.parse(reader.getDataStream());
+                            done = true;
+                        }
                     }
                     catch (Exception e)
                     {
@@ -358,7 +361,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             if (dataParser != null)
                 dataParser.stop();
             
-            synchronized (this) {this.notifyAll();}
+            synchronized (this) {this.notify();}
         }
         catch (IOException e)
         {
@@ -377,28 +380,23 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         try
         {
-            //System.out.println("send block");
+            // give exec control and wait for the ok to continue
+            while (outputReady)
+                this.wait();
             
-            synchronized (this)
-            {
-                // wait for exec to give us the ok to continue
-                while (outputReady)
-                    this.wait();
-                
-                outputObsData.setData(data);
-                
-                // also write observation info
-                outputObsName.getData().setStringValue(obsName);
-                outputObsProcedure.getData().setStringValue(obsProcedure);
-                outputObsLocation.getData().setDoubleValue(0, obsLocation.x * Math.PI / 180);
-                outputObsLocation.getData().setDoubleValue(1, -obsLocation.y * Math.PI / 180);
-                outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
-                
-                outputReady = true;
-                
-                // notifies exec caller that data has been parsed
-                this.notify();                
-            }
+            // write observation data
+            outputObsData.setData(data);
+            
+            // also write observation info
+            outputObsName.getData().setStringValue(obsName);
+            outputObsProcedure.getData().setStringValue(obsProcedure);
+            outputObsLocation.getData().setDoubleValue(0, obsLocation.x * Math.PI / 180);
+            outputObsLocation.getData().setDoubleValue(1, -obsLocation.y * Math.PI / 180);
+            outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
+            
+            // notify exec thread that next packet has been parsed
+            outputReady = true;
+            this.notify();            
         }
         catch (InterruptedException e)
         {
