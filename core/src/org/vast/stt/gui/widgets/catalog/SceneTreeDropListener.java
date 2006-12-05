@@ -58,11 +58,12 @@ import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
+import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.provider.ows.SOSProvider;
+//import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
@@ -102,9 +103,9 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
-			//  DataProvider prov = createSensorMLProvider(caps);
+			DataProvider prov = createSensorMLProvider(caps);
 			//  For now, use SOSProvider
-			DataProvider prov = createSosProvider(caps);
+			//DataProvider prov = createSosProvider(caps);
 			newItem.setDataProvider(prov);
 			//  Creat new Styler
 //			DataStyler styler = createNewStyler();
@@ -118,15 +119,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			newItem.getSymbolizers().add(sym);
 			return dropItem(newItem);
 		} else if (data instanceof WMSLayerCapabilities) {
-			newItem.setName(caps.getName());
-			DataProvider prov = createSensorMLProvider(caps);
-			newItem.setDataProvider(prov);
-			//TextureStyler styler = StylerFactory.createWMSTextureStyler(newItem);
-			Symbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
-			//styler.setDataItem(newItem);
-			sym.setEnabled(true);
-			newItem.getSymbolizers().add(sym);
-			return dropItem(newItem);
+			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
+			return dropItem(item);
 		} else if (data instanceof WCSLayerCapabilities) {
 			System.err.println("Add WCS drop support");
 			return false;
@@ -169,9 +163,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		//  If target is a folder, drop into folder and open it
 		if (dropTarget instanceof DataFolder) {
 			((DataFolder) dropTarget).add(item);
-			item
-					.dispatchEvent(new STTEvent(item,
-							EventType.SCENE_TREE_CHANGED));
+			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
 			//		   vwr.reveal(item);  //  vwr.reveal() does not work as advertised in Eclipse 3.1!!!
 			vwr.expandToLevel(dropTarget, 2); //  ensure dropped item is visible
 			vwr.refresh();
@@ -182,9 +174,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		if (dropTarget instanceof WorldScene) {
 			tree = ((WorldScene) dropTarget).getDataTree();
 			tree.add(0, item);
-			item
-					.dispatchEvent(new STTEvent(item,
-							EventType.SCENE_TREE_CHANGED));
+			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
 			vwr.expandToLevel(2); //  ensure dropped item is visible
 			vwr.refresh();
 			return true;
@@ -235,6 +225,40 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			index++;
 		}
 		return false;
+	}
+	
+	public DataItem createWMSItem(WMSLayerCapabilities caps){
+		try {
+			String fileLocation = null;
+			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
+					"templates", "wms.xml", false);
+			if (e.hasMoreElements())
+				fileLocation = (String) e.nextElement().toString();
+
+			if (fileLocation == null) {
+				ExceptionSystem.display(new Exception(
+						"STT error: Cannot find template\\wms.xml"));
+				return null;
+			}
+
+			DOMReader dom = new DOMReader(fileLocation, false);
+			DataTreeReader dataReader = new DataTreeReader();
+			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			
+			return worldItem;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+			
+//		item.setName(caps.getName());
+//		DataProvider prov = createSensorMLProvider(caps);
+//		item.setDataProvider(prov);
+//		Symbolizer sym = SymbolizerFactory.createWMSTextureSymbolizer();
+//		sym.setEnabled(true);
+//		item.getSymbolizers().add(sym);
+//		
+//		return item;
 	}
 
 	//  TODO  Hardwired for WMS now- generalize
@@ -371,14 +395,6 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return prov;
 	}
 
-	protected DataProvider createSosProvider(OWSLayerCapabilities caps) {
-		SOSProvider prov = new SOSProvider();
-
-		// ... 
-		SOSLayerCapabilities sosCaps = (SOSLayerCapabilities) caps;
-		sosCaps.getObservableList();
-		return prov;
-	}
 
 	public static void main(String[] args) throws IOException,
 			DOMReaderException {
