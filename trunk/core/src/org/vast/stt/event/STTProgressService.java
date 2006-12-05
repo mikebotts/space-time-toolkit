@@ -51,7 +51,7 @@ public class STTProgressService implements IRunnableContext
     
     public void run(final boolean fork, final boolean cancelable, final IRunnableWithProgress runnable)
     {
-        showInGUI = false;//(provider.getSpatialExtent().getUpdater() == null);
+        showInGUI = (provider.getSpatialExtent().getUpdater() == null);
         
         if (showInGUI)
         {
@@ -65,6 +65,7 @@ public class STTProgressService implements IRunnableContext
                     {
                         try
                         {
+                            Thread.currentThread().setPriority(6);
                             runnable.run(monitor);
                         }
                         catch (Exception e)
@@ -80,7 +81,6 @@ public class STTProgressService implements IRunnableContext
                 };
                 
                 //myJob.setUser(true);
-                myJob.setPriority(6);
                 myJob.schedule();                
             }
             catch (Exception e)
