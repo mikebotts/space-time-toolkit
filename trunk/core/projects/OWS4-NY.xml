@@ -1146,7 +1146,7 @@
                                              <ogc:PropertyName>gridData/array</ogc:PropertyName>
                                           </sld:Axis>
                                           <sld:Axis name="length">
-                                             <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                                             <ogc:PropertyName>/</ogc:PropertyName>
                                           </sld:Axis>
                                        </sld:Dimensions>
                                        <sld:Geometry>
@@ -1156,6 +1156,9 @@
                                           <sld:CssParameter name="geometry-y">
                                              <ogc:PropertyName>gridData/array/point/latitude</ogc:PropertyName>
                                           </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-z">
+                                             <ogc:PropertyName>gridData/array/point/altitude</ogc:PropertyName>
+                                          </sld:CssParameter>
                                        </sld:Geometry>
                                     </sld:Grid>
                                     <sld:Raster>
@@ -1164,7 +1167,7 @@
                                              <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
                                           </sld:Axis>
                                           <sld:Axis name="height">
-                                             <ogc:PropertyName>imageData/image</ogc:PropertyName>
+                                             <ogc:PropertyName>/</ogc:PropertyName>
                                           </sld:Axis>
                                        </sld:Dimensions>
                                        <sld:Opacity>1.0</sld:Opacity>
@@ -1180,21 +1183,24 @@
                                  </sld:TextureSymbolizer>
                               </style>
                               <style>
-                                 <sld:GridMeshSymbolizer enabled="false">
+                                 <sld:GridMeshSymbolizer enabled="true">
                                     <sld:Dimensions>
                                        <sld:Axis name="width">
-                                          <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                          <ogc:PropertyName>gridData/array</ogc:PropertyName>
                                        </sld:Axis>
                                        <sld:Axis name="length">
-                                          <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                          <ogc:PropertyName>/</ogc:PropertyName>
                                        </sld:Axis>
                                     </sld:Dimensions>
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                          <ogc:PropertyName>gridData/array/point/longitude</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                          <ogc:PropertyName>gridData/array/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>gridData/array/point/altitude</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
@@ -1472,7 +1478,7 @@
                                  </DataList>
                               </contents>
                            </ChartScene>
-                        </member>       
+                        </member>
                      </DataList>
                   </member>
                   <member>
@@ -1486,13 +1492,10 @@
                                  <sld:PointSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>gridData/array/point/longitude</ogc:PropertyName>
+                                          <ogc:PropertyName>Components/c2</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>gridData/array/point/latitude</ogc:PropertyName>
-                                       </sld:CssParameter>
-                                       <sld:CssParameter name="geometry-z">
-                                          <ogc:PropertyName>gridData/array/point/altitude</ogc:PropertyName>
+                                          <ogc:PropertyName>Components/c3</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Graphic>
@@ -1502,11 +1505,63 @@
                                              <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
                                           </sld:Fill>
                                        </sld:Mark>
-                                       <sld:Size>2</sld:Size>
+                                       <sld:Size>8</sld:Size>
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
                               </style>
                            </DataItem>
+                        </member>
+                        <member>
+                           <ChartScene>
+                              <name>Radiation Charts</name>
+                              <contents>
+                                 <DataList>
+                                    <member visible="true">
+                                       <DataItem>
+                                          <name>Radiation (counts)</name>
+                                          <dataProvider href="#RADIATION_SOS"/>
+                                          <style>
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>Components/c1</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>Components/c4</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>
+                                          <style>
+                                             <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>Components/c1</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>Components/c4</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                   <sld:Mark>
+                                                      <sld:WellKnownName>square</sld:WellKnownName>
+                                                      <sld:Fill>
+                                                         <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                                                      </sld:Fill>
+                                                   </sld:Mark>
+                                                   <sld:Size>8</sld:Size>
+                                                </sld:Graphic>
+                                             </sld:PointSymbolizer>
+                                          </style>                                         
+                                       </DataItem>
+                                    </member>                                    
+                                 </DataList>
+                              </contents>
+                           </ChartScene>
                         </member>
                      </DataList>
                   </member>
@@ -1832,20 +1887,19 @@
                   <name>NY Radiation SOS</name>
                   <layerId>NJ-Transit-Radiation</layerId>
                   <request postUrl="http://216.221.5.139:8080/sos/">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="0.0.32">
                         <offering>NJ-Transit-Radiation</offering>
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>                                 
                                  <gml:beginPosition>2006-11-29T06:30:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-11-29T06:35:00Z</gml:endPosition>
+                                 <gml:endPosition>2006-11-29T06:45:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>DataValueType</resultModel>
                         <responseMode>inline</responseMode>                        
-                        <numberOfRecords>10</numberOfRecords>
                      </GetObservation>                     
                   </request>
                </OWSDataProvider>

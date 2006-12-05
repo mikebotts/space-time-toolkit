@@ -109,8 +109,14 @@ public class DisplayListManager
      * @param block
      * @param renderRunnable
      */
-    public void useDisplayList(DataStyler styler, BlockListItem block, GLRunnable renderRunnable)
+    public void useDisplayList(DataStyler styler, BlockListItem block, GLRunnable renderRunnable, boolean force)
     {
+        if (block == null)
+        {
+            renderRunnable.run();
+            return;
+        }
+        
         synchronized (DLTables)
         {
             // wrap styler with our own hashKey
@@ -137,7 +143,7 @@ public class DisplayListManager
             }
             
             // create new display list only if it needs update
-            if (dlInfo.needsUpdate)
+            if (dlInfo.needsUpdate || force)
             {
                 dlInfo.needsUpdate = false;
                 createDisplayList(dlInfo, renderRunnable);

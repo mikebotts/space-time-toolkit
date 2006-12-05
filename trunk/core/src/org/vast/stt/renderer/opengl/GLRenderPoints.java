@@ -78,6 +78,9 @@ public class GLRenderPoints extends GLRunnable
                     begin = true;
                 }
 
+                if (point.a == 0)
+                    continue;
+                
                 gl.glColor4f(point.r, point.g, point.b, point.a);
                 gl.glVertex3d(point.x, point.y, point.z);
             }

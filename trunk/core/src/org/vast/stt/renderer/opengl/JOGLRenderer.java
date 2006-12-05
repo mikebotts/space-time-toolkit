@@ -190,7 +190,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     {
         // clear back buffer
         Color backColor = view.getBackgroundColor();
-        gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 0.0f);
+        gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
         // set up projection
@@ -551,6 +551,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        //gl.glBl
         
         // set up a light
 //        gl.glEnable(GL.GL_LIGHTING);
@@ -594,7 +595,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         while ((block = styler.nextBlock()) != null)
         { 
             pointRenderer.blockCount = 10000;
-            displayListManager.useDisplayList(styler, block, pointRenderer);
+            displayListManager.useDisplayList(styler, block, pointRenderer, false);
         }      
     }
     
@@ -612,7 +613,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         while ((segment = styler.nextLineBlock()) != null)
         { 
             lineRenderer.blockCount = 10000;
-            displayListManager.useDisplayList(styler, segment.block, lineRenderer);
+            displayListManager.useDisplayList(styler, segment.block, lineRenderer, false);
         }
     }
 
@@ -631,7 +632,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         { 
             gl.glPolygonOffset(0.0f, zBufferOffset*100);
             polygonRenderer.blockCount = 1;
-            displayListManager.useDisplayList(styler, block, polygonRenderer);
+            displayListManager.useDisplayList(styler, block, polygonRenderer, false);
             updateZBufferOffset();
         }    
     }
@@ -734,7 +735,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         {           
             gridBorderRenderer.blockCount = 1;
             gridBorderRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer);
+            displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer, false);
         }
     }
     
@@ -767,9 +768,10 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gl.glPolygonOffset(0.0f, zBufferOffset*100 - 10);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer);
-            updateZBufferOffset();
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);            
         }
+        
+        updateZBufferOffset();
     }
     
     
@@ -794,9 +796,10 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gl.glPolygonOffset(0.5f, zBufferOffset*100);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer);
-            updateZBufferOffset();
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);
         }
+        
+        updateZBufferOffset();
     }
 
 
@@ -824,9 +827,10 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             textureRenderer.patch = patch;
             textureRenderer.blockCount = 1;
             textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
-            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer);
-            updateZBufferOffset();
+            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, false);
         }
+        
+        updateZBufferOffset();
         
         // reload the void texture
         gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, 0);

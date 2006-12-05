@@ -79,7 +79,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
     
     public PointGraphic getPoint(int u)
     {
-        point.x = point.y = point.z = 0.0;        
+        point.x = point.y = point.z = 0.0;
         
         if (dataLists[0].indexOffset == 0)
         {
@@ -304,6 +304,8 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                 }
             }
         }
+        
+        dataLists[0].indexOffset = 0;
 	}
 	
 	
