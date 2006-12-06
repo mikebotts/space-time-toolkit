@@ -26,6 +26,7 @@ package org.vast.stt.provider.sml;
 import org.vast.io.xml.DOMReader;
 import org.vast.process.DataProcess;
 import org.vast.process.IOSelector;
+import org.vast.process.ProcessChain;
 import org.vast.sensorML.reader.SystemReader;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
@@ -52,15 +53,26 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
             SystemReader systemReader = new SystemReader(dom);
             systemReader.setReadMetadata(false);
             systemReader.setCreateExecutableProcess(true);
-            DataProcess process = systemReader.readProcessProperty(processElt);
-            provider.setProcess(process);
+            DataProcess rootProcess = systemReader.readProcessProperty(processElt);
+            provider.setProcess(rootProcess);
             
             // read custom values and assign them to chain signals
             NodeList valueElts = dom.getElements(providerElt, "value");
             for (int i=0; i<valueElts.getLength(); i++)
             {
-                Element nextElt = (Element)valueElts.item(i); 
+                Element nextElt = (Element)valueElts.item(i);
+                String processPath = dom.getAttributeValue(nextElt, "@process");
                 String dataPath = dom.getAttributeValue(nextElt, "@path");
+                DataProcess process = rootProcess;
+                
+                // find process recursively
+                if (processPath != null)
+                {
+                    String[] processNames = processPath.split("/");                
+                    for (int p=0; p<processNames.length; p++)
+                        process = ((ProcessChain)process).getProcess(processNames[p]);
+                }
+                
                 IOSelector selector = new IOSelector(process.getParameterList(), dataPath);
                 String value = dom.getElementValue(nextElt, "");
                 selector.getComponent().getData().setStringValue(value);

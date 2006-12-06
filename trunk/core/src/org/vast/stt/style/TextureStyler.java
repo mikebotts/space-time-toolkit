@@ -44,6 +44,7 @@ public class TextureStyler extends AbstractStyler
     protected ListInfo gridBlocks, texBlocks;
     protected int[] gridIndex = new int[4];
     protected int[] texIndex = new int[4];
+    protected boolean newPatch = true;
     
     
 	public TextureStyler()
@@ -57,6 +58,39 @@ public class TextureStyler extends AbstractStyler
     
     public TexturePatchGraphic nextTile()
     {
+        // update patch length
+        if (dataLists[0].indexOffset >= 0)
+        {
+            int gridListSize = gridBlocks.blockIterator.getList().getSize();
+            int texListSize = texBlocks.blockIterator.getList().getSize();
+            
+            if (newPatch & gridListSize > 0)
+            {
+                newPatch = false;
+                                
+                // force update if more blocks were added
+                if (gridListSize != patch.grid.length)
+                    patch.updated = true;
+                else
+                    patch.updated = false;
+                                
+                // adjust patch grid length and texture height
+                patch.grid.length = gridListSize;
+                patch.texture.height = texListSize;
+                patch.texture.width = 460;
+                gridBlocks.blockIndexer.next();
+                texBlocks.blockIndexer.next();
+                
+                // get first blocks as references
+                patch.grid.block = gridBlocks.blockIterator.next();
+                patch.texture.block = texBlocks.blockIterator.next();
+                
+                return patch;
+            }
+            else
+                return null;
+        }
+        
         // if no more items one of the lists, just return null
         if (!(gridBlocks.blockIterator.hasNext() && texBlocks.blockIterator.hasNext()))
         {
@@ -104,7 +138,18 @@ public class TextureStyler extends AbstractStyler
     {
         texIndex[2] = x;
         texIndex[3] = y;
-        texBlocks.blockIndexer.getData(texIndex);
+        
+        dataLists[1].getData(texIndex);
+        
+        // scale to 0-255 if values are normalized
+        if (symbolizer.hasNormalizedColors())
+        {
+            pixel.r *= 255;
+            pixel.g *= 255;
+            pixel.b *= 255;
+            pixel.a *= 255;
+        }
+        
         return pixel;
     }
     
@@ -114,7 +159,8 @@ public class TextureStyler extends AbstractStyler
         point.x = point.y = point.z = 0.0;
         gridIndex[0] = u;
         gridIndex[1] = v;
-        gridBlocks.blockIndexer.getData(gridIndex);
+        
+        dataLists[0].getData(gridIndex);
         
         // compute texture coordinates
         if (normalize)
@@ -214,7 +260,10 @@ public class TextureStyler extends AbstractStyler
         propertyName = this.symbolizer.getGridDimensions().get("length");
         if (propertyName != null)
         {
-            addPropertyMapper(propertyName, new GridLengthMapper(1, patch.getGrid(), null));
+            if (propertyName.equals("/"))
+                dataLists[0].indexOffset = 1;
+            else
+                addPropertyMapper(propertyName, new GridLengthMapper(1, patch.getGrid(), null));
         }
         
         // grid geometry X
@@ -264,7 +313,10 @@ public class TextureStyler extends AbstractStyler
         propertyName = this.symbolizer.getRasterDimensions().get("height");
         if (propertyName != null)
         {
-            addPropertyMapper(propertyName, new RasterHeightMapper(3, patch.getTexture(), null));
+            if (propertyName.equals("/"))
+                dataLists[1].indexOffset = 3;
+            else
+                addPropertyMapper(propertyName, new RasterHeightMapper(3, patch.getTexture(), null));
         }
         
         // global texture opacity
@@ -353,6 +405,14 @@ public class TextureStyler extends AbstractStyler
         // make sure we keep a handle to the block list containing image data
         texBlocks = dataLists[dataLists.length-1];
 	}
+    
+    
+    @Override
+    public void resetIterators()
+    {
+        super.resetIterators();
+        newPatch = true;
+    }
 	
 	
 	public TextureSymbolizer getSymbolizer()

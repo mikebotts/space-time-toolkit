@@ -749,7 +749,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         {           
             gridBorderRenderer.blockCount = 1;
             gridBorderRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer, false);
+            displayListManager.useDisplayList(styler, patch.block, gridBorderRenderer, patch.updated);
         }
     }
     
@@ -782,7 +782,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gl.glPolygonOffset(0.0f, zBufferOffset*100 - 10);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);          
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, patch.updated);          
         }
         
         updateZBufferOffset();
@@ -810,7 +810,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             gl.glPolygonOffset(0.5f, zBufferOffset*100);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer, false);
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, patch.updated);
             updateZBufferOffset();
         }
     }
@@ -835,12 +835,12 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         while ((patch = styler.nextTile()) != null)
         {
             // bind texture and load in GL if needed
-            textureManager.useTexture(styler, patch.getTexture());            
+            textureManager.useTexture(styler, patch.getTexture(), patch.updated);            
             gl.glPolygonOffset(0.5f, zBufferOffset*100);
             textureRenderer.patch = patch;
             textureRenderer.blockCount = 1;
             textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
-            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, false);
+            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, patch.updated);
             updateZBufferOffset();
         }
         

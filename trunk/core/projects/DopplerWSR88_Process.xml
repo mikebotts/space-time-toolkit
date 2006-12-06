@@ -111,7 +111,7 @@
                                  <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
                               </swe:component>
                               <swe:component name="offering">
-                                 <swe:Category>KENX_DOPPLER_TILT0</swe:Category>
+                                 <swe:Category>KOKX_DOPPLER_TILT0</swe:Category>
                               </swe:component>
                               <swe:component name="observables">
                                  <swe:Category>REFLECTIVITY</swe:Category>
@@ -147,7 +147,7 @@
                                  <swe:Quantity/>
                               </swe:component>
                               <swe:component name="stepSize">
-                                 <swe:Quantity>1</swe:Quantity>
+                                 <swe:Quantity>4</swe:Quantity>
                               </swe:component>
                            </swe:DataGroup>
                         </sml:input>                        
@@ -171,6 +171,9 @@
                                  <swe:Count/>
                               </swe:component>
                            </swe:DataGroup>
+                        </sml:output>
+                        <sml:output name="stepCount">
+                           <swe:Count/>
                         </sml:output>
                      </sml:OutputList>
                   </sml:outputs>
@@ -279,7 +282,7 @@
             <!-- arrayBuilder inputs -->
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="sos/outputs/observationData/numBins"/>
+                  <sml:source ref="binCounter/outputs/stepCount"/>
                   <sml:destination ref="arrayBuilder/inputs/arraySize"/>
                </sml:Link>
             </sml:connection>
