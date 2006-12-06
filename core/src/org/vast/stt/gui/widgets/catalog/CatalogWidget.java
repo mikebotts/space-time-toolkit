@@ -18,8 +18,9 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -105,7 +106,7 @@ public class CatalogWidget
 		optLayout.verticalSpacing = 10;
 		optionGroup.setLayout(optLayout);
 		optionGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
-		optionGroup.setText("Search Options");
+		optionGroup.setText("Serarch Options");
 
 		//  Servers (Only one initially, but still making it a combo)
 		Label serverLabel = new Label(optionGroup, SWT.LEFT);  
@@ -131,7 +132,8 @@ public class CatalogWidget
 		Label kwLabel = new Label(optionGroup, SWT.LEFT);
 		kwLabel.setText("Keywords:");
 		kwText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
-		gd = new GridData(SWT.FILL,SWT.CENTER, true, false, 3, 1);
+		gd = new GridData(SWT.FILL,SWT.CENTER, true, false);
+		gd.horizontalSpan = 3;
 		kwText.setLayoutData(gd);
 		kwText.setToolTipText("Keyword for search");
 		
@@ -176,11 +178,15 @@ public class CatalogWidget
 		maxXText.setLayoutData(gd);
 		
 		// load test fields (may want to keep this, but will need to mod other logic)
-		minXText.setText("-90.0");
-		maxXText.setText("90.0");
-		minYText.setText("-180.0");
-		maxYText.setText("180.0");
-		
+//		minXText.setText("-90.0");
+//		maxXText.setText("90.0");
+//		minYText.setText("-180.0");
+//		maxYText.setText("180.0");
+		minXText.setText("37.0");
+		maxXText.setText("43.0");
+		minYText.setText("-73.0");
+		maxYText.setText("-67.0");
+
         // Get Bbox Btn
         Button getBboxBtn = new Button(optionGroup, SWT.PUSH);
         getBboxBtn.setText("Get BBOX");
@@ -204,7 +210,7 @@ public class CatalogWidget
             public void widgetDefaultSelected(SelectionEvent e) {}            
         });
         
-		//  Submit Btn (and potentially edit btn to add new Catalog)
+        //  Submit Btn (and potentially edit btn to add new Catalog)
 		Button submitBtn = new Button(optionGroup, SWT.PUSH);
 		submitBtn.setText("Submit");
 		gd = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 4, 1);
@@ -276,35 +282,39 @@ public class CatalogWidget
 			//  .. . or we have a 3 step, filtered query
 			//  1) Get all objects matching the initial search
 		    WRSResponseReader wrsReader = new WRSResponseReader();
-		    List<String> extObjIds = wrsReader.parseExtrinsicObjects(is);
-		    if(extObjIds.isEmpty())
+		    //  eoMap is map of <extObjId, offeringName>
+		    HashMap<String,String> eoMap = wrsReader.parseExtrinsicObjects(is);
+		    if(eoMap.isEmpty())
 		    	return emptyList;
 		    //  Change query type to serviceSearch
 		    List<QueryType> qlist = new ArrayList<QueryType>(1);
 		    qlist.add(QueryType.SERVICE_SOS);
 		    query.setQueryTypeList(qlist);
-		    List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
-		    Collection <String>uniqueUri = new HashSet<String>();
+		    // uriMap is map of (uri, List<ExtObjOfferings>)
+		    HashMap<String, List<String>> uriMap = new HashMap<String,List<String>>();
+		    Set<String> extObjIds = eoMap.keySet();
 		    for(String id : extObjIds) {
 		    //  2)  For each ID, get the serviceURI
 		    	query.setServiceSearchId(id);
 		    	is = wrsRW.sendRequest(query, true).getInputStream();
 		    	sosUri = wrsReader.parseSOSEndpoint(is);
+		    	is.close();
 		    	if(sosUri.isEmpty())
 		    		continue;
 		    	// 3)  Read caps and get Offerings - Note, we have to manually filter this
 		    	//     to find the extObjId offering.  Not very efficient
-	    		uniqueUri.add(sosUri.get(0));
+		    	String thisUri = sosUri.get(0);
+		    	String name = eoMap.get(id);
+		    	if(uriMap.containsKey(thisUri)){  // add name to thisUri's list
+		    		List<String> eoList = uriMap.get(thisUri);
+		    		eoList.add(name);
+		    	} else { //  add thisUri to map, and add name to thisUri's list
+		    		List<String> eoList = new ArrayList<String>(3);
+		    		eoList.add(name);
+		    		uriMap.put(thisUri, eoList);
+		    	}
 		    }
-	        return (getOfferings(uniqueUri));
-//			InputStreamReader isr = new InputStreamReader(is);
-//			BufferedWriter writer = new BufferedWriter(new FileWriter("C:/tcook/bbox.xml")); 
-//			int c;
-//			while((c=isr.read())!=-1) {
-//				//System.err.print((char)c);
-//				writer.write(new char[]{(char)c});
-//			}
-//			writer.close();
+	        return (getFilteredOfferings(uriMap));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -318,8 +328,34 @@ public class CatalogWidget
 		
 		return null;
 	}
+	
+	//  Return offerings matching names in List<String> parameter of UriMap
+	private List<OWSLayerCapabilities> getFilteredOfferings(HashMap<String, List<String>> uriMap){
+//	  Cycle through SOS's and get all ObsOfferings
+		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
+		List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
+		Set<String> sosUris = uriMap.keySet();
+		for(String sosTmp : sosUris){
+			try {
+				List<String> offerings = uriMap.get(sosTmp);
+				//  Not sure how to detect version prior to this call...
+				OWSServiceCapabilities caps = capsReader.readCapabilities(sosTmp, "0.0.31");
+				List<OWSLayerCapabilities> capsTmp = caps.getLayers();
+				for(OWSLayerCapabilities thisCaps: capsTmp){
+					String thisOffering = thisCaps.getId();
+					if(offerings.contains(thisOffering))
+						layerCaps.add(thisCaps);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
-	//  for now, just add them all (This may add layers that aren't in our kw or bbox criteria)
+		return layerCaps;
+	}
+		
+	//  Return ALL offerings for all uri's in the collection
 	private List<OWSLayerCapabilities> getOfferings(Collection<String> sosUri){
 //	  Cycle through SOS's and get all ObsOfferings
 		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
@@ -415,7 +451,6 @@ public class CatalogWidget
 			 return BBOX_ERROR;
 		}
 	}
-	
 	
 }	
 
