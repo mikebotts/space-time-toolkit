@@ -189,10 +189,6 @@ public class CatalogWidget
 //		maxXText.setText("90.0");
 //		minYText.setText("-180.0");
 //		maxYText.setText("180.0");
-		minXText.setText("37.0");
-		maxXText.setText("43.0");
-		minYText.setText("-73.0");
-		maxYText.setText("-67.0");
 
         // Get Bbox Btn
         Button getBboxBtn = new Button(optionGroup, SWT.PUSH);
