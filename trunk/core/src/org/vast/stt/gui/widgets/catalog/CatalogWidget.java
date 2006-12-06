@@ -47,6 +47,9 @@ import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
 import org.vast.ows.wrs.WRSResponseReader;
 import org.vast.ows.wrs.WRSQuery.QueryType;
+import org.vast.stt.gui.views.ScenePageInput;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.provider.STTSpatialExtent;
 
 /**
  * <p><b>Title:</b>
@@ -102,7 +105,7 @@ public class CatalogWidget
 		optLayout.verticalSpacing = 10;
 		optionGroup.setLayout(optLayout);
 		optionGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
-		optionGroup.setText("Serarch Options");
+		optionGroup.setText("Search Options");
 
 		//  Servers (Only one initially, but still making it a combo)
 		Label serverLabel = new Label(optionGroup, SWT.LEFT);  
@@ -128,8 +131,7 @@ public class CatalogWidget
 		Label kwLabel = new Label(optionGroup, SWT.LEFT);
 		kwLabel.setText("Keywords:");
 		kwText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
-		gd = new GridData(SWT.FILL,SWT.CENTER, true, false);
-		gd.horizontalSpan = 3;
+		gd = new GridData(SWT.FILL,SWT.CENTER, true, false, 3, 1);
 		kwText.setLayoutData(gd);
 		kwText.setToolTipText("Keyword for search");
 		
@@ -179,6 +181,29 @@ public class CatalogWidget
 		minYText.setText("-180.0");
 		maxYText.setText("180.0");
 		
+        // Get Bbox Btn
+        Button getBboxBtn = new Button(optionGroup, SWT.PUSH);
+        getBboxBtn.setText("Get BBOX");
+        gd = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 4, 1);
+        getBboxBtn.setLayoutData(gd);
+        getBboxBtn.addSelectionListener(new SelectionListener(){
+            public void widgetSelected(SelectionEvent e) {
+                ScenePageInput pageInput = (ScenePageInput)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getInput();
+                if (pageInput != null)
+                {
+                    WorldScene scene = (WorldScene)pageInput.getScene();        
+                    STTSpatialExtent bbox = new STTSpatialExtent();
+                    scene.getViewSettings().getProjection().fitBboxToView(bbox, scene);
+                    minXText.setText("" + bbox.getMinX());
+                    maxXText.setText("" + bbox.getMaxX());
+                    minYText.setText("" + bbox.getMinY());
+                    maxYText.setText("" + bbox.getMaxY());
+                }
+                
+            }
+            public void widgetDefaultSelected(SelectionEvent e) {}            
+        });
+        
 		//  Submit Btn (and potentially edit btn to add new Catalog)
 		Button submitBtn = new Button(optionGroup, SWT.PUSH);
 		submitBtn.setText("Submit");
