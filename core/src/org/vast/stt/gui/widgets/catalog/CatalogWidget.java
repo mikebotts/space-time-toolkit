@@ -203,10 +203,10 @@ public class CatalogWidget
                     WorldScene scene = (WorldScene)pageInput.getScene();        
                     STTSpatialExtent bbox = new STTSpatialExtent();
                     scene.getViewSettings().getProjection().fitBboxToView(bbox, scene);
-                    minXText.setText("" + bbox.getMinX());
-                    maxXText.setText("" + bbox.getMaxX());
-                    minYText.setText("" + bbox.getMinY());
-                    maxYText.setText("" + bbox.getMaxY());
+                    minXText.setText("" + bbox.getMinY());
+                    maxXText.setText("" + bbox.getMaxY());
+                    minYText.setText("" + bbox.getMinX());
+                    maxYText.setText("" + bbox.getMaxX());
                 }
                 
             }
