@@ -277,7 +277,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                 if (param.isConstant())
                 {
                     value = param.getConstantValue();
-                    point.iconUrl = (String)value;                    
+                    point.iconUrl = ((GraphicImage)glyph).getBaseFolder() + (String)value;
                 }
                 else
                 {
