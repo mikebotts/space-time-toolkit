@@ -120,7 +120,7 @@ public class TextureManager
      * @param tex
      * @return
      */
-    public void useTexture(TextureStyler styler, RasterTileGraphic tex)
+    public void useTexture(TextureStyler styler, RasterTileGraphic tex, boolean force)
     {
         Symbolizer sym = styler.getSymbolizer();
         
@@ -147,7 +147,7 @@ public class TextureManager
             }            
             
             // create new texture if it needs update
-            if (texInfo.needsUpdate)
+            if (texInfo.needsUpdate || force)
             {
                 texInfo.needsUpdate = false;
                 createTexture(styler, tex, texInfo);

@@ -14,8 +14,6 @@
 package org.vast.stt.style;
 
 import org.vast.ows.sld.*;
-import org.vast.stt.project.table.TableSymbolizer;
-import org.vast.stt.project.tree.DataItem;
 
 
 /**
@@ -64,9 +62,6 @@ public class StylerFactory
         
         else if (sym instanceof RasterSymbolizer)
             styler = new RasterStyler();
-        
-        else if (sym instanceof TableSymbolizer)
-            styler = new TableStyler();
 
         if (styler != null)
         {

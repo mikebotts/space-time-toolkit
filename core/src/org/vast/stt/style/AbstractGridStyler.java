@@ -56,12 +56,22 @@ public abstract class AbstractGridStyler extends AbstractStyler
         if (listInfo.indexOffset >= 0)
         {
             int listSize = listInfo.blockIterator.getList().getSize();
-            if (newPatch)
+            if (newPatch && listSize > 0)
             {
                 newPatch = false;
+                
+                // force update if more blocks were added
+                if (listSize != patch.length)
+                    patch.updated = true;
+                else
+                    patch.updated = false;
+                
+                // adjust patch length
                 patch.length = listSize;
-                if (listInfo.blockIterator.hasNext())
-                    patch.block = listInfo.blockIterator.next();
+                listInfo.blockIndexer.next();
+                
+                // get first block as reference
+                patch.block = listInfo.blockIterator.next();                
                 return patch;
             }
             else
