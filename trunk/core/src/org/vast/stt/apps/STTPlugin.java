@@ -9,7 +9,7 @@ import org.vast.sensorML.reader.ProcessLoader;
 import org.vast.stt.gui.views.ExceptionPopup;
 import org.vast.stt.project.XMLRegistry;
 import org.vast.stt.project.chart.ChartSceneReader;
-import org.vast.stt.project.table.TableItemReader;
+import org.vast.stt.project.table.TableSceneReader;
 import org.vast.stt.project.world.WorldSceneReader;
 import org.vast.stt.provider.google.GoogleMapProviderReader;
 import org.vast.stt.provider.ows.OWSProviderReader;
@@ -72,7 +72,7 @@ public class STTPlugin extends AbstractUIPlugin
         XMLRegistry.registerReader("Scene", WorldSceneReader.class);
         XMLRegistry.registerReader("WorldScene", WorldSceneReader.class);
         XMLRegistry.registerReader("ChartScene", ChartSceneReader.class);
-        XMLRegistry.registerReader("TableItem", TableItemReader.class);
+        XMLRegistry.registerReader("TableScene", TableSceneReader.class);
 	}
 
 

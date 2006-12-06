@@ -23,7 +23,6 @@ import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.SceneRenderer;
 
@@ -186,8 +185,7 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
         while (it.hasNext())
         {
             DataItem nextItem = it.next();
-            if (nextItem instanceof WorldItem)
-                setItemVisibility((WorldItem)nextItem, visible);
+            setItemVisibility(nextItem, visible);
         }
     }
     
@@ -221,11 +219,8 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
         while (it.hasNext())
         {
             DataItem nextItem = it.next();
-            if (nextItem instanceof WorldItem)
-            {
-                if (isItemVisible((WorldItem)nextItem))
-                    return true;
-            }
+            if (isItemVisible(nextItem))
+                return true;
         }
         return false;
     }

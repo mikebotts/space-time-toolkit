@@ -13,25 +13,25 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.table.RichTable;
-import org.vast.stt.project.table.TableItem;
-import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.table.TableScene;
 
 
 /**
  * <p><b>Title:</b>
- * World View
+ * Table View
  * </p>
  *
  * <p><b>Description:</b><br/>
- * The world view is the 2D/3D view where the data items of
- * the scene are rendered using the provided renderer.
+ * The table view is a multiple view that can display table scenes.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -39,82 +39,136 @@ import org.vast.stt.project.tree.DataItem;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class TableView extends DataItemView
+public class TableView extends SceneView<TableScene> implements PaintListener, ControlListener
 {
-	public static final String ID = "STT.TableView";
-    protected RichTable table;
+    public static final String ID = "STT.ChartView";
+    private Composite composite;
     
     
     public TableView()
     {
     }
-			
+            
 
     @Override
-	public void createPartControl(Composite parent)
-	{
-        table = new RichTable(parent, SWT.NONE);
-	}
-    	
-	
-	@Override
-	public void init(IViewSite site) throws PartInitException
-	{
-		super.init(site);
-		
-        // add show target action to toolbar
-//		IAction ShowTargetAction = new Action()
-//		{
-//			public void run()
-//			{
-//				//boolean targetshown = scene.getViewSettings().isShowCameraTarget();
-//                //scene.getViewSettings().setShowCameraTarget(!targetshown);
-//                //scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
-//			}
-//		};
-//        ShowTargetAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
-//        ShowTargetAction.setToolTipText("Toggle Target Tripod");
-//		site.getActionBars().getToolBarManager().add(ShowTargetAction);
-	}
-	   
+    public void createPartControl(Composite parent)
+    {
+        composite = parent;
+        composite.addControlListener(this);
+        composite.addPaintListener(this);
+    }
+        
+    
+    @Override
+    public void init(IViewSite site) throws PartInitException
+    {
+        super.init(site);       
+    }
+    
+    
+    @Override
+    public void dispose()
+    {
+        super.dispose();        
+        if (scene != null)
+            scene.getRenderer().dispose();
+    }
+    
+    
+    @Override
+    public void setFocus()
+    {
+        composite.setFocus();
+    }
+    
+    
+    @Override
+    public void setScene(TableScene sc)
+    {
+        if (scene != sc)
+        {
+            // make sure we dispose previous renderer
+            if (scene != null)
+                scene.getRenderer().dispose();
+    
+            // call parent method !!
+            super.setScene(sc);
+            setPartName(scene.getName());
+            
+            // init the renderer
+            scene.getRenderer().setParent(composite);
+            scene.getRenderer().init();
+            
+            // create and register view controller
+            //canvas.addMouseListener(controller);
+            //canvas.addMouseMoveListener(controller);
+            //canvas.addListener(SWT.MouseWheel , controller);
+            
+            // register view as listener to the scene
+            scene.addListener(this);
+            
+            // refresh display
+            refreshViewAsync();
+        }
+    }
+    
     
     @Override
     public void updateView()
     {
-        setPartName("Table: " + item.getName());
-        table.setTable((TableItem)item, ((TableItem)item).getTableInfo());
-        table.updateTable();
+        // render whole scene tree
+        scene.getRenderer().drawScene(scene);
     }
     
     
     @Override
     public void clearView()
     {
-        
+        // Clears the world view and unregister listeners
+        //canvas.removeMouseListener(controller);
+        //canvas.removeMouseMoveListener(controller);
+        //canvas.removeListener(SWT.MouseWheel , controller);
+        composite.redraw();
+        setPartName("Nothing Open");
     }
     
     
     @Override
-    public void handleEvent(STTEvent event)
+    public void handleEvent(STTEvent e)
     {       
-        switch (event.type)
+        switch (e.type)
         {
-            case ITEM_SYMBOLIZER_CHANGED:
-                Symbolizer symbolizer = (Symbolizer)event.source;
-                table.updateSymbolizer(symbolizer);
-                
-            case PROVIDER_DATA_CHANGED:
+            case SCENE_OPTIONS_CHANGED:
+            case SCENE_VIEW_CHANGED:
+            case SCENE_ITEM_CHANGED:
+            case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
         }
     }
-
-
-    @Override
-    public void setDataItem(DataItem dataItem)
+    
+    
+    public void paintControl(PaintEvent e)
     {
-        super.setDataItem(dataItem);
-        TableItem tableItem = (TableItem)dataItem;
-        table.setTable(tableItem, tableItem.getTableInfo());
-        refreshViewAsync();
+        if (scene != null)
+            scene.getRenderer().drawScene(scene);
+    }
+    
+    
+    public void controlResized(ControlEvent e)
+    {
+        if (scene != null)
+        {
+            // update view size
+            Rectangle clientArea = composite.getClientArea();
+            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
+            
+            // redraw the whole scene
+            //scene.getRenderer().drawScene(scene);
+        }
+    }
+    
+    
+    public void controlMoved(ControlEvent e)
+    {
     }
 }

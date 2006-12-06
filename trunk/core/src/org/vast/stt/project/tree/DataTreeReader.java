@@ -102,7 +102,7 @@ public class DataTreeReader extends XMLReader
         if (dataEntryElt.getLocalName().equals("DataList"))
 			dataEntry = readDataList(dom, dataEntryElt);
 		else if (dataEntryElt.getLocalName().equals("DataItem"))
-			dataEntry = readWorldItem(dom, dataEntryElt);
+			dataEntry = readDataItem(dom, dataEntryElt);
         else
         {
             XMLModuleReader reader = XMLRegistry.createReader(dataEntryElt.getLocalName());
@@ -149,13 +149,13 @@ public class DataTreeReader extends XMLReader
             {
                 dataList.add(dataEntry);
                 
-                // set visibility if it's a WorldItem
-                if (dataEntry instanceof WorldItem)
+                // set visibility if it's a DataItem
+                if (dataEntry instanceof DataItem)
                 {
                     String visText = dom.getAttributeValue(propElt, "visible");
                     if (visText != null && visText.equals("true"))
-                        parentScene.setItemVisibility((WorldItem)dataEntry, true);
-                }                    
+                        parentScene.setItemVisibility((DataItem)dataEntry, true);
+                }
             }
 		}
 		
@@ -169,9 +169,9 @@ public class DataTreeReader extends XMLReader
 	 * @param dataItemElt
 	 * @return
 	 */
-	public WorldItem readWorldItem(DOMReader dom, Element dataItemElt)
+	public DataItem readDataItem(DOMReader dom, Element dataItemElt)
 	{
-        WorldItem dataItem = new WorldItem();
+        DataItem dataItem = new DataItem();
         
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
