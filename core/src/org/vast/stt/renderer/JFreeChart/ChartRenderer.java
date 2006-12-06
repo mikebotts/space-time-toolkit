@@ -115,8 +115,11 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
         {
             JFreeChart chart = new JFreeChart(plotBuilder.getPlot());
             chart.setTitle(scene.getName());
-            chartPanel.setRefreshBuffer(false);
             chartPanel.setChart(chart);            
+        }
+        else
+        {
+            chartPanel.setChart(null);
         }
         //chart.draw((Graphics2D)img1.getGraphics(), img1.getGraphics().getClipBounds());
         //BufferedImage img = chart.createBufferedImage(800, 600);

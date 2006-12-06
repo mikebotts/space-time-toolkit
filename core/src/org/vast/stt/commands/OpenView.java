@@ -22,7 +22,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.vast.stt.gui.views.ChartView;
 import org.vast.stt.gui.views.DataItemView;
+import org.vast.stt.gui.views.TableView;
 import org.vast.stt.project.chart.ChartScene;
+import org.vast.stt.project.table.TableScene;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -74,6 +76,8 @@ public class OpenView implements Command
                         ((DataItemView)openedView).setDataItem((DataItem)data);
                     else if (openedView instanceof ChartView)
                         ((ChartView)openedView).setScene((ChartScene)data);
+                    else if (openedView instanceof TableView)
+                        ((TableView)openedView).setScene((TableScene)data);
                 }
                 catch (PartInitException e)
                 {

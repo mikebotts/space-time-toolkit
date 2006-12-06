@@ -16,8 +16,8 @@ package org.vast.stt.style;
 import java.util.ArrayList;
 import java.util.List;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.gui.widgets.table.RichTable;
 import org.vast.stt.project.table.DataColumn;
+import org.vast.stt.project.table.RichTable;
 import org.vast.stt.project.table.TableSymbolizer;
 
 

@@ -55,7 +55,6 @@ import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
-import org.vast.stt.project.tree.WorldItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.sml.SMLProvider;
@@ -90,7 +89,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	 */
 	public boolean performDrop(Object data) {
 		OWSLayerCapabilities caps = (OWSLayerCapabilities) data;
-		DataItem newItem = new WorldItem(); // use world item for stuffs to be rendered in the world view
+		DataItem newItem = new DataItem(); // use world item for stuffs to be rendered in the world view
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {

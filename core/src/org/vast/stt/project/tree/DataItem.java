@@ -41,24 +41,29 @@ import org.vast.stt.provider.DataProvider;
  * @date Nov 3, 2005
  * @version 1.0
  */
-public abstract class DataItem implements DataEntry, STTEventListener, STTEventProducer
+public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 {
 	protected String name;
 	protected boolean enabled = true;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
-    protected STTEventListeners listeners;    
-    protected ArrayList<UserAction> actions;
+    protected STTEventListeners listeners;
+    protected List<Symbolizer> symbolizers;
+    protected List<UserAction> actions;    
     
     
     public DataItem()
 	{
-        listeners = new STTEventListeners(2);        
+        listeners = new STTEventListeners(2);
+        symbolizers = new ArrayList<Symbolizer>(2); 
         actions = new ArrayList<UserAction>(1);
 	}
     
     
-    public abstract List<Symbolizer> getSymbolizers(); 
+    public List<Symbolizer> getSymbolizers()
+    {
+        return this.symbolizers;
+    }
 	
 
 	public String getName()

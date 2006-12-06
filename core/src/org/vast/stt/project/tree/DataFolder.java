@@ -83,4 +83,30 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 		iterator.reset();
 		return iterator;
 	}
+    
+    
+    /**
+     * Looks for the given entry recursively into this folder
+     * @param item
+     * @return true if entry was found in this folder or its sub-folders
+     */
+    public boolean containsRecursively(DataEntry item)
+    {
+        for (int i=0; i<size(); i++)
+        {
+            DataEntry nextEntry = get(i);
+            
+            if (nextEntry == item)
+                return true;
+            
+            else if (nextEntry instanceof DataFolder)
+            {
+                boolean found = ((DataFolder)nextEntry).containsRecursively(item);
+                if (found)
+                    return true;
+            }
+        }
+        
+        return false;
+    }
 }
