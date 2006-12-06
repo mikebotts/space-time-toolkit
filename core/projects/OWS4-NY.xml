@@ -1354,7 +1354,7 @@
                            </DataItem>
                         </member>
                         <member>
-                           <ChartScene>
+                           <ChartScene id="WEATHER_CHART">
                               <name>Weather Charts</name>
                               <contents>
                                  <DataList>
@@ -1818,7 +1818,7 @@
                      <TimeExtent>
                         <baseTime>2006-11-08T08:00:00</baseTime>
                         <lagTime>0</lagTime>
-                        <leadTime>36000</leadTime>
+                        <leadTime>54000</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -1833,7 +1833,7 @@
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>2006-11-10T16:15:00</baseTime>
-                        <lagTime>216000</lagTime>
+                        <lagTime>54000</lagTime>
                         <leadTime>0</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
@@ -1849,7 +1849,7 @@
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>2006-11-10T16:15:00</baseTime>
-                        <lagTime>216000</lagTime>
+                        <lagTime>54000</lagTime>
                         <leadTime>0</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
