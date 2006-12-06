@@ -49,13 +49,15 @@ public class LayerLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element){
-		if(element instanceof SOSLayerCapabilities)
+		if(element instanceof OWSLayerCapabilities)
+			caps = (OWSLayerCapabilities)element;
+		if(caps instanceof SOSLayerCapabilities)
 			return getSOSText(element);
-		else if(element instanceof WMSLayerCapabilities)
+		else if(caps instanceof WMSLayerCapabilities)
 			return getWMSText(element);
-		else if(element instanceof WFSLayerCapabilities)
+		else if(caps instanceof WFSLayerCapabilities)
 			return getWFSText(element);
-		else if(element instanceof WCSLayerCapabilities)
+		else if(caps instanceof WCSLayerCapabilities)
 			return getWCSText(element);
 		else
 			return element.toString();
@@ -74,7 +76,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else if (element == sosCaps.getTimeList()) 
 				return "Times";
 			else
-				return "WTF?";
+				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
 			return ((OWSLayerCapabilities)element).getId();
 		} else if(element instanceof TimeInfo) {
@@ -100,7 +102,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else if (element == wmsCaps.getChildLayers()) 
 				return "Child Layers";
 			else
-				return "Heh?";
+				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
 			return ((OWSLayerCapabilities)element).getName();
 		} else if(element instanceof TimeInfo) {
@@ -128,5 +130,10 @@ public class LayerLabelProvider extends LabelProvider {
 		String isoStop = DateTimeFormat.formatIso(ti.getStopTime(), 0); 
 		return isoStart + "/" + isoStop + "/" + ti.getTimeStep();
 	}
+	
+	public void setCapabilities(OWSLayerCapabilities caps){
+		this.caps = caps;
+	}
+	
 }
 

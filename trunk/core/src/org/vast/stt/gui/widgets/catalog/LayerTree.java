@@ -84,7 +84,7 @@ public class LayerTree implements ITreeContentProvider {
 			}
 			return null;
 		} else if (parentElement instanceof OWSLayerCapabilities) {
-			//labelProv.setCapabilities((OWSLayerCapabilities) parentElement);
+			labelProv.setCapabilities((OWSLayerCapabilities) parentElement);
 			LayerInfo info = new LayerInfo((OWSLayerCapabilities) parentElement);
 			return info.getOptions();
 		} else if (parentElement instanceof List[]) {
