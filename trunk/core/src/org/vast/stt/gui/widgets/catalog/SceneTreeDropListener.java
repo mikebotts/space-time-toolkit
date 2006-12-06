@@ -55,7 +55,7 @@ import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
-import org.vast.stt.project.tree.WorldItem;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.sml.SMLProvider;
@@ -90,13 +90,13 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	 */
 	public boolean performDrop(Object data) {
 		OWSLayerCapabilities caps = (OWSLayerCapabilities) data;
-		DataItem newItem = new WorldItem(); // use world item for stuffs to be rendered in the world view
+		DataItem newItem = new DataItem(); // use world item for stuffs to be rendered in the world view
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
 			return false;
 		} else if (data instanceof WMSLayerCapabilities) {
-			WorldItem item = createWMSItem((WMSLayerCapabilities)caps);
+			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
 			return dropItem(item);
 		} else if (data instanceof WCSLayerCapabilities) {
 			System.err.println("Add WCS drop support");
@@ -202,7 +202,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return false;
 	}
 	
-	public WorldItem createWMSItem(WMSLayerCapabilities caps){
+	public DataItem createWMSItem(WMSLayerCapabilities caps){
 		try {
 			String fileLocation = null;
 			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
@@ -218,7 +218,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 
 			DOMReader dom = new DOMReader(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
-			WorldItem worldItem = (WorldItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
 			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
 			//  load default fields from caps into SensorMLProvider 
 			loadSensorMLProvider(provider, caps);
