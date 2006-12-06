@@ -85,6 +85,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     protected PopupRenderer popupRenderer;
 
     protected GLRenderPoints pointRenderer;
+    protected GLRenderIcons iconRenderer;
     protected GLRenderLines lineRenderer;
     protected GLRenderPolygons polygonRenderer;
     protected GLRenderGrids gridRenderer;
@@ -533,6 +534,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         displayListManager = new DisplayListManager(gl, glu);
         blockFilter = new GLBlockFilter(gl, glu);
         pointRenderer = new GLRenderPoints(gl, glu);
+        iconRenderer = new GLRenderIcons(gl, glu, this);
         lineRenderer = new GLRenderLines(gl, glu);
         polygonRenderer = new GLRenderPolygons(gl, glu);
         gridRenderer = new GLRenderGrids(gl, glu);
@@ -542,7 +544,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         popupRenderer = new PopupRenderer(composite);
         
         gl.glClearDepth(1.0f);
-        gl.glDepthFunc(GL.GL_LESS);
+        gl.glDepthFunc(GL.GL_LEQUAL);//GL.GL_LESS);
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
@@ -588,15 +590,27 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     public void visit(PointStyler styler)
     {
         BlockListItem block;
-        styler.resetIterators();        
-        pointRenderer.setStyler(styler);
+        styler.resetIterators();
         
-        // loop through all tiles
-        while ((block = styler.nextBlock()) != null)
-        { 
-            pointRenderer.blockCount = 10000;
-            displayListManager.useDisplayList(styler, block, pointRenderer, false);
-        }      
+        // select point or icon renderer
+        if (styler.useIcons())
+        {
+            iconRenderer.setStyler(styler);            
+            while ((block = styler.nextBlock()) != null)
+            { 
+                iconRenderer.blockCount = 10000;
+                iconRenderer.run();
+            }
+        }
+        else
+        {        
+            pointRenderer.setStyler(styler);
+            while ((block = styler.nextBlock()) != null)
+            { 
+                pointRenderer.blockCount = 10000;
+                displayListManager.useDisplayList(styler, block, pointRenderer, false);
+            }
+        }
     }
     
     

@@ -14,6 +14,7 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
+import org.vast.ows.sld.GraphicImage;
 import org.vast.ows.sld.GraphicMark;
 import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
@@ -43,6 +44,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
     protected PointGraphic point;
     protected PointSymbolizer symbolizer;	
     protected int[] pointIndex = new int[1];
+    protected boolean useIcons;
     
 	
 	public PointStyler()
@@ -265,7 +267,30 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                     }
                 }
             }
-        }        
+        }
+        
+        else if (glyph instanceof GraphicImage)
+        {
+            param = ((GraphicImage)glyph).getUrl();
+            if (param != null)
+            {
+                if (param.isConstant())
+                {
+                    value = param.getConstantValue();
+                    point.iconUrl = (String)value;                    
+                }
+                else
+                {
+                    propertyName = param.getPropertyName();
+                    if (propertyName != null)
+                    {
+                        addPropertyMapper(propertyName, new IconUrlMapper(point, param.getMappingFunction())); 
+                    }
+                }
+                
+                useIcons = true;
+            }
+        }
         
         // point size
         param = this.symbolizer.getGraphic().getSize();
@@ -274,7 +299,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.size = ((Float)value).intValue();
+                point.size = ((Float)value).floatValue();
             }
             else
             {
@@ -333,4 +358,10 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
     		visitor.visit(this);
         }
 	}
+
+
+    public boolean useIcons()
+    {
+        return useIcons;
+    }
 }
