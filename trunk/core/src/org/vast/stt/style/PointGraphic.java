@@ -36,8 +36,10 @@ public class PointGraphic extends PrimitiveGraphic
     }
     
     public float orientation;
-	public float size = 1.0f;
-	public byte[] icon;
+	public float size = 1.0f;	
     public boolean smooth = false;
     public ShapeType shape = ShapeType.SQUARE;
+    public String iconUrl;
+    public int iconOffsetX = 0;
+    public int iconOffsetY = 0;
 }
