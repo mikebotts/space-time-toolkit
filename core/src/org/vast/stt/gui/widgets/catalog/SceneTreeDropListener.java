@@ -94,7 +94,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
-			return false;
+			DataItem item = createSOSItem((SOSLayerCapabilities)caps);
+			return dropItem(item);
 		} else if (data instanceof WMSLayerCapabilities) {
 			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
 			return dropItem(item);
@@ -202,6 +203,34 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return false;
 	}
 	
+	public DataItem createSOSItem(SOSLayerCapabilities caps){
+		try {
+			String fileLocation = null;
+			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
+					"templates", "SOS_IFGI.xml", false);
+			if (e.hasMoreElements())
+				fileLocation = (String) e.nextElement().toString();
+
+			if (fileLocation == null) {
+				ExceptionSystem.display(new Exception(
+						"STT error: Cannot find template\\SOS_IFGI.xml"));
+				return null;
+			}
+
+			DOMReader dom = new DOMReader(fileLocation, false);
+			DataTreeReader dataReader = new DataTreeReader();
+			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
+			//  load default fields from caps into SensorMLProvider 
+			//loadSensorMLProvider(provider, caps);
+			
+			return worldItem;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public DataItem createWMSItem(WMSLayerCapabilities caps){
 		try {
 			String fileLocation = null;
