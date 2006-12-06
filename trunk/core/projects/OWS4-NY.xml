@@ -1247,13 +1247,17 @@
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Graphic>
-                                       <sld:Mark>
+                                       <!--<sld:Mark>
                                           <sld:WellKnownName>triangle</sld:WellKnownName>
                                           <sld:Fill>
                                              <sld:CssParameter name="fill">#007FFF</sld:CssParameter>
                                           </sld:Fill>
-                                       </sld:Mark>
-                                       <sld:Size>8</sld:Size>
+                                       </sld:Mark>-->
+                                       <sld:ExternalGraphic>
+                                          <sld:Format>image/png</sld:Format>
+                                          <sld:OnlineResource>icons/thermo1.png</sld:OnlineResource>                                             
+                                       </sld:ExternalGraphic>
+                                       <sld:Size>0.5</sld:Size>
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
                               </style>
@@ -1499,13 +1503,11 @@
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Graphic>
-                                       <sld:Mark>
-                                          <sld:WellKnownName>square</sld:WellKnownName>
-                                          <sld:Fill>
-                                             <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
-                                          </sld:Fill>
-                                       </sld:Mark>
-                                       <sld:Size>8</sld:Size>
+                                       <sld:ExternalGraphic>
+                                          <sld:Format>image/png</sld:Format>
+                                          <sld:OnlineResource>icons/radio1.png</sld:OnlineResource>                                             
+                                       </sld:ExternalGraphic>
+                                       <sld:Size>0.5</sld:Size>
                                     </sld:Graphic>
                                  </sld:PointSymbolizer>
                               </style>
