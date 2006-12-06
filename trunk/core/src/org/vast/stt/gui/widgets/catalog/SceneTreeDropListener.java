@@ -207,7 +207,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		try {
 			String fileLocation = null;
 			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", "SOS_IFGI.xml", false);
+					"templates", "IFGI_WeatherNY.xml", false);
 			if (e.hasMoreElements())
 				fileLocation = (String) e.nextElement().toString();
 
