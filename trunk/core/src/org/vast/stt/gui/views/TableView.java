@@ -41,7 +41,7 @@ import org.vast.stt.project.table.TableScene;
  */
 public class TableView extends SceneView<TableScene> implements PaintListener, ControlListener
 {
-    public static final String ID = "STT.ChartView";
+    public static final String ID = "STT.TableView";
     private Composite composite;
     
     
