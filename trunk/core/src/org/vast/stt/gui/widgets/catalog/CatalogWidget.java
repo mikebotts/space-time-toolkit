@@ -103,7 +103,8 @@ public class CatalogWidget
 		
 		Group optionGroup = new Group(mainGroup, SWT.BORDER);
 		GridLayout optLayout = new GridLayout(4, false);
-		optLayout.verticalSpacing = 10;
+		optLayout.verticalSpacing = 6;
+		optLayout.marginWidth = 4;
 		optionGroup.setLayout(optLayout);
 		optionGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
 		optionGroup.setText("Serarch Options");
@@ -111,6 +112,8 @@ public class CatalogWidget
 		//  Servers (Only one initially, but still making it a combo)
 		Label serverLabel = new Label(optionGroup, SWT.LEFT);  
 		serverLabel.setText("Server:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		serverLabel.setLayoutData(gd);
 		Combo serverCombo = new Combo(optionGroup, SWT.BORDER | SWT.READ_ONLY);
 		serverCombo.setTextLimit(20);
 		serverCombo.setItems(catServers);
@@ -163,6 +166,8 @@ public class CatalogWidget
 
 		Label maxYLabel = new Label(optionGroup, SWT.LEFT);
 		maxYLabel.setText("maxLon:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		maxYLabel.setLayoutData(gd);
 		maxYText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
 		maxYText.setTextLimit(15);
 		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
@@ -171,6 +176,8 @@ public class CatalogWidget
 		
 		Label maxXLabel = new Label(optionGroup, SWT.LEFT);
 		maxXLabel.setText("maxLat:");
+		gd = new GridData(SWT.RIGHT,SWT.CENTER, false, false);
+		maxXLabel.setLayoutData(gd);
 		maxXText = new Text(optionGroup, SWT.BORDER | SWT.LEFT);
 		maxXText.setTextLimit(15);
 		gd = new GridData(SWT.LEFT,SWT.CENTER, false, false);
