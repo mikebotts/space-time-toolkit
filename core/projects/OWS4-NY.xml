@@ -1722,7 +1722,7 @@
                   <name>KOKX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2006-12-01T22:00:00</baseTime>
+                        <baseTime>2006-12-01T22:45:00</baseTime>
 <!--                        <baseTime>now</baseTime>
 -->                        <lagTime>0</lagTime>
                         <leadTime>300</leadTime>
@@ -1738,7 +1738,7 @@
                   <name>KDIX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2006-12-01T22:00:00</baseTime>
+                        <baseTime>2006-12-01T22:45:00</baseTime>
                         <!--                        <baseTime>now</baseTime>-->
                         <lagTime>0</lagTime>
                         <leadTime>300</leadTime>
@@ -1754,7 +1754,7 @@
                   <name>KENX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2006-12-01T22:00:00</baseTime>
+                        <baseTime>2006-12-01T22:45:00</baseTime>
 <!--                        <baseTime>now</baseTime>
 -->                        <lagTime>0</lagTime>
                         <leadTime>300</leadTime>
