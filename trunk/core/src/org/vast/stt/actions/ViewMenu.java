@@ -15,6 +15,7 @@ import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.ScenePageInput;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.Projection_LLA;
 import org.vast.stt.project.world.WorldScene;
@@ -52,7 +53,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
 	{
 		String actionID = action.getId();
         ScenePageInput pageInput = (ScenePageInput)window.getActivePage().getInput();
-        WorldScene currentScene = (WorldScene)pageInput.getScene();
+        Scene currentScene = pageInput.getScene();
         
         if (actionID.endsWith("CloneScene1"))
         {
@@ -60,8 +61,8 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             if (pageInput != null)
             {
                 WorldScene newScene = new WorldScene();
-                newScene.setViewSettings(currentScene.getViewSettings());
-                newScene.setTimeSettings(currentScene.getTimeSettings());
+                newScene.setViewSettings(((WorldScene)currentScene).getViewSettings());
+                newScene.setTimeSettings(((WorldScene)currentScene).getTimeSettings());
                 newScene.setDataTree(currentScene.getDataTree());
                 newScene.setName(currentScene.getName());
                 
@@ -82,7 +83,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(new ViewSettings());
-                newScene.setTimeSettings(currentScene.getTimeSettings());
+                newScene.setTimeSettings(((WorldScene)currentScene).getTimeSettings());
                 newScene.setDataTree(currentScene.getDataTree());
                 newScene.setName(currentScene.getName());
                 
@@ -101,11 +102,11 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
         {
             if (pageInput != null)
             {
-                ViewSettings viewSettings = currentScene.getViewSettings();
+                ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
                 currentScene.getRenderer().drawScene(currentScene);
-                FitView fit = new FitView(currentScene);
+                FitView fit = new FitView(((WorldScene)currentScene));
                 fit.execute();
             }
         }
@@ -113,11 +114,11 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
         {
             if (pageInput != null)
             {
-                ViewSettings viewSettings = currentScene.getViewSettings();
+                ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
                 currentScene.getRenderer().drawScene(currentScene);
-                FitView fit = new FitView(currentScene);
+                FitView fit = new FitView(((WorldScene)currentScene));
                 fit.execute();
             }
         }

@@ -28,7 +28,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.vast.math.Vector3d;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.renderer.PickFilter;
@@ -61,7 +60,7 @@ import org.vast.stt.style.TextureStyler;
  * @date Dec 05, 2006
  * @version 1.0
  */
-public class TableRenderer extends SceneRenderer<Scene<TableSceneItem>> implements StylerVisitor
+public class TableRenderer extends SceneRenderer<TableScene> implements StylerVisitor
 {
     private ScrolledComposite mainSC;
     
@@ -82,17 +81,17 @@ public class TableRenderer extends SceneRenderer<Scene<TableSceneItem>> implemen
 
 
     @Override
-    public void drawScene(Scene<TableSceneItem> sc)
+    public void drawScene(TableScene sc)
     {
         if (composite.isDisposed())
             return;
         
         // draw all items
         TableScene scene = (TableScene)sc;
-        List<TableSceneItem> sceneItems = scene.getSceneItems();
+        List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem<?> nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
 
             if (!nextItem.isVisible())
                 continue;
@@ -100,19 +99,12 @@ public class TableRenderer extends SceneRenderer<Scene<TableSceneItem>> implemen
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            drawTableItem(nextItem);
+            drawItem(nextItem);
         }
     }
-
-
-    @Override
-    public void drawItem(SceneItem<?> item)
-    {
-        
-    }
     
     
-    protected void drawTableItem(SceneItem<?> item)
+    protected void drawItem(SceneItem item)
     {
         if (item.getStylers().isEmpty())
             return;
@@ -149,7 +141,7 @@ public class TableRenderer extends SceneRenderer<Scene<TableSceneItem>> implemen
 
 
     @Override
-    public PickedObject pick(Scene<TableSceneItem> scene, PickFilter filter)
+    public PickedObject pick(TableScene scene, PickFilter filter)
     {
         return null;
     }

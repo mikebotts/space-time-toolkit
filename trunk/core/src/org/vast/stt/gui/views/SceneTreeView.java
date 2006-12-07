@@ -53,7 +53,6 @@ import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.WorldSceneItem;
 
 
 public class SceneTreeView extends SceneView<WorldScene> implements ISelectionChangedListener, IDoubleClickListener
@@ -65,7 +64,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 	private Font treeFont;
 	private Object[] expandedItems;
     private ISelection selectedItem;
-    private List<Scene<?>> allScenes;
+    private List<Scene> allScenes;
     	
     
 	// Label + Image provider
@@ -74,7 +73,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
         @Override
 		public Image getImage(Object element)
 		{
-            Scene<?> parentScene = findParentScene((DataEntry)element);
+            Scene parentScene = findParentScene((DataEntry)element);
             
             if (element instanceof DataFolder)
 			{
@@ -143,7 +142,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 			if (parentElement instanceof Scene)
 			{
 				allScenes.add((Scene)parentElement);
-                return (((Scene<?>)parentElement).getDataTree()).toArray();
+                return (((Scene)parentElement).getDataTree()).toArray();
 			}
             else if (parentElement instanceof DataFolder)
             {
@@ -196,7 +195,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 	public void init(IViewSite site) throws PartInitException
 	{
 		super.init(site);
-        allScenes = new ArrayList<Scene<?>>(1);
+        allScenes = new ArrayList<Scene>(1);
         
         // load tree images
 		ImageDescriptor descriptor;
@@ -251,7 +250,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
                     DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
                     if (selectedEntry instanceof DataItem)
                     {
-                        SceneItem<?> sceneItem = scene.findItem((DataItem)selectedEntry);
+                        SceneItem sceneItem = scene.findItem((DataItem)selectedEntry);
                         if (sceneItem != null && sceneItem.isVisible())
                         {
                             FitView cmd = new FitView(scene, sceneItem);
@@ -330,11 +329,11 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
     }
     
     
-    protected Scene<?> findParentScene(DataEntry dataEntry)
+    protected Scene findParentScene(DataEntry dataEntry)
     {
         for (int i=0; i<allScenes.size(); i++)
         {
-            Scene<?> nextScene = allScenes.get(i);
+            Scene nextScene = allScenes.get(i);
             if (nextScene.getDataTree().containsRecursively(dataEntry))
                 return nextScene;
         }
@@ -357,10 +356,10 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
                 DataEntry selectedEntry = (DataEntry)iterator.next();
                 if (selectedEntry instanceof DataItem)
                 {
-                    SceneItem<?> item = scene.findItem((DataItem)selectedEntry);
+                    SceneItem item = scene.findItem((DataItem)selectedEntry);
                     if (item != null && item.isVisible())
                     {
-                        scene.getSelectedItems().add((WorldSceneItem)item);                    
+                        scene.getSelectedItems().add(item);                    
                     }
                 }
             }
@@ -374,7 +373,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
     {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
         DataEntry selectedEntry = (DataEntry)selection.getFirstElement();
-        Scene<?> parentScene = findParentScene(selectedEntry);
+        Scene parentScene = findParentScene(selectedEntry);
         
         // if it's a list change visibility for all descendants
         if (selectedEntry instanceof DataFolder)

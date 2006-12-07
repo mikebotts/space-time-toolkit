@@ -40,12 +40,12 @@ import java.util.ArrayList;
  * @date Oct 19, 2006
  * @version 1.0
  */
-public class ShowMenu extends UserAction
+public class ShowMenu extends ItemAction
 {
     public class MenuEntry
     {
         public String name;
-        public UserAction action;
+        public ItemAction action;
     }    
     
     protected ArrayList<MenuEntry> entries;

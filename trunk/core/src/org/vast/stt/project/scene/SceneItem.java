@@ -20,7 +20,9 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.Projection;
 import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.SceneRenderer.CleanupSection;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
@@ -41,25 +43,22 @@ import org.vast.stt.style.StylerVisitor;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public abstract class SceneItem<SceneType extends Scene<?>> implements STTEventListener
+public class SceneItem implements STTEventListener
 {
-    protected SceneType parentScene;
+    protected Scene<? extends SceneRenderer<? extends Scene>> parentScene;
     protected DataItem dataItem;
     protected ArrayList<DataStyler> stylers;
     protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
 
-    public SceneItem(SceneType scene)
+    public SceneItem(Scene<? extends SceneRenderer<? extends Scene>> scene)
     {
         stylers = new ArrayList<DataStyler>(1);
         stylerTable = new Hashtable<Symbolizer, DataStyler>();
         parentScene = scene;
     }
-    
-    
-    protected abstract void prepareStyler(DataStyler styler);
-    
+        
     
     public DataItem getDataItem()
     {
@@ -148,6 +147,21 @@ public abstract class SceneItem<SceneType extends Scene<?>> implements STTEventL
     
     
     /**
+     * Changes projections of all stylers (for map views)
+     * @param projection
+     */
+    public void setProjection(Projection projection)
+    {
+        for (int i = 0; i < stylers.size(); i++)
+        {
+            DataStyler nextStyler = stylers.get(i);
+            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.GEOMETRY);
+            nextStyler.setProjection(projection);
+        }
+    }
+    
+    
+    /**
      * Clears all rendering cache related to this item
      */
     public void cleanup()
@@ -206,7 +220,7 @@ public abstract class SceneItem<SceneType extends Scene<?>> implements STTEventL
             
             styler = StylerFactory.createStyler(sym);
             styler.setDataItem(dataItem);
-            prepareStyler(styler);
+            parentScene.prepareStyler(styler);
             stylers.add(styler);
             stylerTable.put(sym, styler);
         }

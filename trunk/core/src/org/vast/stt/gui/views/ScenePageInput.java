@@ -6,10 +6,10 @@ import org.vast.stt.project.scene.Scene;
 
 public class ScenePageInput implements IAdaptable
 {
-    protected Scene<?> scene;
+    protected Scene scene;
     
     
-    public ScenePageInput(Scene<?> scene)
+    public ScenePageInput(Scene scene)
     {
         this.scene = scene;
     }
@@ -21,13 +21,13 @@ public class ScenePageInput implements IAdaptable
     }
 
 
-    public Scene<?> getScene()
+    public Scene getScene()
     {
         return scene;
     }
 
 
-    public void setScene(Scene<?> scene)
+    public void setScene(Scene scene)
     {
         this.scene = scene;
     }	

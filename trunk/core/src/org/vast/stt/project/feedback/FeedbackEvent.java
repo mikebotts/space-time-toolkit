@@ -23,21 +23,31 @@
 
 package org.vast.stt.project.feedback;
 
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.renderer.SceneRenderer;
 
-public class UserEvent
+
+public class FeedbackEvent
 {
-    public enum EventType
+    public enum FeedbackType
     {
-        HOVER, LEFT_CLICK, RIGHT_CLICK, DBL_CLICK
+        HOVER, LEFT_CLICK, MID_CLICK, RIGHT_CLICK, DBL_CLICK
     }
 
-    protected EventType type;
+    protected FeedbackType type;
     protected int cursorX, cursorY;
+    protected Scene<? extends SceneRenderer<? extends Scene>> sourceScene;
     protected DataItem sourceItem;
     protected int[] dataIndices; // block#, array1#, array2#
 
 
+    public FeedbackEvent(FeedbackType type)
+    {
+        this.type = type;
+    }
+    
+    
     public int getCursorX()
     {
         return cursorX;
@@ -74,13 +84,13 @@ public class UserEvent
     }
 
 
-    public EventType getType()
+    public FeedbackType getType()
     {
         return type;
     }
 
 
-    public void setType(EventType eventType)
+    public void setType(FeedbackType eventType)
     {
         this.type = eventType;
     }
@@ -97,4 +107,15 @@ public class UserEvent
         this.sourceItem = sourceItem;
     }
 
+
+    public Scene<? extends SceneRenderer<? extends Scene>> getSourceScene()
+    {
+        return sourceScene;
+    }
+
+
+    public void setSourceScene(Scene<? extends SceneRenderer<? extends Scene>> sourceScene)
+    {
+        this.sourceScene = sourceScene;
+    }
 }

@@ -32,11 +32,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.data.BlockListItem;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
-import org.vast.stt.project.world.WorldSceneItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -61,7 +59,7 @@ import org.vast.stt.style.*;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implements StylerVisitor
+public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVisitor
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
     protected org.eclipse.swt.opengl.GLContext SWTContext;
@@ -111,7 +109,6 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
                 wait();
             
             contextInUse = true;
-            SWTContext.setCurrent();
             JOGLContext.makeCurrent();
         }
         catch (InterruptedException e)
@@ -232,7 +229,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     
     
     @Override
-    public PickedObject pick(Scene<WorldSceneItem> sc, PickFilter filter)
+    public PickedObject pick(WorldScene sc, PickFilter filter)
     {
         WorldScene scene = (WorldScene)sc;
         ViewSettings view = scene.getViewSettings();
@@ -283,7 +280,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         else
         {
             // get all or only selected items
-            List<WorldSceneItem> items = null;
+            List<SceneItem> items = null;
             if (filter.onlySelectedItems)
                 items = scene.getSelectedItems();
             else
@@ -292,7 +289,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             // loop through all items and render them in selection mode
             for (int i = 0; i < items.size(); i++)
             {
-                SceneItem<?> nextItem = items.get(i);
+                SceneItem nextItem = items.get(i);
     
                 if (!nextItem.isVisible())
                     continue;
@@ -300,11 +297,11 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
                 if (!nextItem.getDataItem().isEnabled())
                     continue;
                 
-                if (filter.onlyWithEvent && !nextItem.getDataItem().hasEvent())
+                if (filter.onlyItemsWithAction && !nextItem.getDataItem().hasEvent())
                     continue;
                 
                 selectableItems.put(nextItem.hashCode(), nextItem);
-                drawOneItem(nextItem);
+                drawItem(nextItem);
             }
         }
         
@@ -337,7 +334,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
     
     
     @Override
-    public void drawScene(Scene<WorldSceneItem> sc)
+    public void drawScene(WorldScene sc)
     {
         if (composite.isDisposed())
             return;
@@ -348,10 +345,10 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         setupMatrices(view);
         
         // draw all items
-        List<WorldSceneItem> sceneItems = scene.getSceneItems();
+        List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem<?> nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
 
             if (!nextItem.isVisible())
                 continue;
@@ -359,7 +356,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            try {drawOneItem(nextItem);}
+            try {drawItem(nextItem);}
             catch (RuntimeException e) {e.printStackTrace();}
         }
 
@@ -379,18 +376,9 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         SWTContext.swapBuffers();
         releaseContext();
     }
-       
-    
-    @Override
-    public void drawItem(SceneItem<?> sceneItem)
-    {
-        getContext();
-        drawOneItem(sceneItem);
-        releaseContext();
-    }
     
     
-    protected void drawOneItem(SceneItem sceneItem)
+    protected void drawItem(SceneItem sceneItem)
     {
         resetZOffset = false;
         gl.glLoadName(sceneItem.hashCode());
@@ -474,7 +462,7 @@ public class JOGLRenderer extends SceneRenderer<Scene<WorldSceneItem>> implement
         if (scene.getSelectedItems().isEmpty())
             return;
         
-        SceneItem<?> sceneItem = scene.getSelectedItems().get(0);
+        SceneItem sceneItem = scene.getSelectedItems().get(0);
         DataProvider provider = sceneItem.getDataItem().getDataProvider();
         
         if (provider.isSpatialSubsetSupported())

@@ -40,7 +40,6 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.STTDndTransfer;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.WorldSceneItem;
 
 
 public class SceneItemsView extends SceneView<WorldScene> implements ISelectionChangedListener, IDoubleClickListener
@@ -58,7 +57,7 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         @Override
 		public Image getImage(Object element)
 		{
-			SceneItem<?> item = (SceneItem<?>)element;
+			SceneItem item = (SceneItem)element;
             if (item.isVisible())
                 return itemVisImg;
             else
@@ -68,7 +67,7 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
 		@Override
 		public String getText(Object element)
 		{
-			return ((SceneItem<?>)element).getName();
+			return ((SceneItem)element).getName();
 		}		
 	}
 	
@@ -195,8 +194,8 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
             Iterator iterator = ((IStructuredSelection)selection).iterator();
             while (iterator.hasNext())
             {
-                WorldSceneItem selectedItem = (WorldSceneItem)iterator.next();
-                if (selectedItem != null && ((WorldSceneItem)selectedItem).isVisible())
+                SceneItem selectedItem = (SceneItem)iterator.next();
+                if (selectedItem != null && ((SceneItem)selectedItem).isVisible())
                 {
                     scene.getSelectedItems().add(selectedItem);                    
                 }
@@ -216,5 +215,12 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
+    }
+
+
+    @Override
+    public void setFocus()
+    {
+        refreshViewAsync();
     }
 }

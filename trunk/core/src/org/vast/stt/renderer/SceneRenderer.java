@@ -16,7 +16,6 @@ package org.vast.stt.renderer;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.math.Vector3d;
 import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.style.DataStyler;
 
@@ -35,7 +34,7 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 9, 2005
  * @version 1.0
  */
-public abstract class SceneRenderer<SceneType extends Scene<? extends SceneItem>>
+public abstract class SceneRenderer<SceneType extends Scene>
 {
     public enum CleanupSection
     {
@@ -52,10 +51,7 @@ public abstract class SceneRenderer<SceneType extends Scene<? extends SceneItem>
     
     
     public abstract void drawScene(SceneType scene);
-    
-    
-    public abstract void drawItem(SceneItem<?> item);
-    
+       
     
     public abstract void cleanup(DataStyler styler, CleanupSection section);
     

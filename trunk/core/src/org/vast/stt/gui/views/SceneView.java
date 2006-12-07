@@ -15,12 +15,13 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.renderer.SceneRenderer;
+
 
 /**
  * <p><b>Title:</b>
@@ -38,7 +39,7 @@ import org.vast.stt.project.scene.Scene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart implements IPartListener2, STTEventListener
+public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<? extends Scene>>> extends ViewPart implements IPartListener2, STTEventListener
 {
     protected SceneType scene;
     protected boolean refreshThreadStarted = false;
@@ -130,7 +131,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     {
         ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
         if (pageInput != null)
-            setScene((SceneType) pageInput.getScene());
+            setScene((SceneType)pageInput.getScene());
         else
             setScene(null);
     }
@@ -154,7 +155,7 @@ public abstract class SceneView<SceneType extends Scene<?>> extends ViewPart imp
     @Override
     public void setFocus()
     {
-        refreshViewAsync();
+        //refreshViewAsync();
     }
 
 

@@ -28,8 +28,8 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.TransferData;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.WorldSceneItem;
 
 
 /**
@@ -66,7 +66,7 @@ public class SceneItemsDropListener extends ViewerDropAdapter
         WorldScene scene = (WorldScene)viewer.getInput();
         int targetPos = scene.getSceneItems().indexOf(target);
         scene.getSceneItems().remove(data);
-        scene.getSceneItems().add(targetPos, (WorldSceneItem)data);
+        scene.getSceneItems().add(targetPos, (SceneItem)data);
         viewer.refresh();
         scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED));
         return true;
@@ -79,7 +79,7 @@ public class SceneItemsDropListener extends ViewerDropAdapter
         if (target == null)
             return false;
         
-        if (!(target instanceof WorldSceneItem))
+        if (!(target instanceof SceneItem))
             return false;
         
         this.target = target;

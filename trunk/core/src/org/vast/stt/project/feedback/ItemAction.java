@@ -23,11 +23,11 @@
 
 package org.vast.stt.project.feedback;
 
-import org.vast.stt.project.feedback.UserEvent.EventType;
+import org.vast.stt.project.feedback.FeedbackEvent.FeedbackType;
 
-public class UserAction
+public class ItemAction
 {
-    protected EventType eventType;
+    protected FeedbackType eventType;
     protected int delay;
 
 
@@ -43,13 +43,13 @@ public class UserAction
     }
 
 
-    public EventType getEventType()
+    public FeedbackType getEventType()
     {
         return eventType;
     }
 
 
-    public void setEventType(EventType eventType)
+    public void setEventType(FeedbackType eventType)
     {
         this.eventType = eventType;
     }

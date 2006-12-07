@@ -87,7 +87,7 @@
 				                        </swe:axis>
 				                     </swe:Coordinates>
 				                  </swe:definition>
-				                  <swe:tupleValues>0,0 459,230000</swe:tupleValues>
+				                  <swe:tupleValues>0,0 459,460000</swe:tupleValues>
 				               </swe:Curve>
 				            </sml:parameter>
 				         </sml:ParameterList>

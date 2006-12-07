@@ -139,7 +139,7 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
         switch (e.type)
         {
             case SCENE_OPTIONS_CHANGED:
-            case SCENE_VIEW_CHANGED:
+            //case SCENE_VIEW_CHANGED:
             case SCENE_ITEM_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();

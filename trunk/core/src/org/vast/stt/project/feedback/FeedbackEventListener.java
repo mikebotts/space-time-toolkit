@@ -23,46 +23,23 @@
 
 package org.vast.stt.project.feedback;
 
-import java.util.Hashtable;
-import org.vast.io.xml.DOMReader;
-import org.vast.stt.project.XMLModuleReader;
-import org.vast.stt.project.XMLReader;
-import org.w3c.dom.Element;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.renderer.PickFilter;
+import org.vast.stt.renderer.PickedObject;
+import org.vast.stt.renderer.SceneRenderer;
 
 
-/**
- * <p><b>Title:</b>
- * Data Item Event Reader
- * </p>
- *
- * <p><b>Description:</b><br/>
- * Reads feedback options within a DataItem.
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Sep 13, 2006
- * @version 1.0
- */
-public class FeedbackActionReader extends XMLReader implements XMLModuleReader
+public class FeedbackEventListener
 {
-    public FeedbackActionReader()
+    public void handleEvent(FeedbackEvent event)
     {
-        
-    }
-    
-    
-    @Override
-    public void setObjectIds(Hashtable<String, Object> objectIds)
-    {
-        super.setObjectIds(objectIds);
-        
-    }
-
-
-    public Object read(DOMReader dom, Element elt)
-    {
-        // TODO Auto-generated method stub
-        return new ShowPopup();
+        PickFilter pickFilter = new PickFilter();
+        pickFilter.x = event.cursorX;
+        pickFilter.y = event.cursorY;
+        pickFilter.dX = 5;
+        pickFilter.dY = 5;
+        pickFilter.onlyItemsWithAction = true;
+        //Scene<? extends SceneRenderer<? extends Scene>> scene = event.getSourceScene(); 
+        //PickedObject obj = scene.getRenderer().pick(scene, pickFilter);
     }
 }

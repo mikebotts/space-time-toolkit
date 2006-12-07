@@ -21,69 +21,38 @@
  
  ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.feedback;
+package org.vast.stt.project;
 
-import org.vast.ows.sld.ScalarParameter;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.renderer.SceneRenderer;
 
 
-/**
- * <p><b>Title:</b>
- * Show URL
- * </p>
- *
- * <p><b>Description:</b><br/>
- * Used to open a webpage as a popup or in a separate window.
- * </p>
- *
- * <p>Copyright (c) 2005</p>
- * @author Alexandre Robin
- * @date Oct 19, 2006
- * @version 1.0
- */
-public class ShowURL extends ItemAction
+public class Display<SceneType extends Scene<? extends SceneRenderer>>
 {
-    public enum WindowType
-    {
-        VIEW, POPUP, BROWSER
-    }
-    
-    protected ScalarParameter title;
-    protected ScalarParameter url;
-    protected WindowType windowType;
+    protected SceneRenderer<SceneType> renderer;
+    protected SceneType scene;
 
 
-    public ScalarParameter getUrl()
+    public SceneRenderer<SceneType> getRenderer()
     {
-        return url;
+        return renderer;
     }
 
 
-    public void setUrl(ScalarParameter url)
+    public void setRenderer(SceneRenderer<SceneType> renderer)
     {
-        this.url = url;
+        this.renderer = renderer;
     }
 
 
-    public ScalarParameter getTitle()
+    public SceneType getScene()
     {
-        return title;
+        return scene;
     }
 
 
-    public void setTitle(ScalarParameter title)
+    public void setScene(SceneType scene)
     {
-        this.title = title;
-    }
-
-
-    public WindowType getWindowType()
-    {
-        return windowType;
-    }
-
-
-    public void setWindowType(WindowType windowType)
-    {
-        this.windowType = windowType;
+        this.scene = scene;
     }
 }

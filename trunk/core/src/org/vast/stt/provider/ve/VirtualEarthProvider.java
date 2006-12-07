@@ -81,7 +81,9 @@ public class VirtualEarthProvider extends TiledMapProvider
                 VirtualEarthTileNumber tileNumberGen = new VirtualEarthTileNumber();
                 item.accept(tileNumberGen);
                 String q = tileNumberGen.getTileNumber();
-
+                if (q.length() == 0)
+                    return;
+                
                 // build request URL r=roads(png), a=aerial(jpeg), h=hybrid(jpeg)
                 char layerChar = layerId.charAt(0);
                 String urlString = "http://" + layerChar + q.charAt(q.length()-1) + ".ortho.tiles.virtualearth.net/tiles/" + layerChar + q;

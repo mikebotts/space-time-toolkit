@@ -17,12 +17,13 @@ import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.feedback.FeedbackEvent;
+import org.vast.stt.project.feedback.FeedbackEventListener;
+import org.vast.stt.project.feedback.FeedbackEvent.FeedbackType;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.WorldSceneItem;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
@@ -52,6 +53,7 @@ import org.eclipse.swt.events.*;
 public class WorldViewController implements MouseListener, MouseMoveListener, Listener
 {
 	protected WorldScene scene;
+    protected FeedbackEventListener pickListener;
     private Vector3d P0 = new Vector3d();
 	private int xOld;
 	private int yOld;
@@ -60,14 +62,13 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean translating;
 	private boolean zooming;
     private boolean resizing;
-    private boolean noMove;
-	private PickFilter pickFilter;
+    private boolean dragged;
     private final static double RTD = 180/Math.PI;
     
 
 	public WorldViewController()
 	{
-        pickFilter = new PickFilter();
+        pickListener = new FeedbackEventListener();
 	}
     
     
@@ -146,22 +147,23 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseDown(MouseEvent e)
 	{
-        noMove = true;
+        dragged = false;
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
         
+        // check if resizing ROI (need to call renderer pick method)
         if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
         {
-            SceneRenderer<Scene<WorldSceneItem>> renderer = scene.getRenderer();
+            SceneRenderer<WorldScene> renderer = scene.getRenderer();
+            PickFilter pickFilter = new PickFilter();
             pickFilter.x = e.x;
             pickFilter.y = e.y;
             pickFilter.dX = 5;
             pickFilter.dY = 5;
             pickFilter.onlyBoundingBox = true;
-            pickFilter.onlySelectedItems = false;
-            pickFilter.onlyWithEvent = false;
             PickedObject obj = renderer.pick(scene, pickFilter);
             
+            // case of corner selected
             if (obj != null && obj.indices.length > 0)
             {
                 if (obj.indices[0] < 0)
@@ -175,6 +177,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             }
         }
         
+        // case of left button pressed
         if (e.button == 1)
 		{
 			if (e.stateMask == SWT.CTRL)
@@ -185,11 +188,13 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 				rotating = true;
 		}
 		
-        if (e.button == 3)
+        // case of middle button pressed
+        else if (e.button == 2)
+            zooming = true;
+        
+        // case of right button pressed
+        else if (e.button == 3)
 			translating = true;
-		
-        if (e.button == 2)
-			zooming = true;
 		
 		xOld = e.x;
 		yOld = e.y;
@@ -198,20 +203,24 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseUp(MouseEvent e)
 	{
-		if (noMove)
+		if (!dragged)
 		{
-            SceneRenderer<Scene<WorldSceneItem>> renderer = scene.getRenderer();
-            pickFilter.x = e.x;
-            pickFilter.y = e.y;
-            pickFilter.dX = 5;
-            pickFilter.dY = 5;
-            pickFilter.onlyBoundingBox = false;
-            pickFilter.onlySelectedItems = false;
-            pickFilter.onlyWithEvent = true;
-            renderer.pick(scene, pickFilter);
+            FeedbackType feedbackType = null;
+            
+            if (e.button == 1)
+                feedbackType = FeedbackType.LEFT_CLICK;
+            else if (e.button == 2)
+                feedbackType = FeedbackType.MID_CLICK;
+            else if (e.button == 3)
+                feedbackType = FeedbackType.RIGHT_CLICK;
+            
+            FeedbackEvent event = new FeedbackEvent(feedbackType);
+            event.setSourceScene(scene);
+            pickListener.handleEvent(event);
         }
         else if (resizing)
         {
+            // trigger provider refresh when button is released
             DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
             provider.setEnabled(true);
             provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
@@ -228,7 +237,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseMove(MouseEvent e)
 	{
-        noMove = false;
+        dragged = true;
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
         

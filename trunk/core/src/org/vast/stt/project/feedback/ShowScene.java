@@ -46,7 +46,7 @@ import org.vast.stt.project.world.ViewSettings;
  * @date Oct 19, 2006
  * @version 1.0
  */
-public class ShowScene extends UserAction
+public class ShowScene extends ItemAction
 {
     protected WorldScene scene;
     protected ViewSettings viewSettings;

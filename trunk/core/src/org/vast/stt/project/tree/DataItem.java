@@ -20,7 +20,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
-import org.vast.stt.project.feedback.UserAction;
+import org.vast.stt.project.feedback.ItemAction;
 import org.vast.stt.provider.DataProvider;
 
 
@@ -49,14 +49,14 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	protected DataProvider dataProvider;
     protected STTEventListeners listeners;
     protected List<Symbolizer> symbolizers;
-    protected List<UserAction> actions;    
+    protected List<ItemAction> actions;    
     
     
     public DataItem()
 	{
         listeners = new STTEventListeners(2);
         symbolizers = new ArrayList<Symbolizer>(2); 
-        actions = new ArrayList<UserAction>(1);
+        actions = new ArrayList<ItemAction>(1);
 	}
     
     
@@ -120,7 +120,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
     }
     
     
-    public List<UserAction> getActions()
+    public List<ItemAction> getActions()
     {
         return actions;
     }

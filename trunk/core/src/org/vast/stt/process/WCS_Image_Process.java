@@ -33,6 +33,7 @@ import org.vast.data.*;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
 import org.vast.ows.wcs.WCSRequestWriter;
+import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 
 
@@ -55,6 +56,7 @@ import org.vast.process.*;
 public class WCS_Image_Process extends DataProcess implements DataHandler
 {
     protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
+    protected DataValue inputStartTime, inputStopTime, inputStepTime;
     protected DataValue outputGridWidth, outputGridLength;
     protected DataValue outputCoverageWidth, outputCoverageLength;
     protected DataArray outputGridArray, outputCoverageArray;
@@ -63,6 +65,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     protected WCSQuery query;
     protected WCSRequestWriter requestBuilder;
     protected DataStreamParser dataParser;
+    protected boolean hasTime, hasBbox;
     
 
     public WCS_Image_Process()
@@ -80,16 +83,32 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     {
         int skipX, skipY, skipZ;
         DataComponent component;
+        DataGroup input;
         
         try
         {
-            // Input mappings
-            DataGroup input = (DataGroup)inputData.getComponent("bbox");
-            bboxLat1 = (DataValue)input.getComponent("corner1").getComponent(0);
-            bboxLon1 = (DataValue)input.getComponent("corner1").getComponent(1);
-            bboxLat2 = (DataValue)input.getComponent("corner2").getComponent(0);
-            bboxLon2 = (DataValue)input.getComponent("corner2").getComponent(1);
-            input.assignNewDataBlock();
+            // Optional bbox input mappings
+            if (inputData.existComponent("bbox"))
+            {
+                input = (DataGroup)inputData.getComponent("bbox");
+                bboxLat1 = (DataValue)input.getComponent("corner1").getComponent(0);
+                bboxLon1 = (DataValue)input.getComponent("corner1").getComponent(1);
+                bboxLat2 = (DataValue)input.getComponent("corner2").getComponent(0);
+                bboxLon2 = (DataValue)input.getComponent("corner2").getComponent(1);
+                input.assignNewDataBlock();
+                hasBbox = true;
+            }
+            
+            // optional time input mappings
+            if (inputData.existComponent("time"))
+            {
+                input = (DataGroup)inputData.getComponent("time");
+                inputStartTime = (DataValue)input.getComponent("start");
+                inputStopTime = (DataValue)input.getComponent("stop");
+                inputStepTime = (DataValue)input.getComponent("step");
+                input.assignNewDataBlock();
+                hasTime = true;
+            }
             
             // grid output array
             output = (DataGroup)outputData.getComponent("coverageData");
@@ -205,7 +224,10 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WCS server:\n" +  e);
+            String server = query.getPostServer();
+            if (server == null)
+                server = query.getGetServer();
+            throw new ProcessException("Error while reading data from WCS server " + server, e);
         }
         finally
         {
@@ -224,20 +246,50 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         outputCoverageLength.renewDataBlock();
         
         // read lat/lon bbox
-        double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;
-        double lat1 = bboxLat1.getData().getDoubleValue();///Math.PI*180;
-        double lon2 = bboxLon2.getData().getDoubleValue();///Math.PI*180;
-        double lat2 = bboxLat2.getData().getDoubleValue();///Math.PI*180;
+        if (hasBbox)
+        {
+            double lon1 = bboxLon1.getData().getDoubleValue();///Math.PI*180;
+            double lat1 = bboxLat1.getData().getDoubleValue();///Math.PI*180;
+            double lon2 = bboxLon2.getData().getDoubleValue();///Math.PI*180;
+            double lat2 = bboxLat2.getData().getDoubleValue();///Math.PI*180;
+            
+            double minX = Math.min(lon1, lon2);
+            double maxX = Math.max(lon1, lon2);
+            double minY = Math.min(lat1, lat2);
+            double maxY = Math.max(lat1, lat2);
+            
+            query.getBbox().setMinX(minX);
+            query.getBbox().setMaxX(maxX);
+            query.getBbox().setMinY(minY);
+            query.getBbox().setMaxY(maxY);
+        }
         
-        double minX = Math.min(lon1, lon2);
-        double maxX = Math.max(lon1, lon2);
-        double minY = Math.min(lat1, lat2);
-        double maxY = Math.max(lat1, lat2);
-        
-        query.getBbox().setMinX(minX);
-        query.getBbox().setMaxX(maxX);
-        query.getBbox().setMinY(minY);
-        query.getBbox().setMaxY(maxY);
+        // read time range
+        if (hasTime)
+        {
+            double start = inputStartTime.getData().getDoubleValue();
+            double stop = inputStopTime.getData().getDoubleValue();
+            double step = inputStepTime.getData().getDoubleValue();
+            
+            if (start == TimeExtent.NOW && stop == TimeExtent.NOW)
+            {
+                query.getTime().setBaseAtNow(true);
+            }
+            else
+            {
+                if (start == TimeExtent.NOW)
+                    query.getTime().setBeginNow(true);
+                else
+                    query.getTime().setStartTime(start);
+                
+                if (stop == TimeExtent.NOW)
+                    query.getTime().setEndNow(true);
+                else
+                    query.getTime().setStopTime(stop);
+            }
+            
+            query.getTime().setTimeStep(step);
+        }
     }
     
     

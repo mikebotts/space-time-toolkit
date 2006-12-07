@@ -24,13 +24,11 @@
 package org.vast.stt.dynamics;
 
 import java.util.List;
-
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.project.world.WorldSceneItem;
 
 
 /**
@@ -76,7 +74,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         boolean visibleDataFound = false;
         
         // find all dataItems using this dataProvider
-        List<WorldSceneItem> sceneItems = scene.getSceneItems();
+        List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i=0; i<sceneItems.size(); i++)
         {
             SceneItem nextItem = sceneItems.get(i);
