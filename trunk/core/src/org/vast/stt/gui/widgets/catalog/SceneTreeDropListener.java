@@ -43,12 +43,14 @@ import org.vast.ows.util.Bbox;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
+import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.symbolizer.AddSymbolizerDialog;
+import org.vast.stt.process.SOS_Process;
 import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
@@ -94,8 +96,10 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
-			DataItem item = createSOSItem((SOSLayerCapabilities)caps);
-			return dropItem(item);
+			DataItem [] items = createSOSItem((SOSLayerCapabilities)caps);
+			for(int i=0; i<items.length; i++)
+				dropItem(items[i]);
+			return true;
 		} else if (data instanceof WMSLayerCapabilities) {
 			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
 			return dropItem(item);
@@ -203,34 +207,65 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return false;
 	}
 	
-	public DataItem createSOSItem(SOSLayerCapabilities caps){
+	public DataItem[] createSOSItem(SOSLayerCapabilities caps){
 		try {
+			Enumeration e;
+			String templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
+			String capsServer = caps.getParent().getGetServers().get("GetCapabilities");
+			
+			//  Hardcoded switch to hack what we're dropping- clean up later
+			if(capsServer.contains("muenster"))
+				templateName = "IFGI_WeatherNY.xml";
+			else
+				templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
+			e = STTPlugin.getDefault().getBundle().findEntries(
+					"templates", templateName, false);
 			String fileLocation = null;
-			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", "IFGI_WeatherNY.xml", false);
 			if (e.hasMoreElements())
 				fileLocation = (String) e.nextElement().toString();
 
 			if (fileLocation == null) {
 				ExceptionSystem.display(new Exception(
-						"STT error: Cannot find template\\SOS_IFGI.xml"));
+						"STT error: Cannot find template\\" + templateName));
 				return null;
 			}
 
 			DOMReader dom = new DOMReader(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
-			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
-			//  load default fields from caps into SensorMLProvider 
-			//loadSensorMLProvider(provider, caps);
+//			DataItem tmpItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			List<String> procs = caps.getProcedureList();
+			int numItems = procs.size();
+			DataItem [] items = new DataItem[numItems];
+			for(int i=0; i<numItems;i++) {
+				//  No way to clone items currently.  Reread template file each time, for now
+				items[i] = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+				//  Override name from template
+				items[i].setName(caps.getId());
+				setSOSProcedure(items[i], procs.get(i));
+			}
 			
-			return worldItem;
+			return items;
 		} catch (Exception e){
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	public void setSOSProcedure(DataItem item, String procedure){
+		SMLProvider provider = (SMLProvider)item.getDataProvider();
+		DataProcess process = provider.getProcess();
+		SOS_Process sosProc = (SOS_Process) process;
+		DataGroup sosParams = (DataGroup) sosProc.getParameterList();
+		DataGroup sosOptions = (DataGroup) sosParams.getComponent(0);
+		//  Options
+		//  TODO add some convenience methods and break this all out to separate class
+		DataValue procDv = (DataValue) sosOptions.getComponent("procedures");
+		DataBlockString dbs = new DataBlockString(1);
+		dbs.setStringValue(procedure);
+		procDv.setData(dbs);
+		item.setName(item.getName() + "_" + procedure);
+	}
+	
 	public DataItem createWMSItem(WMSLayerCapabilities caps){
 		try {
 			String fileLocation = null;
@@ -248,9 +283,10 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			DOMReader dom = new DOMReader(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
 			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
+			worldItem.setName(caps.getId());
 			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
 			//  load default fields from caps into SensorMLProvider 
-			loadSensorMLProvider(provider, caps);
+			loadWMSProcess(provider, caps);
 			
 			return worldItem;
 		} catch (Exception e){
@@ -260,7 +296,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	}
 
 	//  TODO  Hardwired for WMS now- generalize
-	protected void loadSensorMLProvider(SMLProvider provider, OWSLayerCapabilities caps) {
+	protected void loadWMSProcess(SMLProvider provider, OWSLayerCapabilities caps) {
 		ProcessChain process = null;
 		WMS_Process wmsProc = null;
 		
