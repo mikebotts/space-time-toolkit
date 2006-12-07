@@ -139,7 +139,7 @@ public class TextureStyler extends AbstractStyler
         texIndex[2] = x;
         texIndex[3] = y;
         
-        dataLists[1].getData(texIndex);
+        texBlocks.getData(texIndex);
         
         // scale to 0-255 if values are normalized
         if (symbolizer.hasNormalizedColors())
@@ -160,7 +160,7 @@ public class TextureStyler extends AbstractStyler
         gridIndex[0] = u;
         gridIndex[1] = v;
         
-        dataLists[0].getData(gridIndex);
+        gridBlocks.getData(gridIndex);
         
         // compute texture coordinates
         if (normalize)
