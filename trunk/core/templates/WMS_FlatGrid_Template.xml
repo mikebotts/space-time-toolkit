@@ -10,7 +10,7 @@
 	<name>Landsat Imagery (Flat)</name>
 	<dataProvider>
 		<SensorMLProvider>
-			<name>Landsat WMS</name>
+			<name>Override</name>
 			<spatialExtent/>
 			<!--<process href="./WMS_FlatGrid_Process.xml#PROCESS"/>-->
 			<process>
