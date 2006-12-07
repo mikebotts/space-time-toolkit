@@ -17,6 +17,10 @@
     <Server name="IFGI Weather" type="SOS" version="0.0.31">
         <URL>http://mars.uni-muenster.de:8080/52nSosWNY/sos</URL>
     </Server>
+    <Server name="CSIRO Weather" type="SOS" version="0.0.31">
+        <URL>http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos</URL>
+    </Server>
+    
     <Server name="UAH Weather data" type="SOS" version="0.0.31">
         <URL>http://vast.uah.edu:8080/ows-dev/weather</URL>
     </Server>
