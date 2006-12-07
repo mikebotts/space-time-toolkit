@@ -34,8 +34,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.vast.math.Vector3d;
 import org.vast.stt.project.chart.ChartScene;
-import org.vast.stt.project.chart.ChartSceneItem;
-import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.renderer.PickFilter;
@@ -58,7 +56,7 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 16, 2006
  * @version 1.0
  */
-public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implements PaintListener
+public class ChartRenderer extends SceneRenderer<ChartScene> implements PaintListener
 {
     protected ChartPanel chartPanel;
     protected XYPlotBuilder plotBuilder = new XYPlotBuilder();
@@ -86,7 +84,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
 
 
     @Override
-    public void drawScene(Scene<ChartSceneItem> sc)
+    public void drawScene(ChartScene sc)
     {
         if (composite.isDisposed())
             return;
@@ -96,10 +94,10 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
         
         // draw all items
         ChartScene scene = (ChartScene)sc;
-        List<ChartSceneItem> sceneItems = scene.getSceneItems();
+        List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem<?> nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
 
             if (!nextItem.isVisible())
                 continue;
@@ -107,7 +105,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            drawChartItem(nextItem);
+            drawItem(nextItem);
         }
         
         // create a new chart and assign to panel
@@ -129,21 +127,8 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
         //chartImg = new Image(composite.getDisplay(), imgData);
     }
 
-
-    @Override
-    public void drawItem(SceneItem<?> item)
-    {
-        plotBuilder.createPlot();
-        drawChartItem(item);
-        
-        // create a new chart and assign to panel
-        JFreeChart chart = new JFreeChart(plotBuilder.getPlot());
-        chart.setTitle(item.getName());
-        chartPanel.setChart(chart);
-    }
     
-    
-    protected void drawChartItem(SceneItem<?> item)
+    protected void drawItem(SceneItem item)
     {
         // build plot using plotBuilder
         plotBuilder.addAxisToPlot(item.getDataItem());
@@ -183,7 +168,7 @@ public class ChartRenderer extends SceneRenderer<Scene<ChartSceneItem>> implemen
 
 
     @Override
-    public PickedObject pick(Scene<ChartSceneItem> scene, PickFilter filter)
+    public PickedObject pick(ChartScene scene, PickFilter filter)
     {
         return null;
     }

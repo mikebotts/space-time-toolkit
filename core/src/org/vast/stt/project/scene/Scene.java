@@ -25,6 +25,7 @@ import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.style.DataStyler;
 
 
 /**
@@ -41,22 +42,22 @@ import org.vast.stt.renderer.SceneRenderer;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDisplay
+public abstract class Scene<RendererType extends SceneRenderer> extends AbstractDisplay
 {
 	protected DataTree dataTree;
-    protected SceneRenderer<Scene<ItemType>> renderer; 
-    protected ArrayList<ItemType> sceneItems;
-    protected ArrayList<ItemType> selectedItems;
+    protected RendererType renderer;
+    protected ArrayList<SceneItem> sceneItems;
+    protected ArrayList<SceneItem> selectedItems;
     
 
     public Scene()
     {
-        sceneItems = new ArrayList<ItemType>();
-        selectedItems = new ArrayList<ItemType>(1);
+        sceneItems = new ArrayList<SceneItem>();
+        selectedItems = new ArrayList<SceneItem>(1);
     }
     
     
-    protected abstract ItemType createNewItem();
+    protected abstract void prepareStyler(DataStyler styler);    
 
 
 	public DataTree getDataTree()
@@ -80,25 +81,25 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
     }
     
     
-    public SceneRenderer<Scene<ItemType>> getRenderer()
+    public RendererType getRenderer()
     {
         return renderer;
     }
-
-
-    public void setRenderer(SceneRenderer<Scene<ItemType>> renderer)
+    
+    
+    public void setRenderer(RendererType renderer)
     {
         this.renderer = renderer;
     }
+        
     
-    
-    public List<ItemType> getSceneItems()
+    public List<SceneItem> getSceneItems()
     {
         return this.sceneItems;
     }
     
     
-    public List<ItemType> getSelectedItems()
+    public List<SceneItem> getSelectedItems()
     {
         return selectedItems;
     }
@@ -109,12 +110,12 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
      * @param dataItem
      * @return
      */
-    public ItemType findItem(DataItem dataItem)
+    public SceneItem findItem(DataItem dataItem)
     {
         // try to find entry in sceneItems list
         for (int i=0; i<sceneItems.size(); i++)
         {
-            ItemType nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem)
                 return nextItem;
         }
@@ -130,7 +131,7 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
     public void removeItem(DataFolder folder, DataItem dataItem)
     {
         folder.remove(dataItem);
-        SceneItem<?> sceneItem = findItem(dataItem);        
+        SceneItem sceneItem = findItem(dataItem);        
         
         // if SceneItem was created, cleanup as well
         if (sceneItem != null)
@@ -159,7 +160,7 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
         else
         {
             // if not found create a new SceneItem
-            ItemType newSceneItem = createNewItem();
+            SceneItem newSceneItem = new SceneItem(this);
             newSceneItem.setDataItem(dataItem);
             newSceneItem.setVisible(visible);
             
@@ -199,7 +200,7 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
     {
         for (int i=0; i<sceneItems.size(); i++)
         {
-            SceneItem<?> nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem && nextItem.isVisible())
                 return true;
         }
@@ -237,7 +238,7 @@ public abstract class Scene<ItemType extends SceneItem<?>> extends AbstractDispl
         // compute smallest bbox containing all children bbox
         for (int i = 0; i < sceneItems.size(); i++)
         {
-            SceneItem<?> nextItem = sceneItems.get(i);
+            SceneItem nextItem = sceneItems.get(i);
             
             if (!nextItem.isVisible())
                 continue;

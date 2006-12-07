@@ -61,7 +61,7 @@ import org.vast.unit.UnitConverter;
 public class SOS_Process extends DataProcess implements DataHandler
 {
     protected DataValue bboxLat1, bboxLon1, bboxLat2, bboxLon2;
-    protected DataValue inputStartTime, intputStopTime, inputStepTime;
+    protected DataValue inputStartTime, inputStopTime, inputStepTime;
     protected DataComponent outputObsInfo, outputObsData;
     protected DataValue outputObsName, outputObsProcedure;
     protected DataGroup outputObsLocation;
@@ -116,7 +116,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             {
                 input = (DataGroup)inputData.getComponent("time");
                 inputStartTime = (DataValue)input.getComponent("start");
-                intputStopTime = (DataValue)input.getComponent("stop");
+                inputStopTime = (DataValue)input.getComponent("stop");
                 inputStepTime = (DataValue)input.getComponent("step");
                 input.assignNewDataBlock();
                 hasTime = true;
@@ -279,7 +279,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                 String server = query.getPostServer();
                 if (server == null)
                     server = query.getGetServer();                
-                throw new ProcessException("Error while reading data from " + server, lastException);
+                throw new ProcessException("Error while reading data from SOS " + server, lastException);
             }
         
             if (done)
@@ -321,7 +321,7 @@ public class SOS_Process extends DataProcess implements DataHandler
         if (hasTime)
         {
             double start = inputStartTime.getData().getDoubleValue();
-            double stop = intputStopTime.getData().getDoubleValue();
+            double stop = inputStopTime.getData().getDoubleValue();
             double step = inputStepTime.getData().getDoubleValue();
             
             if (start == TimeExtent.NOW && stop == TimeExtent.NOW)
@@ -390,8 +390,8 @@ public class SOS_Process extends DataProcess implements DataHandler
             // also write observation info
             outputObsName.getData().setStringValue(obsName);
             outputObsProcedure.getData().setStringValue(obsProcedure);
-            outputObsLocation.getData().setDoubleValue(0, obsLocation.x * Math.PI / 180);
-            outputObsLocation.getData().setDoubleValue(1, obsLocation.y * Math.PI / 180);
+            outputObsLocation.getData().setDoubleValue(0, obsLocation.y * Math.PI / 180);
+            outputObsLocation.getData().setDoubleValue(1, obsLocation.x * Math.PI / 180);
             outputObsLocation.getData().setDoubleValue(2, obsLocation.z);
             
             // notify exec thread that next packet has been parsed

@@ -20,8 +20,8 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.XMLRegistry;
-import org.vast.stt.project.feedback.FeedbackActionReader;
-import org.vast.stt.project.feedback.UserAction;
+import org.vast.stt.project.feedback.ItemActionReader;
+import org.vast.stt.project.feedback.ItemAction;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.ExtentReader;
@@ -48,7 +48,7 @@ public class DataTreeReader extends XMLReader
 {
     protected SLDReader sldReader;
     protected ExtentReader extentReader;
-    protected FeedbackActionReader actionReader;
+    protected ItemActionReader actionReader;
     protected Scene parentScene;
     
 	
@@ -56,7 +56,7 @@ public class DataTreeReader extends XMLReader
 	{
         sldReader = new SLDReader();
         extentReader = new ExtentReader();
-        actionReader = new FeedbackActionReader();
+        actionReader = new ItemActionReader();
 	}
     
     
@@ -199,7 +199,7 @@ public class DataTreeReader extends XMLReader
         for (int i=0; i<listSize; i++)
         {
             Element eventElt = (Element)eventElts.item(i);
-            UserAction action = (UserAction)actionReader.read(dom, eventElt);
+            ItemAction action = (ItemAction)actionReader.read(dom, eventElt);
             if (action != null)
                 dataItem.getActions().add(action);
         }

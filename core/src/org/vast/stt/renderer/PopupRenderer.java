@@ -41,7 +41,7 @@ public class PopupRenderer
     }
     
     
-    public void showPopup(int x, int y, SceneItem<?> item)
+    public void showPopup(int x, int y, SceneItem item)
     {
         Display display = composite.getDisplay();
         Shell tip = new Shell(composite.getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.TOOL);

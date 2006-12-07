@@ -17,73 +17,52 @@
  the Initial Developer. All Rights Reserved.
  
  Contributor(s): 
- Alexandre Robin <robin@nsstc.uah.edu>
+    Alexandre Robin <robin@nsstc.uah.edu>
  
- ******************************* END LICENSE BLOCK ***************************/
+******************************* END LICENSE BLOCK ***************************/
 
 package org.vast.stt.project.feedback;
 
-import org.vast.ows.sld.ScalarParameter;
+import java.util.Hashtable;
+import org.vast.io.xml.DOMReader;
+import org.vast.stt.project.XMLModuleReader;
+import org.vast.stt.project.XMLReader;
+import org.w3c.dom.Element;
 
 
 /**
  * <p><b>Title:</b>
- * Show URL
+ * Data Item Event Reader
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Used to open a webpage as a popup or in a separate window.
+ * Reads feedback options within a DataItem.
  * </p>
  *
  * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Oct 19, 2006
+ * @date Sep 13, 2006
  * @version 1.0
  */
-public class ShowURL extends ItemAction
+public class ItemActionReader extends XMLReader implements XMLModuleReader
 {
-    public enum WindowType
+    public ItemActionReader()
     {
-        VIEW, POPUP, BROWSER
+        
     }
     
-    protected ScalarParameter title;
-    protected ScalarParameter url;
-    protected WindowType windowType;
-
-
-    public ScalarParameter getUrl()
+    
+    @Override
+    public void setObjectIds(Hashtable<String, Object> objectIds)
     {
-        return url;
+        super.setObjectIds(objectIds);
+        
     }
 
 
-    public void setUrl(ScalarParameter url)
+    public Object read(DOMReader dom, Element elt)
     {
-        this.url = url;
-    }
-
-
-    public ScalarParameter getTitle()
-    {
-        return title;
-    }
-
-
-    public void setTitle(ScalarParameter title)
-    {
-        this.title = title;
-    }
-
-
-    public WindowType getWindowType()
-    {
-        return windowType;
-    }
-
-
-    public void setWindowType(WindowType windowType)
-    {
-        this.windowType = windowType;
+        // TODO Auto-generated method stub
+        return new ShowPopup();
     }
 }

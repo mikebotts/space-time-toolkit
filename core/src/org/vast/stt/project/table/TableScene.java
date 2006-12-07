@@ -14,6 +14,8 @@
 package org.vast.stt.project.table;
 
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.style.DataStyler;
 
 
 /**
@@ -30,7 +32,7 @@ import org.vast.stt.project.scene.Scene;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class TableScene extends Scene<TableSceneItem>
+public class TableScene extends Scene<SceneRenderer<TableScene>>
 {
     
     public TableScene()
@@ -41,8 +43,8 @@ public class TableScene extends Scene<TableSceneItem>
 
     
     @Override
-    protected TableSceneItem createNewItem()
+    protected void prepareStyler(DataStyler styler)
     {
-        return new TableSceneItem(this);
+
     }	
 }

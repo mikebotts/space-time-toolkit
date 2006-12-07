@@ -20,5 +20,5 @@ public class PickFilter
     public double dX, dY;
     public boolean onlySelectedItems;
     public boolean onlyBoundingBox;
-    public boolean onlyWithEvent;
+    public boolean onlyItemsWithAction;
 }

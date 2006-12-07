@@ -44,7 +44,7 @@ import org.vast.ows.sld.Symbolizer;
  * @date Oct 19, 2006
  * @version 1.0
  */
-public class ShowPopup extends UserAction
+public class ShowPopup extends ItemAction
 {
     protected ScalarParameter title;
     protected Color backgroundColor;
