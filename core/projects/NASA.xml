@@ -2102,7 +2102,8 @@
                   <name>GOES Visible WCS</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="./GOES_VIS_Process.xml#GOES_WCS_PROCESS"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_REALTIME_VIS</value>
                </SensorMLProvider>
             </member>
             <member>
@@ -2110,7 +2111,8 @@
                   <name>GOES IR WCS</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="./GOES_IR_Process.xml#GOES_WCS_PROCESS"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_REALTIME_IR</value>
                </SensorMLProvider>
             </member>
          </ResourceList>
