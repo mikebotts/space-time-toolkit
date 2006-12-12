@@ -23,7 +23,7 @@
 
 package org.vast.stt.process;
 
-import org.ogc.cdm.common.DataBlock;
+import org.vast.cdm.common.DataBlock;
 import org.vast.data.*;
 import org.vast.process.*;
 

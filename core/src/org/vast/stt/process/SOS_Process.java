@@ -27,11 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
-import org.ogc.cdm.common.DataBlock;
-import org.ogc.cdm.common.DataComponent;
-import org.ogc.cdm.common.DataHandler;
-import org.ogc.cdm.common.DataType;
-import org.ogc.cdm.reader.DataStreamParser;
+import org.vast.cdm.common.DataBlock;
+import org.vast.cdm.common.DataComponent;
+import org.vast.cdm.common.DataHandler;
+import org.vast.cdm.common.DataStreamParser;
+import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.math.Vector3d;
 import org.vast.ows.sos.SOSObservationReader;

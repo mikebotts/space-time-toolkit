@@ -15,10 +15,10 @@ package org.vast.stt.provider.swe;
 
 import java.io.IOException;
 
-import org.ogc.cdm.common.CDMException;
-import org.ogc.cdm.common.DataComponent;
-import org.ogc.cdm.common.DataEncoding;
-import org.ogc.cdm.reader.DataStreamParser;
+import org.vast.cdm.common.CDMException;
+import org.vast.cdm.common.DataComponent;
+import org.vast.cdm.common.DataEncoding;
+import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.reader.URIStreamHandler;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;

@@ -1,6 +1,6 @@
 package org.vast.stt.style;
 
-import org.ogc.cdm.common.DataBlock;
+import org.vast.cdm.common.DataBlock;
 import org.vast.ows.sld.MappingFunction;
 
 

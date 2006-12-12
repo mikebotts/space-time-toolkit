@@ -16,7 +16,8 @@ package org.vast.stt.data;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import org.ogc.cdm.common.DataComponent;
+
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
