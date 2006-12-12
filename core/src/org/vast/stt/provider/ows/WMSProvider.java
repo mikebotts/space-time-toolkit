@@ -20,8 +20,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
-
-import org.ogc.cdm.reader.*;
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
@@ -39,7 +37,6 @@ import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
-
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
