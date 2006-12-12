@@ -31,7 +31,8 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
-import org.ogc.cdm.common.DataType;
+
+import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.wms.WMSQuery;

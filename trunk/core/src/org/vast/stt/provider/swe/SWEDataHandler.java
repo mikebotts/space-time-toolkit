@@ -16,6 +16,10 @@ package org.vast.stt.provider.swe;
 import java.util.Hashtable;
 
 import org.ogc.cdm.common.*;
+import org.vast.cdm.common.DataBlock;
+import org.vast.cdm.common.DataComponent;
+import org.vast.cdm.common.DataHandler;
+import org.vast.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.event.EventType;

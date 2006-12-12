@@ -14,7 +14,8 @@
 package org.vast.stt.provider.sml;
 
 import java.util.ArrayList;
-import org.ogc.cdm.common.DataComponent;
+
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.*;
 import org.vast.physics.TimeExtent;
 import org.vast.process.DataProcess;

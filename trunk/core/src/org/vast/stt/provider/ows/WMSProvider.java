@@ -21,9 +21,10 @@ import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 
-import org.ogc.cdm.common.DataBlock;
-import org.ogc.cdm.common.DataType;
 import org.ogc.cdm.reader.*;
+import org.vast.cdm.common.DataBlock;
+import org.vast.cdm.common.DataStreamParser;
+import org.vast.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataArray;
 import org.vast.data.DataBlockFactory;

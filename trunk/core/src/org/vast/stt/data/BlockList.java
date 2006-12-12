@@ -13,7 +13,7 @@
 
 package org.vast.stt.data;
 
-import org.ogc.cdm.common.DataComponent;
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
 
 

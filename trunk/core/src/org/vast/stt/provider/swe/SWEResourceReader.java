@@ -15,7 +15,7 @@ package org.vast.stt.provider.swe;
 
 import java.io.*;
 
-import org.ogc.cdm.common.CDMException;
+import org.vast.cdm.common.CDMException;
 import org.vast.cdm.reader.*;
 import org.vast.io.xml.*;
 import org.w3c.dom.*;

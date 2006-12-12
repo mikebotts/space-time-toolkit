@@ -5,7 +5,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.ogc.cdm.common.DataComponent;
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataGroup;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.sml.SMLProvider;

@@ -15,7 +15,8 @@ package org.vast.stt.provider.tiling;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.ogc.cdm.common.DataComponent;
+
+import org.vast.cdm.common.DataComponent;
 import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;

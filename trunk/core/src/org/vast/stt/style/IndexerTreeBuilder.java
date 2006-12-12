@@ -24,7 +24,8 @@
 package org.vast.stt.style;
 
 import java.util.Hashtable;
-import org.ogc.cdm.common.DataComponent;
+
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.*;
 
 

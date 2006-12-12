@@ -24,7 +24,8 @@
 package org.vast.stt.provider.tiling;
 
 import java.util.ArrayList;
-import org.ogc.cdm.common.DataType;
+
+import org.vast.cdm.common.DataType;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
