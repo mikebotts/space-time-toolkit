@@ -534,6 +534,8 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LEQUAL);//GL.GL_LESS);
         gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glAlphaFunc(GL.GL_NOTEQUAL, 0);
+        gl.glEnable(GL.GL_ALPHA_TEST);
         gl.glShadeModel(GL.GL_SMOOTH);
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
