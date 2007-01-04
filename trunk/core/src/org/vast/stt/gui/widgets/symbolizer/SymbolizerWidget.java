@@ -222,8 +222,8 @@ public class SymbolizerWidget extends CheckOptionTable
 
     private void openAddSymDialog()
     {
-    	if(dataItem == null)
-    		return;
+//    	if(dataItem == null)
+//    		return;
         AddSymbolizerDialog asd = new AddSymbolizerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
         int rc = asd.getReturnCode();
         if (rc == IDialogConstants.OK_ID)

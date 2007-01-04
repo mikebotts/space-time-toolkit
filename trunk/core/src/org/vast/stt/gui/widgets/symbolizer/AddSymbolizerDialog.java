@@ -15,7 +15,7 @@ import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 
 public class AddSymbolizerDialog extends Dialog {
 	private SymbolizerType[] symbolizerTypes;  
-	private String [] stylerTypeStr;
+	private String [] symbolizerTypeStr;
 	private Combo typeCombo;
 	private Text nameText;
 	private SymbolizerType type;
@@ -30,10 +30,10 @@ public class AddSymbolizerDialog extends Dialog {
 	//  Generate string [] for types 
 	private void initSymbolizerTypes(){
 		symbolizerTypes = SymbolizerType.values();
-		stylerTypeStr = new String[symbolizerTypes.length];
+		symbolizerTypeStr = new String[symbolizerTypes.length];
 		int i=0;
 		for(SymbolizerType st : symbolizerTypes){
-			stylerTypeStr[i++] = st.toString();
+			symbolizerTypeStr[i++] = st.toString();
 		}
 	}
 	
@@ -44,22 +44,26 @@ public class AddSymbolizerDialog extends Dialog {
 
 	protected Control createDialogArea(Composite parent) {
 		Composite comp = (Composite)super.createDialogArea(parent);
-		comp.setLayout(new GridLayout(2, false));
+		GridLayout gl = new GridLayout(2, false);
+		gl.verticalSpacing = 14;
+		comp.setLayout(gl);
 
 		//  Type Combo
 		Label typeLabel = new Label(comp, SWT.RIGHT);
 		GridData gridData = new GridData();
 		typeLabel.setText("Graphic Type:");
 		
-		typeCombo = new Combo(comp, SWT.READ_ONLY);
-		typeCombo.setItems(stylerTypeStr);
+		typeCombo = new Combo(comp, SWT.READ_ONLY | SWT.BORDER);
+		typeCombo.setItems(symbolizerTypeStr);
 		typeCombo.select(0);
+		gridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
+		typeCombo.setLayoutData(gridData);
 		
 		//  Name textField
 		Label nameLabel = new Label(comp, SWT.RIGHT);
 		nameLabel.setText("Name:");
 		
-		nameText = new Text(comp, SWT.RIGHT);
+		nameText = new Text(comp, SWT.RIGHT | SWT.BORDER);
 		String str = "   New Graphic";
 		nameText.setText(str);
 		gridData = new GridData();

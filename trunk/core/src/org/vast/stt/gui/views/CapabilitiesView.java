@@ -41,7 +41,7 @@ import org.vast.stt.gui.widgets.catalog.EditCapServerDialog;
  * @version 1.0
  */
 
-public class CapabilitiesView extends ViewPart// implements IPageListener, STTEventListener
+public class CapabilitiesView extends DataItemView //ViewPart// implements IPageListener, STTEventListener
 {
 	public static final String ID = "STT.CapabilitiesView";
 	protected CapabilitiesWidget capabilitiesWidget;
@@ -53,6 +53,7 @@ public class CapabilitiesView extends ViewPart// implements IPageListener, STTEv
     {
 		capabilitiesWidget = new CapabilitiesWidget(parent);
 		//  TODO anything else?
+		super.createPartControl(parent);
     }
 
     @Override
@@ -84,7 +85,19 @@ public class CapabilitiesView extends ViewPart// implements IPageListener, STTEv
 //        site.getActionBars().getToolBarManager().add(editServerAction);
 	}
 	
-	
+   @Override
+    public void updateView()
+    {
+    	//CatalogWidget.setDataItem(this.item);
+    }
+	    
+   @Override
+   public void clearView()
+   {
+       
+   }
+   
+   
 	@Override
 	public void dispose()
 	{
