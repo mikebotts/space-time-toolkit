@@ -105,7 +105,7 @@ public class SWEDataHandler implements DataHandler
 	}
 
 
-    public void beginDataAtom(DataComponent info, DataBlock data)
+    public void beginDataAtom(DataComponent info)
     {       
     }
 }

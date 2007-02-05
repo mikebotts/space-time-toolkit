@@ -23,7 +23,7 @@
 
 package org.vast.stt.provider.ve;
 
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
@@ -38,7 +38,7 @@ public class VirtualEarthProviderReader extends XMLReader implements XMLModuleRe
     }
 
 
-    public Object read(DOMReader dom, Element providerElt)
+    public Object read(DOMHelper dom, Element providerElt)
     {
         VirtualEarthProvider provider = new VirtualEarthProvider();
         

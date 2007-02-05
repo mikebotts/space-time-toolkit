@@ -23,16 +23,11 @@
 
 package org.vast.stt.provider.ows;
 
-import org.vast.io.xml.DOMReader;
-import org.vast.ows.OWSCapabilitiesReader;
+import org.vast.xml.DOMHelper;
 import org.vast.ows.OWSException;
 import org.vast.ows.OWSQuery;
-import org.vast.ows.OWSRequestReader;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.sos.SOSCapabilitiesReader;
-import org.vast.ows.sos.SOSRequestReader;
-import org.vast.ows.wms.WMSCapabilitiesReader;
-import org.vast.ows.wms.WMSRequestReader;
+import org.vast.ows.OWSUtils;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.XMLModuleReader;
 import org.w3c.dom.Element;
@@ -54,53 +49,44 @@ import org.w3c.dom.Element;
  */
 public class OWSProviderReader extends XMLReader implements XMLModuleReader
 {
+    protected OWSUtils owsUtils = new OWSUtils();
+    
     
     public OWSProviderReader()
-    {
-        
+    {        
     }
     
     
-    public Object read(DOMReader dom, Element providerElt)
+    public Object read(DOMHelper dom, Element providerElt)
     {
         OWSProvider provider = null;
-        OWSRequestReader requestReader = null;
-        OWSCapabilitiesReader capsReader = null;
         
         // get request type
         Element requestElt = dom.getElement(providerElt, "request/*");
         Element capsElt = dom.getElement(providerElt, "capabilities/*");
-        String serviceType = dom.getAttributeValue(requestElt, "service");
         
-        // find out which provider to instantiate
-        if (serviceType.equals("SOS"))
-        {
-            provider = new SOSProvider();                           
-            requestReader = new SOSRequestReader();
-            capsReader = new SOSCapabilitiesReader();
-        }
-        else if (serviceType.equals("WMS"))
-        {
-            provider = new WMSProvider();                           
-            requestReader = new WMSRequestReader();
-            capsReader = new WMSCapabilitiesReader();
-        }
-                
         try
         {
             // parse request
-            OWSQuery query = requestReader.readRequestXML(dom, requestElt);
-            provider.setQuery(query);
-            
-            // parse capabilities
-            if (capsElt != null)
-            {
-                OWSServiceCapabilities caps = capsReader.readCapabilities(dom, capsElt);
-                provider.setServiceCapabilities(caps);
-            }
-            
+            OWSQuery query = owsUtils.readXMLQuery(dom, requestElt);
             query.setGetServer(dom.getAttributeValue(providerElt, "request/@getUrl"));
             query.setPostServer(dom.getAttributeValue(providerElt, "request/@postUrl"));
+            
+            // instantiate provider
+            String serviceType = query.getService();
+            if (serviceType.equals("SOS"))
+                provider = new SOSProvider();                           
+            else if (serviceType.equals("WMS"))
+                provider = new WMSProvider();
+            
+            provider.setQuery(query);
+            
+            // parse capabilities if present
+            if (capsElt != null)
+            {
+                OWSServiceCapabilities caps = owsUtils.readCapabilities(dom, capsElt, query.getService());
+                provider.setServiceCapabilities(caps);
+            }
         }
         catch (OWSException e)
         {

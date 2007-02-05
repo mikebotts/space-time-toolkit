@@ -31,8 +31,8 @@ import org.vast.data.DataBlockBoolean;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
-import org.vast.io.xml.DOMReader;
-import org.vast.io.xml.DOMReaderException;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sld.SLDReader;
@@ -230,7 +230,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 				return null;
 			}
 
-			DOMReader dom = new DOMReader(fileLocation, false);
+            DOMHelper dom = new DOMHelper(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
 //			DataItem tmpItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
 			List<String> procs = caps.getProcedureList();
@@ -280,7 +280,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 				return null;
 			}
 
-			DOMReader dom = new DOMReader(fileLocation, false);
+            DOMHelper dom = new DOMHelper(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
 			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
 			worldItem.setName(caps.getId());
@@ -395,11 +395,11 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 
 
 	public static void main(String[] args) throws IOException,
-			DOMReaderException {
+    DOMHelperException {
 		SLDReader sldReader = new SLDReader();
 		InputStream fileIs = new FileInputStream(
 				"C:\\tcook\\work\\STT3\\templates\\wms.xml");
-		DOMReader dom = new DOMReader(fileIs, false);
+        DOMHelper dom = new DOMHelper(fileIs, false);
 		//  Get to TextureSymbolizer Elt
 		TextureSymbolizer sym = sldReader
 				.readTexture(dom, dom.getRootElement());

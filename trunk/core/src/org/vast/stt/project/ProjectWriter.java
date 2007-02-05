@@ -17,9 +17,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-//import java.util.Hashtable;
-
-import org.vast.io.xml.*;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
@@ -44,7 +42,7 @@ import org.w3c.dom.*;
  */
 public class ProjectWriter
 {
-	private DOMWriter dom;
+	private DOMHelper dom;
 	//private Hashtable<Service, String> serviceIds; // maps Service object to its xml id
 	//private Hashtable<Resource, String> resourceIds; // maps Resource object to its xml id
 	
@@ -65,13 +63,13 @@ public class ProjectWriter
 	{
 		try
 		{
-			dom = new DOMWriter();
+			dom = new DOMHelper();
 			dom.createDocument("STTProject");
 			writeProject(project, dom, dom.getBaseElement());
 
 			String filePath = (new URL(url)).getPath();
 			OutputStream outputStream = new FileOutputStream(filePath);
-			dom.writeDOM(dom.getBaseElement(), outputStream, null);
+			dom.serialize(dom.getBaseElement(), outputStream, null);
 		}
 		catch (Exception e)
 		{
@@ -86,7 +84,7 @@ public class ProjectWriter
 	 * @param dom
 	 * @param projectElt
 	 */
-	public void writeProject(Project project, DOMWriter dom, Element projectElt)
+	public void writeProject(Project project, DOMHelper dom, Element projectElt)
 	{
 		this.dom = dom;
 		writeMetadata(project, projectElt);

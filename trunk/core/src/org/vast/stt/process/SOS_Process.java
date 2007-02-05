@@ -26,7 +26,6 @@ package org.vast.stt.process;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
@@ -34,9 +33,9 @@ import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.math.Vector3d;
-import org.vast.ows.sos.SOSObservationReader;
+import org.vast.ows.OWSUtils;
+import org.vast.ows.om.ObservationReader;
 import org.vast.ows.sos.SOSQuery;
-import org.vast.ows.sos.SOSRequestWriter;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.unit.UnitConversion;
@@ -68,7 +67,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected ConnectionList obsInfoConnections;
     protected InputStream dataStream;
     protected SOSQuery query;
-    protected SOSRequestWriter requestBuilder;
+    protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected Thread workerThread;
     protected boolean hasTime, hasBbox; 
@@ -82,7 +81,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     public SOS_Process()
     {
         query = new SOSQuery();
-        requestBuilder = new SOSRequestWriter();
+        owsUtils = new OWSUtils();
         //requestBuilder.showPostOutput = true;
         converters = new Hashtable<DataComponent, UnitConverter>();
     }
@@ -212,11 +211,11 @@ public class SOS_Process extends DataProcess implements DataHandler
                         initRequest();
                         
                         // create reader
-                        SOSObservationReader reader = new SOSObservationReader();
+                        ObservationReader reader = new ObservationReader();
                         
                         // select request type (post or get)
                         boolean usePost = (query.getPostServer() != null);
-                        dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
+                        dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
                             
                         // parse response
                         reader.parse(dataStream);
@@ -279,7 +278,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                 String server = query.getPostServer();
                 if (server == null)
                     server = query.getGetServer();                
-                throw new ProcessException("Error while reading data from SOS " + server, lastException);
+                throw new ProcessException("Error while reading data from SOS server: " + server, lastException);
             }
         
             if (done)
@@ -444,7 +443,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     }
 
 
-    public void beginDataAtom(DataComponent info, DataBlock data)
+    public void beginDataAtom(DataComponent info)
     {       
     }
 }

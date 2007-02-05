@@ -25,8 +25,7 @@ package org.vast.stt.project.world;
 
 import java.text.ParseException;
 import java.util.Hashtable;
-
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.project.XMLModuleReader;
@@ -77,7 +76,7 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
     }
 
 
-    public Object read(DOMReader dom, Element sceneElt)
+    public Object read(DOMHelper dom, Element sceneElt)
     {
         WorldScene scene = new WorldScene();
         registerObjectID(dom, sceneElt, scene);
@@ -110,7 +109,7 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
      * @param timeSettingsElt
      * @return
      */
-    protected TimeSettings readTimeSettings(DOMReader dom, Element timeSettingsElt)
+    protected TimeSettings readTimeSettings(DOMHelper dom, Element timeSettingsElt)
     {
         // try to get it from the table
         Object obj = findExistingObject(dom, timeSettingsElt);
@@ -179,7 +178,7 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
      * @param viewSettingsElt
      * @return
      */
-    protected ViewSettings readViewSettings(DOMReader dom, Element viewSettingsElt)
+    protected ViewSettings readViewSettings(DOMHelper dom, Element viewSettingsElt)
     {
         // try to get it from the table
         Object obj = findExistingObject(dom, viewSettingsElt);
@@ -294,7 +293,7 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
      * @param vectorElt
      * @return
      */
-    protected Vector3d readVector(DOMReader dom, Element vectorElt)
+    protected Vector3d readVector(DOMHelper dom, Element vectorElt)
     {
         if (vectorElt == null)
             return null;

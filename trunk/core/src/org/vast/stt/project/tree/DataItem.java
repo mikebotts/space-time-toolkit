@@ -49,6 +49,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	protected DataProvider dataProvider;
     protected STTEventListeners listeners;
     protected List<Symbolizer> symbolizers;
+    protected List<Symbolizer> masks;
     protected List<ItemAction> actions;    
     
     

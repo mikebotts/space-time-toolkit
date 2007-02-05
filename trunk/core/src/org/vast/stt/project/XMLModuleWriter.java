@@ -23,11 +23,11 @@
 
 package org.vast.stt.project;
 
-import org.vast.io.xml.DOMWriter;
+import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
 
 public interface XMLModuleWriter
 {
-    public Element write(DOMWriter dom, Object obj);
+    public Element write(DOMHelper dom, Object obj);
 }

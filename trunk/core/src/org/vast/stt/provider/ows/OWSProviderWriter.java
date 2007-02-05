@@ -23,7 +23,7 @@
 
 package org.vast.stt.provider.ows;
 
-import org.vast.io.xml.DOMWriter;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleWriter;
 import org.w3c.dom.Element;
 
@@ -51,7 +51,7 @@ public class OWSProviderWriter implements XMLModuleWriter
     }
     
     
-    public Element write(DOMWriter dom, Object obj)
+    public Element write(DOMHelper dom, Object obj)
     {
         return null;
     }

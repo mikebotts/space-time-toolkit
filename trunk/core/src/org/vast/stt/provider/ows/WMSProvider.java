@@ -33,7 +33,6 @@ import org.vast.ows.OWSQuery;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
-import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
@@ -59,13 +58,11 @@ public class WMSProvider extends OWSProvider
 {
 	protected WMSLayerCapabilities layerCaps;
 	protected WMSQuery query;
-	protected WMSRequestWriter requestBuilder;
 	protected DataStreamParser dataParser;
 
 
 	public WMSProvider()
 	{
-		requestBuilder = new WMSRequestWriter();
 	}
 
 
@@ -83,9 +80,8 @@ public class WMSProvider extends OWSProvider
 		{
 			initRequest();
 
-			String urlString = requestBuilder.buildGetRequest(query);
-			url = new URL(urlString);
-			URLConnection urlCon = url.openConnection();
+            // send request to WMS server
+			URLConnection urlCon = owsUtils.sendRequest(query, false);
 
 			//  Check mime for exception/xml type
 			if (urlCon == null)

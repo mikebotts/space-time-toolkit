@@ -25,7 +25,7 @@ package org.vast.stt.project;
 
 import java.util.Hashtable;
 
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
 
@@ -40,7 +40,7 @@ public abstract class XMLReader
      * @param objElt
      * @return
      */
-    protected Object findExistingObject(DOMReader dom, Element objElt)
+    protected Object findExistingObject(DOMHelper dom, Element objElt)
     {
         Object obj = null;
         String id = dom.getAttributeValue(objElt, "id");
@@ -55,7 +55,7 @@ public abstract class XMLReader
      * @param objElt
      * @param obj
      */
-    protected void registerObjectID(DOMReader dom, Element objElt, Object obj)
+    protected void registerObjectID(DOMHelper dom, Element objElt, Object obj)
     {
         String id = dom.getAttributeValue(objElt, "id");
         

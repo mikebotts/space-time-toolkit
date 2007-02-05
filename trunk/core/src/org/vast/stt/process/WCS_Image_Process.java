@@ -25,15 +25,14 @@ package org.vast.stt.process;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.data.*;
+import org.vast.ows.OWSUtils;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
-import org.vast.ows.wcs.WCSRequestWriter;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 
@@ -64,7 +63,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     protected DataGroup output;
     protected InputStream dataStream;
     protected WCSQuery query;
-    protected WCSRequestWriter requestBuilder;
+    protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected boolean hasTime, hasBbox;
     
@@ -72,7 +71,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     public WCS_Image_Process()
     {
         query = new WCSQuery();
-        requestBuilder = new WCSRequestWriter();
+        owsUtils = new OWSUtils();
     }
 
 
@@ -180,6 +179,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             
             // coverage and bbox crs 
             query.setSrs("EPSG:4329");
+            query.setRequest("GetCoverage");
         }
         catch (Exception e)
         {
@@ -197,7 +197,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
-            dataStream = requestBuilder.sendRequest(query, false).getInputStream();
+            dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
 
             dataParser = reader.getDataParser();  // Just instantiates ASCII or BINARY parser and returns it
@@ -311,7 +311,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     }
 
 
-    public void beginDataAtom(DataComponent info, DataBlock data)
+    public void beginDataAtom(DataComponent info)
     {
         // TODO Auto-generated method stub
         
@@ -341,7 +341,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         
     }
 
-//int dbc = 0;
+    
     public void endDataBlock(DataComponent info, DataBlock data)
     {
         //// TODO Auto-generated method stub

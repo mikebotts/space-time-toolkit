@@ -24,7 +24,7 @@
 package org.vast.stt.project.table;
 
 import java.util.Hashtable;
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.tree.DataTree;
@@ -65,7 +65,7 @@ public class TableSceneReader extends XMLReader implements XMLModuleReader
     }
 
 
-    public Object read(DOMReader dom, Element sceneElt)
+    public Object read(DOMHelper dom, Element sceneElt)
     {
         TableScene scene = new TableScene();
         registerObjectID(dom, sceneElt, scene);

@@ -14,10 +14,13 @@
 package org.vast.stt.provider.swe;
 
 import java.io.*;
-
 import org.vast.cdm.common.CDMException;
-import org.vast.cdm.reader.*;
-import org.vast.io.xml.*;
+import org.vast.sweCommon.CDMFilter;
+import org.vast.sweCommon.CDMReader;
+import org.vast.sweCommon.SWECommonUtils;
+import org.vast.sweCommon.URIStreamHandler;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
 import org.w3c.dom.*;
 
 
@@ -35,20 +38,19 @@ public class SWEResourceReader extends CDMReader
 			streamFilter.setDataElementName("data");
 					
 			// parse xml header using DataComponent and DataEncoding readers
-			DOMReader domReader = new DOMReader(streamFilter, false);			
-			Element dataElt = domReader.getBaseElement();
-			Element defElt = domReader.getElement(dataElt, "dataComponents");
-			Element encElt = domReader.getElement(dataElt, "encoding");
+            DOMHelper dom = new DOMHelper(streamFilter, false);			
+			Element dataElt = dom.getBaseElement();
+			Element defElt = dom.getElement(dataElt, "dataComponents");
+			Element encElt = dom.getElement(dataElt, "encoding");
 			
-			DataComponentsReader infReader = new DataComponentsReader(domReader);
-			EncodingReader encReader = new EncodingReader(domReader);	
-			this.dataComponents = infReader.readComponentProperty(defElt);
-			this.dataEncoding = encReader.readEncodingProperty(encElt);
+            SWECommonUtils utils = new SWECommonUtils();
+            this.dataComponents = utils.readComponentProperty(dom, defElt);
+            this.dataEncoding = utils.readEncodingProperty(dom, encElt);
 			
 			// read external link if present
-			resultUri = domReader.getAttributeValue(dataElt, "data/externalLink");
+			resultUri = dom.getAttributeValue(dataElt, "data/externalLink");
 		}
-		catch (DOMReaderException e)
+		catch (DOMHelperException e)
 		{
 			throw new CDMException("Error while parsing Observation XML", e);
 		}

@@ -14,8 +14,7 @@
 package org.vast.stt.provider;
 
 import java.text.ParseException;
-
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
 import org.vast.stt.dynamics.SpatialExtentUpdater;
@@ -54,7 +53,7 @@ public class ExtentReader extends XMLReader
      * @param dom
      * @param spElt
      */
-    public void readSpatialExtent(DataProvider provider, DOMReader dom, Element spElt)
+    public void readSpatialExtent(DataProvider provider, DOMHelper dom, Element spElt)
     {
         // get provider spatial extent
         STTSpatialExtent spatialExtent = provider.getSpatialExtent();
@@ -124,7 +123,7 @@ public class ExtentReader extends XMLReader
      * @param dom
      * @param spElt
      */
-    public void readTimeExtent(DataProvider provider, DOMReader dom, Element timeElt)
+    public void readTimeExtent(DataProvider provider, DOMHelper dom, Element timeElt)
     {
         // get provider time extent
         STTTimeExtent timeExtent = provider.getTimeExtent();

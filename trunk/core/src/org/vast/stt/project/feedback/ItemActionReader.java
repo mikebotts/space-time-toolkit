@@ -24,7 +24,7 @@
 package org.vast.stt.project.feedback;
 
 import java.util.Hashtable;
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
@@ -60,7 +60,7 @@ public class ItemActionReader extends XMLReader implements XMLModuleReader
     }
 
 
-    public Object read(DOMReader dom, Element elt)
+    public Object read(DOMHelper dom, Element elt)
     {
         // TODO Auto-generated method stub
         return new ShowPopup();
