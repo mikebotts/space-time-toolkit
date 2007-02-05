@@ -31,12 +31,11 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
-
 import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
+import org.vast.ows.OWSUtils;
 import org.vast.ows.wms.WMSQuery;
-import org.vast.ows.wms.WMSRequestWriter;
 import org.vast.process.*;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
@@ -65,7 +64,7 @@ public class WMS_Process extends DataProcess
     protected DataGroup output;
     protected InputStream dataStream;
     protected WMSQuery query;
-    protected WMSRequestWriter requestBuilder;
+    protected OWSUtils owsUtils;
     protected int originalWidth;
     protected int originalHeight;
     protected boolean preserveAspectRatio = true;
@@ -74,7 +73,7 @@ public class WMS_Process extends DataProcess
     public WMS_Process()
     {
         query = new WMSQuery();
-        requestBuilder = new WMSRequestWriter();
+        owsUtils = new OWSUtils();
     }
 
 
@@ -149,6 +148,7 @@ public class WMS_Process extends DataProcess
             
             query.setSrs("EPSG:4326");
             query.setExceptionType("application/vnd.ogc.se_xml");
+            query.setRequest("GetMap");
         }
         catch (Exception e)
         {
@@ -168,7 +168,7 @@ public class WMS_Process extends DataProcess
         {
             initRequest();
 
-            URLConnection urlCon = requestBuilder.sendRequest(query, false);
+            URLConnection urlCon = owsUtils.sendRequest(query, false);
 
             //  Check on mimeType catches all three types (blank, inimage, xml)
             //  of OGC service exceptions
@@ -216,7 +216,7 @@ public class WMS_Process extends DataProcess
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WMS server:\n" + query.getGetServer(), e);
+            throw new ProcessException("Error while requesting data from WMS server: " + query.getGetServer(), e);
         }
         finally
         {

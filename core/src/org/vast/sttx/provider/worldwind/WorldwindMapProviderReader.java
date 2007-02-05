@@ -23,7 +23,7 @@
 
 package org.vast.sttx.provider.worldwind;
 
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
@@ -38,7 +38,7 @@ public class WorldwindMapProviderReader extends XMLReader implements XMLModuleRe
     }
 
 
-    public Object read(DOMReader dom, Element providerElt)
+    public Object read(DOMHelper dom, Element providerElt)
     {
         WorldwindMapProvider provider = new WorldwindMapProvider();
         

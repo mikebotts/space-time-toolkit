@@ -15,7 +15,6 @@ package org.vast.stt.gui.widgets.catalog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -32,14 +31,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.vast.ows.OWSCapabilitiesReader;
 import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.sos.SOSCapabilitiesReader;
-import org.vast.ows.wcs.WCSCapabilitiesReader;
-import org.vast.ows.wfs.WFSCapabilitiesReader;
-import org.vast.ows.wms.WMSCapabilitiesReader;
+import org.vast.ows.OWSUtils;
+
 
 /**
  * <p><b>Title:</b>
@@ -66,6 +62,7 @@ public class CapabilitiesWidget implements SelectionListener
 	private Combo typesCombo;
 	private Combo serverCombo;
 	private LayerTree layerTree;
+    private OWSUtils owsUtils = new OWSUtils();
 	
 	public CapabilitiesWidget(Composite parent) {
 		capServers = new CapServers();
@@ -203,26 +200,9 @@ public class CapabilitiesWidget implements SelectionListener
 	 */
 	protected List<OWSLayerCapabilities> readCapabilities(String server, ServiceType type){
 		ServerInfo info = capServers.getServerInfo(server, type);
-		OWSCapabilitiesReader reader;
-		switch(type){
-		case WMS:
-			reader = new WMSCapabilitiesReader();
-			break;
-		case WCS:
-			reader = new WCSCapabilitiesReader();
-			break;
-		case WFS:
-			reader = new WFSCapabilitiesReader();
-			break;
-		case SOS:
-			reader = new SOSCapabilitiesReader();
-			break;
-		default:
-			return null;
-		}
-		OWSServiceCapabilities caps = null;
+		OWSServiceCapabilities caps;
 		try {		
-			caps = reader.readCapabilities(info.url, info.version);
+			caps = owsUtils.getCapabilities(info.url, type.toString(), info.version);
 		} catch (OWSException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();

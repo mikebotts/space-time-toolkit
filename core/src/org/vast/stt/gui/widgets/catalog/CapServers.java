@@ -17,11 +17,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
-import org.vast.io.xml.DOMReader;
-import org.vast.io.xml.DOMReaderException;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.util.ExceptionSystem;
 import org.w3c.dom.Element;
@@ -144,14 +143,14 @@ public class CapServers {
 	public void loadServerData() {
 		try	{
 		    readServers();
-		} catch (DOMReaderException e) {
+		} catch (DOMHelperException e) {
 			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					"STT Error", "Servers.xml file not found.  Capabilities Servers are empty.");
 			return;
 		}
 	}	
 	
-	public void readServers() throws DOMReaderException {
+	public void readServers() throws DOMHelperException {
 	   String fileLocation = null;
 	   Enumeration e = STTPlugin.getDefault().getBundle().findEntries("conf", "Servers.xml", false);
 	   if (e.hasMoreElements())
@@ -162,7 +161,7 @@ public class CapServers {
 		   return;
 	   }		
 		
-		DOMReader dom = new DOMReader(fileLocation, false);
+        DOMHelper dom = new DOMHelper(fileLocation, false);
 		Element rootElt = dom.getRootElement();
 		
 		NodeList serverNodes = rootElt.getElementsByTagName("Server");

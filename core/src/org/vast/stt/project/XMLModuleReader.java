@@ -25,7 +25,7 @@ package org.vast.stt.project;
 
 import java.util.Hashtable;
 
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
 
@@ -47,6 +47,6 @@ import org.w3c.dom.Element;
  */
 public interface XMLModuleReader
 {
-    public Object read(DOMReader dom, Element elt);
+    public Object read(DOMHelper dom, Element elt);
     public void setObjectIds(Hashtable<String, Object> objectIds);
 }

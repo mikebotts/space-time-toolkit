@@ -16,6 +16,7 @@ package org.vast.stt.provider.ows;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSQuery;
 import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.OWSUtils;
 import org.vast.stt.project.Service;
 import org.vast.stt.provider.AbstractProvider;
 
@@ -40,6 +41,7 @@ public abstract class OWSProvider extends AbstractProvider
     protected String layerID;
     protected Service service;
     protected OWSServiceCapabilities serviceCaps;
+    protected OWSUtils owsUtils = new OWSUtils();
     
     
 	public abstract OWSQuery getQuery();

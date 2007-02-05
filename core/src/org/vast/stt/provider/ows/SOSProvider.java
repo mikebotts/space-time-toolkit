@@ -19,10 +19,9 @@ import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.ows.OWSQuery;
 import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.om.ObservationReader;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSObservationReader;
 import org.vast.ows.sos.SOSQuery;
-import org.vast.ows.sos.SOSRequestWriter;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
@@ -47,15 +46,12 @@ public class SOSProvider extends OWSProvider
 {
     protected SOSLayerCapabilities layerCaps;
 	protected SOSQuery query;
-	protected SOSRequestWriter requestBuilder;
 	protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
 	
 
 	public SOSProvider()
 	{
-		requestBuilder = new SOSRequestWriter();
-        //requestBuilder.showPostOutput = true;
 		dataHandler = new SWEDataHandler(this);
 	}
     
@@ -68,7 +64,7 @@ public class SOSProvider extends OWSProvider
             initRequest();  
             
             // create reader
-            SOSObservationReader reader = new SOSObservationReader();
+            ObservationReader reader = new ObservationReader();
             
             // create template request here
             //double time = new DateTime().getJulianTime();
@@ -77,9 +73,9 @@ public class SOSProvider extends OWSProvider
             //query.setResponseMode(SOSQuery.ResponseMode.RESULT_TEMPLATE);
             
             // select request type (post or get)
-            boolean usePost = true;            
-            dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
-                        
+            boolean usePost = true;
+            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+                         
             // parse response
             reader.parse(dataStream);
             
@@ -122,14 +118,14 @@ public class SOSProvider extends OWSProvider
             query.setResponseMode(SOSQuery.ResponseMode.INLINE);
             
 			// create reader
-			SOSObservationReader reader = new SOSObservationReader();
+			ObservationReader reader = new ObservationReader();
 			
             if (canceled)
                 return;
             
 			// select request type (post or get)
             boolean usePost = true;
-            dataStream = requestBuilder.sendRequest(query, usePost).getInputStream();
+            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
             
             if (canceled)
                 return;

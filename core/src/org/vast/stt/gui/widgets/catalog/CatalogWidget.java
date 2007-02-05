@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -38,11 +37,11 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
-import org.vast.io.xml.DOMReaderException;
+import org.vast.xml.DOMHelperException;
 import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.sos.SOSCapabilitiesReader;
+import org.vast.ows.OWSUtils;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
@@ -89,6 +88,8 @@ public class CatalogWidget
 	private static final int BBOX_ERROR = -1;
 	private static final int BBOX_OK = 1;
 	private Text kwText;
+    private OWSUtils owsUtils = new OWSUtils();
+    
 	
 	public CatalogWidget(Composite parent, int style) {
 		initGui(parent);
@@ -270,7 +271,7 @@ public class CatalogWidget
 
 		try {
 			List<String>sosUri = null;
-			wrsRW.showPostOutput = true;
+			wrsRW.setPrintRequest(true);
 			//  Either request ALL (no filtes set on query)...
 			is = wrsRW.sendRequest(query, true).getInputStream();
 			//  Either we requested ALL SOS (no filtes set on query)...
@@ -324,7 +325,7 @@ public class CatalogWidget
 		} catch (OWSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (DOMReaderException e) {
+		} catch (DOMHelperException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -335,14 +336,13 @@ public class CatalogWidget
 	//  Return offerings matching names in List<String> parameter of UriMap
 	private List<OWSLayerCapabilities> getFilteredOfferings(HashMap<String, List<String>> uriMap){
 //	  Cycle through SOS's and get all ObsOfferings
-		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
 		List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
 		Set<String> sosUris = uriMap.keySet();
 		for(String sosTmp : sosUris){
 			try {
 				List<String> offerings = uriMap.get(sosTmp);
 				//  Not sure how to detect version prior to this call...
-				OWSServiceCapabilities caps = capsReader.readCapabilities(sosTmp, "0.0.31");
+				OWSServiceCapabilities caps = owsUtils.getCapabilities(sosTmp, "SOS", "0.0.31");
 				List<OWSLayerCapabilities> capsTmp = caps.getLayers();
 				for(OWSLayerCapabilities thisCaps: capsTmp){
 					String thisOffering = thisCaps.getId();
@@ -361,12 +361,11 @@ public class CatalogWidget
 	//  Return ALL offerings for all uri's in the collection
 	private List<OWSLayerCapabilities> getOfferings(Collection<String> sosUri){
 //	  Cycle through SOS's and get all ObsOfferings
-		SOSCapabilitiesReader capsReader = new SOSCapabilitiesReader();
 		List<OWSLayerCapabilities> layerCaps = new ArrayList<OWSLayerCapabilities>();
 		for(String sosTmp : sosUri){
 			try {
 				//  Not sure how to detect version prior to this call...
-				OWSServiceCapabilities caps = capsReader.readCapabilities(sosTmp, "0.0.31");
+				OWSServiceCapabilities caps = owsUtils.getCapabilities(sosTmp, "SOS", "0.0.31");
 				List<OWSLayerCapabilities> capsTmp = caps.getLayers();
 				layerCaps.addAll(capsTmp);
 			} catch (Exception e) {

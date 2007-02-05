@@ -15,8 +15,8 @@ package org.vast.stt.project;
 
 import java.text.ParseException;
 import java.util.*;
-import org.vast.io.xml.DOMReader;
-import org.vast.io.xml.DOMReaderException;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.util.*;
 import org.w3c.dom.*;
@@ -41,7 +41,7 @@ import org.vast.process.*;
  */
 public class ProjectReader extends XMLReader
 {
-	private DOMReader dom;    
+	private DOMHelper dom;    
 	private DataTreeReader dataReader;
     
 	
@@ -62,10 +62,10 @@ public class ProjectReader extends XMLReader
 	{
 		try
 		{
-			DOMReader dom = new DOMReader(url, false);
+            DOMHelper dom = new DOMHelper(url, false);
 			return readProject(dom, dom.getBaseElement());
 		}
-		catch (DOMReaderException e)
+		catch (DOMHelperException e)
 		{
 			e.printStackTrace();
 			return null;
@@ -73,7 +73,7 @@ public class ProjectReader extends XMLReader
 	}
 	
 	
-	public Project readProject(DOMReader dom, Element projectElt)
+	public Project readProject(DOMHelper dom, Element projectElt)
 	{
 		Element listElt;
 		Project project = new Project();

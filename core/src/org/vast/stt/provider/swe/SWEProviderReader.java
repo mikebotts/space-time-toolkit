@@ -23,10 +23,11 @@
 
 package org.vast.stt.provider.swe;
 
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
+
 
 public class SWEProviderReader extends XMLReader implements XMLModuleReader
 {
@@ -37,7 +38,7 @@ public class SWEProviderReader extends XMLReader implements XMLModuleReader
     }
     
     
-    public Object read(DOMReader dom, Element providerElt)
+    public Object read(DOMHelper dom, Element providerElt)
     {
         SWEProvider provider = new SWEProvider();
         

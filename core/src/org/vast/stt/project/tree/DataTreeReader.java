@@ -14,7 +14,7 @@
 package org.vast.stt.project.tree;
 
 import java.util.*;
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.ows.sld.SLDReader;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.project.XMLModuleReader;
@@ -75,7 +75,7 @@ public class DataTreeReader extends XMLReader
      * @param parentScene
      * @return
      */
-    public DataTree readDataTree(DOMReader dom, Element dataTreeElt)
+    public DataTree readDataTree(DOMHelper dom, Element dataTreeElt)
     {
         DataFolder folder = (DataFolder)readDataEntry(dom, dataTreeElt);
         DataTree dataTree = new DataTree(folder);
@@ -89,7 +89,7 @@ public class DataTreeReader extends XMLReader
 	 * @param dataEntryElt
 	 * @return
 	 */
-    public DataEntry readDataEntry(DOMReader dom, Element dataEntryElt)
+    public DataEntry readDataEntry(DOMHelper dom, Element dataEntryElt)
 	{
 		DataEntry dataEntry = null;
 		
@@ -132,7 +132,7 @@ public class DataTreeReader extends XMLReader
 	 * @param listElt
 	 * @return
 	 */
-    public DataFolder readDataList(DOMReader dom, Element listElt)
+    public DataFolder readDataList(DOMHelper dom, Element listElt)
 	{
 		NodeList memberElts = dom.getElements(listElt, "member");
 		int listSize = memberElts.getLength();
@@ -169,7 +169,7 @@ public class DataTreeReader extends XMLReader
 	 * @param dataItemElt
 	 * @return
 	 */
-	public DataItem readDataItem(DOMReader dom, Element dataItemElt)
+	public DataItem readDataItem(DOMHelper dom, Element dataItemElt)
 	{
         DataItem dataItem = new DataItem();
         
@@ -220,7 +220,7 @@ public class DataTreeReader extends XMLReader
      * @param providerElt
      * @return
      */
-    public DataProvider readDataProvider(DOMReader dom, Element providerElt)
+    public DataProvider readDataProvider(DOMHelper dom, Element providerElt)
     {
         DataProvider provider = null;
         
@@ -262,7 +262,7 @@ public class DataTreeReader extends XMLReader
      * @param symElt
      * @return
      */
-    public Symbolizer readSymbolizer(DOMReader dom, Element styleElt)
+    public Symbolizer readSymbolizer(DOMHelper dom, Element styleElt)
     {
         Element symElt = dom.getFirstChildElement(styleElt);
         Symbolizer symbolizer = sldReader.readSymbolizer(dom, symElt);

@@ -26,15 +26,14 @@ package org.vast.stt.process;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.data.*;
+import org.vast.ows.OWSUtils;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
-import org.vast.ows.wcs.WCSRequestWriter;
 import org.vast.process.*;
 
 
@@ -62,14 +61,14 @@ public class WCS_Process2 extends DataProcess implements DataHandler
     protected DataGroup output;
     protected InputStream dataStream;
     protected WCSQuery query;
-    protected WCSRequestWriter requestBuilder;
+    protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     
 
     public WCS_Process2()
     {
         query = new WCSQuery();
-        requestBuilder = new WCSRequestWriter();
+        owsUtils = new OWSUtils();
     }
 
 
@@ -154,6 +153,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
             
             // coverage and bbox crs 
             query.setSrs("EPSG:4329");
+            query.setRequest("GetCoverage");
         }
         catch (Exception e)
         {
@@ -173,7 +173,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
-            dataStream = requestBuilder.sendRequest(query, false).getInputStream();
+            dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
           
             dataParser = reader.getDataParser();
@@ -188,7 +188,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WCS server:\n" + url, e);
+            throw new ProcessException("Error while requesting data from WCS server: " + url, e);
         }
         finally
         {
@@ -239,7 +239,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
     }
 
 
-    public void beginDataAtom(DataComponent info, DataBlock data)
+    public void beginDataAtom(DataComponent info)
     {
         // TODO Auto-generated method stub
         

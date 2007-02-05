@@ -14,8 +14,7 @@
 package org.vast.stt.style;
 
 import java.util.Enumeration;
-
-import org.vast.io.xml.DOMReader;
+import org.vast.xml.DOMHelper;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
 import org.vast.ows.sld.Graphic;
@@ -30,6 +29,7 @@ import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.util.ExceptionSystem;
 
+
 /**
  * <p><b>Title:</b>
  * 	SymbolizerFactory
@@ -43,7 +43,6 @@ import org.vast.util.ExceptionSystem;
  * @date Nov 28, 2006
  * @version 1.0
  */
-
 public class SymbolizerFactory {
 
 	public static enum SymbolizerType
@@ -117,7 +116,7 @@ public class SymbolizerFactory {
   	
   	public static TextureSymbolizer createWMSTextureSymbolizer(){
   	    SLDReader sldReader = new SLDReader();
-		DOMReader dom;
+        DOMHelper dom;
 		TextureSymbolizer sym = null;
 		try {
 			String fileLocation = null;
@@ -132,7 +131,7 @@ public class SymbolizerFactory {
 				return null;
 			}
 
-			dom = new DOMReader(fileLocation, false);
+			dom = new DOMHelper(fileLocation, false);
 			sym = sldReader.readTexture(dom, dom.getRootElement());
 			return sym;
 		} catch (Exception e) {
