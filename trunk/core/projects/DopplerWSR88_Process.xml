@@ -108,7 +108,7 @@
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                               </swe:component>
                               <swe:component name="version">
-                                 <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
+                                 <swe:Category definition="urn:ogc:def:identifier:version">0.0.31</swe:Category>
                               </swe:component>
                               <swe:component name="offering">
                                  <swe:Category>KOKX_DOPPLER_TILT0</swe:Category>
