@@ -197,6 +197,7 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
+            //owsUtils.setPrintRequest(true);
             dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
 
