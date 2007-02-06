@@ -72,4 +72,15 @@ public class MasterTimeView extends SceneView<WorldScene>
                     refreshViewAsync();
         }
     }
+
+
+    @Override
+    public void setScene(WorldScene sc)
+    {
+        super.setScene(sc);
+        masterTimeWidget.setScene(sc);
+        
+        // refresh display
+        refreshViewAsync();
+    }
 }
