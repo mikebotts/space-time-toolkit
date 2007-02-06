@@ -404,11 +404,7 @@
             <member>
                <VirtualEarthProvider id="MS_ROADS">
                   <name>World Roads</name>
-                  <spatialExtent>
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </member>
             <member>
