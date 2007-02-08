@@ -271,7 +271,7 @@ public class CatalogWidget
 
 		try {
 			List<String>sosUri = null;
-			wrsRW.setPrintRequest(true);
+            wrsRW.writeXMLQuery(System.out, query);
 			//  Either request ALL (no filtes set on query)...
 			is = wrsRW.sendRequest(query, true).getInputStream();
 			//  Either we requested ALL SOS (no filtes set on query)...
