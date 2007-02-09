@@ -78,7 +78,7 @@ public class SWEDataHandler implements DataHandler
     		
     		if (converter == null)
     		{
-    			String uom = (String)info.getProperty(DataComponent.UOM);
+    			String uom = (String)info.getProperty(DataComponent.UOM_CODE);
     			converter = UnitConversion.createConverterToSI(uom);
     	    	converters.put(info, converter);
     		}
