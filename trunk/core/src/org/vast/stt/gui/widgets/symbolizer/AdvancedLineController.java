@@ -1,16 +1,12 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.MappingFunction;
@@ -138,20 +134,27 @@ public class AdvancedLineController extends AdvancedOptionController
     // reset value of all controls to what is currently in symbolizer
     //   TODO  deal with color and rgba
     public void loadFields(){
-		//  width
-    	Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
-		boolean widthMapped = !lineOptionHelper.getWidthConstant();
-		isMappedBtn[0].setSelection(widthMapped);
-		optionControls[0].setEnabled(!widthMapped);
-		if(widthMapped) {
-			String widthProp = lineOptionHelper.getWidthProperty();
-			//mapFromCombo[0].select(widthProp);
-			selectMapFromCombo(0, widthProp);
-		}
-		
-		//  color
-		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
+
+    	//  width
+    	Runnable loadFieldsThread = new Runnable(){
+    		public void run(){
+    			Spinner widthSpinner = (Spinner)optionControls[0].getControl();
+    			widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
+    			boolean widthMapped = !lineOptionHelper.getWidthConstant();
+    			isMappedBtn[0].setSelection(widthMapped);
+    			optionControls[0].setEnabled(!widthMapped);
+    			if(widthMapped) {
+    				String widthProp = lineOptionHelper.getWidthProperty();
+    				//mapFromCombo[0].select(widthProp);
+    				selectMapFromCombo(0, widthProp);
+    			}
+    			
+    			//  color
+    			optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
+    		}
+    	};
+    	PlatformUI.getWorkbench().getDisplay().asyncExec(loadFieldsThread);    	
+
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e){

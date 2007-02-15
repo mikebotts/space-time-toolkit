@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.stt.event.EventType;
@@ -54,10 +55,16 @@ public class BasicLineController extends OptionController // implements Selectio
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
-		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
-		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
-	}
+		Runnable loadFieldsThread = new Runnable(){
+			public void run(){
+				Spinner widthSpinner = (Spinner)optionControls[0].getControl();
+				widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
+				optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
+			}
+			
+		};
+		PlatformUI.getWorkbench().getDisplay().asyncExec(loadFieldsThread);  
+    }
 	
 	public void widgetDefaultSelected(SelectionEvent e){
 	}
