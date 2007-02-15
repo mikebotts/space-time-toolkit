@@ -70,7 +70,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		if(optionController != null) {
 			optionController.setMappableItems(mappableItems);
 			dataItem.addListener(optionController);
-
 		}
 		this.layout();
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -115,6 +114,7 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 	}
 	
 	public void close(){
+		dataItem.removeListener(optionController);
 	}
 
 }

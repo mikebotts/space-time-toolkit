@@ -67,6 +67,8 @@ public class SymbolizerOptionChooser extends OptionChooser
 		if(optionController == null)
 			return;
         optionController.setDataItem(item);
+        item.addListener(optionController);
+        //  NOTE - need to remove listener also!!!
 
 		optComp.layout(true);		
 		optScr.setMinSize(optComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
