@@ -45,14 +45,14 @@ import org.vast.stt.style.StylerVisitor;
  */
 public class SceneItem implements STTEventListener
 {
-    protected Scene<? extends SceneRenderer<? extends Scene>> parentScene;
+    protected Scene<? extends SceneRenderer> parentScene;
     protected DataItem dataItem;
     protected ArrayList<DataStyler> stylers;
     protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
 
-    public SceneItem(Scene<? extends SceneRenderer<? extends Scene>> scene)
+    public SceneItem(Scene<? extends SceneRenderer> scene)
     {
         stylers = new ArrayList<DataStyler>(1);
         stylerTable = new Hashtable<Symbolizer, DataStyler>();
