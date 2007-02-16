@@ -154,15 +154,18 @@ public class ExtentReader extends XMLReader
                     
                     // read lag time
                     val = dom.getElementValue(extentElt, "lagTime");
-                    timeExtent.setLagTimeDelta(Double.parseDouble(val));
+                    if (val != null)
+                        timeExtent.setLagTimeDelta(Double.parseDouble(val));
                     
                     // read lead time
                     val = dom.getElementValue(extentElt, "leadTime");
-                    timeExtent.setLeadTimeDelta(Double.parseDouble(val));
+                    if (val != null)
+                        timeExtent.setLeadTimeDelta(Double.parseDouble(val));
                     
                     // read step time
                     val = dom.getElementValue(extentElt, "stepTime");
-                    timeExtent.setTimeStep(Double.parseDouble(val));
+                    if (val != null)
+                        timeExtent.setTimeStep(Double.parseDouble(val));
                 
                     // store that in the hashtable
                     registerObjectID(dom, extentElt, timeExtent);

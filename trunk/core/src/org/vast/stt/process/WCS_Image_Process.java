@@ -197,28 +197,13 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         {
             initRequest();
             CoverageReader reader = new CoverageReader();
-            //owsUtils.setPrintRequest(true);
+            System.out.println(owsUtils.buildURLQuery(query));
             dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
 
             dataParser = reader.getDataParser();  // Just instantiates ASCII or BINARY parser and returns it
-            DataComponent serverData = dataParser.getDataComponents();
             dataParser.setDataHandler(this);            
             dataParser.parse(reader.getDataStream());
-            
-            // set grid size
-            DataArray gridArray = (DataArray)serverData.getComponent("coverage");
-            int gridWidth = gridArray.getComponent(0).getComponentCount();
-            int gridLength = gridArray.getComponentCount();                
-            outputGridWidth.getData().setIntValue(gridWidth);
-            outputGridLength.getData().setIntValue(gridLength);
-            
-            // set coverage size
-            DataArray coverageArray = (DataArray)serverData.getComponent("imagery");
-            int coverageWidth = coverageArray.getComponent(0).getComponentCount();
-            int coverageLength = coverageArray.getComponentCount();                
-            outputCoverageWidth.getData().setIntValue(coverageWidth);
-            outputCoverageLength.getData().setIntValue(coverageLength);
             
             ((DataGroup)output.getComponent(0)).combineDataBlocks();
             ((DataGroup)output.getComponent(1)).combineDataBlocks();
@@ -321,15 +306,23 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
 
     public void endData(DataComponent info, DataBlock data)
     {
-        //Object obj = ((AbstractDataBlock)data).getUnderlyingObject();
-        //DataBlock gridData = ((DataBlock[])obj)[0];
-        //DataBlock coverageData = ((DataBlock[])obj)[1];
+        DataArray gridArray = (DataArray)info.getComponent("domainData").getComponent("grid");
+        DataArray coverageArray = (DataArray)info.getComponent("rangeData").getComponent("coverage");
         
-        //DataBlock gridData = info.getComponent(0).getData();
-        //DataBlock coverageData = info.getComponent(1).getData();
+        // set grid size
+        int gridWidth = gridArray.getComponent(0).getComponentCount();
+        int gridLength = gridArray.getComponentCount();                
+        outputGridWidth.getData().setIntValue(gridWidth);
+        outputGridLength.getData().setIntValue(gridLength);
         
-        DataBlock gridData = info.getComponent("coverage").getData();
-        DataBlock coverageData = info.getComponent("imagery").getData();
+        // set coverage size
+        int coverageWidth = coverageArray.getComponent(0).getComponentCount();
+        int coverageLength = coverageArray.getComponentCount();                
+        outputCoverageWidth.getData().setIntValue(coverageWidth);
+        outputCoverageLength.getData().setIntValue(coverageLength);
+        
+        DataBlock gridData = gridArray.getData();
+        DataBlock coverageData = coverageArray.getData();
         
         outputGridArray.setData(gridData);
         outputCoverageArray.setData(coverageData);

@@ -23,10 +23,10 @@
 
 package org.vast.stt.project.feedback;
 
-import org.vast.stt.project.scene.Scene;
+//import org.vast.stt.project.scene.Scene;
 import org.vast.stt.renderer.PickFilter;
-import org.vast.stt.renderer.PickedObject;
-import org.vast.stt.renderer.SceneRenderer;
+//import org.vast.stt.renderer.PickedObject;
+//import org.vast.stt.renderer.SceneRenderer;
 
 
 public class FeedbackEventListener
