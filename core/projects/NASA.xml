@@ -2101,18 +2101,24 @@
                <SensorMLProvider id="GOES_VIS">
                   <name>GOES Visible WCS</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent>
+                     <TimeExtent id="GOES_TIME">
+                        <baseTime>2005-08-26</baseTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
-                  <value path="wcsOptions/layer">GOES12_CONUS_REALTIME_VIS</value>
+                  <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
                </SensorMLProvider>
             </member>
             <member>
                <SensorMLProvider id="GOES_IR">
                   <name>GOES IR WCS</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent xlink:href="#GOES_TIME"/>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
-                  <value path="wcsOptions/layer">GOES12_CONUS_REALTIME_IR</value>
+                  <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
                </SensorMLProvider>
             </member>
          </ResourceList>
