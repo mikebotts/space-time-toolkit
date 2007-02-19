@@ -69,10 +69,6 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
         enabledButton.setData(dataItem);
         enabledButton.setSelection(dataItem.isEnabled());
         //System.err.println("COT.setDI(): " + dataItem.getName());
-        //  Need a NULL check here, now, because setDataItem is being called before 
-        //  optionController gets instantiated the first time.  (Fix it...)
-        if(optionChooser.optionController != null)
-        	optionChooser.optionController.loadFields();
     }
 
 
