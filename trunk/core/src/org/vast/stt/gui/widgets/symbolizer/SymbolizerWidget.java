@@ -68,6 +68,7 @@ public class SymbolizerWidget extends CheckOptionTable
     {
         super.setDataItem(item);
         setSymbolizers(item.getSymbolizers());
+        //  repaint the optionControllers...
         optionChooser.optionController.loadFields();
     }
 
