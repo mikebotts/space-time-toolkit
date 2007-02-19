@@ -78,8 +78,10 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     {
         if (item != dataItem)
         {
-            if (item != null)
+            if (item != null) {
+            	System.err.println("Removing listener or item: " + item.getName());
                 item.removeListener(this);
+            }
             
             item = dataItem;
             
