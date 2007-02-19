@@ -77,7 +77,7 @@ public class GridOptionHelper
 		ScalarParameter alphaSP = fillColor.getAlpha();
 		
 		if(!redSP.isConstant() || !greenSP.isConstant() || !blueSP.isConstant() || !alphaSP.isConstant()) {
-			System.err.println("At least one FillColor channel is mapped.  Do what now?");
+			//System.err.println("At least one FillColor channel is mapped.  Do what now?");
 			return new Color(0.5f, 0.0f, 0.0f, 1.0f);		
 		}
 		

@@ -11,14 +11,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.ScalarParameter;
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.project.tree.DataItem;
 
 abstract public class AdvancedOptionController extends OptionController 
-	implements STTEventListener
 {
 	protected Combo [] mapFromCombo;
 	//protected Text [] gainText;
@@ -161,16 +158,6 @@ abstract public class AdvancedOptionController extends OptionController
 			mapFromCombo[i].removeSelectionListener(sl);
 		}
 	}
-
-	// ============ NEW EVENT CODE
-	//abstract void loadFields();
 	
-	public void handleEvent(STTEvent e) {       
-        switch (e.type) {
-            case ITEM_OPTIONS_CHANGED:
-            case ITEM_SYMBOLIZER_CHANGED:
-            	loadFields();
-        }  
-	 }
-		
+
 }

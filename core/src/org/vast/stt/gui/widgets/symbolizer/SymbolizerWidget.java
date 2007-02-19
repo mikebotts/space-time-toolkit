@@ -25,8 +25,6 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.StylerFactory;
 import org.vast.stt.style.SymbolizerFactory;
 
 
@@ -71,7 +69,6 @@ public class SymbolizerWidget extends CheckOptionTable
         super.setDataItem(item);
         setSymbolizers(item.getSymbolizers());
     }
-
 
     /**
      * Make this Symbolizer the currently active Symbolizer in the SymbolizerWidget.
@@ -167,19 +164,15 @@ public class SymbolizerWidget extends CheckOptionTable
         optionChooser.buildControls(symbolizer);
     }
 
-    public void loadOptions(){
-    	optionChooser.optionController.loadFields();
-    }
-    
     public void widgetDefaultSelected(SelectionEvent e)
     {
     }
-
 
     public void widgetSelected(SelectionEvent e)
     {
         // TODO Auto-generated method stub
         Control control = (Control) e.getSource();
+        
         if (control == addButton)
         {
             openAddSymDialog();
@@ -201,8 +194,8 @@ public class SymbolizerWidget extends CheckOptionTable
         {
             createAdvancedSymDialog();
         }
+       
     }
-
 
     //  TODO:  Disable Advanced Button until Data is in DataNode?
     private void createAdvancedSymDialog()

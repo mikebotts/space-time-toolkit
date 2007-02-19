@@ -5,6 +5,8 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,6 +20,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.DataNode;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
 
 /**
@@ -46,10 +50,11 @@ import org.vast.stt.project.tree.DataItem;
  * TODO: Have added symbolizers from AddSymbolizerDialog be
  * added to this widget also
  */
-public class AdvancedSymbolizerDialog implements SelectionListener {
+public class AdvancedSymbolizerDialog implements SelectionListener, STTEventListener
+{
 	private Shell shell;
 	private DataItem dataItem;
-	private AdvancedGraphicsTab advGraphicsTab;
+	protected AdvancedGraphicsTab advGraphicsTab;
 	private AdvancedGeometryTab advGeomTab;
 	DataStructureTreeViewer dataStructureTree;
 	private TabItem graphicTabItem;
@@ -59,9 +64,10 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 	private Combo symCombo;
 	private Symbolizer activeSymbolizer;
 	private List<Symbolizer> symbolizerList;
-	private Button closeButton;
+	protected Button closeButton;
 	private Button applyBtn;
-
+	private Font labelFont;
+	
 	// This dialog's dataItem cannot change, unlike SymbolizerWidget
 	// However, it's list of symbolizers can change if a style is added to the
 	// DataItem via the 'add' button, or the 'add' button on the
@@ -69,6 +75,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 	// NOTE: For now, if anything causes Dialog to fail, throw exception
 	public AdvancedSymbolizerDialog(DataItem item, Symbolizer activeSymbolizer)
 			throws Exception {
+
 		this.dataItem = item;
 		// init GUI components
 		init();
@@ -77,6 +84,8 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 		setSymbolizers(dataItem.getSymbolizers());
 		dataStructureTree.setInput(item.getDataProvider().getDataNode());
 		shell.open();
+		//  register for DataItem events
+		dataItem.addListener(this);
 	}
 
 	/**
@@ -87,16 +96,27 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 		//shell.setMinimumSize(new Point(400, 250));
 		shell.setLayout(new GridLayout(1, false));
 		shell.setSize(500,520);
-		shell.setText("Advanced Style Options");
+		shell.setText(dataItem.getName() + "- Advanced Style Options");
 
-		// Top composite for top row
+		//  Label for item
+		Label itemLabel = new Label(shell, SWT.LEAD);
+		itemLabel.setText(dataItem.getName());
+		GridData gd = new GridData(SWT.LEAD, SWT.CENTER, false, false, 1, 1);
+		itemLabel.setLayoutData(gd);
+		//  Create label for Font - make sure to free it on close (and switch 
+		//  to application-wide FontRegistry at some point)
+		FontData fd = new FontData("Arial", 12, SWT.BOLD);
+		labelFont = new Font(shell.getDisplay(), fd);
+		itemLabel.setFont(labelFont);
+		
+			// Top composite for top row
 		final Composite topComp = new Composite(shell, SWT.NONE);
 		topComp.setLayoutData(new GridData(GridData.CENTER, GridData.CENTER,
 				false, false));
 		// GridLayout w/5 columns
 		final GridLayout topLayout = new GridLayout(5, false);
 		topComp.setLayout(topLayout);
-
+	
 		// Top "Row" of combo and buttons
 		final Label sLabel = new Label(topComp, SWT.NONE);
 		sLabel.setText("Styles:");
@@ -126,7 +146,7 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 		// middle composite for Tabbed Folder
 		final Composite midComp = new Composite(shell, SWT.NONE);
 		midComp.setLayout(new GridLayout(1, true));
-		GridData gd = new GridData(GridData.FILL, GridData.FILL,true, true);
+		gd = new GridData(GridData.FILL, GridData.FILL,true, true);
 		midComp.setLayoutData(gd);
 		
 		// Tab Folder (left 2 columns of midComp)
@@ -230,6 +250,11 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 		setActiveSymbolizer(symCombo.getSelectionIndex());
 	}
 
+	protected void closeDialog(){
+		advGraphicsTab.close(); // why close tab?
+		shell.close();
+	}
+	
 	protected void setActiveSymbolizer(int index) {
 		activeSymbolizer = symbolizerList.get(index);
 		advGraphicsTab.setActiveSymbolizer(activeSymbolizer);
@@ -252,11 +277,24 @@ public class AdvancedSymbolizerDialog implements SelectionListener {
 			setActiveSymbolizer(symCombo.getSelectionIndex());
 		} else if (e.widget == applyBtn) {
 			//  apply mappings
-		} else if (e.widget == closeButton) {
-			// Remove STTEventListener from item (a little messy still)
-			dataItem.removeListener(advGraphicsTab.optionController);
-			advGraphicsTab.close(); // why close tab?
-			shell.close();
+		} 
+		else if (e.widget == closeButton){
+			//  de-register as DataItem listener
+			dataItem.removeListener(this);
+			labelFont.dispose();
+			closeDialog();
 		}
 	}
+	
+	public void handleEvent(STTEvent e) {
+		switch (e.type)
+		{
+		case ITEM_OPTIONS_CHANGED:
+		case ITEM_SYMBOLIZER_CHANGED:
+			System.err.println("AdvOptContr.handleEvt = " + e);
+			//  Need to refresh all tabs/windows in this dialog (including mapping stuff)
+			advGraphicsTab.optionController.loadFields();
+		}		
+	}	
+	
 }
