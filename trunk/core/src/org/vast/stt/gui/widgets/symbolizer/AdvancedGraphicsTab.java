@@ -17,7 +17,7 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 
 	Composite mainGroup;
 	DataItem dataItem;
-	AdvancedOptionController optionController;
+	protected AdvancedOptionController optionController;
 	String [] mappableItems;
 	Symbolizer activeSymbolizer;
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
@@ -55,7 +55,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		removeOldControls();
 		addTopRow();
 		if(optionController!=null) {
-			dataItem.removeListener(optionController);
 			optionController.removeSelectionListener(optionController);
 		}
 		if(symbolizer instanceof PointSymbolizer){
@@ -69,7 +68,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 		//  can remove null check when all Stlyer types are supported
 		if(optionController != null) {
 			optionController.setMappableItems(mappableItems);
-			dataItem.addListener(optionController);
 		}
 		this.layout();
 		this.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -114,7 +112,6 @@ public class AdvancedGraphicsTab extends ScrolledComposite  {
 	}
 	
 	public void close(){
-		dataItem.removeListener(optionController);
 	}
 
 }
