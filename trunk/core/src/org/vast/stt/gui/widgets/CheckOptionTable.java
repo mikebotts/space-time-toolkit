@@ -30,7 +30,7 @@ import org.vast.stt.project.tree.DataItem;
  *  and bottom panel being a list of OptionControls.  Not sure what I 
  *  should call it.     
  *  
- *  Concrete subclasses include StyleWidget and DataProviderWidget
+ *  Concrete subclasses include SymbolizerWidget and DataProviderWidget
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -58,9 +58,7 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
     protected Button advancedButton;
     protected int span = 3;
 
-
     abstract public OptionChooser createOptionChooser(Composite parent);
-
 
     public void setDataItem(DataItem item)
     {
@@ -69,6 +67,10 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
         enabledButton.setData(dataItem);
         enabledButton.setSelection(dataItem.isEnabled());
         //System.err.println("COT.setDI(): " + dataItem.getName());
+        //  Need a NULL check here, now, because setDataItem is being called before 
+        //  optionController gets instantiated the first time.  (Fix it...)
+//        if(optionChooser.optionController != null)
+//        	optionChooser.optionController.loadFields();
     }
 
 
