@@ -3,8 +3,6 @@ package org.vast.stt.gui.widgets;
 
 import org.eclipse.swt.events.SelectionListener;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -22,7 +20,7 @@ import org.vast.stt.project.tree.DataItem;
  * @date Jul 12, 2006
  * @version 1.0
  */
-public abstract class OptionController implements SelectionListener, STTEventListener
+public abstract class OptionController implements SelectionListener
 {
     protected OptionControl[] optionControls;
     protected Symbolizer symbolizer;
@@ -30,14 +28,6 @@ public abstract class OptionController implements SelectionListener, STTEventLis
 
     abstract public void loadFields();
     
-	public void handleEvent(STTEvent e) {       
-        switch (e.type) {
-            case ITEM_OPTIONS_CHANGED:
-            case ITEM_SYMBOLIZER_CHANGED:
-            	loadFields();
-        }  
-	 }    
-
 	//  TODO  REMOVE THIS METHOD
     public OptionControl[] getControls()
     {
