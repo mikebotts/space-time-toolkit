@@ -19,7 +19,7 @@ import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.ows.OWSQuery;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.om.ObservationReader;
+import org.vast.ows.om.ObservationReaderV0;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSQuery;
 import org.vast.stt.data.BlockList;
@@ -64,7 +64,7 @@ public class SOSProvider extends OWSProvider
             initRequest();  
             
             // create reader
-            ObservationReader reader = new ObservationReader();
+            ObservationReaderV0 reader = new ObservationReaderV0();
             
             // create template request here
             //double time = new DateTime().getJulianTime();
@@ -118,7 +118,7 @@ public class SOSProvider extends OWSProvider
             query.setResponseMode(SOSQuery.ResponseMode.INLINE);
             
 			// create reader
-			ObservationReader reader = new ObservationReader();
+			ObservationReaderV0 reader = new ObservationReaderV0();
 			
             if (canceled)
                 return;
