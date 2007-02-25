@@ -1267,7 +1267,7 @@
                         </member>
                         <member>
                            <DataItem>
-                              <name>TN KGWX Doppler Radar</name>
+                              <name>MS KGWX Doppler Radar</name>
                               <dataProvider xlink:href="#KGWX_SOS"/>
                               <style name="Footprint Grid" xlink:href="#RADAR_FOOTPRINT_GRID"/>
                               <style name="Footprint Points" xlink:href="#RADAR_FOOTPRINT_POINTS"/>                              
