@@ -46,7 +46,8 @@ public class SWEDataHandler implements DataHandler
 	protected Hashtable<DataComponent, UnitConverter> converters;
     protected BlockList blockList;
     protected DataProvider provider;
-	
+	protected boolean firstBlock = true;
+    
 
 	public SWEDataHandler(DataProvider provider)
 	{
@@ -59,10 +60,23 @@ public class SWEDataHandler implements DataHandler
 	{
         this.blockList = blockList;
 	}
+    
+    
+    public void reset()
+    {
+        firstBlock = true;
+    }
 	
 	
 	public void endData(DataComponent info, DataBlock data)
 	{
+	    // clear data node before adding first block
+        if (firstBlock)
+        {
+            provider.getDataNode().clearAll();
+            firstBlock = false;
+        }        
+        
         blockList.addBlock((AbstractDataBlock)data);
         provider.dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 	}

@@ -105,6 +105,7 @@ public class SOSProvider extends OWSProvider
     }
 	
 	
+    @Override
 	public void updateData() throws DataException
 	{
 		// init DataNode if not done yet
@@ -131,9 +132,10 @@ public class SOSProvider extends OWSProvider
                 return;
                 
 			// parse response
+            dataHandler.reset();
 			reader.parse(dataStream);
 			dataParser = reader.getDataParser();
-        	dataParser.setDataHandler(dataHandler);
+        	dataParser.setDataHandler(dataHandler);            
         	
             if (canceled)
                 return;

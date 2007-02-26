@@ -117,9 +117,7 @@ public abstract class AbstractProvider implements DataProvider
                 do
                 {
                     try
-                    {
-                        // clear previous data
-                        clearData();                                
+                    {                             
                         canceled = false;
                         
                         synchronized(lock)

@@ -241,13 +241,6 @@ public abstract class TiledMapProvider extends AbstractProvider
     }
     
     
-    @Override
-    public void clearData()
-    {
-        
-    }
-    
-    
     /**
      * Removes children data when lower level of details
      * is shown.
