@@ -113,6 +113,7 @@ public class SWEProvider extends AbstractProvider
 			dataParser = reader.getDataParser();
 						
 			// register the CDM data handler
+            dataHandler.reset();
 			dataParser.setDataHandler(dataHandler);
             
             // override resultUri if specified in data set
