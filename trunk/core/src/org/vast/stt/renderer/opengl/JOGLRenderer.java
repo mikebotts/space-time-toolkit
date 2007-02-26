@@ -188,6 +188,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     {
         // clear back buffer
         Color backColor = view.getBackgroundColor();
+        gl.glClearStencil(0);
         gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
@@ -301,7 +302,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
                     continue;
                 
                 selectableItems.put(nextItem.hashCode(), nextItem);
-                drawItem(nextItem);
+                drawItem(sc, nextItem);
             }
         }
         
@@ -356,7 +357,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            try {drawItem(nextItem);}
+            try {drawItem(sc, nextItem);}
             catch (RuntimeException e) {e.printStackTrace();}
         }
 
@@ -378,11 +379,49 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     }
     
     
-    protected void drawItem(SceneItem sceneItem)
+    protected void drawItem(WorldScene scene, SceneItem sceneItem)
     {
         resetZOffset = false;
         gl.glLoadName(sceneItem.hashCode());
-        sceneItem.accept(this);
+        
+        // draw all masks attached to this item
+        if (sceneItem.getDataItem().hasMask())
+        {
+            // disable writing in color and depth buffers
+            gl.glColorMask(false, false, false, false);             
+            gl.glDepthMask(false);
+
+            // setup stencil test to always pass
+            gl.glEnable(GL.GL_STENCIL_TEST);
+            gl.glStencilFunc(GL.GL_ALWAYS, 1, 1);
+            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_REPLACE);
+            
+            // draw all mask items
+            drawROI(scene, false);
+            
+            // setup stencil to draw only when stencil buffer is 1
+            gl.glStencilFunc(GL.GL_EQUAL, 1, 1);
+            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+            
+            // reenable writing in color and depth buffer
+            gl.glDepthMask(true);
+            gl.glColorMask(true, true, true, true);
+        }
+        
+        // loop through all stylers for this item
+        for (int i = 0; i < sceneItem.getStylers().size(); i++)
+        {
+            DataStyler nextStyler = sceneItem.getStylers().get(i);
+            if (nextStyler.getSymbolizer().isEnabled())
+                nextStyler.accept(this);
+        }
+        
+        // clear stencil buffer and disable stencil
+        if (sceneItem.getDataItem().hasMask())
+        {
+            gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
+            gl.glDisable(GL.GL_STENCIL_TEST);
+        }
     }
     
     

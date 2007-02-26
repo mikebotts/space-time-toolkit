@@ -178,7 +178,9 @@ public class DataTreeReader extends XMLReader
         DataProvider provider = readDataProvider(dom, providerElt);
         dataItem.setDataProvider(provider);
 		
-		// style/symbolizer list
+        ///////////////////////////
+		// style/symbolizer list //
+        ///////////////////////////
 		NodeList symElts = dom.getElements(dataItemElt, "style");
 		int listSize = symElts.getLength();
 		
@@ -191,7 +193,24 @@ public class DataTreeReader extends XMLReader
                 dataItem.getSymbolizers().add(symbolizer);
         }
         
-        // event list
+        ///////////////
+        // mask list //
+        ///////////////
+        NodeList maskElts = dom.getElements(dataItemElt, "mask");
+        listSize = maskElts.getLength();
+        
+        // read all masks
+        for (int i=0; i<listSize; i++)
+        {
+            Element itemElt = (Element)maskElts.item(i);
+            DataItem maskItem = readMask(dom, itemElt);
+            if (dataItem != null)
+                dataItem.getMasks().add(maskItem);
+        }
+        
+        ////////////////
+        // event list //
+        ////////////////
         NodeList eventElts = dom.getElements(dataItemElt, "event");
         listSize = eventElts.getLength();
         
@@ -283,6 +302,28 @@ public class DataTreeReader extends XMLReader
         }
         
         return symbolizer;
+    }
+    
+ 
+    /**
+     * Reads a DataItem used as a mask
+     * @param dom
+     * @param maskElt
+     * @return
+     */
+    public DataItem readMask(DOMHelper dom, Element maskElt)
+    {
+        Element dataItemElt = dom.getFirstChildElement(maskElt);
+        
+        // try to get the item from the list of registered id
+        Object obj = findExistingObject(dom, dataItemElt);
+        if (obj != null)
+            return (DataItem)obj;
+        
+        DataItem maskItem = readDataItem(dom, dataItemElt);
+        registerObjectID(dom, dataItemElt, maskItem);
+        
+        return maskItem;
     }
 
 

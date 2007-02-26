@@ -186,7 +186,7 @@ public class SpatialTilingProvider extends TiledMapProvider
         tileSelector.setSizeRatio(spatialExtent.getXTiles());
         quadTree.accept(tileSelector);
         
-//      first round of cached background items to display
+        // first round of cached background items to display
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);

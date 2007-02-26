@@ -49,7 +49,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	protected DataProvider dataProvider;
     protected STTEventListeners listeners;
     protected List<Symbolizer> symbolizers;
-    protected List<Symbolizer> masks;
+    protected List<DataItem> masks;
     protected List<ItemAction> actions;    
     
     
@@ -58,16 +58,11 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
         listeners = new STTEventListeners(2);
         symbolizers = new ArrayList<Symbolizer>(2); 
         actions = new ArrayList<ItemAction>(1);
+        masks = new ArrayList<DataItem>(1);
 	}
     
     
-    public List<Symbolizer> getSymbolizers()
-    {
-        return this.symbolizers;
-    }
-	
-
-	public String getName()
+    public String getName()
 	{
 		return name;
 	}
@@ -118,6 +113,24 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
     public boolean hasEvent()
     {
         return !actions.isEmpty();
+    }
+    
+    
+    public boolean hasMask()
+    {
+        return !masks.isEmpty();
+    }
+    
+    
+    public List<Symbolizer> getSymbolizers()
+    {
+        return this.symbolizers;
+    }
+    
+    
+    public List<DataItem> getMasks()
+    {
+        return masks;
     }
     
     

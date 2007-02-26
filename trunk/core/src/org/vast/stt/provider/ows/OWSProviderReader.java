@@ -76,8 +76,6 @@ public class OWSProviderReader extends XMLReader implements XMLModuleReader
             String serviceType = query.getService();
             if (serviceType.equals("SOS"))
                 provider = new SOSProvider();                           
-            else if (serviceType.equals("WMS"))
-                provider = new WMSProvider();
             
             provider.setQuery(query);
             

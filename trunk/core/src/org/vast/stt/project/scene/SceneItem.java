@@ -26,7 +26,6 @@ import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.SceneRenderer.CleanupSection;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
-import org.vast.stt.style.StylerVisitor;
 
 
 /**
@@ -272,16 +271,5 @@ public class SceneItem implements STTEventListener
         if (visible)
             parentScene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED));
     }
-    
-    
-    public void accept(StylerVisitor visitor)
-    {
-        // loop through all stylers for this item
-        for (int i = 0; i < stylers.size(); i++)
-        {
-            DataStyler nextStyler = stylers.get(i);
-            if (nextStyler.getSymbolizer().isEnabled())
-                nextStyler.accept(visitor);
-        }
-    }
+
 }
