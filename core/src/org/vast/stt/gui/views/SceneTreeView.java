@@ -59,7 +59,8 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 {
 	public static final String ID = "STT.SceneTreeView";
 	private TreeViewer sceneTree;
-	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg, tableImg, chartImg, globeImg;
+	private Image itemVisImg, itemHidImg, itemErrImg, folderVisImg, folderHidImg;
+    private Image maskVisImg, maskHidImg, tableImg, chartImg, globeImg;
     private ImageDescriptor fitSceneImg, fitItemImg;
 	private Font treeFont;
 	private Object[] expandedItems;
@@ -89,10 +90,20 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
                 if (item.getDataProvider() == null || item.getDataProvider().hasError())
                     return itemErrImg;
                 
-                if (parentScene.isItemVisible(item))
-                    return itemVisImg;
+                if (item.getOptions().get(DataEntry.MASK) != null)
+                {
+                    if (parentScene.isItemVisible(item))
+                        return maskVisImg;
+                    else
+                        return maskHidImg;
+                }
                 else
-                    return itemHidImg;
+                {
+                    if (parentScene.isItemVisible(item))
+                        return itemVisImg;
+                    else
+                        return itemHidImg;
+                }
             }
             else if (element instanceof Scene)
             {
@@ -148,6 +159,10 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
             {
                 return ((DataFolder)parentElement).toArray();
             }
+            else if (parentElement instanceof DataItem)
+            {
+                return (((DataItem)parentElement).getMasks()).toArray();
+            }
             else
                 return null;
 		}
@@ -159,8 +174,12 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 
 		public boolean hasChildren(Object element)
 		{
-			if (element instanceof Scene || element instanceof DataFolder)
+			if (element instanceof Scene)
 				return true;
+            else if (element instanceof DataFolder)
+                return true;
+            else if (element instanceof DataItem)
+                return (((DataItem)element).hasMask());
 			else
 				return false;
 		}
@@ -209,6 +228,10 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
         folderVisImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/folderHid.gif");
         folderHidImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/maskVis.gif");
+        maskVisImg = descriptor.createImage();
+        descriptor = STTPlugin.getImageDescriptor("icons/maskHid.gif");
+        maskHidImg = descriptor.createImage();        
         descriptor = STTPlugin.getImageDescriptor("icons/table.gif");
         tableImg = descriptor.createImage();
         descriptor = STTPlugin.getImageDescriptor("icons/chart.gif");
@@ -359,7 +382,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
                     SceneItem item = scene.findItem((DataItem)selectedEntry);
                     if (item != null && item.isVisible())
                     {
-                        scene.getSelectedItems().add(item);                    
+                        scene.getSelectedItems().add(item);
                     }
                 }
             }

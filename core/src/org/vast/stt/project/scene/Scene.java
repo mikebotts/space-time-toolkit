@@ -20,6 +20,7 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.AbstractDisplay;
 import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataItem;
@@ -48,11 +49,13 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
     protected RendererType renderer;
     protected ArrayList<SceneItem> sceneItems;
     protected ArrayList<SceneItem> selectedItems;
+    protected ArrayList<SceneItem> maskItems;
     
 
     public Scene()
     {
         sceneItems = new ArrayList<SceneItem>();
+        maskItems = new ArrayList<SceneItem>();
         selectedItems = new ArrayList<SceneItem>(1);
     }
     
@@ -120,6 +123,14 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
                 return nextItem;
         }
         
+        // try to find entry in maskItems list
+        for (int i=0; i<maskItems.size(); i++)
+        {
+            SceneItem nextItem = maskItems.get(i);
+            if (nextItem.getDataItem() == dataItem)
+                return nextItem;
+        }
+        
         return null;
     }
     
@@ -144,6 +155,49 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
     
     
     /**
+     * Looks up for existing SceneItem in table or create a new one if needed
+     * Item will be added to maskItems list if mask=true, otherwise to sceneItems list
+     * @param dataItem
+     * @param mask
+     * @return
+     */
+    protected SceneItem lookupSceneItem(DataItem dataItem)
+    {
+        SceneItem sceneItem = findItem(dataItem);
+        if (sceneItem != null)
+            return sceneItem;        
+        
+        // if not found create a new SceneItem
+        SceneItem newSceneItem = new SceneItem(this);
+        newSceneItem.setDataItem(dataItem);
+        
+        // prepare all stylers
+        List<Symbolizer> symbolizers = dataItem.getSymbolizers();
+        for (int i=0; i<symbolizers.size(); i++)
+            newSceneItem.updateStyler(symbolizers.get(i));
+        
+        // add new scene items to rendering list
+        if (dataItem.getOptions().get(DataEntry.MASK) != null)
+            maskItems.add(newSceneItem);
+        else
+            sceneItems.add(newSceneItem);
+        
+        // recursively call this to handle mask items
+        List<DataItem> maskItems = dataItem.getMasks();
+        for (int i=0; i<maskItems.size(); i++)
+        {
+            DataItem maskDataItem = maskItems.get(i);
+            SceneItem maskItem = lookupSceneItem(maskDataItem);
+            newSceneItem.getMaskItems().add(maskItem);
+            if (maskDataItem.isEnabled())
+                maskItem.setVisible(true);
+        }        
+        
+        return newSceneItem;
+    }
+    
+    
+    /**
      * Sets item visibility to the specified value
      * Also creates a SceneItem if not created yet
      * @param dataItem
@@ -151,27 +205,8 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
      */
     public void setItemVisibility(DataItem dataItem, boolean visible)
     {       
-        SceneItem sceneItem = findItem(dataItem);
-        
-        if (sceneItem != null)
-        {
-            sceneItem.setVisible(visible);
-        }
-        else
-        {
-            // if not found create a new SceneItem
-            SceneItem newSceneItem = new SceneItem(this);
-            newSceneItem.setDataItem(dataItem);
-            newSceneItem.setVisible(visible);
-            
-            // prepare all stylers
-            List<Symbolizer> symbolizers = dataItem.getSymbolizers();
-            for (int i=0; i<symbolizers.size(); i++)
-                newSceneItem.updateSymbolizer(symbolizers.get(i));
-            
-            // add new scene items to rendering list
-            sceneItems.add(newSceneItem);
-        }
+        SceneItem sceneItem = lookupSceneItem(dataItem);
+        sceneItem.setVisible(visible);
     }
     
     
@@ -182,7 +217,7 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
      */
     public void setItemVisibility(DataFolder folder, boolean visible)
     {
-        Iterator<DataItem> it = folder.getItemIterator();        
+        Iterator<DataItem> it = folder.getItemIterator();
         while (it.hasNext())
         {
             DataItem nextItem = it.next();
@@ -198,13 +233,9 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
      */
     public boolean isItemVisible(DataItem dataItem)
     {
-        for (int i=0; i<sceneItems.size(); i++)
-        {
-            SceneItem nextItem = sceneItems.get(i);
-            if (nextItem.getDataItem() == dataItem && nextItem.isVisible())
-                return true;
-        }
-        
+        SceneItem item = findItem(dataItem);
+        if (item != null && item.isVisible())
+            return true;        
         return false;
     }
     

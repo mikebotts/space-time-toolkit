@@ -187,8 +187,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     protected void setupMatrices(ViewSettings view)
     {
         // clear back buffer
-        Color backColor = view.getBackgroundColor();
-        gl.glClearStencil(0);
+        Color backColor = view.getBackgroundColor();        
         gl.glClearColor(backColor.getRedValue(), backColor.getGreenValue(), backColor.getBlueValue(), 1.0f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
@@ -382,31 +381,12 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     protected void drawItem(WorldScene scene, SceneItem sceneItem)
     {
         resetZOffset = false;
-        gl.glLoadName(sceneItem.hashCode());
         
         // draw all masks attached to this item
         if (sceneItem.getDataItem().hasMask())
-        {
-            // disable writing in color and depth buffers
-            gl.glColorMask(false, false, false, false);             
-            gl.glDepthMask(false);
-
-            // setup stencil test to always pass
-            gl.glEnable(GL.GL_STENCIL_TEST);
-            gl.glStencilFunc(GL.GL_ALWAYS, 1, 1);
-            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_REPLACE);
-            
-            // draw all mask items
-            drawROI(scene, false);
-            
-            // setup stencil to draw only when stencil buffer is 1
-            gl.glStencilFunc(GL.GL_EQUAL, 1, 1);
-            gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
-            
-            // reenable writing in color and depth buffer
-            gl.glDepthMask(true);
-            gl.glColorMask(true, true, true, true);
-        }
+            drawMasks(scene, sceneItem);
+        
+        gl.glLoadName(sceneItem.hashCode());
         
         // loop through all stylers for this item
         for (int i = 0; i < sceneItem.getStylers().size(); i++)
@@ -418,10 +398,55 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         
         // clear stencil buffer and disable stencil
         if (sceneItem.getDataItem().hasMask())
-        {
-            gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
             gl.glDisable(GL.GL_STENCIL_TEST);
+    }
+    
+    
+    protected void drawMasks(WorldScene scene, SceneItem sceneItem)
+    {
+        boolean maskVisible = false;
+        
+        // loop through to masks to see if at least one is active
+        List<SceneItem> maskItems = sceneItem.getMaskItems();
+        for (int i=0; i<maskItems.size(); i++)
+            if (maskItems.get(i).isVisible())
+            {
+                maskVisible = true;
+                break;
+            }
+        
+        // return if none of the masks are visible
+        if (!maskVisible)
+            return;
+            
+        // disable writing in color and depth buffers
+        gl.glDepthMask(false);
+        gl.glColorMask(false, false, false, false);             
+        
+        // clear stencil buffer
+        gl.glClearStencil(0);
+        gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
+        
+        // setup stencil test to always pass
+        gl.glEnable(GL.GL_STENCIL_TEST);
+        gl.glStencilFunc(GL.GL_ALWAYS, 1, 1);
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_REPLACE);
+        
+        // draw all mask items
+        for (int i=0; i<maskItems.size(); i++)
+        {
+            SceneItem maskItem = maskItems.get(i);
+            if (maskItem.isVisible())
+                drawItem(scene, maskItem);
         }
+        
+        // setup stencil to draw only when stencil buffer is 1
+        gl.glStencilFunc(GL.GL_EQUAL, 1, 1);
+        gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+        
+        // reenable writing in color and depth buffer
+        gl.glDepthMask(true);
+        gl.glColorMask(true, true, true, true);
     }
     
     
@@ -582,7 +607,6 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        //gl.glBl
         
         // set up a light
 //        gl.glEnable(GL.GL_LIGHTING);

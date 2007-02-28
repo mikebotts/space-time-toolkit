@@ -314,15 +314,9 @@ public class DataTreeReader extends XMLReader
     public DataItem readMask(DOMHelper dom, Element maskElt)
     {
         Element dataItemElt = dom.getFirstChildElement(maskElt);
-        
-        // try to get the item from the list of registered id
-        Object obj = findExistingObject(dom, dataItemElt);
-        if (obj != null)
-            return (DataItem)obj;
-        
         DataItem maskItem = readDataItem(dom, dataItemElt);
-        registerObjectID(dom, dataItemElt, maskItem);
-        
+        maskItem.getOptions().put(DataEntry.MASK, true);
+        maskItem.setName(dom.getElementValue(dataItemElt, "name"));
         return maskItem;
     }
 

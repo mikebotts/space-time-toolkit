@@ -17,6 +17,9 @@ package org.vast.stt.project.tree;
  */
 public interface DataEntry
 {
+    public final static String MASK = "mask";
+    
+    
     public String getName();
 
 

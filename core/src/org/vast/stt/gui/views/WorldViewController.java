@@ -77,7 +77,6 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         DataItem selectedItem = scene.getSelectedItems().get(0).getDataItem();
         DataProvider provider = selectedItem.getDataProvider();
         STTSpatialExtent bbox = provider.getSpatialExtent();
-        provider.setEnabled(false);
         
         Projection projection = scene.getViewSettings().getProjection();
         boolean found = projection.pointOnMap(x1, y1, scene, P0);
@@ -141,7 +140,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         }
         
         // send event to update spatial extent listeners
-        bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+        //provider.setEnabled(false);
+        //bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+        // commented out because it would cause other providers subscribed to this bbox to redraw
     }
 	
 
@@ -222,7 +223,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         {
             // trigger provider refresh when button is released
             DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
-            provider.setEnabled(true);
+            //provider.setEnabled(true);
             provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
         }
         
