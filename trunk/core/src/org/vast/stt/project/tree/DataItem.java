@@ -50,7 +50,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
     protected STTEventListeners listeners;
     protected List<Symbolizer> symbolizers;
     protected List<DataItem> masks;
-    protected List<ItemAction> actions;    
+    protected List<ItemAction> actions;
     
     
     public DataItem()
@@ -59,6 +59,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
         symbolizers = new ArrayList<Symbolizer>(2); 
         actions = new ArrayList<ItemAction>(1);
         masks = new ArrayList<DataItem>(1);
+        options = new Hashtable<String, Object>();
 	}
     
     
@@ -105,7 +106,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	{
 		this.enabled = enabled;
         
-        if (dataProvider != null)
+        if (dataProvider != null && enabled == true)
             dataProvider.setEnabled(enabled);
 	}
     

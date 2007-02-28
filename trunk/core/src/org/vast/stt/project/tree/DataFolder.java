@@ -105,6 +105,13 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
                 if (found)
                     return true;
             }
+            
+            else if (nextEntry instanceof DataItem)
+            {
+                boolean found = ((DataItem)nextEntry).getMasks().contains(item);
+                if (found)
+                    return true;
+            }
         }
         
         return false;

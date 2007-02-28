@@ -15,6 +15,8 @@ package org.vast.stt.project.scene;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -46,7 +48,8 @@ public class SceneItem implements STTEventListener
 {
     protected Scene<? extends SceneRenderer> parentScene;
     protected DataItem dataItem;
-    protected ArrayList<DataStyler> stylers;
+    protected List<DataStyler> stylers;    
+    protected List<SceneItem> maskItems;
     protected Hashtable<Symbolizer, DataStyler> stylerTable;
     protected boolean visible;
 
@@ -54,6 +57,7 @@ public class SceneItem implements STTEventListener
     public SceneItem(Scene<? extends SceneRenderer> scene)
     {
         stylers = new ArrayList<DataStyler>(1);
+        maskItems = new ArrayList<SceneItem>(1);
         stylerTable = new Hashtable<Symbolizer, DataStyler>();
         parentScene = scene;
     }
@@ -115,9 +119,15 @@ public class SceneItem implements STTEventListener
     }
 
 
-    public ArrayList<DataStyler> getStylers()
+    public List<DataStyler> getStylers()
     {
         return stylers;
+    }
+    
+    
+    public List<SceneItem> getMaskItems()
+    {
+        return maskItems;
     }
     
     
@@ -202,11 +212,11 @@ public class SceneItem implements STTEventListener
     
     
     /**
-     * Update this symbolizer after a change/addition/deletion
-     * For deletion, styler must first be disabled.
+     * Update this styler after a change/addition/deletion
+     * For deletion, symbolizer must first be disabled.
      * @param sym
      */
-    protected void updateSymbolizer(Symbolizer sym)
+    protected void updateStyler(Symbolizer sym)
     {
         // try to find corresponding styler
         DataStyler styler = stylerTable.get(sym);
@@ -251,7 +261,7 @@ public class SceneItem implements STTEventListener
         {
             case ITEM_SYMBOLIZER_CHANGED:
                 Symbolizer symbolizer = (Symbolizer)event.source;
-                updateSymbolizer(symbolizer);
+                updateStyler(symbolizer);
                 break;
                             
             case PROVIDER_DATA_CLEARED:
