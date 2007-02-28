@@ -106,7 +106,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	{
 		this.enabled = enabled;
         
-        if (dataProvider != null && enabled == true)
+        if (dataProvider != null)
             dataProvider.setEnabled(enabled);
 	}
     
