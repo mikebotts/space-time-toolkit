@@ -28,8 +28,7 @@ public class BasicPolygonController extends OptionController
 	
 	public BasicPolygonController(Composite parent, PolygonSymbolizer symbolizer){
 		this.symbolizer = symbolizer;
-
-		//polygonOptionHelper = new PolygonOptionHelper(this);
+		polygonOptionHelper = new PolygonOptionHelper(this);
 		buildControls(parent);
 	}
 
