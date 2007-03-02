@@ -68,8 +68,8 @@ public class GLRenderBBOX
         view = scene.getViewSettings();
         
         // compute grid dimensions and step in rads
-        int gridWidth = 10;
-        int gridLength = 10;        
+        int gridWidth = 24;
+        int gridLength = 24;        
         double minY = extent.getMinY() * DTR;
         double maxY = extent.getMaxY() * DTR;
         double minX = extent.getMinX() * DTR;
@@ -139,10 +139,13 @@ public class GLRenderBBOX
         
         // compute handle size
         // compute screen diagonal size in world coordinates
+        int viewWidth = renderer.getViewWidth();
+        int viewHeight = renderer.getViewHeight();
         renderer.unproject(0, 0, 0, screenCorner1);
-        renderer.unproject(renderer.getViewWidth(), renderer.getViewHeight(), 0, screenCorner2);
+        renderer.unproject(viewWidth, viewHeight, 0, screenCorner2);
         screenCorner1.sub(screenCorner2);
-        double screenSize = screenCorner1.length();
+        double screenWorldSize = screenCorner1.length();
+        double screenPixelSize = Math.sqrt(viewWidth*viewWidth + viewHeight*viewHeight);
         
         // compute bbox diagonal size in world coordinates
         point.x = minX;
@@ -162,10 +165,13 @@ public class GLRenderBBOX
         bboxCorner1.sub(bboxCorner2);
         double bboxSize = bboxCorner1.length();
         
-        // draw handles
-        double s = Math.sqrt(dX*dX+dY*dY)/20;
-        s *= screenSize/bboxSize;
+        // compute handle size
+        dX = (maxX - minX);
+        dY = (maxY - minY);
+        double s = Math.sqrt(dX*dX+dY*dY)*5/bboxSize;
+        s *= screenWorldSize/screenPixelSize;
         
+        // draw handles
         for (int g=0; g<2; g++)
         {
             for (int i=0; i<5; i++)
