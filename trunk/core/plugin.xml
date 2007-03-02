@@ -55,6 +55,7 @@
          <action class="org.vast.stt.actions.ViewMenu" id="STT.CloneScene2" label="Clone Scene2" menubarPath="STT.ViewMenu/group1"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectLLA" label="LLA" menubarPath="STT.ViewMenu/group2" style="radio"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectECEF" label="ECEF" menubarPath="STT.ViewMenu/group2" style="radio"/>
+         <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectMERC" label="Mercator" menubarPath="STT.ViewMenu/group2" style="radio"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowWorldView" label="Show World View" menubarPath="STT.ViewMenu/group3"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneTreeView" label="Show Scene Tree" menubarPath="STT.ViewMenu/group3"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneItemsView" label="Show Scene Items" menubarPath="STT.ViewMenu/group3"/>
