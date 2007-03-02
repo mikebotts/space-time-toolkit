@@ -153,8 +153,9 @@ public class SMLProvider extends AbstractProvider
                         if (canceled)
                             return;
                         
-                        // clear data node
-                        dataNode.clearAll();
+                        // clear data node before first tile
+                        if (i == 0 & j == 0)
+                            dataNode.clearAll();
                         
                         // transfer block for each output
                         for (int c=0; c<blockListArray.size(); c++)
