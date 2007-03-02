@@ -22,7 +22,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
-import org.vast.stt.project.tree.DataEntry;
+import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -93,7 +93,9 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     @Override
     public void createPartControl(Composite parent)
     {
+        // listen to selection events from both tree views
         getSite().getPage().addPostSelectionListener(SceneTreeView.ID, this);
+        getSite().getPage().addPostSelectionListener(SceneItemsView.ID, this);
         
         // trigger a selection event so we can update ourselves
         SceneTreeView treeView = (SceneTreeView)getSite().getPage().findView(SceneTreeView.ID);
@@ -129,7 +131,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
 	 */
     public void selectionChanged(IWorkbenchPart part, ISelection selection)
 	{
-		if (part != null && (part instanceof SceneTreeView || part instanceof SceneItemsView))
+		if (part != null)
 		{
 		    // handle case of null selection
             if (selection == null)
@@ -138,16 +140,22 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
                 clearView();
             }
             
-            DataEntry selectedEntry = (DataEntry)((IStructuredSelection)selection).getFirstElement();
-			if (selectedEntry instanceof DataItem)
+            Object selectedObj = ((IStructuredSelection)selection).getFirstElement();
+			if (selectedObj instanceof DataItem)
             {
-			    DataItem selectedItem = (DataItem)selectedEntry;
+			    DataItem selectedItem = (DataItem)selectedObj;
+                setDataItem(selectedItem);
+                refreshView();
+            }
+            if (selectedObj instanceof SceneItem)
+            {
+                DataItem selectedItem = ((SceneItem)selectedObj).getDataItem();
                 setDataItem(selectedItem);
                 refreshView();
             }
             else
             {
-                setDataItem(null);
+                item = null;
                 clearView();
             }
 		}		

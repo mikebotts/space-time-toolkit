@@ -112,18 +112,30 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
 	@Override
 	public void createPartControl(Composite parent)
 	{
-		TreeLabelProvider labelProvider = new TreeLabelProvider();
-		TreeContentProvider contentProvider = new TreeContentProvider();
-		sceneTree = new TreeViewer(parent, SWT.SINGLE);
-		sceneTree.setLabelProvider(labelProvider);
-		sceneTree.setContentProvider(contentProvider);
-		sceneTree.addDoubleClickListener(this);
+	    // setup tree viewer and its providers
+        TreeLabelProvider labelProvider = new TreeLabelProvider();
+        TreeContentProvider contentProvider = new TreeContentProvider();
+        sceneTree = new TreeViewer(parent, SWT.SINGLE);
+        sceneTree.setLabelProvider(labelProvider);
+        sceneTree.setContentProvider(contentProvider);
+        
+        // listen to double clicks (toggle visibility)
+        sceneTree.addDoubleClickListener(this);
+        
+        // listen to selection to update scene selection
+        sceneTree.addSelectionChangedListener(this);
+        
+        // listen to part cycle events for enabling/disabling refresh when view is hidden
         getSite().getPage().addPartListener(this);
+        
+        // register as selection provider to send selection to other views
+        getSite().setSelectionProvider(sceneTree);
+        
+        // add drag & drop support for reordering items
         int ops = DND.DROP_COPY | DND.DROP_MOVE;
         Transfer [] dropfers = new Transfer[] { STTDndTransfer.getInstance()};        
         sceneTree.addDragSupport(0, dropfers, new SceneItemsDragListener(sceneTree));
-        sceneTree.addDropSupport(ops, dropfers, new SceneItemsDropListener(sceneTree));
-        sceneTree.addSelectionChangedListener(this);
+        sceneTree.addDropSupport(ops, dropfers, new SceneItemsDropListener(sceneTree));        
 	}
 	
 	
@@ -215,12 +227,5 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
-    }
-
-
-    @Override
-    public void setFocus()
-    {
-        refreshViewAsync();
     }
 }

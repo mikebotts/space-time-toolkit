@@ -194,19 +194,29 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
 	@Override
 	public void createPartControl(Composite parent)
 	{
-		TreeLabelProvider labelProvider = new TreeLabelProvider();
+		// setup tree viewer and its providers
+        TreeLabelProvider labelProvider = new TreeLabelProvider();
 		TreeContentProvider contentProvider = new TreeContentProvider();
 		sceneTree = new TreeViewer(parent, SWT.SINGLE);
 		sceneTree.setLabelProvider(labelProvider);
 		sceneTree.setContentProvider(contentProvider);
+        
+        // listen to double clicks (toggle visibility)
 		sceneTree.addDoubleClickListener(this);
-		//  add SceneTreeView as a LayerTree Drop listener
+        
+        // listen to selection to update scene selection
+        sceneTree.addSelectionChangedListener(this);
+        
+        // listen to part cycle events for enabling/disabling refresh when view is hidden
+        getSite().getPage().addPartListener(this);
+        
+        // register as selection provider to send selection to other views
+        getSite().setSelectionProvider(sceneTree);
+        
+		// add drop support for adding new items
 		int ops = DND.DROP_COPY | DND.DROP_MOVE;
 	    Transfer [] dropfers = new Transfer[] { LayerTransfer.getInstance()};
-	    sceneTree.addDropSupport(ops, dropfers, new SceneTreeDropListener(sceneTree));
-        sceneTree.addSelectionChangedListener(this);
-        getSite().getPage().addPartListener(this);
-		getSite().setSelectionProvider(sceneTree);
+	    sceneTree.addDropSupport(ops, dropfers, new SceneTreeDropListener(sceneTree));        
 	}
 	
 	

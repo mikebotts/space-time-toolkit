@@ -153,13 +153,6 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
 
 
     @Override
-    public void setFocus()
-    {
-        //refreshViewAsync();
-    }
-
-
-    @Override
     public void dispose()
     {
         if (scene != null)
@@ -173,6 +166,13 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
         }
 
         super.dispose();
+    }
+    
+    
+    @Override
+    public void setFocus()
+    {
+        refreshViewAsync();        
     }
 
 
@@ -230,5 +230,6 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
 
     public void partInputChanged(IWorkbenchPartReference partRef)
     {
-    }    
+    }
+    
 }
