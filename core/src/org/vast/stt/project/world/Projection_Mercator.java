@@ -97,10 +97,10 @@ public class Projection_Mercator implements Projection
     
     public void clip(PrimitiveGraphic point)
     {
-        // adjust longitude to -PI:PI range
+        // clip longitude to -PI:PI range
         point.x = adjustX(point.x);
         
-        // adjust latitude to PI range
+        // clip latitude to PI range
         point.y = adjustY(point.y);
     }
     

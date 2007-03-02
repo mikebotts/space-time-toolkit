@@ -115,10 +115,13 @@ public class WorldScene extends Scene<SceneRenderer<WorldScene>>
         switch (event.type)
         {
             case SCENE_PROJECTION_CHANGED:
+                // project geometry of all items and masks
                 for (int i = 0; i < sceneItems.size(); i++)
                     sceneItems.get(i).setProjection(viewSettings.getProjection());
                 for (int i = 0; i < maskItems.size(); i++)
-                    maskItems.get(i).setProjection(viewSettings.getProjection());
+                    maskItems.get(i).setProjection(viewSettings.getProjection());                
+                // forward event for scene fit and redraw
+                dispatchEvent(event.copy());                
                 break;
                 
             case SCENE_VIEW_CHANGED:

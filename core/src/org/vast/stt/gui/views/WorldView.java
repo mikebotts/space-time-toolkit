@@ -29,6 +29,7 @@ import org.eclipse.ui.PartInitException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 
 
@@ -208,6 +209,22 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             case SCENE_ITEM_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
                 refreshViewAsync();
+                break;
+                
+            case SCENE_PROJECTION_CHANGED:
+                // fit view to scene
+                // create fit runnable for async exec
+                Runnable runFitScene = new Runnable()
+                {
+                    public void run()
+                    {
+                        ViewSettings view = scene.getViewSettings();
+                        view.getProjection().fitViewToBbox(scene.getBoundingBox(), scene, true);
+                        refreshView();
+                    }
+                };                
+                getSite().getShell().getDisplay().syncExec(runFitScene);
+                break;
         }
     }
     
