@@ -102,10 +102,10 @@ public class Projection_LLA implements Projection
     
     public void clip(PrimitiveGraphic point)
     {
-        // adjust longitude to TWO_PI range
+        // clip longitude to TWO_PI range
         point.x = adjustLongitude(point.x);
         
-        // adjust latitude to PI range
+        // clip latitude to PI range
         point.y = adjustLatitude(point.y);
     }
     

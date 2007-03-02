@@ -11,13 +11,13 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
-import org.vast.stt.commands.FitView;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.Projection_LLA;
+import org.vast.stt.project.world.Projection_Mercator;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
 
@@ -98,28 +98,31 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
                 }
             }
         }
-        else if (actionID.endsWith("ProjectECEF"))
+        else if (action.isChecked() && actionID.endsWith("ProjectECEF"))
         {
             if (pageInput != null)
             {
                 ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
-                currentScene.getRenderer().drawScene(currentScene);
-                FitView fit = new FitView(((WorldScene)currentScene));
-                fit.execute();
             }
         }
-        else if (actionID.endsWith("ProjectLLA"))
+        else if (action.isChecked() && actionID.endsWith("ProjectLLA"))
         {
             if (pageInput != null)
             {
                 ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
                 viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
-                currentScene.getRenderer().drawScene(currentScene);
-                FitView fit = new FitView(((WorldScene)currentScene));
-                fit.execute();
+            }
+        }
+        else if (action.isChecked() && actionID.endsWith("ProjectMERC"))
+        {
+            if (pageInput != null)
+            {
+                ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
+                viewSettings.setProjection(new Projection_Mercator());
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
             }
         }
         else if (actionID.startsWith("STT.Show"))
