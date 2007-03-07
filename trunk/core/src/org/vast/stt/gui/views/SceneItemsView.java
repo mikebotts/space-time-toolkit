@@ -13,16 +13,13 @@
 
 package org.vast.stt.gui.views;
 
-import java.util.Iterator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -42,7 +39,7 @@ import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 
 
-public class SceneItemsView extends SceneView<WorldScene> implements ISelectionChangedListener, IDoubleClickListener
+public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneItemsView";
 	private TreeViewer sceneTree;
@@ -122,9 +119,6 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
         // listen to double clicks (toggle visibility)
         sceneTree.addDoubleClickListener(this);
         
-        // listen to selection to update scene selection
-        sceneTree.addSelectionChangedListener(this);
-        
         // listen to part cycle events for enabling/disabling refresh when view is hidden
         getSite().getPage().addPartListener(this);
         
@@ -192,29 +186,6 @@ public class SceneItemsView extends SceneView<WorldScene> implements ISelectionC
     public void clearView()
     {
         sceneTree.setInput(null);
-    }
-    
-    
-    public void selectionChanged(SelectionChangedEvent event)
-    {
-        ISelection selection = event.getSelection();
-        scene.getSelectedItems().clear();
-        
-        // handle case of null selection
-        if (selection != null)
-        {        
-            Iterator iterator = ((IStructuredSelection)selection).iterator();
-            while (iterator.hasNext())
-            {
-                SceneItem selectedItem = (SceneItem)iterator.next();
-                if (selectedItem != null && ((SceneItem)selectedItem).isVisible())
-                {
-                    scene.getSelectedItems().add(selectedItem);                    
-                }
-            }
-        }
-        
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
     }
 
 

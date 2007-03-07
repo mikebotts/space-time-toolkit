@@ -378,27 +378,36 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
     public void selectionChanged(SelectionChangedEvent event)
     {
         ISelection selection = event.getSelection();
-        scene.getSelectedItems().clear();
         
-        // handle case of null selection
+        // clear selected items in all scenes
+        for (int i=0; i<allScenes.size(); i++)
+            allScenes.get(i).getSelectedItems().clear();
+        
+        // if selection is not null
         if (selection != null)
         {        
+            // iterate through selection items
             Iterator iterator = ((IStructuredSelection)selection).iterator();
             while (iterator.hasNext())
             {
                 DataEntry selectedEntry = (DataEntry)iterator.next();
                 if (selectedEntry instanceof DataItem)
                 {
-                    SceneItem item = scene.findItem((DataItem)selectedEntry);
+                    Scene sc = findParentScene(selectedEntry);
+                    SceneItem item = sc.findItem((DataItem)selectedEntry);
+                    
+                    // add scene item to selected list only if visible
                     if (item != null && item.isVisible())
                     {
-                        scene.getSelectedItems().add(item);
+                        sc.getSelectedItems().add(item);
                     }
                 }
             }
         }
         
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+        // send redraw events to all affected scenes
+        for (int i=0; i<allScenes.size(); i++)
+            allScenes.get(i).dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
     }
 
 
