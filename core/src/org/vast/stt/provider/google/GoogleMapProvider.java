@@ -59,7 +59,7 @@ public class GoogleMapProvider extends TiledMapProvider
     
     public GoogleMapProvider()
     {
-        super(256, 19);
+        super(256, 256, 19);
     }
     
     

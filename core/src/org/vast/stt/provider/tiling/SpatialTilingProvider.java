@@ -68,7 +68,8 @@ public class SpatialTilingProvider extends TiledMapProvider
         selectedItems = new ArrayList<QuadTreeItem>(100);
         deletedItems = new ArrayList<BlockListItem>(100);
         tileSelector = new TiledMapSelector(3, 3, 0, 18);        
-        tileSize = 256;
+        tileWidth = 256;
+        tileHeight = 256;
     }
     
     

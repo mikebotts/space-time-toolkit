@@ -25,7 +25,8 @@ import org.vast.stt.project.world.WorldScene;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Used to update provide using the current scene visible bbox
+ * Used to automatically update provider spatial extent using
+ * the current scene visible bbox
  * </p>
  *
  * <p>Copyright (c) 2005</p>
@@ -60,8 +61,8 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
         
         if (spatialExtent.isTilingEnabled())
         {
-            spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX);
-            spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY);
+            spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX + 1);
+            spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY + 1);
         }
     }
     

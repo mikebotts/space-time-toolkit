@@ -53,7 +53,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     protected TiledMapSelector tileSelector;
     protected ArrayList<QuadTreeItem> selectedItems;
     protected ArrayList<BlockListItem> deletedItems;
-    protected int tileSize;
+    protected int tileWidth, tileHeight;
     
     
     protected abstract void getNewTile(QuadTreeItem item);
@@ -64,7 +64,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     }
     
     
-    public TiledMapProvider(int tileSize, int maxLevel)
+    public TiledMapProvider(int tileWidth, int tileHeight, int maxLevel)
 	{
         quadTree = new QuadTree();
         
@@ -81,7 +81,8 @@ public abstract class TiledMapProvider extends AbstractProvider
         deletedItems = new ArrayList<BlockListItem>(100);
         tileSelector = new TiledMapSelector(3, 3, 0, maxLevel);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
-        this.tileSize = tileSize;
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
 	}
 
 
@@ -120,12 +121,12 @@ public abstract class TiledMapProvider extends AbstractProvider
         blockLists[1] = dataNode.createList(gridData);
         //System.out.println(gridData);
         
-        // set tile size in updater
+        // set tile sizes in updater
         SpatialExtentUpdater updater = this.getSpatialExtent().getUpdater();
         if (updater != null)
         {
             if (updater instanceof SceneBboxUpdater)
-                ((SceneBboxUpdater)updater).setTilesize(tileSize, tileSize);
+                ((SceneBboxUpdater)updater).setTilesize(tileWidth, tileHeight);
             updater.update();
         }
         
@@ -163,7 +164,8 @@ public abstract class TiledMapProvider extends AbstractProvider
         deletedItems.clear();        
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
-        tileSelector.setSizeRatio(spatialExtent.getXTiles());
+        double tileRatio = Math.max(spatialExtent.getXTiles(), spatialExtent.getYTiles());
+        tileSelector.setSizeRatio(tileRatio*tileRatio*0.7);
         quadTree.accept(tileSelector);
         
         // first round of cached background items to display

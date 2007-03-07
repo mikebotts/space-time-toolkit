@@ -58,8 +58,7 @@ public class VirtualEarthProvider extends TiledMapProvider
     
     public VirtualEarthProvider()
     {
-        //super(256, 18);
-        super(256, 19);
+        super(256, 256, 19);
     }
     
     
