@@ -1278,34 +1278,27 @@
                                           </sld:Axis>
                                        </sld:Dimensions>
                                        <sld:ChannelSelection>
-                                          <sld:GrayChannel>
+                                          <!--<sld:GrayChannel>
                                              <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                          </sld:GrayChannel>
-                                          <!--
+                                          </sld:GrayChannel>-->
                                           <sld:BlueChannel>
                                              <LookUpTable1D>
-                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 127 88</TableValues>
+                                                <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                                <TableValues>0 0.6 99 0.6 100 0.57 199 0.71 200 0.00 299 0.00 300 0.12 399 0.06 400 0.00 499 0.00 500 0.49 599 0.93 600 1.00 699 0.82 700 1.00 799 1.00 800 0.71 899 0.53 900 0.78 1000 1.00</TableValues>
                                              </LookUpTable1D>
                                           </sld:BlueChannel>
                                           <sld:GreenChannel>
                                              <LookUpTable1D>
-                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 127 88</TableValues>
+                                                <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                                <TableValues>0 0.6 99 0.6 100 0.17 199 0.66 200 0.93 299 0.71 300 0.56 399 0.30 400 0.54 499 0.79 500 1.00 599 0.93 600 0.84 699 0.54 700 0.49 799 0.00 800 0.00 899 0.00 900 0.00 1000 1.00</TableValues>
                                              </LookUpTable1D>
                                           </sld:GreenChannel>
                                           <sld:RedChannel>
                                              <LookUpTable1D>
-                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 127 88</TableValues>
+                                                <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                                <TableValues>0 0.6 99 0.6 100 0.93 199 0.82 200 0.93 299 0.93 300 1.00 399 0.54 400 0.00 499 0.00 500 0.00 599 0.00 600 0.00 699 0.00 700 0.00 799 0.00 800 0.00 899 0.00 900 0.47 1000 1.00</TableValues>
                                              </LookUpTable1D>
-                                          </sld:RedChannel>
-                                          <sld:AlphaChannel>
-                                             <LookUpTable1D>
-                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 0 -1 0 0 255 70 255 127 0</TableValues>
-                                             </LookUpTable1D>
-                                          </sld:AlphaChannel>-->
+                                          </sld:RedChannel> 
                                        </sld:ChannelSelection>
                                     </sld:Raster>
                                  </sld:TextureSymbolizer>
