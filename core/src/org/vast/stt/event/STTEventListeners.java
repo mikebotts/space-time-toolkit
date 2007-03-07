@@ -70,6 +70,7 @@ public class STTEventListeners extends ArrayList<STTEventListener>
 //            if (next != event.source)
 //                next.handleEvent(event);
 //        }
+        //System.out.println("Received: " + event + " from " + event.source);
         STTEventManager.getInstance().dispatchEvent(event, this);
     }
 }

@@ -161,7 +161,7 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
      * @param mask
      * @return
      */
-    protected SceneItem lookupSceneItem(DataItem dataItem)
+    protected SceneItem enforceItem(DataItem dataItem)
     {
         SceneItem sceneItem = findItem(dataItem);
         if (sceneItem != null)
@@ -187,7 +187,7 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
         for (int i=0; i<maskItems.size(); i++)
         {
             DataItem maskDataItem = maskItems.get(i);
-            SceneItem maskItem = lookupSceneItem(maskDataItem);
+            SceneItem maskItem = enforceItem(maskDataItem);
             newSceneItem.getMaskItems().add(maskItem);
             if (maskDataItem.isEnabled())
                 maskItem.setVisible(true);
@@ -205,7 +205,13 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
      */
     public void setItemVisibility(DataItem dataItem, boolean visible)
     {       
-        SceneItem sceneItem = lookupSceneItem(dataItem);
+        SceneItem sceneItem;
+        
+        if (visible)
+            sceneItem = enforceItem(dataItem);
+        else
+            sceneItem = findItem(dataItem);
+        
         sceneItem.setVisible(visible);
     }
     
