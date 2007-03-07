@@ -844,7 +844,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>Max Surface Temperature</name>
-                              <dataProvider href="#PROVIDER_13"/>
+                              <dataProvider href="#PROVIDER_NWS"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -932,7 +932,7 @@
                                     <member>
                                        <DataItem>
                                           <name>Temp</name>
-                                          <dataProvider href="#PROVIDER_13"/>
+                                          <dataProvider href="#PROVIDER_NWS"/>
                                           <width>200</width>
                                           <style>
                                              <sld:TextSymbolizer enabled="true">
@@ -949,7 +949,7 @@
                                     <member>
                                        <DataItem>
                                           <name>Lat</name>
-                                          <dataProvider href="#PROVIDER_13"/>
+                                          <dataProvider href="#PROVIDER_NWS"/>
                                           <width>200</width>
                                           <style>
                                              <sld:TextSymbolizer enabled="true">
@@ -1042,118 +1042,29 @@
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
                                                 <TableValues>
-                                                   0  0
-                                                   1  2.318181795
-                                                   2  4.63636359
-                                                   3  6.954545385
-                                                   4  9.272726925
-                                                   5  11.59090847
-                                                   6  13.90909103
-                                                   7  16.2272718
-                                                   8  18.54545385
-                                                   9  20.8636359
-                                                   10 23.18181693
-                                                   11 25.49999847
-                                                   12 27.81818205
-                                                   13 30.1363641
-                                                   14 32.45454615
-                                                   15 34.77272565
-                                                   16 37.0909077
-                                                   17 39.4090923
-                                                   18 41.7272718
-                                                   19 44.04545385
-                                                   20 46.36363335
-                                                   21 48.68181795
-                                                   22 50.99999745
-                                                   23 53.3181795
-                                                   24 55.6363641
-                                                   25 57.9545436
-                                                   26 60.27272565
-                                                   27 62.59090515
-                                                   28 64.90908975
-                                                   29 67.22726925
-                                                   30 69.54544875
-                                                   31 71.8636359
-                                                   32 74.1818154
-                                                   33 76.4999949
-                                                   34 78.8181795
-                                                   35 81.136359
-                                                   36 83.4545385
-                                                   37 85.772718
-                                                   38 88.0909077
-                                                   39 90.4090872
-                                                   40 92.7272667
-                                                   41 95.04545385
-                                                   42 97.3636359
-                                                   43 99.6818154
-                                                   44 101.9999949
-                                                   45 104.3181795
-                                                   46 106.636359
-                                                   47 108.9545385
-                                                   48 111.2727282
-                                                   49 113.5909077
-                                                   50 115.9090872
-                                                   51 118.2272667
-                                                   52 120.5454539
-                                                   53 122.8636334
-                                                   54 125.1818129
-                                                   55 127.4999924
-                                                   56 129.8181795
-                                                   57 132.136359
-                                                   58 134.4545385
-                                                   59 136.772718
-                                                   60 139.0908975
-                                                   61 141.4090923
-                                                   62 143.7272718
-                                                   63 146.0454513
-                                                   64 148.3636308
-                                                   65 150.6818103
-                                                   66 152.9999898
-                                                   67 155.3181693
-                                                   68 157.636359
-                                                   69 159.9545385
-                                                   70 162.272718
-                                                   71 164.5908975
-                                                   72 166.909077
-                                                   73 169.2272565
-                                                   74 171.545436
-                                                   75 173.863641
-                                                   76 176.1818205
-                                                   77 178.5
-                                                   78 180.8181795
-                                                   79 183.136359
-                                                   80 185.4545385
-                                                   81 187.772718
-                                                   82 190.0909103
-                                                   83 192.4090898
-                                                   84 194.7272693
-                                                   85 197.0454488
-                                                   86 199.3636283
-                                                   87 201.6818078
-                                                   88 203.9999873
-                                                   89 206.3181795
-                                                   90 208.636359
-                                                   91 210.9545385
-                                                   92 213.272718
-                                                   93 215.5908975
-                                                   94 217.909077
-                                                   95 220.2272565
-                                                   96 222.5454615
-                                                   97 224.863641
-                                                   98 227.1818205
-                                                   99 229.5
-                                                   100 231.8181795
-                                                   101 234.136359
-                                                   102 236.4545385
-                                                   103 238.772718
-                                                   104 241.0909077
-                                                   105 243.4090872
-                                                   106 245.7272667
-                                                   107 248.0454462
-                                                   108 250.3636257
-                                                   109 252.6818052
-                                                   110 255
-                                                   255 255                                           
+                                                   0 0 1 2.318181795 2 4.63636359 3 6.954545385 4 9.272726925
+                                                   5 11.59090847 6 13.90909103 7 16.2272718 8 18.54545385 9 20.8636359
+                                                   10 23.18181693 11 25.49999847 12 27.81818205 13 30.1363641 14 32.45454615
+                                                   15 34.77272565 16 37.0909077 17 39.4090923 18 41.7272718 19 44.04545385
+                                                   20 46.36363335 21 48.68181795 22 50.99999745 23 53.3181795 24 55.6363641
+                                                   25 57.9545436 26 60.27272565 27 62.59090515 28 64.90908975 29 67.22726925
+                                                   30 69.54544875 31 71.8636359 32 74.1818154 33 76.4999949 34 78.8181795
+                                                   35 81.136359 36 83.4545385 37 85.772718 38 88.0909077 39 90.4090872
+                                                   40 92.7272667 41 95.04545385 42 97.3636359 43 99.6818154 44 101.9999949
+                                                   45 104.3181795 46 106.636359 47 108.9545385 48 111.2727282 49 113.5909077
+                                                   50 115.9090872 51 118.2272667 52 120.5454539 53 122.8636334 54 125.1818129
+                                                   55 127.4999924 56 129.8181795 57 132.136359 58 134.4545385 59 136.772718
+                                                   60 139.0908975 61 141.4090923 62 143.7272718 63 146.0454513 64 148.3636308
+                                                   65 150.6818103 66 152.9999898 67 155.3181693 68 157.636359 69 159.9545385
+                                                   70 162.272718 71 164.5908975 72 166.909077 73 169.2272565 74 171.545436
+                                                   75 173.863641 76 176.1818205 77 178.5 78 180.8181795 79 183.136359
+                                                   80 185.4545385 81 187.772718 82 190.0909103 83 192.4090898 84 194.7272693
+                                                   85 197.0454488 86 199.3636283 87 201.6818078 88 203.9999873 89 206.3181795
+                                                   90 208.636359 91 210.9545385 92 213.272718 93 215.5908975 94 217.909077
+                                                   95 220.2272565 96 222.5454615 97 224.863641 98 227.1818205 99 229.5
+                                                   100 231.8181795 101 234.136359 102 236.4545385 103 238.772718 104 241.0909077
+                                                   105 243.4090872 106 245.7272667 107 248.0454462 108 250.3636257 109 252.6818052
+                                                   110 255 255 255                                           
                                                 </TableValues>
                                              </LookUpTable1D>
                                           </sld:GrayChannel>
@@ -1335,6 +1246,100 @@
                         </member>
                         <member>
                            <DataItem>
+                              <name>GOES CTP Imagery</name>
+                              <dataProvider xlink:href="#GOES_CTP"/>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:ChannelSelection>
+                                          <sld:GrayChannel>
+                                             <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
+                                          </sld:GrayChannel>
+                                          <!--
+                                          <sld:BlueChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 127 88</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:BlueChannel>
+                                          <sld:GreenChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 127 88</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:GreenChannel>
+                                          <sld:RedChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>-128 87 -1 0 0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 127 88</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:RedChannel>
+                                          <sld:AlphaChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>-128 0 -1 0 0 255 70 255 127 0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:AlphaChannel>-->
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                              <mask xlink:href="#GOES_AL_MASK"/>
+                              <mask xlink:href="#GOES_BBOX_MASK"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
                               <name>GOES Lookup on Nadir Track</name>
                               <dataProvider xlink:href="#GOES_INTERSECT_PROVIDER"/>
                               <style>
@@ -1351,22 +1356,22 @@
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
-                                       <sld:CssParameter name="stroke-blue">
+                                       <sld:CssParameter name="stroke-red">
                                           <LookUpTable1D>
                                              <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                             <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 0.5 20 0 30 0 41 0 45 0.5 54 1.0 63 0.5 69 0 70 0.65 127 0.35</TableValues>
+                                             <TableValues>0 0.6 99 0.6 100 0.57 199 0.71 200 0.00 299 0.00 300 0.12 399 0.06 400 0.00 499 0.00 500 0.49 599 0.93 600 1.00 699 0.82 700 1.00 799 1.00 800 0.71 899 0.53 900 0.78 1000 1.00</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="stroke-green">
                                           <LookUpTable1D>
                                              <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                             <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 0.5 20 0 30 1.0 41 1.0 45 0.5 54 0 63 0 69 0 70 0.65 127 0.35</TableValues>
+                                             <TableValues>0 0.6 99 0.6 100 0.17 199 0.66 200 0.93 299 0.71 300 0.56 399 0.30 400 0.54 499 0.79 500 1.00 599 0.93 600 0.84 699 0.54 700 0.49 799 0.00 800 0.00 899 0.00 900 0.00 1000 1.00</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
-                                       <sld:CssParameter name="stroke-red">
+                                       <sld:CssParameter name="stroke-blue">
                                           <LookUpTable1D>
                                              <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                             <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 1.0 20 255 30 1.0 41 0 45 0 54 0 63 0.5 69 0 70 0.65 127 0.35</TableValues>
+                                             <TableValues>0 0.6 99 0.6 100 0.93 199 0.82 200 0.93 299 0.93 300 1.00 399 0.54 400 0.00 499 0.00 500 0.00 599 0.00 600 0.00 699 0.00 700 0.00 799 0.00 800 0.00 899 0.00 900 0.47 1000 1.00</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="stroke-width">2</sld:CssParameter>
@@ -1387,24 +1392,7 @@
                                        <sld:Mark>
                                           <sld:WellKnownName>circle</sld:WellKnownName>
                                           <sld:Fill>
-                                             <sld:CssParameter name="fill-blue">
-                                                <LookUpTable1D>
-                                                   <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                                   <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 0.5 20 0 30 0 41 0 45 0.5 54 1.0 63 0.5 69 0 70 0.65 127 0.35</TableValues>
-                                                </LookUpTable1D>
-                                             </sld:CssParameter>
-                                             <sld:CssParameter name="fill-green">
-                                                <LookUpTable1D>
-                                                   <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                                   <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 0.5 20 0 30 1.0 41 1.0 45 0.5 54 0 63 0 69 0 70 0.65 127 0.35</TableValues>
-                                                </LookUpTable1D>
-                                             </sld:CssParameter>
-                                             <sld:CssParameter name="fill-red">
-                                                <LookUpTable1D>
-                                                   <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
-                                                   <TableValues>-128 0.35 -1 0 0 1.0 15 1.0 19 1.0 20 255 30 1.0 41 0 45 0 54 0 63 0.5 69 0 70 0.65 127 0.35</TableValues>
-                                                </LookUpTable1D>
-                                             </sld:CssParameter>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
                                           </sld:Fill>
                                        </sld:Mark>
                                        <sld:Size>4</sld:Size>
@@ -1504,7 +1492,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>NOAA15 AMSU-A Footprints</name>
-                              <dataProvider href="#PROVIDER_01"/>
+                              <dataProvider href="#PROVIDER_NOAA15_AMSUA"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1592,7 +1580,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>NOAA15 AVHRR Footprints</name>
-                              <dataProvider href="#PROVIDER_03"/>
+                              <dataProvider href="#PROVIDER_NOAA15_AVHRR"/>
                               <style>
                                  <sld:GridFillSymbolizer id="GRID_FILL" enabled="true">
                                     <sld:Dimensions>
@@ -1624,7 +1612,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>NOAA12 AMSU-A Footprints</name>
-                              <dataProvider href="#PROVIDER_04"/>
+                              <dataProvider href="#PROVIDER_NOAA12_AMSUA"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1656,7 +1644,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>NOAA12 AVHRR Footprints</name>
-                              <dataProvider href="#PROVIDER_06"/>
+                              <dataProvider href="#PROVIDER_NOAA12_AVHRR"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1688,7 +1676,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>AQUA MODIS Footprints</name>
-                              <dataProvider href="#PROVIDER_08"/>
+                              <dataProvider href="#PROVIDER_AQUA"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1720,7 +1708,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>SPOT-5 Footprints</name>
-                              <dataProvider href="#PROVIDER_09"/>
+                              <dataProvider href="#PROVIDER_SPOT5"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1752,7 +1740,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>TRMM TMI Footprints</name>
-                              <dataProvider href="#PROVIDER_10"/>
+                              <dataProvider href="#PROVIDER_TRMM"/>
                               <style>
                                  <sld:GridFillSymbolizer enabled="true">
                                     <sld:Dimensions>
@@ -1783,8 +1771,40 @@
                         </member>
                         <member visible="false">
                            <DataItem>
+                              <name>METOP-A IASI Footprints</name>
+                              <dataProvider href="#PROVIDER_METOP"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FFAAAA</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.3</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
                               <name>CALIPSO - LIDAR Footprints</name>
-                              <dataProvider href="#PROVIDER_11"/>
+                              <dataProvider href="#PROVIDER_CALIPSO"/>
                               <style>
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
@@ -1806,7 +1826,7 @@
                         <member visible="false">
                            <DataItem>
                               <name>CLOUDSAT - RADAR Footprints</name>
-                              <dataProvider href="#PROVIDER_12"/>
+                              <dataProvider href="#PROVIDER_CLOUDSAT"/>
                               <style>
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
@@ -1866,7 +1886,7 @@
                </SensorMLProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_01">
+               <OWSDataProvider id="PROVIDER_NOAA15_AMSUA">
                   <name>NOAA-15 AMSU-A Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>NOAA15-AMSU-A</layerId>
@@ -1888,7 +1908,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_02">
+               <OWSDataProvider id="PROVIDER_NOAA15_AMSUB">
                   <name>NOAA-15 AMSU-B Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>NOAA15-AMSU-B</layerId>
@@ -1910,7 +1930,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_03">
+               <OWSDataProvider id="PROVIDER_NOAA15_AVHRR">
                   <name>NOAA-15 AVHRR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>NOAA15-AVHRR</layerId>
@@ -1932,7 +1952,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_04">
+               <OWSDataProvider id="PROVIDER_NOAA12_AMSUA">
                   <name>NOAA12 AMSU-A Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>NOAA12-AMSU-A</layerId>
@@ -1954,7 +1974,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_06">
+               <OWSDataProvider id="PROVIDER_NOAA12_AVHRR">
                   <name>NOAA12 AVHRR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>NOAA12-AVHRR</layerId>
@@ -1976,29 +1996,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_07">
-                  <name>TERRA MODIS Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
-                  <layerId>TERRA-MODIS</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
-                        <offering>TERRA-MODIS</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
-                        <resultModel>swe:DataValueType</resultModel>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
-            </member>
-            <member>
-               <OWSDataProvider id="PROVIDER_08">
+               <OWSDataProvider id="PROVIDER_AQUA">
                   <name>AQUA MODIS Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>AQUA-MODIS</layerId>
@@ -2020,7 +2018,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_09">
+               <OWSDataProvider id="PROVIDER_SPOT5">
                   <name>SPOT5 Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>SPOT5</layerId>
@@ -2042,7 +2040,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_10">
+               <OWSDataProvider id="PROVIDER_TRMM">
                   <name>TRMM TMI Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>TRMM-TMI</layerId>
@@ -2064,7 +2062,29 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_11">
+               <OWSDataProvider id="PROVIDER_METOP">
+                  <name>METOP-A IASI Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <layerId>METOP-A IASI</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>METOP-A-IASI</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2007-01-01T02:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2007-01-01T02:30:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_CALIPSO">
                   <name>CALIPSO LIDAR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>CALIPSO-LIDAR</layerId>
@@ -2086,7 +2106,7 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_12">
+               <OWSDataProvider id="PROVIDER_CLOUDSAT">
                   <name>CLOUDSAT RADAR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01"/>
                   <layerId>CLOUDSAT-RADAR</layerId>
@@ -2198,7 +2218,7 @@
                </GoogleMapProvider>
             </member>
             <member>
-               <OWSDataProvider id="PROVIDER_13">
+               <OWSDataProvider id="PROVIDER_NWS">
                   <name>Temperature Data</name>
                   <layerId>MaxT_SFC</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
@@ -2274,6 +2294,20 @@
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="GOES_CTP">
+                  <name>GOES CTP WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>now</baseTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_REALTIME_CTP</value>
                </SensorMLProvider>
             </member>
          </ResourceList>
