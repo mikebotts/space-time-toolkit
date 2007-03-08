@@ -397,7 +397,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
                 nextStyler.accept(this);
         }
         
-        // clear stencil buffer and disable stencil
+        // disable stencil after mask is used
         if (sceneItem.getDataItem().hasMask())
             gl.glDisable(GL.GL_STENCIL_TEST);
     }
