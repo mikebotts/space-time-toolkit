@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.vast.common,
  org.apache.xerces
 Eclipse-AutoStart: true
-Bundle-ClassPath: classes/, lib/jogl.jar, lib/jai_core.jar, lib/jai_codec.jar,
-                  lib/jcommon-1.0.5.jar, lib/jfreechart-1.0.2.jar
+Bundle-ClassPath: classes/, lib/jogl.jar, lib/gluegen-rt.jar, lib/jai_core.jar, lib/jai_codec.jar,
+                  lib/jcommon-1.0.5.jar, lib/jfreechart-1.0.2.jar, lib/smack.jar, lib/smackx.jar
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,
