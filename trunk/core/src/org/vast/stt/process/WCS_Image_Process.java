@@ -25,16 +25,21 @@ package org.vast.stt.process;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
+
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
+import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
+import org.vast.unit.UnitConversion;
+import org.vast.unit.UnitConverter;
 
 
 /**
@@ -66,12 +71,14 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
     protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected boolean hasTime, hasBbox;
+    protected Hashtable<DataComponent, UnitConverter> converters;
     
 
     public WCS_Image_Process()
     {
         query = new WCSQuery();
         owsUtils = new OWSUtils();
+        converters = new Hashtable<DataComponent, UnitConverter>();
     }
 
 
@@ -331,8 +338,24 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
 
     public void endDataAtom(DataComponent info, DataBlock data)
     {
-        // TODO Auto-generated method stub
+        DataType dataType = data.getDataType();
         
+        // TODO unit conversion WILL be handled by global chain unit converters
+        if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
+        {
+            UnitConverter converter = converters.get(info);
+            
+            if (converter == null)
+            {
+                String uom = (String)info.getProperty(DataComponent.UOM_CODE);
+                converter = UnitConversion.createConverterToSI(uom);
+                converters.put(info, converter);
+            }
+            
+            // convert to SI
+            double newVal = converter.convert(data.getDoubleValue());
+            data.setDoubleValue(newVal);
+        }        
     }
 
     
