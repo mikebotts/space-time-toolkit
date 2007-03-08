@@ -73,10 +73,15 @@ public class GLRenderTexture extends GLRunnable
         gl.glColor4f(1.0f, 1.0f, 1.0f, tex.opacity);
         
         // compute tex coordinate scale (for padded textures)
-        if (tex.widthPadding != 0 || tex.heightPadding != 0)
+        if (normalizeCoords)
         {
-            uScale = (float)tex.width / (float)(tex.width + tex.widthPadding);
-            vScale = (float)tex.height / (float)(tex.height + tex.heightPadding);
+            uScale = (float)tex.width / (float)(tex.width + tex.widthPadding + 1);
+            vScale = (float)tex.height / (float)(tex.height + tex.heightPadding + 1);
+        }
+        else
+        {
+            uScale = (float)tex.width;
+            vScale = (float)tex.height;
         }
         
         do
@@ -90,7 +95,7 @@ public class GLRenderTexture extends GLRunnable
                 {
                     for (int p=0; p<2; p++)
                     {                    
-                        point = styler.getGridPoint(u, v+p, uScale, vScale, normalizeCoords);
+                        point = styler.getGridPoint(u, v+p);
                         
                         if (point.graphBreak)
                         {
@@ -101,7 +106,7 @@ public class GLRenderTexture extends GLRunnable
                             break;
                         }
                         
-                        gl.glTexCoord2f(point.tx, point.ty);
+                        gl.glTexCoord2f(point.tx * uScale, point.ty * vScale);
                         gl.glVertex3d(point.x, point.y, point.z);
                     }
                 }
