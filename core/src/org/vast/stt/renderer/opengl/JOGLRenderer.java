@@ -423,13 +423,14 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         // disable writing in color and depth buffers
         gl.glDepthMask(false);
         gl.glColorMask(false, false, false, false);
+        gl.glEnable(GL.GL_STENCIL_TEST);
+        gl.glStencilMask(1);
         
         // clear stencil buffer
         gl.glClearStencil(0);
         gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
         
-        // setup stencil test to always pass
-        gl.glEnable(GL.GL_STENCIL_TEST);
+        // setup stencil test to always pass        
         gl.glStencilFunc(GL.GL_ALWAYS, 1, 1);
         gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_REPLACE);
         
