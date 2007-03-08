@@ -41,6 +41,7 @@ import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.PopupRenderer;
 import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.renderer.opengl.TextureManager.GLTexture;
 import org.vast.stt.style.*;
 
 
@@ -344,6 +345,10 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         ViewSettings view = scene.getViewSettings();
         setupMatrices(view);
         
+        // draw camera target if enabled
+        if (view.isShowCameraTarget())
+            this.drawCameraTarget(view);
+        
         // draw all items
         List<SceneItem> sceneItems = scene.getSceneItems();
         for (int i = 0; i < sceneItems.size(); i++)
@@ -359,16 +364,12 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             try {drawItem(sc, nextItem);}
             catch (RuntimeException e) {e.printStackTrace();}
         }
-
-        // draw camera target if enabled
-        if (view.isShowCameraTarget())
-            this.drawCameraTarget(view);
         
         // draw camera target if enabled
         if (view.isShowArcball())
             this.drawArcball(view);
         
-        // draw camera target if enabled
+        // ROI if enabled
         if (view.isShowItemROI())
             this.drawROI(scene, false);
         
@@ -385,7 +386,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         // draw all masks attached to this item
         if (sceneItem.getDataItem().hasMask())
             drawMasks(scene, sceneItem);
-        
+            
         gl.glLoadName(sceneItem.hashCode());
         
         // loop through all stylers for this item
@@ -421,7 +422,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             
         // disable writing in color and depth buffers
         gl.glDepthMask(false);
-        gl.glColorMask(false, false, false, false);             
+        gl.glColorMask(false, false, false, false);
         
         // clear stencil buffer
         gl.glClearStencil(0);
@@ -529,7 +530,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         SceneItem sceneItem = scene.getSelectedItems().get(0);
         DataProvider provider = sceneItem.getDataItem().getDataProvider();
         
-        if (provider.isSpatialSubsetSupported())
+        if (sceneItem.isVisible() && provider.isSpatialSubsetSupported())
         {        
             STTSpatialExtent extent = provider.getSpatialExtent();
             
@@ -594,6 +595,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         textureRenderer = new GLRenderTexture(gl, glu);        
         bboxRenderer = new GLRenderBBOX(this, gl, glu);
         popupRenderer = new PopupRenderer(composite);
+        textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
         
         gl.glClearDepth(1.0f);
         gl.glDepthFunc(GL.GL_LEQUAL);//GL.GL_LESS);
@@ -823,22 +825,14 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         styler.resetIterators();
         gridRenderer.setStyler(styler);
         
-        if (resetZOffset)
-            zBufferOffset = oldZBufferOffset;            
-        
-        oldZBufferOffset = zBufferOffset;
-        resetZOffset = true;
-        
         // loop through all tiles
         while ((patch = styler.nextPatch()) != null)
         {           
-            gl.glPolygonOffset(0.0f, zBufferOffset*100 - 10);
+            gl.glPolygonOffset(0.0f, 0.0f);
             gridRenderer.blockCount = 1;
             gridRenderer.patch = patch;
-            displayListManager.useDisplayList(styler, patch.block, gridRenderer, patch.updated);          
+            displayListManager.useDisplayList(styler, patch.block, gridRenderer, patch.updated);            
         }
-        
-        updateZBufferOffset();
     }
     
     
@@ -887,13 +881,29 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         // loop through all tiles
         while ((patch = styler.nextTile()) != null)
         {
-            // bind texture and load in GL if needed
-            textureManager.useTexture(styler, patch.getTexture(), patch.updated);            
+            // get existing or create GL texture(s)
+            GLTexture texture = textureManager.getTexture(styler, patch.getTexture(), patch.updated);
             gl.glPolygonOffset(0.5f, zBufferOffset*100);
-            textureRenderer.patch = patch;
-            textureRenderer.blockCount = 1;
-            textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
-            displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, patch.updated);
+            
+            if (texture.tiles == null)
+            {
+                textureManager.useTexture(texture, patch.getTexture());
+                textureRenderer.patch = patch;                      
+                textureRenderer.blockCount = 1;                
+                displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, patch.updated);                
+            }
+            else
+            {
+                List<GLTexture> tiles = texture.tiles;
+                for (int i=0; i<tiles.size(); i++)
+                {
+                    textureManager.useTexture(tiles.get(i), patch.getTexture());
+                    textureRenderer.patch = patch;                      
+                    textureRenderer.blockCount = 1;
+                    displayListManager.useDisplayList(styler, patch.getGrid().block, textureRenderer, patch.updated);
+                }
+            }
+            
             updateZBufferOffset();
         }
         

@@ -52,4 +52,16 @@ public class TexturePatchGraphic extends GraphicObject
     {
         return texture;
     }
+
+
+    public void setGrid(GridPatchGraphic grid)
+    {
+        this.grid = grid;
+    }
+
+
+    public void setTexture(RasterTileGraphic texture)
+    {
+        this.texture = texture;
+    }
 }

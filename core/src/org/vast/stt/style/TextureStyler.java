@@ -154,7 +154,7 @@ public class TextureStyler extends AbstractStyler
     }
     
     
-    public GridPointGraphic getGridPoint(int u, int v, float uScale, float vScale, boolean normalize)
+    public GridPointGraphic getGridPoint(int u, int v)
     {
         point.x = point.y = point.z = 0.0;
         gridIndex[0] = u;
@@ -163,23 +163,84 @@ public class TextureStyler extends AbstractStyler
         gridBlocks.getData(gridIndex);
         
         // compute texture coordinates
-        if (normalize)
-        {
-            point.tx = (float)u / (float)(patch.grid.width-1) * uScale;
-            point.ty = (float)v / (float)(patch.grid.length-1) * vScale;
-        }
-        else
-        {
-            point.tx = (float)u / (float)(patch.grid.width-1) * ((float)patch.texture.width);//-1);
-            point.ty = (float)v / (float)(patch.grid.length-1) * ((float)patch.texture.height);//-1);
-            //System.out.println(point.tx + "," + point.ty);
-        }
+        point.tx = (float)u / (float)(patch.grid.width-1);
+        point.ty = (float)v / (float)(patch.grid.length-1);
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
         
         return point;
     }
+    
+    /*
+    public GridPointGraphic getGridPoint(double u, double v)
+    {
+        point.x = point.y = point.z = 0.0;
+        
+        double u_hig = Math.ceil(u);
+        double u_low = Math.floor(u);
+        double v_hig = Math.ceil(v);
+        double v_low = Math.floor(v);
+        double coef_u = (u - u_low) / (u_hig - u_low);
+        double coef_v = (v - v_low) / (v_hig - v_low);
+        
+        double x11, x21, x12, x22;
+        double y11, y21, y12, y22;
+        double z11, z21, z12, z22;
+        
+        gridIndex[0] = (int)u_low;
+        gridIndex[1] = (int)v_low;        
+        gridBlocks.getData(gridIndex);
+        x11 = point.x;
+        y11 = point.y;
+        z11 = point.z;
+        
+        gridIndex[0] = (int)u_hig;
+        gridIndex[1] = (int)v_low;        
+        gridBlocks.getData(gridIndex);
+        x21 = point.x;
+        y21 = point.y;
+        z21 = point.z;
+        
+        gridIndex[0] = (int)u_low;
+        gridIndex[1] = (int)v_hig;        
+        gridBlocks.getData(gridIndex);
+        x12 = point.x;
+        y12 = point.y;
+        z12 = point.z;
+        
+        gridIndex[0] = (int)u_hig;
+        gridIndex[1] = (int)v_hig;        
+        gridBlocks.getData(gridIndex);
+        x22 = point.x;
+        y22 = point.y;
+        z22 = point.z;
+        
+        double x1, y1, z1;
+        double x2, y2, z2;
+        
+        // compute bilinear interpolation between points
+        x1 = x11 + coef_u * (x21 - x11);
+        y1 = y11 + coef_u * (y21 - y11);
+        z1 = z11 + coef_u * (z21 - z11);
+        
+        gridIndex[0] = (int)u_low;
+        gridIndex[1] = (int)v_low;        
+        gridBlocks.getData(gridIndex);
+        x1 = point.x;
+        y1 = point.y;
+        z1 = point.z;
+        
+        
+        point.x = x;
+        point.y = y;
+        point.z = z;
+        
+        // adjust geometry to fit projection
+        projection.adjust(geometryCrs, point);
+        
+        return point;
+    }*/
     
     
     private BlockListItem nextGridBlock()
