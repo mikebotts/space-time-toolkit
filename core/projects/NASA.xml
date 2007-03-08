@@ -1185,31 +1185,28 @@
                                           </sld:Axis>
                                        </sld:Dimensions>
                                        <sld:ChannelSelection>
-                                          <!--<sld:GrayChannel>
-                                             <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                          </sld:GrayChannel>-->
                                           <sld:BlueChannel>
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 127 88</TableValues>
+                                                <TableValues>0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 128 88 255 0</TableValues>
                                              </LookUpTable1D>
                                           </sld:BlueChannel>
                                           <sld:GreenChannel>
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 127 88</TableValues>
+                                                <TableValues>0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 128 88 255 0</TableValues>
                                              </LookUpTable1D>
                                           </sld:GreenChannel>
                                           <sld:RedChannel>
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 87 -1 0 0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 127 88</TableValues>
+                                                <TableValues>0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 128 88 255 0</TableValues>
                                              </LookUpTable1D>
                                           </sld:RedChannel>
                                           <sld:AlphaChannel>
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
-                                                <TableValues>-128 0 -1 0 0 255 70 255 127 0</TableValues>
+                                                <TableValues>0 255 70 255 127 0 255 0</TableValues>
                                              </LookUpTable1D>
                                           </sld:AlphaChannel>
                                        </sld:ChannelSelection>
