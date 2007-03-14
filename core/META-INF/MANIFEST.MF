@@ -6,14 +6,13 @@ Bundle-Version: 3.0.1
 Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-Localization: plugin
 Eclipse-BuddyPolicy: global
+Eclipse-LazyStart: true
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.swt.opengl,
  org.eclipse.update.ui,
  org.eclipse.update.core,
  org.vast.common,
  org.apache.xerces
-Eclipse-AutoStart: true
 Bundle-ClassPath: classes/, lib/jogl.jar, lib/gluegen-rt.jar, lib/jai_core.jar, lib/jai_codec.jar,
                   lib/jcommon-1.0.5.jar, lib/jfreechart-1.0.2.jar, lib/smack.jar, lib/smackx.jar
 Bundle-Vendor: UAH VAST
@@ -30,7 +29,6 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.gui.widgets.catalog,
  org.vast.stt.gui.widgets.dataProvider,
  org.vast.stt.gui.widgets.symbolizer,
- org.vast.stt.gui.widgets.table,
  org.vast.stt.gui.widgets.time,
  org.vast.stt.process,
  org.vast.stt.project,
