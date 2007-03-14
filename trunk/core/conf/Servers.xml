@@ -2,13 +2,25 @@
     <Server name="Lizard Tech" type="WMS" version="1.1.0">
         <URL>http://wcs.lizardtech.com/lizardtech/iserv/ows</URL>
     </Server>
+    <Server name="Microsoft Terraserver" type="WMS" version="1.1.1">
+        <URL>http://terraserver.microsoft.com/ogccapabilities.ashx</URL>
+    </Server>
     <Server name="USGS Landsat" type="WMS" version="1.1.1">
         <URL>http://gisdata.usgs.net:80/servlet/com.esri.wms.Esrimap?servicename=USGS_WMS_LANDSAT7</URL>
+    </Server>
+    <Server name="USGS Color Urban Orthos" type="WMS" version="1.1.1">
+        <URL>http://ims.cr.usgs.gov:80/servlet/com.esri.wms.Esrimap/USGS_EDC_Ortho_Urban</URL>
+    </Server>
+    <Server name="NASA JPL Mosaics" type="WMS" version="1.1.1">
+        <URL>http://wms.jpl.nasa.gov/wms.cgi</URL>
+    </Server>
+    <Server name="Ionic DC Data" type="WMS" version="1.1.0">
+        <URL>http://redspider.us/ionicweb/wfs/METRODC</URL>
     </Server>
     <Server name="NASA Globe Program" type="WMS" version="1.1.1">
         <URL>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</URL>
     </Server>
-    <Server name="UAH GOES" type="WCS" version="0.6">
+   <Server name="UAH GOES" type="WCS" version="0.6">
         <URL>http://vast.uah.edu:8080/ows-dev/goes</URL>
     </Server>
     <Server name="UAH SRTM Topo data" type="WCS" version="0.6">
