@@ -22,17 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.PlatformUI;
 import org.vast.data.DataBlockBoolean;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
-import org.vast.xml.DOMHelper;
-import org.vast.xml.DOMHelperException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sld.SLDReader;
@@ -57,12 +57,13 @@ import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
-import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
 import org.vast.util.ExceptionSystem;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
 
 /**
  * <p><b>Title:</b>
@@ -96,9 +97,12 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
-			DataItem [] items = createSOSItem((SOSLayerCapabilities)caps);
-			for(int i=0; i<items.length; i++)
-				dropItem(items[i]);
+			startAddItemWizard((SOSLayerCapabilities)caps);
+			//DataItem [] items = createSOSItem((SOSLayerCapabilities)caps);
+			//			for(int i=0; i<items.length; i++) {
+//				//  Popup addItem wizard BEFORE drop occurs
+//				dropItem(items[i]);
+//			}
 			return true;
 		} else if (data instanceof WMSLayerCapabilities) {
 			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
@@ -116,18 +120,18 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		}
 	}
 
-	public Symbolizer createNewSymbolizer() {
-		AddSymbolizerDialog asd = new AddSymbolizerDialog(
-				PlatformUI.getWorkbench().getDisplay().getActiveShell());
-		int rc = asd.getReturnCode();
-		if (rc != IDialogConstants.OK_ID) 
-			return null;
-		
-		Symbolizer symbolizer = 
-			SymbolizerFactory.createDefaultSymbolizer(asd.getStylerName().trim(), asd.getSymbolizerType());
-		return symbolizer;
+	public void startAddItemWizard(SOSLayerCapabilities caps){
+		AddItemWizard addItemWizard = new AddItemWizard(caps);
+		addItemWizard.init(PlatformUI.getWorkbench(), null);
+				
+		// Instantiates the wizard container with the wizard and opens it
+		WizardDialog dialog = 
+			new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), addItemWizard);
+		dialog.create();
+		dialog.open();
 	}
-
+	
+	
 	/**
 	 * Method declared on ViewerDropAdapter
 	 */
@@ -214,6 +218,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			String capsServer = caps.getParent().getGetServers().get("GetCapabilities");
 			
 			//  Hardcoded switch to hack what we're dropping- clean up later
+			//  TODO:  How to unhack this?
 			if(capsServer.contains("muenster"))
 				templateName = "IFGI_WeatherNY.xml";
 			else
