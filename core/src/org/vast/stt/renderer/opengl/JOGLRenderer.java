@@ -100,7 +100,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
 
     public JOGLRenderer()
     {
-        selectableItems = new Hashtable<Integer, SceneItem>();        
+        selectableItems = new Hashtable<Integer, SceneItem>();
     }
     
     
@@ -589,6 +589,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         context = GLDrawableFactory.getFactory().createExternalGLContext();
         /*GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
         
+        // TODO take care of shared contexts for cloning the view !
         // associate to a context already created for sharing display lists
         if (contextList.isEmpty())
             context = drawable.createContext(null);
