@@ -24,7 +24,7 @@
       <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
-      <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="src/icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
+      <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
    </extension>
    <!--~~~~~~~~~~~~~~~~~~~-->
    <!-- Action Extensions -->
