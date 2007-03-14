@@ -21,9 +21,8 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.vast.stt.apps.STTPlugin;
@@ -31,6 +30,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
@@ -51,7 +51,7 @@ import org.vast.stt.project.world.WorldScene;
 public class WorldView extends SceneView<WorldScene> implements PaintListener, ControlListener
 {
 	public static final String ID = "STT.WorldView";
-	private Canvas canvas;
+    private Composite parent;
     private WorldViewController controller;
     
     
@@ -64,10 +64,9 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     @Override
 	public void createPartControl(Composite parent)
 	{
-        canvas = new Canvas(parent, SWT.NO_REDRAW_RESIZE);
-		canvas.addControlListener(this);
-		canvas.addPaintListener(this);
-        getSite().getPage().addPartListener(this);
+        this.parent = parent;
+        parent.setLayout(new FillLayout());
+        getSite().getPage().addPartListener(this);        
 	}
     	
 	
@@ -130,14 +129,13 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
         super.dispose();
         if (scene != null)
             scene.getRenderer().dispose();
-        canvas.dispose();
 	}
 	
 	
 	@Override
 	public void setFocus()
 	{
-		canvas.setFocus();
+        parent.setFocus();
 	}
     
     
@@ -146,7 +144,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     {
         if (scene != sc)
         {
-            // make sure we dispose previous renderer
+            // make sure we dispose previous scene renderer
             if (scene != null)
                 scene.getRenderer().dispose();
     
@@ -155,8 +153,10 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             setPartName(scene.getName());
             
             // init the renderer
-            scene.getRenderer().setParent(canvas);
-            scene.getRenderer().init();
+            SceneRenderer renderer = scene.getRenderer();
+            renderer.setParent(parent);
+            renderer.init();
+            Composite canvas = renderer.getCanvas();
             
             // init size
             //Rectangle clientArea = canvas.getClientArea();
@@ -169,9 +169,8 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             canvas.addMouseListener(controller);
             canvas.addMouseMoveListener(controller);
             canvas.addListener(SWT.MouseWheel , controller);
-            
-            // register view as listener to the scene
-            scene.addListener(this);
+            canvas.addControlListener(this);
+            canvas.addPaintListener(this);
             
             // refresh display
             refreshViewAsync();
@@ -191,10 +190,10 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     public void clearView()
     {
         // Clears the world view and unregister listeners
-        canvas.removeMouseListener(controller);
-        canvas.removeMouseMoveListener(controller);
-        canvas.removeListener(SWT.MouseWheel , controller);
-        canvas.redraw();
+        parent.removeMouseListener(controller);
+        parent.removeMouseMoveListener(controller);
+        parent.removeListener(SWT.MouseWheel , controller);
+        parent.redraw();
         setPartName("Nothing Open");
     }
     
@@ -212,7 +211,6 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
                 break;
                 
             case SCENE_PROJECTION_CHANGED:
-                // fit view to scene
                 // create fit runnable for async exec
                 Runnable runFitScene = new Runnable()
                 {
@@ -222,8 +220,9 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
                         view.getProjection().fitViewToBbox(scene.getBoundingBox(), scene, true);
                         refreshView();
                     }
-                };                
-                getSite().getShell().getDisplay().syncExec(runFitScene);
+                };
+                // fit view to scene
+                parent.getDisplay().syncExec(runFitScene);
                 break;
         }
     }
@@ -240,13 +239,9 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     {
         if (scene != null)
         {
-            // update view size
-            Rectangle clientArea = canvas.getClientArea();
-            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            
             // redraw the whole scene
             scene.getRenderer().drawScene(scene);
-            scene.getViewSettings().dispatchEvent(new STTEvent(this.controller, EventType.SCENE_VIEW_CHANGED));
+            scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
         }
     }
 	

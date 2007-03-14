@@ -17,7 +17,6 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -104,9 +103,6 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
             //canvas.addMouseMoveListener(controller);
             //canvas.addListener(SWT.MouseWheel , controller);
             
-            // register view as listener to the scene
-            scene.addListener(this);
-            
             // refresh display
             refreshViewAsync();
         }
@@ -158,10 +154,6 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
     {
         if (scene != null)
         {
-            // update view size
-            Rectangle clientArea = composite.getClientArea();
-            scene.getRenderer().resizeView(clientArea.width, clientArea.height);
-            
             // redraw the whole scene
             //scene.getRenderer().drawScene(scene);
         }

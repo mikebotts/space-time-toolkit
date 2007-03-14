@@ -164,8 +164,8 @@ public abstract class TiledMapProvider extends AbstractProvider
         deletedItems.clear();        
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
-        double tileRatio = Math.max(spatialExtent.getXTiles(), spatialExtent.getYTiles());
-        tileSelector.setSizeRatio(tileRatio*tileRatio*0.7);
+        double tileRatio = spatialExtent.getXTiles() * spatialExtent.getYTiles();
+        tileSelector.setSizeRatio(tileRatio * 0.7);
         quadTree.accept(tileSelector);
         
         // first round of cached background items to display

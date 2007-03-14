@@ -58,6 +58,7 @@ import org.vast.stt.style.DataStyler;
  */
 public class ChartRenderer extends SceneRenderer<ChartScene> implements PaintListener
 {
+    protected Composite swt_awt;
     protected ChartPanel chartPanel;
     protected XYPlotBuilder plotBuilder = new XYPlotBuilder();
     //protected Image chartImg;
@@ -67,12 +68,19 @@ public class ChartRenderer extends SceneRenderer<ChartScene> implements PaintLis
     public ChartRenderer()
     {
     }
+    
+    
+    @Override
+    public Composite getCanvas()
+    {
+        return swt_awt;
+    }
 
 
     @Override
     public void init()
     {
-        Composite swt_awt = new Composite(composite, SWT.EMBEDDED);
+        swt_awt = new Composite(composite, SWT.EMBEDDED);
         Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
         swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
         chartPanel = new ChartPanel(null);
