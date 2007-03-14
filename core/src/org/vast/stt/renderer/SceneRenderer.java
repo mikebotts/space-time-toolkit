@@ -44,10 +44,12 @@ public abstract class SceneRenderer<SceneType extends Scene>
     }    
     
     protected Composite composite;
-    protected int viewWidth, viewHeight;
     
 
     public abstract void init();
+    
+    
+    public abstract Composite getCanvas();
     
     
     public abstract void drawScene(SceneType scene);
@@ -72,38 +74,35 @@ public abstract class SceneRenderer<SceneType extends Scene>
     
     
     public abstract void dispose();
-    
-    
-    public void resizeView(int width, int height)
-    {
-        this.viewHeight = height;
-        this.viewWidth = width;
-    }
 
-
+    
     public int getViewWidth()
     {
-        return viewWidth;
+        class MyRunnable implements Runnable
+        {
+            public int viewWidth = 0;
+            public void run() {viewWidth = getCanvas().getClientArea().width;}
+        };
+        
+        MyRunnable runnable = new MyRunnable();       
+        composite.getDisplay().syncExec(runnable);
+        return runnable.viewWidth;
     }
 
 
     public int getViewHeight()
     {
-        return viewHeight;
+        class MyRunnable implements Runnable
+        {
+            public int viewHeight = 0;
+            public void run() {viewHeight = getCanvas().getClientArea().height;}
+        };
+        
+        MyRunnable runnable = new MyRunnable();       
+        composite.getDisplay().syncExec(runnable);
+        return runnable.viewHeight;
     }
     
-    
-    public double getAspectRatio()
-    {
-        return (double)viewWidth/(double)viewHeight;
-    }
-    
-    
-    public Composite getParent()
-    {
-        return composite;
-    }
-
 
     public void setParent(Composite composite)
     {

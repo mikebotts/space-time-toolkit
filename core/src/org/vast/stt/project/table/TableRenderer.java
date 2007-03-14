@@ -27,6 +27,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.vast.math.Vector3d;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
@@ -67,6 +68,13 @@ public class TableRenderer extends SceneRenderer<TableScene> implements StylerVi
     
     public TableRenderer()
     {
+    }
+    
+    
+    @Override
+    public Composite getCanvas()
+    {
+        return mainSC;
     }
 
 

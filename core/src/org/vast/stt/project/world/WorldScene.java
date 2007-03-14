@@ -119,7 +119,8 @@ public class WorldScene extends Scene<SceneRenderer<WorldScene>>
                 for (int i = 0; i < sceneItems.size(); i++)
                     sceneItems.get(i).setProjection(viewSettings.getProjection());
                 for (int i = 0; i < maskItems.size(); i++)
-                    maskItems.get(i).setProjection(viewSettings.getProjection());                
+                    maskItems.get(i).setProjection(viewSettings.getProjection());               
+                
                 // forward event for scene fit and redraw
                 dispatchEvent(event.copy());                
                 break;
