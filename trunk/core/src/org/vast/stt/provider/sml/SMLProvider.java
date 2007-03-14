@@ -86,6 +86,8 @@ public class SMLProvider extends AbstractProvider
     @Override
     public void updateData() throws DataException
     {
+        boolean doClear = true;
+        
         // init DataNode if not done yet
         if (!dataNode.isNodeStructureReady())
             init();
@@ -153,9 +155,12 @@ public class SMLProvider extends AbstractProvider
                         if (canceled)
                             return;
                         
-                        // clear data node before first tile
-                        if (i == 0 & j == 0)
+                        // clear data node before 1st block is output
+                        if (doClear)
+                        {
                             dataNode.clearAll();
+                            doClear = false;
+                        }
                         
                         // transfer block for each output
                         for (int c=0; c<blockListArray.size(); c++)
