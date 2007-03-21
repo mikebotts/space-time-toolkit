@@ -49,12 +49,13 @@ public class AddItemWizard extends Wizard implements INewWizard {
 	{
 		SOSOfferingChooserPage sosChooserPage = new SOSOfferingChooserPage((SOSLayerCapabilities)caps);
 		addPage(sosChooserPage);
+		addPage(new SOSOfferingChooserPage((SOSLayerCapabilities)caps));
 	}	
 
 	@Override
 	public boolean performFinish() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	
