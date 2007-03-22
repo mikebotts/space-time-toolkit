@@ -93,6 +93,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	 */
 	public boolean performDrop(Object data) {
 		OWSLayerCapabilities caps = (OWSLayerCapabilities) data;
+
 		DataItem newItem = new DataItem(); // use world item for stuffs to be rendered in the world view
 		newItem.setName(caps.getName());
 
@@ -121,7 +122,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	}
 
 	public void startAddItemWizard(SOSLayerCapabilities caps){
-		AddItemWizard addItemWizard = new AddItemWizard(caps);
+		AddSOSItemWizard addItemWizard = new AddSOSItemWizard(caps);
 		addItemWizard.init(PlatformUI.getWorkbench(), null);
 				
 		// Instantiates the wizard container with the wizard and opens it
@@ -138,7 +139,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	public boolean validateDrop(Object target, int op, TransferData type) {
 		boolean dropOk = LayerTransfer.getInstance().isSupportedType(type);
 		dropOk = dropOk && (target instanceof DataEntry);
-		return dropOk;
+//		return dropOk;
+		return dropOk || true;
 	}
 
 	protected boolean dropItem(DataItem item) {
