@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -120,6 +121,21 @@ public class SOSOfferingChooserPage extends WizardPage
 		return false;
 	}
 
+	public IWizardPage getNextPage(){
+		SOSMappingPage mappingPage = ((AddSOSItemWizard)this.getWizard()).mappingPage;
+		String [] offerings = getSelectedOfferings();
+		mappingPage.setOfferings(offerings);
+		return mappingPage;
+	}
+	
+	public String [] getSelectedOfferings(){
+		Object [] offerings = checkboxTableViewer.getCheckedElements();
+		String [] offStr = new String[offerings.length];
+		for(int i=0; i<offerings.length; i++)
+			offStr[i] = (String)offerings[i];
+		return offStr;
+	}
+	
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
