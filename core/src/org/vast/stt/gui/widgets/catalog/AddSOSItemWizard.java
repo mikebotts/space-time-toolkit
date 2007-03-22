@@ -33,11 +33,13 @@ import org.vast.ows.sos.SOSLayerCapabilities;
  * @version 1.0
  */
 
-public class AddItemWizard extends Wizard implements INewWizard {
+public class AddSOSItemWizard extends Wizard implements INewWizard 
+{
+	SOSLayerCapabilities caps;
+	SOSMappingPage mappingPage;
+	SOSStylerPage stylerPage;
 	
-	OWSLayerCapabilities caps;
-	
-	public AddItemWizard(OWSLayerCapabilities caps){
+	public AddSOSItemWizard(SOSLayerCapabilities caps){
 		this.caps = caps;
 		this.setWindowTitle("Add Items to Scene Tree");
 	}
@@ -47,14 +49,17 @@ public class AddItemWizard extends Wizard implements INewWizard {
 	
 	public void addPages()
 	{
-		SOSOfferingChooserPage sosChooserPage = new SOSOfferingChooserPage((SOSLayerCapabilities)caps);
+		SOSOfferingChooserPage sosChooserPage = new SOSOfferingChooserPage(caps);
 		addPage(sosChooserPage);
-		addPage(new SOSOfferingChooserPage((SOSLayerCapabilities)caps));
+		mappingPage = new SOSMappingPage(caps);
+		addPage(mappingPage);
+		//stylerPage = new SOSStylerPage();
+		//addPage(stylerPage);
 	}	
 
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
+		//  Drop items 
 		return true;
 	}
 
