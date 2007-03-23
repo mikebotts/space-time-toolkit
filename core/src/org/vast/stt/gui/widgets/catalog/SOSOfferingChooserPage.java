@@ -80,7 +80,7 @@ public class SOSOfferingChooserPage extends WizardPage
 						.newCheckList(comp, SWT.BORDER | SWT.MULTI);
 		checkboxTableViewer.setLabelProvider(new OfferingLabelProvider());
 		checkboxTableViewer.setContentProvider(new OfferingContentProvider());
-		List<String> procs = caps.getProcedureList();
+		List<String> procs = caps.getObservableList();
 		checkboxTableViewer.setInput(procs);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 		checkboxTableViewer.getTable().setLayoutData(gd);
