@@ -139,5 +139,16 @@ public class SymbolizerFactory {
 			return null;
 		}
 	}
+  	
+	public static String[] getSymbolizerTypes(){
+		SymbolizerType [] symbolizerTypes = SymbolizerType.values();
+		String [] symbolizerTypeStr = new String[symbolizerTypes.length];
+		int i=0;
+		for(SymbolizerType st : symbolizerTypes){
+			symbolizerTypeStr[i++] = st.toString();
+		}
+		
+		return symbolizerTypeStr;
+	}
 }
 
