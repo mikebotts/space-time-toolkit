@@ -102,7 +102,10 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 			mapFromCombo[i].setTextLimit(20);
 			mapFromCombo[i].addSelectionListener(this);
 			gd = new GridData();
-			//gd.widthHint = 30;
+			//gd.widthHint = 200;
+			//  MinWidth only seems to work if grabExcess==true
+			gd.minimumWidth = 150;
+			gd.grabExcessHorizontalSpace = true;
 			mapFromCombo[i].setLayoutData(gd);
 
 			//  set enabled state
@@ -118,7 +121,7 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		mappableItems = items;
 		for (int i=0; i<mapFromCombo.length; i++) {
 			mapFromCombo[i].setItems(items);
-			mapFromCombo[i].setTextLimit(20);
+			mapFromCombo[i].setTextLimit(30);
 		}
 	}
 	

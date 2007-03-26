@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.vast.stt.style.SymbolizerFactory;
 import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 
 public class AddSymbolizerDialog extends Dialog {
@@ -23,20 +24,10 @@ public class AddSymbolizerDialog extends Dialog {
 	
 	public AddSymbolizerDialog(Shell parent){
 		super(parent);
-		initSymbolizerTypes();
+		symbolizerTypeStr = SymbolizerFactory.getSymbolizerTypes();
 		this.open();
 	}
 
-	//  Generate string [] for types 
-	private void initSymbolizerTypes(){
-		symbolizerTypes = SymbolizerType.values();
-		symbolizerTypeStr = new String[symbolizerTypes.length];
-		int i=0;
-		for(SymbolizerType st : symbolizerTypes){
-			symbolizerTypeStr[i++] = st.toString();
-		}
-	}
-	
 	protected void configureShell(Shell shell) {
         super.configureShell(shell);
         shell.setText("Add Graphic");
