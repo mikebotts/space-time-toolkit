@@ -36,7 +36,9 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 {
 	SOSLayerCapabilities caps;
 	SOSMappingPage mappingPage;
-	SOSStylerPage stylerPage;
+	SOSSymbolizerPage symPage;
+	SOSOfferingChooserPage sosChooserPage;
+	boolean canFinish = false;
 	
 	public AddSOSItemWizard(SOSLayerCapabilities caps){
 		this.caps = caps;
@@ -48,12 +50,12 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 	
 	public void addPages()
 	{
-		SOSOfferingChooserPage sosChooserPage = new SOSOfferingChooserPage(caps);
+		sosChooserPage = new SOSOfferingChooserPage(caps);
 		addPage(sosChooserPage);
 		mappingPage = new SOSMappingPage(caps);
 		addPage(mappingPage);
-		//stylerPage = new SOSStylerPage();
-		//addPage(stylerPage);
+		symPage = new SOSSymbolizerPage();
+		addPage(symPage);
 	}	
 
 	@Override
@@ -62,7 +64,13 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 		return true;
 	}
 
+	public void setCanFinish(boolean b){
+		canFinish = b;
+	}
 	
+	public boolean canFinish(){
+		return canFinish;
+	}
 
 }
 

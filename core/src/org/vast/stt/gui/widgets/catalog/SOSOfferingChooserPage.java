@@ -26,13 +26,11 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.vast.ows.sos.SOSLayerCapabilities;
 
@@ -78,7 +76,7 @@ public class SOSOfferingChooserPage extends WizardPage
 		
 		checkboxTableViewer = CheckboxTableViewer
 						.newCheckList(comp, SWT.BORDER | SWT.MULTI);
-		checkboxTableViewer.setLabelProvider(new OfferingLabelProvider());
+		checkboxTableViewer.setLabelProvider(new LabelProvider());
 		checkboxTableViewer.setContentProvider(new OfferingContentProvider());
 		List<String> procs = caps.getObservableList();
 		checkboxTableViewer.setInput(procs);
@@ -161,29 +159,13 @@ class OfferingContentProvider implements IStructuredContentProvider
         return offerings.toArray();
     }
 
-
     public void dispose()
     {
     }
-
 
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 }
 
-class OfferingLabelProvider extends LabelProvider
-{
-
-    public Image getImage(Object element)
-    {
-        return null;
-    }
-
-
-    public String getText(Object element)
-    {
-        return element.toString();
-    }
-}
 

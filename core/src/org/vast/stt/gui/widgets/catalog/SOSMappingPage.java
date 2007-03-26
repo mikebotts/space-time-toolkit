@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.cdm.common.DataComponent;
@@ -51,12 +52,12 @@ public class SOSMappingPage extends WizardPage
 	String [] offerings;
 	private AdvancedGeometryTab geometryComp;
 	List<String>possibleMappings = new ArrayList<String>(3);
+	int offeringIndex = 0;
 	
 	public SOSMappingPage(SOSLayerCapabilities caps){
 		super("Map Offerings");
 		this.caps = caps;
-		setTitle("Map Offerings to Display");
-		setDescription("Map SOS Offering components to Display space");
+		setDescription("Map the SOS Offering components to Display space");
 	}
 	
 	public void setOfferings(String [] offerings){
@@ -64,10 +65,10 @@ public class SOSMappingPage extends WizardPage
 		String [] dataComponents = getComponents();
 		if(dataComponents != null)
 			geometryComp.setMappableItems(dataComponents);
-		//geometryComp.setRedraw(true);
 	}
 	
 	private String [] getComponents(){
+		setTitle(offerings[offeringIndex] + " Geometry Mapper");
 		DataComponent component = null; 
 		try {
 			component = issueRequest();
@@ -76,9 +77,27 @@ public class SOSMappingPage extends WizardPage
 			e.printStackTrace();
 		}
 		//  Get DataComponents;
+		//  TODO  store these so they don't have to be reloaded in the event
+		//  of user selecting prev/next repeatedlyd
 		if(component != null)
 			findPossibleMappings(component, component.getName());
-		return(possibleMappings.toArray(new String[]{}));
+		String [] mappings = possibleMappings.toArray(new String[]{});
+		possibleMappings.clear();
+		return(mappings);
+	}
+	
+	/**
+	 * Assign defaults for X,Y,Z, and time, if they are present in the
+	 * available Mapping componenets.  Also, should skip any fields
+	 * where user has ovverridden the defaults
+	 * 
+	 *  @TODO
+	 */
+	private void assignDefaultComponents(){
+		//  assign Y to lat
+		//  assign X to lon
+		//  assign Z to alt
+		//  assign *time to time
 	}
 	
 	//  This creates a dummy request just to get the DataComponents back
@@ -149,7 +168,8 @@ public class SOSMappingPage extends WizardPage
 	private void findPossibleMappings(DataComponent component, String componentPath) {
         // for each array, build an array mapper
         if (component instanceof DataArray)
-        {
+        {  
+        	System.err.println("Adding arr " + componentPath);
         	possibleMappings.add(componentPath);
             DataComponent childComponent = component.getComponent(0);
             String childPath = componentPath + '/' + childComponent.getName();
@@ -159,6 +179,7 @@ public class SOSMappingPage extends WizardPage
         // just descend into DataGroups
         else if (component instanceof DataGroup)
         {
+        	System.err.println("Adding grp " + componentPath);
         	possibleMappings.add(componentPath);
             for (int i = 0; i < component.getComponentCount(); i++)
             {
@@ -171,6 +192,7 @@ public class SOSMappingPage extends WizardPage
         // handle DataValues
         else if (component instanceof DataValue)
         {
+        	System.err.println("Adding val " + componentPath);
         	possibleMappings.add(componentPath);
         }
     }
@@ -182,15 +204,31 @@ public class SOSMappingPage extends WizardPage
 		setControl(geometryComp);
 	}
 	
-/*	public IWizardPage getNextPage(){
-		storeCurrentMappings();
-		if(moreOfferings) {
-			getComponents();
-			updateControl();
-		}
-		return mappingPage;
+	public boolean canFlipToNextPage() {
+	     return true;
 	}
-*/
+	
+	public IWizardPage getPreviousPage(){
+		if(offeringIndex == 0)
+			return ((AddSOSItemWizard)this.getWizard()).sosChooserPage;
+		offeringIndex--;
+		String [] dataComponents = getComponents();
+		assignDefaultComponents();
+		if(dataComponents != null)
+			geometryComp.setMappableItems(dataComponents);
+		return this;
+	}
+	
+	public IWizardPage getNextPage(){
+		//storeCurrentMappings();
+		if(++offeringIndex < offerings.length) {
+			String [] dataComponents = getComponents();
+			if(dataComponents != null)
+				geometryComp.setMappableItems(dataComponents);
+			return this;
+		}
+		return ((AddSOSItemWizard)this.getWizard()).symPage;
+	}
 }
 
 
