@@ -188,7 +188,6 @@ public class SOSMappingPage extends WizardPage
         // for each array, build an array mapper
         if (component instanceof DataArray)
         {  
-        	System.err.println("Adding arr " + componentPath);
         	possibleMappings.add(componentPath);
             DataComponent childComponent = component.getComponent(0);
             String childPath = componentPath + '/' + childComponent.getName();
@@ -198,7 +197,6 @@ public class SOSMappingPage extends WizardPage
         // just descend into DataGroups
         else if (component instanceof DataGroup)
         {
-        	System.err.println("Adding grp " + componentPath);
         	possibleMappings.add(componentPath);
             for (int i = 0; i < component.getComponentCount(); i++)
             {
@@ -211,7 +209,6 @@ public class SOSMappingPage extends WizardPage
         // handle DataValues
         else if (component instanceof DataValue)
         {
-        	System.err.println("Adding val " + componentPath);
         	possibleMappings.add(componentPath);
         }
     }
