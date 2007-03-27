@@ -374,8 +374,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			dbs = new DataBlockString(1);
 			if (stylesList != null && stylesList.size() > 0) {
 				dbs.setStringValue(stylesList.get(0));
-				DataValue stylesDV = (DataValue) wmsOptions
-						.getComponent("styles");
+				DataValue stylesDV = (DataValue) wmsOptions.getComponent("styles");
 				stylesDV.setData(dbs);
 			}
 

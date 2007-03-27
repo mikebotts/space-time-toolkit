@@ -16,6 +16,7 @@ package org.vast.stt.gui.widgets.catalog;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -52,6 +53,7 @@ public class SOSMappingPage extends WizardPage
 	String [] offerings;
 	private AdvancedGeometryTab geometryComp;
 	List<String>possibleMappings = new ArrayList<String>(3);
+	HashMap<String, String []> mappings = new HashMap<String, String[]>(3);
 	int offeringIndex = 0;
 	
 	public SOSMappingPage(SOSLayerCapabilities caps){
@@ -62,19 +64,35 @@ public class SOSMappingPage extends WizardPage
 	
 	public void setOfferings(String [] offerings){
 		this.offerings = offerings;
-		String [] dataComponents = getComponents();
+		offeringIndex = 0;
+		String [] dataComponents = getComponents(offeringIndex);
 		if(dataComponents != null)
 			geometryComp.setMappableItems(dataComponents);
+		else
+			; //  disable combos, require ProcessChain?
 	}
 	
-	private String [] getComponents(){
+	private String [] getComponents(int index){
 		setTitle(offerings[offeringIndex] + " Geometry Mapper");
+		String [] components = mappings.get(offerings[index]);
+		if(components == null){
+			components = requestComponents();
+			if(components == null)
+				return null;//  disable mapping controls for this observation
+			else 
+				mappings.put(offerings[index], components);
+		}
+		return components;
+	}
+	
+	private String [] requestComponents(){
 		DataComponent component = null; 
 		try {
 			component = issueRequest();
 		} catch (DataException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			//  TODO: report error and disable this offering (or force to processChain mapping)
+			return null;
 		}
 		//  Get DataComponents;
 		//  TODO  store these so they don't have to be reloaded in the event
@@ -96,6 +114,7 @@ public class SOSMappingPage extends WizardPage
 	private void assignDefaultComponents(){
 		//  assign Y to lat
 		//  assign X to lon
+		
 		//  assign Z to alt
 		//  assign *time to time
 	}
@@ -212,8 +231,7 @@ public class SOSMappingPage extends WizardPage
 		if(offeringIndex == 0)
 			return ((AddSOSItemWizard)this.getWizard()).sosChooserPage;
 		offeringIndex--;
-		String [] dataComponents = getComponents();
-		assignDefaultComponents();
+		String [] dataComponents = getComponents(offeringIndex);
 		if(dataComponents != null)
 			geometryComp.setMappableItems(dataComponents);
 		return this;
@@ -222,7 +240,7 @@ public class SOSMappingPage extends WizardPage
 	public IWizardPage getNextPage(){
 		//storeCurrentMappings();
 		if(++offeringIndex < offerings.length) {
-			String [] dataComponents = getComponents();
+			String [] dataComponents = getComponents(offeringIndex);
 			if(dataComponents != null)
 				geometryComp.setMappableItems(dataComponents);
 			return this;
