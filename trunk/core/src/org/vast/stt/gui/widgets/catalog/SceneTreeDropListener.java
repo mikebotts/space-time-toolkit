@@ -144,6 +144,11 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	}
 
 	protected boolean dropItem(DataItem item) {
+		if(item.getName()==null){
+			System.err.println("DataItem name is null in SceneTreeDropListner.  Should not have gotten here.");
+			return false;
+		}
+		
 		DataEntry dropTarget = (DataEntry) this.getCurrentTarget();
 		TreeViewer vwr = (TreeViewer) this.getViewer();
 		//  If target is a folder, drop into folder and open it
@@ -328,7 +333,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			endPt.setData(dbs);
 			//  layer
 			DataValue layerDV = (DataValue) wmsOptions.getComponent("layer");
-			String layerStr = wmsCaps.getName();
+			//String layerStr = wmsCaps.getName();
+			String layerStr = wmsCaps.getId();
 			dbs = new DataBlockString(1);
 			dbs.setStringValue(layerStr);
 			layerDV.setData(dbs);

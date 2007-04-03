@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.wms.WMSLayerCapabilities;
 
 /**
  * <p><b>Title:</b>
@@ -68,6 +69,13 @@ public class LayerTreeDragListener extends DragSourceAdapter
 		StructuredSelection sel = (StructuredSelection)event.getSelection();
 		Object selObj = sel.getFirstElement();
 		if(selObj instanceof OWSLayerCapabilities) {
+			if(selObj instanceof WMSLayerCapabilities){
+				WMSLayerCapabilities caps = (WMSLayerCapabilities)selObj;
+				if(caps.getChildLayers() != null){
+					dragOk = false;  //  do not allow layers with children to be dragged
+					return;
+				}
+			}
 			dragOk = true;
 			currentSelection = (OWSLayerCapabilities)selObj;
 		} else
