@@ -21,22 +21,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.PlatformUI;
-import org.vast.data.DataBlockBoolean;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.sld.SLDReader;
-import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.util.Bbox;
@@ -49,7 +45,7 @@ import org.vast.process.ProcessException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.symbolizer.AddSymbolizerDialog;
+import org.vast.stt.gui.widgets.dataProvider.WMSProcessOptions;
 import org.vast.stt.process.SOS_Process;
 import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataEntry;
@@ -60,7 +56,6 @@ import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.stt.style.SymbolizerFactory;
 import org.vast.util.ExceptionSystem;
 import org.vast.xml.DOMHelper;
 import org.vast.xml.DOMHelperException;
@@ -311,6 +306,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	protected void loadWMSProcess(SMLProvider provider, OWSLayerCapabilities caps) {
 		ProcessChain process = null;
 		WMS_Process wmsProc = null;
+		WMSProcessOptions wmsOptions;
 		
 		try {
 			process = (ProcessChain)provider.getProcess();
@@ -319,70 +315,34 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			WMSLayerCapabilities wmsCaps = (WMSLayerCapabilities) caps;
 			OWSServiceCapabilities owsCaps = wmsCaps.getParent();
 			wmsProc = (WMS_Process) process.getProcessList().get(0);
-			DataGroup wmsParams = (DataGroup) wmsProc.getParameterList();
-			DataGroup wmsOptions = (DataGroup) wmsParams.getComponent(0);
+			wmsOptions = new WMSProcessOptions(wmsProc);
 			//  Options
-			//  TODO add some convenience methods and break this all out to separate class
-			//  service endPt
-			DataValue endPt = (DataValue) wmsOptions.getComponent("endPoint");
-			DataBlockString dbs = new DataBlockString(1);
 			//  Use 1st get Server for now
 			Map serversMap = owsCaps.getGetServers();
 			String getMapUrl = (String) serversMap.get("GetMap");
-			dbs.setStringValue(getMapUrl);
-			endPt.setData(dbs);
-			//  layer
-			DataValue layerDV = (DataValue) wmsOptions.getComponent("layer");
-			//String layerStr = wmsCaps.getName();
+			wmsOptions.setEndpoint(getMapUrl);
 			String layerStr = wmsCaps.getId();
-			dbs = new DataBlockString(1);
-			dbs.setStringValue(layerStr);
-			layerDV.setData(dbs);
+			wmsOptions.setLayer(layerStr);
 			// format
-			DataValue formatDV = (DataValue) wmsOptions.getComponent("format");
 			List<String> formatList = wmsCaps.getFormatList();
 			String formatStr;
-			if (formatList.contains("image/png"))
-				formatStr = "image/png";
+			//  gif and png are not working properly
+			if (formatList.contains("image/jpeg"))
+				formatStr = "image/jpeg";
 			else
 				formatStr = formatList.get(0);
-			dbs = new DataBlockString(1);
-			dbs.setStringValue(formatStr);
-			formatDV.setData(dbs);
-			// version- comes from Servers.xml, leave as default
-			//  imageW & H - leave these as defaults from the template file
-			//    	  DataValue widthDV = (DataValue)wmsOptions.getComponent("imageWidth");
-			//    	  DataBlockInt dbi = new DataBlockInt(1);
-			//    	  dbi.setIntValue(512);
-			//    	  widthDV.setData(dbi);
-			//    	  DataValue heightDV = (DataValue)wmsOptions.getComponent("imageHeight");
-			//    	  dbi = new DataBlockInt(1);
-			//    	  dbi.setIntValue(512);
-			//    	  heightDV.setData(dbi);
-			// trasnparency
-			DataValue transDV = (DataValue) wmsOptions
-					.getComponent("imageTransparency");
-			DataBlockBoolean dbb = new DataBlockBoolean(1);
-			dbb.setBooleanValue(wmsCaps.isOpaque());
-			transDV.setData(dbb);
-			//  SRS - no provision to set 
+			wmsOptions.setFormat(formatStr);
+			wmsOptions.setTransparency(wmsCaps.isOpaque());
 			List<String> srsList = wmsCaps.getSrsList();
-			dbs = new DataBlockString(1);
+			String srs;
 			if (srsList.contains("EPSG:4326") || srsList.size() == 0)
-				dbs.setStringValue("EPSG:4326");
+				srs = "EPSG:4326";
 			else
-				dbs.setStringValue(srsList.get(0));
-			DataValue srsDV = (DataValue) wmsOptions.getComponent("srs");
-			srsDV.setData(dbs);
-
-			//  Styles
+				srs = srsList.get(0);
+			wmsOptions.setSRS(srs);
 			List<String> stylesList = wmsCaps.getStyleList();
-			dbs = new DataBlockString(1);
-			if (stylesList != null && stylesList.size() > 0) {
-				dbs.setStringValue(stylesList.get(0));
-				DataValue stylesDV = (DataValue) wmsOptions.getComponent("styles");
-				stylesDV.setData(dbs);
-			}
+			if (stylesList != null && stylesList.size() > 0) 
+				wmsOptions.setStyle(stylesList.get(0));
 
 			// set bbox input values (override these with caps vals?
 			List<Bbox> bboxList = wmsCaps.getBboxList();
