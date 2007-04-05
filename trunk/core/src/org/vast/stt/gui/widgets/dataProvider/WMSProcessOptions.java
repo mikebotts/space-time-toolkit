@@ -49,7 +49,7 @@ public class WMSProcessOptions
 	}
 	
 	public int getInputImageWidth() {
-        DataComponent wComp = wmsParams.getComponent("imageWidth");
+        DataComponent wComp = wmsOptions.getComponent("imageWidth");
         DataBlock wBlock = wComp.getData();
         int w = wBlock.getIntValue();
         return w;
@@ -61,7 +61,7 @@ public class WMSProcessOptions
 	}
 	
 	public String getVersion(){
-        String version = wmsParams.getComponent("version").getData().getStringValue();
+        String version = wmsOptions.getComponent("version").getData().getStringValue();
 		return version;
 	}
 	
@@ -72,12 +72,12 @@ public class WMSProcessOptions
 	}
 	
 	public String getFormat(){
-        String format = wmsParams.getComponent("format").getData().getStringValue();
+        String format = wmsOptions.getComponent("format").getData().getStringValue();
         return format;
 	}
 	
 	public boolean getTransparency(){
-        boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
+        boolean transparent = wmsOptions.getComponent("imageTransparency").getData().getBooleanValue();
         return transparent;
 	}
 	
@@ -93,11 +93,11 @@ public class WMSProcessOptions
 	}
 
 	public void setInputImageHeight(int h){
-        wmsParams.getComponent("imageWidth").getData().setIntValue(h);
+        wmsOptions.getComponent("imageWidth").getData().setIntValue(h);
 	}        
 	
 	public void setInputImageWidth(int w){
-        wmsParams.getComponent("imageWidth").getData().setIntValue(w);
+		wmsOptions.getComponent("imageWidth").getData().setIntValue(w);
 	}
 	
 	public void setLayer(String layer){
