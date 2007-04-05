@@ -101,7 +101,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 //			}
 			return true;
 		} else if (data instanceof WMSLayerCapabilities) {
-			DataItem item = createWMSItem((WMSLayerCapabilities)caps);
+			DataItem item = WMSLayerFactory.createWMSLayer((WMSLayerCapabilities)caps);
 			return dropItem(item);
 		} else if (data instanceof WCSLayerCapabilities) {
 			System.err.println("Add WCS drop support");
@@ -126,7 +126,6 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		dialog.create();
 		dialog.open();
 	}
-	
 	
 	/**
 	 * Method declared on ViewerDropAdapter
@@ -213,159 +212,6 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return false;
 	}
 	
-	public DataItem[] createSOSItem(SOSLayerCapabilities caps){
-		try {
-			Enumeration e;
-			String templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
-			String capsServer = caps.getParent().getGetServers().get("GetCapabilities");
-			
-			//  Hardcoded switch to hack what we're dropping- clean up later
-			//  TODO:  How to unhack this?
-			if(capsServer.contains("muenster"))
-				templateName = "IFGI_WeatherNY.xml";
-			else
-				templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
-			e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", templateName, false);
-			String fileLocation = null;
-			if (e.hasMoreElements())
-				fileLocation = (String) e.nextElement().toString();
-
-			if (fileLocation == null) {
-				ExceptionSystem.display(new Exception(
-						"STT error: Cannot find template\\" + templateName));
-				return null;
-			}
-
-            DOMHelper dom = new DOMHelper(fileLocation, false);
-			DataTreeReader dataReader = new DataTreeReader();
-//			DataItem tmpItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-			List<String> procs = caps.getProcedureList();
-			int numItems = procs.size();
-			DataItem [] items = new DataItem[numItems];
-			for(int i=0; i<numItems;i++) {
-				//  No way to clone items currently.  Reread template file each time, for now
-				items[i] = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-				//  Override name from template
-				items[i].setName(caps.getId());
-				setSOSProcedure(items[i], procs.get(i));
-			}
-			
-			return items;
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public void setSOSProcedure(DataItem item, String procedure){
-		SMLProvider provider = (SMLProvider)item.getDataProvider();
-		DataProcess process = provider.getProcess();
-		SOS_Process sosProc = (SOS_Process) process;
-		DataGroup sosParams = (DataGroup) sosProc.getParameterList();
-		DataGroup sosOptions = (DataGroup) sosParams.getComponent(0);
-		//  Options
-		//  TODO add some convenience methods and break this all out to separate class
-		DataValue procDv = (DataValue) sosOptions.getComponent("procedures");
-		DataBlockString dbs = new DataBlockString(1);
-		dbs.setStringValue(procedure);
-		procDv.setData(dbs);
-		item.setName(item.getName() + "_" + procedure);
-	}
-	
-	public DataItem createWMSItem(WMSLayerCapabilities caps){
-		try {
-			String fileLocation = null;
-			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", "WMS_FlatGrid_Template.xml", false);
-			if (e.hasMoreElements())
-				fileLocation = (String) e.nextElement().toString();
-
-			if (fileLocation == null) {
-				ExceptionSystem.display(new Exception(
-						"STT error: Cannot find template\\wms.xml"));
-				return null;
-			}
-
-            DOMHelper dom = new DOMHelper(fileLocation, false);
-			DataTreeReader dataReader = new DataTreeReader();
-			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-			worldItem.setName(caps.getId());
-			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
-			//  load default fields from caps into SensorMLProvider 
-			loadWMSProcess(provider, caps);
-			
-			return worldItem;
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	//  TODO  Hardwired for WMS now- generalize
-	protected void loadWMSProcess(SMLProvider provider, OWSLayerCapabilities caps) {
-		ProcessChain process = null;
-		WMS_Process wmsProc = null;
-		WMSProcessOptions wmsOptions;
-		
-		try {
-			process = (ProcessChain)provider.getProcess();
-			
-			//  Bold assumptions into processChain structure...
-			WMSLayerCapabilities wmsCaps = (WMSLayerCapabilities) caps;
-			OWSServiceCapabilities owsCaps = wmsCaps.getParent();
-			wmsProc = (WMS_Process) process.getProcessList().get(0);
-			wmsOptions = new WMSProcessOptions(wmsProc);
-			//  Options
-			//  Use 1st get Server for now
-			Map serversMap = owsCaps.getGetServers();
-			String getMapUrl = (String) serversMap.get("GetMap");
-			wmsOptions.setEndpoint(getMapUrl);
-			String layerStr = wmsCaps.getId();
-			wmsOptions.setLayer(layerStr);
-			// format
-			List<String> formatList = wmsCaps.getFormatList();
-			String formatStr;
-			//  gif and png are not working properly
-			if (formatList.contains("image/jpeg"))
-				formatStr = "image/jpeg";
-			else
-				formatStr = formatList.get(0);
-			wmsOptions.setFormat(formatStr);
-			wmsOptions.setTransparency(wmsCaps.isOpaque());
-			List<String> srsList = wmsCaps.getSrsList();
-			String srs;
-			if (srsList.contains("EPSG:4326") || srsList.size() == 0)
-				srs = "EPSG:4326";
-			else
-				srs = srsList.get(0);
-			wmsOptions.setSRS(srs);
-			List<String> stylesList = wmsCaps.getStyleList();
-			if (stylesList != null && stylesList.size() > 0) 
-				wmsOptions.setStyle(stylesList.get(0));
-
-			// set bbox input values (override these with caps vals?
-			List<Bbox> bboxList = wmsCaps.getBboxList();
-			STTSpatialExtent ext = new STTSpatialExtent();
-			Bbox bbox = new Bbox();
-			if (bboxList != null || bboxList.size() > 0) {
-				bbox = bboxList.get(0);
-				ext.setMinX(bbox.getMinX());
-				ext.setMaxX(bbox.getMaxX());
-				ext.setMinY(bbox.getMinY());
-				ext.setMaxY(bbox.getMaxY());
-				provider.setSpatialExtent(ext);
-			}
-			// intitialize process with new params
-			process.init();
-
-		} catch (ProcessException e) {
-			e.printStackTrace(System.err);
-		} 
-		System.err.println(wmsProc);
-	}
-
-
 	public static void main(String[] args) throws IOException,
     DOMHelperException {
 		SLDReader sldReader = new SLDReader();
