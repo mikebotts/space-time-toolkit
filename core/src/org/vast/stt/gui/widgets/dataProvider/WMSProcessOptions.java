@@ -13,6 +13,8 @@
 
 package org.vast.stt.gui.widgets.dataProvider;
 
+import org.vast.cdm.common.DataBlock;
+import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataBlockBoolean;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
@@ -46,21 +48,64 @@ public class WMSProcessOptions
 		wmsOptions = (DataGroup) wmsParams.getComponent(0);
 	}
 	
+	public int getInputImageWidth() {
+        DataComponent wComp = wmsParams.getComponent("imageWidth");
+        DataBlock wBlock = wComp.getData();
+        int w = wBlock.getIntValue();
+        return w;
+	}
+	
+	public int getInputImageHeight(){
+        int h = wmsParams.getComponent("imageHeight").getData().getIntValue();
+        return h;
+	}
+	
+	public String getVersion(){
+        String version = wmsParams.getComponent("version").getData().getStringValue();
+		return version;
+	}
+	
+	public String getSRS(){
+		//  TODO uncomment when SRS supported by process
+        //String version = wmsParams.getComponent("srs").getData().getStringValue();
+		return "EPSG:4326";
+	}
+	
+	public String getFormat(){
+        String format = wmsParams.getComponent("format").getData().getStringValue();
+        return format;
+	}
+	
+	public boolean getTransparency(){
+        boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
+        return transparent;
+	}
+	
+	public boolean getMaintainAspect(){
+		return wmsProcess.getPreserveAspectRatio();
+	}	
+	
 	public void setEndpoint(String url){
 		DataValue endPt = (DataValue) wmsOptions.getComponent("endPoint");
 		DataBlockString dbs = new DataBlockString(1);
-		//  Use 1st get Server for now
 		dbs.setStringValue(url);
 		endPt.setData(dbs);
 	}
 
+	public void setInputImageHeight(int h){
+        wmsParams.getComponent("imageWidth").getData().setIntValue(h);
+	}        
+	
+	public void setInputImageWidth(int w){
+        wmsParams.getComponent("imageWidth").getData().setIntValue(w);
+	}
+	
 	public void setLayer(String layer){
 		DataValue layerDV = (DataValue) wmsOptions.getComponent("layer");
 		//String layerStr = wmsCaps.getName();
 		DataBlockString dbs = new DataBlockString(1);
 		dbs.setStringValue(layer);
 		layerDV.setData(dbs);
-		
 	}
 	
 	public void setFormat(String format){
@@ -70,10 +115,8 @@ public class WMSProcessOptions
 		formatDV.setData(dbs);
 	}
 	
-	// trasnparency
 	public void setTransparency(boolean b){
-		DataValue transDV = (DataValue) wmsOptions
-		.getComponent("imageTransparency");
+		DataValue transDV = (DataValue) wmsOptions.getComponent("imageTransparency");
 		DataBlockBoolean dbb = new DataBlockBoolean(1);
 		dbb.setBooleanValue(b);
 		transDV.setData(dbb);
