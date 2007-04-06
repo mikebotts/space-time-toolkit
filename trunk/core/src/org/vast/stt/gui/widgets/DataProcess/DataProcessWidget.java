@@ -3,24 +3,34 @@ package org.vast.stt.gui.widgets.DataProcess;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ISelection;
+
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
-import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.stt.gui.widgets.CheckOptionTable;
+import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.sml.SMLProvider;
 
 
 /**
@@ -37,14 +47,24 @@ import org.vast.stt.provider.DataProvider;
  * @date May 10, 2006
  * @version 1.0
  * 
- * TODO  CkBoxTableViewer really only needs to be a list here, I think.
- *       Processes can't be turned on and off?
- * TODO  Should this GUI have an enable button?  If not, make it optional 
- *       in super class       
- * 
  */
-public class DataProcessWidget extends CheckOptionTable
+public class DataProcessWidget implements ISelectionChangedListener, SelectionListener
 { 
+    protected DataItem dataItem;
+    protected Table table;
+    protected Group mainGroup;
+    protected Composite optionsComp;
+    protected ScrolledComposite stylesSC;
+    protected ListViewer listViewer;
+    protected OptionChooser optionChooser;
+    protected String checkboxTableLabel;
+
+    protected boolean allowAddRemove = true;
+    protected Button deleteButton;
+    protected Button addButton;
+    protected Button enabledButton;
+    protected Button updateButton;
+    protected int span = 3;
 	java.util.List<DataProcess> processAL;
 	DataProcess activeProcess;
 	
@@ -53,26 +73,101 @@ public class DataProcessWidget extends CheckOptionTable
 		checkboxTableLabel = "Providers:";
 		allowAddRemove = false;
 		init(parent);
-		setCheckboxTableContentProvider(new TableContentProvider());
-		setCheckboxTableLabelProvider(new TableLabelProvider());
 	}
 	
+	public void init(Composite parent) {
+		// Check for DataItem, OptionChooser
+		final ScrolledComposite mainSC = new ScrolledComposite(parent,
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+
+		mainSC.setExpandVertical(true);
+		mainSC.setExpandHorizontal(true);
+		// START HERE: Try this with OptSCroller
+		mainSC.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
+
+		mainGroup = new Group(mainSC, SWT.NONE);
+		mainGroup.setText("Item Name");
+		final GridLayout gridLayout = new GridLayout(span, false);
+		mainGroup.setLayout(gridLayout);
+		mainGroup.setLocation(0, 0);
+
+		// Enabled Button
+		enabledButton = new Button(mainGroup, SWT.CHECK);
+		enabledButton.setData(dataItem);
+		GridData gridData = new GridData();
+		gridData.verticalIndent = 7;
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.horizontalSpan = span;
+		enabledButton.setLayoutData(gridData);
+		enabledButton.setText("enabled");
+		enabledButton.addSelectionListener(this);
+
+		// Styles Label
+		final Label stylesLabel = new Label(mainGroup, SWT.RIGHT);
+		stylesLabel.setText(checkboxTableLabel);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalSpan = span - (allowAddRemove ? 2 : 0);
+		// gridData.widthHint = 55;
+		stylesLabel.setLayoutData(gridData);
+
+		// CheckboxTableViewer for styles
+		listViewer = new ListViewer(mainGroup,SWT.SINGLE);
+		listViewer.setLabelProvider(new ProcessLabelProvider());
+		listViewer.setContentProvider(new ProcessContentProvider());
+		listViewer.addSelectionChangedListener(this);
+
+		final GridData tableGd = new GridData(GridData.FILL, GridData.FILL,	true, true);
+		tableGd.minimumHeight = 75;
+		tableGd.heightHint = 45;
+		tableGd.horizontalSpan = span;
+		tableGd.grabExcessVerticalSpace = false;
+		listViewer.getControl().setLayoutData(tableGd);
+
+		// Options Label
+		final Label optLabel = new Label(mainGroup, SWT.NONE);
+		final GridData gridData_6 = new GridData();
+		gridData_6.horizontalSpan = span;
+		gridData_6.horizontalAlignment = GridData.BEGINNING;
+		optLabel.setLayoutData(gridData_6);
+		optLabel.setText("Options:");
+
+		// OptionsChooser
+		optionChooser = createOptionChooser(mainGroup);
+
+		// Advanced Button
+		updateButton = new Button(mainGroup, SWT.NONE);
+		final GridData gridData_7 = new GridData();
+		gridData_7.horizontalSpan = span;
+		gridData_7.horizontalAlignment = GridData.END;
+		updateButton.setLayoutData(gridData_7);
+		updateButton.setText("Send New Request");
+		updateButton.addSelectionListener(this);
+
+		mainSC.setContent(mainGroup);
+		mainSC.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+	}
+
 	public OptionChooser createOptionChooser(Composite parent){
 		return new DataProcessOptionChooser(parent);
 	}
 
-	public void setDataItem(DataItem item){
-		super.setDataItem(item);
+	public void setDataItem(DataItem item) {
+		dataItem = item;
+		mainGroup.setText(item.getName());
+		enabledButton.setData(dataItem);
+		enabledButton.setSelection(dataItem.isEnabled());
 		DataProvider prov = item.getDataProvider();
-		if(prov == null)
+		if (prov == null)
 			return;
-		//  Provider should be a SensorMLProvider
-		if(!(prov instanceof SMLProvider)) {
+		// Provider should be a SensorMLProvider
+		if (!(prov instanceof SMLProvider)) {
 			System.err.println("SWE Provider not yer supported");
 			return;
 		}
-		
-		setProvider((SMLProvider)prov);
+
+		setProvider((SMLProvider) prov);
 	}
 	
 	/**
@@ -100,27 +195,10 @@ public class DataProcessWidget extends CheckOptionTable
 
 		//  Display first process options initially
 		optionChooser.buildControls(processAL.get(0));
-		//  Change cbTableViewer contents
-		checkboxTableViewer.setInput(processAL);	
-		Iterator it = processAL.iterator();
-//		DataProcess procTmp;
-//		//  Set init state of checkboxes
-//		while(it.hasNext()){
-//			procTmp = (DataProcess)it.next();
-//			//checkboxTableViewer.setChecked(procTmp, procTmp.);
-//		}
-		checkboxTableViewer.getTable().setSelection(0);
-		ISelection selection = checkboxTableViewer.getSelection();
-		checkboxTableViewer.setSelection(selection);	
+		//  Change listViewer contents
+		listViewer.setInput(processAL);	
 	}
-	//  enabling checkbox causes ckState AND selChanged events
-	public void checkStateChanged(CheckStateChangedEvent e) {
-		// TODO Auto-generated method stub
-		//  e.getElement returns checked Styler
-//		DataStyler styler = (DataStyler)e.getElement();
-//		styler.setEnabled(e.getChecked());
-	}
-	
+
 	//  Selecting label causes ONLY selChanged event
 	public void selectionChanged(SelectionChangedEvent e) {
 		System.err.println("sel source is" + e.getSource());
@@ -135,9 +213,9 @@ public class DataProcessWidget extends CheckOptionTable
 				return;
 			}
 			//  Reset selected to first in Table
-			checkboxTableViewer.getTable().setSelection(0);			
-			selection = (StructuredSelection)checkboxTableViewer.getSelection();
-			proc = (DataProcess)selection.getFirstElement();
+//			checkboxTableViewer.getTable().setSelection(0);			
+//			selection = (StructuredSelection)checkboxTableViewer.getSelection();
+//			proc = (DataProcess)selection.getFirstElement();
 		}
 		//  Check to see if selected Styler has really changed
 		if(proc == activeProcess){
@@ -156,17 +234,26 @@ public class DataProcessWidget extends CheckOptionTable
 		// TODO Auto-generated method stub
 		Control control = (Control)e.getSource();
 		if (control == enabledButton){
-		} else if (control == advancedButton){
+			dataItem.setEnabled(enabledButton.getSelection());
+		} else if (control == updateButton){
+			try {
+				//  TODO  add update button...
+				DataProvider provider = dataItem.getDataProvider();
+				dataItem.getDataProvider().updateData();
+			} catch (DataException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
   		}
 	}
 	
 	public void close(){
 		//  TODO: dispose of any resources
-	}
+	}	
 }
 
-class TableContentProvider implements IStructuredContentProvider{
-
+class ProcessContentProvider implements IStructuredContentProvider
+{
 	DataProcess[] process;
 	
 	public Object [] getElements (Object inputElement){
@@ -181,10 +268,9 @@ class TableContentProvider implements IStructuredContentProvider{
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		//System.err.println("Input changed is " + );
 	}
-	
 }
 
-class TableLabelProvider extends LabelProvider {
+class ProcessLabelProvider extends LabelProvider {
 
 	public Image getImage(Object element) {
 		return null;
