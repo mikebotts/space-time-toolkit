@@ -35,6 +35,7 @@ import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
+import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.ows.wms.WMSQuery;
 import org.vast.process.*;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
@@ -68,7 +69,7 @@ public class WMS_Process extends DataProcess
     protected int originalWidth;
     protected int originalHeight;
     protected boolean preserveAspectRatio = true;
-    
+    protected WMSLayerCapabilities caps;  //  need this for option chooser...
 
     public WMS_Process()
     {
@@ -289,5 +290,15 @@ public class WMS_Process extends DataProcess
 
 	public void setPreserveAspectRatio(boolean preserveAspectRatio) {
 		this.preserveAspectRatio = preserveAspectRatio;
+	}
+
+
+	public WMSLayerCapabilities getCapabilities() {
+		return caps;
+	}
+
+
+	public void setCapabilities(WMSLayerCapabilities caps) {
+		this.caps = caps;
 	}
 }
