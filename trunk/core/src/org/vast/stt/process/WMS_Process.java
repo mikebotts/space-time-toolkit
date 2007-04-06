@@ -264,6 +264,18 @@ public class WMS_Process extends DataProcess
             query.setWidth(width);
             query.setHeight(height);
         }
+        
+        //  reload other query options (since user can change them via GUI)
+        // image format
+        DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
+        String format = wmsParams.getComponent("format").getData().getStringValue();
+        query.setFormat(format);
+        
+        // image transparency
+        boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
+        query.setTransparent(transparent);
+        
+        query.setSrs("EPSG:4326");
     }
     
     
