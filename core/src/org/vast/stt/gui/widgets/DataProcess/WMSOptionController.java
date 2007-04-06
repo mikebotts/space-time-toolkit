@@ -1,5 +1,7 @@
 package org.vast.stt.gui.widgets.DataProcess;
 
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -7,12 +9,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.vast.ows.wms.WMSLayerCapabilities;
-import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
 import org.vast.stt.process.WMS_Process;
+import org.vast.stt.provider.sml.SMLProvider;
 
 /**
  * <p><b>Title:</b><br/>
@@ -29,7 +30,7 @@ import org.vast.stt.process.WMS_Process;
  * @version 1.0
  */
 
-public class WMSOptionController extends OptionController
+public class WMSOptionController extends OptionController implements ModifyListener
 {
 	private SMLProvider provider;
 	WMS_Process wmsProcess;
@@ -60,6 +61,10 @@ public class WMSOptionController extends OptionController
 		optionControls = OptionControl.createControls(parent, params);
 		loadFields();
 		addSelectionListener(this);
+		//  Need also to register key listeners on width and height text fields, since they
+		//  don't generate selection events.
+		Text wText = (Text)optionControls[0].getControl();
+		wText.addModifyListener(this);
 	}
 
 	@Override
@@ -90,20 +95,20 @@ public class WMSOptionController extends OptionController
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
+	public void modifyText(ModifyEvent e) {
+		Text text = (Text)e.getSource();
+		String newStr = text.getText();
+		int newVal = Integer.parseInt(newStr);
+		if(text == optionControls[0].getControl()) { // width
+			wmsOptions.setInputImageWidth(newVal);
+		} else {  // height
+			wmsOptions.setInputImageHeight(newVal);
+		}
+	}
+
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 
-//		if(control == optionControls[0].getControl()) {  // width 
-//			String ws = ((Text)control).getText();
-//			int w = Integer.parseInt(ws);
-//			wmsOptions.setInputImageWidth(w);
-//		}
-//		else if (control == optionControls[1].getControl()) { //height
-//			String hs = ((Text)control).getText();
-//			int h = Integer.parseInt(hs);
-//			wmsOptions.setInputImageHeight(h);
-//		} else 
-//			
 		if (control == optionControls[2].getControl()) { //format
 			String format = ((Combo)control).getText();
 			wmsOptions.setFormat(format);
