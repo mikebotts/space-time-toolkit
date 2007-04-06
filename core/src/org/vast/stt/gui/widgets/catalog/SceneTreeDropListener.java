@@ -13,13 +13,7 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -27,38 +21,18 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.PlatformUI;
-import org.vast.data.DataBlockString;
-import org.vast.data.DataGroup;
-import org.vast.data.DataValue;
 import org.vast.ows.OWSLayerCapabilities;
-import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.sld.SLDReader;
-import org.vast.ows.sld.TextureSymbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.util.Bbox;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
-import org.vast.process.DataProcess;
-import org.vast.process.ProcessChain;
-import org.vast.process.ProcessException;
-import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.dataProvider.WMSProcessOptions;
-import org.vast.stt.process.SOS_Process;
-import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataEntry;
 import org.vast.stt.project.tree.DataFolder;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTree;
-import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.util.ExceptionSystem;
-import org.vast.xml.DOMHelper;
-import org.vast.xml.DOMHelperException;
 
 /**
  * <p><b>Title:</b>
@@ -210,16 +184,5 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 			index++;
 		}
 		return false;
-	}
-	
-	public static void main(String[] args) throws IOException,
-    DOMHelperException {
-		SLDReader sldReader = new SLDReader();
-		InputStream fileIs = new FileInputStream(
-				"C:\\tcook\\work\\STT3\\templates\\wms.xml");
-        DOMHelper dom = new DOMHelper(fileIs, false);
-		//  Get to TextureSymbolizer Elt
-		TextureSymbolizer sym = sldReader
-				.readTexture(dom, dom.getRootElement());
 	}
 }
