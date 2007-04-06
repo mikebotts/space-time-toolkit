@@ -115,12 +115,5 @@ public class WMSOptionController extends OptionController
 			boolean tr = ((Button)control).getSelection();
 			wmsOptions.setTransparency(tr);
 		}
-		try {
-			//  TODO  add update button...
-			provider.updateData();
-		} catch (DataException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 }

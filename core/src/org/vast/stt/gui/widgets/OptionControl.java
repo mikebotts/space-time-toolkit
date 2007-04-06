@@ -159,7 +159,7 @@ public class OptionControl extends Composite implements KeyListener
 		combo.setItems(opts);
 	
 		GridData gd = new GridData(SWT.RIGHT, SWT.CENTER, true,false);
-		gd.widthHint = 40;
+		gd.widthHint = 60;
 		combo.setLayoutData(gd);
 		controlType = ControlType.COMBO;
 		return combo;

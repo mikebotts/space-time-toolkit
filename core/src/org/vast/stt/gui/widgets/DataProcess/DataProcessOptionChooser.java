@@ -26,8 +26,8 @@ import org.vast.stt.process.WMS_Process;
  * TODO  support advanced options      
  */
 
-public class DataProcessOptionChooser extends OptionChooser {
-	
+public class DataProcessOptionChooser extends OptionChooser 
+{
     SMLProvider provider;
 	
 	public DataProcessOptionChooser(Composite parent) {
