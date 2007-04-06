@@ -93,7 +93,7 @@ public class WMSProcessOptions
 	}
 
 	public void setInputImageHeight(int h){
-        wmsOptions.getComponent("imageWidth").getData().setIntValue(h);
+        wmsOptions.getComponent("imageHeight").getData().setIntValue(h);
 	}        
 	
 	public void setInputImageWidth(int w){

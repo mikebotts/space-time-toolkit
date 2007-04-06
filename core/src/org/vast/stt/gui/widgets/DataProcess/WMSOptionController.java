@@ -93,15 +93,18 @@ public class WMSOptionController extends OptionController
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 
-		if(control == optionControls[0].getControl()) {  // width 
-			String ws = ((Text)control).getText();
-			int w = Integer.parseInt(ws);
-			wmsOptions.setInputImageWidth(w);
-		} else if (control == optionControls[1].getControl()) { //height
-			String hs = ((Text)control).getText();
-			int h = Integer.parseInt(hs);
-			wmsOptions.setInputImageHeight(h);
-		} else if (control == optionControls[2].getControl()) { //format
+//		if(control == optionControls[0].getControl()) {  // width 
+//			String ws = ((Text)control).getText();
+//			int w = Integer.parseInt(ws);
+//			wmsOptions.setInputImageWidth(w);
+//		}
+//		else if (control == optionControls[1].getControl()) { //height
+//			String hs = ((Text)control).getText();
+//			int h = Integer.parseInt(hs);
+//			wmsOptions.setInputImageHeight(h);
+//		} else 
+//			
+		if (control == optionControls[2].getControl()) { //format
 			String format = ((Combo)control).getText();
 			wmsOptions.setFormat(format);
 		} else if (control == optionControls[3].getControl()) { //SRS
