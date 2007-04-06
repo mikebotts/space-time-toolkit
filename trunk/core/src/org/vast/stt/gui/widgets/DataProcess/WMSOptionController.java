@@ -5,14 +5,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.gui.widgets.dataProvider.WMSProcessOptions;
 import org.vast.stt.process.WMS_Process;
 
 /**
@@ -33,18 +32,21 @@ import org.vast.stt.process.WMS_Process;
 public class WMSOptionController extends OptionController
 {
 	private SMLProvider provider;
+	WMS_Process wmsProcess;
 	private WMSProcessOptions wmsOptions;
 	
 	public WMSOptionController(Composite parent, WMS_Process wmsProc, SMLProvider provider){
 		this.provider = provider;
+		this.wmsProcess = wmsProc;
 		wmsOptions = new WMSProcessOptions(wmsProc);
 		buildBasicControls(parent);
 	}
 	
 	public void buildBasicControls(Composite parent){
-		String [] formatOpts = new String[]{};
-		String [] srsOpts = new String [] {};
-		String [] styleOpts = new String []{};
+		WMSLayerCapabilities caps = wmsProcess.getCapabilities(); 
+		String [] formatOpts = caps.getFormatList().toArray(new String[]{});
+		String [] srsOpts = caps.getSrsList().toArray(new String[]{});
+		String [] styleOpts = caps.getStyleList().toArray(new String[]{});
 		OptionParams[] params = 
 		{
 			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Width:", ""),	
@@ -61,6 +63,7 @@ public class WMSOptionController extends OptionController
 	}
 
 	@Override
+	//  load the initial state of the options based on what's currently in the provider
 	public void loadFields() {
 		Text wText = (Text)optionControls[0].getControl();
 		wText.setText(wmsOptions.getInputImageWidth() + "");

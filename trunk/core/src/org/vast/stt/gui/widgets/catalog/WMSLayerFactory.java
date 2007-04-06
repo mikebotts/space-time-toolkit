@@ -24,7 +24,7 @@ import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
 import org.vast.stt.apps.STTPlugin;
-import org.vast.stt.gui.widgets.dataProvider.WMSProcessOptions;
+import org.vast.stt.gui.widgets.DataProcess.WMSProcessOptions;
 import org.vast.stt.process.WMS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
@@ -48,9 +48,8 @@ import org.vast.xml.DOMHelper;
  * @version 1.0
  */
 
-public class WMSLayerFactory {
-	
-	
+public class WMSLayerFactory
+{
 	public static DataItem createWMSLayer(WMSLayerCapabilities caps){
 		try {
 			String fileLocation = null;
@@ -93,6 +92,10 @@ public class WMSLayerFactory {
 			WMSLayerCapabilities wmsCaps = (WMSLayerCapabilities) caps;
 			OWSServiceCapabilities owsCaps = wmsCaps.getParent();
 			wmsProc = (WMS_Process) process.getProcessList().get(0);
+			//  Add caps to the process.  Not sure if belongs here, but need caps
+			//  to be persistent so the option chooser can know all available choices
+			wmsProc.setCapabilities(wmsCaps);
+			
 			wmsOptions = new WMSProcessOptions(wmsProc);
 			//  Options
 			//  Use 1st get Server for now
