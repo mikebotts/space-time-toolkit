@@ -237,8 +237,9 @@ public class DataProcessWidget implements ISelectionChangedListener, SelectionLi
 			dataItem.setEnabled(enabledButton.getSelection());
 		} else if (control == updateButton){
 			try {
-				//  TODO  add update button...
 				DataProvider provider = dataItem.getDataProvider();
+				//  NEED TO READ w/h fields and reset them here before requesting data!!!
+				// 
 				dataItem.getDataProvider().updateData();
 			} catch (DataException e1) {
 				// TODO Auto-generated catch block
