@@ -250,6 +250,13 @@ public class WMS_Process extends DataProcess
         query.getBbox().setMaxY(maxY);
         
         // adjust widht/height to match aspect ratio
+        DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
+        // image width
+        originalWidth = wmsParams.getComponent("imageWidth").getData().getIntValue();
+        
+        // image height
+        originalHeight = wmsParams.getComponent("imageHeight").getData().getIntValue();
+        
         if (preserveAspectRatio)
         {
             int width = originalWidth;
@@ -267,7 +274,6 @@ public class WMS_Process extends DataProcess
         
         //  reload other query options (since user can change them via GUI)
         // image format
-        DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
         String format = wmsParams.getComponent("format").getData().getStringValue();
         query.setFormat(format);
         
