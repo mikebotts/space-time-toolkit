@@ -1,8 +1,11 @@
 package org.vast.stt.gui.widgets.bbox;
 
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -25,7 +28,7 @@ import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 
 
-public class BboxWidget implements SelectionListener
+public class BboxWidget implements SelectionListener, KeyListener
 {
     WorldScene scene;
     DataItem dataItem;
@@ -108,7 +111,12 @@ public class BboxWidget implements SelectionListener
 		fl.marginWidth = 4;
 		slatGroup.setLayout(fl);
 		slatText = new Text(slatGroup, SWT.RIGHT);
-
+		//  restrict text fields to numeric input
+		wlonText.addKeyListener(this);
+		elonText.addKeyListener(this);
+		nlatText.addKeyListener(this);
+		slatText.addKeyListener(this);
+		
 		//  Layout Btns
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
@@ -299,10 +307,21 @@ public class BboxWidget implements SelectionListener
         else if(e.widget == fitBtn){
             STTSpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
             scene.getViewSettings().getProjection().fitBboxToView(bbox, scene);
+            setSpatialExtent(bbox);
             bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
 		} else if (e.widget == formatCombo){
 			//System.err.println("Selection Index = " + formatCombo.getSelectionIndex());
 			this.setFormat(formatCombo.getSelectionIndex());
 		}
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		//  accept only numbers, decimal point, and '-' sign
+		e.doit = ( (e.keyCode >=48 && e.keyCode <= 57) || e.keyCode == 46 || e.keyCode == 45 );
+		//  and bkspace/delete/LFT/RT ARROW
+		e.doit = e.doit || e.keyCode == 8 || e.keyCode == 127 || e.keyCode == 16777219 || e.keyCode == 16777220;
+	}
+
+	public void keyReleased(KeyEvent e) {
 	}
 }
