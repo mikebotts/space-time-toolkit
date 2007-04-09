@@ -359,9 +359,10 @@ public class OptionControl extends Composite implements KeyListener
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		//  if e.control == numericText
 		//  accept only numbers and decimal point
 		e.doit = ( (e.keyCode >=48 && e.keyCode <= 57) || e.keyCode == 46 );
+		//	and bkspace/delete/LFT/RT ARROW
+		e.doit = e.doit || e.keyCode == 8 || e.keyCode == 127 || e.keyCode == 16777219 || e.keyCode == 16777220;
 	}
 
 	public void keyReleased(KeyEvent e) {
