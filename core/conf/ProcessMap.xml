@@ -22,7 +22,7 @@
    
    <Process>
       <uri>urn:ogc:def:process:pos2Matrix:1.0</uri>
-      <class>org.sensorML.process.Pos2Matrix_Process</class>
+      <class>org.sensorML.process.Pos2Matrix4_Process</class>
    </Process>
    
    <Process>
