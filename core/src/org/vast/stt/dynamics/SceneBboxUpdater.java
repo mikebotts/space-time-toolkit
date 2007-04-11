@@ -61,8 +61,8 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
         
         if (spatialExtent.isTilingEnabled())
         {
-            spatialExtent.setXTiles(scene.getRenderer().getViewWidth() / tileSizeX + 1);
-            spatialExtent.setYTiles(scene.getRenderer().getViewHeight() / tileSizeY + 1);
+            spatialExtent.setXTiles((float)scene.getRenderer().getViewWidth() / (float)tileSizeX);
+            spatialExtent.setYTiles((float)scene.getRenderer().getViewHeight() / (float)tileSizeY);
         }
     }
     

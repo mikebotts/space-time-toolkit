@@ -165,7 +165,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
         double tileRatio = spatialExtent.getXTiles() * spatialExtent.getYTiles();
-        tileSelector.setSizeRatio(tileRatio * 0.7);
+        tileSelector.setSizeRatio(tileRatio * 0.5);
         quadTree.accept(tileSelector);
         
         // first round of cached background items to display
