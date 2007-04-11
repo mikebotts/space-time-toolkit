@@ -303,7 +303,7 @@
                               <mask>
                                  <DataItem id="GOES_AL_MASK" enabled="true">
                                     <name>Alabama Mask</name>
-                                    <dataProvider xlink:href="#AL_STATE"/>
+                                    <dataProvider xlink:href="./BaseLayers.xml#AL_STATE_BOUNDARIES_DATA"/>
                                     <style>
                                        <sld:PolygonSymbolizer enabled="true">
                                           <sld:Geometry>
