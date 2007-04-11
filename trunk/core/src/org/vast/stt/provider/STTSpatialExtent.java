@@ -39,9 +39,9 @@ public class STTSpatialExtent extends SpatialExtent implements STTEventProducer
 {
     protected STTEventListeners listeners;
     protected SpatialExtentUpdater updater;
-    protected int xTiles = 1;
-    protected int yTiles = 1;
-    protected int zTiles = 1;
+    protected float xTiles = 1;
+    protected float yTiles = 1;
+    protected float zTiles = 1;
     protected boolean tilingEnabled;
 
 
@@ -88,37 +88,37 @@ public class STTSpatialExtent extends SpatialExtent implements STTEventProducer
     }
 
 
-    public int getXTiles()
+    public float getXTiles()
     {
         return xTiles;
     }
 
 
-    public void setXTiles(int tiles)
+    public void setXTiles(float tiles)
     {
         xTiles = tiles;
     }
 
 
-    public int getYTiles()
+    public float getYTiles()
     {
         return yTiles;
     }
 
 
-    public void setYTiles(int tiles)
+    public void setYTiles(float tiles)
     {
         yTiles = tiles;
     }
 
 
-    public int getZTiles()
+    public float getZTiles()
     {
         return zTiles;
     }
 
 
-    public void setZTiles(int tiles)
+    public void setZTiles(float tiles)
     {
         zTiles = tiles;
     }

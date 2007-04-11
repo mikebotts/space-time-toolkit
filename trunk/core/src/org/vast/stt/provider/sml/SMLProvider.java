@@ -99,8 +99,8 @@ public class SMLProvider extends AbstractProvider
             
             if (this.spatialExtent.isTilingEnabled())
             {
-                tileCountX = this.spatialExtent.getXTiles();
-                tileCountY = this.spatialExtent.getYTiles();
+                tileCountX = (int)this.spatialExtent.getXTiles();
+                tileCountY = (int)this.spatialExtent.getYTiles();
             }
             else
             {
