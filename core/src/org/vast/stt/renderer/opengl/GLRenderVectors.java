@@ -16,7 +16,6 @@ package org.vast.stt.renderer.opengl;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import org.vast.stt.style.LinePointGraphic;
-import org.vast.stt.style.VectorGraphic;
 import org.vast.stt.style.VectorStyler;
 
 
@@ -29,9 +28,9 @@ import org.vast.stt.style.VectorStyler;
  * Runnable for rendering vectors.
  * </p>
  *
- * <p>Copyright (c) 2007</p>
+ * <p>Copyright (c) 2005</p>
  * @author Alexandre Robin
- * @date Apr 12, 2007
+ * @date Aug 2, 2006
  * @version 1.0
  */
 public class GLRenderVectors extends GLRunnable
@@ -55,33 +54,47 @@ public class GLRenderVectors extends GLRunnable
     @Override
     public void run()
     {
-        VectorGraphic vector;
+        LinePointGraphic point;
         boolean begin = false;
         float oldWidth = -1.0f;
         int count = 0;
         
-        // loop and draw all vectors
+        // loop and draw all points
         do
         {
-            while ((vector = styler.nextVector()) != null)
+            while ((point = styler.nextPoint()) != null)
             {
-                LinePointGraphic point1 = vector.point1;
-                LinePointGraphic point2 = vector.point2;
+                if (!begin)
+                {
+                    // enable line smooth if needed        
+                    if (point.smooth)
+                        gl.glEnable(GL.GL_LINE_SMOOTH);
+                    else
+                        gl.glDisable(GL.GL_LINE_SMOOTH);
+                }
                 
-                if (point1.width != oldWidth)
+                if (point.width != oldWidth)
                 {
                     if (begin)
+                    {
                         gl.glEnd();
+                        begin = false;
+                    }
+                    gl.glLineWidth(point.width);
+                    oldWidth = point.width;
+                    gl.glBegin(GL.GL_LINE_STRIP);
+                }
+    
+                if (point.graphBreak && begin)
+                {
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINE_STRIP);
+                }
 
-                    gl.glLineWidth(point1.width);
-                    oldWidth = point1.width;
-                    gl.glBegin(GL.GL_LINES);
-                    begin = true;
-                }                
-                
-                gl.glColor4f(point1.r, point1.g, point1.b, point1.a);
-                gl.glVertex3d(point1.x, point1.y, point1.z);
-                gl.glVertex3d(point2.x, point2.y, point2.z);
+                point.graphBreak = false;
+                begin = true;
+                gl.glColor4f(point.r, point.g, point.b, point.a);
+                gl.glVertex3d(point.x, point.y, point.z);
             }
             
             count++;
