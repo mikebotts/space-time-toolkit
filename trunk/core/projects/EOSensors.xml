@@ -53,7 +53,7 @@
                                     <stepTime>60</stepTime>
                                  </TimeExtent>
                               </timeExtent>
-                              <process xlink:href="./MODIS_Process.xml#LOOKRAY_PROCESS"/>
+                              <process xlink:href="./process/MODIS_Process.xml#LOOKRAY_PROCESS"/>
                            </SensorMLProvider>
                         </dataProvider>
                         <style>

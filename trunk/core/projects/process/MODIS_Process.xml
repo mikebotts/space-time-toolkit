@@ -226,7 +226,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="file:///D:/Projects/NSSTC/JUnitTests/src/org/vast/test/sensorML/MODIS.xml#MODIS_GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./MODIS.xml#MODIS_GEOLOCATION"/>
             </sml:ComponentList>
          </sml:components>
          <sml:connections>
