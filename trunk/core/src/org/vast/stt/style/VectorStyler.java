@@ -13,7 +13,6 @@
 
 package org.vast.stt.style;
 
-import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.VectorSymbolizer;
@@ -37,82 +36,67 @@ import org.vast.ows.sld.VectorSymbolizer;
 public class VectorStyler extends AbstractStyler
 {
     protected VectorGraphic vector;
+    protected LinePointGraphic point;
     protected VectorSymbolizer symbolizer;	
     protected int[] pointIndex = new int[1];
     protected boolean useIcons;
     protected double vectorLength = 1.0;
-    
+    protected double steps = 10;
+    protected double currentStep = 0;
 	
+    
 	public VectorStyler()
 	{
-		vector = new VectorGraphic();
+        vector = new VectorGraphic();
+        point = new LinePointGraphic();
 	}
     
     
-    public VectorGraphic nextVector()
+    @Override
+    public void resetIterators()
     {
-        vector.point1.x = vector.point1.y = vector.point1.z = 0.0;
-        vector.point2.x = vector.point2.y = vector.point2.z = 0.0;
+        super.resetIterators();
+        currentStep = 0;
+    }
+    
+    
+    public LinePointGraphic nextPoint()
+    {
+        point.x = point.y = point.z = 0.0;
         
-        if (nextItem())
+        if (currentStep == 0)
         {
-            // compute point2 absolute pos
-            transformPoint2();
-            
-            // adjust geometry to fit projection
-            if (projection != null)
+            // add break at beginning of vector
+            point.graphBreak = true;
+            for (int i=0; i<dataLists.length; i++)
             {
-                projection.adjust(geometryCrs, vector.point1);
-                projection.adjust(geometryCrs, vector.point2);
+                if (dataLists[i].blockIndexer.hasNext())
+                    dataLists[i].blockIndexer.next();
+                else
+                    return null;
             }
-            
-            return vector;
         }
         
-        return null;
-    }
-    
-    
-    public int getNumVectors()
-    {
-        if (dataLists[0].indexOffset == 0)
-            return dataLists[0].blockIterator.getList().getSize();
-        else
-            return 0;
-    }
-    
-    
-    public VectorGraphic getVector(int u)
-    {
-        vector.point1.x = vector.point1.y = vector.point1.z = 0.0;
-        vector.point2.x = vector.point2.y = vector.point2.z = 0.0;
+        LinePointGraphic p1 = vector.point1;
+        LinePointGraphic p2 = vector.point2;
         
-        if (dataLists[0].indexOffset == 0)
-        {
-            AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
-            dataLists[0].blockIndexer.setData(dataBlock);
-            dataLists[0].blockIndexer.reset();
-            dataLists[0].blockIndexer.next();
-        }
-        else
-        {
-            pointIndex[0] = u;
-            dataLists[0].blockIndexer.getData(pointIndex);
-        }
-        
-        // compute point2 absolute pos
-        transformPoint2();
+        double ratio = currentStep / (steps - 1.0);
+        point.x = p1.x + (p2.x - p1.x)*ratio;
+        point.y = p1.y + (p2.y - p1.y)*ratio;
+        point.z = p1.z + (p2.z - p1.z)*ratio;
         
         // adjust geometry to fit projection
         if (projection != null)
-        {
-            projection.adjust(geometryCrs, vector.point1);
-            projection.adjust(geometryCrs, vector.point2);
-        }
+            projection.adjust(geometryCrs, point);
         
-        return vector;
+        // increment/reset currentStep
+        currentStep++;        
+        if (currentStep >= steps)
+            currentStep = 0;
+        
+        return point;
     }
-    
+        
     
     protected void transformPoint2()
     {
@@ -141,14 +125,11 @@ public class VectorStyler extends AbstractStyler
     public void computeBoundingBox()
     {
         this.resetIterators();
-        VectorGraphic vector;
+        PrimitiveGraphic point;
         
         while (nextBlock() != null)
-            while ((vector = nextVector()) != null)
-            {
-                addToExtent(vector.point1);
-                addToExtent(vector.point2);
-            }
+            while ((point = nextPoint()) != null)
+                addToExtent(point);
     }
 
 
@@ -303,14 +284,14 @@ public class VectorStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                vector.point1.r = (Float)value;
+                point.r = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericRedMapper(vector.point1, param.getMappingFunction()));              
+                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));              
                 }
             }
         }
@@ -322,14 +303,14 @@ public class VectorStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                vector.point1.g = (Float)value;
+                point.g = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(vector.point1, param.getMappingFunction()));               
+                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));               
                 }
             }
         }
@@ -341,14 +322,14 @@ public class VectorStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                vector.point1.b = (Float)value;
+                point.b = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(vector.point1, param.getMappingFunction()));             
+                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));             
                 }
             }
         }
@@ -360,14 +341,14 @@ public class VectorStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                vector.point1.a = (Float)value;
+                point.a = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(vector.point1, param.getMappingFunction()));              
+                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));              
                 }
             }
         }
@@ -379,14 +360,14 @@ public class VectorStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                vector.point1.width = (Float)value;
+                point.width = (Float)value;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new LineWidthMapper(vector.point1, param.getMappingFunction()));              
+                    addPropertyMapper(propertyName, new LineWidthMapper(point, param.getMappingFunction()));              
                 }
             }
         }

@@ -21,7 +21,7 @@ import java.util.Hashtable;
 import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
-import javax.media.opengl.GLDrawable;
+//import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.GLDrawableFactory;
@@ -91,8 +91,8 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     protected GLRenderPoints pointRenderer;
     protected GLRenderIcons iconRenderer;
     protected GLRenderLines lineRenderer;
-    protected GLRenderPolygons polygonRenderer;
     protected GLRenderVectors vectorRenderer;
+    protected GLRenderPolygons polygonRenderer;
     protected GLRenderGrids gridRenderer;
     protected GLRenderGridBorder gridBorderRenderer;
     protected GLRenderTexture textureRenderer;
@@ -613,8 +613,8 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         pointRenderer = new GLRenderPoints(gl, glu);
         iconRenderer = new GLRenderIcons(gl, glu, this);
         lineRenderer = new GLRenderLines(gl, glu);
-        polygonRenderer = new GLRenderPolygons(gl, glu);
         vectorRenderer = new GLRenderVectors(gl, glu);
+        polygonRenderer = new GLRenderPolygons(gl, glu);
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
         textureRenderer = new GLRenderTexture(gl, glu);        
@@ -745,7 +745,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         styler.resetIterators();        
         vectorRenderer.setStyler(styler);
         
-        // loop through all blocks
+        // loop through all segments
         while ((block = styler.nextBlock()) != null)
         { 
             vectorRenderer.blockCount = 10000;
