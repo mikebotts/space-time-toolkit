@@ -86,18 +86,16 @@ public class Projection_LLA implements Projection
     {
         switch (sourceCrs)
         {
-            case EPSG4329:
-                point.z = altitudeDamping * point.z;
-                break;
-                
             case ECEF:
                 double[] lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
                 point.x = lla[1];
                 point.y = lla[0];
-                point.z = lla[2];
-                point.z = altitudeDamping * point.z;
+                point.z = lla[2];                
                 break;
         }
+        
+        // always apply altitude damping
+        point.z = altitudeDamping * point.z;
     }
     
     
