@@ -46,7 +46,7 @@
                      </swe:coordinate>
                   </swe:Vector>
                </sml:output>
-               <sml:output name="ECEF_view_vector">
+               <sml:output name="ECEF_ground">
                   <swe:Vector definition="urn:ogc:def:data:viewVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
                      <swe:coordinate name="x">
                         <swe:Quantity>
@@ -227,6 +227,77 @@
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
                <sml:component name="lookVectorChain" xlink:href="./MODIS.xml#MODIS_GEOLOCATION"/>
+               <!-- Intersection w/ Ellipsoid -->
+               <sml:component name="rayIntersectEllipsoid">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="rayOrigin">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="rayDirection">
+                              <swe:Vector definition="urn:ogc:def:data:directionVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="intersection">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
             </sml:ComponentList>
          </sml:components>
          <sml:connections>
@@ -288,6 +359,19 @@
                      <sml:destination ref="lookVectorChain/inputs/Along_track_pixel"/>
                   </sml:Link>
                </sml:connection>
+               <!-- -->               
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="lookVectorChain/outputs/ECEF_view_vector"/>
+                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayDirection"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="lookVectorChain/outputs/ECEF_location"/>
+                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayOrigin"/>
+                  </sml:Link>
+               </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
@@ -297,8 +381,8 @@
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/ECEF_view_vector"/>
-                     <sml:destination ref="this/outputs/ECEF_view_vector"/>
+                     <sml:source ref="rayIntersectEllipsoid/outputs/intersection"/>
+                     <sml:destination ref="this/outputs/ECEF_ground"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
