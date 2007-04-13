@@ -27,7 +27,7 @@ import org.vast.xml.DOMHelper;
 import org.vast.process.DataProcess;
 import org.vast.process.IOSelector;
 import org.vast.process.ProcessChain;
-import org.vast.sensorML.SystemReaderV0;
+import org.vast.sensorML.SMLUtils;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
@@ -36,7 +36,9 @@ import org.w3c.dom.NodeList;
 
 public class SMLProviderReader extends XMLReader implements XMLModuleReader
 {
-
+    protected SMLUtils smlUtils = new SMLUtils();
+    
+    
     public SMLProviderReader()
     {
     }
@@ -50,10 +52,9 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
         {
             // read process chain using SML SystemReader
             Element processElt = dom.getElement(providerElt, "process");
-            SystemReaderV0 systemReader = new SystemReaderV0();
-            systemReader.setReadMetadata(false);
-            systemReader.setCreateExecutableProcess(true);
-            DataProcess rootProcess = systemReader.readProcessProperty(dom, processElt);
+            smlUtils.setReadMetadata(true);
+            smlUtils.setCreateExecutableProcess(true);
+            DataProcess rootProcess = smlUtils.readProcessProperty(dom, processElt);
             provider.setProcess(rootProcess);
             
             // read custom values and assign them to chain signals

@@ -49,6 +49,7 @@ public class GridMeshStyler extends AbstractGridStyler
     public void setSymbolizer(Symbolizer sym)
     {
         this.symbolizer = (GridMeshSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
     }
 
     

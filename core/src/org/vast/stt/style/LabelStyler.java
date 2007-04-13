@@ -264,6 +264,7 @@ public class LabelStyler extends AbstractStyler
 	public void setSymbolizer(Symbolizer sym)
 	{
 		this.symbolizer = (TextSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
 	}
 	
 	

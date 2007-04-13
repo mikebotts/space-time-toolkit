@@ -485,6 +485,7 @@ public class TextureStyler extends AbstractStyler
 	public void setSymbolizer(Symbolizer sym)
 	{
 		this.symbolizer = (TextureSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
 	}
 
 

@@ -34,17 +34,7 @@ import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.SceneRenderer;
-import org.vast.stt.style.DataStyler;
-import org.vast.stt.style.GridBorderStyler;
-import org.vast.stt.style.GridFillStyler;
-import org.vast.stt.style.GridMeshStyler;
-import org.vast.stt.style.LabelStyler;
-import org.vast.stt.style.LineStyler;
-import org.vast.stt.style.PointStyler;
-import org.vast.stt.style.PolygonStyler;
-import org.vast.stt.style.RasterStyler;
-import org.vast.stt.style.StylerVisitor;
-import org.vast.stt.style.TextureStyler;
+import org.vast.stt.style.*;
 
 
 /**
@@ -182,6 +172,13 @@ public class TableRenderer extends SceneRenderer<TableScene> implements StylerVi
 
 
     public void visit(PolygonStyler styler)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    
+    public void visit(VectorStyler styler)
     {
         // TODO Auto-generated method stub
         

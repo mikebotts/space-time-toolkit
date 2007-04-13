@@ -260,11 +260,13 @@ public class DataTreeReader extends XMLReader
         
         // read spatial extent
         Element spElt = dom.getElement(providerElt, "spatialExtent");
-        extentReader.readSpatialExtent(provider, dom, spElt);
+        if (spElt != null)
+            extentReader.readSpatialExtent(provider, dom, spElt);
         
         // read time extent
         Element timeElt = dom.getElement(providerElt, "timeExtent");
-        extentReader.readTimeExtent(provider, dom, timeElt);
+        if (timeElt != null)
+            extentReader.readTimeExtent(provider, dom, timeElt);
         
         // read quadTree option
         String text = dom.getAttributeValue(providerElt, "quadTree");

@@ -81,8 +81,7 @@ public abstract class AbstractStyler implements DataStyler
     protected boolean computeExtent = true;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
-    
-    
+        
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
     public abstract void updateDataMappings();
@@ -170,6 +169,19 @@ public abstract class AbstractStyler implements DataStyler
             ListInfo info = dataLists[i];
             info.blockIterator.reset();
         }
+    }
+    
+    
+    protected void setCrs(String crs)
+    {
+        if (crs == null)
+            this.geometryCrs = Crs.EPSG4329;
+        else if (crs.equalsIgnoreCase("epsg4329"))
+            this.geometryCrs = Crs.EPSG4329;
+        else if (crs.equalsIgnoreCase("ecef"))
+            this.geometryCrs = Crs.ECEF;
+        else if (crs.equalsIgnoreCase("eci"))
+            this.geometryCrs = Crs.ECI;
     }
     
     
