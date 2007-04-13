@@ -204,7 +204,7 @@
                </sld:PointSymbolizer>
             </style>
             <style>
-               <sld:TextSymbolizer enabled="true">
+               <sld:TextSymbolizer enabled="false">
                   <sld:Geometry>
                      <sld:CssParameter name="geometry-x">
                         <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>

@@ -155,7 +155,7 @@ public class SMLProvider extends AbstractProvider
                         if (canceled)
                             return;
                         
-                        // clear data node before 1st block is output
+                        // clear data node right before 1st block is added
                         if (doClear)
                         {
                             dataNode.clearAll();

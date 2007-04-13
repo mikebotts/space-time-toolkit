@@ -49,6 +49,7 @@ public class GridFillStyler extends AbstractGridStyler
     public void setSymbolizer(Symbolizer sym)
     {
         this.symbolizer = (GridFillSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
     }
 
     

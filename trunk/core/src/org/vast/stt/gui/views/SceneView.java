@@ -160,9 +160,7 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
 
         synchronized (refreshThread)
         {
-            refreshThreadStarted = false;
-            refreshRequested = true;
-            lock.notifyAll();
+            refreshThread.interrupt();
         }
 
         super.dispose();

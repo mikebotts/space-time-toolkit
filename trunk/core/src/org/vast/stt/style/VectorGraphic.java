@@ -16,38 +16,30 @@ package org.vast.stt.style;
 
 /**
  * <p><b>Title:</b><br/>
- * Styler Visitor
+ * Vector Graphic
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Interface for a Styler Visitor.
- * Renderer are typically styler visitors.
+ * TODO VectorGraphic Class Description
  * </p>
  *
- * <p>Copyright (c) 2005</p>
+ * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Nov 21, 2005
+ * @date Apr 10, 2007
  * @version 1.0
  */
-public interface StylerVisitor
+public class VectorGraphic extends GraphicObject
 {
-	public void visit(PointStyler styler);
-	
-	public void visit(LineStyler styler);
-	
-	public void visit(PolygonStyler styler);
+    public enum ShapeType
+    {
+        ARROW_SIMPLE
+    }
     
-    public void visit(VectorStyler styler);
+    public LinePointGraphic point1 = new LinePointGraphic();
+    public LinePointGraphic point2 = new LinePointGraphic();
     
-    public void visit(LabelStyler styler);
-	
-    public void visit(GridMeshStyler styler);
-    
-    public void visit(GridFillStyler styler);
-    
-    public void visit(GridBorderStyler styler);
-    
-	public void visit(RasterStyler styler);    
-    
-    public void visit(TextureStyler styler);
+    public ShapeType shape = ShapeType.ARROW_SIMPLE;
+    public String iconUrl;
+    public int iconOffsetX = 0;
+    public int iconOffsetY = 0;
 }

@@ -95,6 +95,7 @@ public class Projection_LLA implements Projection
                 point.x = lla[1];
                 point.y = lla[0];
                 point.z = lla[2];
+                point.z = altitudeDamping * point.z;
                 break;
         }
     }

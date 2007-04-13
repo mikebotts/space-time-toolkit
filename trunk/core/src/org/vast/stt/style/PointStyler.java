@@ -343,6 +343,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
 	public void setSymbolizer(Symbolizer sym)
 	{
 		this.symbolizer = (PointSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
 	}
 	
 	

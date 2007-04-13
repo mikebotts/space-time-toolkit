@@ -44,6 +44,9 @@ public class StylerFactory
 
         else if (sym instanceof PolygonSymbolizer)
             styler = new PolygonStyler();
+        
+        else if (sym instanceof VectorSymbolizer)
+            styler = new VectorStyler();
 
         else if (sym instanceof TextSymbolizer)
             styler = new LabelStyler();

@@ -311,6 +311,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
 	public void setSymbolizer(Symbolizer sym)
 	{
 		this.symbolizer = (LineSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
 	}
 
 

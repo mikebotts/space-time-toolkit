@@ -37,7 +37,7 @@ public interface Projection
 {
     public enum Crs
     {
-        ECEF,
+        ECI, ECEF,
         EPSG4329
     }
     

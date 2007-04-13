@@ -92,6 +92,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     protected GLRenderIcons iconRenderer;
     protected GLRenderLines lineRenderer;
     protected GLRenderPolygons polygonRenderer;
+    protected GLRenderVectors vectorRenderer;
     protected GLRenderGrids gridRenderer;
     protected GLRenderGridBorder gridBorderRenderer;
     protected GLRenderTexture textureRenderer;
@@ -613,6 +614,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         iconRenderer = new GLRenderIcons(gl, glu, this);
         lineRenderer = new GLRenderLines(gl, glu);
         polygonRenderer = new GLRenderPolygons(gl, glu);
+        vectorRenderer = new GLRenderVectors(gl, glu);
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
         textureRenderer = new GLRenderTexture(gl, glu);        
@@ -674,6 +676,8 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         if (styler.useIcons())
         {
             iconRenderer.setStyler(styler);            
+            
+            // loop through all blocks
             while ((block = styler.nextBlock()) != null)
             { 
                 iconRenderer.blockCount = 10000;
@@ -683,6 +687,8 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         else
         {        
             pointRenderer.setStyler(styler);
+            
+            // loop through all blocks
             while ((block = styler.nextBlock()) != null)
             { 
                 pointRenderer.blockCount = 10000;
@@ -701,7 +707,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         styler.resetIterators();        
         lineRenderer.setStyler(styler);
         
-        // loop through all tiles
+        // loop through all segments
         while ((segment = styler.nextLineBlock()) != null)
         { 
             lineRenderer.blockCount = 10000;
@@ -719,7 +725,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         styler.resetIterators();        
         polygonRenderer.setStyler(styler);
         
-        // loop through all tiles
+        // loop through all blocks
         while ((block = styler.nextBlock()) != null)
         { 
             gl.glPolygonOffset(0.0f, zBufferOffset*100);
@@ -727,6 +733,24 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             displayListManager.useDisplayList(styler, block, polygonRenderer, false);
             updateZBufferOffset();
         }    
+    }
+    
+    
+    /**
+     * Renders all data passed by a vector styler
+     */
+    public void visit(VectorStyler styler)
+    {
+        BlockListItem block;
+        styler.resetIterators();        
+        vectorRenderer.setStyler(styler);
+        
+        // loop through all blocks
+        while ((block = styler.nextBlock()) != null)
+        { 
+            vectorRenderer.blockCount = 10000;
+            displayListManager.useDisplayList(styler, block, vectorRenderer, false);
+        }
     }
 
 

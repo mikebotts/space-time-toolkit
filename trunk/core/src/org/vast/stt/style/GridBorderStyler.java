@@ -50,6 +50,7 @@ public class GridBorderStyler extends AbstractGridStyler
     public void setSymbolizer(Symbolizer sym)
     {
         this.symbolizer = (GridBorderSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
     }
 
     

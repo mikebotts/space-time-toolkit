@@ -216,6 +216,7 @@ public class PolygonStyler extends AbstractStyler
 	public void setSymbolizer(Symbolizer sym)
 	{
 		this.symbolizer = (PolygonSymbolizer)sym;
+        this.setCrs(sym.getGeometry().getCrs());
 	}
 
 
