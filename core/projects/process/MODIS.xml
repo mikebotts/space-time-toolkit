@@ -1494,7 +1494,7 @@
                                  <sml:destination ref="eciVelToEcef/inputs/ECI_velocity"/>
                               </sml:Link>
                            </sml:connection>
-                           <!-- ECI/ECEF converters to Geocentric Pointing -->
+                           <!-- ECI/ECEF converters to Nadir Pointing -->
                            <sml:connection>
                               <sml:Link>
                                  <sml:source ref="eciToEcef/outputs/ECEF_location"/>

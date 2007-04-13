@@ -69,15 +69,15 @@
                                     <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
-                              <sld:Direction srsName="ECEF" type="DIFF">
+                              <sld:Direction srsName="ECEF" type="ABS">
                                  <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>ECEF_view_vector/x</ogc:PropertyName>
+                                    <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>ECEF_view_vector/y</ogc:PropertyName>
+                                    <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-z">
-                                    <ogc:PropertyName>ECEF_view_vector/z</ogc:PropertyName>
+                                    <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
                               </sld:Direction>
