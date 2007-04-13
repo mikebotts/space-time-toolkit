@@ -6,6 +6,11 @@
    </ProcessPackage>
    
    <Process>
+      <uri>urn:vast:def:process:binaryOperation:1.0</uri>
+      <class>org.sensorML.process.BinaryOperation_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:counter:1.0</uri>
       <class>org.sensorML.process.Counter_Process</class>
    </Process>
@@ -21,8 +26,25 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:pos2Matrix3:1.0</uri>
+      <class>org.sensorML.process.Pos2Matrix3_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:pos2Matrix4:1.0</uri>
+      <class>org.sensorML.process.Pos2Matrix4_Process</class>
+   </Process>
+   
+   <!-- Need to be removed - kept only for backward compatibility -->
+   <Process>
       <uri>urn:ogc:def:process:pos2Matrix:1.0</uri>
       <class>org.sensorML.process.Pos2Matrix4_Process</class>
+   </Process>
+   <!-- -->
+   
+   <Process>
+      <uri>urn:ogc:def:process:vectorMatrixMultiplication:1.0</uri>
+      <class>org.sensorML.process.VectorMatrixMultiplication_Process</class>
    </Process>
    
    <Process>
@@ -44,10 +66,40 @@
       <uri>urn:ogc:def:process:geocentricPointing:1.0</uri>
       <class>org.sensorML.process.GeocentricPointingMatrix_Process</class>
    </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:nadirPointing4:1.0</uri>
+      <class>org.sensorML.process.NadirPointingMatrix4_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:nadirPointing3:1.0</uri>
+      <class>org.sensorML.process.NadirPointingMatrix3_Process</class>
+   </Process>
       
    <Process>
       <uri>urn:ogc:def:process:rayIntersectEllipsoid:1.0</uri>
-      <class>org.sensorML.process.RayIntersectEllipsoid_Process</class>
+      <class>org.sensorML.process.RayIntersectEllipsoid2_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:vast:def:process:tleParser:1.0</uri>
+      <class>org.sensorML.process.TLEParser_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:SGP4:1.0</uri>
+      <class>org.sensorML.process.SGP4_OrbitalModel_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:eciToEcef:1.0</uri>
+      <class>org.sensorML.process.ECItoECEF_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:eciVelToEcef:1.0</uri>
+      <class>org.sensorML.process.ECIVeltoECEF_Process</class>
    </Process>
    
    <Process>
