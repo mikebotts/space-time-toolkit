@@ -47,9 +47,9 @@
                            <SensorMLProvider>
                               <name>MODIS Lookrays Process Chain</name>
                               <timeExtent>
-                                 <TimeExtent>
+                                 <TimeExtent id="MODIS_TIME">
                                     <baseTime>2005-08-28T16:00:00</baseTime>
-                                    <leadTime>3600</leadTime>
+                                    <leadTime>600</leadTime>
                                     <stepTime>60</stepTime>
                                  </TimeExtent>
                               </timeExtent>
@@ -87,6 +87,25 @@
                               </sld:Stroke>
                            </sld:VectorSymbolizer>
                         </style>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry srsName="ECEF">
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>
                      </DataItem>
                   </member>
                   <member visible="false">
@@ -95,7 +114,7 @@
                         <dataProvider>
                            <OWSDataProvider>
                               <name>TERRA MODIS Footprints</name>
-                              <timeExtent autoUpdate="#SCENE_01"/>
+                              <timeExtent xlink:href="#MODIS_TIME"/>
                               <layerId>TERRA-MODIS</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                                  <GetObservation service="SOS" version="0.0.31">
