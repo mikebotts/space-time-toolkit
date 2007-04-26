@@ -125,12 +125,12 @@
                               <swe:DataRecord>
                                  <swe:field name="start">
                                     <swe:Quantity>
-                                       <swe:value>0</swe:value>
+                                       <swe:value>1</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>5415</swe:value>
+                                       <swe:value>256</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
@@ -167,62 +167,40 @@
                      <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
-               <!-- FOR loop for across track steps -->
-               <sml:component name="atCounter">
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Binary arithmeric to add determine the frame with respect to the stepcount -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="BinaryFrameStepcount">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through">
-                              <swe:DataRecord>
-                                 <swe:field name="Scan_time" xlink:href="#SCAN_TIME"/>
-                                 <swe:field name="Along_scan_pixel" xlink:href="#AS_PIXEL"/>
-                              </swe:DataRecord>
+                           <sml:input name="operand1">
+                              <swe:Quantity/>
                            </sml:input>
-                           <sml:input name="countingRange">
-                              <swe:DataRecord>
-                                 <swe:field name="start">
-                                    <swe:Quantity>
-                                       <swe:value>0</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
-                                 <swe:field name="stop">
-                                    <swe:Quantity>
-                                       <swe:value>39</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
-                                 <swe:field name="stepCount">
-                                    <swe:Quantity>
-                                       <swe:value>2</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
-                              </swe:DataRecord>
+                           <sml:input name="operand2">
+                              <swe:Quantity>
+                                 <swe:value>0.004476275</swe:value>
+                              </swe:Quantity>
                            </sml:input>
                         </sml:InputList>
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through">
-                              <swe:DataRecord>
-                                 <swe:field name="Scan_time" xlink:href="#SCAN_TIME"/>
-                                 <swe:field name="Along_scan_pixel" xlink:href="#AS_PIXEL"/>
-                              </swe:DataRecord>
-                           </sml:output>
-                           <sml:output name="count">
-                              <swe:DataRecord>
-                                 <swe:field name="variable">
-                                    <swe:Quantity/>
-                                 </swe:field>
-                                 <swe:field name="index">
-                                    <swe:Count/>
-                                 </swe:field>
-                              </swe:DataRecord>
-                           </sml:output>
-                           <sml:output name="stepCount">
-                              <swe:Count/>
+                           <sml:output name="result">
+                              <swe:Quantity/>
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="operator">
+                              <swe:Category>
+                                 <swe:value>division</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:binaryOperation:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
@@ -330,52 +308,46 @@
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/Scan_time"/>
-                     <sml:destination ref="atCounter/inputs/pass-through/Scan_time"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
                      <sml:source ref="asCounter/outputs/count/variable"/>
-                     <sml:destination ref="atCounter/inputs/pass-through/Along_scan_pixel"/>
+                     <sml:destination ref="lookVectorChain/inputs/pixel"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="atCounter/outputs/pass-through/Scan_time"/>
-                     <sml:destination ref="lookVectorChain/inputs/julianTime"/>
+                     <sml:source ref="this/inputs/time/start"/>
+                     <sml:destination ref="lookVectorChain/inputs/swathStartTime"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="atCounter/outputs/pass-through/Along_scan_pixel"/>
-                     <sml:destination ref="lookVectorChain/inputs/Along_scan_pixel"/>
+                     <sml:source ref="timeCounter/outputs/stepCount"/>
+                     <sml:destination ref="BinaryFrameStepcount/inputs/operand1"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="atCounter/outputs/count/variable"/>
-                     <sml:destination ref="lookVectorChain/inputs/Along_track_pixel"/>
+                     <sml:source ref="BinaryFrameStepcount/outputs/result"/>
+                     <sml:destination ref="lookVectorChain/inputs/frame"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->               
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/ECEF_view_vector"/>
+                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_view_vector"/>
                      <sml:destination ref="rayIntersectEllipsoid/inputs/rayDirection"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/ECEF_location"/>
+                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_location"/>
                      <sml:destination ref="rayIntersectEllipsoid/inputs/rayOrigin"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/ECEF_location"/>
+                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_location"/>
                      <sml:destination ref="this/outputs/ECEF_location"/>
                   </sml:Link>
                </sml:connection>
