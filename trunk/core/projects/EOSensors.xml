@@ -596,7 +596,7 @@
                            <SensorMLProvider>
                               <name>AMPR Lookrays Process Chain</name>
                               <timeExtent>
-                                 <TimeExtent id="MODIS_TIME">
+                                 <TimeExtent id="AMPR_TIME">
                                     <baseTime>2005-07-17T06:19:32Z</baseTime>
                                     <leadTime>600</leadTime>
                                     <stepTime>60</stepTime>
