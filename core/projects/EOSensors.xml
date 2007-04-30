@@ -106,6 +106,30 @@
                               </sld:Stroke>
                            </sld:LineSymbolizer>
                         </style>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry srsName="ECEF">
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>circle</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>3</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style>
                      </DataItem>
                   </member>
                   <member visible="false">
