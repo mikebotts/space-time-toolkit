@@ -273,7 +273,7 @@
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/pass-through/Scan_time"/>
-                     <sml:destination ref="lookVectorChain/inputs/scanTime"/>
+                     <sml:destination ref="lookVectorChain/inputs/julianTime"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
