@@ -93,6 +93,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:trueHeadingTransform:1.0</uri>
+      <class>org.sensorML.process.TrueHeadingMatrix_process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:eciToEcef:1.0</uri>
       <class>org.sensorML.process.ECItoECEF_Process</class>
    </Process>
@@ -105,6 +110,11 @@
    <Process>
       <uri>urn:ogc:def:process:ECEFToLLA:1.0</uri>
       <class>org.sensorML.process.ECEFToLLA_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:LLAtoECEF:2.0</uri>
+      <class>org.sensorML.process.LLAToECEF2_Process</class>
    </Process>
    
    <Process>
