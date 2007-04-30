@@ -97,7 +97,7 @@
                      <sml:outputs>
                         <sml:OutputList>
                            <sml:output name="navigationData">
-                              <swe:DataRecord gml:id="NAV_DATA">
+                              <swe:DataRecord>
                                  <swe:field name="time">
                                     <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
                                        <swe:uom code="s"/>
@@ -146,9 +146,9 @@
                                        <swe:value>http://vast.uah.edu:8080/ows-dev/amprSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
-                                 <swe:field name="requestMethod">
+                                 <swe:field name="request">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>GET</swe:value>
+                                       <swe:value>GetObservation</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="service">
@@ -185,8 +185,44 @@
                         <sml:InputList>
                            <sml:input name="pass-through">
                               <swe:DataRecord>
-                                 <swe:field name="navigationData" xlink:href="#NAV_DATA">
-                                    <swe:DataRecord/>
+                                 <swe:field name="navigationData">
+                                       <swe:DataRecord>
+                                          <swe:field name="time">
+                                             <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                                <swe:uom code="s"/>
+                                             </swe:Time>
+                                          </swe:field>
+                                          <swe:field name="latitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                                <swe:uom code="deg"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="longitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                                <swe:uom code="deg"/>
+                                             </swe:Quantity>     
+                                          </swe:field>
+                                          <swe:field name="altitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                                <swe:uom code="ft"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="trueHeading">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="deg"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="pitch">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="deg"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="roll">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="deg"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                       </swe:DataRecord>
                                  </swe:field>    
                               </swe:DataRecord>
                            </sml:input>
@@ -215,7 +251,45 @@
                         <sml:OutputList>
                            <sml:output name="pass-through">
                               <swe:DataRecord>
-                                 <swe:field name="navigationData" xlink:href="#NAV_DATA"/>
+                                 <swe:field name="navigationData">
+                                    <swe:DataRecord>
+                                       <swe:field name="time">
+                                          <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                             <swe:uom code="s"/>
+                                          </swe:Time>
+                                       </swe:field>
+                                       <swe:field name="latitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="longitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>     
+                                       </swe:field>
+                                       <swe:field name="altitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                             <swe:uom code="ft"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="trueHeading">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="pitch">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="roll">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                    </swe:DataRecord>
+                                 </swe:field>    
                               </swe:DataRecord>
                            </sml:output>
                            <sml:output name="count">
@@ -315,20 +389,8 @@
             <sml:ConnectionList>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="this/inputs/time/start"/>
-                     <sml:destination ref="sos/inputs/time/start"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="this/inputs/time/stop"/>
-                     <sml:destination ref="sos/inputs/time/stop"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="this/inputs/time/step"/>
-                     <sml:destination ref="sos/inputs/time/step"/>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="sos/inputs/time"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
