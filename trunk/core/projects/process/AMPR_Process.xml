@@ -146,14 +146,9 @@
                                        <swe:value>http://vast.uah.edu:8080/ows-dev/amprSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
-                                 <swe:field name="request">
+                                 <swe:field name="requestMethod">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>GetObservation</swe:value>
-                                    </swe:Category>
-                                 </swe:field>
-                                 <swe:field name="service">
-                                    <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>SOS</swe:value>
+                                       <swe:value>GET</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="version">
@@ -164,7 +159,7 @@
                                  <swe:field name="offering">
                                     <swe:Category>
                                        <swe:value>AMPR_NAV</swe:value>
-                                       </swe:Category>
+                                    </swe:Category>
                                  </swe:field>
                                  <swe:field name="format">
                                     <swe:Category definition="urn:ogc:def:identifier:mimeType">
