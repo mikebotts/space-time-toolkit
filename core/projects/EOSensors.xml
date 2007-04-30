@@ -588,7 +588,76 @@
                         </style>
                      </DataItem>
                   </member>                             
-                                                                                                     
+                       
+                  <member visible="false">
+                     <DataItem>
+                        <name>AMPR Lookrays</name>
+                        <dataProvider>
+                           <SensorMLProvider>
+                              <name>AMPR Lookrays Process Chain</name>
+                              <timeExtent>
+                                 <TimeExtent id="MODIS_TIME">
+                                    <baseTime>2005-07-17T06:19:32Z</baseTime>
+                                    <leadTime>600</leadTime>
+                                    <stepTime>60</stepTime>
+                                 </TimeExtent>
+                              </timeExtent>
+                              <process xlink:href="./process/AMPR_Process.xml#LOOKRAY_PROCESS"/>
+                           </SensorMLProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:VectorSymbolizer enabled="true">
+                              <sld:Geometry srsName="ECEF">
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Direction srsName="ECEF" type="ABS">
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                              </sld:Direction>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:VectorSymbolizer>
+                        </style>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry srsName="ECEF">
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-z">
+                                    <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member> 
+                                                                                               
                </DataList>
             </contents>
          </Scene>
