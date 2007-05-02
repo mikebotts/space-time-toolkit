@@ -106,30 +106,6 @@
                               </sld:Stroke>
                            </sld:LineSymbolizer>
                         </style>
-                        <style>
-                           <sld:PointSymbolizer enabled="true">
-                              <sld:Geometry srsName="ECEF">
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-z">
-                                    <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sld:Graphic>
-                                 <sld:Mark>
-                                    <sld:WellKnownName>circle</sld:WellKnownName>
-                                    <sld:Fill>
-                                       <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
-                                    </sld:Fill>
-                                 </sld:Mark>
-                                 <sld:Size>3</sld:Size>
-                              </sld:Graphic>
-                           </sld:PointSymbolizer>
-                        </style>
                      </DataItem>
                   </member>
                   <member visible="false">
@@ -369,6 +345,108 @@
                                  <sld:CssParameter name="stroke-width">2</sld:CssParameter>
                               </sld:Stroke>
                            </sld:LineSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member visible="false">
+                     <DataItem>
+                        <name>EO1 - Hyperion Footprint at Nadir pointing</name>
+                        <dataProvider>
+                           <OWSDataProvider>
+                              <name>TRMM PR Footprints</name>
+                              <timeExtent xlink:href="#HYPERION_TIME"/>
+                              <layerId>EO1-Hyperion-NADIR</layerId>
+                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                                 <GetObservation service="SOS" version="0.0.31">
+                                    <offering>EO1-Hyperion-NADIR</offering>
+                                    <eventTime>
+                                       <ogc:During>
+                                          <gml:TimePeriod>
+                                             <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                             <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                                          </gml:TimePeriod>
+                                       </ogc:During>
+                                    </eventTime>
+                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultModel>swe:DataValueType</resultModel>
+                                 </GetObservation>
+                              </request>
+                           </OWSDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:GridFillSymbolizer enabled="true">
+                              <sld:Dimensions>
+                                 <sld:Axis name="width">
+                                    <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                 </sld:Axis>
+                                 <sld:Axis name="length">
+                                    <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                 </sld:Axis>
+                              </sld:Dimensions>
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:GridFillSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member visible="false">
+                     <DataItem>
+                        <name>EO1 - Hyperion Potential Pointing Footprint</name>
+                        <dataProvider>
+                           <OWSDataProvider>
+                              <name>EO1 - Hyperion Potential Pointing Footprint</name>
+                              <timeExtent xlink:href="#HYPERION_TIME"/>
+                              <layerId>EO1-Hyperion-Potential</layerId>
+                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                                 <GetObservation service="SOS" version="0.0.31">
+                                    <offering>EO1-Hyperion-Potential</offering>
+                                    <eventTime>
+                                       <ogc:During>
+                                          <gml:TimePeriod>
+                                             <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                             <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                                          </gml:TimePeriod>
+                                       </ogc:During>
+                                    </eventTime>
+                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultModel>swe:DataValueType</resultModel>
+                                 </GetObservation>
+                              </request>
+                           </OWSDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:GridFillSymbolizer enabled="true">
+                              <sld:Dimensions>
+                                 <sld:Axis name="width">
+                                    <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                 </sld:Axis>
+                                 <sld:Axis name="length">
+                                    <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                 </sld:Axis>
+                              </sld:Dimensions>
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:GridFillSymbolizer>
                         </style>
                      </DataItem>
                   </member>
@@ -629,8 +707,8 @@
                               <process xlink:href="./process/AMPR_Process.xml#LOOKRAY_PROCESS"/>
                            </SensorMLProvider>
                         </dataProvider>
-                        <style>
-                           <sld:VectorSymbolizer enabled="true">
+                       <style>
+                           <sld:VectorSymbolizer enabled="false">
                               <sld:Geometry srsName="ECEF">
                                  <sld:CssParameter name="geometry-x">
                                     <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
@@ -659,7 +737,7 @@
                                  <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                               </sld:Stroke>
                            </sld:VectorSymbolizer>
-                        </style>
+                        </style> 
                         <style>
                            <sld:LineSymbolizer enabled="true">
                               <sld:Geometry srsName="ECEF">
@@ -681,7 +759,59 @@
                         </style>
                      </DataItem>
                   </member> 
-                                                                                               
+                   
+                  <member visible="false">
+                     <DataItem>
+                        <name>TRMM LIS Footprints</name>
+                        <dataProvider>
+                           <OWSDataProvider>
+                              <name>TRMM LIS Footprints</name>
+                              <timeExtent xlink:href="#TMI_TIME"/>
+                              <layerId>TRMM-LIS</layerId>
+                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                                 <GetObservation service="SOS" version="0.0.31">
+                                    <offering>TRMM-LIS</offering>
+                                    <eventTime>
+                                       <ogc:During>
+                                          <gml:TimePeriod>
+                                             <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                             <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                                          </gml:TimePeriod>
+                                       </ogc:During>
+                                    </eventTime>
+                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultModel>swe:DataValueType</resultModel>
+                                 </GetObservation>
+                              </request>
+                           </OWSDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:GridFillSymbolizer enabled="true">
+                              <sld:Dimensions>
+                                 <sld:Axis name="width">
+                                    <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                 </sld:Axis>
+                                 <sld:Axis name="length">
+                                    <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                 </sld:Axis>
+                              </sld:Dimensions>
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                 <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:GridFillSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>                                                                             
+                                                                                                                                                                                                                                                       
                </DataList>
             </contents>
          </Scene>
