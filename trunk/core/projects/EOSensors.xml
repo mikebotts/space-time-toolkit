@@ -350,7 +350,7 @@
                   </member>
                   <member visible="false">
                      <DataItem>
-                        <name>EO1 - Hyperion Footprint at Nadir pointing</name>
+                        <name>EO1 Hyperion Footprint at Nadir pointing</name>
                         <dataProvider>
                            <OWSDataProvider>
                               <name>TRMM PR Footprints</name>
@@ -401,10 +401,10 @@
                   </member>
                   <member visible="false">
                      <DataItem>
-                        <name>EO1 - Hyperion Potential Pointing Footprint</name>
+                        <name>EO1 Hyperion Potential Pointing Footprint</name>
                         <dataProvider>
                            <OWSDataProvider>
-                              <name>EO1 - Hyperion Potential Pointing Footprint</name>
+                              <name>EO1 Hyperion Potential Pointing Footprint</name>
                               <timeExtent xlink:href="#HYPERION_TIME"/>
                               <layerId>EO1-Hyperion-Potential</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
