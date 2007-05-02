@@ -184,6 +184,11 @@
                                        <swe:value>AMPR_NAV</swe:value>
                                     </swe:Category>
                                  </swe:field>
+                                 <swe:field name="observables">
+                                    <swe:Category>
+                                       <swe:value>LOCATION</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
                                  <swe:field name="format">
                                     <swe:Category definition="urn:ogc:def:identifier:mimeType">
                                        <swe:value>application/com-xml</swe:value>
