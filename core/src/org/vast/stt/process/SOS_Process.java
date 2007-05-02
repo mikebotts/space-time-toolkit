@@ -123,11 +123,11 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             // Output Data mapping
             obsInfoConnections = outputConnections.get(0);
-            outputObsInfo = outputData.getComponent(0);
+            outputObsInfo = outputData.getComponent("observationInfo");
             outputObsName = (DataValue) outputObsInfo.getComponent("name");
             outputObsProcedure = (DataValue) outputObsInfo.getComponent("procedure");
             outputObsLocation = (DataGroup) outputObsInfo.getComponent("location");
-            outputObsData = outputData.getComponent(1);
+            outputObsData = outputData.getComponent("observationData");
 
             
             // Read parameters mappings + values
