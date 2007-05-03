@@ -699,7 +699,7 @@
                               <name>AMPR Lookrays Process Chain</name>
                               <timeExtent>
                                  <TimeExtent id="AMPR_TIME">
-                                    <baseTime>2005-07-17T06:19:32Z</baseTime>
+                                    <baseTime>2005-07-17T06:20:00Z</baseTime>
                                     <leadTime>600</leadTime>
                                     <stepTime>60</stepTime>
                                  </TimeExtent>
@@ -708,7 +708,7 @@
                            </SensorMLProvider>
                         </dataProvider>
                        <style>
-                           <sld:VectorSymbolizer enabled="false">
+                           <sld:VectorSymbolizer enabled="true">
                               <sld:Geometry srsName="ECEF">
                                  <sld:CssParameter name="geometry-x">
                                     <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
