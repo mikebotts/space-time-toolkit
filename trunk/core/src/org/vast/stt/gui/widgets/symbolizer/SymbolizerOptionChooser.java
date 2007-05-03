@@ -49,6 +49,8 @@ public class SymbolizerOptionChooser extends OptionChooser
 			optionController = new BasicLineController(optComp, (LineSymbolizer)sym);
         } else if (sym instanceof PolygonSymbolizer) {
             optionController = new BasicPolygonController(optComp, (PolygonSymbolizer)sym);
+        } else if (sym instanceof VectorSymbolizer) {
+            optionController = new BasicVectorController(optComp, (VectorSymbolizer)sym);
 		} else if (sym instanceof GridMeshSymbolizer) {
 			optionController = new BasicGridMeshController(optComp, (GridSymbolizer)sym);
 		} else if (sym instanceof GridFillSymbolizer) {
