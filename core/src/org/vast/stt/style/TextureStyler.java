@@ -77,13 +77,17 @@ public class TextureStyler extends AbstractStyler
                 // adjust patch grid length and texture height
                 patch.grid.length = gridListSize;
                 patch.texture.height = texListSize;
-                patch.texture.width = 460;
-                gridBlocks.blockIndexer.next();
-                texBlocks.blockIndexer.next();
                 
                 // get first blocks as references
+                // and call next to get var size array data
                 patch.grid.block = gridBlocks.blockIterator.next();
+                gridBlocks.blockIndexer.setData(patch.grid.block.getData());
+                gridBlocks.blockIndexer.reset();
+                gridBlocks.blockIndexer.next();                
                 patch.texture.block = texBlocks.blockIterator.next();
+                texBlocks.blockIndexer.setData(patch.texture.block.getData());
+                texBlocks.blockIndexer.reset();
+                texBlocks.blockIndexer.next();
                 
                 return patch;
             }
