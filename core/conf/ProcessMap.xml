@@ -21,6 +21,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:timeSync:1.0</uri>
+      <class>org.sensorML.process.TimeSynchronizer_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:LUT1D:1.0</uri>
       <class>org.sensorML.process.LookUpTable1D_Process</class>
    </Process>
