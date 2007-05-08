@@ -62,7 +62,7 @@ public class SMLProvider extends AbstractProvider
             if (process instanceof ProcessChain)
                 ((ProcessChain)process).setChildrenThreadsOn(false);
             
-            process.initProcess();
+            process.init();
             process.createNewInputBlocks();
             
             DataComponent outputs = process.getOutputList();
@@ -114,6 +114,7 @@ public class SMLProvider extends AbstractProvider
             {
                 for (int j=0; j<tileCountY; j++)
                 {
+                    process.reset();
                     generateTile(tileCountX, tileCountY, i, j);
                     
                     // time is expected to be a DataGroup of start/stop/step
@@ -149,10 +150,11 @@ public class SMLProvider extends AbstractProvider
                     
                     // execute process until keep running is false
                     boolean keepRunning = true;
+                    
                     do
                     {
-                        process.createNewOutputBlocks();
-                        process.runProcess();
+                        process.createNewOutputBlocks();                        
+                        process.execute();
                         
                         if (checkCancel())
                             return;
