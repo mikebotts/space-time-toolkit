@@ -144,35 +144,47 @@ public class SMLProvider extends AbstractProvider
                             timeInput.getComponent("step").getData().setDoubleValue(step);
                     }
                     
-                    if (canceled)
-                        return;
+                    if (checkCancel())
+                        return;                    
                     
+                    // execute process until keep running is false
+                    boolean keepRunning = true;
                     do
                     {
                         process.createNewOutputBlocks();
                         process.runProcess();
                         
-                        if (canceled)
+                        if (checkCancel())
                             return;
                         
-                        // clear data node right before 1st block is added
-                        if (doClear)
-                        {
-                            dataNode.clearAll();
-                            doClear = false;
+                        // add data to list only if output data was generated
+                        keepRunning = process.getOutputConnections().get(0).isNeeded();
+                        if (keepRunning)
+                        {                        
+                            // clear data node right before 1st block is added
+                            if (doClear)
+                            {
+                                dataNode.clearAll();
+                                doClear = false;
+                            }
+                            
+                            // transfer block for each output
+                            for (int c=0; c<blockListArray.size(); c++)
+                            {
+                                BlockList blockList = blockListArray.get(c);
+                                blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                            }
+                            
+                            // send event for redraw
+                            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                            
+                            // reset input needed flags to avoid a process chain to set 
+                            // internal availability to true
+                            for (int n=0; n<process.getInputConnections().size(); n++)
+                                process.getInputConnections().get(n).setNeeded(false);
                         }
-                        
-                        // transfer block for each output
-                        for (int c=0; c<blockListArray.size(); c++)
-                        {
-                            BlockList blockList = blockListArray.get(c);
-                            blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
-                        }
-                        
-                        // send event for redraw
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                     }
-                    while (!process.getInputConnections().get(0).isNeeded());
+                    while (keepRunning);                 
                 }
             }
             
@@ -182,6 +194,18 @@ public class SMLProvider extends AbstractProvider
         {
             throw new DataException(updateError + this.getName(), e);
         }
+    }
+    
+    
+    protected boolean checkCancel() throws Exception
+    {
+        if (canceled)
+        {
+            init();
+            return true;
+        }
+        
+        return false;
     }
     
     
