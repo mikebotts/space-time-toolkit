@@ -698,8 +698,8 @@
                               <name>AMPR Lookrays Process Chain</name>
                               <timeExtent>
                                  <TimeExtent id="AMPR_TIME">
-                                    <baseTime>2005-07-17T06:20:00Z</baseTime>
-                                    <leadTime>8</leadTime>
+                                    <baseTime>2005-07-17T08:40:00Z</baseTime>
+                                    <leadTime>900</leadTime>
                                     <stepTime>4</stepTime>
                                  </TimeExtent>
                               </timeExtent>
@@ -760,22 +760,17 @@
                   </member> 
                   <member visible="false">
                      <DataItem>
-                        <name>AMPR Data</name>
+                        <name>AMPR 10GHz Data</name>
                         <dataProvider>
                            <SensorMLProvider>
                               <name>AMPR Data Process Chain</name>
-                              <timeExtent>
-                                 <TimeExtent>
-                                    <baseTime>2005-07-17T08:20:00Z</baseTime>
-                                    <leadTime>3600</leadTime>
-                                    <stepTime>4</stepTime>
-                                 </TimeExtent>
-                              </timeExtent>
+                              <timeExtent xlink:href="#AMPR_TIME"/>
                               <process xlink:href="./process/AMPR_Process_WithData.xml#PROCESS"/>
+                              <value process="sosScan" path="sosOptions/observables">10GHz</value>
                            </SensorMLProvider>
                         </dataProvider>
                         <style name="Imagery">
-                           <sld:TextureSymbolizer enabled="true">
+                           <sld:TextureSymbolizer id="AMPR_TEXTURE" enabled="true">
                               <sld:Grid>
                                  <sld:Dimensions>
                                     <sld:Axis name="width">
@@ -862,6 +857,48 @@
                               </sld:Graphic>
                            </sld:PointSymbolizer>
                         </style>
+                     </DataItem>
+                  </member>
+                  <member visible="false">
+                     <DataItem>
+                        <name>AMPR 19GHz Data</name>
+                        <dataProvider>
+                           <SensorMLProvider>
+                              <name>AMPR Data Process Chain</name>
+                              <timeExtent xlink:href="#AMPR_TIME"/>
+                              <process xlink:href="./process/AMPR_Process_WithData.xml#PROCESS"/>
+                              <value process="sosScan" path="sosOptions/observables">19GHz</value>
+                           </SensorMLProvider>
+                        </dataProvider>
+                        <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
+                     </DataItem>
+                  </member>
+                  <member visible="false">
+                     <DataItem>
+                        <name>AMPR 37GHz Data</name>
+                        <dataProvider>
+                           <SensorMLProvider>
+                              <name>AMPR Data Process Chain</name>
+                              <timeExtent xlink:href="#AMPR_TIME"/>
+                              <process xlink:href="./process/AMPR_Process_WithData.xml#PROCESS"/>
+                              <value process="sosScan" path="sosOptions/observables">37GHz</value>
+                           </SensorMLProvider>
+                        </dataProvider>
+                        <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
+                     </DataItem>
+                  </member>
+                  <member visible="false">
+                     <DataItem>
+                        <name>AMPR 85GHz Data</name>
+                        <dataProvider>
+                           <SensorMLProvider>
+                              <name>AMPR Data Process Chain</name>
+                              <timeExtent xlink:href="#AMPR_TIME"/>
+                              <process xlink:href="./process/AMPR_Process_WithData.xml#PROCESS"/>
+                              <value process="sosScan" path="sosOptions/observables">85GHz</value>
+                           </SensorMLProvider>
+                        </dataProvider>
+                        <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
                      </DataItem>
                   </member>
                   <member visible="false">
