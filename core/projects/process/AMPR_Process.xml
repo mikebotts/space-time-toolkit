@@ -5,7 +5,7 @@
          <sml:inputs>
             <sml:InputList>
                <sml:input name="time">
-                  <swe:DataRecord id="INPUT_TIME">
+                  <swe:DataRecord>
                      <swe:field name="start">
                         <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
                            <swe:uom code="s"/>
@@ -73,7 +73,25 @@
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="time" xlink:href="#INPUT_TIME"/>
+                           <sml:input name="time">
+                              <swe:DataRecord>
+                                 <swe:field name="start">
+                                    <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="stop">
+                                    <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="step">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:duration">
+                                       <swe:uom code="s"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
                         </sml:InputList>
                      </sml:inputs>
                      <sml:outputs>
@@ -102,7 +120,7 @@
                               </swe:DataRecord>
                            </sml:output>
                            <sml:output name="observationData">
-                              <swe:DataRecord id="NAV_DATA">
+                              <swe:DataRecord>
                                  <swe:field name="time">
                                     <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
                                        <swe:uom code="s"/>
@@ -188,7 +206,49 @@
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:input name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="observationData">
+                                       <swe:DataRecord>
+                                          <swe:field name="time">
+                                             <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                                <swe:uom code="s"/>
+                                             </swe:Time>
+                                          </swe:field>
+                                          <swe:field name="latitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="longitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="altitude">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                                <swe:uom code="m"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="trueHeading">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="pitch">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="roll">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                       </swe:DataRecord>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
                            <sml:input name="countingRange">
                               <swe:DataRecord>
                                  <swe:field name="start">
@@ -212,7 +272,49 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:output name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="observationData">
+                                    <swe:DataRecord>
+                                       <swe:field name="time">
+                                          <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                             <swe:uom code="s"/>
+                                          </swe:Time>
+                                       </swe:field>
+                                       <swe:field name="latitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                             <swe:uom code="rad"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="longitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                             <swe:uom code="rad"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="altitude">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                             <swe:uom code="m"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="trueHeading">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="rad"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="pitch">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="rad"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                       <swe:field name="roll">
+                                          <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                             <swe:uom code="rad"/>
+                                          </swe:Quantity>
+                                       </swe:field>
+                                    </swe:DataRecord>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
@@ -318,13 +420,13 @@
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sos/outputs/observationData"/>
-                     <sml:destination ref="asCounter/inputs/pass-through"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/observationData"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through"/>
+                     <sml:source ref="asCounter/outputs/pass-through/observationData"/>
                      <sml:destination ref="lookVectorChain/inputs/navigationData"/>
                   </sml:Link>
                </sml:connection>
