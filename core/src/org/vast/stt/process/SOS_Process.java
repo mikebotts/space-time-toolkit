@@ -387,6 +387,10 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         try
         {
+            // give exec control and wait for the ok to continue
+            while (outputReady)
+                this.wait();
+            
             // write observation data
             ///System.out.println("out " + name);
             outputObsData.setData(data);
@@ -401,10 +405,6 @@ public class SOS_Process extends DataProcess implements DataHandler
             // notify exec thread that next packet has been parsed
             outputReady = true;
             this.notify();
-            
-            // give exec control and wait for the ok to continue
-            while (outputReady)
-                this.wait();
         }
         catch (InterruptedException e)
         {
