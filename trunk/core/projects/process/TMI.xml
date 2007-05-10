@@ -25,7 +25,7 @@
         <sml:input name="satelliteAngle">
             <swe:Quantity>
                 <swe:uom code="rad"/>
-               <swe:value>0.0</swe:value>
+               <swe:value>3.141592</swe:value>
             </swe:Quantity>
         </sml:input>
        <sml:input name="attitudeOrientation">
