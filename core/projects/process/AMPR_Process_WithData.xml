@@ -303,7 +303,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>2</swe:value>
+                                       <swe:value>10</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -458,8 +458,14 @@
                      <sml:destination ref="sosScan/inputs/time"/>
                   </sml:Link>
                </sml:connection>
-               <!-- -->
                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosNav/outputs/observationData"/>
+                     <sml:destination ref="asCounter/inputs/pass-through"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- -->
+               <!--<sml:connection>
                   <sml:Link>
                      <sml:source ref="sosScan/outputs/observationData/startTime"/>
                      <sml:destination ref="timeSync/inputs/masterTime"/>
@@ -476,14 +482,14 @@
                      <sml:source ref="sosNav/outputs/observationData"/>
                      <sml:destination ref="timeSync/inputs/dataIn"/>
                   </sml:Link>
-               </sml:connection>
+               </sml:connection>-->
                <!-- -->
-               <sml:connection>
+               <!--<sml:connection>
                   <sml:Link>
                      <sml:source ref="timeSync/outputs/dataOut"/>
                      <sml:destination ref="asCounter/inputs/pass-through"/>
                   </sml:Link>
-               </sml:connection>        
+               </sml:connection>-->        
                <!-- -->
                <sml:connection>
                   <sml:Link>

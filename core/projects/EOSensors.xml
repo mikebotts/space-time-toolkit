@@ -803,13 +803,6 @@
                                  </sld:Dimensions>
                                  <sld:Opacity>1.0</sld:Opacity>
                                  <sld:ChannelSelection normalizedColors="false">
-                                    <sld:GrayChannel>
-                                       <!--<LinearAdjustment>
-                                          <ogc:PropertyName>imageData/scanLine/brightnessTemps/10GHz</ogc:PropertyName>
-                                          <Gain>0.01</Gain>
-                                          <Offset>-1</Offset>
-                                       </LinearAdjustment>-->
-                                    </sld:GrayChannel>
                                     <sld:RedChannel>
                                        <LookUpTable1D>
                                           <ogc:PropertyName>imageData/scanLine/brightnessTemps/10GHz</ogc:PropertyName>

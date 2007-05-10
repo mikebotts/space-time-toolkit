@@ -82,15 +82,12 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         query = new SOSQuery();
         owsUtils = new OWSUtils();
-        //requestBuilder.showPostOutput = true;
         converters = new Hashtable<DataComponent, UnitConverter>();
+        needSync = true;
     }
 
 
-    /**
-     * Initializes the process
-     * Gets handles to input/output components
-     */
+    @Override
     public void init() throws ProcessException
     {
         // Read I/O mappings
@@ -128,7 +125,6 @@ public class SOS_Process extends DataProcess implements DataHandler
             outputObsProcedure = (DataValue) outputObsInfo.getComponent("procedure");
             outputObsLocation = (DataGroup) outputObsInfo.getComponent("location");
             outputObsData = outputData.getComponent("observationData");
-
             
             // Read parameters mappings + values
             DataGroup sosParams = (DataGroup)paramData.getComponent("sosOptions");
@@ -168,33 +164,39 @@ public class SOS_Process extends DataProcess implements DataHandler
             String format = sosParams.getComponent("format").getData().getStringValue();
             query.setFormat(format);
 
-            // change exception type
+            // request name
             query.setRequest("GetObservation");
+            
+            checkData();
+            reset();
         }
         catch (Exception e)
         {
             throw new ProcessException(ioError, e);
         }
-        
-        // check that output is compatible with reqiested data
-        checkData();
-        done = true;
-        needSync = true;
+    }
+    
+    
+    @Override
+    public void reset() throws ProcessException
+    {
+        endRequest();
+        outputReady = false;
+        done = true;        
         error = false;        
         lastException = null;
+        for (int i=0; i<inputConnections.size(); i++)
+            inputConnections.get(i).setNeeded(true);
     }
     
     
     protected void checkData() throws ProcessException
     {
-        // TODO check if returned data is compatible with output + call at init...
-        endRequest();        
+        //TODO check that output is compatible with SOS data
     }
     
     
-    /**
-     * Executes process algorithm on inputs and set output data
-     */
+    @Override
     public void execute() throws ProcessException
     {
         // get input variables only if previous request is done
@@ -207,30 +209,30 @@ public class SOS_Process extends DataProcess implements DataHandler
                 {
                     try
                     {    
-                        // init request using spatial + time extent
-                        initRequest();
-                        
-                        // create reader
-                        ObservationReaderV0 reader = new ObservationReaderV0();
-                        
-                        // select request type (post or get)
-                        boolean usePost = (query.getPostServer() != null);
-                        //System.out.println(owsUtils.buildURLQuery(query);
-                        dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
-                            
-                        // parse response
-                        reader.parse(dataStream);
-                        dataParser = reader.getDataParser();
-                        dataParser.setDataHandler(handler);
-                        
-                        // get procedure, name and location
-                        obsName = reader.getObservationName();
-                        obsProcedure = reader.getProcedure();
-                        obsLocation = reader.getFoiLocation();
-                        
-                         // start parsing
                         synchronized (handler)
                         {
+                            // init request using spatial + time extent
+                            initRequest();
+                            
+                            // create reader
+                            ObservationReaderV0 reader = new ObservationReaderV0();
+                            
+                            // select request type (post or get)
+                            boolean usePost = (query.getPostServer() != null);
+                            //System.out.println(owsUtils.buildURLQuery(query);
+                            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+                            
+                            // parse response
+                            reader.parse(dataStream);
+                            dataParser = reader.getDataParser();
+                            dataParser.setDataHandler(handler);
+                            
+                            // get procedure, name and location
+                            obsName = reader.getObservationName();
+                            obsProcedure = reader.getProcedure();
+                            obsLocation = reader.getFoiLocation();
+                            
+                            // start parsing
                             dataParser.parse(reader.getDataStream());
                             done = true;
                         }
@@ -261,13 +263,17 @@ public class SOS_Process extends DataProcess implements DataHandler
         // now let the worker thread run one more time
         synchronized (this)
         {
-            // let the request thread parse one more block
             try
             {
+                // notify parser thread that next packet is needed
                 outputReady = false;
-                this.notify();                
+                this.notify();
+                //System.out.println("next " + name);
+                
+                // give parser control and wait for next block to be parsed
                 while (!done && !error && !outputReady)
                     this.wait();
+                //System.out.println("ready " + name + ": " + outputObsData.getData().getDoubleValue(0));
             }
             catch (InterruptedException e)
             {
@@ -282,6 +288,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                 throw new ProcessException("Error while reading data from SOS server: " + server, lastException);
             }
         
+            // if parsing is done (at end of stream)
             if (done)
             {
                 // set inputs as needed since loop has ended
@@ -380,11 +387,8 @@ public class SOS_Process extends DataProcess implements DataHandler
     {
         try
         {
-            // give exec control and wait for the ok to continue
-            while (outputReady)
-                this.wait();
-            
             // write observation data
+            ///System.out.println("out " + name);
             outputObsData.setData(data);
             
             // also write observation info
@@ -396,7 +400,11 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             // notify exec thread that next packet has been parsed
             outputReady = true;
-            this.notify();            
+            this.notify();
+            
+            // give exec control and wait for the ok to continue
+            while (outputReady)
+                this.wait();
         }
         catch (InterruptedException e)
         {
