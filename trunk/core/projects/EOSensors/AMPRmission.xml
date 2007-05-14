@@ -10,8 +10,8 @@
                   <name>AMPR Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="AMPR_TIME">
-                        <baseTime>2005-07-17T08:40:00Z</baseTime>
-                        <leadTime>900</leadTime>
+                        <baseTime>2005-07-17T07:40:00Z</baseTime>
+                        <leadTime>4500</leadTime>
                         <stepTime>4</stepTime>
                      </TimeExtent>
                   </timeExtent>
