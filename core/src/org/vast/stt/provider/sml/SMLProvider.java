@@ -185,6 +185,9 @@ public class SMLProvider extends AbstractProvider
                             for (int n=0; n<process.getInputConnections().size(); n++)
                                 process.getInputConnections().get(n).setNeeded(false);
                         }
+                        
+                        if (!process.needSync())
+                            break;
                     }
                     while (keepRunning);                 
                 }
