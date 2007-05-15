@@ -143,53 +143,35 @@ public class SMLProvider extends AbstractProvider
                         timeInput.getComponent("stop").getData().setDoubleValue(stop);
                         if (timeInput.getComponent("step") != null)
                             timeInput.getComponent("step").getData().setDoubleValue(step);
-                    }
+                    }                
                     
-                    if (checkCancel())
-                        return;                    
-                    
-                    // execute process until keep running is false
-                    boolean keepRunning = true;
-                    
+                    // execute process until more inputs are needed
                     do
                     {
+                        if (canceled)
+                            return;
+                        
                         process.createNewOutputBlocks();                        
                         process.execute();
                         
-                        if (checkCancel())
-                            return;
-                        
-                        // add data to list only if output data was generated
-                        keepRunning = process.getOutputConnections().get(0).isNeeded();
-                        if (keepRunning)
-                        {                        
-                            // clear data node right before 1st block is added
-                            if (doClear)
-                            {
-                                dataNode.clearAll();
-                                doClear = false;
-                            }
-                            
-                            // transfer block for each output
-                            for (int c=0; c<blockListArray.size(); c++)
-                            {
-                                BlockList blockList = blockListArray.get(c);
-                                blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
-                            }
-                            
-                            // send event for redraw
-                            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-                            
-                            // reset input needed flags to avoid a process chain to set 
-                            // internal availability to true
-                            for (int n=0; n<process.getInputConnections().size(); n++)
-                                process.getInputConnections().get(n).setNeeded(false);
+                        // clear data node right before 1st block is added
+                        if (doClear)
+                        {
+                            dataNode.clearAll();
+                            doClear = false;
                         }
                         
-                        if (!process.needSync())
-                            break;
+                        // transfer block for each output
+                        for (int c=0; c<blockListArray.size(); c++)
+                        {
+                            BlockList blockList = blockListArray.get(c);
+                            blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                        }
+                        
+                        // send event for redraw
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                     }
-                    while (keepRunning);                 
+                    while (!process.getInputConnections().get(0).isNeeded());
                 }
             }
             
@@ -199,18 +181,6 @@ public class SMLProvider extends AbstractProvider
         {
             throw new DataException(updateError + this.getName(), e);
         }
-    }
-    
-    
-    protected boolean checkCancel() throws Exception
-    {
-        if (canceled)
-        {
-            init();
-            return true;
-        }
-        
-        return false;
     }
     
     
