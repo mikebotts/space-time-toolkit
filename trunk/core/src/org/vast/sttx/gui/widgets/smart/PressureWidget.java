@@ -2,6 +2,8 @@ package org.vast.sttx.gui.widgets.smart;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -27,7 +29,7 @@ import org.eclipse.swt.widgets.Text;
  * @date May 21, 2007
  * @version 1.0
  */
-public class PressureWidget  implements SelectionListener
+public class PressureWidget  implements SelectionListener, KeyListener
 {
 	private Slider minSlider;
 	private Slider maxSlider;
@@ -100,10 +102,14 @@ public class PressureWidget  implements SelectionListener
 		gd = new GridData(SWT.CENTER, SWT.BEGINNING, true, false);
         gd.verticalIndent = 6;
         minText.setLayoutData(gd);
+        minText.addSelectionListener(this);
+        minText.addKeyListener(this);
         maxText = new Text(mainGroup, SWT.RIGHT);
 		gd = new GridData(SWT.CENTER, SWT.BEGINNING, true, false);
         gd.verticalIndent = 6;
         maxText.setLayoutData(gd);
+        maxText.addSelectionListener(this);
+        maxText.addKeyListener(this);
         
         continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
 		continuousUpdateBtn.setText("Continuous Update");
@@ -165,10 +171,34 @@ public class PressureWidget  implements SelectionListener
 		} else if (e.widget == continuousUpdateBtn) {
 			;  //  add call to enable continuousUpdate in DataProvider
 			updateNowBtn.setEnabled(!continuousUpdateBtn.getSelection());
-		}
+		} 
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e){
+		if (e.widget == minText) {
+			float minPressure = Float.parseFloat(minText.getText());
+			if (minPressure > maxPressure - 0.1f) {
+				minPressure = maxPressure - 0.1f;
+				minText.setText("" + minPressure);
+			}
+			minSlider.setSelection(mapToSlider(minPressure));
+		} else if (e.widget == maxText) {
+			float maxPressure = Float.parseFloat(maxText.getText());
+			if (maxPressure < minPressure + 0.1f) {
+				maxPressure = minPressure + 0.1f;
+				maxText.setText("" + maxPressure);
+			}	
+			maxSlider.setSelection(mapToSlider(maxPressure));
+		}
+			
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		//  accept only numbers, decimal point
+		e.doit = ( (e.keyCode >=48 && e.keyCode <= 57) || e.keyCode == 46 || e.keyCode == 13);
+	}
+
+	public void keyReleased(KeyEvent e) {
 	}
 	
 	public void setMinPressureLimit(float minPressure) {
