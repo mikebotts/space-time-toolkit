@@ -219,7 +219,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                             
                             // select request type (post or get)
                             boolean usePost = (query.getPostServer() != null);
-                            //System.out.println(owsUtils.buildURLQuery(query);
+                            //System.out.println(owsUtils.buildURLQuery(query));
                             dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
                             
                             // parse response
