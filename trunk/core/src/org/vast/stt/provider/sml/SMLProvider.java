@@ -154,6 +154,10 @@ public class SMLProvider extends AbstractProvider
                         process.createNewOutputBlocks();                        
                         process.execute();
                         
+                        // break if no output was generated!
+                        if (!process.getOutputConnections().get(0).isNeeded())
+                            break;
+                        
                         // clear data node right before 1st block is added
                         if (doClear)
                         {
@@ -170,8 +174,13 @@ public class SMLProvider extends AbstractProvider
                         
                         // send event for redraw
                         dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                        
+                        // reset input needed flags to avoid a process chain to set 
+                        // internal availability to true
+                        for (int n=0; n<process.getInputConnections().size(); n++)
+                            process.getInputConnections().get(n).setNeeded(false);
                     }
-                    while (!process.getInputConnections().get(0).isNeeded());
+                    while (process.needSync());// && !process.getInputConnections().get(0).isNeeded());
                 }
             }
             
