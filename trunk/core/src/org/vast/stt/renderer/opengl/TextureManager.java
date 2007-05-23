@@ -87,20 +87,10 @@ public class TextureManager
     {
         this.gl = gl;
         this.glu = glu;
-
-        if(forceNoExt)
-        {
-            MessageSystem.display("--> NPOT textures NOT supported <--", false);
-            MessageSystem.display("--> Textures will be padded with transparent pixels or resampled <--", false);
-            gl.glEnable(GL.GL_TEXTURE_2D);
-            npotSupported = false;
-            normalizationRequired = true;
-            return;
-        }
         
         // find out which texture 2D target to use
         String glExtensions = gl.glGetString(GL.GL_EXTENSIONS);
-        if (glu.gluCheckExtension("GL_ARB_texture_rectangle", glExtensions) ||
+        if (!forceNoExt && glu.gluCheckExtension("GL_ARB_texture_rectangle", glExtensions) ||
             glu.gluCheckExtension("GL_EXT_texture_rectangle", glExtensions))
         {
             OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_RECTANGLE_EXT;

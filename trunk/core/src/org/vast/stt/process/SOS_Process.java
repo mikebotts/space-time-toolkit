@@ -34,8 +34,8 @@ import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.om.ObservationReaderV0;
 import org.vast.ows.sos.SOSQuery;
+import org.vast.ows.sos.SOSResponseReader;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.unit.UnitConversion;
@@ -215,7 +215,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                             initRequest();
                             
                             // create reader
-                            ObservationReaderV0 reader = new ObservationReaderV0();
+                            SOSResponseReader reader = new SOSResponseReader();
                             
                             // select request type (post or get)
                             boolean usePost = (query.getPostServer() != null);

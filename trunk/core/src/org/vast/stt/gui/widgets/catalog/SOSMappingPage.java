@@ -27,9 +27,9 @@ import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.om.ObservationReaderV0;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSQuery;
+import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
@@ -153,7 +153,7 @@ public class SOSMappingPage extends WizardPage
 	      try
 	        {
 	            // create reader
-	            ObservationReaderV0 reader = new ObservationReaderV0();
+	            SOSResponseReader reader = new SOSResponseReader();
 	            
 	            // select request type (post or get)
 	            boolean usePost = false;

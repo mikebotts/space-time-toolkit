@@ -20,19 +20,17 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLContext;
-//import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
+import com.realityinteractive.opengl.swt.GLContext;
 import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.opengl.GLCanvas;
-import org.eclipse.swt.opengl.GLData;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
@@ -68,8 +66,9 @@ import org.vast.stt.style.*;
 public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVisitor
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
-    protected GLContext context;
-    protected GLCanvas canvas;
+    protected GLContext swtContext;
+    protected javax.media.opengl.GLContext joglContext;
+    protected Canvas canvas;
     protected GL gl;
     protected GLU glu;
     protected GLUT glut;
@@ -98,7 +97,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     protected GLRenderTexture textureRenderer;
     protected GLRenderBBOX bboxRenderer;
     
-
+    
     public JOGLRenderer()
     {
         selectableItems = new Hashtable<Integer, SceneItem>();
@@ -117,7 +116,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
      */
     protected synchronized void getContext()
     {
-        if (javax.media.opengl.GLContext.getCurrent() == context)
+        if (javax.media.opengl.GLContext.getCurrent() == joglContext)
             return;
         
         try
@@ -125,15 +124,9 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             while (contextInUse)
                 wait();
             
-            contextInUse = true;
-                        
-            // Make sure this is called in UI thread because
-            // getContext can be called from another thread
-            Runnable runnable = new Runnable()
-            { public void run() {canvas.setCurrent();}};            
-            canvas.getDisplay().syncExec(runnable);
-            
-            context.makeCurrent();
+            contextInUse = true;            
+            joglContext.makeCurrent();
+            swtContext.setCurrent();
         }
         catch (InterruptedException e)
         {
@@ -143,7 +136,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     
     protected synchronized void releaseContext()
     {
-        context.release();
+        joglContext.release();
         contextInUse = false;
         notifyAll();
     }
@@ -390,7 +383,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
             this.drawROI(scene, false);
         
         // swap buffers        
-        canvas.swapBuffers();
+        swtContext.swapBuffers();
         releaseContext();
     }
     
@@ -581,30 +574,22 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     {
         // setup GL canvas with desired options
         composite.setLayout(new FillLayout());
-        GLData data = new GLData ();
-        data.doubleBuffer = true;
-        data.stencilSize = 1;
-        canvas = new GLCanvas(composite, SWT.NO_REDRAW_RESIZE, data);
-        canvas.setCurrent();
-
-        context = GLDrawableFactory.getFactory().createExternalGLContext();
-        /*GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
+        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE);
         
-        // TODO take care of shared contexts for cloning the view !
         // associate to a context already created for sharing display lists
         if (contextList.isEmpty())
-            context = drawable.createContext(null);
+            swtContext = new GLContext(canvas, 8, 8, 24, 1);
         else
-            context = drawable.createContext(contextList.get(0));
-        contextList.add(context);*/
+            swtContext = new GLContext(canvas, contextList.get(0));
+        contextList.add(swtContext);
+        swtContext.setCurrent();
+        joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        joglContext.makeCurrent();
         
-        //JOGLContext.setSynchronized(true);
-        context.makeCurrent();
+        //context.setGL(new DebugGL(JOGLContext.getGL()));
+        //context.setGL(new TraceGL(JOGLContext.getGL(), System.err));
 
-        //JOGLContext.setGL(new DebugGL(JOGLContext.getGL()));
-        //JOGLContext.setGL(new TraceGL(JOGLContext.getGL(), System.err));
-
-        gl = context.getGL();
+        gl = joglContext.getGL();
         glu = new GLU();
         glut = new GLUT();
         textureManager = new TextureManager(gl, glu);
@@ -649,15 +634,17 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     @Override
     public void dispose()
     {
-        if (context != null && canvas != null)
+        if (joglContext != null && canvas != null)
         {
             // dispose context and remove from list
             releaseContext();
-            contextList.remove(context);
+            contextList.remove(swtContext);
             canvas.dispose();
-            context.destroy();
+            joglContext.destroy();
+            swtContext.dispose();
             canvas = null;
-            context = null;
+            swtContext = null;
+            joglContext = null;
             DisplayListManager.DLTables.clear();
             TextureManager.symTextureTables.clear();
         }
