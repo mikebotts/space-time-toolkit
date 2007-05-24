@@ -299,7 +299,7 @@
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
          </DataItem>
       </member> 
-      <member visible="false">
+   <!--    <member visible="false">
          <DataItem>
             <name>TMI 85GHz Vertical Polarization Data</name>
             <dataProvider>
@@ -326,6 +326,6 @@
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
          </DataItem>
-      </member>                                     
-   </DataList>
+      </member>  -->                                   
+   </DataList>   
 </STTProject>
