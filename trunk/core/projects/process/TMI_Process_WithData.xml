@@ -85,21 +85,6 @@
                                        <swe:uom code="s"/>
                                     </swe:Time>
                                  </swe:field>
-                                 <swe:field name="XpositionECI">
-                                    <swe:Quantity definition="urn:ogc:def:data:locationVector::ECI_wgs84">
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:field>
-                                 <swe:field name="YpositionECI">
-                                    <swe:Quantity definition="urn:ogc:def:data:locationVector::ECI_wgs84">
-                                       <swe:uom code="rad"/>
-                                    </swe:Quantity>
-                                 </swe:field>
-                                 <swe:field name="ZpositionECI">
-                                    <swe:Quantity definition="urn:ogc:def:data:locationVector::ECI_wgs84">
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:field>
                                  <swe:field name="yaw">
                                     <swe:Quantity definition="urn:ogc:phenomenon:angle">
                                        <swe:uom code="rad"/>
@@ -204,12 +189,12 @@
                                     <swe:DataArray>
                                        <swe:elementCount>
                                           <swe:Count>
-                                             <swe:value>50</swe:value>
+                                             <swe:value>104</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
                                        <swe:elementType name="brightnessTemps">                                        
                                           <swe:DataRecord>
-                                             <swe:field name="10GHz">
+                                             <swe:field name="10GHzVP">
                                                 <swe:Quantity definition="urn:ogc:data:brightnessTemp"/>
                                              </swe:field>
                                           </swe:DataRecord>
@@ -241,12 +226,12 @@
                                  </swe:field>
                                  <swe:field name="offering">
                                     <swe:Category>
-                                       <swe:value>AMPR_SCAN</swe:value>
+                                       <swe:value>TMI_SCAN</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="observables">
                                     <swe:Category>
-                                       <swe:value>10GHz</swe:value>
+                                       <swe:value>10GHzVP</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="format">
