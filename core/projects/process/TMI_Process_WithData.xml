@@ -110,7 +110,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows-dev/amprSos</swe:value>
+                                       <swe:value>http://localhost:8080/ows-dev/tmi</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -130,7 +130,7 @@
                                  </swe:field>
                                  <swe:field name="observables">
                                     <swe:Category>
-                                       <swe:value>LOCATION</swe:value>
+                                       <swe:value>ATTITUDE</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="format">
@@ -211,7 +211,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows-dev/amprSos</swe:value>
+                                       <swe:value>http://localhost:8080/ows-dev/tmiSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -283,12 +283,12 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>50</swe:value>
+                                       <swe:value>104</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>10</swe:value>
+                                       <swe:value>34</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -317,7 +317,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./AMPR.xml#AMPR_GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./TMI.xml#TMI_GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
                <sml:component name="rayIntersectEllipsoid">
                   <sml:ProcessModel>
