@@ -68,7 +68,7 @@ public class STTPlugin extends AbstractUIPlugin
         XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
         XMLRegistry.registerReader("GoogleMapProvider", GoogleMapProviderReader.class);
         XMLRegistry.registerReader("WorldwindProvider", WorldwindMapProviderReader.class);
-        XMLRegistry.registerReader("PhenomenonExtractionProvider", PhenomenaDetectionProviderReader.class);
+        XMLRegistry.registerReader("PhenomenonDetectionProvider", PhenomenaDetectionProviderReader.class);
         
         // register basic display type reader/writers
         XMLRegistry.registerReader("Scene", WorldSceneReader.class);
