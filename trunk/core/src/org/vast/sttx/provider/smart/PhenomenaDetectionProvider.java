@@ -16,17 +16,11 @@ package org.vast.sttx.provider.smart;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import org.vast.cdm.common.DataBlock;
+import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataStreamParser;
-import org.vast.data.AbstractDataBlock;
-import org.vast.data.DataBlockFactory;
-import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSResponseReader;
-import org.vast.stt.data.BlockListItem;
+import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
-import org.vast.data.DataArray;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.swe.SWEDataHandler;
 import org.vast.util.DateTimeFormat;
@@ -65,7 +59,6 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     @Override
     public void init() throws DataException
     {
-        // TODO Auto-generated method stub
         
     }
 
@@ -87,9 +80,6 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     @Override
     public void updateData() throws DataException
     {
-        if (!dataNode.isNodeStructureReady())
-            init();
-        
         try
         {    
             // init request using spatial + time extent + pressure range 
@@ -116,6 +106,16 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             // parse response
             dataHandler.reset();
             reader.parse(dataStream);
+            
+            // create block list if not done yet
+            if (!dataNode.isNodeStructureReady())
+            {
+                DataComponent dataInfo = reader.getDataComponents();
+                BlockList blockList = dataNode.createList(dataInfo.copy());
+                dataNode.setNodeStructureReady(true);
+                dataHandler.setBlockList(blockList);
+            }
+                
             dataParser = reader.getDataParser();
             dataParser.setDataHandler(dataHandler);
             
@@ -162,6 +162,15 @@ public class PhenomenaDetectionProvider extends AbstractProvider
         dom.setElementValue(root, "Region/East", Double.toString(spatialExtent.getMaxX()));
         dom.setElementValue(root, "Region/West", Double.toString(spatialExtent.getMinX()));
         
+        try
+        {
+            dom.serialize(dom.getBaseElement(), System.out, true);
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return dom;
     }
     
