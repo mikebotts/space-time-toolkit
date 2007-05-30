@@ -14,8 +14,8 @@
 package org.vast.sttx.provider.smart;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.ows.sos.SOSResponseReader;
@@ -23,7 +23,6 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.swe.SWEDataHandler;
-import org.vast.util.DateTimeFormat;
 import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
@@ -93,11 +92,16 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             
             // send request to server using POST
             URL serverUrl = new URL(server);
-            URLConnection connection = serverUrl.openConnection();
+            HttpURLConnection connection = (HttpURLConnection)serverUrl.openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty( "Content-type", "text/xml");            
+            OutputStream reqStream = connection.getOutputStream();
+            dom.serialize(dom.getBaseElement(), reqStream, true);
+            reqStream.flush();
             connection.connect();
-            dom.serialize(dom.getBaseElement(), connection.getOutputStream(), true);
+            reqStream.close();
             dataStream = connection.getInputStream();
             
             if (canceled)
@@ -142,26 +146,57 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     protected DOMHelper buildRequest()
     {
         DOMHelper dom = new DOMHelper();
+        dom.addUserPrefix("soap", "http://schemas.xmlsoap.org/soap/envelope/");
+        dom.addUserPrefix("ns1", "urn:PhenomenaDetection2");
+        dom.addUserPrefix("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        dom.getXmlDocument().addNS("xsd", "http://www.w3.org/2001/XMLSchema");
         
-        Element root = dom.addElement("PhenomenaDetectionRequest");
+        Element root = dom.addElement("soap:Envelope/soap:Body/ns1:detectPhenomena");
+        dom.setAttributeValue(root, "@soap:encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
+        Element req = dom.addElement(root, "request");
+        dom.setAttributeValue(req, "@xsi:type", "xsd:string");
+        
+        String msg =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<PhenomenaDetectionRequest>\n" +
+        "<TimeStep>1</TimeStep>\n" +
+        "<PressureRange>\n" +
+        "<Min>200.0</Min>\n" +
+        "<Max>1000.0</Max>\n" +
+        "</PressureRange>\n" +
+        "<TimeRange>\n" +
+        "<BeginDateTime>2006-05-04T00:00:00Z</BeginDateTime>\n" +
+        "<EndDateTime>2006-05-04T07:31:00Z</EndDateTime>\n" +
+        "</TimeRange>\n" +
+        "<Region>\n" +
+        "<North>45.4</North>\n" +
+        "<South>15.4</South>\n" +
+        "<East>-72.2</East>\n" +
+        "<West>-79.9</West>\n" +
+        "</Region>\n" +
+        "</PhenomenaDetectionRequest>";
+        req.setTextContent(msg);
+        
+        /*
+        Element msgRoot = dom.addElement(req, "PhenomenaDetectionRequest");
         
         // time step
-        dom.setElementValue(root, "TimeStep", Integer.toString((int)timeExtent.getTimeStep()));
+        dom.setElementValue(msgRoot, "TimeStep", Integer.toString((int)timeExtent.getTimeStep()));
         
         // pressure range
-        dom.setElementValue(root, "PressureRange/Min", Double.toString(0.0));
-        dom.setElementValue(root, "PressureRange/Max", Double.toString(100.0));
+        dom.setElementValue(msgRoot, "PressureRange/Min", Double.toString(minPressure));
+        dom.setElementValue(msgRoot, "PressureRange/Max", Double.toString(maxPressure));
         
         // time range
-        dom.setElementValue(root, "TimeRange/BeginDateTime", DateTimeFormat.formatIso(timeExtent.getAdjustedLagTime(), 0));
-        dom.setElementValue(root, "TimeRange/EndDateTime", DateTimeFormat.formatIso(timeExtent.getAdjustedLeadTime(), 0));
+        dom.setElementValue(msgRoot, "TimeRange/BeginDateTime", DateTimeFormat.formatIso(timeExtent.getAdjustedLagTime(), 0));
+        dom.setElementValue(msgRoot, "TimeRange/EndDateTime", DateTimeFormat.formatIso(timeExtent.getAdjustedLeadTime(), 0));
         
         // bbox
-        dom.setElementValue(root, "Region/North", Double.toString(spatialExtent.getMaxY()));
-        dom.setElementValue(root, "Region/South", Double.toString(spatialExtent.getMinY()));
-        dom.setElementValue(root, "Region/East", Double.toString(spatialExtent.getMaxX()));
-        dom.setElementValue(root, "Region/West", Double.toString(spatialExtent.getMinX()));
-        
+        dom.setElementValue(msgRoot, "Region/North", Double.toString(spatialExtent.getMaxY()));
+        dom.setElementValue(msgRoot, "Region/South", Double.toString(spatialExtent.getMinY()));
+        dom.setElementValue(msgRoot, "Region/East", Double.toString(spatialExtent.getMaxX()));
+        dom.setElementValue(msgRoot, "Region/West", Double.toString(spatialExtent.getMinX()));
+        */
         try
         {
             dom.serialize(dom.getBaseElement(), System.out, true);
