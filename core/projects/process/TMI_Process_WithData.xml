@@ -110,7 +110,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/tmi</swe:value>
+                                       <swe:value>http://localhost:8080/ows-dev/tmiSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -478,8 +478,26 @@
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through"/>
-                     <sml:destination ref="lookVectorChain/inputs/navigationData"/>
+                     <sml:source ref="asCounter/outputs/pass-through/time"/>
+                     <sml:destination ref="lookVectorChain/inputs/julianTime"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/yaw"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/yaw"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/pitch"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/pitch"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/roll"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/roll"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
