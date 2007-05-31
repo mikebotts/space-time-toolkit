@@ -40,9 +40,9 @@
                   <name>EO Sensors</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
-                  <member xlink:href="./EOSensors/AMPRmission.xml#AMPRmission"/>
-                  <member xlink:href="./EOSensors/TRMMmission.xml#TRMMmission"/>
-                  <member visible="false">
+                  <member xlink:href="./EOSensors/AircraftMission.xml#AircraftMission"/>
+                  <member xlink:href="./EOSensors/SatelliteObs.xml#SatelliteObs"/>
+     <!--             <member visible="false">
                      <DataItem>
                         <name>MODIS Lookrays</name>
                         <dataProvider>
@@ -451,7 +451,7 @@
                            </sld:GridFillSymbolizer>
                         </style>
                      </DataItem>
-                  </member>
+                  </member>  -->
                                                                                                                                                                                                                                     
                </DataList>
             </contents>
