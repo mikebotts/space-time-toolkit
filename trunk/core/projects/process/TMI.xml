@@ -19,30 +19,29 @@
        </sml:input>
        <sml:input name="channelNumber">
           <swe:Quantity>
-             <swe:value>1.0</swe:value>
           </swe:Quantity>
        </sml:input>
         <sml:input name="satelliteAngle">
             <swe:Quantity>
                 <swe:uom code="rad"/>
-               <swe:value>3.141592</swe:value>
+               <swe:value>0</swe:value>
             </swe:Quantity>
         </sml:input>
        <sml:input name="attitudeOrientation">
           <swe:Vector definition="urn:ogc:def:data:orientationVector">
-             <swe:coordinate name="x">
+             <swe:coordinate name="roll">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
                    <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
-             <swe:coordinate name="y">
+             <swe:coordinate name="pitch">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
                    <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
-             <swe:coordinate name="z">
+             <swe:coordinate name="yaw">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
                    <swe:value>0.0</swe:value>
@@ -821,17 +820,17 @@
              </sml:input> 
             <sml:input name="attitudeOrientation">
                <swe:Vector definition="urn:ogc:def:data:orientationVector">
-                  <swe:coordinate name="x">
+                  <swe:coordinate name="roll">
                      <swe:Quantity>
                         <swe:uom code="m"/>
                      </swe:Quantity>
                   </swe:coordinate>
-                  <swe:coordinate name="y">
+                  <swe:coordinate name="pitch">
                      <swe:Quantity>
                         <swe:uom code="m"/>
                      </swe:Quantity>
                   </swe:coordinate>
-                  <swe:coordinate name="z">
+                  <swe:coordinate name="yaw">
                      <swe:Quantity>
                         <swe:uom code="m"/>
                      </swe:Quantity>
@@ -1557,19 +1556,19 @@
             <!-- LUTattitude to matrixbuilderorbit -->
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="this/inputs/attitudeOrientation/z"/>
+                  <sml:source ref="this/inputs/attitudeOrientation/yaw"/>
                   <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/z"/>
                </sml:Link>
             </sml:connection>     
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="this/inputs/attitudeOrientation/y"/>
+                  <sml:source ref="this/inputs/attitudeOrientation/pitch"/>
                   <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/y"/>
                </sml:Link>
             </sml:connection>     
             <sml:connection>
                <sml:Link>
-                  <sml:source ref="this/inputs/attitudeOrientation/x"/>
+                  <sml:source ref="this/inputs/attitudeOrientation/roll"/>
                   <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/x"/>
                </sml:Link>
             </sml:connection> 
