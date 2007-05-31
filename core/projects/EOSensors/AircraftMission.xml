@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="AircraftMission">
+      <name>Aircrafts</name>
+      <member xlink:href="./AMPRmission.xml#AMPRmission"/>
+   </DataList>
+</STTProject>
