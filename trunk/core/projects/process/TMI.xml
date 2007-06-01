@@ -32,19 +32,16 @@
              <swe:coordinate name="roll">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
-                   <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
              <swe:coordinate name="pitch">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
-                   <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
              <swe:coordinate name="yaw">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
-                   <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
           </swe:Vector>
