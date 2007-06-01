@@ -336,8 +336,8 @@
                                  <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                               </swe:encoding>
                               <swe:values>
-                                 0.0,0.43633231299858239423092269212215
-                                 1.0,2.7052603405912108442317206911573                                  
+                                 0.0,2.7052603405912108442317206911573
+                                 1.0,0.43633231299858239423092269212215                                  
                               </swe:values>
                            </swe:Curve>
                         </sml:parameter>
@@ -358,7 +358,7 @@
                            <swe:coordinate name="x">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                  <swe:uom code="rad"/>
-                                 <swe:value>0.855211333</swe:value>
+                                 <swe:value>-0.855211333</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                            <swe:coordinate name="y">
