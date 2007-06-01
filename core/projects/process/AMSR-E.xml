@@ -347,8 +347,8 @@
                                  <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                               </swe:encoding>
                               <swe:values>
-                                 0.0,-0.5061454830783555773078703228617
-                                 1.0,-2.6354471705114376611547730604178                                  
+                                 0.0,-2.6354471705114376611547730604178
+                                 1.0,-0.5061454830783555773078703228617                               
                               </swe:values>
                            </swe:Curve>
                         </sml:parameter>
