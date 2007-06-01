@@ -10,8 +10,8 @@
                   <name>AMSR-E Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="AMSRE_TIME">
-                        <baseTime>2007-05-01T11:40:00</baseTime>
-                        <leadTime>600</leadTime>
+                        <baseTime>2007-04-30T23:40:00</baseTime>
+                        <leadTime>1200</leadTime>
                         <stepTime>60</stepTime>
                      </TimeExtent>
                   </timeExtent>
