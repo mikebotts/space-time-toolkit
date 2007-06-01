@@ -23,6 +23,7 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.swe.SWEDataHandler;
+import org.vast.util.DateTimeFormat;
 import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
@@ -46,7 +47,7 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     protected DataStreamParser dataParser;
     protected SWEDataHandler dataHandler;
     protected double minPressure, maxPressure;
-    protected String server = "http://smartdev.itsc.uah.edu:81/CCDOM/services/PhenomenaDetection2"; 
+    protected String server = "http://smartdev.itsc.uah.edu:81/CCDOM/services/PhenomenaDetection"; 
     
     
     public PhenomenaDetectionProvider()
@@ -96,13 +97,19 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty( "Content-type", "text/xml");            
+            connection.setRequestProperty( "Content-type", "text/xml");
+            connection.setRequestProperty( "SOAPAction", "SOAPAction");
             OutputStream reqStream = connection.getOutputStream();
             dom.serialize(dom.getBaseElement(), reqStream, true);
             reqStream.flush();
             connection.connect();
             reqStream.close();
             dataStream = connection.getInputStream();
+            
+//            int c; 
+//            while((c = dataStream.read()) != -1)
+//                System.out.print((char)c);
+//            System.exit(0);
             
             if (canceled)
                 return;
@@ -126,8 +133,8 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             if (canceled)
                 return;
             
-             // start parsing
-            dataParser.parse(reader.getDataStream());
+            // start parsing
+            dataParser.parse(reader.getDataStream());            
         }
         catch (Exception e)
         {
@@ -149,36 +156,8 @@ public class PhenomenaDetectionProvider extends AbstractProvider
         dom.addUserPrefix("soap", "http://schemas.xmlsoap.org/soap/envelope/");
         dom.addUserPrefix("ns1", "urn:PhenomenaDetection2");
         dom.addUserPrefix("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        dom.getXmlDocument().addNS("xsd", "http://www.w3.org/2001/XMLSchema");
-        
-        Element root = dom.addElement("soap:Envelope/soap:Body/ns1:detectPhenomena");
-        dom.setAttributeValue(root, "@soap:encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
-        Element req = dom.addElement(root, "request");
-        dom.setAttributeValue(req, "@xsi:type", "xsd:string");
-        
-        String msg =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-        "<PhenomenaDetectionRequest>\n" +
-        "<TimeStep>1</TimeStep>\n" +
-        "<PressureRange>\n" +
-        "<Min>200.0</Min>\n" +
-        "<Max>1000.0</Max>\n" +
-        "</PressureRange>\n" +
-        "<TimeRange>\n" +
-        "<BeginDateTime>2006-05-04T00:00:00Z</BeginDateTime>\n" +
-        "<EndDateTime>2006-05-04T07:31:00Z</EndDateTime>\n" +
-        "</TimeRange>\n" +
-        "<Region>\n" +
-        "<North>45.4</North>\n" +
-        "<South>15.4</South>\n" +
-        "<East>-72.2</East>\n" +
-        "<West>-79.9</West>\n" +
-        "</Region>\n" +
-        "</PhenomenaDetectionRequest>";
-        req.setTextContent(msg);
-        
-        /*
-        Element msgRoot = dom.addElement(req, "PhenomenaDetectionRequest");
+        dom.getXmlDocument().addNS("xsd", "http://www.w3.org/2001/XMLSchema");               
+        Element msgRoot = dom.addElement("soap:Envelope/soap:Body/PhenomenaDetectionRequest");
         
         // time step
         dom.setElementValue(msgRoot, "TimeStep", Integer.toString((int)timeExtent.getTimeStep()));
@@ -196,16 +175,7 @@ public class PhenomenaDetectionProvider extends AbstractProvider
         dom.setElementValue(msgRoot, "Region/South", Double.toString(spatialExtent.getMinY()));
         dom.setElementValue(msgRoot, "Region/East", Double.toString(spatialExtent.getMaxX()));
         dom.setElementValue(msgRoot, "Region/West", Double.toString(spatialExtent.getMinX()));
-        */
-        try
-        {
-            dom.serialize(dom.getBaseElement(), System.out, true);
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
         return dom;
     }
     
@@ -260,5 +230,28 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     public void setMinPressure(double minPressure)
     {
         this.minPressure = minPressure;
+    }
+    
+    
+    public static void main(String[] args)
+    {
+        try
+        {
+            PhenomenaDetectionProvider provider = new PhenomenaDetectionProvider();
+            provider.setMinPressure(200);
+            provider.setMaxPressure(1000);
+            provider.getTimeExtent().setBaseTime(DateTimeFormat.parseIso("2006-05-04T00:00:00Z"));
+            provider.getTimeExtent().setLeadTimeDelta(36000);
+            provider.getSpatialExtent().setMinX(-79.9);
+            provider.getSpatialExtent().setMaxX(-72.2);
+            provider.getSpatialExtent().setMinY(15.4);
+            provider.getSpatialExtent().setMaxY(45.4);
+            provider.updateData();
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
