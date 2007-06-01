@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
    <DataList id="AMPRmission">
-      <name>AMPR Data</name>
+      <name>AMPR Instrument</name>
       <member visible="false">
          <DataItem>
             <name>AMPR Lookrays</name>
@@ -72,7 +72,7 @@
       </member> 
       <member visible="false">
          <DataItem>
-            <name>AMPR 10GHz Data</name>
+            <name>AMPR 10GHz Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMPR Data Process Chain</name>
@@ -166,7 +166,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMPR 19GHz Data</name>
+            <name>AMPR 19GHz Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMPR Data Process Chain</name>
@@ -180,7 +180,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMPR 37GHz Data</name>
+            <name>AMPR 37GHz Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMPR Data Process Chain</name>
@@ -194,7 +194,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMPR 85GHz Data</name>
+            <name>AMPR 85GHz Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMPR Data Process Chain</name>

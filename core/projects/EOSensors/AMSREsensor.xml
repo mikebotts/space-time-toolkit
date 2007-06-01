@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
    <DataList id="AMSREsensor">
-      <name>AMSR-E instrument</name>
+      <name>AMSR-E Instrument</name>
       <member visible="false">
          <DataItem>
             <name>AMSR-E Lookrays</name>
@@ -123,7 +123,7 @@
       </member> 
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 6GHz Vertical Polarization Data</name>
+            <name>AMSR-E 6GHz Vertical Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -217,7 +217,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 6GHz Horizontal Polarization Data</name>
+            <name>AMSR-E 6GHz Horizontal Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -231,7 +231,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 10GHz Vertical Polarization Data</name>
+            <name>AMSR-E 10GHz Vertical Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -245,7 +245,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 10GHz Horizontal Polarization Data</name>
+            <name>AMSR-E 10GHz Horizontal Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -259,7 +259,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 18GHz Vertical Polarization Data</name>
+            <name>AMSR-E 18GHz Vertical Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -273,7 +273,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 18GHz Horizontal Polarization Data</name>
+            <name>AMSR-E 18GHz Horizontal Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -287,7 +287,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 23GHz Vertical Polarization Data</name>
+            <name>AMSR-E 23GHz Vertical Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -301,7 +301,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 23GHz Horizontal Polarization Data</name>
+            <name>AMSR-E 23GHz Horizontal Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -315,7 +315,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 36GHz Vertical Polarization Data</name>
+            <name>AMSR-E 36GHz Vertical Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
@@ -329,7 +329,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>AMSR-E 36GHz Horizontal Polarization Data</name>
+            <name>AMSR-E 36GHz Horizontal Polarization Band</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
