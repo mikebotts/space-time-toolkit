@@ -288,7 +288,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>60</swe:value>
+                                       <swe:value>243</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
