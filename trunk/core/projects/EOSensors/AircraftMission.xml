@@ -6,5 +6,6 @@
    <DataList id="AircraftMission">
       <name>Aircrafts</name>
       <member xlink:href="./AMPRmission.xml#AMPRmission"/>
+      <member xlink:href="./MASmission.xml#MASmission"/>
    </DataList>
 </STTProject>
