@@ -616,19 +616,19 @@
                                  <sld:LineSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-breaks">
-                                          <ogc:PropertyName>intersection_data/trackLength</ogc:PropertyName>
+                                          <ogc:PropertyName>Data/SegmentData/TotalNumberOfPoints</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-x">
-                                          <ogc:PropertyName>intersection_data/goes_data/element/lon</ogc:PropertyName>
+                                          <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/Longitude</ogc:PropertyName>
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
+                                          <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/Latitude</ogc:PropertyName>
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Stroke>
                                        <sld:CssParameter name="stroke-red">
                                           <LookUpTable1D>
-                                             <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                             <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/InRange</ogc:PropertyName>
                                              <TableValues>0 0.0 1 1.0</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
@@ -1374,8 +1374,8 @@
                   <description>Grid for Region of Interest</description>
                   <spatialExtent tiling="1x1">
                      <BoundingBox id="ROI" srsName="EPSG:4326">
-                        <!--<gml:coordinates>-102.2,15.4 -92.3,25.4</gml:coordinates>-->
-                        <gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>
+                        <!--<gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>-->
+                        <gml:coordinates>-79.9,15.4 -72.2,45.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
@@ -1424,12 +1424,12 @@
                   <name>Cirrus Cloud Detection</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2006-10-02T09:14:00Z</baseTime>
+                        <baseTime>2006-05-04T00:00:00Z</baseTime>
                         <leadTime>36000</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <minPressure>0</minPressure>
+                  <minPressure>200</minPressure>
                   <maxPressure>1000</maxPressure>
                </PhenomenonDetectionProvider>
             </member>
