@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="MASmission">
+      <name>MAS Instrument</name>
+      <member visible="false">
+         <DataItem>
+            <name>MAS Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="MAS_TIME">
+                        <baseTime>2005-07-28T19:30:00Z</baseTime>
+                        <leadTime>60</leadTime>
+                        <stepTime>6</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="../process/MAS_Process.xml#LOOKRAY_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style> 
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.465 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS2 Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.465m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="MAS_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/radiation/0.465m</ogc:PropertyName>
+                              <TableValues>0 0 100 247 200 135 300 255 400 000 500 000 600 000 700 255 800 255 900 255 1000 135</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/radiation/0.465m</ogc:PropertyName>
+                              <TableValues>0 0 100 160 200 000 300 000 400 000 500 255 600 127 700 255 800 000 900 255 1000 49</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/radiation/0.465m</ogc:PropertyName>
+                              <TableValues>0 0 100 127 200 135 300 255 400 255 500 255 600 000 700 000 800 000 900 255 1000 49</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="MAS_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.549 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.549m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.655 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.655m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.702 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.702m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.743 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.743m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.825 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.825m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.867 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.867m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.907 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.907m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 0.948 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">0.948m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.619 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.619m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.675 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.675m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.727 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.727m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.778 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.778m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.832 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.832m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.881 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.881m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.932 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.932m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 1.982 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">1.982m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.032 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.032m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.081 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.081m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.130 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.130m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.179 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.179m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.229 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.229m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.279 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.279m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.328 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.328m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 2.378 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">2.378m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.134 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.134m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.296 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.296m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.448 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.448m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.609 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.609m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.760 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.760m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 3.922 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">3.922m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.086 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.086m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.185 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.185m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.418 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.418m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.555 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.555m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.713 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.713m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 4.869 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">4.869m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 5.018 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">5.018m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 5.174 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">5.174m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 5.323 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">5.323m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 5.413 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">5.413m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 8.537 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">8.537m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 9.722 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">9.722m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 10.507 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">10.507m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 11.012 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">11.012m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 11.986 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">11.986m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 12.901 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">12.901m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 13.270 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">13.270m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 13.808 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">13.808m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MAS 14.240 micron Radiation Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>MAS Data Process Chain</name>
+                  <timeExtent xlink:href="#MAS_TIME"/>
+                  <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/observables">14.240m</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
+         </DataItem>
+      </member>
+   </DataList>
+</STTProject>
