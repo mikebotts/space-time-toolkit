@@ -10,8 +10,8 @@
                   <name>TMI Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="TMI_TIME">
-                        <baseTime>2005-02-02T11:40:00</baseTime>
-                        <leadTime>600</leadTime>
+                        <baseTime>2005-02-02T11:23:00</baseTime>
+                        <leadTime>1800</leadTime>
                         <stepTime>60</stepTime>
                      </TimeExtent>
                   </timeExtent>
