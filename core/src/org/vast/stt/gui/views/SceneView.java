@@ -169,8 +169,7 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
     
     @Override
     public void setFocus()
-    {
-        refreshViewAsync();        
+    {       
     }
 
 
