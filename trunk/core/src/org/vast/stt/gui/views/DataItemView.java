@@ -109,8 +109,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     
     @Override
     public void setFocus()
-    {
-        
+    {        
     }
     
     

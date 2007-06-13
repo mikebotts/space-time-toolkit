@@ -109,7 +109,7 @@ public class PhenomenaDetectionProvider extends AbstractProvider
 //            int c; 
 //            while((c = dataStream.read()) != -1)
 //                System.out.print((char)c);
-//            System.exit(0);
+//            if (true) return;
             
             if (canceled)
                 return;

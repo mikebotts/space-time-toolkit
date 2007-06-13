@@ -34,8 +34,8 @@ import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
+import org.vast.ows.wcs.WCSResponseReader;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.unit.UnitConversion;
@@ -203,13 +203,13 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
         try
         {
             initRequest();
-            CoverageReader reader = new CoverageReader();
+            WCSResponseReader reader = new WCSResponseReader();
             System.out.println(owsUtils.buildURLQuery(query));
             dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
 
             dataParser = reader.getDataParser();  // Just instantiates ASCII or BINARY parser and returns it
-            dataParser.setDataHandler(this);            
+            dataParser.setDataHandler(this);
             dataParser.parse(reader.getDataStream());
             
             ((DataGroup)output.getComponent(0)).combineDataBlocks();
