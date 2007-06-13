@@ -359,7 +359,7 @@
                            <swe:coordinate name="x">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                  <swe:uom code="rad"/>
-                                 <swe:value>-0.828211333</swe:value>
+                                 <swe:value>-0.827211333</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                            <swe:coordinate name="y">
