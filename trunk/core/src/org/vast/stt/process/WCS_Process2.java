@@ -32,8 +32,8 @@ import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.data.*;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.wcs.CoverageReader;
 import org.vast.ows.wcs.WCSQuery;
+import org.vast.ows.wcs.WCSResponseReader;
 import org.vast.process.*;
 
 
@@ -172,7 +172,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
         try
         {
             initRequest();
-            CoverageReader reader = new CoverageReader();
+            WCSResponseReader reader = new WCSResponseReader();
             dataStream = owsUtils.sendRequest(query, false).getInputStream();
             reader.parse(dataStream);
           
