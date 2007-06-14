@@ -1347,35 +1347,13 @@
                </OWSDataProvider>
             </member>
             <member>
-               <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
-                  <name>GOES Data Lookup</name>
-                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <layerId>CALIPSO-LIDAR</layerId>
-                  <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
-                     <GetObservation service="SOS" version="0.0.31">
-                        <offering>CALIPSO-LIDAR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-02T09:14:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-10-02T19:22:00Z</gml:endPosition>
-                                 <gml:timeStep>P1S</gml:timeStep>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
-            </member>
-            <member>
                <SensorMLProvider id="FLATGRID_PROCESS">
                   <name>Flat Grid Process</name>
                   <description>Grid for Region of Interest</description>
                   <spatialExtent tiling="1x1">
                      <BoundingBox id="ROI" srsName="EPSG:4326">
                         <!--<gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>-->
-                        <gml:coordinates>-79.9,15.4 -72.2,45.4</gml:coordinates>
+                        <gml:coordinates>-89.9,15.4 -61.2,45.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
                   <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
@@ -1417,12 +1395,41 @@
                </SensorMLProvider>
             </member>
             <member>
+               <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
+                  <name>GOES Data Lookup</name>
+                  <timeExtent>
+                     <TimeExtent>
+                        <baseTime>2007-06-03T06:00:00</baseTime>
+                        <leadTime>7200</leadTime>
+                        <stepTime>10</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <layerId>CALIPSO-LIDAR</layerId>
+                  <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>CALIPSO-LIDAR</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2006-10-02T09:14:00Z</gml:beginPosition>
+                                 <gml:endPosition>2006-10-02T19:22:00Z</gml:endPosition>
+                                 <gml:timeStep>P1S</gml:timeStep>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
                <PhenomenonDetectionProvider id="CIRRUS_DETECTION">
                   <name>Cirrus Cloud Detection</name>
                   <timeExtent>
                      <TimeExtent>
                         <baseTime>2006-05-04T00:00:00Z</baseTime>
-                        <leadTime>36000</leadTime>
+                        <leadTime>36000</leadTime>                        
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
