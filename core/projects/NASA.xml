@@ -1387,7 +1387,8 @@
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <timeExtent>
                      <TimeExtent id="GOES_TIME">
-                        <baseTime>2005-08-28T16:00:00</baseTime>
+                        <!--<baseTime>2005-08-28T16:00:00</baseTime>-->
+                        <baseTime>2007-06-03T07:46:00</baseTime>
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
