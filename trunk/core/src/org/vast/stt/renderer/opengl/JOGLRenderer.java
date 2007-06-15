@@ -574,7 +574,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     {
         // setup GL canvas with desired options
         composite.setLayout(new FillLayout());
-        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE);
+        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
         
         // associate to a context already created for sharing display lists
         if (contextList.isEmpty())
