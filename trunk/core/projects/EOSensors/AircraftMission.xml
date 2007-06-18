@@ -7,5 +7,59 @@
       <name>Aircrafts</name>
       <member xlink:href="./AMPRmission.xml#AMPRmission"/>
       <member xlink:href="./MASmission.xml#MASmission"/>
+      <member>
+         <DataItem>
+            <name>Aerosonde</name>
+            <dataProvider>
+               <OWSDataProvider id="AEROSONDE_PROVIDER">
+                  <name>Aerosonde Data</name>
+                  <timeExtent>
+                     <TimeExtent id="GOES_INTERSECT_TIME">
+                        <baseTime>2005-07-07T14:00:00Z</baseTime>
+                        <leadTime>7200</leadTime>
+                        <stepTime>5</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <spatialExtent tiling="1x1">
+                     <BoundingBox id="ROI" srsName="EPSG:4326">
+                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <layerId>AEROSONDE_MET_DATA</layerId>
+                  <request getUrl="http://moby.itsc.uah.edu:8080/Aerosonde/AerosondeSos">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>AEROSONDE_MET_DATA</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-07-07T14:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2005-07-07T16:00:00Z</gml:endPosition>
+                                 <gml:timeStep>P5S</gml:timeStep>
+                              </gml:TimePeriod>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-xml</resultFormat>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/Longitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/Latitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
    </DataList>
 </STTProject>
