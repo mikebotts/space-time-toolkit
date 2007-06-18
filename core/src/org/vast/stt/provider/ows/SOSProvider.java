@@ -48,7 +48,8 @@ public class SOSProvider extends OWSProvider
 	protected SOSQuery query;
 	protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
-	
+	protected boolean usePost;
+    
 
 	public SOSProvider()
 	{
@@ -73,9 +74,14 @@ public class SOSProvider extends OWSProvider
             //query.setResponseMode(SOSQuery.ResponseMode.RESULT_TEMPLATE);
             
             // select request type (post or get)
-            boolean usePost = true;
+            if (query.getPostServer() != null)
+                usePost = true;
+            else if (query.getGetServer() == null)
+                throw new DataException("No GET or POST Server URL specified");
+            
+            // send request
             dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
-                         
+            
             // parse response
             reader.parse(dataStream);
             
@@ -125,7 +131,6 @@ public class SOSProvider extends OWSProvider
                 return;
             
 			// select request type (post or get)
-            boolean usePost = true;
             dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
             
             if (canceled)
