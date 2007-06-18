@@ -1398,10 +1398,10 @@
                <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
                   <name>GOES Data Lookup</name>
                   <timeExtent>
-                     <TimeExtent>
+                     <TimeExtent id="GOES_INTERSECT_TIME">
                         <baseTime>2007-06-03T06:00:00</baseTime>
                         <leadTime>7200</leadTime>
-                        <stepTime>10</stepTime>
+                        <stepTime>5</stepTime>
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
@@ -1426,12 +1426,7 @@
             <member>
                <PhenomenonDetectionProvider id="CIRRUS_DETECTION">
                   <name>Cirrus Cloud Detection</name>
-                  <timeExtent>
-                     <TimeExtent>
-                        <baseTime>2006-05-04T00:00:00Z</baseTime>
-                        <leadTime>36000</leadTime>                        
-                     </TimeExtent>
-                  </timeExtent>
+                  <timeExtent xlink:href="#GOES_INTERSECT_TIME"/>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <minPressure>200</minPressure>
                   <maxPressure>1000</maxPressure>
