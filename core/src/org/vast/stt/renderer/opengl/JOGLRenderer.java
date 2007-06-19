@@ -114,8 +114,9 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     /**
      * Make sure context is current
      */
-    protected synchronized void getContext()
+    protected void getContext()
     {
+        /*
         if (javax.media.opengl.GLContext.getCurrent() == joglContext)
             return;
         
@@ -131,14 +132,18 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         catch (InterruptedException e)
         {
         }
+        */
+        
+        joglContext.makeCurrent();
+        swtContext.setCurrent();
     }
     
     
-    protected synchronized void releaseContext()
+    protected void releaseContext()
     {
         joglContext.release();
-        contextInUse = false;
-        notifyAll();
+        //contextInUse = false;
+        //notifyAll();
     }
     
     
@@ -574,7 +579,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
     {
         // setup GL canvas with desired options
         composite.setLayout(new FillLayout());
-        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
+        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE);// | SWT.DOUBLE_BUFFERED);
         
         // associate to a context already created for sharing display lists
         if (contextList.isEmpty())
@@ -584,6 +589,7 @@ public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVis
         contextList.add(swtContext);
         swtContext.setCurrent();
         joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        joglContext.setSynchronized(false);
         joglContext.makeCurrent();
         
         //context.setGL(new DebugGL(JOGLContext.getGL()));

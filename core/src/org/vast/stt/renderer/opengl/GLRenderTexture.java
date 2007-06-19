@@ -41,6 +41,7 @@ public class GLRenderTexture extends GLRunnable
     protected TextureStyler styler;
     protected TexturePatchGraphic patch;
     protected boolean normalizeCoords;
+    protected float zOffset;
     
     
     public GLRenderTexture(GL gl, GLU glu)
@@ -52,7 +53,8 @@ public class GLRenderTexture extends GLRunnable
     
     public void setStyler(TextureStyler styler)
     {
-        this.styler = styler;        
+        this.styler = styler;
+        zOffset = 0.0f;
     }
 
     
@@ -63,7 +65,8 @@ public class GLRenderTexture extends GLRunnable
         float uScale = 1.0f;
         float vScale = 1.0f;
         int count = 0;
-                
+        float dz;
+        
         RasterTileGraphic tex = patch.getTexture();
         GridPatchGraphic grid = patch.getGrid();
                 
@@ -106,11 +109,17 @@ public class GLRenderTexture extends GLRunnable
                             break;
                         }
                         
+                        if (p>0)
+                            dz = zOffset + 1e-7f;
+                        else
+                            dz = zOffset;
+                        
                         gl.glTexCoord2f(point.tx * uScale, point.ty * vScale);
-                        gl.glVertex3d(point.x, point.y, point.z);
+                        gl.glVertex3d(point.x, point.y, point.z + dz);
                     }
-                }
+                }                
                 
+                zOffset += 1e-7f;
                 gl.glEnd();
             }
             
