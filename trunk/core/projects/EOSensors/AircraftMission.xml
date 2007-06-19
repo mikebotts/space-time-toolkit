@@ -43,7 +43,33 @@
                   </request>
                </OWSDataProvider>
             </dataProvider>
-            <style>
+            <style name="Pressure">
+               <sld:LineSymbolizer enabled="false">
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/Longitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/Latitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/GPSaltitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke-red">
+                        <LinearAdjustment>
+                           <ogc:PropertyName>AEROSONDE_MET_Data/Right Pressure</ogc:PropertyName>
+                           <Gain>0.000034</Gain>
+                           <Offset>-2.4</Offset>
+                        </LinearAdjustment>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+            <style name="Temperature">
                <sld:LineSymbolizer enabled="true">
                   <sld:Geometry>
                      <sld:CssParameter name="geometry-x">
@@ -52,10 +78,20 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>AEROSONDE_MET_Data/Latitude</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>AEROSONDE_MET_Data/GPSaltitude</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
-                     <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                     <sld:CssParameter name="stroke-red">1.0</sld:CssParameter>
+                     <sld:CssParameter name="stroke-green">
+                        <LinearAdjustment>
+                           <ogc:PropertyName>AEROSONDE_MET_Data/Right Temperature</ogc:PropertyName>
+                           <Gain>-0.1</Gain>
+                           <Offset>30</Offset>
+                        </LinearAdjustment>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
                   </sld:Stroke>
                </sld:LineSymbolizer>
             </style>
