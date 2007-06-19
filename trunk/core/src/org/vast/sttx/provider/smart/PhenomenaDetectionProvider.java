@@ -240,10 +240,10 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             PhenomenaDetectionProvider provider = new PhenomenaDetectionProvider();
             provider.setMinPressure(200);
             provider.setMaxPressure(1000);
-            provider.getTimeExtent().setBaseTime(DateTimeFormat.parseIso("2006-05-04T00:00:00Z"));
-            provider.getTimeExtent().setLeadTimeDelta(36000);
-            provider.getSpatialExtent().setMinX(-79.9);
-            provider.getSpatialExtent().setMaxX(-72.2);
+            provider.getTimeExtent().setBaseTime(DateTimeFormat.parseIso("2007-06-03T06:00:00Z"));
+            provider.getTimeExtent().setLeadTimeDelta(7200);
+            provider.getSpatialExtent().setMinX(-89.9);
+            provider.getSpatialExtent().setMaxX(-61.2);
             provider.getSpatialExtent().setMinY(15.4);
             provider.getSpatialExtent().setMaxY(45.4);
             provider.updateData();

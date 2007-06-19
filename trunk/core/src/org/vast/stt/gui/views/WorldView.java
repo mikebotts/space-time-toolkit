@@ -231,7 +231,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     public void paintControl(PaintEvent e)
     {
         if (scene != null)
-            scene.getRenderer().drawScene(scene);
+            updateView();
     }
     
     
@@ -240,7 +240,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
         if (scene != null)
         {
             // redraw the whole scene
-            scene.getRenderer().drawScene(scene);
+            updateView();
             scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
         }
     }
