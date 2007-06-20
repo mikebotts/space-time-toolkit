@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0" xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 file:///C:\eclipse_workspace\schema\sensorML\sensorML.xsd" version="1.0">
    <sml:member>
-      <sml:ProcessChain gml:id="TMI_GEOLOCATION">
+      <sml:ProcessChain gml:id="SSMI_GEOLOCATION">
  <gml:description>
        This process chain determines TMI position vector and the ECEF view vector. This chain is composed of 2 chains,
        one specific to TMI, the other is generic.
