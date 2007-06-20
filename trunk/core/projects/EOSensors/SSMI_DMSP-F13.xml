@@ -76,7 +76,7 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>DMSP-F13 SSMI Footprints</name>
-                  <timeExtent xlink:href="#TMI_TIME"/>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
                   <layerId>DMSP-F13-SSMI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
