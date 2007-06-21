@@ -253,6 +253,54 @@
                      <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
+               <!-- FOR loop for along bin steps -->
+               <sml:component name="binCounter">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:input name="countingRange">
+                              <swe:DataRecord>
+                                 <swe:field name="start">
+                                    <swe:Quantity>
+                                       <swe:value>1</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stop">
+                                    <swe:Quantity>
+                                       <swe:value>49</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stepCount">
+                                    <swe:Quantity>
+                                       <swe:value>49</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:output name="count">
+                              <swe:DataRecord>
+                                 <swe:field name="variable">
+                                    <swe:Quantity gml:id="AS_PIXEL"/>
+                                 </swe:field>
+                                 <swe:field name="index">
+                                    <swe:Count/>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="stepCount">
+                              <swe:Count/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
                <!-- FOR loop for along scan steps -->
                <sml:component name="asCounter">
                   <sml:ProcessModel>
@@ -268,12 +316,12 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>104</swe:value>
+                                       <swe:value>140</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>34</swe:value>
+                                       <swe:value>140</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -302,78 +350,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./TMI.xml#TMI_GEOLOCATION"/>
-               <!-- Intersection w/ Ellipsoid -->
-               <sml:component name="rayIntersectEllipsoid">
-                  <sml:ProcessModel>
-                     <sml:inputs>
-                        <sml:InputList>
-                           <sml:input name="rayOrigin">
-                              <swe:Vector definition="urn:ogc:def:data:locationVector">
-                                 <swe:coordinate name="x">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="y">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="z">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                              </swe:Vector>
-                           </sml:input>
-                           <sml:input name="rayDirection">
-                              <swe:Vector definition="urn:ogc:def:data:directionVector">
-                                 <swe:coordinate name="x">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="y">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="z">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                              </swe:Vector>
-                           </sml:input>
-                        </sml:InputList>
-                     </sml:inputs>
-                     <sml:outputs>
-                        <sml:OutputList>
-                           <sml:output name="intersection">
-                              <swe:Vector definition="urn:ogc:def:data:locationVector" gml:id="GROUND_POINT">
-                                 <swe:coordinate name="x">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="y">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="z">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                              </swe:Vector>
-                           </sml:output>
-                        </sml:OutputList>
-                     </sml:outputs>
-                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
-                  </sml:ProcessModel>
-               </sml:component>
+               <sml:component name="lookVectorChain" xlink:href="./PRWithData.xml#PR_GEOLOCATION"/>
                <!-- Grid array builder -->
                <sml:component name="arrayBuilder">
                   <sml:ProcessModel>
@@ -387,7 +364,25 @@
                                  <swe:field name="index">
                                     <swe:Count/>
                                  </swe:field>
-                                 <swe:field name="data" xlink:href="#GROUND_POINT"/>
+                                 <swe:field name="data">
+                                    <swe:Vector definition="urn:ogc:def:data:locationVector" gml:id="GROUND_POINT">
+                                       <swe:coordinate name="x">
+                                          <swe:Quantity>
+                                             <swe:uom code="m"/>
+                                          </swe:Quantity>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="y">
+                                          <swe:Quantity>
+                                             <swe:uom code="m"/>
+                                          </swe:Quantity>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="z">
+                                          <swe:Quantity>
+                                             <swe:uom code="m"/>
+                                          </swe:Quantity>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
                               </swe:DataRecord>
                            </sml:input>
                         </sml:InputList>
@@ -435,32 +430,6 @@
                   </sml:Link>
                </sml:connection>
                <!-- -->
-               <!--<sml:connection>
-                  <sml:Link>
-                     <sml:source ref="sosScan/outputs/observationData/startTime"/>
-                     <sml:destination ref="timeSync/inputs/masterTime"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="sosNav/outputs/observationData/time"/>
-                     <sml:destination ref="timeSync/inputs/slaveTime"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="sosNav/outputs/observationData"/>
-                     <sml:destination ref="timeSync/inputs/dataIn"/>
-                  </sml:Link>
-               </sml:connection>-->
-               <!-- -->
-               <!--<sml:connection>
-                  <sml:Link>
-                     <sml:source ref="timeSync/outputs/dataOut"/>
-                     <sml:destination ref="asCounter/inputs/pass-through"/>
-                  </sml:Link>
-               </sml:connection>-->        
-               <!-- -->
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/pass-through/time"/>
@@ -506,20 +475,7 @@
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_view_vector"/>
-                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayDirection"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_location"/>
-                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayOrigin"/>
-                  </sml:Link>
-               </sml:connection>
-               <!-- -->
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="rayIntersectEllipsoid/outputs/intersection"/>
+                     <sml:source ref="lookVectorChain/outputs/ECEF_data_location"/>
                      <sml:destination ref="arrayBuilder/inputs/arrayComponent/data"/>
                   </sml:Link>
                </sml:connection>
