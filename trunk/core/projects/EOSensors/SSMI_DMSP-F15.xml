@@ -16,7 +16,8 @@
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="../process/SSMI_Process.xml#LOOKRAY_PROCESS"/>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style>
@@ -132,8 +133,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">19GHzVP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
@@ -172,19 +173,19 @@
                      <sld:ChannelSelection normalizedColors="false">
                         <sld:RedChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/brightnessTemps/10GHzVP</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/data/19GHzVP</ogc:PropertyName>
                               <TableValues>75 0 100 247 125 135 150 255 175 000 200 000 225 000 250 255 275 255 300 255 325 135 350 127</TableValues>
                            </LookUpTable1D>
                         </sld:RedChannel>
                         <sld:GreenChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/brightnessTemps/10GHzVP</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/data/19GHzVP</ogc:PropertyName>
                               <TableValues>75 0 100 160 125 000 150 000 175 000 200 255 225 127 250 255 275 000 300 255 325 49 350 160</TableValues>
                            </LookUpTable1D>
                         </sld:GreenChannel>
                         <sld:BlueChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/brightnessTemps/10GHzVP</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/data/19GHzVP</ogc:PropertyName>
                               <TableValues>75 0 100 127 125 135 150 255 175 255 200 255 225 000 250 000 275 000 300 255 325 49 350 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
@@ -229,8 +230,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">19GHzHP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -246,8 +247,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">22GHzVP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -263,8 +264,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">37GHzVP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -280,8 +281,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">37GHzHP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -297,8 +298,8 @@
                   <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
                   <value process="sosScan" path="sosOptions/observables">85GHzVP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">6</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">6</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -314,8 +315,8 @@
                   <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
                   <value process="sosScan" path="sosOptions/observables">85GHzHP</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">7</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">7</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -331,8 +332,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_CLW</value>
                   <value process="sosScan" path="sosOptions/observables">CLW</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -348,8 +349,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_OWS</value>
                   <value process="sosScan" path="sosOptions/observables">OWS</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
@@ -365,8 +366,8 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_IWV</value>
                   <value process="sosScan" path="sosOptions/observables">IWV</value>
-                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
-                  <value process="lookVectorChain" path="inputs/channelNumber">1</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
