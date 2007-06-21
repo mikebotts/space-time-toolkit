@@ -223,7 +223,7 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" xlink:href="PASS_THROUGH"/>
+                           <sml:output name="pass-through" xlink:href="#PASS_THROUGH"/>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
