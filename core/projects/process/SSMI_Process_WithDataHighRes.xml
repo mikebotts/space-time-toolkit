@@ -46,7 +46,7 @@
          <sml:parameters>
             <sml:ParameterList>
                <sml:parameter name="attitude">
-                  <swe:DataRecord gml:id="NAV_DATA">
+                  <swe:DataRecord>
                      <swe:field name="yaw">
                         <swe:Quantity>
                            <swe:value>0</swe:value>
@@ -182,8 +182,21 @@
                                       <swe:uom code="s"/>
                                    </swe:Time>
                              </swe:field>
-                             <swe:field name="navigation">  
-                              <swe:DataRecord xlink:href="#NAV_DATA"/>
+                                 <swe:field name="attitude">  
+                                <swe:DataRecord>
+                                   <swe:field name="yaw">
+                                      <swe:Quantity>
+                                      </swe:Quantity>
+                                   </swe:field>
+                                   <swe:field name="pitch">
+                                      <swe:Quantity>
+                                      </swe:Quantity>
+                                   </swe:field>
+                                   <swe:field name="roll">
+                                      <swe:Quantity>
+                                      </swe:Quantity>
+                                   </swe:field>
+                                </swe:DataRecord>
                              </swe:field> 
                             </swe:DataRecord>    
                            </sml:input>
@@ -210,7 +223,7 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" gml:id="PASS_THROUGH"/>
+                           <sml:output name="pass-through" xlink:href="PASS_THROUGH"/>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
@@ -353,13 +366,13 @@
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sosScan/outputs/observationData/startTime"/>
-                     <sml:destination ref="asCounter/inputs/pass-through/navigation/attitude"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/time"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="this/parameters/attitude"/>
-                     <sml:destination ref="asCounter/inputs/pass-through/navigation/attitude"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/attitude"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
@@ -370,25 +383,19 @@
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/time"/>
-                     <sml:destination ref="lookVectorChain/inputs/julianTime"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/navigation/attitude/yaw"/>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/yaw"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/yaw"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/navigation/attitude/pitch"/>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/pitch"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/pitch"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/navigation/attitude/roll"/>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/roll"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/roll"/>
                   </sml:Link>
                </sml:connection>   
