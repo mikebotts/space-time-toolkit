@@ -17,11 +17,6 @@
        <sml:input name="pixel">
              <swe:Quantity/>
        </sml:input>
-       <sml:input name="channelNumber">
-          <swe:Quantity>
-             <swe:value>1</swe:value>
-          </swe:Quantity>          
-       </sml:input>
         <sml:input name="satelliteAngle">
             <swe:Quantity>
                 <swe:uom code="rad"/>
@@ -98,6 +93,15 @@
        </sml:output>
     </sml:OutputList>
  </sml:outputs>
+         <sml:parameters>
+            <sml:ParameterList>
+               <sml:parameter name="channelNumber">
+                  <swe:Quantity>
+                     <swe:value>1</swe:value>
+                  </swe:Quantity>          
+               </sml:parameter>
+            </sml:ParameterList>
+         </sml:parameters>
  <sml:components>
   <sml:ComponentList>    
      <!--~~~~~~~~~~~~~~~~~~-->
@@ -1679,7 +1683,7 @@
       <sml:ConnectionList>     
          <sml:connection>
             <sml:Link>
-               <sml:source ref="this/inputs/channelNumber"/>
+               <sml:source ref="this/parameters/channelNumber"/>
                <sml:destination ref="SSMI_specific/inputs/channelNumber"/>
             </sml:Link>
          </sml:connection>          
