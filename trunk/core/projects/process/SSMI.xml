@@ -3,10 +3,10 @@
    <sml:member>
       <sml:ProcessChain gml:id="SSMI_GEOLOCATION">
  <gml:description>
-       This process chain determines TMI position vector and the ECEF view vector. This chain is composed of 2 chains,
-       one specific to TMI, the other is generic.
+       This process chain determines SSMI position vector and the ECEF view vector. This chain is composed of 2 chains,
+       one specific to SSMI, the other is generic.
  </gml:description>
-      <gml:name>TMI</gml:name>
+      <gml:name>SSMI</gml:name>
  <sml:inputs>
     <sml:InputList>
        <sml:input name="julianTime">
@@ -18,9 +18,7 @@
              <swe:Quantity/>
        </sml:input>
        <sml:input name="channelNumber">
-          <swe:Quantity>
-             <swe:value>1</swe:value>
-          </swe:Quantity>
+          <swe:Quantity/>          
        </sml:input>
         <sml:input name="satelliteAngle">
             <swe:Quantity>
@@ -31,18 +29,21 @@
        <sml:input name="attitudeOrientation">
           <swe:Vector definition="urn:ogc:def:data:orientationVector">
              <swe:coordinate name="roll">
-                <swe:Quantity>
+                <swe:Quantity>                   
                    <swe:uom code="rad"/>
-                </swe:Quantity>
+                   <swe:value>0.0</swe:value>
+                </swe:Quantity>                  
              </swe:coordinate>
              <swe:coordinate name="pitch">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
+                   <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
              <swe:coordinate name="yaw">
                 <swe:Quantity>
                    <swe:uom code="rad"/>
+                   <swe:value>0.0</swe:value>
                 </swe:Quantity>
              </swe:coordinate>
           </swe:Vector>
@@ -102,11 +103,11 @@
      <!-- 1st chain -->
      <!--~~~~~~~~~~~~~~~~~~-->  
      <!--~~~~~~~~~~~~~~~~~~-->
-  <sml:component name="TMI_specific">
+  <sml:component name="SSMI_specific">
    <sml:ProcessChain>
       <gml:description>
             This process chain determines the matrix to tansform the sample view vector into the satellite view
-            vector in function of the channel and x pixel. This chain is TMI SPECIFIC.
+            vector in function of the channel and x pixel. This chain is SSMI SPECIFIC.
       </gml:description>
       <!--~~~~~~~~~~~~~~~~~~-->
       <!-- Inputs & Outputs -->
@@ -237,15 +238,13 @@
                                  <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                               </swe:encoding>
                               <swe:values>
-                                 1,103
-                                 2,103  
-                                 3,103
-                                 4,103 
-                                 5,103
-                                 6,103 
-                                 7,103
-                                 8,207 
-                                 9,207                              
+                                 1,63
+                                 2,63  
+                                 3,63
+                                 4,63 
+                                 5,63
+                                 6,127 
+                                 7,127                           
                               </swe:values>
                            </swe:Curve>
                         </sml:parameter>
@@ -337,8 +336,8 @@
                                  <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                               </swe:encoding>
                               <swe:values>
-                                 0.0,2.7052603405912108442317206911573
-                                 1.0,0.43633231299858239423092269212215                                  
+                                 0.0,2.4644049038159466192313216916398
+                                 1.0,0.67718774977384661923132169163975                                  
                               </swe:values>
                            </swe:Curve>
                         </sml:parameter>
@@ -359,7 +358,7 @@
                            <swe:coordinate name="x">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                  <swe:uom code="rad"/>
-                                 <swe:value>-0.827211333</swe:value>
+                                 <swe:value>-0.7853981633974483</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                            <swe:coordinate name="y">
@@ -631,7 +630,7 @@
                                     </swe:encoding>
                                      <swe:values>
                                         0.0,0                                      
-                                        1.0,0.6856540084                                      
+                                        1.0,0.540444444444                                      
                                      </swe:values>
                                  </swe:Curve>
                              </sml:parameter>
@@ -777,7 +776,7 @@
      <!-- 2nd chain -->
      <!--~~~~~~~~~~~~~~~~~~-->  
      <!--~~~~~~~~~~~~~~~~~~-->
-  <sml:component name="TMI_generic">
+  <sml:component name="SSMI_generic">
    <sml:ProcessChain>
       <gml:description>
             This process chain transform the satellite view vector into the ECEF view vector.
@@ -1067,7 +1066,7 @@
                      <sml:ParameterList>
                         <sml:parameter name="tleDataUrl">
                            <swe:Category>
-                              <swe:value>C:/trmm.txt</swe:value>
+                              <swe:value>C:/dmsp-f13.txt</swe:value>
                            </swe:Category>
                         </sml:parameter>
                      </sml:ParameterList>
@@ -1679,54 +1678,54 @@
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/channelNumber"/>
-               <sml:destination ref="TMI_specific/inputs/channelNumber"/>
+               <sml:destination ref="SSMI_specific/inputs/channelNumber"/>
             </sml:Link>
          </sml:connection>          
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/pixel"/>
-               <sml:destination ref="TMI_specific/inputs/pixel"/>
+               <sml:destination ref="SSMI_specific/inputs/pixel"/>
             </sml:Link>
          </sml:connection> 
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/attitudeOrientation"/>
-               <sml:destination ref="TMI_generic/inputs/attitudeOrientation"/>
+               <sml:destination ref="SSMI_generic/inputs/attitudeOrientation"/>
             </sml:Link>
          </sml:connection> 
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/julianTime"/>
-               <sml:destination ref="TMI_specific/inputs/julianTime"/>
+               <sml:destination ref="SSMI_specific/inputs/julianTime"/>
             </sml:Link>
          </sml:connection>  
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/satelliteAngle"/>
-                <sml:destination ref="TMI_generic/inputs/satelliteAngle"/>
+                <sml:destination ref="SSMI_generic/inputs/satelliteAngle"/>
             </sml:Link>
          </sml:connection>  
          <sml:connection>
             <sml:Link>
-               <sml:source ref="TMI_specific/outputs/pixelJulianTime"/>
-               <sml:destination ref="TMI_generic/inputs/pixelJulianTime"/>
+               <sml:source ref="SSMI_specific/outputs/pixelJulianTime"/>
+               <sml:destination ref="SSMI_generic/inputs/pixelJulianTime"/>
             </sml:Link>
          </sml:connection>  
           <sml:connection>
               <sml:Link>
-                  <sml:source ref="TMI_specific/outputs/Satellite_view_vector"/>
-                  <sml:destination ref="TMI_generic/inputs/Satellite_view_vector"/>
+                  <sml:source ref="SSMI_specific/outputs/Satellite_view_vector"/>
+                  <sml:destination ref="SSMI_generic/inputs/Satellite_view_vector"/>
               </sml:Link>
           </sml:connection>  
          <sml:connection>
             <sml:Link>
-               <sml:source ref="TMI_generic/outputs/ECEF_location"/>
+               <sml:source ref="SSMI_generic/outputs/ECEF_location"/>
                <sml:destination ref="this/outputs/geolocationData/ECEF_location"/>
             </sml:Link>
          </sml:connection>  
          <sml:connection>
             <sml:Link>
-                <sml:source ref="TMI_generic/outputs/ECEF_view_vector"/>
+                <sml:source ref="SSMI_generic/outputs/ECEF_view_vector"/>
                <sml:destination ref="this/outputs/geolocationData/ECEF_view_vector"/>
             </sml:Link>
          </sml:connection>  
