@@ -15,8 +15,8 @@
                   <name>Aerosonde Data</name>
                   <timeExtent>
                      <TimeExtent id="GOES_INTERSECT_TIME">
-                        <baseTime>2005-07-07T14:00:00Z</baseTime>
-                        <leadTime>7200</leadTime>
+                        <baseTime>2005-07-21T21:00:00Z</baseTime>
+                        <leadTime>36000</leadTime>
                         <stepTime>5</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -32,8 +32,8 @@
                         <eventTime>
                            <ogc:During>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2005-07-07T14:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2005-07-07T16:00:00Z</gml:endPosition>
+                                 <gml:beginPosition>2005-07-21T21:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2005-07-22T05:00:00Z</gml:endPosition>
                                  <gml:timeStep>P5S</gml:timeStep>
                               </gml:TimePeriod>
                            </ogc:During>
@@ -65,7 +65,7 @@
                         </LinearAdjustment>
                      </sld:CssParameter>
                      <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
                   </sld:Stroke>
                </sld:LineSymbolizer>
             </style>
@@ -91,7 +91,7 @@
                            <Offset>30</Offset>
                         </LinearAdjustment>
                      </sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
                   </sld:Stroke>
                </sld:LineSymbolizer>
             </style>
