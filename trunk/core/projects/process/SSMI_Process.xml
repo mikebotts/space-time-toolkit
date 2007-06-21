@@ -130,7 +130,7 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>64</swe:value>
+                                       <swe:value>128</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
@@ -168,7 +168,7 @@
                   </sml:ProcessModel>
                </sml:component>              
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./TMI.xml#TMI_GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./SSMI.xml#SSMI_GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
                <sml:component name="rayIntersectEllipsoid">
                   <sml:ProcessModel>
