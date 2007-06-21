@@ -16,6 +16,7 @@
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="../process/SSMI_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                </SensorMLProvider>
             </dataProvider>
             <style>
@@ -131,7 +132,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">19GHzVP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -228,7 +229,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">19GHzHP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -245,7 +246,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">22GHzVP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -262,7 +263,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">37GHzVP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -279,7 +280,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
                   <value process="sosScan" path="sosOptions/observables">37GHzHP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -296,7 +297,7 @@
                   <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
                   <value process="sosScan" path="sosOptions/observables">85GHzVP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">6</value>
                </SensorMLProvider>
             </dataProvider>
@@ -313,7 +314,7 @@
                   <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
                   <value process="sosScan" path="sosOptions/observables">85GHzHP</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">7</value>
                </SensorMLProvider>
             </dataProvider>
@@ -330,7 +331,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_CLW</value>
                   <value process="sosScan" path="sosOptions/observables">CLW</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -347,7 +348,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_OWS</value>
                   <value process="sosScan" path="sosOptions/observables">OWS</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -364,7 +365,7 @@
                   <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/offering">SSMI_IWV</value>
                   <value process="sosScan" path="sosOptions/observables">IWV</value>
-                  <value process="lookVectorChain" path="tle/tleDataUrl">C:/dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="SSMI_generic/tle/tleDataUrl">C:/dmsp-f15.txt</value>
                   <value process="lookVectorChain" path="inputs/channelNumber">1</value>
                </SensorMLProvider>
             </dataProvider>
