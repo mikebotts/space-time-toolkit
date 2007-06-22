@@ -13,17 +13,12 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
-import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.gui.widgets.catalog.CapabilitiesWidget;
-import org.vast.stt.gui.widgets.catalog.EditCapServerDialog;
+
 
 /**
  * <p><b>Title:</b>
@@ -45,7 +40,7 @@ public class CapabilitiesView extends DataItemView //ViewPart// implements IPage
 {
 	public static final String ID = "STT.CapabilitiesView";
 	protected CapabilitiesWidget capabilitiesWidget;
-    private ImageDescriptor editServerImg; 
+    protected ImageDescriptor editServerImg; 
 	
     
 	@Override
