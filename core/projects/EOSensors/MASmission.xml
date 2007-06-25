@@ -75,7 +75,7 @@
             <name>MAS 0.465 micron Radiation Band</name>
             <dataProvider>
                <SensorMLProvider>
-                  <name>MAS2 Data Process Chain</name>
+                  <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">0.465m</value>

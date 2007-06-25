@@ -120,7 +120,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/masSos</swe:value>
+                                       <swe:value>http://vast.uah.edu:8080/ows-dev/masSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -221,7 +221,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/masSos</swe:value>
+                                       <swe:value>http://vast.uah.edu:8080/ows-dev/masSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -255,8 +255,7 @@
                      </sml:parameters>
                      <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
                   </sml:ProcessModel>
-               </sml:component>
-               
+               </sml:component>              
                <!-- FOR loop for along scan steps -->
                <sml:component name="asCounter">
                   <sml:ProcessModel>
