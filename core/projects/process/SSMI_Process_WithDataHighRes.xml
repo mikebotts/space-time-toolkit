@@ -115,8 +115,12 @@
                                              <swe:value>128</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
-                                       <swe:elementType name="data">                                        
-                                                <swe:Quantity definition="urn:ogc:data"/>
+                                       <swe:elementType name="dataRecord">
+                                          <swe:DataRecord>
+                                             <swe:field name="data">
+                                                <swe:Quantity definition="urn:ogc:data:brightnessTemp"/>
+                                             </swe:field>
+                                          </swe:DataRecord>                                      
                                        </swe:elementType>
                                     </swe:DataArray>
                                  </swe:field>                                 
@@ -369,12 +373,12 @@
                      <sml:destination ref="asCounter/inputs/pass-through/time"/>
                   </sml:Link>
                </sml:connection>
-               <sml:connection>
+             <!--  <sml:connection>
                   <sml:Link>
                      <sml:source ref="this/parameters/attitude"/>
                      <sml:destination ref="asCounter/inputs/pass-through/attitude"/>
                   </sml:Link>
-               </sml:connection>
+               </sml:connection>  -->
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/pass-through/time"/>
