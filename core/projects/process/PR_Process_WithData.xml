@@ -110,7 +110,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/prSos</swe:value>
+                                       <swe:value>http://vast.uah.edu:8080/ows-dev/prSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -199,10 +199,12 @@
                                                    <swe:value>140</swe:value>
                                                 </swe:Count>
                                              </swe:elementCount>
-                                             <swe:elementType name="reflectivity">
-                                                <swe:Quantity definition="urn:ogc:data:reflectivity">
-                                                   <swe:uom code="K"/>
-                                                </swe:Quantity>
+                                             <swe:elementType name="data">
+                                                <swe:DataRecord>
+                                                   <swe:field name="reflectivity">
+                                                      <swe:Quantity definition="urn:ogc:data:reflectivity"/>
+                                                   </swe:field>
+                                                </swe:DataRecord>
                                              </swe:elementType>
                                           </swe:DataArray>
                                        </swe:elementType>
@@ -218,7 +220,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/prSos</swe:value>
+                                       <swe:value>http://vast.uah.edu:8080/ows-dev/prSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -254,7 +256,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- FOR loop for along bin steps -->
-               <sml:component name="binCounter">
+               <sml:component name="angleCounter">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
@@ -283,10 +285,10 @@
                      <sml:outputs>
                         <sml:OutputList>
                            <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
-                           <sml:output name="count">
+                           <sml:output name="count" gml:id="ANGLE_DATA">
                               <swe:DataRecord>
                                  <swe:field name="variable">
-                                    <swe:Quantity gml:id="AS_PIXEL"/>
+                                    <swe:Quantity/>
                                  </swe:field>
                                  <swe:field name="index">
                                     <swe:Count/>
@@ -302,11 +304,16 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- FOR loop for along scan steps -->
-               <sml:component name="asCounter">
+               <sml:component name="binCounter">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:input name="pass-through" gml:id="PASS_THROUGH2">
+                           <swe:DataRecord>
+                              <swe:field name="navigation" xlink:href="#NAV_DATA"/>
+                              <swe:field name="angleCounterData" xlink:href="#ANGLE_DATA"/>
+                           </swe:DataRecord>
+                           </sml:input> 
                            <sml:input name="countingRange">
                               <swe:DataRecord>
                                  <swe:field name="start">
@@ -330,11 +337,11 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:output name="pass-through" xlink:href="#PASS_THROUGH2"/>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
-                                    <swe:Quantity gml:id="AS_PIXEL"/>
+                                    <swe:Quantity/>
                                  </swe:field>
                                  <swe:field name="index">
                                     <swe:Count/>
@@ -426,49 +433,67 @@
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sosNav/outputs/observationData"/>
-                     <sml:destination ref="asCounter/inputs/pass-through"/>
+                     <sml:destination ref="angleCounter/inputs/pass-through"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/time"/>
-                     <sml:destination ref="lookVectorChain/inputs/julianTime"/>
+                     <sml:source ref="angleCounter/outputs/pass-through"/>
+                     <sml:destination ref="binCounter/inputs/pass-through/navigation"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/yaw"/>
+                     <sml:source ref="angleCounter/outputs/count"/>
+                     <sml:destination ref="binCounter/inputs/pass-through/angleCounterData"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="binCounter/outputs/pass-through/navigation/yaw"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/yaw"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/pitch"/>
+                     <sml:source ref="binCounter/outputs/pass-through/navigation/pitch"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/pitch"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/roll"/>
+                     <sml:source ref="binCounter/outputs/pass-through/navigation/roll"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/roll"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/count/variable"/>
-                     <sml:destination ref="lookVectorChain/inputs/pixel"/>
+                     <sml:source ref="binCounter/outputs/pass-through/navigation/time"/>
+                     <sml:destination ref="lookVectorChain/inputs/scanTime"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/count/index"/>
+                     <sml:source ref="binCounter/outputs/pass-through/angleCounterData/variable"/>
+                     <sml:destination ref="lookVectorChain/inputs/scanIndexIndex"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="binCounter/outputs/count/variable"/>
+                     <sml:destination ref="lookVectorChain/inputs/distanceIndex"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="binCounter/outputs/count/index"/>
                      <sml:destination ref="arrayBuilder/inputs/arrayComponent/index"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/stepCount"/>
+                     <sml:source ref="binCounter/outputs/stepCount"/>
                      <sml:destination ref="arrayBuilder/inputs/arraySize"/>
                   </sml:Link>
                </sml:connection>

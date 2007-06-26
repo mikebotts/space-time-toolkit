@@ -18,10 +18,27 @@
              <swe:Quantity/>
        </sml:input>
        <sml:input name="distanceIndex">
-          <swe:Quantity>
-             <swe:value>0</swe:value>
-          </swe:Quantity>
+          <swe:Quantity/>
        </sml:input>
+       <sml:input name="attitudeOrientation">
+          <swe:Vector definition="urn:ogc:def:data:orientationVector">
+             <swe:coordinate name="roll">
+                <swe:Quantity>
+                   <swe:uom code="rad"/>
+                </swe:Quantity>
+             </swe:coordinate>
+             <swe:coordinate name="pitch">
+                <swe:Quantity>
+                   <swe:uom code="rad"/>
+                </swe:Quantity>
+             </swe:coordinate>
+             <swe:coordinate name="yaw">
+                <swe:Quantity>
+                   <swe:uom code="rad"/>
+                </swe:Quantity>
+             </swe:coordinate>
+          </swe:Vector>
+       </sml:input> 
     </sml:InputList>
  </sml:inputs>
  <sml:outputs>
@@ -644,6 +661,25 @@
                   </swe:coordinate>
                </swe:Vector>
             </sml:input>
+            <sml:input name="attitudeOrientation">
+               <swe:Vector definition="urn:ogc:def:data:orientationVector">
+                  <swe:coordinate name="roll">
+                     <swe:Quantity>
+                        <swe:uom code="rad"/>
+                     </swe:Quantity>
+                  </swe:coordinate>
+                  <swe:coordinate name="pitch">
+                     <swe:Quantity>
+                        <swe:uom code="rad"/>
+                     </swe:Quantity>
+                  </swe:coordinate>
+                  <swe:coordinate name="yaw">
+                     <swe:Quantity>
+                        <swe:uom code="rad"/>
+                     </swe:Quantity>
+                  </swe:coordinate>
+               </swe:Vector>
+            </sml:input> 
          </sml:InputList>
       </sml:inputs>
       <sml:outputs>
@@ -702,19 +738,16 @@
                            <swe:coordinate name="z">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                <swe:uom code="rad"/>
-                                 <swe:value>0.0</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                            <swe:coordinate name="y">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                  <swe:uom code="rad"/>
-                                 <swe:value>0.0</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                            <swe:coordinate name="x">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
                                  <swe:uom code="rad"/>
-                                 <swe:value>0.0</swe:value>
                               </swe:Quantity>
                            </swe:coordinate>
                         </swe:Vector>
@@ -1251,6 +1284,24 @@
             <!-- Matrix3_3builderorbit to SatelliteVectorOrbitMatrixMultiplier -->
             <sml:connection>
                <sml:Link>
+                  <sml:source ref="this/inputs/attitudeOrientation/yaw"/>
+                  <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/z"/>
+               </sml:Link>
+            </sml:connection>
+            <sml:connection>
+               <sml:Link>
+                  <sml:source ref="this/inputs/attitudeOrientation/pitch"/>
+                  <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/y"/>
+               </sml:Link>
+            </sml:connection>
+            <sml:connection>
+               <sml:Link>
+                  <sml:source ref="this/inputs/attitudeOrientation/roll"/>
+                  <sml:destination ref="MatrixBuilderOrbit/inputs/orientation/x"/>
+               </sml:Link>
+            </sml:connection>
+            <sml:connection>
+               <sml:Link>
                   <sml:source ref="MatrixBuilderOrbit/outputs/posMatrix"/>
                   <sml:destination ref="SatelliteVectorOrbitMatrixMultiplier/inputs/transformMatrix"/>
                </sml:Link>
@@ -1725,7 +1776,13 @@
    <!-- Connections -->
    <!--~~~~~~~~~~~~~-->
    <sml:connections>
-      <sml:ConnectionList>     
+      <sml:ConnectionList>
+         <sml:connection>
+            <sml:Link>
+               <sml:source ref="this/inputs/attitudeOrientation"/>
+               <sml:destination ref="PR_generic/inputs/attitudeOrientation"/>
+            </sml:Link>
+         </sml:connection>     
          <sml:connection>
             <sml:Link>
                <sml:source ref="this/inputs/scanIndex"/>
