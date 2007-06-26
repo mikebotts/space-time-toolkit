@@ -118,7 +118,7 @@
                                        <swe:elementType name="dataRecord">
                                           <swe:DataRecord>
                                              <swe:field name="data">
-                                                <swe:Quantity definition="urn:ogc:data:brightnessTemp"/>
+                                                <swe:Quantity definition="urn:ogc:data:data"/>
                                              </swe:field>
                                           </swe:DataRecord>                                      
                                        </swe:elementType>
