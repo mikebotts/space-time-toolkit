@@ -36,6 +36,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
 	final Color RED = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
 	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
+	private Button realtimeBtn;
 
 	public TimeExtentWidget(Composite parent) {
 		init(parent);
@@ -102,13 +103,23 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		manualTimeSpinner.setLayoutData(gridData);
         manualTimeSpinner.addTimeListener(this);
 
+        realtimeBtn = new Button(mainGroup, SWT.CHECK);
+		realtimeBtn.setText("Realtime mode");
+        realtimeBtn.addSelectionListener(this);
+        gridData = new GridData();
+		gridData.horizontalAlignment = SWT.RIGHT;  
+		gridData.horizontalSpan = 2;
+		gridData.verticalIndent = 10;
+		realtimeBtn.setLayoutData(gridData);
+        
 		//  Add Override Time toggle
 		overrideTimeBtn = new Button(mainGroup, SWT.CHECK);
-		overrideTimeBtn.setText("Override Base Time");
+		overrideTimeBtn.setText("Override Master Time");
 		overrideTimeBtn.addSelectionListener(this);
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;  
 		gridData.horizontalSpan = 2;
+		gridData.verticalIndent = 10;
 		overrideTimeBtn.setLayoutData(gridData);
 		
 		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
@@ -142,6 +153,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             timeExtent.getUpdater().setEnabled(!b);
         
 		manualTimeSpinner.setEnabled(b);
+		realtimeBtn.setEnabled(b);
 	}
 	
 	public void setDataItem(DataItem item){
@@ -155,7 +167,16 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 		leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		stepSpinner.setValue(timeExtent.getTimeStep());
-		manualTimeSpinner.setValue(timeExtent.getBaseTime());
+		double baseTime;
+		if(timeExtent.isBaseAtNow()) {
+			baseTime = (double)(System.currentTimeMillis()/1000);
+			realtimeBtn.setSelection(true);
+		} else {
+			baseTime = timeExtent.getBaseTime();
+			realtimeBtn.setSelection(false);
+		}
+		timeExtent.setBaseTime(baseTime);
+		manualTimeSpinner.setValue(baseTime);
         
         boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
         manualTimeSpinner.setEnabled(!useAutoTime);
@@ -164,18 +185,22 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	
 
 	public void widgetDefaultSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.widget == overrideTimeBtn){
-            setUseAbsoluteTime(overrideTimeBtn.getSelection());            
+            setUseAbsoluteTime(overrideTimeBtn.getSelection()); 
+            //manualTimeSpinner.setEnabled(!overrideTimeBtn.getSelection());
 		} else if(e.widget == updateNowBtn){
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
             timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
-		} else if(e.widget == biasCombo){
+		} else if(e.widget == realtimeBtn){
+           // setUseAbsoluteTime(realtimeBtn.getSelection()); 
+            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
+            timeExtent.setBaseAtNow(realtimeBtn.getSelection());
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+        } else if(e.widget == biasCombo){
 			STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
 			timeExtent.setTimeBias(timeExtent.getTimeBias() * sense);
