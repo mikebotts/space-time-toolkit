@@ -205,7 +205,28 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		return -1;
 	}
 	
+	public void setMapFromX(int i){
+		mapFromCombo[0].select(i);
+	}
+	
+	public void setMapFromY(int i){
+		mapFromCombo[1].select(i);
+	}
+	
+	public void setMapFromZ(int i){
+		mapFromCombo[2].select(i);
+	}
+	
+	public void setMapFromTime(int i){
+		mapFromCombo[3].select(i);
+	}
+	
+	public void setMapFromBreak(int i){
+		mapFromCombo[4].select(i);
+	}
+	
 	public void close(){
+		//  clean up any resources
 	}
 
 	private void doLut(int index){

@@ -21,6 +21,12 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataArray;
@@ -47,11 +53,12 @@ import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
  * @version 1.0
  */
 
-public class SOSMappingPage extends WizardPage 
+public class SOSMappingPage extends WizardPage implements SelectionListener
 {
 	SOSLayerCapabilities caps;
 	String [] offerings;
 	private AdvancedGeometryTab geometryComp;
+	Button procBtn, directBtn;
 	List<String>possibleMappings = new ArrayList<String>(3);
 	HashMap<String, String []> mappings = new HashMap<String, String[]>(3);
 	int offeringIndex = 0;
@@ -66,9 +73,10 @@ public class SOSMappingPage extends WizardPage
 		this.offerings = offerings;
 		offeringIndex = 0;
 		String [] dataComponents = getComponents(offeringIndex);
-		if(dataComponents != null)
+		if(dataComponents != null) {
 			geometryComp.setMappableItems(dataComponents);
-		else
+			assignDefaultComponents(dataComponents);
+		} else
 			; //  disable combos, require ProcessChain?
 	}
 	
@@ -111,12 +119,21 @@ public class SOSMappingPage extends WizardPage
 	 * 
 	 *  @TODO
 	 */
-	private void assignDefaultComponents(){
-		//  assign Y to lat
+	private void assignDefaultComponents(String [] mapping){
 		//  assign X to lon
-		
-		//  assign Z to alt
-		//  assign *time to time
+		for(int index=0; index<mapping.length; index++){
+			if(mapping[index].indexOf("longitude")!=-1)
+				geometryComp.setMapFromX(index);
+			else if(mapping[index].indexOf("latitude")!=-1)
+				geometryComp.setMapFromY(index);
+			else if(mapping[index].indexOf("altitude")!=-1 || mapping[index].indexOf("elevation")!=-1)
+				geometryComp.setMapFromZ(index);
+			else if(mapping[index].indexOf("time")!=-1)
+				geometryComp.setMapFromTime(index);
+			else if(mapping[index].indexOf("break")!=-1)
+				geometryComp.setMapFromBreak(index);
+				
+		}
 	}
 	
 	//  This creates a dummy request just to get the DataComponents back
@@ -150,38 +167,33 @@ public class SOSMappingPage extends WizardPage
 		query.setTime(requestTime);
 		
 		InputStream dataStream = null;
-	      try
-	        {
-	            // create reader
-	            SOSResponseReader reader = new SOSResponseReader();
-	            
-	            // select request type (post or get)
-	            boolean usePost = false;
-	            OWSUtils owsUtils = new OWSUtils();
-	            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
-	                         
-	            // parse response
-	            reader.parse(dataStream);
-	            
-	            // display data structure and encoding
-	            DataComponent dataInfo = reader.getDataComponents();
-	            return dataInfo;
-	        }
-	        catch (Exception e)
-	        {
-	            String server = query.getPostServer();
-	            if (server == null)
-	                server = query.getGetServer();
-	            throw new DataException("Error while reading data from " + server, e);
-	        }
-	        finally
-	        {
-	        	try {
-	        		if (dataStream != null) 
-	        			dataStream.close();
-	        	} catch (IOException e){
-	        	}
-	        }		
+		try {
+			// create reader
+			SOSResponseReader reader = new SOSResponseReader();
+
+			// select request type (post or get)
+			boolean usePost = false;
+			OWSUtils owsUtils = new OWSUtils();
+			dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+
+			// parse response
+			reader.parse(dataStream);
+
+			// display data structure and encoding
+			DataComponent dataInfo = reader.getDataComponents();
+			return dataInfo;
+		} catch (Exception e) {
+			String server = query.getPostServer();
+			if (server == null)
+				server = query.getGetServer();
+			throw new DataException("Error while reading data from " + server, e);
+		} finally {
+			try {
+				if (dataStream != null) 
+					dataStream.close();
+			} catch (IOException e){
+			}
+		}		
 	}
 	
 	private void findPossibleMappings(DataComponent component, String componentPath) {
@@ -215,9 +227,25 @@ public class SOSMappingPage extends WizardPage
 
 	
 	public void createControl(Composite parent){
-		geometryComp = new AdvancedGeometryTab(parent);
-		//geometryComp.setMappableItems(dataComponents);
-		setControl(geometryComp);
+		Composite mainComp = new Composite(parent, 0x0);
+		GridLayout layout = new GridLayout(2, false);
+		mainComp.setLayout(layout);
+		directBtn = new Button(mainComp, SWT.RADIO);
+		directBtn.setText("Direct Mapping");
+		GridData gd = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		directBtn.setLayoutData(gd);
+		directBtn.setSelection(true);
+		directBtn.addSelectionListener(this);
+		procBtn = new Button(mainComp, SWT.RADIO);
+		procBtn.setText("Discover Process");
+		gd = new GridData(SWT.END, SWT.CENTER, false, false);
+		procBtn.setLayoutData(gd);
+		procBtn.addSelectionListener(this);
+		procBtn.setEnabled(false);
+		geometryComp = new AdvancedGeometryTab(mainComp);
+		gd = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+		geometryComp.setLayoutData(gd);
+		setControl(mainComp);
 	}
 	
 	public boolean canFlipToNextPage() {
@@ -229,8 +257,10 @@ public class SOSMappingPage extends WizardPage
 			return ((AddSOSItemWizard)this.getWizard()).sosChooserPage;
 		offeringIndex--;
 		String [] dataComponents = getComponents(offeringIndex);
-		if(dataComponents != null)
+		if(dataComponents != null) {
 			geometryComp.setMappableItems(dataComponents);
+			assignDefaultComponents(dataComponents);
+		}
 		return this;
 	}
 	
@@ -238,11 +268,20 @@ public class SOSMappingPage extends WizardPage
 		//storeCurrentMappings();
 		if(++offeringIndex < offerings.length) {
 			String [] dataComponents = getComponents(offeringIndex);
-			if(dataComponents != null)
+			if(dataComponents != null) {
 				geometryComp.setMappableItems(dataComponents);
+				assignDefaultComponents(dataComponents);
+			}
 			return this;
 		}
 		return ((AddSOSItemWizard)this.getWizard()).symPage;
+	}
+	
+	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public void widgetSelected(SelectionEvent e) {
+		//  change page options
 	}
 }
 
