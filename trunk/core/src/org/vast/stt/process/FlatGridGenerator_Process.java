@@ -49,6 +49,7 @@ public class FlatGridGenerator_Process extends DataProcess
     protected DataValue outputWidth, outputLength;
     protected DataArray outputGrid;
     protected int width, length;
+    protected double heightAboveEllipse = 0.0;
     
 
     public FlatGridGenerator_Process()
@@ -88,6 +89,8 @@ public class FlatGridGenerator_Process extends DataProcess
             // Read parameter values
             width = paramData.getComponent("gridWidth").getData().getIntValue();
             length = paramData.getComponent("gridLength").getData().getIntValue();
+            if (paramData.getComponent("heightAboveEllipsoid")!=null)
+            	heightAboveEllipse = paramData.getComponent("heightAboveEllipsoid").getData().getDoubleValue();
             outputWidth.getData().setIntValue(width);
             outputLength.getData().setIntValue(length);
             outputGrid.setSize(length);
@@ -132,7 +135,7 @@ public class FlatGridGenerator_Process extends DataProcess
                 pointNum++;
                 gridData.setDoubleValue(pointNum, y);
                 pointNum++;
-                gridData.setDoubleValue(pointNum, 0.0);
+                gridData.setDoubleValue(pointNum, heightAboveEllipse);
                 pointNum++;
             }
         }
