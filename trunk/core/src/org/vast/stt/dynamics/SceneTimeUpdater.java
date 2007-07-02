@@ -62,7 +62,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         {
             case SCENE_TIME_CHANGED:
                 if (enabled)
-                    updateTime(scene.getTimeSettings().getCurrentTime().getJulianTime());
+                	updateTime(scene.getTimeExtent().getBaseTime());
                 break;
         }        
     }
@@ -91,6 +91,6 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
     public void setScene(WorldScene scene)
     {
         this.scene = scene;
-        scene.getTimeSettings().addListener(this);
+        scene.getTimeExtent().addListener(this);
     }
 }
