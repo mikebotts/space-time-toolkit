@@ -25,6 +25,8 @@ import org.vast.stt.project.feedback.ItemAction;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.ExtentReader;
+import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.provider.STTTimeExtent;
 import org.vast.stt.provider.tiling.SpatialTilingProvider;
 import org.w3c.dom.*;
 
@@ -260,13 +262,17 @@ public class DataTreeReader extends XMLReader
         
         // read spatial extent
         Element spElt = dom.getElement(providerElt, "spatialExtent");
-        if (spElt != null)
-            extentReader.readSpatialExtent(provider, dom, spElt);
+        if (spElt != null) {
+            STTSpatialExtent spatialExtent = extentReader.readSpatialExtent(dom, spElt);
+            provider.setSpatialExtent(spatialExtent);
+        }
         
         // read time extent
         Element timeElt = dom.getElement(providerElt, "timeExtent");
-        if (timeElt != null)
-            extentReader.readTimeExtent(provider, dom, timeElt);
+        if (timeElt != null) {
+        	 STTTimeExtent timeExtent = extentReader.readTimeExtent(dom, timeElt);
+             provider.setTimeExtent(timeExtent);	
+        }
         
         // read quadTree option
         String text = dom.getAttributeValue(providerElt, "quadTree");
