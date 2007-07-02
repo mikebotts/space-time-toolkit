@@ -27,9 +27,7 @@ import org.vast.stt.event.STTEventProducer;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Class for storing the definition of a spatial domain.
- * This can include an absolute time, time bias (deviation from abs time),
- * time step, and timeBefore and timeAfter deltas.
+ *   Extends base TimeExtent class to add listeners and updater
  * </p>
  *
  * <p>Copyright (c) 2005</p>
