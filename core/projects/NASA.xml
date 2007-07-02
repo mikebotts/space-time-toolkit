@@ -13,15 +13,16 @@
       <member>
          <Scene id="SCENE_01">
             <name>World View</name>
-            <time>
-               <TimeSettings>
-                  <currentTime>2006-10-02T15:13:00Z</currentTime>
+            
+            <time autoUpdate="realtime">
+               <TimeExtent>
+                  <baseTime>2006-10-02T15:13:00Z</baseTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
                   <stepTime>60</stepTime>
-                  <realTimeMode>on</realTimeMode>
-               </TimeSettings>
+               </TimeExtent>
             </time>
+            
             <view>
                <ViewSettings showTripod="true" showArcball="false" showROI="true">
                   <backgroundColor>#000000</backgroundColor>
