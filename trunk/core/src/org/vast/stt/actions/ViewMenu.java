@@ -62,7 +62,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(((WorldScene)currentScene).getViewSettings());
-                newScene.setTimeSettings(((WorldScene)currentScene).getTimeSettings());
+                newScene.setTimeExtent(((WorldScene)currentScene).getTimeExtent());
                 newScene.setDataTree(currentScene.getDataTree());
                 newScene.setName(currentScene.getName());
                 
@@ -83,7 +83,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 WorldScene newScene = new WorldScene();
                 newScene.setViewSettings(new ViewSettings());
-                newScene.setTimeSettings(((WorldScene)currentScene).getTimeSettings());
+                newScene.setTimeExtent(((WorldScene)currentScene).getTimeExtent());
                 newScene.setDataTree(currentScene.getDataTree());
                 newScene.setName(currentScene.getName());
                 
