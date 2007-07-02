@@ -15,6 +15,7 @@ package org.vast.stt.project.world;
 
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.provider.STTTimeExtent;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 import org.vast.stt.style.DataStyler;
@@ -37,7 +38,7 @@ import org.vast.stt.style.DataStyler;
 public class WorldScene extends Scene<SceneRenderer<WorldScene>>
 {
     protected ViewSettings viewSettings;
-	protected TimeSettings timeSettings;
+	protected STTTimeExtent timeExtent;
     protected CameraControl cameraController;
     
 
@@ -76,28 +77,24 @@ public class WorldScene extends Scene<SceneRenderer<WorldScene>>
         }
 	}
 
-
-	public TimeSettings getTimeSettings()
-	{
-		return timeSettings;
+	public STTTimeExtent getTimeExtent() {
+		return timeExtent;
 	}
 
 
-	public void setTimeSettings(TimeSettings timeSettings)
-	{
-        if (this.timeSettings != timeSettings)
+	public void setTimeExtent(STTTimeExtent timeExtent) {
+		if (this.timeExtent != timeExtent)
         {
-            if (this.timeSettings != null)
-                this.timeSettings.removeListener(this);
+            if (this.timeExtent != null)
+                this.timeExtent.removeListener(this);
             
-            this.timeSettings = timeSettings;
+            this.timeExtent = timeExtent;
             
-            if (this.timeSettings != null)
-                this.timeSettings.addListener(this);
+            if (this.timeExtent != null)
+                this.timeExtent.addListener(this);
         }
 	}
-    
-    
+	
     public CameraControl getCameraController()
     {
         return cameraController;
