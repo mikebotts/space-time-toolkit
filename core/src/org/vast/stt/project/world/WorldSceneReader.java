@@ -23,23 +23,17 @@
 
 package org.vast.stt.project.world;
 
-import java.text.ParseException;
 import java.util.Hashtable;
-import org.vast.xml.DOMHelper;
+
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
 import org.vast.stt.project.XMLModuleReader;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.tree.DataTree;
 import org.vast.stt.project.tree.DataTreeReader;
-import org.vast.stt.project.world.Projection_ECEF;
-import org.vast.stt.project.world.Projection_LLA;
-import org.vast.stt.project.world.Projection_Mercator;
-import org.vast.stt.project.world.TimeSettings;
-import org.vast.stt.project.world.ViewSettings;
-import org.vast.stt.project.world.WorldScene;
-import org.vast.util.DateTime;
-import org.vast.util.DateTimeFormat;
+import org.vast.stt.provider.ExtentReader;
+import org.vast.stt.provider.STTTimeExtent;
+import org.vast.xml.DOMHelper;
 import org.w3c.dom.Element;
 
 
@@ -60,11 +54,12 @@ import org.w3c.dom.Element;
 public class WorldSceneReader extends XMLReader implements XMLModuleReader
 {
     protected DataTreeReader dataTreeReader;
-    
+    protected ExtentReader extentReader;
     
     public WorldSceneReader()
     {
         dataTreeReader = new DataTreeReader();
+        extentReader = new ExtentReader();
     }
     
     
@@ -73,8 +68,8 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
     {
         super.setObjectIds(objectIds);
         dataTreeReader.setObjectIds(objectIds);
+        extentReader.setObjectIds(objectIds);
     }
-
 
     public Object read(DOMHelper dom, Element sceneElt)
     {
@@ -85,9 +80,9 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
         scene.setName(dom.getElementValue(sceneElt, "name"));
         
         // read time settings
-        Element timeSettingsElt = dom.getElement(sceneElt, "time/TimeSettings");
-        TimeSettings timeSettings = readTimeSettings(dom, timeSettingsElt);
-        scene.setTimeSettings(timeSettings);
+        Element timeExtentElt = dom.getElement(sceneElt, "time");
+        STTTimeExtent timeExtent = extentReader.readTimeExtent(dom, timeExtentElt);
+        scene.setTimeExtent(timeExtent);
         
         // read view settings
         Element viewSettingsElt = dom.getElement(sceneElt, "view/ViewSettings");
@@ -102,76 +97,6 @@ public class WorldSceneReader extends XMLReader implements XMLModuleReader
         
         return scene;
     }
-    
-    
-    /**
-     * Reads Scene Time Settings
-     * @param timeSettingsElt
-     * @return
-     */
-    protected TimeSettings readTimeSettings(DOMHelper dom, Element timeSettingsElt)
-    {
-        // try to get it from the table
-        Object obj = findExistingObject(dom, timeSettingsElt);
-        if (obj != null)
-            return (TimeSettings)obj;
-                
-        String val;
-        TimeSettings timeSettings = new TimeSettings();
-                
-        // current time
-        val = dom.getElementValue(timeSettingsElt, "currentTime");
-        if (val != null)
-        {
-            double julianTime = 0;
-            
-            try
-            {
-                julianTime = DateTimeFormat.parseIso(val);                
-            }
-            catch (ParseException e)
-            {
-            }
-            
-            timeSettings.setCurrentTime(new DateTime(julianTime));
-        }
-        
-        // lag time
-        val = dom.getElementValue(timeSettingsElt, "lagTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setLagTime(time);
-        }
-        
-        // lead time
-        val = dom.getElementValue(timeSettingsElt, "leadTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setLeadTime(time);
-        }
-        
-        // step time
-        val = dom.getElementValue(timeSettingsElt, "stepTime");
-        if (val != null)
-        {
-            double time = Double.parseDouble(val);
-            timeSettings.setStepTime(time);
-        }
-        
-        // real time mode
-        val = dom.getElementValue(timeSettingsElt, "realTimeMode");
-        if (val.equals("on") || val.equals("yes"))
-        {
-            timeSettings.setRealTime(true);
-        }
-        else
-            timeSettings.setRealTime(false);
-        
-        return timeSettings;
-    }
-    
     
     /**
      * Reads Scene View Settings (camera, target, ortho, colors...)
