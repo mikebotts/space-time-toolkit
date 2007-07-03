@@ -192,10 +192,8 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
     public void doubleClick(DoubleClickEvent event)
     {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-        SceneItem sceneItem = (SceneItem)selection.getFirstElement();
-        
-        sceneItem.setVisible(!sceneItem.isVisible());
-        
+        SceneItem sceneItem = (SceneItem)selection.getFirstElement();        
+        sceneItem.setVisible(!sceneItem.isVisible());        
         updateView();
         scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
     }

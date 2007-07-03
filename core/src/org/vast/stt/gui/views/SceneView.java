@@ -194,7 +194,10 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
     public void partVisible(IWorkbenchPartReference partRef)
     {
         if (partRef.getPart(false) == this)
+        {
             doRefresh = true;
+            refreshView();
+        }
     }
     
     
