@@ -1086,8 +1086,8 @@
                   <name>NOAA-15 AMSU-A Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>NOAA15-AMSU-A</layerId>
@@ -1105,8 +1105,8 @@
                   <name>NOAA-15 AMSU-B Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>NOAA15-AMSU-B</layerId>
@@ -1124,8 +1124,8 @@
                   <name>NOAA-15 AVHRR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>NOAA15-AVHRR</layerId>
@@ -1143,8 +1143,8 @@
                   <name>NOAA12 AMSU-A Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>NOAA12-AMSU-A</layerId>
@@ -1162,8 +1162,8 @@
                   <name>NOAA12 AVHRR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>NOAA12-AVHRR</layerId>
@@ -1181,8 +1181,8 @@
                   <name>AQUA MODIS Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>AQUA-MODIS</layerId>
@@ -1200,8 +1200,8 @@
                   <name>SPOT5 Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>SPOT5</layerId>
@@ -1219,8 +1219,8 @@
                   <name>TRMM TMI Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>TRMM-TMI</layerId>
@@ -1238,8 +1238,8 @@
                   <name>METOP-A IASI Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>METOP-A IASI</layerId>
@@ -1257,8 +1257,8 @@
                   <name>CALIPSO LIDAR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>CALIPSO-LIDAR</layerId>
@@ -1276,8 +1276,8 @@
                   <name>CLOUDSAT RADAR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
-                        <lagTime>15</lagTime>
-                        <leadTime>15</leadTime>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>CLOUDSAT-RADAR</layerId>
