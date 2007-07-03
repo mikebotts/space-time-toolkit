@@ -13,6 +13,8 @@
 
 package org.vast.stt.dynamics;
 
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.util.DateTime;
 
 
@@ -30,7 +32,7 @@ import org.vast.util.DateTime;
  * @date Aug 21, 2006
  * @version 1.0
  */
-public abstract class RealTimeUpdater extends TimeExtentUpdater
+public class RealTimeUpdater extends TimeExtentUpdater
 {
     protected double updatePeriod;
     protected Thread realtimeUpdateThread;
@@ -45,6 +47,8 @@ public abstract class RealTimeUpdater extends TimeExtentUpdater
                 {
                     DateTime now = new DateTime();
                     timeExtent.setBaseTime(now.getJulianTime());
+                    timeExtent.dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+                    //System.err.println("TimeUp = " + now.getJulianTime());
                     Thread.sleep((long)updatePeriod*1000);
                 }
             }
