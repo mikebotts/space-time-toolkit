@@ -15,6 +15,7 @@ package org.vast.stt.provider;
 
 import java.text.ParseException;
 import org.vast.xml.DOMHelper;
+import org.vast.stt.dynamics.RealTimeUpdater;
 import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
 import org.vast.stt.dynamics.SpatialExtentUpdater;
@@ -179,7 +180,17 @@ public class ExtentReader extends XMLReader
 	            timeExtent.setUpdater(updater);
 	            updater.setEnabled(true);
         	} else if("realtime".equalsIgnoreCase(updateVal)){
-        		System.err.println("Realtime MODE");
+        		RealTimeUpdater updater = new RealTimeUpdater();
+        		String periodStr = dom.getAttributeValue(timeElt, "@updatePeriod");
+        		if(periodStr != null){
+        			double pd = Double.parseDouble(periodStr);
+        			updater.setUpdatePeriod(pd);
+        		} else {
+            		updater.setUpdatePeriod(5.0);
+        		}
+        		//  Need a way to spec updatePeriod for realTime 
+ 	            timeExtent.setUpdater(updater);
+ 	            updater.setEnabled(true);
         	} else 
          		throw new IllegalStateException("Invalid value for time attribtue 'autoUpdate': " + updateVal);
         }
