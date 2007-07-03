@@ -67,7 +67,7 @@ public class MasterTimeView extends SceneView<WorldScene>
     {
         switch (e.type)
         {
-            case SCENE_TIME_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 if (e.source != masterTimeWidget)
                     refreshViewAsync();
         }

@@ -116,7 +116,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
 	        	updater.setUpdatePeriod(5.0);
 	        	STTTimeExtent extent = scene.getTimeExtent();
 	        	extent.setUpdater(updater);
-	            extent.dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+	            extent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
         	} else {
         		STTTimeExtent extent = scene.getTimeExtent();
         		extent.getUpdater().setEnabled(false);
@@ -141,7 +141,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     	if(scene == null)
     		return;
         scene.getTimeExtent().setBaseTime(newTime);
-        scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+        scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
     }
 
 

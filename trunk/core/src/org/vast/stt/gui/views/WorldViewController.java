@@ -224,7 +224,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             // trigger provider refresh when button is released
             DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
             //provider.setEnabled(true);
-            provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+            provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));
         }
         
         rotating = false;

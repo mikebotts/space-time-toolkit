@@ -194,12 +194,12 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             //manualTimeSpinner.setEnabled(!overrideTimeBtn.getSelection());
 		} else if(e.widget == updateNowBtn){
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
 		} else if(e.widget == realtimeBtn){
            // setUseAbsoluteTime(realtimeBtn.getSelection()); 
             STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
             timeExtent.setBaseAtNow(realtimeBtn.getSelection());
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
         } else if(e.widget == biasCombo){
 			STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
 			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
@@ -222,7 +222,7 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
             timeExtent.setTimeBias(biasSpinner.getValue());
             
             if (continuousUpdateBtn.getSelection() == true)
-                timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));            
+                timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
         }
     }	
 }
