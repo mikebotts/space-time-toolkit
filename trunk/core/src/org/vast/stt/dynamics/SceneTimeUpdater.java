@@ -93,4 +93,13 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         this.scene = scene;
         scene.getTimeExtent().addListener(this);
     }
+    
+    
+    @Override
+    public void setEnabled(boolean enabled)
+    {
+        super.setEnabled(enabled);
+        if (enabled == true)
+            updateTime(scene.getTimeExtent().getBaseTime());
+    }
 }
