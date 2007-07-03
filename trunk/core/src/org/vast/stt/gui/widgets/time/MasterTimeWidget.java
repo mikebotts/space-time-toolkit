@@ -112,10 +112,12 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         	if(scene == null)
         		return;
         	if(rtBtn.getSelection()) {
-	        	RealTimeUpdater updater = new RealTimeUpdater();
-	        	updater.setUpdatePeriod(5.0);
-	        	STTTimeExtent extent = scene.getTimeExtent();
-	        	extent.setUpdater(updater);
+        		STTTimeExtent extent = scene.getTimeExtent();
+        		//  Just create new one every time for now....
+        		RealTimeUpdater updater = new RealTimeUpdater();
+        		updater.setUpdatePeriod(stepSpinner.getValue());
+        		updater.setEnabled(true);
+    	        extent.setUpdater(updater);
 	            extent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
         	} else {
         		STTTimeExtent extent = scene.getTimeExtent();
