@@ -136,10 +136,13 @@ public class ExtentReader extends XMLReader
 	                
 	                // read base time
 	                val = dom.getElementValue(extentElt, "baseTime");
-	                if (val.equalsIgnoreCase("now"))
-	                    timeExtent.setBaseAtNow(true);
-	                else
-	                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+                    if (val != null)
+                    {
+    	                if (val.equalsIgnoreCase("now"))
+    	                    timeExtent.setBaseAtNow(true);
+    	                else
+    	                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+                    }
 	                
 	                // read lag time
 	                val = dom.getElementValue(extentElt, "lagTime");

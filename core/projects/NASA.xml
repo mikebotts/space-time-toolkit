@@ -12,17 +12,13 @@
    <SceneList>
       <member>
          <Scene id="SCENE_01">
-            <name>World View</name>
-            
+            <name>World View</name>            
             <time autoUpdate="realtime" updatePeriod="3">
                <TimeExtent>
                   <baseTime>2006-10-02T15:13:00Z</baseTime>
-                  <lagTime>3600</lagTime>
-                  <leadTime>3600</leadTime>
                   <stepTime>60</stepTime>
                </TimeExtent>
-            </time>
-            
+            </time>            
             <view>
                <ViewSettings showTripod="true" showArcball="false" showROI="true">
                   <backgroundColor>#000000</backgroundColor>
@@ -1088,19 +1084,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_NOAA15_AMSUA">
                   <name>NOAA-15 AMSU-A Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>NOAA15-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA15-AMSU-A</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1110,19 +1103,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_NOAA15_AMSUB">
                   <name>NOAA-15 AMSU-B Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>NOAA15-AMSU-B</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA15-AMSU-B</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1132,19 +1122,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_NOAA15_AVHRR">
                   <name>NOAA-15 AVHRR Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>NOAA15-AVHRR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA15-AVHRR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1154,19 +1141,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_NOAA12_AMSUA">
                   <name>NOAA12 AMSU-A Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>NOAA12-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA12-AMSU-A</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:05:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:35:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1176,19 +1160,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_NOAA12_AVHRR">
                   <name>NOAA12 AVHRR Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>NOAA12-AVHRR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>NOAA12-AVHRR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T03:05:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:35:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1198,19 +1179,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_AQUA">
                   <name>AQUA MODIS Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>AQUA-MODIS</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>AQUA-MODIS</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:40:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:10:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1220,19 +1198,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_SPOT5">
                   <name>SPOT5 Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>SPOT5</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>SPOT5</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:30:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:00:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1242,19 +1217,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_TRMM">
                   <name>TRMM TMI Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>TRMM-TMI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>TRMM-TMI</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2003-01-01T02:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2003-01-01T03:30:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1264,19 +1236,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_METOP">
                   <name>METOP-A IASI Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>METOP-A IASI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>METOP-A-IASI</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2007-01-01T02:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2007-01-01T02:30:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1286,19 +1255,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_CALIPSO">
                   <name>CALIPSO LIDAR Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>CALIPSO-LIDAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>CALIPSO-LIDAR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-02T15:13:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-10-02T15:30:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1308,19 +1274,16 @@
             <member>
                <OWSDataProvider id="PROVIDER_CLOUDSAT">
                   <name>CLOUDSAT RADAR Footprints</name>
-                  <timeExtent autoUpdate="#SCENE_01"/>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>15</lagTime>
+                        <leadTime>15</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <layerId>CLOUDSAT-RADAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>CLOUDSAT-RADAR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-02T15:13:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-10-02T15:30:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1410,15 +1373,6 @@
                   <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
                      <GetObservation service="SOS" version="0.0.31">
                         <offering>CALIPSO-LIDAR</offering>
-                        <eventTime>
-                           <ogc:During>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2006-10-02T09:14:00Z</gml:beginPosition>
-                                 <gml:endPosition>2006-10-02T19:22:00Z</gml:endPosition>
-                                 <gml:timeStep>P1S</gml:timeStep>
-                              </gml:TimePeriod>
-                           </ogc:During>
-                        </eventTime>
                         <resultFormat>application/com-xml</resultFormat>
                      </GetObservation>
                   </request>
