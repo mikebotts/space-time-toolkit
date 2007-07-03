@@ -310,14 +310,14 @@ public abstract class AbstractProvider implements DataProvider
     {
         switch (e.type)
         {
-            case PROVIDER_TIME_EXTENT_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 if (this.isTimeSubsetSupported())
                 {
                     startUpdate(true);
                     break;
                 }
                     
-            case PROVIDER_SPATIAL_EXTENT_CHANGED:
+            case SPATIAL_EXTENT_CHANGED:
                 if (this.isSpatialSubsetSupported())
                 {
                     startUpdate(true);

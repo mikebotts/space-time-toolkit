@@ -80,7 +80,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
         {
             case SCENE_VIEW_CHANGED:
                 update();
-                spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
+                spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED));
                 break;
         }
     }

@@ -60,7 +60,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
     {
         switch (e.type)
         {
-            case SCENE_TIME_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 if (enabled)
                 	updateTime(scene.getTimeExtent().getBaseTime());
                 break;
@@ -84,7 +84,7 @@ public class SceneTimeUpdater extends TimeExtentUpdater implements STTEventListe
         
         // send event only if data is currently visible if this scene
         if (visibleDataFound)
-            this.timeExtent.dispatchEvent(new STTEvent(this, EventType.PROVIDER_TIME_EXTENT_CHANGED));
+            this.timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
     }
     
 

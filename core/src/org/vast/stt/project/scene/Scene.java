@@ -296,7 +296,7 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
                 dispatchEvent(event.copy());
                 break;
                 
-            case SCENE_TIME_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 dispatchEvent(event.copy());
                 break;
         }

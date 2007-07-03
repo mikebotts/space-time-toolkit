@@ -37,6 +37,7 @@ public class RealTimeUpdater extends TimeExtentUpdater
     protected double updatePeriod;
     protected Thread realtimeUpdateThread;
     
+    
     private class MyRunnable implements Runnable
     {
         public void run()
@@ -47,7 +48,7 @@ public class RealTimeUpdater extends TimeExtentUpdater
                 {
                     DateTime now = new DateTime();
                     timeExtent.setBaseTime(now.getJulianTime());
-                    timeExtent.dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+                    timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
                     //System.err.println("TimeUp = " + now.getJulianTime());
                     Thread.sleep((long)updatePeriod*1000);
                 }

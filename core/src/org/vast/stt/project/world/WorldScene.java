@@ -126,7 +126,7 @@ public class WorldScene extends Scene<SceneRenderer<WorldScene>>
                 dispatchEvent(event.copy());
                 break;
                 
-            case SCENE_TIME_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 dispatchEvent(event.copy());
                 break;
         }

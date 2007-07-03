@@ -79,7 +79,7 @@ public class TimeExtentView extends DataItemView
         switch (e.type)
         {
             case ITEM_OPTIONS_CHANGED:
-            case PROVIDER_TIME_EXTENT_CHANGED:
+            case TIME_EXTENT_CHANGED:
                 if (e.source != timeSettingsWidget)
                     refreshViewAsync();
         }
