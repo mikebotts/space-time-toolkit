@@ -11,10 +11,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
+import org.vast.stt.dynamics.RealTimeUpdater;
+import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.world.WorldScene;
-import org.vast.util.DateTime;
+import org.vast.stt.provider.STTTimeExtent;
 
 /**
  * <p><b>Title:</b><br/>
@@ -94,7 +96,7 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         gridData.horizontalSpan = 2;
         rtBtn.setLayoutData(gridData);
         rtBtn.addSelectionListener(this);
-
+        
         //  Must give sroller sufficient size
         scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
@@ -107,7 +109,18 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     {
         if (e.widget == rtBtn)
         {
-            //  TODO start/stop realtime mode
+        	if(scene == null)
+        		return;
+        	if(rtBtn.getSelection()) {
+	        	RealTimeUpdater updater = new RealTimeUpdater();
+	        	updater.setUpdatePeriod(5.0);
+	        	STTTimeExtent extent = scene.getTimeExtent();
+	        	extent.setUpdater(updater);
+	            extent.dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+        	} else {
+        		STTTimeExtent extent = scene.getTimeExtent();
+        		extent.getUpdater().setEnabled(false);
+        	}
         }
         else if (e.widget == setBtn)
         {
@@ -127,8 +140,8 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
     {
     	if(scene == null)
     		return;
-        scene.getTimeSettings().setCurrentTime(new DateTime(newTime));
-        scene.getTimeSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
+        scene.getTimeExtent().setBaseTime(newTime);
+        scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.SCENE_TIME_CHANGED));
     }
 
 
@@ -138,15 +151,20 @@ public final class MasterTimeWidget implements SelectionListener, TimeListener
         
         if (scene != null)
         {
-            double sceneTime = scene.getTimeSettings().getCurrentTime().getJulianTime();
+        	STTTimeExtent extent = scene.getTimeExtent();
+            double sceneTime = extent.getBaseTime();
             absTimeSpinner.setValue(sceneTime);
-            double stepTime = scene.getTimeSettings().getStepTime();
-            stepSpinner.setValue(stepTime);
+            TimeExtentUpdater updater = extent.getUpdater();
+            if(updater instanceof RealTimeUpdater && updater.isEnabled()){
+            	rtBtn.setSelection(true);
+            	double updatePd = ((RealTimeUpdater)updater).getUpdatePeriod();
+            	stepSpinner.setValue(updatePd);
+            } else {
+            	rtBtn.setSelection(false);
+                double stepTime = extent.getTimeStep();
+                stepSpinner.setValue(stepTime);
+            }
         }
-        else
-        {
-           ;// absTimeSpinner.setValue(0); // ???
-          // stepSpinner.setValue(60);
-        }
+        
     }
 }
