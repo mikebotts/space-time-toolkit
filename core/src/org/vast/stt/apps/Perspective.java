@@ -38,7 +38,7 @@ public class Perspective implements IPerspectiveFactory
         sceneFolder.addPlaceholder(CapabilitiesView.ID);
         sceneFolder.addPlaceholder(CatalogView.ID);
         
-        sceneOptFolder.addView(MasterTimeView.ID);
+        sceneOptFolder.addView(SceneTimeView.ID);
 	}
 
 }
