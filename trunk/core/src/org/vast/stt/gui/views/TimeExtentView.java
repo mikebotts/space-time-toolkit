@@ -3,7 +3,7 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.time.TimeExtentWidget;
+import org.vast.stt.gui.widgets.time.TimeExtentController;
 import org.vast.stt.project.tree.DataItem;
 
 
@@ -26,13 +26,12 @@ import org.vast.stt.project.tree.DataItem;
 public class TimeExtentView extends DataItemView
 {
     public static final String ID = "STT.TimeExtentView";
-    private TimeExtentWidget timeSettingsWidget;
-
+    private TimeExtentController timeExtentController;
 
     @Override
     public void createPartControl(Composite parent)
     {
-        timeSettingsWidget = new TimeExtentWidget(parent);
+    	timeExtentController = new TimeExtentController(parent);
         super.createPartControl(parent);
     }
     
@@ -62,7 +61,7 @@ public class TimeExtentView extends DataItemView
     @Override
     public void updateView()
     {
-        timeSettingsWidget.setDataItem(item);
+    	timeExtentController.setDataItem(item);
     }
 
 
@@ -80,7 +79,8 @@ public class TimeExtentView extends DataItemView
         {
             case ITEM_OPTIONS_CHANGED:
             case TIME_EXTENT_CHANGED:
-                if (e.source != timeSettingsWidget)
+            	//  Need to filter events from the TimeExentWidget, and its MasterTimeWidget, probably
+                //if (e.source != timeExtentController.)
                     refreshViewAsync();
         }
     }

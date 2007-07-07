@@ -15,7 +15,7 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.gui.widgets.time.MasterTimeWidget;
+import org.vast.stt.gui.widgets.time.SceneTimeController;
 import org.vast.stt.project.world.WorldScene;
 
 
@@ -34,16 +34,16 @@ import org.vast.stt.project.world.WorldScene;
  * @version 1.0
  * 
  */
-public class MasterTimeView extends SceneView<WorldScene>
+public class SceneTimeView extends SceneView<WorldScene>
 {
-    public static final String ID = "STT.MasterTimeView";
-    protected MasterTimeWidget masterTimeWidget;
+    public static final String ID = "STT.SceneTimeView";
+    protected SceneTimeController masterTimeController;
 
 
     @Override
     public void createPartControl(Composite parent)
     {
-        masterTimeWidget = new MasterTimeWidget(parent);
+        masterTimeController = new SceneTimeController(parent, (WorldScene)scene);
         getSite().getPage().addPartListener(this);
     }
 
@@ -51,14 +51,14 @@ public class MasterTimeView extends SceneView<WorldScene>
     @Override
     public void updateView()
     {
-        masterTimeWidget.setScene((WorldScene)scene);
+        masterTimeController.setScene((WorldScene)scene);
     }
 
 
     @Override
     public void clearView()
     {
-        masterTimeWidget.setScene(null);
+        masterTimeController.setScene(null);
     }
     
     
@@ -68,8 +68,10 @@ public class MasterTimeView extends SceneView<WorldScene>
         switch (e.type)
         {
             case TIME_EXTENT_CHANGED:
-                if (e.source != masterTimeWidget)
+                if (e.source != masterTimeController) {
+                	//System.err.println();
                     refreshViewAsync();
+                }
         }
     }
 
@@ -78,7 +80,7 @@ public class MasterTimeView extends SceneView<WorldScene>
     public void setScene(WorldScene sc)
     {
         super.setScene(sc);
-        masterTimeWidget.setScene(sc);
+        masterTimeController.setScene(sc);
         
         // refresh display
         refreshViewAsync();
