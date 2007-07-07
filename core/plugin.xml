@@ -12,7 +12,7 @@
    <extension point="org.eclipse.ui.views">
       <view name="Bbox" class="org.vast.stt.gui.views.SpatialExtentView" id="STT.SpatialExtentView"/>
       <view name="Time" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
-      <view name="Master Time" class="org.vast.stt.gui.views.MasterTimeView" id="STT.MasterTimeView"/>
+      <view name="Scene Time" class="org.vast.stt.gui.views.SceneTimeView" id="STT.SceneTimeView"/>
       <view name="Graphics" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
       <view name="CatalogView" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>
       <view name="CapabilitiesView" class="org.vast.stt.gui.views.CapabilitiesView" id="STT.CapabilitiesView"/>
@@ -22,6 +22,7 @@
       <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView"/>
       <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
       <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
+      <view name="Pressure" class="org.vast.sttx.gui.views.PressureView" id="STT.PressureView"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
