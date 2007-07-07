@@ -82,7 +82,7 @@ public class TimeExtentWidget
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.LEFT;  
 		gridData.horizontalSpan = 2;
-		gridData.verticalIndent = 4;
+		gridData.verticalIndent = 9;
 		overrideTimeBtn.setLayoutData(gridData);
 		overrideTimeBtn.setToolTipText("Override the Scene time with the Time Controller below");
 

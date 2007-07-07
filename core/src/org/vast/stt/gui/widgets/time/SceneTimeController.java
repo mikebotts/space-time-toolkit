@@ -77,10 +77,12 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 			TimeExtentUpdater updater = extent.getUpdater();
 			if (updater instanceof RealTimeUpdater && updater.isEnabled()) {
 				widget.absTimeSpinner.rtBtn.setSelection(true);
+				widget.absTimeSpinner.disableDateChanges();
 				double updatePd = ((RealTimeUpdater) updater).getUpdatePeriod();
 				widget.stepSpinner.setValue(updatePd);
 			} else {
 				widget.absTimeSpinner.rtBtn.setSelection(false);
+				widget.setEnabled(true);
 				double stepTime = extent.getTimeStep();
 				widget.stepSpinner.setValue(stepTime);
 			}
