@@ -2,7 +2,6 @@ package org.vast.stt.gui.widgets.time;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -12,32 +11,47 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
-import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.provider.STTTimeExtent;
 
-
-public class TimeExtentWidget implements SelectionListener, TimeListener
+/**
+ * <p><b>Title:</b><br/>
+ * TimeExtentWidget
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ *  Widget containing ManualTimeWidget and TimeExtentSpinners.  
+ *  It's a little busy and may be confusing to users, but it does allow
+ *  for precise control of all item time parameters.  One solution may 
+ *  be to break ManualTimeWidget and TimeExtentSpinners into separate 
+ *  Views, or make this a TabbedFolder with one tab for ManualTime control
+ *  and one for Spinners.  
+ *  
+ *  Also, it took some hammering to get the things to align and look halfway decent.
+ *  Expect inconsistencies when porting to Linux/Mac- if so, consider a FormLayout 
+ *  next time...  AWT, Swing, SWT- freakin layout managers never change...  TC
+ * </p>
+ *
+ * <p>Copyright (c) 2005</p>
+ * @author Tony Cook
+ * @date Jul 7, 2007
+ * @version 1.0
+ */
+public class TimeExtentWidget
 {	
-    //private TimeZoneCombo tzCombo;
-    private Button overrideTimeBtn;
-    private Button continuousUpdateBtn;
-    private Button updateNowBtn;    
-	private DataItem dataItem;
-	private Group mainGroup;
-    private TimeSpinner biasSpinner;
-	private TimeSpinner stepSpinner;
-	private TimeSpinner leadSpinner;
-	private TimeSpinner lagSpinner;
-	private CalendarSpinner manualTimeSpinner;
-	private Combo biasCombo;
-	final Color BLUE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
-	final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
-	final Color RED = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
-	final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
-	private Button realtimeBtn;
-
+	protected Button overrideTimeBtn;
+	protected Button continuousUpdateBtn;
+	protected Button updateNowBtn;    
+	protected Group mainGroup;
+	protected TimeSpinner biasSpinner;
+	protected TimeSpinner stepSpinner;
+	protected TimeSpinner leadSpinner;
+	protected TimeSpinner lagSpinner;
+	protected MasterTimeWidget manualTimeWidget;
+	protected Combo biasCombo;
+	static final Color BLUE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
+	static final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
+	static final Color RED = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
+	static final Color WHITE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE);
+	
 	public TimeExtentWidget(Composite parent) {
 		init(parent);
 	}
@@ -50,179 +64,120 @@ public class TimeExtentWidget implements SelectionListener, TimeListener
 	    scroller.setExpandVertical(true);
 		scroller.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
 
+		GridData gridData;
+		//  MainGroup
 	    mainGroup = new Group(scroller, 0x0);
 		mainGroup.setText("itemName");
 		scroller.setContent(mainGroup);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
-		layout.verticalSpacing = 6;
+		layout.verticalSpacing = 3;
+		layout.marginTop = -5;
 		layout.makeColumnsEqualWidth = false;
 		mainGroup.setLayout(layout);
 		
-		//  Spinners
-		biasCombo = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
-		biasCombo.setItems(new String[]{"+", "-"});
-		biasCombo.select(0);
-		//biasCombo.setTextLimit(1);
-		biasCombo.setForeground(BLUE);
-		biasCombo.addSelectionListener(this);
-		GridData gridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gridData.horizontalIndent = 20;
-		biasCombo.setLayoutData(gridData);
-		biasSpinner = new TimeSpinner(mainGroup, "Time Bias");
-		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gridData.horizontalAlignment = SWT.RIGHT;
-		//biasSpinner.setBackground(GREEN);
-		biasSpinner.setLayoutData(gridData);
-        biasSpinner.addTimeListener(this);
-		
-		stepSpinner = new TimeSpinner(mainGroup, "Time Step");
+        //  Override Time toggle
+		overrideTimeBtn = new Button(mainGroup, SWT.CHECK);
+		overrideTimeBtn.setText("Override Scene Time");
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.horizontalAlignment = SWT.LEFT;  
 		gridData.horizontalSpan = 2;
-		stepSpinner.setLayoutData(gridData);
-        stepSpinner.addTimeListener(this);
-        
-		leadSpinner = new TimeSpinner(mainGroup, "Delta Lead");
+		gridData.verticalIndent = 4;
+		overrideTimeBtn.setLayoutData(gridData);
+		overrideTimeBtn.setToolTipText("Override the Scene time with the Time Controller below");
+
+        //  ManualTimeWidget
+		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
+		gridData.verticalIndent = 2;
+        manualTimeWidget = new MasterTimeWidget(mainGroup, gridData, true);
+        manualTimeWidget.setTitle("Override Time Control");
+
+        //  Continuous/Update now btn
+		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
+		continuousUpdateBtn.setText("Continuous update");
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.RIGHT;   
+		gridData.horizontalSpan = 1;
+		gridData.verticalIndent = 8;
+		continuousUpdateBtn.setLayoutData(gridData);
+		continuousUpdateBtn.setToolTipText("Update the data with each time parameter change");
+		
+		updateNowBtn = new Button(mainGroup, SWT.PUSH);
+		updateNowBtn.setText("Update Now");
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.LEFT;  
+		gridData.horizontalSpan = 1;
+		gridData.verticalIndent = 8;
+		updateNowBtn.setLayoutData(gridData);
+
+		//  Spinners
+		//  SpinnerGroup 
+		Group spinnerGroup = new Group(mainGroup, 0x0);
+		spinnerGroup.setText("Advanced Controls");
+		gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		gridData.verticalIndent = 6;
+		spinnerGroup.setLayoutData(gridData);
+		GridLayout spinnerLayout = new GridLayout();
+		spinnerLayout.numColumns = 2;
+		spinnerLayout.verticalSpacing = 1;
+		spinnerLayout.makeColumnsEqualWidth = false;
+		spinnerGroup.setLayout(spinnerLayout);
+		
+		leadSpinner = new TimeSpinner(spinnerGroup, "Delta Lead");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		leadSpinner.setLayoutData(gridData);
-        leadSpinner.addTimeListener(this);
 
-		lagSpinner = new TimeSpinner(mainGroup, "Delta Lag");
+		lagSpinner = new TimeSpinner(spinnerGroup, "Delta Lag");
 		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
 		lagSpinner.setLayoutData(gridData);
-        lagSpinner.addTimeListener(this);
-
-		manualTimeSpinner = new CalendarSpinner(mainGroup, "Manual Time", SWT.VERTICAL);
-		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1);
-		gridData.verticalIndent = 10;
-		manualTimeSpinner.setLayoutData(gridData);
-        manualTimeSpinner.addTimeListener(this);
-
-        realtimeBtn = new Button(mainGroup, SWT.CHECK);
-		realtimeBtn.setText("Realtime mode");
-        realtimeBtn.addSelectionListener(this);
-        gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;  
+		
+        stepSpinner = new TimeSpinner(spinnerGroup, "Time Step");
+		gridData = new GridData();
+		gridData.horizontalAlignment = SWT.RIGHT;
 		gridData.horizontalSpan = 2;
-		gridData.verticalIndent = 10;
-		realtimeBtn.setLayoutData(gridData);
+		stepSpinner.setLayoutData(gridData);
         
-		//  Add Override Time toggle
-		overrideTimeBtn = new Button(mainGroup, SWT.CHECK);
-		overrideTimeBtn.setText("Override Master Time");
-		overrideTimeBtn.addSelectionListener(this);
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;  
-		gridData.horizontalSpan = 2;
-		gridData.verticalIndent = 10;
-		overrideTimeBtn.setLayoutData(gridData);
+        biasCombo = new Combo(spinnerGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		biasCombo.setItems(new String[]{"+", "-"});
+		biasCombo.select(0);
+		biasCombo.setForeground(BLUE);
+		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		biasCombo.setLayoutData(gridData);
+		biasSpinner = new TimeSpinner(spinnerGroup, "Time Bias");
+		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gridData.horizontalAlignment = SWT.RIGHT;
+		biasSpinner.setLayoutData(gridData);
 		
-		continuousUpdateBtn = new Button(mainGroup, SWT.CHECK);
-		continuousUpdateBtn.setText("Enable Continuous Update");
-		continuousUpdateBtn.addSelectionListener(this);
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.RIGHT;   
-		gridData.horizontalSpan = 2;
-		gridData.verticalIndent = 10;
-		continuousUpdateBtn.setLayoutData(gridData);
-		
-		//  Update now btn
-		updateNowBtn = new Button(mainGroup, SWT.PUSH);
-		updateNowBtn.setText("Update Now");
-		updateNowBtn.addSelectionListener(this);
-		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.CENTER;  
-		gridData.horizontalSpan = 2;
-		gridData.verticalIndent = 8;
-		updateNowBtn.setLayoutData(gridData);
-
 		//  Must give sroller sufficient size
-		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));		
+		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 	}
 
-	private void setUseAbsoluteTime(boolean b){
-		STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-        
-        // disable auto updater if abs time is selected
-        if (timeExtent.getUpdater() != null)
-            timeExtent.getUpdater().setEnabled(!b);
-        
-		manualTimeSpinner.setEnabled(b);
-		realtimeBtn.setEnabled(b);
+	public void addListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
+		overrideTimeBtn.addSelectionListener(selectionListener);
+		updateNowBtn.addSelectionListener(selectionListener);
+		continuousUpdateBtn.addSelectionListener(selectionListener);
+		biasCombo.addSelectionListener(selectionListener);
+		leadSpinner.addTimeSpinnerListener(spinnerListener);
+		lagSpinner.addTimeSpinnerListener(spinnerListener);
+		stepSpinner.addTimeSpinnerListener(spinnerListener);
+		biasSpinner.addTimeSpinnerListener(spinnerListener);
+		manualTimeWidget.addListeners(spinnerListener, selectionListener);
 	}
-	
-	public void setDataItem(DataItem item){
-		this.dataItem = item;
-		mainGroup.setText(item.getName());
-		//  set the fields 
-		STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-		if(timeExtent == null)
-			return;
-		biasSpinner.setValue(timeExtent.getTimeBias());
-		leadSpinner.setValue(timeExtent.getLeadTimeDelta());
-		lagSpinner.setValue(timeExtent.getLagTimeDelta());
-		stepSpinner.setValue(timeExtent.getTimeStep());
-		double baseTime;
-		if(timeExtent.isBaseAtNow()) {
-			baseTime = (double)(System.currentTimeMillis()/1000);
-			realtimeBtn.setSelection(true);
-		} else {
-			baseTime = timeExtent.getBaseTime();
-			realtimeBtn.setSelection(false);
-		}
-		timeExtent.setBaseTime(baseTime);
-		manualTimeSpinner.setValue(baseTime);
-        
-        boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
-        manualTimeSpinner.setEnabled(!useAutoTime);
-		overrideTimeBtn.setSelection(!useAutoTime);
-	}
-	
-
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
-	public void widgetSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.widget == overrideTimeBtn){
-            setUseAbsoluteTime(overrideTimeBtn.getSelection()); 
-            //manualTimeSpinner.setEnabled(!overrideTimeBtn.getSelection());
-		} else if(e.widget == updateNowBtn){
-            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
-		} else if(e.widget == realtimeBtn){
-           // setUseAbsoluteTime(realtimeBtn.getSelection()); 
-            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-            timeExtent.setBaseAtNow(realtimeBtn.getSelection());
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
-        } else if(e.widget == biasCombo){
-			STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-			double sense = (biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
-			timeExtent.setTimeBias(timeExtent.getTimeBias() * sense);
-		} else {
-			System.err.println(e);
-		}
-	}
-
-    public void timeChanged(TimeSpinner spinner, double newTime)
-    {
-        if (this.dataItem != null)
-        {
-            // update time extent object
-            STTTimeExtent timeExtent = dataItem.getDataProvider().getTimeExtent();
-            timeExtent.setBaseTime(manualTimeSpinner.getValue());
-            timeExtent.setLagTimeDelta(lagSpinner.getValue());
-            timeExtent.setLeadTimeDelta(leadSpinner.getValue());
-            timeExtent.setTimeStep(stepSpinner.getValue());
-            timeExtent.setTimeBias(biasSpinner.getValue());
-            
-            if (continuousUpdateBtn.getSelection() == true)
-                timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
-        }
-    }	
+    
+    public void removeListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
+    	overrideTimeBtn.removeSelectionListener(selectionListener);
+		updateNowBtn.removeSelectionListener(selectionListener);
+		continuousUpdateBtn.removeSelectionListener(selectionListener);
+		biasCombo.removeSelectionListener(selectionListener);
+		leadSpinner.removeTimeSpinnerListener(spinnerListener);
+		lagSpinner.removeTimeSpinnerListener(spinnerListener);
+		stepSpinner.removeTimeSpinnerListener(spinnerListener);
+		biasSpinner.removeTimeSpinnerListener(spinnerListener);
+		manualTimeWidget.removeListeners(spinnerListener, selectionListener);
+   }
 }

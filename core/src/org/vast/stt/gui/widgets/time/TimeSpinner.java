@@ -47,6 +47,7 @@ public class TimeSpinner
 	implements TraverseListener, MouseListener, KeyListener, DisposeListener, FocusListener
 {
 	Group mainGroup;
+	protected Composite spinnerGroup;
 	StyledText text;
 	int currentField;  // the currently selected Field in the StyledText widget
 	private int currentCaretOffset = 0;
@@ -60,12 +61,13 @@ public class TimeSpinner
 	final Color DARK_GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 	final Color GRAY = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	Color activeBackground = null;
-	List<TimeListener> timeListeners;
-	
+	List<TimeSpinnerListener> timeSpinnerListeners;
+	protected final static int BTN_SIZE = 13;
+
 	protected TimeSpinner(){
 		//  Added so that CurrentTimeSpinner can extend this class
 		initFont();
-		timeListeners = new ArrayList<TimeListener>();
+		timeSpinnerListeners = new ArrayList<TimeSpinnerListener>();
 	}
 	
 	public TimeSpinner(Composite parent, String label) {
@@ -116,8 +118,7 @@ public class TimeSpinner
 		text.addKeyListener(this);
 		text.addFocusListener(this);
 
-		// SpinnerGroup
-		Composite spinnerGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
+		spinnerGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
 		gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		gridLayout.verticalSpacing = 2;
@@ -130,26 +131,30 @@ public class TimeSpinner
 		spinnerGroup.setLayoutData(gridData);
 		//  Spinner buttons
 		upBtn = new Button(spinnerGroup, SWT.ARROW | SWT.UP);
+		//upBtn.setSize(4,4);
 		gridData = new GridData();
-		gridData.heightHint = 15;
+		gridData.heightHint = BTN_SIZE;
+		gridData.widthHint = BTN_SIZE;
     	upBtn.setLayoutData(gridData);
     	upBtn.addMouseListener(this);
     	upBtn.addFocusListener(this);
 		downBtn = new Button(spinnerGroup, SWT.ARROW | SWT.DOWN);
 		gridData = new GridData();
-		gridData.heightHint = 15;
+		gridData.heightHint = BTN_SIZE;
+		gridData.widthHint = BTN_SIZE;
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
     	downBtn.addFocusListener(this);
 	}
 
 	public void setEnabled(boolean b){
+		text.setEnabled(b);
+		spinnerGroup.setEnabled(b);
 		mainGroup.setEnabled(b);
 		if(b)
 			text.setBackground(activeBackground);
 		else 
-			text.setBackground(DARK_GRAY);
-			//text.setBackground(STTColorManager.getInstance().get("textBackground"));
+			text.setBackground(GRAY);
 	}
 
 	private void timeUp(){
@@ -181,20 +186,20 @@ public class TimeSpinner
 	}
 	
 	private void publishTimeChanged(){
-		TimeListener tsTmp = null;
+		TimeSpinnerListener tsTmp = null;
 		double t = getValue();
-		for(int i=0; i<timeListeners.size(); i++){
-			tsTmp = timeListeners.get(i);
+		for(int i=0; i<timeSpinnerListeners.size(); i++){
+			tsTmp = timeSpinnerListeners.get(i);
 			tsTmp.timeChanged(this, t);
 		}
 	}
 
-	public void addTimeListener(TimeListener tl){
-		timeListeners.add(tl);
+	public void addTimeSpinnerListener(TimeSpinnerListener tl){
+		timeSpinnerListeners.add(tl);
 	}
 	
-	public void removeTimeListener(TimeListener tl){
-		timeListeners.remove(tl);
+	public void removeTimeSpinnerListener(TimeSpinnerListener tl){
+		timeSpinnerListeners.remove(tl);
 	}
 	
 	Runnable spinUpThread = new Runnable(){
