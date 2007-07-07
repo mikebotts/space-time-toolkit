@@ -49,7 +49,6 @@ public class RealTimeUpdater extends TimeExtentUpdater
                     DateTime now = new DateTime();
                     timeExtent.setBaseTime(now.getJulianTime());
                     timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
-                    //System.err.println("TimeUp = " + now.getJulianTime());
                     Thread.sleep((long)updatePeriod*1000);
                 }
             }
@@ -69,12 +68,22 @@ public class RealTimeUpdater extends TimeExtentUpdater
     
     
     @Override
+    /**
+     * Note that calling setEnabled(true) on an existing instance of realTimeUpdater
+     * causes an IllegalThreadStateException
+     */
     public void setEnabled(boolean enabled)
     {
         super.setEnabled(enabled);
         
-        if (enabled && !realtimeUpdateThread.isAlive())
-            realtimeUpdateThread.start();
+        if (enabled && !realtimeUpdateThread.isAlive()) {
+        	try {
+        		realtimeUpdateThread.start();
+        	} catch (IllegalThreadStateException e) {
+        		System.err.println(e);
+        	}
+        }
+        	
     }
 
 
