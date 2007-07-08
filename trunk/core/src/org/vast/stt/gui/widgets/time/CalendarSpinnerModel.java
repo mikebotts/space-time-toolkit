@@ -49,6 +49,8 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 
 	public void setValue(Object jtimeObj){
 		double jtime = ((Double)jtimeObj).doubleValue();
+		//  Account for timeZone
+		jtime += zoneOffset*3600.0;
     	Calendar cal = getGoodCalendar();
 		cal.setTimeInMillis((long)jtime*1000l);
     	//  set all fields from cal object's values
@@ -67,10 +69,13 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 	}
 
 	/**
-     * Sets the spinner value based on number of seconds
+     * Sets the spinner value based on Calendar object
      * @param sec - seconds since 1Jan1970
      */
     private void setValue(Calendar cal){
+    	//  Ignore timeZone here
+    	//  This is only setting the text fields
+    	
         //  reset all fields
     	years = cal.get(Calendar.YEAR);
     	months = cal.get(Calendar.MONTH);  // watch for 11/12 thing
@@ -84,7 +89,8 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
     public Object getValue(){
     	Calendar calendar = getGoodCalendar();
 		calendar.set(years, months, days, hours-zoneOffset, minutes, seconds);
-		return new Double(((double)calendar.getTimeInMillis()) / 1000.0); // + fseconds;
+		double time = ((double)calendar.getTimeInMillis()) / 1000.0;
+		return new Double(time); // + fseconds;
     }
 
     public void increment(int field){
