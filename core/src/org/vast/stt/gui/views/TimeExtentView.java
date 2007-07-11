@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.time.TimeExtentController;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -61,7 +62,12 @@ public class TimeExtentView extends DataItemView
     @Override
     public void updateView()
     {
-    	timeExtentController.setDataItem(item);
+        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+        if (pageInput != null)
+        {
+        	timeExtentController.setScene((WorldScene)pageInput.getScene());        
+            timeExtentController.setDataItem(item);
+        }    	
     }
 
 
