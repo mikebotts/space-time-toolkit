@@ -7,19 +7,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.dynamics.RealTimeUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
-import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTTimeExtent;
 
 public class TimeExtentController implements SelectionListener, TimeSpinnerListener, STTEventListener 
 {
 	private STTTimeExtent timeExtent;
 	private TimeExtentWidget extentWidget;
-	//  Get a handle to the SceneTimeUpdater somehow
-	private SceneTimeUpdater sceneUpdater;
+	private WorldScene worldScene;
 	
 	public TimeExtentController(Composite parent) {
 		extentWidget = new TimeExtentWidget(parent);
@@ -32,18 +31,12 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		    timeExtent.removeListener(this);
 		
 		extentWidget.mainGroup.setText(item.getName());
-		//  reset timeExtent
+		//  get timeExtent from new dataItem
 		timeExtent = item.getDataProvider().getTimeExtent();
 		if(timeExtent == null)
 			return;
-		//  Get a handle to the current updater
-		TimeExtentUpdater initialUpdater = timeExtent.getUpdater();
-		if(initialUpdater instanceof SceneTimeUpdater) {
-			sceneUpdater = (SceneTimeUpdater)initialUpdater;
-		} else {
-			System.err.println("TimeExtentController- intial updater is RT- FIX THIS!!!!");
-		}
 			
+		//  Reset widget values based on new timeExtent object state
 		extentWidget.biasSpinner.setValue(timeExtent.getTimeBias());
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
@@ -60,24 +53,31 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 	        //extentWidget.manualTimeWidget.setEnabled(!useAutoTime);
 		} 
 
-		//  Make this timeExtent a listener to timeExtent changes so it can refresh it's current time display
+		//  Make this Controller a listener to timeExtent changes so it can refresh it's current time display
 		//  if other sources (i.e. RealTimeUpdater/SCeneTimeUpdater) are changing the time value
 		timeExtent.addListener(this);
 	}
 	
 	private RealTimeUpdater createRealtimeUpdater(){
 		RealTimeUpdater rtUpdater = new RealTimeUpdater();
-		rtUpdater.setUpdatePeriod(extentWidget.manualTimeWidget.stepSpinner.getValue());
+		rtUpdater.setUpdatePeriod(extentWidget.manualTimeWidget.stepTimeSpinner.getValue());
 		
 		return rtUpdater;
 	}
 	
+	private SceneTimeUpdater createSceneTimeUpdater(){
+		SceneTimeUpdater stUpdater = new SceneTimeUpdater(worldScene);
+		stUpdater.setTimeExtent(timeExtent);
+		
+		return stUpdater;
+	}
+	
 	private void setOverrideSceneTime(boolean b){
 		extentWidget.manualTimeWidget.setEnabled(b);
-		//	Disable old updater, whether Scene or RT
+		//	disable old updater (this should ensure old updater Thread terminates)
 		timeExtent.getUpdater().setEnabled(false);
 		
-		//  reset baseTime of timeExtent to overide cal value
+		// switch between RealTime or SceneTime updater
 		if(b){
 			timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
 			if (extentWidget.manualTimeWidget.absTimeSpinner.rtBtn.getSelection()) {
@@ -85,7 +85,8 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 				rtu.setEnabled(true);
 				timeExtent.setUpdater(rtu);
 			}
-		} else {  //  Revert to scene updater
+		} else { 
+			SceneTimeUpdater sceneUpdater = createSceneTimeUpdater();
 			sceneUpdater.setEnabled(true);
             timeExtent.setUpdater(sceneUpdater);
 		}
@@ -104,20 +105,19 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
             timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
 		} else if(e.widget == extentWidget.manualTimeWidget.absTimeSpinner.rtBtn){
 			boolean rt = extentWidget.manualTimeWidget.absTimeSpinner.rtBtn.getSelection();
-			//extentWidget.manualTimeWidget.absTimeSpinner.setEnabled(!rt);
 			if (rt) {
 				extentWidget.manualTimeWidget.absTimeSpinner.disableDateChanges();
 				//  disable Calendar spinner controls
-				//  disable old updater?
+				//  disable old updater (this should ensure old updater Thread terminates)
 				timeExtent.getUpdater().setEnabled(false);
-				//  Use cached RT updater
+				//  create new RT updater
 				RealTimeUpdater rtu = createRealtimeUpdater();
 				rtu.setEnabled(true);
 				timeExtent.setUpdater(rtu);
 				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
 			} else {
 				extentWidget.manualTimeWidget.absTimeSpinner.setEnabled(true);
-				//  disable RT updater
+				//   disable old updater (this should ensure old updater Thread terminates)
 				timeExtent.getUpdater().setEnabled(false);
 				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
 			}       
@@ -130,11 +130,11 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
         	timeExtent.setBaseAtNow(extentWidget.continuousUpdateBtn.getSelection());
         	//  How to interact with manual time controls/RT..etc...
         } else if (e.widget == extentWidget.manualTimeWidget.setBtn) {
-        	StepSpinnerDialog ssd = new StepSpinnerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+        	StepSpinnerDialog ssd = new StepSpinnerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
+        			extentWidget.manualTimeWidget.stepTimeSpinner.getValue());
 			int rc = ssd.getReturnCode();
 			if (rc == IDialogConstants.OK_ID) {
-				extentWidget.manualTimeWidget.stepSpinner.setValue(ssd.getTimeStep());
-				extentWidget.manualTimeWidget.stepSpinner.resetCaret();
+				extentWidget.manualTimeWidget.stepTimeSpinner.setValue(ssd.getTimeStep());
 			}
         } else {
 			System.err.println(e);
@@ -145,16 +145,23 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 	 * Handle events from the spinners 
 	 */
     public void timeChanged(TimeSpinner spinner, double newTime) {
-        if (this.timeExtent != null) {
-            // update time extent object
-            timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
-            timeExtent.setLagTimeDelta(extentWidget.lagSpinner.getValue());
-            timeExtent.setLeadTimeDelta(extentWidget.leadSpinner.getValue());
-            timeExtent.setTimeStep(extentWidget.stepSpinner.getValue());
-            timeExtent.setTimeBias(extentWidget.biasSpinner.getValue());
-            if (extentWidget.continuousUpdateBtn.getSelection() == true)
-                timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
-        }
+    	if (this.timeExtent == null)
+        	return;
+    	//  If this event came from stepTime spinner, advance time
+    	//  by the  current value of step 
+    	if(spinner == extentWidget.manualTimeWidget.stepTimeSpinner){
+    		double baseTime = extentWidget.manualTimeWidget.absTimeSpinner.getValue();
+    		baseTime += newTime;
+    		extentWidget.manualTimeWidget.absTimeSpinner.setValue(baseTime);
+    	}
+        // update time extent object 
+        timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+        timeExtent.setLagTimeDelta(extentWidget.lagSpinner.getValue());
+        timeExtent.setLeadTimeDelta(extentWidget.leadSpinner.getValue());
+        timeExtent.setTimeStep(extentWidget.stepSpinner.getValue());
+        timeExtent.setTimeBias(extentWidget.biasSpinner.getValue());
+        if (extentWidget.continuousUpdateBtn.getSelection() == true)
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
     }
 
 	/**
@@ -184,4 +191,11 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
         	extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getAdjustedTime());
         }
     }
+
+    /*
+     * Set the current worldScene so we can create SceneTimeUpdaters
+     */
+	public void setScene(WorldScene worldScene) {
+		this.worldScene = worldScene;
+	}
 }

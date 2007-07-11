@@ -40,7 +40,7 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 				STTTimeExtent extent = scene.getTimeExtent();
 				//  Just create new one every time for now....
 				RealTimeUpdater updater = new RealTimeUpdater();
-				updater.setUpdatePeriod(widget.stepSpinner.getValue());
+				updater.setUpdatePeriod(widget.stepTimeSpinner.getValue());
 				updater.setEnabled(true);
 				extent.setUpdater(updater);
 				extent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
@@ -50,17 +50,21 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 			}
 		} else if (e.widget == widget.setBtn) {
 			//  popup setTimeStep Spinner
-			StepSpinnerDialog ssd = new StepSpinnerDialog(PlatformUI
-					.getWorkbench().getDisplay().getActiveShell());
+			StepSpinnerDialog ssd = new StepSpinnerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
+					widget.stepTimeSpinner.getValue());
 			int rc = ssd.getReturnCode();
 			if (rc == IDialogConstants.OK_ID) {
-				widget.stepSpinner.setValue(ssd.getTimeStep());
-				widget.stepSpinner.resetCaret();
+				widget.stepTimeSpinner.setValue(ssd.getTimeStep());
 			}
 		}
 	}
 
 	public void timeChanged(TimeSpinner spinner, double newTime) {
+		if(spinner == widget.stepTimeSpinner) {
+			double oldTime = widget.absTimeSpinner.getValue();
+			newTime += oldTime;
+			widget.absTimeSpinner.setValue(newTime);
+		}
 		if (scene == null)
 			return;
 		scene.getTimeExtent().setBaseTime(newTime);
@@ -79,12 +83,12 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 				widget.absTimeSpinner.rtBtn.setSelection(true);
 				widget.absTimeSpinner.disableDateChanges();
 				double updatePd = ((RealTimeUpdater) updater).getUpdatePeriod();
-				widget.stepSpinner.setValue(updatePd);
+				widget.stepTimeSpinner.setValue(updatePd);
 			} else {
 				widget.absTimeSpinner.rtBtn.setSelection(false);
 				widget.setEnabled(true);
 				double stepTime = extent.getTimeStep();
-				widget.stepSpinner.setValue(stepTime);
+				widget.stepTimeSpinner.setValue(stepTime);
 			}
 		}
 	}

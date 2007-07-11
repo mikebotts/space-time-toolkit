@@ -25,7 +25,7 @@ import org.vast.stt.gui.widgets.SpinnerModel;
  */
 public class TimeSpinnerModel implements SpinnerModel{
 	
-	String formatStr;
+	protected String formatStr;
 	// position of field in arrays start and len
     protected int YEAR = -1 , MONTH = -1, DAY = -1, HOUR = -1, MIN = -1, SEC = -1, FSEC = -1;
     Integer [] start, len; // position of fields in Str
@@ -265,6 +265,7 @@ public class TimeSpinnerModel implements SpinnerModel{
     	double sec = ((Double)secondsObj).doubleValue();
         //  clear all fields
         years = days = hours = minutes = seconds = fseconds = 0;
+        //  BUG here when sec > MAX INT
         int isec = (int)sec;
         if (hasFseconds) {
             double frac = sec - (double)isec;

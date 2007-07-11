@@ -31,6 +31,12 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 	
 	SimpleDateFormat dateFormat;
 	int zoneOffset;
+	//  Enforce min and max to keep the widget from changing width.
+	//  This could actually be an issue for geologic datasets.  The widget
+	//  will need to be modified to handle the AD/BC crossover (or whatever
+	//  the kids are calling BC and AD these days).
+	private static final double MIN_DATE = -6.21357696E10;  //  Jan 1, 0001 00:00:00
+	private static final double MAX_DATE = 2.53402300799E11;  //  Dec 31, 9999 23:59:59
 	
 	public CalendarSpinnerModel(String formatStr){
 		super(formatStr);
@@ -49,6 +55,12 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 
 	public void setValue(Object jtimeObj){
 		double jtime = ((Double)jtimeObj).doubleValue();
+		//  NOTE:  this will cause the widget to fail on Jan 1, 10000.  
+		//  The dreaded Y10K bug...  TC
+		if(jtime > MAX_DATE)
+			jtime = MAX_DATE;
+		if(jtime < MIN_DATE)
+			jtime = MIN_DATE;
 		//  Account for timeZone
 		jtime += zoneOffset*3600.0;
     	Calendar cal = getGoodCalendar();
@@ -62,10 +74,6 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
     	seconds = cal.get(Calendar.SECOND);
     	//  fseconds = ...
 
-//		String sval = tsModel.toString();
-//		System.err.println("sval = " + sval);
-//		System.err.println("jtime = " + jtime);
-//		System.err.println("Mod jtime = " + tsModel.getValue());
 	}
 
 	/**

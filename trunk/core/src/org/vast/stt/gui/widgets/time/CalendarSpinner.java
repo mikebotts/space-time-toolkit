@@ -36,15 +36,15 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 
 	public CalendarSpinner(Composite parent, String label) {
 		super();
-		formatStr = "MMM dd, yyyy HH:mm:ss";
+		String formatStr = "MMM dd, yyyy HH:mm:ss";
 		tsModel = new CalendarSpinnerModel(formatStr);
 		start = tsModel.getStart();
 		len = tsModel.getLength();
 		initGui(parent, label);
 
-		//  Set initial time elsewhere
-		this.setValue(1.1e9);
-		text.setCaretOffset(13);
+		// Set initial time and field pos to realtime and mintues
+		currentField = start.length - 2;
+		this.setValue(System.currentTimeMillis()/1000);
 		resetCaret();
 	}
 
@@ -72,11 +72,9 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		gridData.horizontalSpan = 2;
 		spinnerGroup.setLayoutData(gridData);
 		text = new StyledText(spinnerGroup, SWT.RIGHT | SWT.BORDER | SWT.READ_ONLY);
-		//gridData.verticalAlignment = SWT.CENTER;
-		//gridData.heightHint = 18;
-		//text.setLayoutData(gridData);
+		ensureTextWidth();
 		text.setFont(entryFont);
-		text.setToolTipText(formatStr);
+		text.setToolTipText(tsModel.formatStr);
 		
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
@@ -124,6 +122,18 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		tzCombo.addSelectionListener(this);
 	}
 
+	//  Should set widthHint == the widest possible date the widget can support.  That
+	//  will require getting the Font Metrics and doing some calculations.  For now, 
+	//  just make it wide enough to display properly on Winders.  When porting to 
+	//  Mac/Linux, this will need to be addressed.
+	//  Note that this isn't an issue with the base TimeSpinners because I init them
+	//  to all 0's, and there is no character data allowed.
+	private void ensureTextWidth(){
+		GridData gridData = new GridData();
+		gridData.widthHint = 127;
+		text.setLayoutData(gridData);
+	}
+	
 	public void setEnabled(boolean b){
 		super.setEnabled(b);
 		if(b)
@@ -140,12 +150,12 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 		text.setBackground(GRAY);
 	}
 	
-	public void setValue(double jul1970_seconds){
-		tsModel.setValue(new Double(jul1970_seconds));
-		text.setText(tsModel.toString());
-		//selectField();
-	}
-		
+//	public void setValue(double jul1970_seconds){
+//		tsModel.setValue(new Double(jul1970_seconds));
+//		text.setText(tsModel.toString());
+//		//hiliteField(currentField, true);
+//	}
+//		
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
@@ -154,8 +164,6 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
 			//  change displayed time, but no need to issue updateData() calls
 			((CalendarSpinnerModel)tsModel).setZoneOffset(tzCombo.getZoneOffset());
 			text.setText(tsModel.toString());
-			//tsModel.selectField(text);
-			System.err.println("New timeVal is " + tsModel.getValue());
 		}
 	}
 }

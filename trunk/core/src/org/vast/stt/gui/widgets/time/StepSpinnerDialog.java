@@ -25,8 +25,10 @@ public class StepSpinnerDialog extends Dialog {
 	static final double DEFAULT_TIME_STEP = 60.0;
 	private double timeStep = DEFAULT_TIME_STEP;
 	
-	public StepSpinnerDialog(Shell parent){
+	public StepSpinnerDialog(Shell parent, double val){
 		super(parent);
+//		this.timeStep = 1e11;
+		this.timeStep = val;
 		this.open();
 	}
 
@@ -35,13 +37,13 @@ public class StepSpinnerDialog extends Dialog {
 		//  made it 2 columns because I coudn't get the damned spinner to center otherwise...
 		comp.setLayout(new GridLayout(2, true));
 		//  step Spinner
-		stepSpinner = new TimeSpinner(comp, "Time Step");
+		stepSpinner = new TimeSpinner(comp, "Step Time");
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.horizontalSpan = 2;
 		stepSpinner.setLayoutData(gridData);
 		
-		stepSpinner.setValue(DEFAULT_TIME_STEP);
+		stepSpinner.setValue(timeStep);
 		stepSpinner.resetCaret();
 		
 		return comp;
@@ -54,7 +56,7 @@ public class StepSpinnerDialog extends Dialog {
 	
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("Adjust Time Step");
+        shell.setText("Adjust Step Time");
     }
 
     protected void buttonPressed(int buttonId) {
@@ -63,7 +65,6 @@ public class StepSpinnerDialog extends Dialog {
     	} else if(buttonId == DEFAULT_ID){
     		timeStep = DEFAULT_TIME_STEP;
     		stepSpinner.setValue(timeStep);
-    		stepSpinner.resetCaret();
     	}
     	super.buttonPressed(buttonId);
     }    

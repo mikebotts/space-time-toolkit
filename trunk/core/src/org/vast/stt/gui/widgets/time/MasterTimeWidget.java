@@ -29,7 +29,7 @@ public final class MasterTimeWidget
 {
     private Group mainGroup;
     protected CalendarSpinner absTimeSpinner;
-    protected TimeSpinner stepSpinner;
+    protected StepSpinner stepTimeSpinner;
     protected Button setBtn;
     protected Button baseAtNowBtn;    
     protected double timeStep = 3.0; //  timeStep in seconds
@@ -42,7 +42,7 @@ public final class MasterTimeWidget
     public MasterTimeWidget(Composite parent, Object layoutData, boolean showTimeAtNow) {
     	this.showTimeAtNow = showTimeAtNow;
         init(parent, layoutData);
-        stepSpinner.resetCaret();
+        //stepTimeSpinner.resetCaret();
     }
     
     public void setTitle(String title){
@@ -71,7 +71,7 @@ public final class MasterTimeWidget
         	layout.marginBottom = -17;
         mainGroup.setLayout(layout);
 
-        //  MastermTime
+        //  MasterTime
         absTimeSpinner = new CalendarSpinner(mainGroup, "Master Time");
         GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.RIGHT;
@@ -84,13 +84,13 @@ public final class MasterTimeWidget
         gridData = new GridData();
         gridData.horizontalAlignment = SWT.LEFT;
         setBtn.setLayoutData(gridData);
-        setBtn.setToolTipText("Change the step value shown in the Time Step Spinner");
+        setBtn.setToolTipText("Change the step value shown in the Step Time Spinner");
         
-        stepSpinner = new TimeSpinner(mainGroup, "Time Step");
-        stepSpinner.setValue(timeStep);
+        stepTimeSpinner = new StepSpinner(mainGroup, "Step Time");
+        stepTimeSpinner.setValue(timeStep);
         gridData = new GridData();
         gridData.horizontalAlignment = SWT.RIGHT;
-        stepSpinner.setLayoutData(gridData);
+        stepTimeSpinner.setLayoutData(gridData);
 
 //      Base at Now Btn...
 		//  Only needed for OGC services, but including for all 
@@ -114,7 +114,7 @@ public final class MasterTimeWidget
     public void setEnabled(boolean b){
     	absTimeSpinner.setEnabled(b);
     	absTimeSpinner.rtBtn.setEnabled(b);
-    	stepSpinner.setEnabled(b);
+    	stepTimeSpinner.setEnabled(b);
     	setBtn.setEnabled(b);
     	if(showTimeAtNow)
     		baseAtNowBtn.setEnabled(b);
@@ -122,7 +122,7 @@ public final class MasterTimeWidget
     
     public void addListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
     	 absTimeSpinner.addTimeSpinnerListener(spinnerListener);
-    	 stepSpinner.addTimeSpinnerListener(spinnerListener);
+    	 stepTimeSpinner.addTimeSpinnerListener(spinnerListener);
          absTimeSpinner.rtBtn.addSelectionListener(selectionListener);
          setBtn.addSelectionListener(selectionListener);
          if(showTimeAtNow)
@@ -131,7 +131,7 @@ public final class MasterTimeWidget
     
     public void removeListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
    	    absTimeSpinner.addTimeSpinnerListener(spinnerListener);
-   	    stepSpinner.addTimeSpinnerListener(spinnerListener);
+   	    stepTimeSpinner.addTimeSpinnerListener(spinnerListener);
         absTimeSpinner.rtBtn.addSelectionListener(selectionListener);
         setBtn.addSelectionListener(selectionListener);
         if(showTimeAtNow)
