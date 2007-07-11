@@ -52,7 +52,6 @@ public class TimeSpinner
 	int currentField;  // the currently selected Field in the StyledText widget
 	private int currentCaretOffset = 0;
 	Integer [] start, len;  //  Ts Model loads these, but doesn't need them subsequently
-	String formatStr;
 	Font entryFont;
 	Button upBtn, downBtn;
 	TimeSpinnerModel tsModel;
@@ -72,25 +71,51 @@ public class TimeSpinner
 	
 	public TimeSpinner(Composite parent, String label) {
 		this();
-		formatStr = "YYYY DDD HH:mm:SS";
 		tsModel = new TimeSpinnerModel("YYYY DDD HH:mm:SS");
 		start = tsModel.getStart();
 		len = tsModel.getLength();
 		initGui(parent, label);
+		addListeners();
 		//  Should really generate initial data from formatStr, but I don't 
 		//  think it will use this anyway.  In practice, setValue(double) will
 		//  be called at initialization
 		text.setText("0000 000 00:00:00");
+		//text.setSize(300, 25);
 		resetCaret();
+	}
+	
+	public void addListeners(){
+		text.addTraverseListener(this);
+		text.addMouseListener(this);
+		text.addKeyListener(this);
+		text.addFocusListener(this);
+		upBtn.addMouseListener(this);
+    	upBtn.addFocusListener(this);
+    	downBtn.addMouseListener(this);
+    	downBtn.addFocusListener(this);
 	}
 	
 	public void setLayoutData(GridData gridData){
 		mainGroup.setLayoutData(gridData);
 	}
 	
+	/**
+	 * Fixed font (like courier) would look better, but it makes the text area
+	 * too wide to fit in the TimeExtent widget without horizontal scrollbar.
+	 * Variable width font causes width to vary when month is changing, also
+	 * producing unwanted visual behavior.  Finally, hardwiring a font value in 
+	 * like I have done here is system dependent.  We really need a FontRegistry
+	 * in STT, but this won't fix the fixed vs. variable-width issue.  For that
+	 */
 	protected void initFont(){
 		Display display = PlatformUI.getWorkbench().getDisplay();
+		//entryFont = new Font(display, new FontData("lucida console", 9, SWT.NORMAL));
 		entryFont = new Font(display, new FontData("arial", 9, SWT.NORMAL));
+		
+//		FontData [] fonts = display.getFontList(null, true);
+//		for(int i=0; i<fonts.length; i++){
+//			System.err.println(fonts[i]);
+//		}
 	}
 	
 	protected void initGui(Composite parent, String label){
@@ -110,14 +135,9 @@ public class TimeSpinner
 		//gridData.heightHint = 18;
 		text.setLayoutData(gridData);
 		text.setFont(entryFont);
-		text.setToolTipText(formatStr);
+		text.setToolTipText(tsModel.formatStr);
 		activeBackground = text.getBackground();
 		
-		text.addTraverseListener(this);
-		text.addMouseListener(this);
-		text.addKeyListener(this);
-		text.addFocusListener(this);
-
 		spinnerGroup = new Composite(mainGroup, SWT.SHADOW_NONE);
 		gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
@@ -136,15 +156,13 @@ public class TimeSpinner
 		gridData.heightHint = BTN_SIZE;
 		gridData.widthHint = BTN_SIZE;
     	upBtn.setLayoutData(gridData);
-    	upBtn.addMouseListener(this);
-    	upBtn.addFocusListener(this);
+    	
 		downBtn = new Button(spinnerGroup, SWT.ARROW | SWT.DOWN);
 		gridData = new GridData();
 		gridData.heightHint = BTN_SIZE;
 		gridData.widthHint = BTN_SIZE;
 		downBtn.setLayoutData(gridData);
-    	downBtn.addMouseListener(this);
-    	downBtn.addFocusListener(this);
+    	
 	}
 
 	public void setEnabled(boolean b){
@@ -157,7 +175,7 @@ public class TimeSpinner
 			text.setBackground(GRAY);
 	}
 
-	private void timeUp(){
+	protected void timeUp(){
 		int caretPos;
 		if(text.isFocusControl())
 			caretPos = text.getCaretOffset();
@@ -171,7 +189,7 @@ public class TimeSpinner
 		publishTimeChanged();
 	}
 	
-	private void timeDown(){
+	protected void timeDown(){
 		int caretPos;
 		if(text.isFocusControl())
 			caretPos = text.getCaretOffset();
@@ -185,7 +203,7 @@ public class TimeSpinner
 		publishTimeChanged();
 	}
 	
-	private void publishTimeChanged(){
+	protected void publishTimeChanged(){
 		TimeSpinnerListener tsTmp = null;
 		double t = getValue();
 		for(int i=0; i<timeSpinnerListeners.size(); i++){
@@ -240,7 +258,7 @@ public class TimeSpinner
 			childThread = child;
 		}
 		
-		public void run(){
+		public  void run(){
 			try {		
 				Thread.sleep(300l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
 				while(btnDown){
@@ -265,6 +283,7 @@ public class TimeSpinner
 	public void setValue(double value){
 		tsModel.setValue(new Double(value));
 		text.setText(tsModel.toString());
+		hiliteField(currentField, true);
 	}
 	
 	public double getValue(){
@@ -284,7 +303,7 @@ public class TimeSpinner
         return 0;  //  Default to 0th field, but this is really an error
 	}
 
-	public void hiliteField(int field, boolean onOff){
+	protected void hiliteField(int field, boolean onOff){
 		//  Set new field to hilite colors
         Display display = text.getDisplay();
         Color fgColor, bgColor;
@@ -310,7 +329,7 @@ public class TimeSpinner
     	text.setCaretOffset(currentCaretOffset);
     	hiliteField(currentField, true);
     }
-    	
+    
     /********************************************************/
     ////////   All listener methods from here down  /////////
     /********************************************************/
