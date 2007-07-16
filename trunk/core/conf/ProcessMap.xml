@@ -89,7 +89,7 @@
    
    <Process>
       <uri>urn:vast:def:process:tleParser:1.0</uri>
-      <class>org.sensorML.process.TLEParser_Process</class>
+      <class>org.sensorML.process.TLEParser2_Process</class>
    </Process>
    
    <Process>
