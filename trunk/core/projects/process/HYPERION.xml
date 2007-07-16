@@ -834,7 +834,7 @@
                      <sml:ParameterList>
                         <sml:parameter name="tleDataUrl">
                            <swe:Category>
-                              <swe:value>\\C:/eo-1.txt</swe:value>
+                              <swe:value>eo-1.txt</swe:value>
                            </swe:Category>
                         </sml:parameter>
                      </sml:ParameterList>

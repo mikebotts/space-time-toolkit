@@ -1072,7 +1072,7 @@
                      <sml:ParameterList>
                         <sml:parameter name="tleDataUrl">
                            <swe:Category>
-                              <swe:value>C:/dmsp-f13.txt</swe:value>
+                              <swe:value>dmsp-f13.txt</swe:value>
                            </swe:Category>
                         </sml:parameter>
                      </sml:ParameterList>

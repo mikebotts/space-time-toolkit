@@ -1067,7 +1067,7 @@
                      <sml:ParameterList>
                         <sml:parameter name="tleDataUrl">
                            <swe:Category>
-                              <swe:value>C:/trmm.txt</swe:value>
+                              <swe:value>trmm.txt</swe:value>
                            </swe:Category>
                         </sml:parameter>
                      </sml:ParameterList>
