@@ -83,6 +83,35 @@ public class GridOptionHelper
 		
 		return fillColor;
 	}
+	
+	public float getGridFillOpacity(){
+		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
+		if(fill == null) {
+			System.err.println("Fill is NULL.  Do what now?");
+			return 1.0f;		
+			//return null;
+		}
+		
+		ScalarParameter opSp = fill.getOpacity();
+		
+		if(!opSp.isConstant()) {
+			System.err.println("Opacity is mapped- Not supported yet");
+			return 1.0f;		
+		}
+		
+		return ((Float)opSp.getConstantValue()).floatValue();
+	}
+	
+	public void setGridFillOpacity(float f){
+		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
+		ScalarParameter opSp = new ScalarParameter();
+		opSp.setConstant(true);
+		opSp.setConstantValue(f);
+		fill.setOpacity(opSp);
+		//  Not sure why we have to set opacity AND alpha to the same val here, but that's 
+		//  thwe way it is done in SLDReader
+		fill.getColor().setAlpha(opSp);
+	}
 		
 	public float getGridBorderWidth(){
 		Stroke stroke = ((GridBorderSymbolizer)symbolizer).getStroke();
