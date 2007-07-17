@@ -357,12 +357,13 @@ public class OptionControl extends Composite implements KeyListener
 			System.err.println("OptionControl.addSelListnr():  ControlType unrecognized");
 		}
 	}
-	
+
 	public void keyPressed(KeyEvent e) {
 		//  accept only numbers and decimal point
 		e.doit = ( (e.keyCode >=48 && e.keyCode <= 57) || e.keyCode == 46 );
-		//	and bkspace/delete/LFT/RT ARROW
-		e.doit = e.doit || e.keyCode == 8 || e.keyCode == 127 || e.keyCode == 16777219 || e.keyCode == 16777220;
+		//	and bkspace/delete/ENTER/LFT/RT ARROW/
+		e.doit = e.doit || e.keyCode == 8 || e.keyCode == 127 || e.keyCode == 13 ||
+				 e.keyCode == 16777219 || e.keyCode == 16777220;
 	}
 
 	public void keyReleased(KeyEvent e) {
