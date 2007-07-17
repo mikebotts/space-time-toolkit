@@ -57,9 +57,6 @@ public class SymbolizerOptionChooser extends OptionChooser
 			optionController = new BasicGridFillController(optComp, (GridSymbolizer)sym);
 		} else if (sym instanceof GridBorderSymbolizer) {
 			optionController = new BasicGridBorderController(optComp, (GridSymbolizer)sym);
-	   //  Don't think I need this check or BasicGridController any longer
-	   //} else if (sym instanceof GridSymbolizer) {
-	   //		optionController = new BasicGridController(optComp, (GridSymbolizer)sym);
 		} else if (sym instanceof RasterSymbolizer) {
 			optionController = new BasicRasterController(optComp, (RasterSymbolizer)sym);
 		} else if (sym instanceof TextSymbolizer) {
