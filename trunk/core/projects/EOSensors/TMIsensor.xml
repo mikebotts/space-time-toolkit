@@ -133,7 +133,7 @@
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
-               <sld:TextureSymbolizer id="TMI_TEXTURE" enabled="true">
+               <sld:TextureSymbolizer id="TMI_TEXTURE" enabled="true">                
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -299,7 +299,863 @@
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
          </DataItem>
       </member> 
-   <!--    <member visible="false">
+      <member visible="false">
+         <DataItem>
+            <name>TMI All Channel 10m Wind Speed</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="TMIL2c_TIME">
+                        <baseTime>2007-01-04T10:23:00</baseTime>
+                        <leadTime>2700</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="../process/TMIL2c_WSAC_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_WSAC</value>
+                  <value process="sosScan" path="sosOptions/observables">WSAC</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WSAC</ogc:PropertyName>
+                              <TableValues>0 0 1.2 247 2.4 135 3.6 255 4.8 000 6 000 7.2 000 8.4 255 9.6 255 10.8 255 12 135 15.4 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WSAC</ogc:PropertyName>
+                              <TableValues>0 0 1.2 160 2.4 000 3.6 000 4.8 000 6 255 7.2 127 8.4 255 9.6 000 10.8 255 12 49 15.4 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WSAC</ogc:PropertyName>
+                              <TableValues>0 0 1.2 127 2.4 135 3.6 255 4.8 255 6 255 7.2 000 8.4 000 9.6 000 10.8 255 12 49 15.4 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI 19-37GHz 10m Wind Speed</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                     <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_WS1937_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_WS1937</value>
+                  <value process="sosScan" path="sosOptions/observables">WS1937</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WS1937</ogc:PropertyName>
+                              <TableValues>0 0 1.2 247 2.4 135 3.6 255 4.8 000 6 000 7.2 000 8.4 255 9.6 255 10.8 255 12 135 15.4 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WS1937</ogc:PropertyName>
+                              <TableValues>0 0 1.2 160 2.4 000 3.6 000 4.8 000 6 255 7.2 127 8.4 255 9.6 000 10.8 255 12 49 15.4 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WS1937</ogc:PropertyName>
+                              <TableValues>0 0 1.2 127 2.4 135 3.6 255 4.8 255 6 255 7.2 000 8.4 000 9.6 000 10.8 255 12 49 15.4 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>TMI Sea Surface Temperature</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                     <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_SST_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_SST</value>
+                  <value process="sosScan" path="sosOptions/observables">SST</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/seaSurfaceTemperature/SST</ogc:PropertyName>
+                              <TableValues>0 0 3 247 6 135 9 255 12 000 15 000 18 000 21 255 24 255 27 255 30 135 34 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/seaSurfaceTemperature/SST</ogc:PropertyName>
+                              <TableValues>0 0 3 160 6 000 9 000 12 000 15 255 18 127 21 255 24 000 27 255 30 49 34 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/seaSurfaceTemperature/SST</ogc:PropertyName>
+                              <TableValues>0 0 3 127 6 135 9 255 12 255 15 255 18 000 21 000 24 000 27 255 30 49 34 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI Columnar Cloud Water</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_CCW_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_CCW</value>
+                  <value process="sosScan" path="sosOptions/observables">CCW</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/columnarCloudWater/CCW</ogc:PropertyName>
+                              <TableValues>0 0 15 247 30 135 45 255 60 000 75 000 90 000 105 255 120 255 135 255 150 135 165 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/columnarCloudWater/CCW</ogc:PropertyName>
+                              <TableValues>0 0 15 160 30 000 45 000 60 000 75 255 90 127 105 255 120 000 135 255 150 49 165 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/columnarCloudWater/CCW</ogc:PropertyName>
+                              <TableValues>0 0 15 127 30 135 45 255 60 255 75 255 90 000 105 000 120 000 135 255 150 49 165 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI 11GHz Rain Rate</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_RR11_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_RR11</value>
+                  <value process="sosScan" path="sosOptions/observables">11GHz</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/11GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 247 4 135 6 255 8 000 10 000 12 000 14 255 16 255 18 255 20 135 22 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/11GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 160 4 000 6 000 8 000 10 255 12 127 14 255 16 000 18 255 20 49 22 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/11GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 127 4 135 6 255 8 255 10 255 12 000 14 000 16 000 18 255 20 49 22 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI 19-37GHz Rain Rate</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_RR1937_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_RR1937</value>
+                  <value process="sosScan" path="sosOptions/observables">19-37GHz</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/19-37GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 247 4 135 6 255 8 000 10 000 12 000 14 255 16 255 18 255 20 135 22 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/19-37GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 160 4 000 6 000 8 000 10 255 12 127 14 255 16 000 18 255 20 49 22 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/19-37GHz</ogc:PropertyName>
+                              <TableValues>0 0 2 127 4 135 6 255 8 255 10 255 12 000 14 000 16 000 18 255 20 49 22 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI Cloud Water Vapor</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_CWV_Process.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_CWV</value>
+                  <value process="sosScan" path="sosOptions/observables">CWV</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 247 1300 135 1950 255 2600 000 3250 000 3900 000 4550 255 5200 255 5850 255 6500 135 7300 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 160 1300 000 1950 000 2600 000 3250 255 3900 127 4550 255 5200 000 5850 255 6500 49 7300 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 127 1300 135 1950 255 2600 255 3250 255 3900 000 4550 000 5200 000 5850 255 6500 49 7300 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI Cloud Water Vapor Georeferenced</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_CWV_Process_Geo.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_CWV</value>
+                  <value process="sosScan" path="sosOptions/observables">CWV</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="TMIL2c_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 247 1300 135 1950 255 2600 000 3250 000 3900 000 4550 255 5200 255 5850 255 6500 135 7300 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 160 1300 000 1950 000 2600 000 3250 255 3900 127 4550 255 5200 000 5850 255 6500 49 7300 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>0 0 650 127 1300 135 1950 255 2600 255 3250 255 3900 000 4550 000 5200 000 5850 255 6500 49 7300 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+<!--      <member visible="false">
+         <DataItem>
+            <name>TMI 19-37GHz 10m Wind Speed</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_WS1937</value>
+                  <value process="sosScan" path="sosOptions/observables">WS1937</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>TMI Columnar Cloud Water</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_CCW</value>
+                  <value process="sosScan" path="sosOptions/observables">CCW</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>TMI Columnar Water Vapor</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_CWV</value>
+                  <value process="sosScan" path="sosOptions/observables">CWV</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>TMI 11GHz Rain Rate</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_RR11</value>
+                  <value process="sosScan" path="sosOptions/observables">RR11</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member>  
+      <member visible="false">
+         <DataItem>
+            <name>TMI 19-37GHz Rain Rate</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_RR1937</value>
+                  <value process="sosScan" path="sosOptions/observables">RR1937</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>TMI Sea Surface Temperature</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Data Process Chain</name>
+                  <timeExtent xlink:href="#TMIL2c_TIME"/>
+                  <process xlink:href="../process/TMIL2c_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">TMI_SST</value>
+                  <value process="sosScan" path="sosOptions/observables">SST</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#TMIL2c_TEXTURE"/>
+         </DataItem>
+      </member> 
+       <member visible="false">
          <DataItem>
             <name>TMI 85GHz Vertical Polarization Data</name>
             <dataProvider>
