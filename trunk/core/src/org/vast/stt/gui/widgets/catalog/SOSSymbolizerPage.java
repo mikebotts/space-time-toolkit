@@ -22,7 +22,9 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.vast.stt.gui.widgets.symbolizer.SymbolizerOptionChooser;
 import org.vast.stt.style.SymbolizerFactory;
+import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 
 /**
  * <p><b>Title:</b>
@@ -59,6 +61,16 @@ public class SOSSymbolizerPage extends WizardPage
 		checkboxTableViewer.addCheckStateListener(this);
 		
 		setControl(checkboxTableViewer.getTable());
+	}
+	
+	public String [] getSelectedSymbolizerTypes(){
+		Object [] checked = checkboxTableViewer.getCheckedElements();
+		//  convert to String []
+		String [] selSymTypes = new String[checked.length];
+		for(int i=0; i<checked.length; i++){
+			selSymTypes[i] = (String)checked[i];
+		}
+		return selSymTypes;
 	}
 	
 	public void checkStateChanged(CheckStateChangedEvent event) {

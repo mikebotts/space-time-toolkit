@@ -19,6 +19,7 @@ import java.util.List;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
+import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.process.DataProcess;
 import org.vast.stt.apps.STTPlugin;
@@ -26,8 +27,11 @@ import org.vast.stt.process.SOS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.sml.SMLProvider;
+import org.vast.stt.style.SymbolizerFactory;
+import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 import org.vast.util.ExceptionSystem;
 import org.vast.xml.DOMHelper;
+import org.w3c.dom.Element;
 
 /**
  * <p><b>Title:</b>
@@ -104,6 +108,17 @@ public class SOSLayerFactory
 		dbs.setStringValue(procedure);
 		procDv.setData(dbs);
 		item.setName(item.getName() + "_" + procedure);
+	}
+	
+	public static DataItem createSOSLayer(String offering, String [] mappings, String symType){
+		System.err.println("Create SOS layer: " + offering + " " + mappings[0] + " " + symType);
+		DataItem item = new DataItem();
+		
+		//item.setDataProvider(provider);
+		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(offering, symType);
+        item.getSymbolizers().add(sym);
+		 
+        return item;
 	}
 	
 }
