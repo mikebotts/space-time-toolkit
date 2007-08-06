@@ -196,8 +196,7 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 		int lastSlashIndex;
 		for(int i=0; i<srcArr.length; i++){
 			lastSlashIndex = target.lastIndexOf('/');
-			stmp = (lastSlashIndex == -1) ? target 
-			    : target.substring(lastSlashIndex+1);
+			stmp = (lastSlashIndex == -1) ? target : target.substring(lastSlashIndex+1);
 					
 			if(stmp.equalsIgnoreCase(srcArr[i]))
 				return i;
@@ -223,6 +222,26 @@ public class AdvancedGeometryTab extends ScrolledComposite implements SelectionL
 	
 	public void setMapFromBreak(int i){
 		mapFromCombo[4].select(i);
+	}
+	
+	public String getMapFromX(){
+		return mapFromCombo[0].getText();
+	}
+	
+	public String getMapFromY(){
+		return mapFromCombo[1].getText();
+	}
+	
+	public String getMapFromZ(){
+		return mapFromCombo[2].getText();
+	}
+	
+	public String getMapFromTime(){
+		return mapFromCombo[3].getText();
+	}
+	
+	public String getMapFromBreak(){
+		return mapFromCombo[4].getText();
 	}
 	
 	public void close(){
