@@ -45,11 +45,24 @@ import org.vast.util.ExceptionSystem;
  */
 public class SymbolizerFactory {
 
-	public static enum SymbolizerType
+	public enum SymbolizerType
     {
-        point, line, grid, polygon, raster, texture, label
+        point("point"), line("line"), grid("grid"), polygon("polygon"), raster("raster"), 
+        texture("texture"), label("label");
+        
+        String typeStr;
+        
+        private SymbolizerType(String type){
+        	this.typeStr = type;
+        }
     };
 	
+   
+    public static Symbolizer createDefaultSymbolizer(String symName, String symTypeStr){
+    	SymbolizerType symType = SymbolizerType.valueOf(symTypeStr);
+    	return createDefaultSymbolizer(symName, symType);
+    }
+    
     public static Symbolizer createDefaultSymbolizer(String symName, SymbolizerType symType)
     {
         Symbolizer newSymbolizer = null;
