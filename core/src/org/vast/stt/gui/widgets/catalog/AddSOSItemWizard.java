@@ -13,11 +13,15 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.vast.ows.sos.SOSLayerCapabilities;
+import org.vast.stt.project.tree.DataItem;
 
 /**
  * <p><b>AddItemWizard:</b>
@@ -38,6 +42,7 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 	SOSMappingPage mappingPage;
 	SOSSymbolizerPage symPage;
 	SOSOfferingChooserPage sosChooserPage;
+	DataItem [] newItems;
 	boolean canFinish = false;
 	
 	public AddSOSItemWizard(SOSLayerCapabilities caps){
@@ -60,6 +65,20 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 
 	@Override
 	public boolean performFinish() {
+		HashMap <String , String[]> selMappings = mappingPage.getSelectedMappings();
+		String [] symTypes = symPage.getSelectedSymbolizerTypes();
+		Iterator<String> offIt = selMappings.keySet().iterator();
+		String offTmp;
+		String [] mapTmp;
+		newItems = new DataItem[selMappings.size()];
+		while(offIt.hasNext()){
+			offTmp = offIt.next();
+			mapTmp = selMappings.get(offTmp);
+			for(int i=0; i<symTypes.length; i++){
+				newItems[i] = SOSLayerFactory.createSOSLayer(offTmp, mapTmp, symTypes[i]);
+			}
+		}
+		
 		//  Drop items 
 		return true;
 	}
@@ -70,6 +89,10 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 	
 	public boolean canFinish(){
 		return canFinish;
+	}
+
+	public DataItem[] getNewItems() {
+		return newItems;
 	}
 
 }

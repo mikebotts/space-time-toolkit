@@ -32,6 +32,7 @@ import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
+import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSQuery;
@@ -60,8 +61,13 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 	private AdvancedGeometryTab geometryComp;
 	Button procBtn, directBtn;
 	List<String>possibleMappings = new ArrayList<String>(3);
+	//  mappings contains possible mappings for each offering
 	HashMap<String, String []> mappings = new HashMap<String, String[]>(3);
+	//  selectedMappings contains user-selected mappings for each offering (from the combos)
+	HashMap<String, String []> selectedMappings = new HashMap<String, String[]>(3);
+	
 	int offeringIndex = 0;
+	private Vector3d foiLocation;
 	
 	public SOSMappingPage(SOSLayerCapabilities caps){
 		super("Map Offerings");
@@ -86,7 +92,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		if(components == null){
 			components = requestComponents();
 			if(components == null)
-				return null;//  disable mapping controls for this observation
+				return null;//  didn't work, return null
 			else 
 				mappings.put(offerings[index], components);
 		}
@@ -107,6 +113,14 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		//  of user selecting prev/next repeatedlyd
 		if(component != null)
 			findPossibleMappings(component, component.getName());
+		//  Add lat/lon from FOI- this assumes FOI is a simple point, which may not always
+		//  be the case, but the SOSResponseReader is using a Vector3d, so it needs to 
+		//  be modified there first to support more complex geom in FOI.
+		if(foiLocation != null) {
+			possibleMappings.add("FeatureOfInterest/latitude");
+			possibleMappings.add("FeatureOfInterest/longitude");
+			possibleMappings.add("FeatureOfInterest/altitude");
+		}
 		String [] mappings = possibleMappings.toArray(new String[]{});
 		possibleMappings.clear();
 		return(mappings);
@@ -181,6 +195,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 
 			// display data structure and encoding
 			DataComponent dataInfo = reader.getDataComponents();
+			foiLocation = reader.getFoiLocation();
 			return dataInfo;
 		} catch (Exception e) {
 			String server = query.getPostServer();
@@ -264,8 +279,23 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		return this;
 	}
 	
+	public HashMap<String, String []> getSelectedMappings(){
+		return selectedMappings;
+	}
+	
+	//  Store selected Mappings so we can contruct the Symbolizer at the completion of the wizard
+	private void storeSelectedMappings(){
+		String [] selMappings = new String[5];
+		selMappings[0] = geometryComp.getMapFromX();
+		selMappings[1] = geometryComp.getMapFromY();
+		selMappings[2] = geometryComp.getMapFromZ();
+		selMappings[3] = geometryComp.getMapFromTime();
+		selMappings[4] = geometryComp.getMapFromBreak();
+		selectedMappings.put(offerings[offeringIndex], selMappings);
+	}
+	
 	public IWizardPage getNextPage(){
-		//storeCurrentMappings();
+		storeSelectedMappings();
 		if(++offeringIndex < offerings.length) {
 			String [] dataComponents = getComponents(offeringIndex);
 			if(dataComponents != null) {
