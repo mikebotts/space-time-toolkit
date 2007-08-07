@@ -13,9 +13,9 @@
       <member>
          <Scene id="SCENE_01">
             <name>World View</name>            
-            <time autoUpdate="realtime" updatePeriod="3">
+            <time updatePeriod="3">
                <TimeExtent>
-                  <baseTime>2007-06-03T15:33:00Z</baseTime>
+                  <baseTime>2007-06-03T06:00:00Z</baseTime>
                   <stepTime>60</stepTime>
                </TimeExtent>
             </time>            
@@ -1327,10 +1327,11 @@
                <SensorMLProvider id="GOES_VIS">
                   <name>GOES Visible WCS</name>
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
-                  <timeExtent>
+                  <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="GOES_TIME">
                         <!--<baseTime>2005-08-28T16:00:00</baseTime>-->
-                        <baseTime>2007-06-03T07:46:00</baseTime>
+                        <!--<baseTime>2007-06-03T07:46:00</baseTime>-->
+                        <baseTime>2007-06-03T06:00:00</baseTime>
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
@@ -1361,7 +1362,7 @@
             <member>
                <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
                   <name>GOES Data Lookup</name>
-                  <timeExtent>
+                  <timeExtent  autoUpdate="#SCENE_01" >
                      <TimeExtent id="GOES_INTERSECT_TIME">
                         <baseTime>2007-06-03T06:00:00</baseTime>
                         <leadTime>7200</leadTime>
