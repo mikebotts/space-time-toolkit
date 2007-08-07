@@ -534,7 +534,7 @@
                         </member>
                         <member>
                            <DataItem>
-                              <name>GOES Lookup on Nadir Track</name>
+                              <name>GOES CTP on Cloudsat Track</name>
                               <dataProvider xlink:href="#GOES_INTERSECT_PROVIDER"/>
                               <style>
                                  <sld:LineSymbolizer enabled="true">
