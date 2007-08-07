@@ -295,7 +295,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./TMI.xml#TMI_GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./TMIL2c.xml#TMI_GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
                <sml:component name="rayIntersectEllipsoid">
                   <sml:ProcessModel>

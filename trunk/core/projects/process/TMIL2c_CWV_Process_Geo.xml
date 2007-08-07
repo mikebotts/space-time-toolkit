@@ -246,7 +246,7 @@
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <!-- <sml:input name="pass-through" xlink:href="#NAV_DATA"/> -->   
                            <sml:input name="countingRange">
                               <swe:DataRecord>
                                  <swe:field name="start">
