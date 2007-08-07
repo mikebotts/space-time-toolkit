@@ -2,7 +2,7 @@
 <STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
    <DataList id="GIS">
       <name>GIS Data</name>
-      <member visible="false">
+      <member visible="true">
          <DataItem>
             <name>Coast Lines - 100km</name>
             <dataProvider>
