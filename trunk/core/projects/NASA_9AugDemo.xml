@@ -1,0 +1,1449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>Satellite Demo Project</name>
+      <author>Alex Robin</author>
+      <dateCreated>2006-07-10T09:23:00</dateCreated>
+      <description>Satellite Footprints and Coincidence Search</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>World View</name>            
+            <time updatePeriod="3">
+               <TimeExtent>
+                  <baseTime>2007-06-03T06:00:00Z</baseTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>            
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>0 0 10</cameraPos>
+                  <targetPos>0 0 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>6.0</orthoWidth>
+                  <orthoHeight>4.0</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>NASA Project</name>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/>
+                  <member>
+                     <DataList>
+                        <name>Coverage Data</name>
+                        <member visible="false">
+                           <DataItem>
+                              <name>Max Surface Temperature</name>
+                              <dataProvider href="#PROVIDER_NWS"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>surfaceTemp/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>surfaceTemp/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill-blue">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 1.0 82.5 1.0 87.5 0.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-green">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 1.0 87.5 1.0 90 0.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>0.0 0.0 80 0.0 82.5 0.0 87.5 1.0 90 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                             <TableValues>-100.0 0.0 -100.0 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>surfaceTemp/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>surfaceTemp/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Dimensions>
+                                       <sld:CssParameter name="width">
+                                          <ogc:PropertyName>surfaceTemp/gridWidth</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="length">
+                                          <ogc:PropertyName>surfaceTemp/gridLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Dimensions>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#00FFFF</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <TableScene>
+                              <name>Temperature Table</name>
+                              <contents>
+                                 <DataList>
+                                    <member>
+                                       <DataItem>
+                                          <name>Temp</name>
+                                          <dataProvider href="#PROVIDER_NWS"/>
+                                          <width>200</width>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/temp</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                    <member>
+                                       <DataItem>
+                                          <name>Lat</name>
+                                          <dataProvider href="#PROVIDER_NWS"/>
+                                          <width>200</width>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>surfaceTemp/grid/row/point/lat</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6677</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                 </DataList>
+                              </contents>
+                           </TableScene>
+                        </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>GOES Datasets</name>
+                        <member>
+                           <DataItem>
+                              <name>Region Of Interest</name>
+                              <dataProvider xlink:href="#FLATGRID_PROCESS"/>
+                              <style>
+                                 <sld:GridBorderSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <!--
+                        <member>
+                           <DataItem>
+                              <name>GOES VIS Imagery</name>
+                              <dataProvider xlink:href="#GOES_VIS"/>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:ChannelSelection>
+                                          <sld:GrayChannel>
+                                             <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>
+                                                   0 0 1 2.318181795 2 4.63636359 3 6.954545385 4 9.272726925
+                                                   5 11.59090847 6 13.90909103 7 16.2272718 8 18.54545385 9 20.8636359
+                                                   10 23.18181693 11 25.49999847 12 27.81818205 13 30.1363641 14 32.45454615
+                                                   15 34.77272565 16 37.0909077 17 39.4090923 18 41.7272718 19 44.04545385
+                                                   20 46.36363335 21 48.68181795 22 50.99999745 23 53.3181795 24 55.6363641
+                                                   25 57.9545436 26 60.27272565 27 62.59090515 28 64.90908975 29 67.22726925
+                                                   30 69.54544875 31 71.8636359 32 74.1818154 33 76.4999949 34 78.8181795
+                                                   35 81.136359 36 83.4545385 37 85.772718 38 88.0909077 39 90.4090872
+                                                   40 92.7272667 41 95.04545385 42 97.3636359 43 99.6818154 44 101.9999949
+                                                   45 104.3181795 46 106.636359 47 108.9545385 48 111.2727282 49 113.5909077
+                                                   50 115.9090872 51 118.2272667 52 120.5454539 53 122.8636334 54 125.1818129
+                                                   55 127.4999924 56 129.8181795 57 132.136359 58 134.4545385 59 136.772718
+                                                   60 139.0908975 61 141.4090923 62 143.7272718 63 146.0454513 64 148.3636308
+                                                   65 150.6818103 66 152.9999898 67 155.3181693 68 157.636359 69 159.9545385
+                                                   70 162.272718 71 164.5908975 72 166.909077 73 169.2272565 74 171.545436
+                                                   75 173.863641 76 176.1818205 77 178.5 78 180.8181795 79 183.136359
+                                                   80 185.4545385 81 187.772718 82 190.0909103 83 192.4090898 84 194.7272693
+                                                   85 197.0454488 86 199.3636283 87 201.6818078 88 203.9999873 89 206.3181795
+                                                   90 208.636359 91 210.9545385 92 213.272718 93 215.5908975 94 217.909077
+                                                   95 220.2272565 96 222.5454615 97 224.863641 98 227.1818205 99 229.5
+                                                   100 231.8181795 101 234.136359 102 236.4545385 103 238.772718 104 241.0909077
+                                                   105 243.4090872 106 245.7272667 107 248.0454462 108 250.3636257 109 252.6818052
+                                                   110 255 255 255                                           
+                                                </TableValues>
+                                             </LookUpTable1D>
+                                          </sld:GrayChannel>
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                              <mask>
+                                 <DataItem id="GOES_AL_MASK" enabled="true">
+                                    <name>Alabama Mask</name>
+                                    <dataProvider xlink:href="./BaseLayers.xml#AL_STATE_BOUNDARIES_DATA"/>
+                                    <style>
+                                       <sld:PolygonSymbolizer enabled="true">
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-breaks">
+                                                <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                          </sld:Geometry>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:PolygonSymbolizer>
+                                    </style>
+                                 </DataItem>                            
+                              </mask>
+                              <mask>
+                                 <DataItem id="GOES_BBOX_MASK" enabled="true">
+                                    <name>ROI Mask</name>
+                                    <dataProvider xlink:href="#FLATGRID_PROCESS"/>
+                                    <style>
+                                       <sld:GridFillSymbolizer enabled="true">
+                                          <sld:Dimensions>
+                                             <sld:Axis name="width">
+                                                <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                             </sld:Axis>
+                                             <sld:Axis name="length">
+                                                <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                             </sld:Axis>
+                                          </sld:Dimensions>
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                          </sld:Geometry>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:GridFillSymbolizer>
+                                    </style>                                  
+                                 </DataItem>
+                              </mask>
+                           </DataItem>
+                        </member>
+                        -->
+                        <member>
+                           <DataItem>
+                              <name>GOES IR Imagery</name>
+                              <dataProvider xlink:href="#GOES_IR"/>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:ChannelSelection>
+                                          <sld:BlueChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128 69 0 70 165 128 88 255 0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:BlueChannel>
+                                          <sld:GreenChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0 69 0 70 165 128 88 255 0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:GreenChannel>
+                                          <sld:RedChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128 69 0 70 165 128 88 255 0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:RedChannel>
+                                          <sld:AlphaChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 255 70 255 127 0 255 0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:AlphaChannel>
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                             <!-- <mask xlink:href="#GOES_AL_MASK"/>
+                              <mask xlink:href="#GOES_BBOX_MASK"/>-->
+                              <mask>
+                                 <DataItem id="GOES_AL_MASK" enabled="true">
+                                    <name>Alabama Mask</name>
+                                    <dataProvider xlink:href="./BaseLayers.xml#AL_STATE_BOUNDARIES_DATA"/>
+                                    <style>
+                                       <sld:PolygonSymbolizer enabled="true">
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-breaks">
+                                                <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                          </sld:Geometry>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:PolygonSymbolizer>
+                                    </style>
+                                 </DataItem>                            
+                              </mask>
+                              <mask>
+                                 <DataItem id="GOES_BBOX_MASK" enabled="true">
+                                    <name>ROI Mask</name>
+                                    <dataProvider xlink:href="#FLATGRID_PROCESS"/>
+                                    <style>
+                                       <sld:GridFillSymbolizer enabled="true">
+                                          <sld:Dimensions>
+                                             <sld:Axis name="width">
+                                                <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                             </sld:Axis>
+                                             <sld:Axis name="length">
+                                                <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                             </sld:Axis>
+                                          </sld:Dimensions>
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                          </sld:Geometry>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:GridFillSymbolizer>
+                                    </style>                                  
+                                 </DataItem>
+                              </mask>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>GOES CTP Imagery</name>
+                              <dataProvider xlink:href="#GOES_CTP"/>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:ChannelSelection normalizedColors="true">
+                                          <sld:RedChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 0.6 100 0.6 100 0.57 200 0.71 200 0.00 300 0.00 300 0.12 400 0.06 400 0.00 500 0.00 500 0.49 600 0.93 600 1.00 700 0.82 700 1.00 800 1.00 800 0.71 900 0.53 900 0.78 1000 1.00</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 0.6 100 0.6 100 0.17 200 0.66 200 0.93 300 0.71 300 0.56 400 0.30 400 0.54 500 0.79 500 1.00 600 0.93 600 0.84 700 0.54 700 0.49 800 0.00 800 0.00 900 0.00 900 0.00 1000 0.68</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 0.6 100 0.6 100 0.93 200 0.82 200 0.93 300 0.93 300 1.00 400 0.54 400 0.00 500 0.00 500 0.00 600 0.00 600 0.00 700 0.00 700 0.00 800 0.00 800 0.00 900 0.00 900 0.47 1000 0.72</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:BlueChannel>
+                                          <sld:AlphaChannel>
+                                             <LookUpTable1D>
+                                                <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                                <TableValues>0 0.0 100 0.0 100 1.0</TableValues>
+                                             </LookUpTable1D>
+                                          </sld:AlphaChannel>
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                              <mask xlink:href="#GOES_AL_MASK"/>
+                              <mask xlink:href="#GOES_BBOX_MASK"/>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>GOES CTP on Cloudsat Track</name>
+                              <dataProvider xlink:href="#GOES_INTERSECT_PROVIDER"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>intersection_data/trackLength</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                             <TableValues>0 0.6 99 0.6 100 0.57 199 0.71 200 0.00 299 0.00 300 0.12 399 0.06 400 0.00 499 0.00 500 0.49 599 0.93 600 1.00 699 0.82 700 1.00 799 1.00 800 0.71 899 0.53 900 0.78 1000 1.00</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-green">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                             <TableValues>0 0.6 99 0.6 100 0.17 199 0.66 200 0.93 299 0.71 300 0.56 399 0.30 400 0.54 499 0.79 500 1.00 599 0.93 600 0.84 699 0.54 700 0.49 799 0.00 800 0.00 899 0.00 900 0.00 1000 1.00</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-blue">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>intersection_data/goes_data/element/value</ogc:PropertyName>
+                                             <TableValues>0 0.6 99 0.6 100 0.93 199 0.82 200 0.93 299 0.93 300 1.00 399 0.54 400 0.00 499 0.00 500 0.00 599 0.00 600 0.00 699 0.00 700 0.00 799 0.00 800 0.00 899 0.00 900 0.47 1000 1.00</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">4</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:PointSymbolizer enabled="false">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>intersection_data/goes_data/element/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Graphic>
+                                       <sld:Mark>
+                                          <sld:WellKnownName>circle</sld:WellKnownName>
+                                          <sld:Fill>
+                                             <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                          </sld:Fill>
+                                       </sld:Mark>
+                                       <sld:Size>4</sld:Size>
+                                    </sld:Graphic>
+                                 </sld:PointSymbolizer>
+                              </style>
+                              <event type="left-click">
+                                 <ShowPopup autoClose="true">
+                                    <title>My Popup</title>
+                                    <content>
+                                       <sld:TextSymbolizer>
+                                          <sld:Label>GOES Lookup</sld:Label>
+                                       </sld:TextSymbolizer>
+                                    </content>
+                                 </ShowPopup>
+                              </event>
+                           </DataItem>
+                        </member>
+                        <member>
+                           <DataItem>
+                              <name>Cirrus Detection on Cloudsat Track</name>
+                              <dataProvider xlink:href="#CIRRUS_DETECTION"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-breaks">
+                                          <ogc:PropertyName>Data/SegmentData/TotalNumberOfPoints</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/Longitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/Latitude</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke-red">
+                                          <LookUpTable1D>
+                                             <ogc:PropertyName>Data/SegmentData/SegmentPoints/PointData/InRange</ogc:PropertyName>
+                                             <TableValues>0 0.0 1 1.0</TableValues>
+                                          </LookUpTable1D>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">4</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <TableScene>
+                              <name>GOES Data Table</name>
+                              <contents>
+                                 <DataList>
+                                    <member>
+                                       <DataItem>
+                                          <name>Sat ID</name>
+                                          <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>intersection_data/instrumentID</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                    <member>
+                                       <DataItem>
+                                          <name>Begin Time</name>
+                                          <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>intersection_data/beginTime</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                    <member>
+                                       <DataItem>
+                                          <name>End Time</name>
+                                          <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>intersection_data/endTime</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                    <member>
+                                       <DataItem>
+                                          <name>Match Ratio (%)</name>
+                                          <dataProvider href="#GOES_INTERSECT_PROVIDER"/>
+                                          <style>
+                                             <sld:TextSymbolizer enabled="true">
+                                                <sld:Label>
+                                                   <ogc:PropertyName>intersection_data/matchRatio</ogc:PropertyName>
+                                                </sld:Label>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:TextSymbolizer>
+                                          </style>
+                                       </DataItem>
+                                    </member>
+                                 </DataList>
+                              </contents>
+                           </TableScene>
+                        </member>
+                     </DataList>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Satellite Swaths</name>
+                        <member visible="false">
+                           <DataItem>
+                              <name>NOAA15 AMSU-A Footprints</name>
+                              <dataProvider href="#PROVIDER_NOAA15_AMSUA"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridMeshSymbolizer id="GRID_MESH" enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000AA</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#0000ff</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                              <event type="left-click">
+                                 <ShowPopup autoClose="true">
+                                    <title>My Popup</title>
+                                    <content>
+                                       <sld:TextSymbolizer>
+                                          <sld:Label>NOAA-15</sld:Label>
+                                       </sld:TextSymbolizer>
+                                    </content>
+                                 </ShowPopup>
+                              </event>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>NOAA15 AVHRR Footprints</name>
+                              <dataProvider href="#PROVIDER_NOAA15_AVHRR"/>
+                              <style>
+                                 <sld:GridFillSymbolizer id="GRID_FILL" enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>NOAA12 AMSU-A Footprints</name>
+                              <dataProvider href="#PROVIDER_NOAA12_AMSUA"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>NOAA12 AVHRR Footprints</name>
+                              <dataProvider href="#PROVIDER_NOAA12_AVHRR"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>AQUA MODIS Footprints</name>
+                              <dataProvider href="#PROVIDER_AQUA"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>SPOT-5 Footprints</name>
+                              <dataProvider href="#PROVIDER_SPOT5"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>TRMM TMI Footprints</name>
+                              <dataProvider href="#PROVIDER_TRMM"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#AAAAFF</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.7</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>METOP-A IASI Footprints</name>
+                              <dataProvider href="#PROVIDER_METOP"/>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#FFAAAA</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.3</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style href="#GRID_MESH"/>
+                              <style href="#GRID_BORDER"/>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>CALIPSO - LIDAR Footprints</name>
+                              <dataProvider href="#PROVIDER_CALIPSO"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>CLOUDSAT - RADAR Footprints</name>
+                              <dataProvider href="#PROVIDER_CLOUDSAT"/>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                     </DataList>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            <member>
+               <OWSDataProvider id="PROVIDER_NOAA15_AMSUA">
+                  <name>NOAA-15 AMSU-A Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA15-AMSU-A</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA15-AMSU-A</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_NOAA15_AMSUB">
+                  <name>NOAA-15 AMSU-B Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA15-AMSU-B</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA15-AMSU-B</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_NOAA15_AVHRR">
+                  <name>NOAA-15 AVHRR Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA15-AVHRR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA15-AVHRR</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_NOAA12_AMSUA">
+                  <name>NOAA12 AMSU-A Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA12-AMSU-A</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA12-AMSU-A</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_NOAA12_AVHRR">
+                  <name>NOAA12 AVHRR Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA12-AVHRR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>NOAA12-AVHRR</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_AQUA">
+                  <name>AQUA MODIS Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>AQUA-MODIS</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>AQUA-MODIS</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_SPOT5">
+                  <name>SPOT5 Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>SPOT5</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>SPOT5</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_TRMM">
+                  <name>TRMM TMI Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>TRMM-TMI</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>TRMM-TMI</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_METOP">
+                  <name>METOP-A IASI Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>METOP-A IASI</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>METOP-A-IASI</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_CALIPSO">
+                  <name>CALIPSO LIDAR Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>CALIPSO-LIDAR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>CALIPSO-LIDAR</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_CLOUDSAT">
+                  <name>CLOUDSAT RADAR Footprints</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <lagTime>900</lagTime>
+                        <leadTime>900</leadTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>CLOUDSAT-RADAR</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>CLOUDSAT-RADAR</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="PROVIDER_NWS">
+                  <name>Temperature Data</name>
+                  <layerId>MaxT_SFC</layerId>
+                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>MaxT_SFC</offering>
+                        <eventTime>
+                           <ogc:During>
+                              <gml:TimeInstant>
+                                 <gml:timePosition>2007-03-06T13:00:00Z</gml:timePosition>
+                              </gml:TimeInstant>
+                           </ogc:During>
+                        </eventTime>
+                        <resultFormat>application/com-binary-base64</resultFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="FLATGRID_PROCESS">
+                  <name>Flat Grid Process</name>
+                  <description>Grid for Region of Interest</description>
+                  <spatialExtent tiling="1x1">
+                     <BoundingBox id="ROI" srsName="EPSG:4326">
+                        <!--<gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>-->
+                        <gml:coordinates>-89.9,15.4 -61.2,45.4</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="GOES_VIS">
+                  <name>GOES Visible WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent id="GOES_TIME">
+                        <!--<baseTime>2005-08-28T16:00:00</baseTime>-->
+                        <!--<baseTime>2007-06-03T07:46:00</baseTime>-->
+                        <baseTime>2007-06-03T06:00:00</baseTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="GOES_IR">
+                  <name>GOES IR WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent xlink:href="#GOES_TIME"/>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SensorMLProvider id="GOES_CTP">
+                  <name>GOES CTP WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent xlink:href="#GOES_TIME"/>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_CTP</value>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <OWSDataProvider id="GOES_INTERSECT_PROVIDER">
+                  <name>GOES Data Lookup</name>
+                  <timeExtent  autoUpdate="#SCENE_01" >
+                     <TimeExtent id="GOES_INTERSECT_TIME">
+                        <baseTime>2007-06-03T06:00:00</baseTime>
+                        <leadTime>7200</leadTime>
+                        <stepTime>5</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <layerId>CALIPSO-LIDAR</layerId>
+                  <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
+                     <GetObservation service="SOS" version="0.0.31">
+                        <offering>CALIPSO-LIDAR</offering>
+                        <resultFormat>application/com-xml</resultFormat>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            <member>
+               <PhenomenonDetectionProvider id="CIRRUS_DETECTION">
+                  <name>Cirrus Cloud Detection</name>
+                  <timeExtent xlink:href="#GOES_INTERSECT_TIME"/>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <minPressure>200</minPressure>
+                  <maxPressure>1000</maxPressure>
+               </PhenomenonDetectionProvider>
+            </member>
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
