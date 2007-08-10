@@ -189,7 +189,7 @@
                </sld:TextureSymbolizer>
             </style>
             <style name="Footprint Grid">
-               <sld:GridMeshSymbolizer id="TMI_TEXTURE" enabled="false">                
+               <sld:GridMeshSymbolizer enabled="false">                
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>gridData/array</ogc:PropertyName>
@@ -398,7 +398,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WSAC</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
@@ -499,7 +499,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/windSpeed/WS1937</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
@@ -600,7 +600,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/seaSurfaceTemperature/SST</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
@@ -701,7 +701,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/columnarCloudWater/CCW</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
@@ -802,7 +802,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/11GHz</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
@@ -903,7 +903,7 @@
                         </sld:BlueChannel>
                         <sld:AlphaChannel>
                            <LookUpTable1D>
-                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <ogc:PropertyName>imageData/scanLine/rainRate/19-37GHz</ogc:PropertyName>
                               <TableValues>-1 0 0 0 0.0001 255</TableValues>
                            </LookUpTable1D>
                         </sld:AlphaChannel>
