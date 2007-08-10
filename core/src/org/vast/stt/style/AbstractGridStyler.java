@@ -79,9 +79,12 @@ public abstract class AbstractGridStyler extends AbstractStyler
         // compute grid and tex sizes in case of continuous texture map
         if (dataLists[0].indexOffset >= 0)
         {
+            // if previous block had a blockCount, increase blockOffset
             if (prevItem != null && prevItem.blockCount != 0)
                 blockOffset += prevItem.blockCount - 1;
             
+            // if this is the last data chunk that has not been processed yet
+            // get all the data left (or max 256) and render it
             if (patch.block.blockCount == 0)
             {
                 int newBlockCount = listInfo.blockIterator.getList().getSize() - blockOffset;
@@ -90,10 +93,11 @@ public abstract class AbstractGridStyler extends AbstractStyler
                 patch.block.blockCount = Math.min(newBlockCount, 256);
             }
             
+            // assign block count to patch length
             patch.length = patch.block.blockCount;
-            this.skipBlocks(patch.length - 2);
             
-            //System.out.println("Len: " + patch.block.blockCount + " -> Off: " + blockOffset);
+            // skip blocks to start of next tile
+            this.skipBlocks(patch.length - 2);
         }
         
         return patch;
