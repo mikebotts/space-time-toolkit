@@ -2113,7 +2113,7 @@
                   <name>Port Newark Radiation SOS</name>
                   <layerId>NJ-Transit-Radiation</layerId>
                   <request postUrl="http://216.221.5.139:8080/sos/">
-                     <GetObservation service="SOS" version="0.0.32">
+                     <GetObservation service="SOS" version="0.0.31">
                         <offering>Port-Newark-Radiation</offering>
                         <eventTime>
                            <ogc:During>
