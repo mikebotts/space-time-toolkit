@@ -95,11 +95,15 @@ public class TextureStyler extends AbstractStyler
         patch.texture.block = nextTexture;
         
         // compute grid and tex sizes in case of continuous texture map
+        // all this logic is assuming that there is one grid block for each texture block 
         if (dataLists[0].indexOffset >= 0)
         {
+            // if previous block had a blockCount, increase blockOffset
             if (prevGridItem != null && prevGridItem.blockCount != 0)
                 blockOffset += prevGridItem.blockCount - 1;
             
+            // if this is the last data chunk that has not been processed yet
+            // get all the data left (or max 256) and render it
             if (patch.grid.block.blockCount == 0)
             {
                 int newBlockCount = gridBlocks.blockIterator.getList().getSize() - blockOffset;
@@ -108,8 +112,11 @@ public class TextureStyler extends AbstractStyler
                 patch.grid.block.blockCount = Math.min(newBlockCount, 256);
             }
             
+            // assign block count to texture height and grid length
             patch.grid.length = patch.grid.block.blockCount;
             patch.texture.height = patch.grid.block.blockCount;
+            
+            // skip blocks to start of next tile
             this.skipBlocks(patch.grid.length - 2);
         }
         
