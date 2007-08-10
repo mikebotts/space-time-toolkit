@@ -14,9 +14,6 @@ import org.vast.stt.provider.STTSpatialExtent;
  *   
  * @author tcook
  * @date Feb 27, 2006
- * 
- * TODO:  - Need to convert from SpatialExtent to ViewSettings   
- *          before this will actually work    
  */
 
 public class FitView implements Command
