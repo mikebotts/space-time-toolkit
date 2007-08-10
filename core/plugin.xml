@@ -77,6 +77,6 @@
    <extension id="STT3" point="org.eclipse.core.runtime.products">
       <product
             application="org.vast.stt.main.MainApp"
-            name="Space Time Toolkit v3.0.1"/>
+            name="Space Time Toolkit v3.0.2"/>
    </extension>
 </plugin>
