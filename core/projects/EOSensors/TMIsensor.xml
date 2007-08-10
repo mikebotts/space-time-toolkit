@@ -396,6 +396,12 @@
                               <TableValues>0 0 1.2 127 2.4 135 3.6 255 4.8 255 6 255 7.2 000 8.4 000 9.6 000 10.8 255 12 49 15.4 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -491,6 +497,12 @@
                               <TableValues>0 0 1.2 127 2.4 135 3.6 255 4.8 255 6 255 7.2 000 8.4 000 9.6 000 10.8 255 12 49 15.4 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -586,6 +598,12 @@
                               <TableValues>0 0 3 127 6 135 9 255 12 255 15 255 18 000 21 000 24 000 27 255 30 49 34 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -681,6 +699,12 @@
                               <TableValues>0 0 15 127 30 135 45 255 60 255 75 255 90 000 105 000 120 000 135 255 150 49 165 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -776,6 +800,12 @@
                               <TableValues>0 0 2 127 4 135 6 255 8 255 10 255 12 000 14 000 16 000 18 255 20 49 22 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -871,6 +901,12 @@
                               <TableValues>0 0 2 127 4 135 6 255 8 255 10 255 12 000 14 000 16 000 18 255 20 49 22 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -966,6 +1002,12 @@
                               <TableValues>0 0 650 127 1300 135 1950 255 2600 255 3250 255 3900 000 4550 000 5200 000 5850 255 6500 49 7300 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
@@ -1061,6 +1103,12 @@
                               <TableValues>0 0 650 127 1300 135 1950 255 2600 255 3250 255 3900 000 4550 000 5200 000 5850 255 6500 49 7300 247</TableValues>
                            </LookUpTable1D>
                         </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/cloudWaterVapor/CWV</ogc:PropertyName>
+                              <TableValues>-1 0 0 0 0.0001 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
