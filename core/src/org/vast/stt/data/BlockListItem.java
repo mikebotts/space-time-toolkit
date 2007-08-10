@@ -36,6 +36,7 @@ public class BlockListItem
     protected BlockListItem nextItem;
     protected BlockListItem prevItem;
     protected boolean hidden;
+    public int blockCount = 0;
     
     
     public BlockListItem(AbstractDataBlock data, BlockListItem prevBlock, BlockListItem nextBlock)

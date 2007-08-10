@@ -38,7 +38,6 @@ public abstract class AbstractGridStyler extends AbstractStyler
     protected GridSymbolizer symbolizer;
     protected GridPatchGraphic patch;
     protected GridPointGraphic point;    
-    protected boolean newPatch = true;
     
 	
 	public AbstractGridStyler()
@@ -51,32 +50,6 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public GridPatchGraphic nextPatch()
     {
         ListInfo listInfo = dataLists[0];
-        
-        // update patch length
-        if (listInfo.indexOffset >= 0)
-        {
-            int listSize = listInfo.blockIterator.getList().getSize();
-            if (newPatch && listSize > 0)
-            {
-                newPatch = false;
-                
-                // force update if more blocks were added
-                if (listSize != patch.length)
-                    patch.updated = true;
-                else
-                    patch.updated = false;
-                
-                // adjust patch length
-                patch.length = listSize;
-                listInfo.blockIndexer.next();
-                
-                // get first block as reference
-                patch.block = listInfo.blockIterator.next();                
-                return patch;
-            }
-            else
-                return null;
-        }        
         
         // if no more items in the list, just return null
         if (!listInfo.blockIterator.hasNext())
@@ -100,7 +73,28 @@ public abstract class AbstractGridStyler extends AbstractStyler
         prepareBlock(nextItem);
         
         // copy current item in the patch object
+        BlockListItem prevItem = patch.block;
         patch.block = nextItem;
+        
+        // compute grid and tex sizes in case of continuous texture map
+        if (dataLists[0].indexOffset >= 0)
+        {
+            if (prevItem != null && prevItem.blockCount != 0)
+                blockOffset += prevItem.blockCount - 1;
+            
+            if (patch.block.blockCount == 0)
+            {
+                int newBlockCount = listInfo.blockIterator.getList().getSize() - blockOffset;
+                if (newBlockCount < 2)
+                    return null;
+                patch.block.blockCount = Math.min(newBlockCount, 256);
+            }
+            
+            patch.length = patch.block.blockCount;
+            this.skipBlocks(patch.length - 2);
+            
+            //System.out.println("Len: " + patch.block.blockCount + " -> Off: " + blockOffset);
+        }
         
         return patch;
     }
@@ -111,7 +105,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
         point.x = point.y = point.z = 0.0;
         indexList[0] = u;
         indexList[1] = v;        
-        
+
         dataLists[0].getData(indexList);
         
         // adjust geometry to fit projection
@@ -235,6 +229,7 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public void resetIterators()
     {
         super.resetIterators();
-        newPatch = true;
+        this.blockOffset = 0;
+        this.patch.block = null;
     }
 }

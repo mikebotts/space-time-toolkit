@@ -188,6 +188,33 @@
                   </sld:Raster>
                </sld:TextureSymbolizer>
             </style>
+            <style name="Footprint Grid">
+               <sld:GridMeshSymbolizer id="TMI_TEXTURE" enabled="false">                
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>/</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
             <style name="Footprint Points">
                <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
                   <sld:Geometry srsName="ECEF">
