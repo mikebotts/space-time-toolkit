@@ -119,7 +119,7 @@ public class GLRenderTexture extends GLRunnable
                     }
                 }                
                 
-                zOffset += 1e-7f;
+                zOffset += 1e-7f; // hack for superimposing textures in LLA ...
                 gl.glEnd();
             }
             

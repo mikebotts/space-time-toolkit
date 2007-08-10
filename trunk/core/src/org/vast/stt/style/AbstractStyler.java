@@ -66,7 +66,7 @@ public abstract class AbstractStyler implements DataStyler
         public void getData(int[] indexList)
         {
             if (indexOffset >= 0)
-                getBlock(indexList[indexOffset]);
+                getBlock(indexList[indexOffset] + blockOffset);
             blockIndexer.getData(indexList);
         }
     }
@@ -81,7 +81,8 @@ public abstract class AbstractStyler implements DataStyler
     protected boolean computeExtent = true;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
-        
+    protected int blockOffset = 0;
+    
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
     public abstract void updateDataMappings();

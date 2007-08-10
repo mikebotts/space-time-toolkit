@@ -43,8 +43,7 @@ public class TextureStyler extends AbstractStyler
     protected GridPointGraphic point;
     protected ListInfo gridBlocks, texBlocks;
     protected int[] gridIndex = new int[4];
-    protected int[] texIndex = new int[4];
-    protected boolean newPatch = true;
+    protected int[] texIndex = new int[4];  
     
     
 	public TextureStyler()
@@ -57,44 +56,7 @@ public class TextureStyler extends AbstractStyler
     
     
     public TexturePatchGraphic nextTile()
-    {
-        // update patch length
-        if (dataLists[0].indexOffset >= 0)
-        {
-            int gridListSize = gridBlocks.blockIterator.getList().getSize();
-            int texListSize = texBlocks.blockIterator.getList().getSize();
-            
-            if (newPatch & gridListSize > 0)
-            {
-                newPatch = false;
-                                
-                // force update if more blocks were added
-                if (gridListSize != patch.grid.length)
-                    patch.updated = true;
-                else
-                    patch.updated = false;
-                                
-                // adjust patch grid length and texture height
-                patch.grid.length = gridListSize;
-                patch.texture.height = texListSize;
-                
-                // get first blocks as references
-                // and call next to get var size array data
-                patch.grid.block = gridBlocks.blockIterator.next();
-                gridBlocks.blockIndexer.setData(patch.grid.block.getData());
-                gridBlocks.blockIndexer.reset();
-                gridBlocks.blockIndexer.next();                
-                patch.texture.block = texBlocks.blockIterator.next();
-                texBlocks.blockIndexer.setData(patch.texture.block.getData());
-                texBlocks.blockIndexer.reset();
-                texBlocks.blockIndexer.next();
-                
-                return patch;
-            }
-            else
-                return null;
-        }
-        
+    {      
         // if no more items one of the lists, just return null
         if (!(gridBlocks.blockIterator.hasNext() && texBlocks.blockIterator.hasNext()))
         {
@@ -128,8 +90,28 @@ public class TextureStyler extends AbstractStyler
         }
         
         // copy current item in the patch object
+        BlockListItem prevGridItem = patch.grid.block;
         patch.grid.block = nextGrid;
         patch.texture.block = nextTexture;
+        
+        // compute grid and tex sizes in case of continuous texture map
+        if (dataLists[0].indexOffset >= 0)
+        {
+            if (prevGridItem != null && prevGridItem.blockCount != 0)
+                blockOffset += prevGridItem.blockCount - 1;
+            
+            if (patch.grid.block.blockCount == 0)
+            {
+                int newBlockCount = gridBlocks.blockIterator.getList().getSize() - blockOffset;
+                if (newBlockCount < 2)
+                    return null;
+                patch.grid.block.blockCount = Math.min(newBlockCount, 256);
+            }
+            
+            patch.grid.length = patch.grid.block.blockCount;
+            patch.texture.height = patch.grid.block.blockCount;
+            this.skipBlocks(patch.grid.length - 2);
+        }
         
         // see what's needed on this block
         prepareBlock(nextGrid);
@@ -476,7 +458,9 @@ public class TextureStyler extends AbstractStyler
     public void resetIterators()
     {
         super.resetIterators();
-        newPatch = true;
+        this.blockOffset = 0;
+        this.patch.grid.block = null;
+        this.patch.texture.block = null;
     }
 	
 	
