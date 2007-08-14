@@ -186,9 +186,8 @@ public class ExtentReader extends XMLReader
         			double pd = Double.parseDouble(periodStr);
         			updater.setUpdatePeriod(pd);
         		} else {
-            		updater.setUpdatePeriod(5.0);
+            		updater.setUpdatePeriod(60.0);
         		}
-        		//  Need a way to spec updatePeriod for realTime 
  	            timeExtent.setUpdater(updater);
  	            updater.setEnabled(true);
         	} else 
