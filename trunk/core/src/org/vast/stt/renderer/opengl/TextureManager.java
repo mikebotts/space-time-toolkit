@@ -205,8 +205,11 @@ public class TextureManager
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
             
             // set texture parameters
+            //  TODO:  Allow user to select between Linear (smoothed) and nearest-neighbor interp
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);//GL.GL_NEAREST);
+//            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);//GL.GL_NEAREST);
+//            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);//GL.GL_NEAREST);
             gl.glTexParameterf(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
             gl.glTexParameterf(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
             
