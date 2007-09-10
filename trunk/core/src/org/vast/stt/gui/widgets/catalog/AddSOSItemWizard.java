@@ -44,10 +44,12 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 	SOSOfferingChooserPage sosChooserPage;
 	DataItem [] newItems;
 	boolean canFinish = false;
+	SceneTreeDropListener dropListener;
 	
-	public AddSOSItemWizard(SOSLayerCapabilities caps){
+	public AddSOSItemWizard(SOSLayerCapabilities caps, SceneTreeDropListener dropper){
 		this.caps = caps;
 		this.setWindowTitle("Add Items to Scene Tree");
+		this.dropListener = dropper;
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -75,11 +77,12 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 			offTmp = offIt.next();
 			mapTmp = selMappings.get(offTmp);
 			for(int i=0; i<symTypes.length; i++){
-				newItems[i] = SOSLayerFactory.createSOSLayer(offTmp, mapTmp, symTypes[i]);
+				newItems[i] = SOSLayerFactory.createSOSLayer(offTmp, caps, mapTmp, symTypes[i]);
 			}
 		}
 		
 		//  Drop items 
+		dropListener.dropItems(newItems);
 		return true;
 	}
 

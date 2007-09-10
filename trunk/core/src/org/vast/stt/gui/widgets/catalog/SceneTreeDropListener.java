@@ -15,6 +15,8 @@ package org.vast.stt.gui.widgets.catalog;
 
 import java.util.Iterator;
 
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -49,8 +51,8 @@ import org.vast.stt.project.world.WorldScene;
  * @version 1.0
  */
 
-public class SceneTreeDropListener extends ViewerDropAdapter {
-	
+public class SceneTreeDropListener extends ViewerDropAdapter 
+{
 	public SceneTreeDropListener(StructuredViewer viewer) {
 		super(viewer);
 	}
@@ -63,8 +65,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	public boolean performDrop(Object data) {
 		OWSLayerCapabilities caps = (OWSLayerCapabilities) data;
 
-		DataItem newItem = new DataItem(); // use world item for stuffs to be rendered in the world view
-		newItem.setName(caps.getName());
+//		DataItem newItem = new DataItem(); // use world item for stuffs to be rendered in the world view
+//		newItem.setName(caps.getName());
 
 		if (data instanceof SOSLayerCapabilities) {
 			startAddItemWizard((SOSLayerCapabilities)caps);
@@ -91,9 +93,8 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 	}
 
 	public void startAddItemWizard(SOSLayerCapabilities caps){
-		AddSOSItemWizard addItemWizard = new AddSOSItemWizard(caps);
+		AddSOSItemWizard addItemWizard = new AddSOSItemWizard(caps, this);
 		addItemWizard.init(PlatformUI.getWorkbench(), null);
-				
 		// Instantiates the wizard container with the wizard and opens it
 		WizardDialog dialog = 
 			new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), addItemWizard);
@@ -111,6 +112,11 @@ public class SceneTreeDropListener extends ViewerDropAdapter {
 		return dropOk || true;
 	}
 
+	public void dropItems(DataItem [] items){
+		for(int i=0; i<items.length; i++)
+			dropItem(items[i]);
+	}
+	
 	protected boolean dropItem(DataItem item) {
 		if(item.getName()==null){
 			System.err.println("DataItem name is null in SceneTreeDropListner.  Should not have gotten here.");
