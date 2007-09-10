@@ -28,18 +28,16 @@ import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
-import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 import org.vast.util.ExceptionSystem;
 import org.vast.xml.DOMHelper;
-import org.w3c.dom.Element;
 
 /**
  * <p><b>Title:</b>
- *  TODO:  Add Title
+ *  SOSLayerFactory
  * </p>
  *
  * <p><b>Description:</b><br/>
- *  TODO: Add Description
+ * 
  * </p>
  *
  * <p>Copyright (c) 2006</p>
@@ -110,11 +108,17 @@ public class SOSLayerFactory
 		item.setName(item.getName() + "_" + procedure);
 	}
 	
-	public static DataItem createSOSLayer(String offering, String [] mappings, String symType){
+	public static DataItem createSOSLayer(String offering, SOSLayerCapabilities caps, 
+			String [] mappings, String symType){
 		System.err.println("Create SOS layer: " + offering + " " + mappings[0] + " " + symType);
 		DataItem item = new DataItem();
+		item.setName(offering);
 		
-		//item.setDataProvider(provider);
+		SMLProvider provider = new SMLProvider();
+		List<String> procs = caps.getProcedureList();
+		SOS_Process process = new SOS_Process();
+		provider.setProcess(process);
+		item.setDataProvider(provider);
 		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(offering, symType);
         item.getSymbolizers().add(sym);
 		 
