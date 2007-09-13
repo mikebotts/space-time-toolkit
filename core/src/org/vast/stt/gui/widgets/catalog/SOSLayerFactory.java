@@ -23,6 +23,7 @@ import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.process.DataProcess;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.data.DataException;
 import org.vast.stt.process.SOS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
@@ -119,6 +120,16 @@ public class SOSLayerFactory
 		SOS_Process process = new SOS_Process();
 		provider.setProcess(process);
 		item.setDataProvider(provider);
+		provider.setEnabled(true);
+		//provider.setTimeExtent(timeExtent);
+		//provider.setSpatialExtent(spatialExtent);
+		try {
+			provider.init();
+		} catch (DataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//SOSLayerFactory.setSOSProcedure(item,procs.get(0));
 		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(offering, symType);
         item.getSymbolizers().add(sym);
 		 
