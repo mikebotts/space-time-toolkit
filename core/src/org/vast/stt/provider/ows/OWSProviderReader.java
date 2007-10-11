@@ -68,7 +68,7 @@ public class OWSProviderReader extends XMLReader implements XMLModuleReader
         try
         {
             // parse request
-        	OWSRequest query = owsUtils.readXMLQuery(dom, requestElt);
+            OWSRequest query = owsUtils.readXMLQuery(dom, requestElt);
             query.setGetServer(dom.getAttributeValue(providerElt, "request/@getUrl"));
             query.setPostServer(dom.getAttributeValue(providerElt, "request/@postUrl"));
             
