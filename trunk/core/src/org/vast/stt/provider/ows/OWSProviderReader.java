@@ -25,7 +25,7 @@ package org.vast.stt.provider.ows;
 
 import org.vast.xml.DOMHelper;
 import org.vast.ows.OWSException;
-import org.vast.ows.OWSQuery;
+import org.vast.ows.OWSRequest;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.OWSUtils;
 import org.vast.stt.project.XMLReader;
@@ -68,7 +68,7 @@ public class OWSProviderReader extends XMLReader implements XMLModuleReader
         try
         {
             // parse request
-            OWSQuery query = owsUtils.readXMLQuery(dom, requestElt);
+        	OWSRequest query = owsUtils.readXMLQuery(dom, requestElt);
             query.setGetServer(dom.getAttributeValue(providerElt, "request/@getUrl"));
             query.setPostServer(dom.getAttributeValue(providerElt, "request/@postUrl"));
             

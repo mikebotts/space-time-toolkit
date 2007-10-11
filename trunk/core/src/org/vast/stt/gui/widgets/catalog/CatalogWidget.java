@@ -273,7 +273,8 @@ public class CatalogWidget
 			List<String>sosUri = null;
             wrsRW.writeXMLQuery(System.out, query);
 			//  Either request ALL (no filtes set on query)...
-			is = wrsRW.sendRequest(query, true).getInputStream();
+            //  NOTE:  Untested change to owsUtil.sendPostRequest() - if there's a problem, check here!
+            is = owsUtils.sendPostRequest(query).getInputStream();
 			//  Either we requested ALL SOS (no filtes set on query)...
 			if(query.getQueryTypeList().isEmpty()) {
 				WRSResponseReader wrsReader = new WRSResponseReader();
@@ -300,7 +301,8 @@ public class CatalogWidget
 		    for(String id : extObjIds) {
 		    //  2)  For each ID, get the serviceURI
 		    	query.setServiceSearchId(id);
-		    	is = wrsRW.sendRequest(query, true).getInputStream();
+	            //  NOTE:  Untested change to owsUtil.sendPostRequest() - if there's a problem, check here!
+	            is = owsUtils.sendPostRequest(query).getInputStream();
 		    	sosUri = wrsReader.parseSOSEndpoint(is);
 		    	is.close();
 		    	if(sosUri.isEmpty())
