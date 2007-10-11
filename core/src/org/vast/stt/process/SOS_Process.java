@@ -26,22 +26,18 @@ package org.vast.stt.process;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
-import org.vast.data.DataGroup;
-import org.vast.data.DataValue;
+import org.vast.data.*;
 import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.sos.GetObservationRequest;
+import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSResponseReader;
 import org.vast.physics.TimeExtent;
-import org.vast.process.ConnectionList;
-import org.vast.process.DataProcess;
-import org.vast.process.ProcessException;
+import org.vast.process.*;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -70,7 +66,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected DataGroup outputObsLocation;
     protected ConnectionList obsInfoConnections;
     protected InputStream dataStream;
-    protected GetObservationRequest query;
+    protected SOSQuery query;
     protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected Thread workerThread;
@@ -84,7 +80,7 @@ public class SOS_Process extends DataProcess implements DataHandler
 
     public SOS_Process()
     {
-        query = new GetObservationRequest();
+        query = new SOSQuery();
         owsUtils = new OWSUtils();
         converters = new Hashtable<DataComponent, UnitConverter>();
         needSync = true;
@@ -168,6 +164,9 @@ public class SOS_Process extends DataProcess implements DataHandler
             String format = sosParams.getComponent("format").getData().getStringValue();
             query.setFormat(format);
 
+            // request name
+            query.setOperation("GetObservation");
+            
             checkData();
             reset();
         }
@@ -223,7 +222,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                             //System.out.println(owsUtils.buildURLQuery(query));
                             if(usePost)
                             	dataStream = owsUtils.sendPostRequest(query).getInputStream();
-                            else
+                            else 
                             	dataStream = owsUtils.sendGetRequest(query).getInputStream();
                             
                             // parse response
