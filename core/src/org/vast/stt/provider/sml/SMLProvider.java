@@ -188,7 +188,9 @@ public class SMLProvider extends AbstractProvider
         }
         catch (Exception e)
         {
+        	  e.printStackTrace();
             throw new DataException(updateError + this.getName(), e);
+          
         }
     }
     

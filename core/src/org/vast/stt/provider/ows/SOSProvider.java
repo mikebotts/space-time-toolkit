@@ -13,14 +13,15 @@
 
 package org.vast.stt.provider.ows;
 
-import java.io.*;
+import java.io.IOException;
+
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
-import org.vast.ows.OWSQuery;
+import org.vast.ows.OWSRequest;
 import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSResponseReader;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
@@ -45,7 +46,7 @@ import org.vast.stt.provider.swe.SWEDataHandler;
 public class SOSProvider extends OWSProvider
 {
     protected SOSLayerCapabilities layerCaps;
-	protected SOSQuery query;
+	protected GetObservationRequest query;
 	protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
 	protected boolean usePost;
@@ -80,7 +81,10 @@ public class SOSProvider extends OWSProvider
                 throw new DataException("No GET or POST Server URL specified");
             
             // send request
-            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+            if(usePost)
+            	dataStream = owsUtils.sendPostRequest(query).getInputStream();
+            else
+            	dataStream = owsUtils.sendGetRequest(query).getInputStream();
             
             // parse response
             reader.parse(dataStream);
@@ -122,7 +126,7 @@ public class SOSProvider extends OWSProvider
         {    
             // init request using spatial + time extent
             initRequest();
-            query.setResponseMode(SOSQuery.ResponseMode.INLINE);
+            query.setResponseMode(GetObservationRequest.ResponseMode.INLINE);
             
 			// create reader
 			SOSResponseReader reader = new SOSResponseReader();
@@ -131,7 +135,11 @@ public class SOSProvider extends OWSProvider
                 return;
             
 			// select request type (post or get)
-            dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+            //usePost = false;
+            if(usePost)
+            	dataStream = owsUtils.sendPostRequest(query).getInputStream();
+            else
+            	dataStream = owsUtils.sendGetRequest(query).getInputStream();
             
             if (canceled)
                 return;
@@ -212,35 +220,37 @@ public class SOSProvider extends OWSProvider
     @Override
 	public void createDefaultQuery()
 	{
+    	//  Spatial and Time extents set in initRequest()
 		if (layerCaps == null) return;
 		
 		String request = "GetObservation";
-		query = new SOSQuery();
+		query = new GetObservationRequest();
 		query.setGetServer(layerCaps.getParent().getGetServers().get(request));
 		query.setPostServer(layerCaps.getParent().getPostServers().get(request));
-		query.setService(layerCaps.getParent().getService());
+		//query.setService(layerCaps.getParent().getService());
+		//  Using getParent.service() returned "OGS:SOS", which wasn't in the OGCRegistry.xml file.
+		//  I could have added it there, but opted to just hardwire service to "SOS" here.  TC
+		query.setService("SOS");
 		query.setVersion(layerCaps.getParent().getVersion());
-		query.setRequest(request);
 		query.setOffering(layerCaps.getId());
 		query.setFormat(layerCaps.getFormatList().get(0));
 		query.getObservables().add(layerCaps.getObservableList().get(0));
 		query.getProcedures().add(layerCaps.getProcedureList().get(0));
-		query.getTime().setStartTime(layerCaps.getTimeList().get(0).getStartTime());
-		query.getTime().setStopTime(query.getTime().getStartTime());		
+		System.err.println(query);
 	}
 
     
     @Override
-	public SOSQuery getQuery()
+	public OWSRequest getQuery()
 	{
 		return query;
 	}
 
 
     @Override
-	public void setQuery(OWSQuery query)
+	public void setQuery(OWSRequest query)
 	{
-		this.query = (SOSQuery)query;
+		this.query = (GetObservationRequest)query;
 		
 		// set up spatial extent
 		if (this.query.getBbox() != null)

@@ -26,15 +26,19 @@ package org.vast.stt.process;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataStreamParser;
-import org.vast.data.*;
+import org.vast.data.DataArray;
+import org.vast.data.DataGroup;
+import org.vast.data.DataValue;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.wcs.WCSQuery;
+import org.vast.ows.wcs.GetCoverageRequest;
 import org.vast.ows.wcs.WCSResponseReader;
-import org.vast.process.*;
+import org.vast.process.DataProcess;
+import org.vast.process.ProcessException;
 
 
 /**
@@ -60,14 +64,14 @@ public class WCS_Process extends DataProcess implements DataHandler
     protected DataArray outputCoverage;
     protected DataGroup output;
     protected InputStream dataStream;
-    protected WCSQuery query;
+    protected GetCoverageRequest query;
     protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     
 
     public WCS_Process()
     {
-        query = new WCSQuery();
+        query = new GetCoverageRequest();
         owsUtils = new OWSUtils();
     }
 
@@ -121,7 +125,7 @@ public class WCS_Process extends DataProcess implements DataHandler
             
             // layer ID
             String layerID = wcsParams.getComponent("layer").getData().getStringValue();
-            query.setLayer(layerID);
+            query.setCoverage(layerID);
             
             // image format
             String format = wcsParams.getComponent("format").getData().getStringValue();
@@ -152,8 +156,8 @@ public class WCS_Process extends DataProcess implements DataHandler
             }
             
             // coverage and bbox crs 
-            query.setSrs("EPSG:4329");
-            query.setRequest("GetCoverage");
+//            query.setSrs("EPSG:4329");
+            query.setGridCrs("EPSG:4329");
         }
         catch (Exception e)
         {
@@ -173,7 +177,8 @@ public class WCS_Process extends DataProcess implements DataHandler
         {
             initRequest();
             WCSResponseReader reader = new WCSResponseReader();
-            dataStream = owsUtils.sendRequest(query, false).getInputStream();
+            //  Hardwired to KVP currently
+            dataStream = owsUtils.sendGetRequest(query).getInputStream();
             reader.parse(dataStream);
           
             dataParser = reader.getDataParser();
