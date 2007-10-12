@@ -35,7 +35,9 @@ import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSQuery;
+import org.vast.ows.sos.DescribeSensorRequest;
+import org.vast.ows.sos.GetResultRequest;
+import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
@@ -155,11 +157,12 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 	//  to predict what constitutes a valid request, since time beheavior and
 	//  bbox behavior or both highly servlet-dependent.
 	//  Fudging some stuff now just to make it work, in the hopes that future
-	//  SOS implemntations (including our own) will support the getTemplate() 
+	//  SOS implementations (including our own) will support the getTemplate() 
 	//  method.    TC 3/22/07
 	private DataComponent issueRequest() throws DataException {
-		SOSQuery query = new SOSQuery();
-		query.setRequest("GetObservation");
+		GetObservationRequest query = new GetObservationRequest();
+		//query..setRequest("GetObservation");
+		query.setOperation("GetObservation");
 		query.setGetServer(caps.getParent().getGetServers().get("GetObservation"));
 		query.setPostServer(caps.getParent().getGetServers().get("GetObservation"));
 		query.setOffering(caps.getId());
@@ -188,7 +191,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 			// select request type (post or get)
 			boolean usePost = false;
 			OWSUtils owsUtils = new OWSUtils();
-			dataStream = owsUtils.sendRequest(query, usePost).getInputStream();
+			dataStream = owsUtils.sendPostRequest(query).getInputStream();
 
 			// parse response
 			reader.parse(dataStream);
