@@ -19,14 +19,21 @@ import java.util.List;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
+import org.vast.ows.sld.Geometry;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
+import org.vast.ows.util.Bbox;
+import org.vast.ows.util.TimeInfo;
 import org.vast.process.DataProcess;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.data.DataException;
 import org.vast.stt.process.SOS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
+import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.provider.STTTimeExtent;
+import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
 import org.vast.util.ExceptionSystem;
@@ -110,7 +117,7 @@ public class SOSLayerFactory
 	}
 	
 	public static DataItem createSOSLayer(String offering, SOSLayerCapabilities caps, 
-			String [] mappings, String symType){
+			String [] mappings, String symType, int usesSMLProvider_notWorkingYet){
 		System.err.println("Create SOS layer: " + offering + " " + mappings[0] + " " + symType);
 		DataItem item = new DataItem();
 		item.setName(offering);
@@ -136,5 +143,97 @@ public class SOSLayerFactory
         return item;
 	}
 	
+	public static DataItem createSOSLayer(String offering, SOSLayerCapabilities caps, 
+			String [] mappings, String symType){
+		System.err.println("Create SOS layer: " + offering + " " + mappings[0] + " " + symType);
+		DataItem item = new DataItem();
+		item.setName(offering);
+		
+		SOSProvider provider = new SOSProvider();
+		provider.setServiceCapabilities(caps.getParent());
+//		List<String> procs = caps.getProcedureList();
+//		SOS_Process process = new SOS_Process();
+//		provider.setProcess(process);
+		item.setDataProvider(provider);
+		//provider.setEnabled(true);
+		List<TimeInfo> times = caps.getTimeList();
+		TimeInfo t0 = times.get(0);
+		//  Copy this time extent to provider time extent
+		//  NOTE:  I need to set this extent to the actual time I want requested 
+		//         intially (should come from where?).  Then, provider.initRequest()
+		//         uses it to set the query times.  
+		
+		//STTTimeExtent extent = STTTimeExtent.getSTTTimeExtent(t0); 
+			//new STTTimeExtent(t0.getAdjustedTime());
+		//extent.setBaseTime(t0.getAdjustedTime());
+		//extent.setLagTimeDelta(600.0);
+		STTTimeExtent extent = new STTTimeExtent();
+//		extent.set/BeginNow(true);
+		extent.setBaseTime(System.currentTimeMillis()/1000.0 - 600);
+		extent.setLagTimeDelta(600.);
+//		extent.setEndNow(true);
+		// other time params  
+		provider.setTimeExtent(extent);
+		List<Bbox> bboxes = caps.getBboxList();
+		if(bboxes != null && bboxes.size()>0){
+			Bbox bbox0 = bboxes.get(0);
+			STTSpatialExtent spEx = new STTSpatialExtent();
+			//  TODO Add convenience methods to convert TimeINfo->TimeExtent and Bbox->SpatialExtent
+			spEx.setMinX(bbox0.getMinX());
+			spEx.setMinY(bbox0.getMinY());
+			spEx.setMaxX(bbox0.getMaxX());
+			spEx.setMaxY(bbox0.getMaxY());
+			//  Z
+			provider.setSpatialExtent(spEx);
+		}
+		try {
+			
+			//  call createDefQuery, otherwise, query is null in init()
+			provider.createDefaultQuery();
+			
+			provider.init();
+		} catch (DataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//SOSLayerFactory.setSOSProcedure(item,procs.get(0));
+		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(symType.toString(), symType);
+        item.getSymbolizers().add(sym);
+        //  Creat mappings (geometry)
+        Geometry geom = sym.getGeometry();
+        for(int i=0; i<5; i++){
+        	System.err.println(mappings[i]);
+        	ScalarParameter sp = new ScalarParameter();
+        	if(mappings[i].startsWith("FeatureOfInterest")){ 
+        		//   Note that FOI mazy NOT be constant.  Need a better 
+        		//   way to handle those cases
+        		sp.setConstant(true);
+        		sp.setConstantValue(new Double(1.0));
+        	} else {
+        		sp.setPropertyName(mappings[i]);
+        	}
+        	switch(i){
+    		case 0:
+    			geom.setX(sp);
+    			break;
+    		case 1:
+    			geom.setY(sp);
+    			break;
+    		case 2:
+    			geom.setZ(sp);
+    			break;
+    		case 3:
+    			geom.setT(sp);
+    			break;
+    		case 4:
+    			geom.setBreaks(sp);
+    			break;
+    		default:
+    			break;
+    		}
+        }
+		 
+        return item;
+	}
 }
 
