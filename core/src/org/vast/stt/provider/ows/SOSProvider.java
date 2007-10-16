@@ -13,7 +13,8 @@
 
 package org.vast.stt.provider.ows;
 
-import java.io.*;
+import java.io.IOException;
+
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
