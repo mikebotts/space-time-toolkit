@@ -34,6 +34,8 @@ import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSUtils;
+import org.vast.ows.util.Bbox;
+import org.vast.ows.util.TimeInfo;
 import org.vast.ows.wcs.GetCoverageRequest;
 import org.vast.ows.wcs.WCSResponseReader;
 import org.vast.physics.TimeExtent;
@@ -184,9 +186,6 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
                 query.setSkipZ(skipZ);
             }
             
-            // coverage and bbox crs 
-            //query.setSrs("EPSG:4329");
-            query.setGridCrs("EPSG:4329");
         }
         catch (Exception e)
         {
@@ -252,11 +251,17 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             double maxX = Math.max(lon1, lon2);
             double minY = Math.min(lat1, lat2);
             double maxY = Math.max(lat1, lat2);
-            
-            query.getBbox().setMinX(minX);
-            query.getBbox().setMaxX(maxX);
-            query.getBbox().setMinY(minY);
-            query.getBbox().setMaxY(maxY);
+            Bbox bbox = query.getBbox();
+            if (bbox == null) {
+            	bbox = new Bbox();
+            	query.setBbox(bbox);
+            }
+            bbox.setMinX(minX);
+            bbox.setMaxX(maxX);
+            bbox.setMinY(minY);
+            bbox.setMaxY(maxY);
+            // coverage and bbox crs (Hardwired for now)
+            bbox.setCrs("EPSG:4326");
         }
         
         // read time range
@@ -266,24 +271,32 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             double stop = inputStopTime.getData().getDoubleValue();
             double step = inputStepTime.getData().getDoubleValue();
             
+            //  Ensure at least one time extent exists in query, or NP gets thrown by 
+            //  query.getTime().set*() below
+            TimeInfo time = query.getTime();
+            if(time == null) {
+            	time = new TimeInfo();
+            	query.setTime(time);
+            }
+            
             if (start == TimeExtent.NOW && stop == TimeExtent.NOW)
             {
-                query.getTime().setBaseAtNow(true);
+                time.setBaseAtNow(true);
             }
             else
             {
                 if (start == TimeExtent.NOW)
-                    query.getTime().setBeginNow(true);
+                    time.setBeginNow(true);
                 else
-                    query.getTime().setStartTime(start);
+                	time.setStartTime(start);
                 
                 if (stop == TimeExtent.NOW)
-                    query.getTime().setEndNow(true);
+                	time.setEndNow(true);
                 else
-                    query.getTime().setStopTime(stop);
+                	time.setStopTime(stop);
             }
             
-            query.getTime().setTimeStep(step);
+            time.setTimeStep(step);
         }
     }
     
