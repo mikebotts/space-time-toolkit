@@ -131,10 +131,18 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
         {
-            propertyName = param.getPropertyName();          
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                point.x = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
+                }
             }
         }
         
@@ -142,10 +150,18 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         param = this.symbolizer.getGeometry().getY();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                point.y = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
+                }
             }
         }
         
@@ -153,10 +169,18 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         param = this.symbolizer.getGeometry().getZ();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                point.z = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
+                }
             }
         }
         

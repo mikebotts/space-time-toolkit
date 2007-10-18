@@ -91,10 +91,18 @@ public class LabelStyler extends AbstractStyler
         param = this.symbolizer.getGeometry().getX();
         if (param != null)
         {
-            propertyName = param.getPropertyName();          
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericXMapper(label, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                label.x = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericXMapper(label, param.getMappingFunction()));
+                }
             }
         }
         
@@ -102,10 +110,18 @@ public class LabelStyler extends AbstractStyler
         param = this.symbolizer.getGeometry().getY();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericYMapper(label, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                label.y = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericYMapper(label, param.getMappingFunction()));
+                }
             }
         }
         
@@ -113,10 +129,18 @@ public class LabelStyler extends AbstractStyler
         param = this.symbolizer.getGeometry().getZ();
         if (param != null)
         {
-            propertyName = param.getPropertyName();            
-            if (propertyName != null)
+            if (param.isConstant())
             {
-                addPropertyMapper(propertyName, new GenericZMapper(label, param.getMappingFunction()));                
+                value = param.getConstantValue();
+                label.z = (Double)value;
+            }
+            else
+            {
+                propertyName = param.getPropertyName();          
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericZMapper(label, param.getMappingFunction()));
+                }
             }
         }
         
