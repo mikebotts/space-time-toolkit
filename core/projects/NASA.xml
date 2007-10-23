@@ -568,7 +568,7 @@
                                              <TableValues>0 0.6 99 0.6 100 0.93 199 0.82 200 0.93 299 0.93 300 1.00 399 0.54 400 0.00 499 0.00 500 0.00 599 0.00 600 0.00 699 0.00 700 0.00 799 0.00 800 0.00 899 0.00 900 0.47 1000 1.00</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">4</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>
@@ -629,7 +629,7 @@
                                              <TableValues>0 0.0 1 1.0</TableValues>
                                           </LookUpTable1D>
                                        </sld:CssParameter>
-                                       <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">4</sld:CssParameter>
                                     </sld:Stroke>
                                  </sld:LineSymbolizer>
                               </style>
@@ -1092,9 +1092,9 @@
                   </timeExtent>
                   <layerId>NOAA15-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AMSU-A</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1111,9 +1111,9 @@
                   </timeExtent>
                   <layerId>NOAA15-AMSU-B</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AMSU-B</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1130,9 +1130,9 @@
                   </timeExtent>
                   <layerId>NOAA15-AVHRR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AVHRR</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1149,9 +1149,9 @@
                   </timeExtent>
                   <layerId>NOAA12-AMSU-A</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>NOAA12-AMSU-A</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1168,9 +1168,9 @@
                   </timeExtent>
                   <layerId>NOAA12-AVHRR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>NOAA12-AVHRR</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1187,9 +1187,9 @@
                   </timeExtent>
                   <layerId>AQUA-MODIS</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>AQUA-MODIS</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1206,9 +1206,9 @@
                   </timeExtent>
                   <layerId>SPOT5</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>SPOT5</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1225,9 +1225,9 @@
                   </timeExtent>
                   <layerId>TRMM-TMI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>TRMM-TMI</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1244,9 +1244,9 @@
                   </timeExtent>
                   <layerId>METOP-A IASI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>METOP-A-IASI</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1263,9 +1263,9 @@
                   </timeExtent>
                   <layerId>CALIPSO-LIDAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>CALIPSO-LIDAR</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1282,9 +1282,9 @@
                   </timeExtent>
                   <layerId>CLOUDSAT-RADAR</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>CLOUDSAT-RADAR</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1294,8 +1294,8 @@
                <OWSDataProvider id="PROVIDER_NWS">
                   <name>Temperature Data</name>
                   <layerId>MaxT_SFC</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
-                     <GetObservation service="SOS" version="0.0.31">
+                  <request getUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
                            <ogc:During>
@@ -1304,7 +1304,7 @@
                               </gml:TimeInstant>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-binary-base64</resultFormat>
+                        <responseFormat>application/com-binary-base64</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1372,9 +1372,9 @@
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
                   <layerId>CALIPSO-LIDAR</layerId>
                   <request getUrl="http://vast.uah.edu:8080/ows-dev/goesIntersect">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>CALIPSO-LIDAR</offering>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                      </GetObservation>
                   </request>
                </OWSDataProvider>

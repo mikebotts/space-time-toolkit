@@ -1811,7 +1811,7 @@
                   <name>Forecast Temperature SOS</name>
                   <layerId>MaxT_SFC</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
                            <ogc:During>
@@ -1820,7 +1820,7 @@
                               </gml:TimeInstant>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-binary-base64</resultFormat>
+                        <responseFormat>application/com-binary-base64</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -2090,7 +2090,7 @@
                   <name>NY Chemical Plume SOS</name>
                   <layerId>PLUME_DATA</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
                            <ogc:During>
@@ -2102,7 +2102,7 @@
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -2113,7 +2113,7 @@
                   <name>Port Newark Radiation SOS</name>
                   <layerId>NJ-Transit-Radiation</layerId>
                   <request postUrl="http://216.221.5.139:8080/sos/">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>Port-Newark-Radiation</offering>
                         <eventTime>
                            <ogc:During>
@@ -2123,7 +2123,7 @@
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>DataValueType</resultModel>
                         <responseMode>inline</responseMode>                        
                      </GetObservation>                     

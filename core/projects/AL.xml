@@ -411,7 +411,7 @@
                   <name>Temperature Data</name>
                   <layerId>MaxT_SFC</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
                            <ogc:During>
@@ -420,7 +420,7 @@
                               </gml:TimeInstant>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-binary-base64</resultFormat>
+                        <responseFormat>application/com-binary-base64</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
