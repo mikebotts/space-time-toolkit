@@ -146,7 +146,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.x = (Double)value;
+                point.x = (Float)value;
             }
             else
             {
@@ -165,7 +165,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.y = (Double)value;
+                point.y = (Float)value;
             }
             else
             {
@@ -184,7 +184,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                point.z = (Double)value;
+                point.z = (Float)value;
             }
             else
             {
