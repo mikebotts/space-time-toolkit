@@ -27,7 +27,7 @@
                   </spatialExtent>
                   <layerId>AEROSONDE_MET_DATA</layerId>
                   <request getUrl="http://moby.itsc.uah.edu:8080/Aerosonde/AerosondeSos">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>AEROSONDE_MET_DATA</offering>
                         <eventTime>
                            <ogc:During>
@@ -38,7 +38,7 @@
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                      </GetObservation>
                   </request>
                </OWSDataProvider>
