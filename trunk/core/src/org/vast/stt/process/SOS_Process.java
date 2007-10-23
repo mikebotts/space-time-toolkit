@@ -36,7 +36,7 @@ import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.sos.SOSQuery;
+import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSResponseReader;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
@@ -68,7 +68,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected DataGroup outputObsLocation;
     protected ConnectionList obsInfoConnections;
     protected InputStream dataStream;
-    protected SOSQuery query;
+    protected GetObservationRequest query;
     protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected Thread workerThread;
@@ -82,7 +82,7 @@ public class SOS_Process extends DataProcess implements DataHandler
 
     public SOS_Process()
     {
-        query = new SOSQuery();
+        query = new GetObservationRequest();
         owsUtils = new OWSUtils();
         converters = new Hashtable<DataComponent, UnitConverter>();
         needSync = true;
