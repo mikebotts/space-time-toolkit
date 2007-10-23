@@ -10,8 +10,8 @@
                   <name>HYPERION Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="HYPERION_TIME">
-                        <baseTime>2002-05-01T15:36:33</baseTime>
-                        <leadTime>16</leadTime>
+                        <baseTime>2002-05-01T15:36:38</baseTime>
+                        <leadTime>11</leadTime>
                         <stepTime>1</stepTime>
                      </TimeExtent>
                   </timeExtent>
