@@ -81,7 +81,7 @@
                   <timeExtent xlink:href="#SSMI_TIME"/>
                   <layerId>DMSP-F13-SSMI</layerId>
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>DMSP-F13-SSMI</offering>
                         <eventTime>
                            <ogc:During>
@@ -91,7 +91,7 @@
                               </gml:TimePeriod>
                            </ogc:During>
                         </eventTime>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
