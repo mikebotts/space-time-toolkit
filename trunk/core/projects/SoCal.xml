@@ -189,7 +189,7 @@
                   <layerId>PLUME_DATA</layerId>
                   <!--<capabilities xlink:href="file:///D:/Projects/NSSTC/STT2/conf/PlumeSosCaps.xml"/>-->
                   <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
-                     <GetObservation service="SOS" version="0.0.31">
+                     <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
                            <ogc:During>
@@ -201,7 +201,7 @@
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
-                        <resultFormat>application/com-xml</resultFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>

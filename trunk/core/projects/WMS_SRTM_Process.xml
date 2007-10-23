@@ -99,9 +99,6 @@
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                               </swe:component>
-                              <swe:component name="capabilitiesCache">
-                                 <swe:Category definition="urn:ogc:def:identifier:URL">file://D:/STT3/cache/</swe:Category>
-                              </swe:component>
                               <swe:component name="layer">
                                  <!--<swe:Category>DRG</swe:Category>-->
                                  <swe:Category>BMNG</swe:Category>
