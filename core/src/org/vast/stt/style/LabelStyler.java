@@ -106,7 +106,7 @@ public class LabelStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                label.x = (Double)value;
+                label.x = (Float)value;
             }
             else
             {
@@ -125,7 +125,7 @@ public class LabelStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                label.y = (Double)value;
+                label.y = (Float)value;
             }
             else
             {
@@ -144,7 +144,7 @@ public class LabelStyler extends AbstractStyler
             if (param.isConstant())
             {
                 value = param.getConstantValue();
-                label.z = (Double)value;
+                label.z = (Float)value;
             }
             else
             {
