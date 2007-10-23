@@ -32,9 +32,10 @@ import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.ows.OWSRequest;
 import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSQuery;
 import org.vast.ows.sos.SOSResponseReader;
+import org.vast.ows.sos.GetObservationRequest.ResponseMode;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
@@ -58,7 +59,7 @@ import org.vast.stt.provider.swe.SWEDataHandler;
 public class SOSProvider extends OWSProvider
 {
     protected SOSLayerCapabilities layerCaps;
-	protected SOSQuery query;
+	protected GetObservationRequest query;
 	protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
 	protected boolean usePost;
@@ -138,7 +139,7 @@ public class SOSProvider extends OWSProvider
         {    
             // init request using spatial + time extent
             initRequest();
-            query.setResponseMode(SOSQuery.ResponseMode.INLINE);
+            query.setResponseMode(ResponseMode.INLINE);
             
 			// create reader
 			SOSResponseReader reader = new SOSResponseReader();
@@ -234,10 +235,11 @@ public class SOSProvider extends OWSProvider
 		if (layerCaps == null) return;
 		
 		String request = "GetObservation";
-		query = new SOSQuery();
+		query = new GetObservationRequest();
 		query.setGetServer(layerCaps.getParent().getGetServers().get(request));
 		query.setPostServer(layerCaps.getParent().getPostServers().get(request));
 		query.setService(layerCaps.getParent().getService());
+		query.setService("SOS");
 		query.setVersion(layerCaps.getParent().getVersion());
 		query.setOperation("GetObservation");
 		query.setOffering(layerCaps.getId());
@@ -250,7 +252,7 @@ public class SOSProvider extends OWSProvider
 
     
     @Override
-	public SOSQuery getQuery()
+	public GetObservationRequest getQuery()
 	{
 		return query;
 	}
@@ -259,7 +261,7 @@ public class SOSProvider extends OWSProvider
     @Override
 	public void setQuery(OWSRequest query)
 	{
-		this.query = (SOSQuery)query;
+		this.query = (GetObservationRequest)query;
 		
 		// set up spatial extent
 		if (this.query.getBbox() != null)
