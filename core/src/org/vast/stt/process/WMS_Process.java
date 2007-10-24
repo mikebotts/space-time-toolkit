@@ -37,6 +37,7 @@ import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
+import org.vast.ows.util.Bbox;
 import org.vast.ows.wms.GetMapRequest;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.*;
@@ -66,7 +67,7 @@ public class WMS_Process extends DataProcess
     protected DataArray outputImage;
     protected DataGroup output;
     protected InputStream dataStream;
-    protected GetMapRequest query;
+    protected GetMapRequest request;
     protected OWSUtils owsUtils;
     protected int originalWidth;
     protected int originalHeight;
@@ -75,7 +76,8 @@ public class WMS_Process extends DataProcess
 
     public WMS_Process()
     {
-        query = new GetMapRequest();
+        request = new GetMapRequest();
+        request.setBbox(new Bbox());
         owsUtils = new OWSUtils();
     }
 
@@ -121,36 +123,36 @@ public class WMS_Process extends DataProcess
             String url = wmsParams.getComponent("endPoint").getData().getStringValue();
             String requestMethod = wmsParams.getComponent("requestMethod").getData().getStringValue();
             if (requestMethod.equalsIgnoreCase("post"))
-                query.setPostServer(url);
+                request.setPostServer(url);
             else
-                query.setGetServer(url);
+                request.setGetServer(url);
             
             // version
             String version = wmsParams.getComponent("version").getData().getStringValue();
-            query.setVersion(version);
+            request.setVersion(version);
             
             // layer ID
             String layerID = wmsParams.getComponent("layer").getData().getStringValue();
-            query.getLayers().add(layerID);
+            request.getLayers().add(layerID);
             
             // image format
             String format = wmsParams.getComponent("format").getData().getStringValue();
-            query.setFormat(format);
+            request.setFormat(format);
             
             // image width
             originalWidth = wmsParams.getComponent("imageWidth").getData().getIntValue();
-            query.setWidth(originalWidth);
+            request.setWidth(originalWidth);
             
             // image height
             originalHeight = wmsParams.getComponent("imageHeight").getData().getIntValue();
-            query.setHeight(originalHeight);
+            request.setHeight(originalHeight);
             
             // image transparency
             boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
-            query.setTransparent(transparent);
+            request.setTransparent(transparent);
             
-            query.setSrs("EPSG:4326");
-            query.setExceptionType("application/vnd.ogc.se_xml");
+            request.setSrs("EPSG:4326");
+            request.setExceptionType("application/vnd.ogc.se_xml");
         }
         catch (Exception e)
         {
@@ -170,7 +172,7 @@ public class WMS_Process extends DataProcess
         {
             initRequest();
 
-            URLConnection urlCon = owsUtils.sendGetRequest(query);
+            URLConnection urlCon = owsUtils.sendGetRequest(request);
 
             //  Check on mimeType catches all three types (blank, inimage, xml)
             //  of OGC service exceptions
@@ -218,7 +220,7 @@ public class WMS_Process extends DataProcess
         }
         catch (Exception e)
         {
-            throw new ProcessException("Error while requesting data from WMS server: " + query.getGetServer(), e);
+            throw new ProcessException("Error while requesting data from WMS server: " + request.getGetServer(), e);
         }
         finally
         {
@@ -245,10 +247,10 @@ public class WMS_Process extends DataProcess
         double minY = Math.min(lat1, lat2);
         double maxY = Math.max(lat1, lat2);
         
-        query.getBbox().setMinX(minX);
-        query.getBbox().setMaxX(maxX);
-        query.getBbox().setMinY(minY);
-        query.getBbox().setMaxY(maxY);
+        request.getBbox().setMinX(minX);
+        request.getBbox().setMaxX(maxX);
+        request.getBbox().setMinY(minY);
+        request.getBbox().setMaxY(maxY);
         
         // adjust widht/height to match aspect ratio
         DataGroup wmsParams = (DataGroup)paramData.getComponent("wmsOptions");
@@ -269,20 +271,20 @@ public class WMS_Process extends DataProcess
             else
                 width = (int)(height * (maxX - minX) / (maxY - minY));
             
-            query.setWidth(width);
-            query.setHeight(height);
+            request.setWidth(width);
+            request.setHeight(height);
         }
         
         //  reload other query options (since user can change them via GUI)
         // image format
         String format = wmsParams.getComponent("format").getData().getStringValue();
-        query.setFormat(format);
+        request.setFormat(format);
         
         // image transparency
         boolean transparent = wmsParams.getComponent("imageTransparency").getData().getBooleanValue();
-        query.setTransparent(transparent);
+        request.setTransparent(transparent);
         
-        query.setSrs("EPSG:4326");
+        request.setSrs("EPSG:4326");
     }
     
     
