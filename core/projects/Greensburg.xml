@@ -66,12 +66,8 @@
                                           2.5236
                                        </sld:CssParameter>                                       
                                        <sld:CssParameter name="geometry-z">
-                                          <ogc:PropertyName>weatherData/windSpeed</ogc:PropertyName>
-                                          <!-- 0.0 -->
+                                          0.0001
                                        </sld:CssParameter>
-                                       <!--<sld:CssParameter name="geometry-t">
-                                          <ogc:PropertyName>weatherData/time</ogc:PropertyName>
-                                       </sld:CssParameter>-->                                       
                                     </sld:Geometry>
                                     <sld:Graphic>
                                        <sld:Mark>
