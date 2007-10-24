@@ -759,7 +759,7 @@
                </sld:TextureSymbolizer>
             </style>
             <style>
-               <sld:GridMeshSymbolizer enabled="true">
+               <sld:GridMeshSymbolizer enabled="false">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
