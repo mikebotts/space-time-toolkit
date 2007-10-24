@@ -50,7 +50,8 @@ public interface Projection
     public enum Crs
     {
         ECI, ECEF,
-        EPSG4329
+        EPSG4329,
+        MERC
     }
     
     

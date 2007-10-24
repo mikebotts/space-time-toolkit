@@ -55,6 +55,7 @@ public class Projection_Mercator implements Projection
     protected final static double RTD = 180 / Math.PI;
     
     protected double centerLongitude = 0.0;
+    protected double altitudeDamping = 1e-6;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
     
@@ -95,15 +96,28 @@ public class Projection_Mercator implements Projection
     
     public void project(Crs sourceCrs, PrimitiveGraphic point)
     {
+        double[] ecef, lla;
+        
         switch (sourceCrs)
         {
             case EPSG4329:
-                double[] ecef = MapProjection.LLAtoMerc(point.y, point.x, point.z);
+                ecef = MapProjection.LLAtoMerc(point.y, point.x, point.z);
+                point.x = ecef[0];
+                point.y = ecef[1];
+                point.z = ecef[2];
+                break;
+                
+            case ECEF:
+                lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
+                ecef = MapProjection.LLAtoMerc(lla[0], lla[1], lla[2]);
                 point.x = ecef[0];
                 point.y = ecef[1];
                 point.z = ecef[2];
                 break;
         }
+        
+        // always apply altitude damping
+        point.z = altitudeDamping * point.z;
     }
     
     
@@ -204,7 +218,28 @@ public class Projection_Mercator implements Projection
     
     public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos)
     {
-        return false;
+        ViewSettings view = scene.getViewSettings();
+        
+        Vector3d cameraPos = view.getCameraPos();
+        Vector3d winPos = new Vector3d();
+        scene.getRenderer().project(cameraPos.x, cameraPos.y, cameraPos.z, winPos);
+        scene.getRenderer().unproject(x, y, winPos.z, pos);
+        
+        Vector3d viewDir = view.getTargetPos().copy();
+        viewDir.sub(view.getCameraPos());
+        
+        double s = -pos.z / viewDir.z;        
+        pos.x += viewDir.x * s;
+        pos.y += viewDir.y * s;
+        pos.z = 0.0;
+        
+        if (pos.x > getMaxX() || pos.x < getMinX())
+            return false;
+        
+        if (pos.y > PI || pos.y < -PI)
+            return false;
+
+        return true;
     }
     
     
