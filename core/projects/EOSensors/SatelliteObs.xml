@@ -10,7 +10,7 @@
       <member xlink:href="./LISsensor.xml#LISsensor"/>
       <member xlink:href="./PRsensor.xml#PRsensor"/>
       <member xlink:href="./SSMIsensor.xml#SSMIsensor"/>
-   <!--   <member xlink:href="./HYPERIONsensor.xml#HYPERIONsensor"/>  -->
+      <member xlink:href="./HYPERIONsensor.xml#HYPERIONsensor"/>  
       <member xlink:href="./otherUnfinished.xml#otherUnfinished"/>
    </DataList>
 </STTProject>
