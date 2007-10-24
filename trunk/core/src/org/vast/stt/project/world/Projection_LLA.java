@@ -96,10 +96,19 @@ public class Projection_LLA implements Projection
     
     public void project(Crs sourceCrs, PrimitiveGraphic point)
     {
+        double[] lla;
+        
         switch (sourceCrs)
         {
             case ECEF:
-                double[] lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
+                lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
+                point.x = lla[1];
+                point.y = lla[0];
+                point.z = lla[2];                
+                break;
+                
+            case MERC:
+                lla = MapProjection.MerctoLLA(point.x, point.y, point.z);
                 point.x = lla[1];
                 point.y = lla[0];
                 point.z = lla[2];                
