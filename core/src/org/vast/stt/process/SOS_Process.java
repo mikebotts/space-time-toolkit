@@ -38,6 +38,7 @@ import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSResponseReader;
+import org.vast.ows.util.TimeInfo;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.unit.UnitConversion;
@@ -68,7 +69,7 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected DataGroup outputObsLocation;
     protected ConnectionList obsInfoConnections;
     protected InputStream dataStream;
-    protected GetObservationRequest query;
+    protected GetObservationRequest request;
     protected OWSUtils owsUtils;
     protected DataStreamParser dataParser;
     protected Thread workerThread;
@@ -82,7 +83,7 @@ public class SOS_Process extends DataProcess implements DataHandler
 
     public SOS_Process()
     {
-        query = new GetObservationRequest();
+        request = new GetObservationRequest();
         owsUtils = new OWSUtils();
         converters = new Hashtable<DataComponent, UnitConverter>();
         needSync = true;
@@ -135,17 +136,17 @@ public class SOS_Process extends DataProcess implements DataHandler
             String url = sosParams.getComponent("endPoint").getData().getStringValue();
             String requestMethod = sosParams.getComponent("requestMethod").getData().getStringValue();
             if (requestMethod.equalsIgnoreCase("post"))
-                query.setPostServer(url);
+                request.setPostServer(url);
             else
-                query.setGetServer(url);
+                request.setGetServer(url);
             
             // version
             String version = sosParams.getComponent("version").getData().getStringValue();
-            query.setVersion(version);
+            request.setVersion(version);
             
             // offering ID
             String offeringID = sosParams.getComponent("offering").getData().getStringValue();
-            query.setOffering(offeringID);
+            request.setOffering(offeringID);
             
             // procedure IDs
             if (sosParams.existComponent("procedures"))
@@ -153,21 +154,21 @@ public class SOS_Process extends DataProcess implements DataHandler
                 String procedures = sosParams.getComponent("procedures").getData().getStringValue();            
                 String[] procArray = procedures.split(" ");
                 for (int i=0; i<procArray.length; i++)
-                    query.getProcedures().add(procArray[i]);
+                    request.getProcedures().add(procArray[i]);
             }
             
             // observable IDs
             String observables = sosParams.getComponent("observables").getData().getStringValue();
             String[] obsArray = observables.split(" ");
             for (int i=0; i<obsArray.length; i++)
-                query.getObservables().add(obsArray[i]);
+                request.getObservables().add(obsArray[i]);
             
             // response format
             String format = sosParams.getComponent("format").getData().getStringValue();
-            query.setFormat(format);
+            request.setFormat(format);
 
             // request name
-            query.setOperation("GetObservation");
+            request.setOperation("GetObservation");
             
             checkData();
             reset();
@@ -220,12 +221,12 @@ public class SOS_Process extends DataProcess implements DataHandler
                             SOSResponseReader reader = new SOSResponseReader();
                             
                             // select request type (post or get)
-                            boolean usePost = (query.getPostServer() != null);
+                            boolean usePost = (request.getPostServer() != null);
                             //System.out.println(owsUtils.buildURLQuery(query));
                             if(usePost)
-                            	dataStream = owsUtils.sendPostRequest(query).getInputStream();
+                            	dataStream = owsUtils.sendPostRequest(request).getInputStream();
                             else 
-                            	dataStream = owsUtils.sendGetRequest(query).getInputStream();
+                            	dataStream = owsUtils.sendGetRequest(request).getInputStream();
                             
                             // parse response
                             reader.parse(dataStream);
@@ -287,9 +288,9 @@ public class SOS_Process extends DataProcess implements DataHandler
             // if an error occured in the worker thread
             if (error)
             {
-                String server = query.getPostServer();
+                String server = request.getPostServer();
                 if (server == null)
-                    server = query.getGetServer();                
+                    server = request.getGetServer();                
                 throw new ProcessException("Error while reading data from SOS server: " + server, lastException);
             }
         
@@ -323,10 +324,10 @@ public class SOS_Process extends DataProcess implements DataHandler
             double maxX = Math.max(lon1, lon2);
             double minY = Math.min(lat1, lat2);
             double maxY = Math.max(lat1, lat2);
-            query.getBbox().setMinX(minX);
-            query.getBbox().setMaxX(maxX);
-            query.getBbox().setMinY(minY);
-            query.getBbox().setMaxY(maxY);
+            request.getBbox().setMinX(minX);
+            request.getBbox().setMaxX(maxX);
+            request.getBbox().setMinY(minY);
+            request.getBbox().setMaxY(maxY);
         }
         
         // read time range
@@ -335,25 +336,26 @@ public class SOS_Process extends DataProcess implements DataHandler
             double start = inputStartTime.getData().getDoubleValue();
             double stop = inputStopTime.getData().getDoubleValue();
             double step = inputStepTime.getData().getDoubleValue();
+            request.setTime(new TimeInfo());
             
             if (start == TimeExtent.NOW && stop == TimeExtent.NOW)
             {
-                query.getTime().setBaseAtNow(true);
+                request.getTime().setBaseAtNow(true);
             }
             else
             {
                 if (start == TimeExtent.NOW)
-                    query.getTime().setBeginNow(true);
+                    request.getTime().setBeginNow(true);
                 else
-                    query.getTime().setStartTime(start);
+                    request.getTime().setStartTime(start);
                 
                 if (stop == TimeExtent.NOW)
-                    query.getTime().setEndNow(true);
+                    request.getTime().setEndNow(true);
                 else
-                    query.getTime().setStopTime(stop);
+                    request.getTime().setStopTime(stop);
             }
             
-            query.getTime().setTimeStep(step);
+            request.getTime().setTimeStep(step);
         }
     }
     
