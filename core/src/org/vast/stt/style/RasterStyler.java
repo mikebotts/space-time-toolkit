@@ -25,7 +25,7 @@
 
 package org.vast.stt.style;
 
-import java.util.ArrayList;
+import org.vast.ows.sld.RasterChannel;
 import org.vast.ows.sld.RasterSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -50,14 +50,14 @@ import org.vast.ows.sld.Symbolizer;
 public class RasterStyler extends AbstractStyler
 {
 	protected RasterSymbolizer symbolizer;
-    protected ArrayList<RasterTileGraphic> tiles;
+    protected RasterTileGraphic tile;
     protected RasterPixelGraphic pixel;
     
 	
 	public RasterStyler()
 	{
         pixel = new RasterPixelGraphic();
-        tiles = new ArrayList<RasterTileGraphic>();
+        tile = new RasterTileGraphic();
 	}
     
     
@@ -68,13 +68,13 @@ public class RasterStyler extends AbstractStyler
      */
     public int getTileCount()
     {
-        return tiles.size();
+        return 0;
     }
     
     
     public RasterTileGraphic nextTile()
     {
-        return tiles.get(0);
+        return null;
     }
 	   
     
@@ -86,46 +86,60 @@ public class RasterStyler extends AbstractStyler
     
     public void updateDataMappings()
 	{
-        ScalarParameter param;
-        String propertyName = null;   
-
+        ScalarParameter param;  
+        RasterChannel channel;
+        
         // reset all parameters
-        tiles.clear();
         pixel = new RasterPixelGraphic();
         this.clearAllMappers();
         
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
+        
         // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericXMapper(pixel, null));
-            }
-        }
+        updateMappingX(pixel, param);
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericYMapper(pixel, null));
-            }
-        }
+        updateMappingY(pixel, param);
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
+        updateMappingZ(pixel, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(tile, param);
+        
+        // pixel red
+        channel = this.symbolizer.getRedChannel();
+        updateMappingRed(pixel, param);
+        
+        // pixel green
+        channel = this.symbolizer.getGreenChannel();
+        updateMappingGreen(pixel, param);
+        
+        // pixel blue
+        channel = this.symbolizer.getBlueChannel();
+        updateMappingBlue(pixel, param);
+        
+        // pixel alpha
+        channel = this.symbolizer.getAlphaChannel();
+        updateMappingAlpha(pixel, param);
+        
+        // pixel gray
+        channel = this.symbolizer.getGrayChannel();
+        if (channel != null)
         {
-            propertyName = param.getPropertyName();
+            String propertyName = channel.getPropertyName();
             if (propertyName != null)
             {
-                addPropertyMapper(propertyName, new GenericZMapper(pixel, null));
+                addPropertyMapper(propertyName, new GenericGrayMapper(pixel, channel.getMappingFunction()));
             }
         }
+        
+        mappingsUpdated = true;
 	}
 	
 	
@@ -147,7 +161,7 @@ public class RasterStyler extends AbstractStyler
 
         if (dataNode != null)
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                         
             visitor.visit(this);

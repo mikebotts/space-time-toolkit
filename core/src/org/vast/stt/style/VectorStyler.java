@@ -49,7 +49,7 @@ public class VectorStyler extends AbstractStyler
 {
     protected VectorGraphic vector;
     protected LinePointGraphic point;
-    protected VectorSymbolizer symbolizer;	
+    protected VectorSymbolizer symbolizer;
     protected int[] pointIndex = new int[1];
     protected boolean useIcons;
     protected double vectorLength = 1.0;
@@ -74,8 +74,6 @@ public class VectorStyler extends AbstractStyler
     
     public LinePointGraphic nextPoint()
     {
-        point.x = point.y = point.z = 0.0;
-        
         if (currentStep == 0)
         {
             // add break at beginning of vector
@@ -155,120 +153,54 @@ public class VectorStyler extends AbstractStyler
         // reset all parameters
         vector = new VectorGraphic();
         this.clearAllMappers();
+        
+        // X,Y,Z are initialized to 0 by default
+        vector.point1.x = vector.point1.y = vector.point1.z = 0.0;
+        vector.point2.x = vector.point2.y = vector.point2.z = 0.0;
                
         // geometry X1
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point1.x = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericXMapper(vector.point1, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingX(vector.point1, param);
         
         //geometry Y1
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point1.y = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();            
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericYMapper(vector.point1, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingY(vector.point1, param);
         
         // geometry Z1
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point1.z = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();            
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericZMapper(vector.point1, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingZ(vector.point1, param);
         
         // geometry X2
         param = this.symbolizer.getDirection().getX();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point2.x = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericXMapper(vector.point2, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingX(vector.point2, param);
         
         // geometry Y2
         param = this.symbolizer.getDirection().getY();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point2.y = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericYMapper(vector.point2, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingY(vector.point2, param);
         
         // geometry Z2
         param = this.symbolizer.getDirection().getZ();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                vector.point2.z = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericZMapper(vector.point2, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingZ(vector.point2, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(point, param);
+        
+        // stroke color - red 
+        param = this.symbolizer.getStroke().getColor().getRed();
+        updateMappingRed(point, param);
+        
+        // stroke color - green 
+        param = this.symbolizer.getStroke().getColor().getGreen();
+        updateMappingGreen(point, param);
+        
+        // stroke color - blue 
+        param = this.symbolizer.getStroke().getColor().getBlue();
+        updateMappingBlue(point, param);
+        
+        // stroke color - alpha 
+        param = this.symbolizer.getStroke().getColor().getAlpha();
+        updateMappingAlpha(point, param);
         
         // geometry length
         param = this.symbolizer.getLength();
@@ -285,82 +217,6 @@ public class VectorStyler extends AbstractStyler
                 if (propertyName != null)
                 {
                     //addPropertyMapper(propertyName, new GenericZMapper(vector.point2, param.getMappingFunction()));                
-                }
-            }
-        }
-        
-        // stroke color - red 
-        param = this.symbolizer.getStroke().getColor().getRed();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.r = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));              
-                }
-            }
-        }
-        
-        // stroke color - green 
-        param = this.symbolizer.getStroke().getColor().getGreen();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.g = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));               
-                }
-            }
-        }
-        
-        // stroke color - blue 
-        param = this.symbolizer.getStroke().getColor().getBlue();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.b = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));             
-                }
-            }
-        }
-        
-        // stroke color - alpha 
-        param = this.symbolizer.getStroke().getColor().getAlpha();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.a = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));              
                 }
             }
         }
@@ -385,6 +241,7 @@ public class VectorStyler extends AbstractStyler
         }
         
         dataLists[0].indexOffset = 0;
+        mappingsUpdated = true;
 	}
 	
 	
@@ -407,7 +264,7 @@ public class VectorStyler extends AbstractStyler
         
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                         
     		visitor.visit(this);

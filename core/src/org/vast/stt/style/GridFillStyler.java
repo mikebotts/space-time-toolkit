@@ -71,85 +71,24 @@ public class GridFillStyler extends AbstractGridStyler
         super.updateDataMappings();
         GridFillSymbolizer sym = (GridFillSymbolizer)this.symbolizer;
         ScalarParameter param;
-        Object value;
-        String propertyName = null;
         
         // point red
         param = sym.getFill().getColor().getRed();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.r = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
-                }
-            }            
-        }
+        updateMappingRed(point, param);
         
         // point green
         param = sym.getFill().getColor().getGreen();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.g = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
-                }
-            }            
-        }
+        updateMappingGreen(point, param);
         
         // point blue
         param = sym.getFill().getColor().getBlue();
-        if (param != null)
-        {
-            
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.b = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingBlue(point, param);
         
         // point alpha
         param = sym.getFill().getColor().getAlpha();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.a = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingAlpha(point, param);
+        
+        mappingsUpdated = true;
     }
     
     
@@ -159,7 +98,7 @@ public class GridFillStyler extends AbstractGridStyler
 
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
 
             visitor.visit(this);

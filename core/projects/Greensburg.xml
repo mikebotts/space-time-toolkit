@@ -49,8 +49,7 @@
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
                   <member>
-                     <DataList>
-                        
+                     <DataList>                        
                         <name>Wx Station Data</name>
                         <member visible="false">
                            <DataItem>
@@ -90,8 +89,7 @@
                                           2.5236
                                        </sld:CssParameter>                                       
                                        <sld:CssParameter name="geometry-z">
-<!--                                          <ogc:PropertyName>weatherData/windSpeed</ogc:PropertyName>-->
-                                           0.0 
+                                          0.0 
                                        </sld:CssParameter>
                                        <!--<sld:CssParameter name="geometry-t">
                                           <ogc:PropertyName>weatherData/time</ogc:PropertyName>

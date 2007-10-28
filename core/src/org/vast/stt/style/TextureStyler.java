@@ -63,7 +63,6 @@ public class TextureStyler extends AbstractStyler
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
         patch = new TexturePatchGraphic();
-        point.a = 255;
 	}
     
     
@@ -161,7 +160,11 @@ public class TextureStyler extends AbstractStyler
     
     public GridPointGraphic getGridPoint(int u, int v)
     {
-        point.x = point.y = point.z = 0.0;
+        // reset point values
+        point.x = constantX;
+        point.y = constantY;
+        point.z = constantZ;
+        
         gridIndex[0] = u;
         gridIndex[1] = v;
         
@@ -180,7 +183,10 @@ public class TextureStyler extends AbstractStyler
     /*
     public GridPointGraphic getGridPoint(double u, double v)
     {
-        point.x = point.y = point.z = 0.0;
+        // reset point values
+        point.x = constantX;
+        point.y = constantY;
+        point.z = constantZ;
         
         double u_hig = Math.ceil(u);
         double u_low = Math.floor(u);
@@ -276,7 +282,11 @@ public class TextureStyler extends AbstractStyler
     {
         if (gridBlocks.blockIndexer.hasNext())
         {
-            point.x = point.y = point.z = 0.0;            
+            // reset point values
+            point.x = constantX;
+            point.y = constantY;
+            point.z = constantZ;
+            
             dataLists[0].blockIndexer.next();
             
             // adjust geometry to fit projection
@@ -302,10 +312,10 @@ public class TextureStyler extends AbstractStyler
 
 
     @Override
-	public void updateDataMappings()
-	{
-        boolean colors = false;
+    public void updateDataMappings()
+    {
         ScalarParameter param;
+        Object value;
         RasterChannel channel;
         String propertyName = null;   
         
@@ -314,6 +324,9 @@ public class TextureStyler extends AbstractStyler
         point = new GridPointGraphic();
         patch.getTexture().bands = 3;
         this.clearAllMappers();
+        
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
         
         // grid width array
         propertyName = this.symbolizer.getGridDimensions().get("width");
@@ -332,38 +345,21 @@ public class TextureStyler extends AbstractStyler
                 addPropertyMapper(propertyName, new GridLengthMapper(1, patch.getGrid(), null));
         }
         
-        // grid geometry X
+        // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingX(point, param);
         
-        // grid geometry Y
+        //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingY(point, param);
         
-        // grid geometry Z
+        // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingZ(point, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(patch.grid, param);
                 
         // make sure we keep a handle to the block list containing grid data
         gridBlocks = dataLists[dataLists.length-1];
@@ -385,92 +381,66 @@ public class TextureStyler extends AbstractStyler
                 addPropertyMapper(propertyName, new RasterHeightMapper(3, patch.getTexture(), null));
         }
         
+        // raster channels
+        channel = this.symbolizer.getGrayChannel();
+        if (channel != null)
+        {    
+            // grayscale pixels            
+            patch.texture.bands = 1;
+            
+            propertyName = channel.getPropertyName();
+            if (propertyName != null)
+            {
+                addPropertyMapper(propertyName, new GenericGrayMapper(pixel, channel.getMappingFunction()));
+            }            
+        }
+        else
+        {
+            // rgb pixels
+            patch.texture.bands = 3;
+            
+            // pixel red
+            channel = this.symbolizer.getRedChannel();
+            updateMappingRed(pixel, channel);
+            
+            // pixel green
+            channel = this.symbolizer.getGreenChannel();
+            updateMappingGreen(pixel, channel);
+            
+            // pixel blue
+            channel = this.symbolizer.getBlueChannel();
+            updateMappingBlue(pixel, channel);
+        }
+        
+        // pixel alpha
+        channel = this.symbolizer.getAlphaChannel();
+        updateMappingAlpha(pixel, channel);
+        if (channel != null)
+            patch.texture.bands++;
+        
         // global texture opacity
         param = this.symbolizer.getOpacity();
         if (param != null)
         {
             if (param.isConstant())
             {
-                Object value = param.getConstantValue();
-                pixel.a = (Float)value * 255;
+                value = param.getConstantValue();
+                patch.texture.opacity = (Float)value * 255;
             }
             else
             {
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, param.getMappingFunction()));
+                    addPropertyMapper(propertyName, new RasterOpacityMapper(patch.texture, param.getMappingFunction()));
                 }
             }
         }
-        
-        // pixel red
-        channel = this.symbolizer.getRedChannel();
-        if (channel != null)       
-        {
-            colors = true;
-            propertyName = channel.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericRedMapper(pixel, channel.getMappingFunction()));
-            }
-        }
-        
-        // pixel green
-        channel = this.symbolizer.getGreenChannel();
-        if (channel != null)
-        {
-            colors = true;
-            propertyName = channel.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericGreenMapper(pixel, channel.getMappingFunction()));
-            }
-        }
-        
-        // pixel blue
-        channel = this.symbolizer.getBlueChannel();
-        if (channel != null)
-        {
-            colors = true;
-            propertyName = channel.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericBlueMapper(pixel, channel.getMappingFunction()));
-            }
-        }
-        
-        // pixel gray
-        if (!colors)
-        {
-            channel = this.symbolizer.getGrayChannel();
-            if (channel != null)
-            {
-                patch.getTexture().bands = 1;
-                propertyName = channel.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGrayMapper(pixel, channel.getMappingFunction()));
-                }
-            }
-        }
-        
-        // pixel alpha
-        channel = this.symbolizer.getAlphaChannel();
-        if (channel != null)
-        {
-            patch.getTexture().bands++;
-            propertyName = channel.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericAlphaMapper(pixel, channel.getMappingFunction()));
-            }
-        }
-        
-                
+                        
         // make sure we keep a handle to the block list containing image data
-        texBlocks = dataLists[dataLists.length-1];
-	}
+        texBlocks = dataLists[dataLists.length-1];        
+        mappingsUpdated = true;
+    }
     
     
     @Override
@@ -502,7 +472,7 @@ public class TextureStyler extends AbstractStyler
 
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                 
             visitor.visit(this);

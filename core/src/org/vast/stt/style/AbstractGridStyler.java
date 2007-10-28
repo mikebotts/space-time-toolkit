@@ -118,7 +118,11 @@ public abstract class AbstractGridStyler extends AbstractStyler
     
     public GridPointGraphic getPoint(int u, int v)
     {
-        point.x = point.y = point.z = 0.0;
+        // reset point values
+        point.x = constantX;
+        point.y = constantY;
+        point.z = constantZ;
+        
         indexList[0] = u;
         indexList[1] = v;        
 
@@ -135,7 +139,11 @@ public abstract class AbstractGridStyler extends AbstractStyler
     {
         if (dataLists[0].blockIndexer.hasNext())
         {
-            point.x = point.y = point.z = 0.0;            
+            // reset point values
+            point.x = constantX;
+            point.y = constantY;
+            point.z = constantZ;
+            
             dataLists[0].blockIndexer.next();
             
             // adjust geometry to fit projection
@@ -170,6 +178,9 @@ public abstract class AbstractGridStyler extends AbstractStyler
         patch = new GridPatchGraphic();
         point = new GridPointGraphic();
         this.clearAllMappers();
+        
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
         
         // grid width array
         propertyName = this.symbolizer.getDimensions().get("width");
@@ -208,36 +219,19 @@ public abstract class AbstractGridStyler extends AbstractStyler
         
         // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingX(point, param);
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingY(point, param);
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingZ(point, param);
+        
+        // geometry T used for the whole patch
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(patch, param);
 	}
 
 

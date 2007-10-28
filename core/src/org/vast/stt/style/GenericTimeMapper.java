@@ -46,10 +46,10 @@ import org.vast.ows.sld.MappingFunction;
  */
 public class GenericTimeMapper extends PropertyMapper
 {
-    PrimitiveGraphic graphic;
+    TimeTaggedGraphic graphic;
     
     
-    public GenericTimeMapper(PrimitiveGraphic graphic, MappingFunction mappingFunction)
+    public GenericTimeMapper(TimeTaggedGraphic graphic, MappingFunction mappingFunction)
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;

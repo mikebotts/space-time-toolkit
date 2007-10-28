@@ -43,13 +43,14 @@ import java.nio.Buffer;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class GridPatchGraphic extends GraphicObject
+public class GridPatchGraphic extends TimeTaggedGraphic
 {
 	public int tileNumber;
     
     public int width = 1;
     public int length = 1;
     public int depth = 1;
+    
     public float lineWidth = 1.0f;
     
     public Buffer vertexData;

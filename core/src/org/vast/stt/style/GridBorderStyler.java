@@ -73,84 +73,22 @@ public class GridBorderStyler extends AbstractGridStyler
         GridBorderSymbolizer sym = (GridBorderSymbolizer)this.symbolizer;
         ScalarParameter param;
         Object value;
-        String propertyName = null;
         
         // point red
         param = sym.getStroke().getColor().getRed();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.r = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
-                }
-            }            
-        }
+        updateMappingRed(point, param);
         
         // point green
         param = sym.getStroke().getColor().getGreen();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.g = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
-                }
-            }            
-        }
+        updateMappingGreen(point, param);
         
         // point blue
         param = sym.getStroke().getColor().getBlue();
-        if (param != null)
-        {
-            
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.b = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingBlue(point, param);
         
         // point alpha
         param = sym.getStroke().getColor().getAlpha();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.a = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingAlpha(point, param);
         
         // line width
         param = sym.getStroke().getWidth();
@@ -162,6 +100,8 @@ public class GridBorderStyler extends AbstractGridStyler
                 patch.lineWidth = (Float)value;
             }
         }
+        
+        mappingsUpdated = true;
     }
     
     
@@ -171,7 +111,7 @@ public class GridBorderStyler extends AbstractGridStyler
 
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
 
             visitor.visit(this);
