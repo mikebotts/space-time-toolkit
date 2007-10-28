@@ -40,11 +40,9 @@ package org.vast.stt.style;
  * @date Mar 31, 2006
  * @version 1.0
  */
-public abstract class PrimitiveGraphic extends GraphicObject
+public abstract class PrimitiveGraphic extends TimeTaggedGraphic
 {
     public double x, y, z;
-    public double t = Double.NaN;
     public float r, g, b;
     public float a = 1.0f;
-    public boolean graphBreak;
 }

@@ -25,47 +25,47 @@
 
 package org.vast.stt.style;
 
-import java.nio.Buffer;
+import org.vast.cdm.common.DataBlock;
+import org.vast.ows.sld.MappingFunction;
 
 
 /**
  * <p><b>Title:</b><br/>
- * Raster Tile Graphic
+ * Raster Opacity Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Represents a tile of a raster. A tile is the atomic piece
- * of a composite tiled raster.
+ * This transfers a value from the DataNode to the opacity value.
+ * It will use a mapping function if provided.
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Apr 3, 2006
  * @version 1.0
  */
-public class RasterTileGraphic extends TimeTaggedGraphic
+public class RasterOpacityMapper extends PropertyMapper
 {
-	public enum BufferType
+    RasterTileGraphic graphic;
+    
+    
+    public RasterOpacityMapper(RasterTileGraphic graphic, MappingFunction mappingFunction)
     {
-        LUM, LUMA, R, G, B, RGB, BGR, RGBA, BGRA
+        this.graphic = graphic;
+        this.mappingFunction = mappingFunction;
+        if (mappingFunction != null)
+            this.useMappingFunction = true;
+    }
+
+    
+    public void mapData(DataBlock data)
+    {
+        if (useMappingFunction)
+        {
+            double val = data.getDoubleValue();
+            graphic.opacity = (float)mappingFunction.compute(val);
+        }
+        else
+            graphic.opacity = data.getFloatValue();
     }    
-    
-    public int tileNumber;
-    
-    public int width = 0;
-    public int height = 0;
-    public int depth = 0; // for 3D textures    
-    public int bands = 3;
-    
-    public float opacity = 1.0f;    
-    public int xPos = 0;
-    public int yPos = 0;
-    public int widthPadding = 0;
-    public int heightPadding = 0;
-    
-    // if no transform is applied, image data can be made
-    // accessible to the renderer directly using these fields
-    public Buffer rasterData;
-    public BufferType rasterType;
-    public boolean hasRasterData;
 }

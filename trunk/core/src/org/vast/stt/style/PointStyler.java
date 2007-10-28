@@ -32,6 +32,7 @@ import org.vast.ows.sld.GraphicSource;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
+import org.vast.stt.data.BlockListItem;
 import org.vast.stt.style.PointGraphic.ShapeType;
 import org.vast.util.MessageSystem;
 
@@ -53,24 +54,33 @@ import org.vast.util.MessageSystem;
  */
 public class PointStyler extends AbstractStyler implements DataStyler1D
 {
-    protected PointGraphic point;
-    protected PointSymbolizer symbolizer;	
+    protected PointGraphic point;    
+    protected PointSymbolizer symbolizer;
     protected int[] pointIndex = new int[1];
     protected boolean useIcons;
-    
+    protected BlockListItem constantBlock;
+    protected boolean returnConstantGraphic;
+    protected boolean returnConstantBlock;
+        
 	
 	public PointStyler()
 	{
 		point = new PointGraphic();
+        constantBlock = new BlockListItem(null, null, null);
 	}
     
     
     public PointGraphic nextPoint()
     {
-        point.x = point.y = point.z = 0.0;
+        // reset point values
+        point.x = constantX;
+        point.y = constantY;
+        point.z = constantZ;
         
-        if (nextItem())
+        if (returnConstantGraphic || nextItem())
         {
+            returnConstantGraphic = false;
+            
             // adjust geometry to fit projection
             if (projection != null)
                 projection.adjust(geometryCrs, point);
@@ -84,28 +94,37 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
     
     public int getNumPoints()
     {
+        if (allConstant)
+            return 1;
+        
         if (dataLists[0].indexOffset == 0)
             return dataLists[0].blockIterator.getList().getSize();
-        else
-            return 0;
+        
+        return 0;
     }
     
     
     public PointGraphic getPoint(int u)
     {
-        point.x = point.y = point.z = 0.0;
+        // reset point values
+        point.x = constantX;
+        point.y = constantY;
+        point.z = constantZ;
         
-        if (dataLists[0].indexOffset == 0)
-        {
-            AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
-            dataLists[0].blockIndexer.setData(dataBlock);
-            dataLists[0].blockIndexer.reset();
-            dataLists[0].blockIndexer.next();
-        }
-        else
-        {
-            pointIndex[0] = u;
-            dataLists[0].blockIndexer.getData(pointIndex);
+        if (!allConstant)
+        {    
+            if (dataLists[0].indexOffset == 0)
+            {
+                AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
+                dataLists[0].blockIndexer.setData(dataBlock);
+                dataLists[0].blockIndexer.reset();
+                dataLists[0].blockIndexer.next();
+            }
+            else
+            {
+                pointIndex[0] = u;
+                dataLists[0].blockIndexer.getData(pointIndex);
+            }
         }
         
         // adjust geometry to fit projection
@@ -138,63 +157,29 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         // reset all parameters
         point = new PointGraphic();
         this.clearAllMappers();
+        
+        // constantPoint is true for now, it will be set to
+        // false if at least one of X,Y,Z properies has a mapper
+        allConstant = true;
+        
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
                
         // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.x = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
-                }
-            }
-        }
+        updateMappingX(point, param);
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.y = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingY(point, param);
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.z = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingZ(point, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(point, param);
         
         // simple graphic mark
         GraphicSource glyph = this.symbolizer.getGraphic().getGlyphs().get(0);
@@ -202,79 +187,19 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         {
             // color - red 
             param = ((GraphicMark)glyph).getFill().getColor().getRed();
-            if (param != null)
-            {
-                if (param.isConstant())
-                {
-                    value = param.getConstantValue();
-                    point.r = (Float)value;
-                }
-                else
-                {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));              
-                    }
-                }
-            }
+            updateMappingRed(point, param);
             
             // color - green 
             param = ((GraphicMark)glyph).getFill().getColor().getGreen();
-            if (param != null)
-            {
-                if (param.isConstant())
-                {
-                    value = param.getConstantValue();
-                    point.g = (Float)value;
-                }
-                else
-                {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));               
-                    }
-                }
-            }
+            updateMappingGreen(point, param);
             
             // color - blue 
             param = ((GraphicMark)glyph).getFill().getColor().getBlue();
-            if (param != null)
-            {
-                if (param.isConstant())
-                {
-                    value = param.getConstantValue();
-                    point.b = (Float)value;
-                }
-                else
-                {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));             
-                    }
-                }
-            }
+            updateMappingBlue(point, param);
             
             // color - alpha 
             param = ((GraphicMark)glyph).getFill().getColor().getAlpha();
-            if (param != null)
-            {
-                if (param.isConstant())
-                {
-                    value = param.getConstantValue();
-                    point.a = (Float)value;
-                }
-                else
-                {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));              
-                    }
-                }
-            }
+            updateMappingAlpha(point, param);
             
             // shape
             param = ((GraphicMark)glyph).getShape();
@@ -294,14 +219,15 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                     else
                         MessageSystem.display("Unknown shape: " + shapeName, true);
                 }
-                else
-                {
-                    propertyName = param.getPropertyName();
-                    if (propertyName != null)
-                    {
-                        //addPropertyMapper(propertyName, new GenericShapeMapper(point, param.getMappingFunction()));              
-                    }
-                }
+//                else
+//                {
+//                    propertyName = param.getPropertyName();
+//                    if (propertyName != null)
+//                    {
+//                        addPropertyMapper(propertyName, new GenericShapeMapper(point, param.getMappingFunction()));
+//                        allConstant = false;
+//                    }
+//                }
             }
         }
         
@@ -320,7 +246,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                     propertyName = param.getPropertyName();
                     if (propertyName != null)
                     {
-                        addPropertyMapper(propertyName, new IconUrlMapper(point, param.getMappingFunction())); 
+                        addPropertyMapper(propertyName, new IconUrlMapper(point, param.getMappingFunction()));
                     }
                 }
                 
@@ -342,7 +268,7 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new PointSizeMapper(point, param.getMappingFunction()));              
+                    addPropertyMapper(propertyName, new PointSizeMapper(point, param.getMappingFunction()));
                 }
             }
         }
@@ -361,12 +287,15 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                 propertyName = param.getPropertyName();
                 if (propertyName != null)
                 {
-                    addPropertyMapper(propertyName, new PointOrientationMapper(point, param.getMappingFunction()));              
+                    addPropertyMapper(propertyName, new PointOrientationMapper(point, param.getMappingFunction()));
                 }
             }
         }
         
-        dataLists[0].indexOffset = 0;
+        if (dataLists.length > 0)
+            dataLists[0].indexOffset = 0;
+        
+        mappingsUpdated = true;
 	}
 	
 	
@@ -389,12 +318,34 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
         
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                         
     		visitor.visit(this);
         }
 	}
+    
+    
+    @Override
+    public void resetIterators()
+    {
+        super.resetIterators();
+        returnConstantBlock = allConstant;
+        returnConstantGraphic = allConstant;
+    }
+    
+    
+    @Override
+    public BlockListItem nextBlock()
+    {
+        if (returnConstantBlock)
+        {
+            returnConstantBlock = false;
+            return constantBlock;
+        }
+        
+        return super.nextBlock();
+    }
 
 
     public boolean useIcons()

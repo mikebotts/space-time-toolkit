@@ -25,9 +25,11 @@
 
 package org.vast.stt.style;
 
+import org.vast.data.AbstractDataBlock;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sld.TextSymbolizer;
+import org.vast.stt.data.BlockListItem;
 
 
 /**
@@ -45,26 +47,36 @@ import org.vast.ows.sld.TextSymbolizer;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class LabelStyler extends AbstractStyler
+public class LabelStyler extends AbstractStyler implements DataStyler1D
 {
     protected LabelGraphic label;
     protected TextSymbolizer symbolizer;
+    protected int[] pointIndex = new int[1];
     protected int labelDensity = 10;
     protected int labelSpacing;
+    protected BlockListItem constantBlock;
+    protected boolean returnConstantGraphic;
+    protected boolean returnConstantBlock;
     	
 	
 	public LabelStyler()
 	{
         label = new LabelGraphic();
+        constantBlock = new BlockListItem(null, null, null);
 	}
     
     
     public LabelGraphic nextPoint()
     {
-        label.x = label.y = label.z = 0.0;
+        // reset point values
+        label.x = constantX;
+        label.y = constantY;
+        label.z = constantZ;
         
-        if (nextItem())
+        if (returnConstantGraphic || nextItem())
         {
+            returnConstantGraphic = false;
+            
             // adjust geometry to fit projection
             if (projection != null)
                 projection.adjust(geometryCrs, label);
@@ -73,6 +85,49 @@ public class LabelStyler extends AbstractStyler
         }
         
         return null;
+    }
+    
+    
+    public int getNumPoints()
+    {
+        if (allConstant)
+            return 1;
+        
+        if (dataLists[0].indexOffset == 0)
+            return dataLists[0].blockIterator.getList().getSize();
+        
+        return 0;
+    }
+    
+    
+    public LabelGraphic getPoint(int u)
+    {
+        // reset point values
+        label.x = constantX;
+        label.y = constantY;
+        label.z = constantZ;
+        
+        if (!allConstant)
+        {    
+            if (dataLists[0].indexOffset == 0)
+            {
+                AbstractDataBlock dataBlock = dataLists[0].blockIterator.getList().get(u);
+                dataLists[0].blockIndexer.setData(dataBlock);
+                dataLists[0].blockIndexer.reset();
+                dataLists[0].blockIndexer.next();
+            }
+            else
+            {
+                pointIndex[0] = u;
+                dataLists[0].blockIndexer.getData(pointIndex);
+            }
+        }
+        
+        // adjust geometry to fit projection
+        if (projection != null)
+            projection.adjust(geometryCrs, label);
+        
+        return label;
     }
     
     
@@ -98,139 +153,45 @@ public class LabelStyler extends AbstractStyler
         // reset all parameters
         label = new LabelGraphic();
         this.clearAllMappers();
+        
+        // constantPoint is true for now, it will be set to
+        // false if at least one of X,Y,Z properies has a mapper
+        allConstant = true;
+        
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
                
         // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.x = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericXMapper(label, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingX(label, param);
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.y = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericYMapper(label, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingY(label, param);
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.z = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();          
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericZMapper(label, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingZ(label, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(label, param);
         
         // color - red 
         param = symbolizer.getFill().getColor().getRed();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.r = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericRedMapper(label, param.getMappingFunction()));              
-                }
-            }
-        }
+        updateMappingRed(label, param);
         
         // color - green 
         param = symbolizer.getFill().getColor().getGreen();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.g = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(label, param.getMappingFunction()));               
-                }
-            }
-        }
+        updateMappingGreen(label, param);
         
         // color - blue 
         param = symbolizer.getFill().getColor().getBlue();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.b = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(label, param.getMappingFunction()));             
-                }
-            }
-        }
+        updateMappingBlue(label, param);
         
         // color - alpha 
         param = symbolizer.getFill().getColor().getAlpha();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                label.a = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(label, param.getMappingFunction()));              
-                }
-            }
-        }
+        updateMappingAlpha(label, param);
         
         // label text
         param = this.symbolizer.getLabel();
@@ -288,6 +249,8 @@ public class LabelStyler extends AbstractStyler
                 }
             }
         }
+        
+        mappingsUpdated = true;
 	}
 	
 	
@@ -310,10 +273,32 @@ public class LabelStyler extends AbstractStyler
         
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                         
     		visitor.visit(this);
         }
 	}
+    
+    
+    @Override
+    public void resetIterators()
+    {
+        super.resetIterators();
+        returnConstantBlock = allConstant;
+        returnConstantGraphic = allConstant;
+    }
+    
+    
+    @Override
+    public BlockListItem nextBlock()
+    {
+        if (returnConstantBlock)
+        {
+            returnConstantBlock = false;
+            return constantBlock;
+        }
+        
+        return super.nextBlock();
+    }
 }

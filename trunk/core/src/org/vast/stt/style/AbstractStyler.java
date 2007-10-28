@@ -28,6 +28,7 @@ package org.vast.stt.style;
 import java.util.Hashtable;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataIndexer;
+import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
@@ -90,10 +91,16 @@ public abstract class AbstractStyler implements DataStyler
     protected ListInfo[] dataLists;
     protected Projection projection;
     protected Crs geometryCrs;
+    protected double constantX;
+    protected double constantY;
+    protected double constantZ;
+    protected double constantT;
     protected boolean computeExtent = true;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
     protected int blockOffset = 0;
+    protected boolean mappingsUpdated = false;
+    protected boolean allConstant = false;
     
     
     public abstract void setSymbolizer(Symbolizer symbolizer);
@@ -198,10 +205,11 @@ public abstract class AbstractStyler implements DataStyler
     }
     
     
-    protected void clearAllMappers()
+    public void clearAllMappers()
     {
         dataLists = new ListInfo[0];
         treeBuilders.clear();
+        mappingsUpdated = false;
     }
     
     
@@ -338,5 +346,221 @@ public abstract class AbstractStyler implements DataStyler
         }
             
         return bbox;
+    }
+
+    
+    /**
+     * Sets up mapping for geometry X property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingX(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.x = constantX = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));
+                    allConstant = false;
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry Y property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingY(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.y = constantY = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
+                    allConstant = false;
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry Z property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingZ(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.z = constantZ = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
+                    allConstant = false;
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry T property
+     * @param graphic
+     * @param param
+     * @return
+     */
+    protected void updateMappingT(TimeTaggedGraphic graphic, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                graphic.t = constantT = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericTimeMapper(graphic, param.getMappingFunction()));
+                    allConstant = false;
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry red property
+     * @param point
+     * @param param
+     */
+    protected void updateMappingRed(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.r = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry green property
+     * @param point
+     * @param param
+     */
+    protected void updateMappingGreen(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.g = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry blue property
+     * @param point
+     * @param param
+     */
+    protected void updateMappingBlue(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.b = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry alpha property
+     * @param point
+     * @param param
+     */
+    protected void updateMappingAlpha(PrimitiveGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.a = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
+                }
+            }
+        }
     }
 }

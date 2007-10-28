@@ -61,7 +61,11 @@ public class PolygonStyler extends AbstractStyler
     {
         if (dataLists[0].blockIndexer.hasNext())
         {
-            point.x = point.y = point.z = 0.0;
+            // reset point values
+            point.x = constantX;
+            point.y = constantY;
+            point.z = constantZ;
+            
             dataLists[0].blockIndexer.next();
             
             // adjust geometry to fit projection
@@ -91,11 +95,13 @@ public class PolygonStyler extends AbstractStyler
 	{
         ScalarParameter param;
         String propertyName = null;
-        Object value;
         
         // reset all parameters
         point = new PolygonPointGraphic();
-        this.clearAllMappers();        
+        this.clearAllMappers();
+        
+        // X,Y,Z are initialized to 0 by default
+        constantX = constantY = constantZ = 0.0;
         
         // geometry breaks
         param = this.symbolizer.getGeometry().getBreaks();
@@ -110,112 +116,37 @@ public class PolygonStyler extends AbstractStyler
         
         // geometry X
         param = this.symbolizer.getGeometry().getX();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericXMapper(point, param.getMappingFunction()));                
-            }
-        }
+        updateMappingX(point, param);
         
         //geometry Y
         param = this.symbolizer.getGeometry().getY();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericYMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingY(point, param);
         
         // geometry Z
         param = this.symbolizer.getGeometry().getZ();
-        if (param != null)
-        {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericZMapper(point, param.getMappingFunction()));
-            }
-        }
+        updateMappingZ(point, param);
+        
+        // geometry T
+        param = this.symbolizer.getGeometry().getT();
+        updateMappingT(point, param);
         
         // color - red 
         param = this.symbolizer.getFill().getColor().getRed();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.r = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericRedMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingRed(point, param);
         
         // color - green 
         param = this.symbolizer.getFill().getColor().getGreen();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.g = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericGreenMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingGreen(point, param);
         
         // color - blue 
         param = this.symbolizer.getFill().getColor().getBlue();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.b = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBlueMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingBlue(point, param);
         
         // color - alpha 
         param = this.symbolizer.getFill().getColor().getAlpha();
-        if (param != null)
-        {
-            if (param.isConstant())
-            {
-                value = param.getConstantValue();
-                point.a = (Float)value;
-            }
-            else
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericAlphaMapper(point, param.getMappingFunction()));
-                }
-            }
-        }
+        updateMappingAlpha(point, param);
+        
+        mappingsUpdated = true;
 	}
 	
 	
@@ -238,7 +169,7 @@ public class PolygonStyler extends AbstractStyler
         
         if (dataNode.isNodeStructureReady())
         {
-            if (dataLists.length == 0)
+            if (!mappingsUpdated)
                 updateDataMappings();
                         
             visitor.visit(this);
