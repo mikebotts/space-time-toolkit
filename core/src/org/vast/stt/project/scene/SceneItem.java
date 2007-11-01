@@ -28,7 +28,6 @@ package org.vast.stt.project.scene;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -36,7 +35,6 @@ import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.SceneRenderer.CleanupSection;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.StylerFactory;
@@ -58,7 +56,7 @@ import org.vast.stt.style.StylerFactory;
  */
 public class SceneItem implements STTEventListener
 {
-    protected Scene<? extends SceneRenderer> parentScene;
+    protected Scene parentScene;
     protected DataItem dataItem;
     protected List<DataStyler> stylers;    
     protected List<SceneItem> maskItems;
@@ -66,7 +64,7 @@ public class SceneItem implements STTEventListener
     protected boolean visible;
 
 
-    public SceneItem(Scene<? extends SceneRenderer> scene)
+    public SceneItem(Scene scene)
     {
         stylers = new ArrayList<DataStyler>(1);
         maskItems = new ArrayList<SceneItem>(1);

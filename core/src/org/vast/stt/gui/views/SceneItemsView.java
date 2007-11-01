@@ -47,11 +47,11 @@ import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.STTDndTransfer;
+import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.scene.SceneItem;
-import org.vast.stt.project.world.WorldScene;
 
 
-public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClickListener
+public class SceneItemsView extends SceneView<Scene> implements IDoubleClickListener
 {
 	public static final String ID = "STT.SceneItemsView";
 	private TreeViewer sceneTree;
@@ -109,9 +109,9 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
 
 		public Object[] getElements(Object inputElement)
 		{
-			if (inputElement instanceof WorldScene)
+			if (inputElement instanceof Scene)
 			{
-				return ((WorldScene)inputElement).getSceneItems().toArray();
+				return ((Scene)inputElement).getSceneItems().toArray();
 			}
 			return null;
 		}		
@@ -158,6 +158,17 @@ public class SceneItemsView extends SceneView<WorldScene> implements IDoubleClic
         
 		treeFont = new Font (PlatformUI.getWorkbench().getDisplay(), "Tahoma", 7, SWT.NORMAL);
 	}
+    
+    
+    @Override
+    protected void assignScene()
+    {
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene((Scene)pageInput.getScene());
+        else
+            setScene(null);
+    }
 	
 	
 	@Override

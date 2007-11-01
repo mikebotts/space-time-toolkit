@@ -27,7 +27,6 @@ package org.vast.stt.project.feedback;
 
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.renderer.SceneRenderer;
 
 
 public class FeedbackEvent
@@ -39,7 +38,7 @@ public class FeedbackEvent
 
     protected FeedbackType type;
     protected int cursorX, cursorY;
-    protected Scene<? extends SceneRenderer<? extends Scene>> sourceScene;
+    protected Scene sourceScene;
     protected DataItem sourceItem;
     protected int[] dataIndices; // block#, array1#, array2#
 
@@ -110,13 +109,13 @@ public class FeedbackEvent
     }
 
 
-    public Scene<? extends SceneRenderer<? extends Scene>> getSourceScene()
+    public Scene getSourceScene()
     {
         return sourceScene;
     }
 
 
-    public void setSourceScene(Scene<? extends SceneRenderer<? extends Scene>> sourceScene)
+    public void setSourceScene(Scene sourceScene)
     {
         this.sourceScene = sourceScene;
     }

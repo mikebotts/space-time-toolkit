@@ -86,6 +86,17 @@ public class SceneTimeView extends SceneView<WorldScene>
                 }
         }
     }
+    
+    
+    @Override
+    protected void assignScene()
+    {
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene((WorldScene)pageInput.getScene());
+        else
+            setScene(null);
+    }
 
 
     @Override

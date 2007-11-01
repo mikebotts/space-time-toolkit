@@ -38,6 +38,7 @@ import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.project.world.Projection.Crs;
 import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.stt.provider.STTTimeExtent;
 
 
 /**
@@ -98,6 +99,7 @@ public abstract class AbstractStyler implements DataStyler
     protected boolean computeExtent = true;
     protected int[] indexList = new int[3];
     protected STTSpatialExtent bbox;
+    protected STTTimeExtent timeExtent;
     protected int blockOffset = 0;
     protected boolean mappingsUpdated = false;
     protected boolean allConstant = false;
@@ -327,6 +329,8 @@ public abstract class AbstractStyler implements DataStyler
     protected void addToExtent(PrimitiveGraphic point)
     {
         bbox.resizeToContain(point.x, point.y, point.z);
+        if (!Double.isNaN(point.t))
+            timeExtent.resizeToContain(point.t);
     }
     
     
@@ -346,6 +350,19 @@ public abstract class AbstractStyler implements DataStyler
         }
             
         return bbox;
+    }
+    
+    
+    public STTTimeExtent getTimeRange()
+    {
+        if (computeExtent)
+        {
+            timeExtent.nullify();
+            this.computeBoundingBox();
+            computeExtent = false;
+        }
+            
+        return timeExtent;
     }
 
     

@@ -26,7 +26,6 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Composite;
@@ -34,6 +33,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.chart.ChartScene;
+import org.vast.stt.project.chart.ChartSceneRenderer;
 
 
 /**
@@ -94,6 +94,17 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
     
     
     @Override
+    protected void assignScene()
+    {
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene((ChartScene)pageInput.getScene());
+        else
+            setScene(null);
+    }
+    
+    
+    @Override
     public void setScene(ChartScene sc)
     {
         if (scene != sc)
@@ -125,7 +136,7 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
     public void updateView()
     {
         // render whole scene tree
-        scene.getRenderer().drawScene(scene);
+        ((ChartSceneRenderer)scene.getRenderer()).drawScene(scene);
     }
     
     
@@ -155,20 +166,8 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
     }
     
     
-    public void paintControl(PaintEvent e)
-    {
-        if (scene != null)
-            scene.getRenderer().drawScene(scene);
-    }
-    
-    
     public void controlResized(ControlEvent e)
     {
-        if (scene != null)
-        {
-            // redraw the whole scene
-            //scene.getRenderer().drawScene(scene);
-        }
     }
 	
 	

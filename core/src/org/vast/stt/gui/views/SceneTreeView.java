@@ -327,6 +327,17 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
     
     
     @Override
+    protected void assignScene()
+    {
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene((WorldScene)pageInput.getScene());
+        else
+            setScene(null);
+    }
+    
+    
+    @Override
     public void setScene(WorldScene sc)
     {
         super.setScene(sc);

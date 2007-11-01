@@ -25,37 +25,24 @@
 
 package org.vast.stt.project.table;
 
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
- * <p><b>Title:</b><br/>
- * Table Scene Descriptor
+ * <p><b>Title:</b>
+ * Table Scene Renderer
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Encapsulate the current state of a table scene.
+ * Abstract base class for all renderers of a table scene
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Nov 2, 2005
+ * @date Nov 1, 2007
  * @version 1.0
  */
-public class TableScene extends Scene
+public abstract class TableSceneRenderer extends SceneRenderer<TableScene>
 {
-    
-    public TableScene()
-    {
-        super();
-        renderer = new MyTableRenderer();
-    }
 
-    
-    @Override
-    protected void prepareStyler(DataStyler styler)
-    {
-
-    }	
 }
