@@ -356,13 +356,12 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     
     
     @Override
-    public void drawScene(WorldScene sc)
+    public void drawScene(WorldScene scene)
     {
         if (composite.isDisposed())
             return;
 
         getContext();
-        WorldScene scene = (WorldScene)sc;
         ViewSettings view = scene.getViewSettings();
         setupMatrices(view);
         
@@ -382,7 +381,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
             if (!nextItem.getDataItem().isEnabled())
                 continue;
 
-            try {drawItem(sc, nextItem);}
+            try {drawItem(scene, nextItem);}
             catch (RuntimeException e) {e.printStackTrace();}
         }
         
