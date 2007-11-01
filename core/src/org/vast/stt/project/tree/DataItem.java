@@ -56,6 +56,7 @@ import org.vast.stt.provider.DataProvider;
 public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 {
 	protected String name;
+    protected String description;
 	protected boolean enabled = true;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
@@ -85,6 +86,18 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	{
 		this.name = name;
 	}
+    
+    
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
 
 
 	public DataProvider getDataProvider()

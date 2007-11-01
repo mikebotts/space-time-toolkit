@@ -48,6 +48,7 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 {
 	static final long serialVersionUID = 0;
 	protected String name;
+    protected String description;
 	protected DataItemIterator iterator;
 	
 	
@@ -74,6 +75,18 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 	{
 		this.name = name;
 	}
+    
+    
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
 	
 	
 	public boolean isEnabled()

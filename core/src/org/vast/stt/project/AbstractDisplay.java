@@ -47,6 +47,7 @@ import org.vast.stt.event.STTEventListeners;
 public abstract class AbstractDisplay implements STTDisplay
 {
     protected String name;
+    protected String description;
     protected String rendererClass;
     protected STTEventListeners listeners;
     
@@ -66,6 +67,18 @@ public abstract class AbstractDisplay implements STTDisplay
     public void setName(String name)
     {
         this.name = name;
+    }
+    
+    
+    public String getDescription()
+    {
+        return description;
+    }
+
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
 
