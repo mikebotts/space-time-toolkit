@@ -55,10 +55,10 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public abstract class Scene<RendererType extends SceneRenderer> extends AbstractDisplay
+public abstract class Scene extends AbstractDisplay
 {
 	protected DataTree dataTree;
-    protected RendererType renderer;
+    protected SceneRenderer renderer;
     protected ArrayList<SceneItem> sceneItems;
     protected ArrayList<SceneItem> selectedItems;
     protected ArrayList<SceneItem> maskItems;
@@ -96,13 +96,13 @@ public abstract class Scene<RendererType extends SceneRenderer> extends Abstract
     }
     
     
-    public RendererType getRenderer()
+    public SceneRenderer getRenderer()
     {
         return renderer;
     }
     
     
-    public void setRenderer(RendererType renderer)
+    public void setRenderer(SceneRenderer renderer)
     {
         this.renderer = renderer;
     }

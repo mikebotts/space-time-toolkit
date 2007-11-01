@@ -29,7 +29,7 @@ import org.vast.stt.project.scene.Scene;
 import org.vast.stt.renderer.SceneRenderer;
 
 
-public class Display<SceneType extends Scene<? extends SceneRenderer>>
+public class Display<SceneType extends Scene>
 {
     protected SceneRenderer<SceneType> renderer;
     protected SceneType scene;

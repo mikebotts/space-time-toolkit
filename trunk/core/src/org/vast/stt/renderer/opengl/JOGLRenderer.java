@@ -50,12 +50,12 @@ import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
+import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
 import org.vast.stt.renderer.PopupRenderer;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.TextureManager.GLTexture;
 import org.vast.stt.style.*;
 
@@ -75,7 +75,7 @@ import org.vast.stt.style.*;
  * @date Nov 15, 2005
  * @version 1.0
  */
-public class JOGLRenderer extends SceneRenderer<WorldScene> implements StylerVisitor
+public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
     protected GLContext swtContext;

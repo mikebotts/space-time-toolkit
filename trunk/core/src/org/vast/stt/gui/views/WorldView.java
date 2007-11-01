@@ -30,7 +30,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -42,6 +41,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.renderer.SceneRenderer;
 
 
@@ -152,6 +152,17 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     
     
     @Override
+    protected void assignScene()
+    {
+        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
+        if (pageInput != null)
+            setScene((WorldScene)pageInput.getScene());
+        else
+            setScene(null);
+    }
+    
+    
+    @Override
     public void setScene(WorldScene sc)
     {
         if (scene != sc)
@@ -194,7 +205,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     public void updateView()
     {
         // render whole scene tree
-        scene.getRenderer().drawScene(scene);
+        ((WorldSceneRenderer)scene.getRenderer()).drawScene(scene);
     }
     
     
@@ -237,13 +248,6 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
                 parent.getDisplay().syncExec(runFitScene);
                 break;
         }
-    }
-    
-    
-    public void paintControl(PaintEvent e)
-    {
-        if (scene != null)
-            updateView();
     }
     
     

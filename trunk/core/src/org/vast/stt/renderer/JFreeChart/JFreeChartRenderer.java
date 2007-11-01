@@ -36,11 +36,11 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.vast.math.Vector3d;
 import org.vast.stt.project.chart.ChartScene;
+import org.vast.stt.project.chart.ChartSceneRenderer;
 import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.DataStyler;
 
 
@@ -58,7 +58,7 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 16, 2006
  * @version 1.0
  */
-public class ChartRenderer extends SceneRenderer<ChartScene> implements PaintListener
+public class JFreeChartRenderer extends ChartSceneRenderer implements PaintListener
 {
     protected Composite swt_awt;
     protected ChartPanel chartPanel;
@@ -67,7 +67,7 @@ public class ChartRenderer extends SceneRenderer<ChartScene> implements PaintLis
     //protected PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
     
     
-    public ChartRenderer()
+    public JFreeChartRenderer()
     {
     }
     

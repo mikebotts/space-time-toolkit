@@ -25,6 +25,7 @@
 
 package org.vast.stt.gui.views;
 
+import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -32,7 +33,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.scene.Scene;
-import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
@@ -51,7 +51,7 @@ import org.vast.stt.renderer.SceneRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<? extends Scene>>> extends ViewPart implements IPartListener2, STTEventListener
+public abstract class SceneView<SceneType extends Scene> extends ViewPart implements IPartListener2, STTEventListener
 {
     protected SceneType scene;
     protected boolean refreshThreadStarted = false;
@@ -95,12 +95,9 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
 
 
     public abstract void createPartControl(Composite parent);
-
-
     public abstract void updateView();
-
-
     public abstract void clearView();
+    protected abstract void assignScene();
 
 
     /**
@@ -136,16 +133,6 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
                 lock.notifyAll();
             }
         }
-    }
-
-
-    protected void assignScene()
-    {
-        ScenePageInput pageInput = (ScenePageInput) getSite().getPage().getInput();
-        if (pageInput != null)
-            setScene((SceneType)pageInput.getScene());
-        else
-            setScene(null);
     }
 
 
@@ -193,6 +180,13 @@ public abstract class SceneView<SceneType extends Scene<? extends SceneRenderer<
         // by default the view will refresh on all events!!
         // override this method to filter on event type
         refreshViewAsync();
+    }
+    
+    
+    public void paintControl(PaintEvent e)
+    {
+        if (scene != null)
+            updateView();
     }
 
 

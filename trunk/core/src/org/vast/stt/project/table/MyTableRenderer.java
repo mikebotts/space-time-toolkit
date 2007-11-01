@@ -35,7 +35,6 @@ import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.*;
 
 
@@ -53,12 +52,12 @@ import org.vast.stt.style.*;
  * @date Dec 05, 2006
  * @version 1.0
  */
-public class TableRenderer extends SceneRenderer<TableScene> implements StylerVisitor
+public class MyTableRenderer extends TableSceneRenderer implements StylerVisitor
 {
     private ScrolledComposite mainSC;
     
     
-    public TableRenderer()
+    public MyTableRenderer()
     {
     }
     

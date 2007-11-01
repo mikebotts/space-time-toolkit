@@ -23,39 +23,26 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.project.table;
+package org.vast.stt.project.world;
 
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.style.DataStyler;
+import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
- * <p><b>Title:</b><br/>
- * Table Scene Descriptor
+ * <p><b>Title:</b>
+ * World Scene Renderer
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Encapsulate the current state of a table scene.
+ * Abstract base class for all renderers of a 3D World scene
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Nov 2, 2005
+ * @date Nov 1, 2007
  * @version 1.0
  */
-public class TableScene extends Scene
+public abstract class WorldSceneRenderer extends SceneRenderer<WorldScene>
 {
-    
-    public TableScene()
-    {
-        super();
-        renderer = new MyTableRenderer();
-    }
 
-    
-    @Override
-    protected void prepareStyler(DataStyler styler)
-    {
-
-    }	
 }

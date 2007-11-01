@@ -28,7 +28,6 @@ package org.vast.stt.project.world;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.Scene;
 import org.vast.stt.provider.STTTimeExtent;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 import org.vast.stt.style.DataStyler;
 
@@ -47,7 +46,7 @@ import org.vast.stt.style.DataStyler;
  * @date Nov 2, 2005
  * @version 1.0
  */
-public class WorldScene extends Scene<SceneRenderer<WorldScene>>
+public class WorldScene extends Scene
 {
     protected ViewSettings viewSettings;
 	protected STTTimeExtent timeExtent;

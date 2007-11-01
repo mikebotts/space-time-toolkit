@@ -36,11 +36,11 @@ import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
-import org.vast.stt.renderer.SceneRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -167,7 +167,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         // check if resizing ROI (need to call renderer pick method)
         if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
         {
-            SceneRenderer<WorldScene> renderer = scene.getRenderer();
+            WorldSceneRenderer renderer = (WorldSceneRenderer)scene.getRenderer();
             PickFilter pickFilter = new PickFilter();
             pickFilter.x = e.x;
             pickFilter.y = e.y;
