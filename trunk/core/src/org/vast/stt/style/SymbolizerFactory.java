@@ -25,21 +25,19 @@
 
 package org.vast.stt.style;
 
-import java.util.Enumeration;
-import org.vast.xml.DOMHelper;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.Fill;
+import org.vast.ows.sld.Font;
 import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
+import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.PointSymbolizer;
-import org.vast.ows.sld.SLDReader;
+import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Stroke;
 import org.vast.ows.sld.Symbolizer;
-import org.vast.ows.sld.TextureSymbolizer;
-import org.vast.stt.apps.STTPlugin;
-import org.vast.util.ExceptionSystem;
+import org.vast.ows.sld.TextSymbolizer;
 
 
 /**
@@ -59,8 +57,10 @@ public class SymbolizerFactory {
 
 	public enum SymbolizerType
     {
-        point("point"), line("line"), grid("grid"), polygon("polygon"), raster("raster"), 
-        texture("texture"), label("label");
+        point("point"), line("line"), polygon("polygon"), label("label");
+        //  TODO  support the rest of these
+//        raster("raster"), texture("texture"), 
+//        gridMesh("grid mesh"), gridFill("grid fill"), gridBorder("grid border");
         
         String typeStr;
         
@@ -86,9 +86,27 @@ public class SymbolizerFactory {
         case line:
         	newSymbolizer = SymbolizerFactory.createDefaultLineSymbolizer();
             break;
+        case polygon:
+        	newSymbolizer = SymbolizerFactory.createDefaultPolygonSymbolizer();
+        	break;
+//        case gridMesh:
+//        	newSymbolizer = SymbolizerFactory.createDefaultGridMeshSymbolizer();
+//        	break;
+//        case gridFill:
+//        	newSymbolizer = SymbolizerFactory.createDefaultGridFillSymbolizer();
+//        	break;
+//        case gridBorder:
+//        	newSymbolizer = SymbolizerFactory.createDefaultGridBorderSymbolizer();
+//        	break;
+//      case raster:
+//          newStyler = StylerFactory.createDefaultTextureStyler();
+//          break;
 //        case texture:
 //            newStyler = StylerFactory.createDefaultTextureStyler();
 //            break;
+        case label:
+        	newSymbolizer = SymbolizerFactory.createDefaultTextSymbolizer();
+        	break;
         default:
             System.err.println("SymbolizerFactory not supported in createNewSym()");
             return null;
@@ -123,6 +141,27 @@ public class SymbolizerFactory {
 		return symbolizer;
 	}
   	
+    public static TextSymbolizer createDefaultTextSymbolizer(){
+    	TextSymbolizer symbolizer = new TextSymbolizer();
+
+    	// 
+//        ScalarParameter labelParam = new ScalarParameter();
+//        labelParam.setConstantValue("");
+//        symbolizer.setLabel(labelParam);
+        
+        // font
+        //  TODO - create default font (font is not yet honored by renderer)
+        Font font = new Font();
+        symbolizer.setFont(font);
+        
+        //  fill
+		Fill fill = new Fill();
+		fill.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+		symbolizer.setFill(fill);
+
+		return symbolizer;
+	}
+    
   	public static LineSymbolizer createDefaultLineSymbolizer(){
         LineSymbolizer symbolizer = new LineSymbolizer();
         Stroke stroke = new Stroke();
@@ -139,33 +178,26 @@ public class SymbolizerFactory {
         return symbolizer;
   	}
   	
-  	public static TextureSymbolizer createWMSTextureSymbolizer(){
-  	    SLDReader sldReader = new SLDReader();
-        DOMHelper dom;
-		TextureSymbolizer sym = null;
-		try {
-			String fileLocation = null;
-			Enumeration e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", "wms.xml", false);
-			if (e.hasMoreElements())
-				fileLocation = (String) e.nextElement().toString();
+  	public static PolygonSymbolizer createDefaultPolygonSymbolizer(){
+  		PolygonSymbolizer sym = new PolygonSymbolizer();
 
-			if (fileLocation == null) {
-				ExceptionSystem.display(new Exception(
-						"STT error: Cannot find template\\wms.xml"));
-				return null;
-			}
+  		Stroke stroke = new Stroke();
 
-			dom = new DOMHelper(fileLocation, false);
-			sym = sldReader.readTexture(dom, dom.getRootElement());
-			return sym;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+        //  width
+  		sym.setStroke(stroke);
+        ScalarParameter width = new ScalarParameter();
+        width.setConstantValue(new Float(2.0));
+        stroke.setWidth(width);
+        
+		// read fill
+        Fill fill = new Fill();
+		fill.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+		sym.setFill(fill);
+		
+  		return sym;
+  	}
   	
-	public static String[] getSymbolizerTypes(){
+	public static String[] getSymbolizerTypeNames(){
 		SymbolizerType [] symbolizerTypes = SymbolizerType.values();
 		String [] symbolizerTypeStr = new String[symbolizerTypes.length];
 		int i=0;
@@ -174,6 +206,10 @@ public class SymbolizerFactory {
 		}
 		
 		return symbolizerTypeStr;
+	}
+	
+	public static SymbolizerType[] getSymbolizerTypes(){
+		return SymbolizerType.values();
 	}
 }
 
