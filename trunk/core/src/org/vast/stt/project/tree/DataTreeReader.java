@@ -133,6 +133,9 @@ public class DataTreeReader extends XMLReader
 		    // set name
             dataEntry.setName(dom.getElementValue(dataEntryElt, "name"));
             
+            // set description
+            dataEntry.setDescription(dom.getElementValue(dataEntryElt, "description"));
+            
 		    // add this new instance to the table
             registerObjectID(dom, dataEntryElt, dataEntry);
 		}
