@@ -25,12 +25,12 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
+import org.vast.math.Vector3d;
 import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -38,18 +38,14 @@ import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.util.TimeInfo;
 import org.vast.process.DataProcess;
-import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.data.DataException;
 import org.vast.stt.process.SOS_Process;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.STTTimeExtent;
 import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
-import org.vast.util.ExceptionSystem;
-import org.vast.xml.DOMHelper;
 
 /**
  * <p><b>Title:</b>
@@ -68,51 +64,6 @@ import org.vast.xml.DOMHelper;
 
 public class SOSLayerFactory 
 {
-	public static DataItem[] createSOSLayer(SOSLayerCapabilities caps){
-		try {
-			Enumeration e;
-			String templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
-			String capsServer = caps.getParent().getGetServers().get("GetCapabilities");
-			
-			//  Hardcoded switch to hack what we're dropping- clean up later
-			//  TODO:  How to unhack this?
-			if(capsServer.contains("muenster"))
-				templateName = "IFGI_WeatherNY.xml";
-			else
-				templateName = "CSIRO_gatton-HUMIDITY_TEMP.xml";
-			e = STTPlugin.getDefault().getBundle().findEntries(
-					"templates", templateName, false);
-			String fileLocation = null;
-			if (e.hasMoreElements())
-				fileLocation = (String) e.nextElement().toString();
-
-			if (fileLocation == null) {
-				ExceptionSystem.display(new Exception(
-						"STT error: Cannot find template\\" + templateName));
-				return null;
-			}
-
-            DOMHelper dom = new DOMHelper(fileLocation, false);
-			DataTreeReader dataReader = new DataTreeReader();
-//			DataItem tmpItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-			List<String> procs = caps.getProcedureList();
-			int numItems = procs.size();
-			DataItem [] items = new DataItem[numItems];
-			for(int i=0; i<numItems;i++) {
-				//  No way to clone items currently.  Reread template file each time, for now
-				items[i] = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-				//  Override name from template
-				items[i].setName(caps.getId());
-				setSOSProcedure(items[i], procs.get(i));
-			}
-			
-			return items;
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	public static void setSOSProcedure(DataItem item, String procedure){
 		SMLProvider provider = (SMLProvider)item.getDataProvider();
 		DataProcess process = provider.getProcess();
@@ -156,7 +107,7 @@ public class SOSLayerFactory
 	}
 	
 	public static DataItem createSOSLayer(String offering, SOSLayerCapabilities caps, 
-			String [] mappings, String symType){
+			String [] mappings, String symType, Vector3d foi){
 		System.err.println("Create SOS layer: " + offering + " " + mappings[0] + " " + symType);
 		DataItem item = new DataItem();
 		item.setName(offering);
@@ -210,6 +161,7 @@ public class SOSLayerFactory
 		}
 		//SOSLayerFactory.setSOSProcedure(item,procs.get(0));
 		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(symType.toString(), symType);
+		sym.setEnabled(true);
         item.getSymbolizers().add(sym);
         //  Creat mappings (geometry)
         Geometry geom = sym.getGeometry();
@@ -220,7 +172,22 @@ public class SOSLayerFactory
         		//   Note that FOI mazy NOT be constant.  Need a better 
         		//   way to handle those cases
         		sp.setConstant(true);
-        		sp.setConstantValue(new Double(1.0));
+        		switch(i){
+        		case 0:
+        			sp.setConstantValue(new Float(foi.x*Math.PI/180.0));
+        			geom.setX(sp);
+        			continue;
+        		case 1:
+        			sp.setConstantValue(new Float(foi.y*Math.PI/180.0));
+        			geom.setY(sp);
+        			continue;
+        		case 2:
+        			sp.setConstantValue(new Float(foi.z));
+        			geom.setZ(sp);
+        			continue;
+        		default:
+        			System.err.println("SOSLayerFactory error: FOI can only be mapped to X, Y, or Z");
+        		}
         	} else {
         		sp.setPropertyName(mappings[i]);
         	}
@@ -235,7 +202,7 @@ public class SOSLayerFactory
     			geom.setZ(sp);
     			break;
     		case 3:
-    			geom.setT(sp);
+    			//geom.setT(sp);
     			break;
     		case 4:
     			geom.setBreaks(sp);

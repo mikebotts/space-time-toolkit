@@ -161,7 +161,6 @@ public class SymbolizerWidget extends CheckOptionTable
     {
         StructuredSelection selection = (StructuredSelection) e.getSelection();
         Symbolizer symbolizer = (Symbolizer) selection.getFirstElement();
-        System.err.println("sel,activ Symb is" + symbolizer + ", " + activeSymbolizer);
         
         //  Check for empty selection (happens when buildControls() is called)
         if (symbolizer == null)

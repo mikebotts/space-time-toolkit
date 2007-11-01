@@ -34,9 +34,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.vast.stt.gui.widgets.symbolizer.SymbolizerOptionChooser;
 import org.vast.stt.style.SymbolizerFactory;
-import org.vast.stt.style.SymbolizerFactory.SymbolizerType;
 
 /**
  * <p><b>Title:</b>
@@ -61,7 +59,7 @@ public class SOSSymbolizerPage extends WizardPage
 		super("Graphic Type Selection");
 		setTitle("Select Graphic Types");
 		setDescription("Select Graphic Types for rendering Offerings");
-		symTypes = SymbolizerFactory.getSymbolizerTypes();
+		symTypes = SymbolizerFactory.getSymbolizerTypeNames();
 	}
 	
 	public void createControl(Composite parent){

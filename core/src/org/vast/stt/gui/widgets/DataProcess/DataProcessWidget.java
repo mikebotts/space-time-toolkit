@@ -188,7 +188,7 @@ public class DataProcessWidget implements ISelectionChangedListener, SelectionLi
 			return;
 		// Provider should be a SensorMLProvider
 		if (!(prov instanceof SMLProvider)) {
-			System.err.println("SWE Provider not yer supported");
+			System.err.println("SWE Provider not yet supported");
 			return;
 		}
 
