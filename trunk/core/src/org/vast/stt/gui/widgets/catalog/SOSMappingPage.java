@@ -171,6 +171,8 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 	//  method.    TC 3/22/07
 	private DataComponent issueRequest() throws DataException {
 		GetObservationRequest query = new GetObservationRequest();
+		//SOSQuery query = new SOSQuery();
+		query.setOperation("GetObservation");
 		query.setGetServer(caps.getParent().getGetServers().get("GetObservation"));
 		query.setPostServer(caps.getParent().getGetServers().get("GetObservation"));
 		query.setOffering(caps.getId());
@@ -205,6 +207,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 
 			// display data structure and encoding
 			DataComponent dataInfo = reader.getDataComponents();
+			//  NOTE- how do we know what CRS FOI is in (and radians or degrees?)
 			foiLocation = reader.getFoiLocation();
 			return dataInfo;
 		} catch (Exception e) {
@@ -322,6 +325,10 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 
 	public void widgetSelected(SelectionEvent e) {
 		//  change page options
+	}
+
+	public Vector3d getFoiLocation() {
+		return foiLocation;
 	}
 }
 

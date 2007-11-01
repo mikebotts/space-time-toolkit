@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.vast.math.Vector3d;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.stt.project.tree.DataItem;
 
@@ -81,6 +82,7 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 	public boolean performFinish() {
 		HashMap <String , String[]> selMappings = mappingPage.getSelectedMappings();
 		String [] symTypes = symPage.getSelectedSymbolizerTypes();
+		Vector3d foi = mappingPage.getFoiLocation();
 		Iterator<String> offIt = selMappings.keySet().iterator();
 		String offTmp;
 		String [] mapTmp;
@@ -89,7 +91,7 @@ public class AddSOSItemWizard extends Wizard implements INewWizard
 			offTmp = offIt.next();
 			mapTmp = selMappings.get(offTmp);
 			for(int i=0; i<symTypes.length; i++){
-				newItems[i] = SOSLayerFactory.createSOSLayer(offTmp, caps, mapTmp, symTypes[i]);
+				newItems[i] = SOSLayerFactory.createSOSLayer(offTmp, caps, mapTmp, symTypes[i], foi);
 			}
 		}
 		
