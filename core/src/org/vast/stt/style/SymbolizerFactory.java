@@ -30,7 +30,6 @@ import org.vast.ows.sld.Fill;
 import org.vast.ows.sld.Font;
 import org.vast.ows.sld.Graphic;
 import org.vast.ows.sld.GraphicMark;
-import org.vast.ows.sld.GridSymbolizer;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.PointSymbolizer;
 import org.vast.ows.sld.PolygonSymbolizer;
