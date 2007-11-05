@@ -97,7 +97,7 @@ public class LineOptionHelper //implements SelectionListener
 	 * Convenience method to set line color
 	 * @param Color
 	 */
-	public void setLineColor(Color color) {
+	public void setLineColor(org.vast.ows.sld.Color color) {
 		Stroke stroke = symbolizer.getStroke();
 		stroke.setColor(color);
 	}

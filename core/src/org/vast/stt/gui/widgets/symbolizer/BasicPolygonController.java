@@ -26,8 +26,14 @@
 package org.vast.stt.gui.widgets.symbolizer;
 
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.vast.ows.sld.Color;
 import org.vast.ows.sld.PolygonSymbolizer;
+import org.vast.stt.event.EventType;
+import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
@@ -40,6 +46,9 @@ import org.vast.stt.gui.widgets.OptionParams;
  *
  * <p><b>Description:</b><br/>
  * Builds basic Polygon controls for StyleWidget
+ * 
+ * NOTE:  Polygon symbolizer only supports Fill Color - to add bounds, the user
+ * must use a separate Line Symbolizer currently.
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -51,6 +60,7 @@ public class BasicPolygonController extends OptionController
 {
 	private PolygonOptionHelper polygonOptionHelper;
 	
+	
 	public BasicPolygonController(Composite parent, PolygonSymbolizer symbolizer){
 		this.symbolizer = symbolizer;
 		polygonOptionHelper = new PolygonOptionHelper(this);
@@ -61,33 +71,40 @@ public class BasicPolygonController extends OptionController
 		
 		OptionParams[] params = 
 		{
-		    new OptionParams(OptionControl.ControlType.CHECKBOX, "Show Bounds",
-		    		polygonOptionHelper.getShowBounds()),
-			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Bound Color", 
-					polygonOptionHelper.getBoundColor()),
-			new OptionParams(OptionControl.ControlType.CHECKBOX, "Fill Polygon", 
-					polygonOptionHelper.getFillPolygon()),	
 			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Fill Color", 
 					polygonOptionHelper.getFillColor())
 		};
 		
 		optionControls = OptionControl.createControls(parent, params);
-		addSelectionListener(polygonOptionHelper);
+		loadFields();
+		addSelectionListener(this);	
 	}
 
 	@Override
 	public void loadFields() {
-		// TODO Auto-generated method stub
-		
+		//  fillColor
+		optionControls[0].setColorLabelColor(polygonOptionHelper.getFillColor());
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void widgetSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+		Control control = (Control)e.getSource();
+
+		//  TODO support showBounds and fillPoly
+		if(control == optionControls[0].getControl()) {  //  fillColor
+			ColorDialog colorChooser = 
+				new ColorDialog(control.getShell());
+			RGB rgb = colorChooser.open();
+			if(rgb == null)
+				return;
+			// TODO:  add alpha support
+			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
+			optionControls[0].setColorLabelColor(sldColor); 
+			polygonOptionHelper.setFillColor(sldColor);
+			dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		}
 	}
+	
 }
