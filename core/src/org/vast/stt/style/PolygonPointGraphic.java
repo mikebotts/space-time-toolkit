@@ -42,5 +42,15 @@ package org.vast.stt.style;
  */
 public class PolygonPointGraphic extends PrimitiveGraphic
 {
-
+    
+    public PolygonPointGraphic copy(PolygonPointGraphic p)
+    {
+        if (p == null)
+            p = new PolygonPointGraphic();
+        
+        super.copy(p);
+        
+        return p;
+    }
+    
 }

@@ -54,4 +54,23 @@ public class PointGraphic extends PrimitiveGraphic
     public String iconUrl;
     public int iconOffsetX = 0;
     public int iconOffsetY = 0;
+    
+    
+    public PointGraphic copy(PointGraphic p)
+    {
+        if (p == null)
+            p = new PointGraphic();
+        
+        super.copy(p);
+        
+        p.orientation = this.orientation;
+        p.size = this.size;
+        p.smooth = this.smooth;
+        p.shape = this.shape;
+        p.iconUrl = this.iconUrl;
+        p.iconOffsetX = this.iconOffsetX;
+        p.iconOffsetY = this.iconOffsetY;
+        
+        return p;
+    }
 }
