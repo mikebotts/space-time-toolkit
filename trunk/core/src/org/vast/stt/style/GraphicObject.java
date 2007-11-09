@@ -49,4 +49,12 @@ public class GraphicObject
     public BlockListItem block;
     public boolean discard;
     public boolean updated;
+    
+    
+    protected GraphicObject copy(GraphicObject g)
+    {
+        g.discard = this.discard;
+        g.updated = this.updated;        
+        return g;
+    }
 }

@@ -44,4 +44,15 @@ public abstract class TimeTaggedGraphic extends GraphicObject
 {
     public double t = Double.NaN;
     public boolean graphBreak;
+    
+    
+    protected TimeTaggedGraphic copy(TimeTaggedGraphic g)
+    {
+        super.copy(g);
+        
+        g.t = this.t;
+        g.graphBreak = this.graphBreak;
+        
+        return g;
+    }
 }

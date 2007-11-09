@@ -45,4 +45,20 @@ public abstract class PrimitiveGraphic extends TimeTaggedGraphic
     public double x, y, z;
     public float r, g, b;
     public float a = 1.0f;
+    
+    
+    protected PrimitiveGraphic copy(PrimitiveGraphic p)
+    {
+        super.copy(p);
+        
+        p.x = this.x;
+        p.y = this.y;
+        p.z = this.z;
+        p.r = this.r;
+        p.g = this.g;
+        p.b = this.b;
+        p.a = this.a;
+        
+        return p;
+    }
 }

@@ -4,7 +4,7 @@
       <name>GIS Data</name>
       <member visible="true">
          <DataItem>
-            <name>Coast Lines - 100km</name>
+            <name>Coast Lines</name>
             <dataProvider>
                <SWEDataProvider id="WORLD_COASTLINES_DATA">
                   <name>World Coast Lines - 13</name>

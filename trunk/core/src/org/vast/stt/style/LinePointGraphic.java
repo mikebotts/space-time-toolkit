@@ -44,4 +44,18 @@ public class LinePointGraphic extends PrimitiveGraphic
 {
     public float width = 1.0f;
     public boolean smooth = false;
+    
+    
+    public LinePointGraphic copy(LinePointGraphic p)
+    {
+        if (p == null)
+            p = new LinePointGraphic();
+        
+        super.copy(p);
+        
+        p.width = this.width;
+        p.smooth = this.smooth;
+        
+        return p;
+    }
 }
