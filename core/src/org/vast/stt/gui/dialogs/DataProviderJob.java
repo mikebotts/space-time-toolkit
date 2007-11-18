@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.provider.DataProvider;
@@ -55,6 +54,7 @@ public class DataProviderJob extends Job implements STTEventListener
 {
     protected DataProvider provider;
     protected boolean canceled;
+    protected IProgressMonitor monitor;
     
     
     public DataProviderJob(DataProvider provider)
@@ -70,7 +70,8 @@ public class DataProviderJob extends Job implements STTEventListener
     {
         try
         {
-            canceled = false;
+            this.monitor = monitor;
+            this.canceled = false;
                         
             if (monitor != null)
                 monitor.beginTask("Updating " + provider.getName(), IProgressMonitor.UNKNOWN);
@@ -83,7 +84,9 @@ public class DataProviderJob extends Job implements STTEventListener
             }
             
             if (monitor != null)
-                monitor.done();            
+                monitor.done();
+            
+            this.monitor = null;
         }
         catch (InterruptedException e)
         {
@@ -102,27 +105,33 @@ public class DataProviderJob extends Job implements STTEventListener
      */
     public void handleEvent(STTEvent e)
     {
-        if (e.type == EventType.PROVIDER_UPDATE_START)
+        switch (e.type)
         {
-            //setUser(true);
-            this.schedule();
-        }
+            case PROVIDER_DATA_CHANGED:
+            case PROVIDER_DATA_CLEARED:
+            case PROVIDER_DATA_ADDED:
+            case PROVIDER_DATA_REMOVED:
+                if (monitor != null && monitor.isCanceled())
+                    provider.cancelUpdate();
+                break;
         
-        else if (e.type == EventType.PROVIDER_UPDATE_DONE)
-        {
-            synchronized(this)
-            {
-                notifyAll();
-            }
-        }
-        
-        else if (e.type == EventType.PROVIDER_UPDATE_CANCELED)
-        {
-            synchronized(this)
-            {
-                canceled = true;
-                notifyAll();
-            }
+            case PROVIDER_UPDATE_START:
+                this.schedule();
+                break;
+                
+            case PROVIDER_UPDATE_DONE:
+                synchronized(this)
+                {
+                    notifyAll();
+                }
+                break;
+                
+            case PROVIDER_UPDATE_CANCELED:
+                synchronized(this)
+                {
+                    canceled = true;
+                    notifyAll();
+                }
         }
     }
 }
