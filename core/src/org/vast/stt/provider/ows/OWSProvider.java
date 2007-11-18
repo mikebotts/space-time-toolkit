@@ -25,6 +25,8 @@
 
 package org.vast.stt.provider.ows;
 
+import java.io.InputStream;
+
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSRequest;
 import org.vast.ows.OWSServiceCapabilities;
@@ -54,6 +56,7 @@ public abstract class OWSProvider extends AbstractProvider
     protected Service service;
     protected OWSServiceCapabilities serviceCaps;
     protected OWSUtils owsUtils = new OWSUtils();
+    protected InputStream dataStream;
     
     
 	public abstract OWSRequest getQuery();
