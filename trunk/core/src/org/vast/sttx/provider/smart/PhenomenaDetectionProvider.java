@@ -60,6 +60,7 @@ public class PhenomenaDetectionProvider extends AbstractProvider
     protected SWEDataHandler dataHandler;
     protected double minPressure, maxPressure;
     protected String server = "http://smartdev.itsc.uah.edu:81/CCDOM/services/PhenomenaDetection"; 
+    protected InputStream dataStream;
     
     
     public PhenomenaDetectionProvider()

@@ -25,8 +25,6 @@
 
 package org.vast.stt.provider;
 
-import java.io.IOException;
-import java.io.InputStream;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.event.EventType;
@@ -63,7 +61,6 @@ public abstract class AbstractProvider implements DataProvider
     protected boolean error = false;
     protected boolean redoUpdate = true;
     protected boolean updating = false;
-	protected InputStream dataStream;
 	protected DataNode dataNode;
 	protected STTTimeExtent timeExtent;
     protected STTSpatialExtent spatialExtent;
@@ -180,16 +177,6 @@ public abstract class AbstractProvider implements DataProvider
     public void cancelUpdate()
     {
         canceled = true;
-
-        try
-        {
-            if (dataStream != null)
-                dataStream.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 	
 	
@@ -217,9 +204,9 @@ public abstract class AbstractProvider implements DataProvider
     }
 	
 	
-	public synchronized boolean isUpdating()
+	public boolean isUpdating()
 	{
-		return updating;
+		synchronized(lock) { return updating; }
 	}
 
 

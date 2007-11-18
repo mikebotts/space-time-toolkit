@@ -26,6 +26,8 @@
 package org.vast.stt.provider.swe;
 
 import java.io.IOException;
+import java.io.InputStream;
+
 import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
@@ -57,7 +59,8 @@ public class SWEProvider extends AbstractProvider
     protected String format; 
     protected DataStreamParser dataParser;
 	protected SWEDataHandler dataHandler;
-	
+    protected InputStream dataStream;
+    
 	
 	public SWEProvider()
 	{
