@@ -43,6 +43,7 @@ import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.renderer.opengl.JOGLRenderer;
 
 
 /**
@@ -176,7 +177,8 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
             setPartName(scene.getName());
             
             // init the renderer
-            SceneRenderer renderer = scene.getRenderer();
+            SceneRenderer renderer = new JOGLRenderer(); // TODO open renderer specified in project file??
+            scene.setRenderer(renderer);
             renderer.setParent(parent);
             renderer.init();
             Composite canvas = renderer.getCanvas();

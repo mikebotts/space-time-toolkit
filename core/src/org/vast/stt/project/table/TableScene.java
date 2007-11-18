@@ -49,7 +49,6 @@ public class TableScene extends Scene
     public TableScene()
     {
         super();
-        renderer = new MyTableRenderer();
     }
 
     

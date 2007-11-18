@@ -27,15 +27,12 @@ package org.vast.stt.provider;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.vast.stt.data.DataException;
 import org.vast.stt.data.DataNode;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
-import org.vast.stt.event.STTProgressService;
 import org.vast.util.ExceptionSystem;
 
 
@@ -74,7 +71,6 @@ public abstract class AbstractProvider implements DataProvider
 	protected STTSpatialExtent maxSpatialExtent;
     protected STTEventListeners listeners;
     protected Object lock = new Object();
-    protected STTProgressService progressService;
     
     
     public abstract void init() throws DataException;
@@ -89,8 +85,6 @@ public abstract class AbstractProvider implements DataProvider
         this.setTimeExtent(new STTTimeExtent());
         this.setSpatialExtent(new STTSpatialExtent());
         listeners = new STTEventListeners(2);
-        progressService = new STTProgressService();
-        progressService.setProvider(this);
     }
       
     
@@ -108,7 +102,7 @@ public abstract class AbstractProvider implements DataProvider
                 {
                     // make sure we canceled previous update properly
                     redoUpdate = true;
-                    cancelUpdate();                    
+                    cancelUpdate();
                     return;
                 }
                 else
@@ -118,67 +112,68 @@ public abstract class AbstractProvider implements DataProvider
             updating = true;
         }
         
-        // start the update thread
-        IRunnableWithProgress runnable = new IRunnableWithProgress()
+        Runnable updateRunnable = new Runnable()
         {
-            public void run(IProgressMonitor monitor)
+            public void run()
             {
-                if (monitor != null)
-                    monitor.beginTask("Updating " + name, IProgressMonitor.UNKNOWN);
-                
-                do
+                try
                 {
-                    try
-                    {                             
-                        canceled = false;
-                        
-                        synchronized(lock)
-                        {
-                            if (!canceled)
-                                redoUpdate = false;
-                            else
+                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_START));
+                    
+                    do
+                    {
+                        try
+                        {                             
+                            canceled = false;
+                            
+                            synchronized(lock)
                             {
-                                //break;
-                                //System.out.println("Update canceled");
+                                if (!canceled)
+                                    redoUpdate = false;
+                                else
+                                    break;
                             }
+                            
+                            // init provider
+                            if (!dataNode.isNodeStructureReady())
+                                init();
+                            
+                            updateData();                
                         }
-                        
-                        // init provider
-                        if (monitor != null)
-                            monitor.subTask("Initializing...");
-                        if (!dataNode.isNodeStructureReady())
-                            init();
-                        
-                        // update data
-                        //System.out.println("Updating " + name + "...");
-                        if (monitor != null)
-                            monitor.subTask("Updating data...");
-                        updateData();
+                        catch (DataException e)
+                        {
+                            error = true;
+                            redoUpdate = false;
+                            ExceptionSystem.display(e);
+                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                        }
+                        catch (Exception e)
+                        {
+                            error = true;
+                            redoUpdate = false;
+                            e.printStackTrace();
+                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                        }
                     }
-                    catch (DataException e)
-                    {
-                        error = true;
-                        redoUpdate = false;
-                        ExceptionSystem.display(e);
-                        dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
-                    }
-                    catch (Exception e)
-                    {
-                        error = true;
-                        redoUpdate = false;
-                        e.printStackTrace();
-                        dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
-                    }
+                    while (redoUpdate);
+                    
+                    updating = false;
+                    
+                    // send event
+                    if (canceled)
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_CANCELED));
+                    else
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_DONE));
                 }
-                while (redoUpdate);
-                
-                updating = false;
-                if (monitor != null)
-                    monitor.done();
+                catch (Exception e)
+                {
+                }
             }
         };
-                
-        progressService.run(true, true, runnable);
+        
+        Thread updateThread = new Thread(updateRunnable, "Updating: " + getName());
+        updateThread.setPriority(Thread.MAX_PRIORITY);
+        updateThread.start();
     }
     
     

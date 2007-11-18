@@ -31,9 +31,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.*;
 import org.vast.stt.commands.*;
+import org.vast.stt.gui.dialogs.DataProviderJob;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.STTDisplay;
+import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.tree.DataItemIterator;
 import org.vast.stt.project.world.WorldScene;
 
 
@@ -57,12 +61,25 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                 {
                     STTDisplay nextDisplay = displayList.get(i);
                     
+                    // open a new page  a WorldScene
                     if (nextDisplay instanceof WorldScene)
                     {
                         WorldScene scene = (WorldScene)nextDisplay;
+                        
+                        // add job progress listener to all providers
+                        DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();
+                        while (it.hasNext())
+                        {
+                            DataItem item = it.next();
+                            new DataProviderJob(item.getDataProvider());                            
+                        }
+                        
+                        // create scene page input and open new page
                         ScenePageInput pageInput = new ScenePageInput(scene);
                         IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                         oldWindow.openPage("STT.Perspective", pageInput);
+                        
+                        // close empty page
                         if (oldWindow.getActivePage().getInput() == null)
                             oldWindow.close();
                     }
@@ -115,8 +132,12 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         {
             public void run()
             {
+                // launch command to read project
                 command.execute();
-                Runnable openPage = new OpenPageRunnable(command.getProject());
+                Project newProject = command.getProject();
+                                
+                // open new GUI page asynchronously
+                Runnable openPage = new OpenPageRunnable(newProject);
                 PlatformUI.getWorkbench().getDisplay().asyncExec(openPage);
             }
         };

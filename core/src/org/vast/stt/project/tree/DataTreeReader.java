@@ -275,6 +275,10 @@ public class DataTreeReader extends XMLReader
         String name = dom.getElementValue(providerElt, "name");
         provider.setName(name);
         
+        // read description
+        String desc = dom.getElementValue(providerElt, "description");
+        provider.setDescription(desc);
+        
         // read spatial extent
         Element spElt = dom.getElement(providerElt, "spatialExtent");
         if (spElt != null) {

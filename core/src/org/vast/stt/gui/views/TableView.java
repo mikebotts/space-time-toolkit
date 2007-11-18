@@ -34,6 +34,7 @@ import org.eclipse.ui.PartInitException;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.table.MyTableRenderer;
 import org.vast.stt.project.table.TableScene;
+import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
@@ -118,8 +119,10 @@ public class TableView extends SceneView<TableScene> implements PaintListener, C
             setPartName(scene.getName());
             
             // init the renderer
-            scene.getRenderer().setParent(composite);
-            scene.getRenderer().init();
+            SceneRenderer renderer = new MyTableRenderer(); // TODO open renderer specified in project file??
+            scene.setRenderer(renderer);
+            renderer.setParent(composite);
+            renderer.init();
             
             // create and register view controller
             //canvas.addMouseListener(controller);

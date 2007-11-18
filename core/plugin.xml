@@ -23,6 +23,7 @@
       <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
       <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
       <view name="Pressure" class="org.vast.sttx.gui.views.PressureView" id="STT.PressureView"/>
+      <view name="Running Jobs" class="org.eclipse.ui.ExtensionFactory:progressView" id="org.eclipse.ui.views.ProgressView"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>

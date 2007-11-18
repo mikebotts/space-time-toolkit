@@ -26,7 +26,6 @@
 package org.vast.stt.project.chart;
 
 import org.vast.stt.project.scene.Scene;
-import org.vast.stt.renderer.JFreeChart.JFreeChartRenderer;
 import org.vast.stt.style.DataStyler;
 
 
@@ -50,7 +49,6 @@ public class ChartScene extends Scene
     public ChartScene()
     {
         super();
-        renderer = new JFreeChartRenderer();
     }
 
     

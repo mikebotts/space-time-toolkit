@@ -32,7 +32,6 @@ import org.vast.xml.DOMHelperException;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.util.*;
 import org.w3c.dom.*;
-import org.vast.process.*;
 
 
 /**
@@ -189,14 +188,14 @@ public class ProjectReader extends XMLReader
         Resource resource = null;
         
         if (resourceName.equals("ResourceList"))
+        {
             resource = readResourceList(resourceElt);
+            resource.setName(dom.getElementValue(resourceElt, "name"));
+            resource.setDescription(dom.getElementValue(resourceElt, "description"));
+        }
         else
             resource = dataReader.readDataProvider(dom, resourceElt);
-        
-        // name & description
-        resource.setName(dom.getElementValue(resourceElt, "name"));
-        resource.setDescription(dom.getElementValue(resourceElt, "description"));
-        
+
         return resource;
     }
 	
@@ -272,7 +271,7 @@ public class ProjectReader extends XMLReader
         if (reader != null)
         {
             reader.setObjectIds(objectIds);
-            display = (STTDisplay)reader.read(dom, displayElt);            
+            display = (STTDisplay)reader.read(dom, displayElt);
         }
 			
         if (display != null)
@@ -287,10 +286,4 @@ public class ProjectReader extends XMLReader
                
         return display;
     }
-	
-	
-	protected ArrayList<DataProcess> readProcessList(Element listElt)
-	{
-		return null;
-	}
 }

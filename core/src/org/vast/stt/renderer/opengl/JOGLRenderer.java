@@ -648,11 +648,13 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         if (joglContext != null && canvas != null)
         {
             // dispose context and remove from list
-            releaseContext();
-            contextList.remove(swtContext);
-            canvas.dispose();
-            joglContext.destroy();
+            getContext();
+            contextList.remove(swtContext);            
             swtContext.dispose();
+            canvas.dispose();
+            releaseContext();
+            joglContext.destroy();
+            
             canvas = null;
             swtContext = null;
             joglContext = null;
