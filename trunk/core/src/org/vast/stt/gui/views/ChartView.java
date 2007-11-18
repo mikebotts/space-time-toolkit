@@ -34,6 +34,8 @@ import org.eclipse.ui.PartInitException;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.chart.ChartScene;
 import org.vast.stt.project.chart.ChartSceneRenderer;
+import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.renderer.JFreeChart.JFreeChartRenderer;
 
 
 /**
@@ -118,8 +120,10 @@ public class ChartView extends SceneView<ChartScene> implements PaintListener, C
             setPartName(scene.getName());
             
             // init the renderer
-            scene.getRenderer().setParent(composite);
-            scene.getRenderer().init();
+            SceneRenderer renderer = new JFreeChartRenderer(); // TODO open renderer specified in project file??
+            scene.setRenderer(renderer);
+            renderer.setParent(composite);
+            renderer.init();
             
             // create and register view controller
             //canvas.addMouseListener(controller);

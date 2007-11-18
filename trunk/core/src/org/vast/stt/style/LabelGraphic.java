@@ -48,6 +48,24 @@ public class LabelGraphic extends PrimitiveGraphic
     public int anchorY = 0;
     public int offsetX = 10;
     public int offsetY = 10;
-    public String text = "A";
-    public boolean lineBreak;
+    public String text = null;
+    
+    
+    public LabelGraphic copy(LabelGraphic p)
+    {
+        if (p == null)
+            p = new LabelGraphic();
+        
+        super.copy(p);
+        
+        p.size = this.size;
+        p.orientation = this.orientation;
+        p.anchorX = this.anchorX;
+        p.anchorY = this.anchorY;
+        p.offsetX = this.offsetX;
+        p.offsetY = this.offsetY;
+        p.text = this.text;
+        
+        return p;
+    }
 }

@@ -31,18 +31,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
 import org.vast.sensorML.ProcessLoader;
 import org.vast.sensorML.SMLException;
-import org.vast.stt.gui.views.ExceptionPopup;
-import org.vast.stt.project.XMLRegistry;
-import org.vast.stt.project.chart.ChartSceneReader;
-import org.vast.stt.project.table.TableSceneReader;
-import org.vast.stt.project.world.WorldSceneReader;
-import org.vast.stt.provider.google.GoogleMapProviderReader;
-import org.vast.stt.provider.ows.OWSProviderReader;
-import org.vast.stt.provider.sml.SMLProviderReader;
-import org.vast.stt.provider.swe.SWEProviderReader;
-import org.vast.stt.provider.ve.VirtualEarthProviderReader;
-import org.vast.sttx.provider.smart.PhenomenaDetectionProviderReader;
-import org.vast.sttx.provider.worldwind.WorldwindMapProviderReader;
+import org.vast.stt.gui.dialogs.ExceptionPopup;
 
 
 /**
@@ -71,7 +60,7 @@ public class STTPlugin extends AbstractUIPlugin
 		super.start(context);
         STTPlugin.ID = context.getBundle().getSymbolicName();
         
-		// preload process map file
+        // preload process map file
         try
         {
             String fileLocation = null;
@@ -86,20 +75,7 @@ public class STTPlugin extends AbstractUIPlugin
             e.printStackTrace();
         }
         
-        // register basic data providers reader/writers            
-        XMLRegistry.registerReader("SWEDataProvider", SWEProviderReader.class);
-        XMLRegistry.registerReader("OWSDataProvider", OWSProviderReader.class);
-        XMLRegistry.registerReader("SensorMLProvider", SMLProviderReader.class);
-        XMLRegistry.registerReader("VirtualEarthProvider", VirtualEarthProviderReader.class);
-        XMLRegistry.registerReader("GoogleMapProvider", GoogleMapProviderReader.class);
-        XMLRegistry.registerReader("WorldwindProvider", WorldwindMapProviderReader.class);
-        XMLRegistry.registerReader("PhenomenonDetectionProvider", PhenomenaDetectionProviderReader.class);
-        
-        // register basic display type reader/writers
-        XMLRegistry.registerReader("Scene", WorldSceneReader.class);
-        XMLRegistry.registerReader("WorldScene", WorldSceneReader.class);
-        XMLRegistry.registerReader("ChartScene", ChartSceneReader.class);
-        XMLRegistry.registerReader("TableScene", TableSceneReader.class);
+        STTConfig.loadDefaultModules();
 	}
 
 

@@ -23,7 +23,7 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.gui.views;
+package org.vast.stt.gui.dialogs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
