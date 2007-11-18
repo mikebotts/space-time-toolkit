@@ -26,6 +26,7 @@
 package org.vast.stt.actions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.FileDialog;
@@ -36,9 +37,9 @@ import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.STTDisplay;
 import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataItemIterator;
 import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.provider.DataProvider;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
@@ -66,12 +67,21 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                     {
                         WorldScene scene = (WorldScene)nextDisplay;
                         
+                        // keep list of providers we did so we don't do them twice
+                        LinkedList processedProviders = new LinkedList<DataProvider>();
+                        
                         // add job progress listener to all providers
                         DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();
                         while (it.hasNext())
                         {
-                            DataItem item = it.next();
-                            new DataProviderJob(item.getDataProvider());                            
+                            DataProvider provider = it.next().getDataProvider();
+                            
+                            if (!processedProviders.contains(provider))
+                            {
+                                if (provider.getSpatialExtent().getUpdater() == null)
+                                    new DataProviderJob(provider);
+                                processedProviders.add(provider);
+                            }
                         }
                         
                         // create scene page input and open new page
