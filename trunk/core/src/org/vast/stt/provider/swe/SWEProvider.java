@@ -145,7 +145,8 @@ public class SWEProvider extends AbstractProvider
 		{
 			try
 			{
-				dataStream.close();
+				if (dataStream != null)
+				    dataStream.close();
                 dataParser = null;
 			}
 			catch (IOException e)
