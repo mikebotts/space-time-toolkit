@@ -11,6 +11,26 @@
    </Process>
    
    <Process>
+      <uri>urn:vast:def:process:printer:1.0</uri>
+      <class>org.sensorML.process.Printer_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:greaterThanInBinary:1.0</uri>
+      <class>org.sensorML.process.GreaterThanInBinary_Process</class>
+   </Process>
+      
+   <Process>
+      <uri>urn:ogc:def:process:dataArrayBuilder:1.0</uri>
+      <class>org.sensorML.process.DataArrayBuilder_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:atomizer:1.0</uri>
+      <class>org.sensorML.process.Atomizer_Process</class>
+   </Process>
+
+   <Process>
       <uri>urn:ogc:def:process:counter:1.0</uri>
       <class>org.sensorML.process.Counter_Process</class>
    </Process>
