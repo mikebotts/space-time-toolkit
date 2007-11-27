@@ -40,7 +40,7 @@
                      </swe:field>
                   </swe:DataRecord> 
                </sml:output>
-               <sml:output name="imageData" xlink:href="#IMG_DATA"/>
+               <sml:output name="imageData" xlink:href="#IMG_CLEARWATER"/>
             </sml:OutputList>
          </sml:outputs>
          <sml:components>
@@ -150,7 +150,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- SOS call to get scanner data -->
-               <sml:component name="sosScan">
+               <sml:component name="sosScanBand21">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
@@ -183,14 +183,14 @@
                               </swe:DataRecord>
                            </sml:output>
                            <sml:output name="observationData">
-                              <swe:DataRecord gml:id="IMG_DATA">
+                              <swe:DataRecord>
                                  <swe:field name="startTime">
                                     <swe:Time definition="urn:ogc:phenomenon:time">
                                        <swe:uom code="s"/>
                                     </swe:Time>
                                  </swe:field>
                                  <swe:field name="scanLine">
-                                    <swe:DataArray>
+                                    <swe:DataArray gml:id="ARRAY_21">
                                        <swe:elementCount>
                                           <swe:Count>
                                              <swe:value>256</swe:value>
@@ -198,7 +198,7 @@
                                        </swe:elementCount>
                                        <swe:elementType name="IR">                                        
                                           <swe:DataRecord>
-                                             <swe:field name="Band_1">
+                                             <swe:field name="Band_21">
                                                 <swe:Quantity definition="urn:ogc:data:IR"/>
                                              </swe:field>
                                           </swe:DataRecord>
@@ -235,7 +235,7 @@
                                  </swe:field>
                                  <swe:field name="observables">
                                     <swe:Category>
-                                       <swe:value>Band_10</swe:value>
+                                       <swe:value>Band_21</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="format">
@@ -248,6 +248,143 @@
                         </sml:ParameterList>
                      </sml:parameters>
                      <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- atomizer -->
+               <sml:component name="atomizer21">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="array" xlink:href="#ARRAY_21"/>                         
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="value">
+                              <swe:Quantity/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:atomizer:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- SOS call to get scanner data -->
+               <sml:component name="sosScanBand51">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="time" xlink:href="#INPUT_TIME"/>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="observationInfo">
+                              <swe:DataRecord>
+                                 <swe:field name="name">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="procedure">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="location">
+                                    <swe:Vector referenceFrame="urn:ogc:def:crs:EPSG:6.1:4329">
+                                       <swe:coordinate name="lat">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="lon">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="alt">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="observationData">
+                              <swe:DataRecord>
+                                 <swe:field name="startTime">
+                                    <swe:Time definition="urn:ogc:phenomenon:time">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="scanLine">
+                                    <swe:DataArray gml:id="ARRAY_51">
+                                       <swe:elementCount>
+                                          <swe:Count>
+                                             <swe:value>256</swe:value>
+                                          </swe:Count>
+                                       </swe:elementCount>
+                                       <swe:elementType name="IR">                                        
+                                          <swe:DataRecord>
+                                             <swe:field name="Band_51">
+                                                <swe:Quantity definition="urn:ogc:data:IR"/>
+                                             </swe:field>
+                                          </swe:DataRecord>
+                                       </swe:elementType>
+                                    </swe:DataArray>
+                                 </swe:field>                                 
+                              </swe:DataRecord>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="sosOptions">
+                              <swe:DataRecord fixed="true">
+                                 <swe:field name="endPoint">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="requestMethod">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>GET</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="version">
+                                    <swe:Category definition="urn:ogc:def:identifier:version">
+                                       <swe:value>0.0.31</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="offering">
+                                    <swe:Category>
+                                       <swe:value>EO1_SCAN</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="observables">
+                                    <swe:Category>
+                                       <swe:value>Band_51</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="format">
+                                    <swe:Category definition="urn:ogc:def:identifier:mimeType">
+                                       <swe:value>application/com-binary-base64</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- atomizer -->
+               <sml:component name="atomizer51">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="array" xlink:href="#ARRAY_51"/>                         
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="value">
+                              <swe:Quantity/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:atomizer:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
                <!-- DualStream Time Synchronizer/Interpolator -->
@@ -277,7 +414,13 @@
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:input name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="time">
+                                    <swe:Quantity/> 
+                                 </swe:field>
+                              </swe:DataRecord>                              
+                           </sml:input>
                            <sml:input name="countingRange">
                               <swe:DataRecord>
                                  <swe:field name="start">
@@ -292,7 +435,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>80</swe:value>
+                                       <swe:value>256</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -301,7 +444,13 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:output name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="time">
+                                    <swe:Quantity/> 
+                                 </swe:field>
+                              </swe:DataRecord> 
+                           </sml:output>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
@@ -320,39 +469,35 @@
                      <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
-               <!-- PRINTER -->
-               <sml:component name="printer">
+               <!-- Actual chain doing the clerwater processing -->
+               <sml:component name="clearwater" xlink:href="./ClearWater.xml#CLEARWATER"/>
+               <!-- array reconstruction -->
+               <sml:component name="dataArrayBuilder">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <swe:input name="time">
+                           <sml:input name="value">
                               <swe:Quantity/>
-                           </swe:input>
-                           <swe:input name="pixel">
-                              <swe:Quantity/>
-                           </swe:input>                         
+                           </sml:input>                         
                         </sml:InputList>
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <swe:output name="time">
-                              <swe:Quantity/>
-                           </swe:output>
-                           <swe:output name="pixel">
-                              <swe:Quantity/>
-                           </swe:output>
+                           <sml:output name="array">
+                              <swe:DataArray  gml:id="IMG_CLEARWATER">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>256</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="clearwater">
+                                      <swe:Quantity definition="urn:ogc:data:classifier"/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:parameters>
-                        <sml:ParameterList>
-                           <sml:parameter name="logFilePath">
-                              <swe:Category>
-                                 <swe:value>default</swe:value>
-                              </swe:Category>
-                           </sml:parameter>
-                        </sml:ParameterList>
-                     </sml:parameters>  
-                     <sml:method xlink:href="urn:vast:def:process:printer:1.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:dataArrayBuilder:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
@@ -470,32 +615,76 @@
          </sml:components>
          <sml:connections>
             <sml:ConnectionList>
-               <sml:connection>
+               <!--     <sml:connection>
                   <sml:Link>
                      <sml:source ref="this/inputs/time"/>
                      <sml:destination ref="sosNav/inputs/time"/>
                   </sml:Link>
+               </sml:connection>  -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosScanBand21/outputs/observationData/scanLine"/>
+                     <sml:destination ref="atomizer21/inputs/array"/>
+                  </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="this/inputs/time"/>
-                     <sml:destination ref="sosScan/inputs/time"/>
+                     <sml:source ref="sosScanBand51/outputs/observationData/scanLine"/>
+                     <sml:destination ref="atomizer51/inputs/array"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atomizer21/outputs/value"/>
+                     <sml:destination ref="clearwater/inputs/0.55micronBand"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atomizer51/outputs/value"/>
+                     <sml:destination ref="clearwater/inputs/0.86micronBand"/>
                   </sml:Link>
                </sml:connection>
                <!-- -->
                <sml:connection>
                   <sml:Link>
+                     <sml:source ref="clearwater/outputs/clearWater"/>
+                     <sml:destination ref="dataArrayBuilder/inputs/value"/>
+                  </sml:Link>
+               </sml:connection>
+               <!--    -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="sosScanBand21/inputs/time"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="sosScanBand51/inputs/time"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- -->
+   <!--            <sml:connection>
+                  <sml:Link>
                      <sml:source ref="sosNav/outputs/observationData/time"/>
                      <sml:destination ref="timeSync/inputs/slaveTime"/>
                   </sml:Link>
-               </sml:connection>
+               </sml:connection>  
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sosScan/outputs/observationData/startTime"/>
                      <sml:destination ref="timeSync/inputs/masterTime"/>
                   </sml:Link>
-               </sml:connection>
+               </sml:connection> -->
                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosScanBand51/outputs/observationData/startTime"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/time"/>
+                  </sml:Link>
+               </sml:connection>
+          <!--     <sml:connection>
                   <sml:Link>
                      <sml:source ref="sosNav/outputs/observationData"/>
                      <sml:destination ref="timeSync/inputs/dataIn"/>
@@ -504,29 +693,17 @@
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="timeSync/outputs/dataOut"/>
-                     <sml:destination ref="asCounter/inputs/pass-through"/>
+                     <sml:destination ref="asCounter/inputs/pass-through"/> 
                   </sml:Link>
-               </sml:connection>        
+               </sml:connection>        -->
                <!-- -->
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/pass-through/time"/>
                      <sml:destination ref="lookVectorChain/inputs/startTime"/>
                   </sml:Link>
-               </sml:connection>  
+               </sml:connection>
       <!--         <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/time"/>
-                     <sml:destination ref="printer/inputs/time"/>
-                  </sml:Link>
-               </sml:connection>  
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="printer/outputs/time"/>
-                     <sml:destination ref="lookVectorChain/inputs/startTime"/>
-                  </sml:Link>
-               </sml:connection>  -->
-               <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/pass-through/attitude/trueHeading"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/yaw"/>
@@ -543,25 +720,13 @@
                      <sml:source ref="asCounter/outputs/pass-through/attitude/roll"/>
                      <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/roll"/>
                   </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="asCounter/outputs/count/variable"/>    
-                     <sml:destination ref="lookVectorChain/inputs/pixel"/>
-                  </sml:Link>
-               </sml:connection>  
-     <!--          <sml:connection>
+               </sml:connection>  -->
+               <sml:connection> 
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/count/variable"/>
-                     <sml:destination ref="printer/inputs/pixel"/>
-                  </sml:Link>
-               </sml:connection>
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="printer/ouputs/pixel"/>      
                      <sml:destination ref="lookVectorChain/inputs/pixel"/>
                   </sml:Link>
-               </sml:connection> -->
+               </sml:connection>
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="asCounter/outputs/count/index"/>
@@ -603,7 +768,7 @@
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="sosScan/outputs/observationData"/>
+                     <sml:source ref="dataArrayBuilder/outputs/array"/>
                      <sml:destination ref="this/outputs/imageData"/>
                   </sml:Link>
                </sml:connection>

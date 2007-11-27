@@ -80,22 +80,31 @@
                            </sml:output>
                            <sml:output name="observationData">
                               <swe:DataRecord gml:id="NAV_DATA">
-                                 <swe:field name="time">
-                                    <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
-                                       <swe:uom code="s"/>
-                                    </swe:Time>
-                                 </swe:field>
-                                 <swe:field name="latitude">
-                                    <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
-                                       <swe:uom code="rad"/>
-                                    </swe:Quantity>
-                                 </swe:field>
-                                 <swe:field name="longitude">
-                                    <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
-                                       <swe:uom code="rad"/>
-                                    </swe:Quantity>
-                                 </swe:field>
-                              </swe:DataRecord>
+                                    <swe:field name="time">
+                                       <swe:Time definition="urn:ogc:phenomenon:time">
+                                          <swe:uom code="s"/>
+                                       </swe:Time>
+                                    </swe:field>
+                                    <swe:field name="attitude">
+                                       <swe:DataRecord>
+                                          <swe:field name="trueHeading">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="pitch">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                          <swe:field name="roll">
+                                             <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                                                <swe:uom code="rad"/>
+                                             </swe:Quantity>
+                                          </swe:field>
+                                       </swe:DataRecord>
+                                    </swe:field>
+                                 </swe:DataRecord>
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
@@ -105,7 +114,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows5-dev/lisSos</swe:value>
+                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -120,19 +129,14 @@
                                  </swe:field>
                                  <swe:field name="offering">
                                     <swe:Category>
-                                       <swe:value>LIS_NAV</swe:value>
-                                    </swe:Category>
-                                 </swe:field>
-                                 <swe:field name="service">
-                                    <swe:Category>
-                                       <swe:value>SOS</swe:value>
+                                       <swe:value>EO1_NAV</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="observables">
                                     <swe:Category>
-                                       <swe:value>LOCATION</swe:value>
+                                       <swe:value>ATTITUDE</swe:value>
                                     </swe:Category>
-                                 </swe:field>
+                                 </swe:field>  
                                  <swe:field name="format">
                                     <swe:Category definition="urn:ogc:def:identifier:mimeType">
                                        <swe:value>application/com-xml</swe:value>
@@ -189,13 +193,13 @@
                                     <swe:DataArray>
                                        <swe:elementCount>
                                           <swe:Count>
-                                             <swe:value>1</swe:value>
+                                             <swe:value>256</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
-                                       <swe:elementType name="radiance">                                        
+                                       <swe:elementType name="IR">                                        
                                           <swe:DataRecord>
-                                             <swe:field name="radiance">
-                                                <swe:Quantity definition="urn:ogc:data:flashes"/>
+                                             <swe:field name="Band_1">
+                                                <swe:Quantity definition="urn:ogc:data:IR"/>
                                              </swe:field>
                                           </swe:DataRecord>
                                        </swe:elementType>
@@ -211,7 +215,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows5-dev/lisSos</swe:value>
+                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -221,22 +225,17 @@
                                  </swe:field>
                                  <swe:field name="version">
                                     <swe:Category definition="urn:ogc:def:identifier:version">
-                                       <swe:value>1.0</swe:value>
+                                       <swe:value>0.0.31</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="offering">
                                     <swe:Category>
-                                       <swe:value>LIS_SCAN</swe:value>
-                                    </swe:Category>
-                                 </swe:field>
-                                 <swe:field name="service">
-                                    <swe:Category>
-                                       <swe:value>SOS</swe:value>
+                                       <swe:value>EO1_SCAN</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="observables">
                                     <swe:Category>
-                                       <swe:value>RADIANCE</swe:value>
+                                       <swe:value>Band_10</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="format">
@@ -251,12 +250,40 @@
                      <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
+               <!-- DualStream Time Synchronizer/Interpolator -->
+               <sml:component name="timeSync">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="masterTime">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="slaveTime">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="dataIn" xlink:href="#NAV_DATA"/>                           
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="dataOut" xlink:href="#NAV_DATA"/>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:timeSync:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
                <!-- FOR loop for along scan steps -->
                <sml:component name="asCounter">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:input name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="time">
+                                    <swe:Quantity/> 
+                                 </swe:field>
+                              </swe:DataRecord>                              
+                           </sml:input>
                            <sml:input name="countingRange">
                               <swe:DataRecord>
                                  <swe:field name="start">
@@ -266,12 +293,12 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>1</swe:value>
+                                       <swe:value>256</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>1</swe:value>
+                                       <swe:value>80</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -280,7 +307,13 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="pass-through" xlink:href="#NAV_DATA"/>
+                           <sml:output name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="time">
+                                    <swe:Quantity/> 
+                                 </swe:field>
+                              </swe:DataRecord> 
+                           </sml:output>
                            <sml:output name="count">
                               <swe:DataRecord>
                                  <swe:field name="variable">
@@ -299,27 +332,46 @@
                      <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
-               <!--~~~~~~~~~~~~~~~~~~~~-->
-               <!-- LLA to ECEF -->
-               <!--~~~~~~~~~~~~~~~~~~~~-->
-               <sml:component name="LLAtoECEF">
+               <!-- Actual chain doing the geolocation job -->
+               <sml:component name="lookVectorChain" xlink:href="./HYPERION2.xml#HYPERION_GEOLOCATION"/>
+               <!-- Intersection w/ Ellipsoid -->
+               <sml:component name="rayIntersectEllipsoid">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
-                           <sml:input name="LLA_location">
-                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
-                                 <swe:coordinate name="latitude">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
-                                       <swe:uom code="rad"/>
+                           <sml:input name="rayOrigin">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
-                                 <swe:coordinate name="longitude">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
-                                       <swe:uom code="rad"/>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
-                                 <swe:coordinate name="altitude">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="rayDirection">
+                              <swe:Vector definition="urn:ogc:def:data:directionVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
                                        <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
@@ -329,20 +381,20 @@
                      </sml:inputs>
                      <sml:outputs>
                         <sml:OutputList>
-                           <sml:output name="ECEF_location">
-                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ecef_wgs84" gml:id="GROUND_POINT">
+                           <sml:output name="intersection">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" gml:id="GROUND_POINT">
                                  <swe:coordinate name="x">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                    <swe:Quantity>
                                        <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
                                  <swe:coordinate name="y">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                    <swe:Quantity>
                                        <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
                                  <swe:coordinate name="z">
-                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                    <swe:Quantity>
                                        <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
@@ -350,7 +402,7 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:method xlink:href="urn:ogc:def:process:LLAtoECEF:2.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
                <!-- Grid array builder -->
@@ -395,35 +447,78 @@
          </sml:components>
          <sml:connections>
             <sml:ConnectionList>
-               <sml:connection>
+               <!--     <sml:connection>
                   <sml:Link>
                      <sml:source ref="this/inputs/time"/>
                      <sml:destination ref="sosNav/inputs/time"/>
                   </sml:Link>
-               </sml:connection>
+               </sml:connection>  -->
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="this/inputs/time"/>
                      <sml:destination ref="sosScan/inputs/time"/>
                   </sml:Link>
                </sml:connection>
+               <!-- -->
+   <!--            <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosNav/outputs/observationData/time"/>
+                     <sml:destination ref="timeSync/inputs/slaveTime"/>
+                  </sml:Link>
+               </sml:connection>  
                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosScan/outputs/observationData/startTime"/>
+                     <sml:destination ref="timeSync/inputs/masterTime"/>
+                  </sml:Link>
+               </sml:connection> -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sosScan/outputs/observationData/startTime"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/time"/>
+                  </sml:Link>
+               </sml:connection>
+          <!--     <sml:connection>
                   <sml:Link>
                      <sml:source ref="sosNav/outputs/observationData"/>
-                     <sml:destination ref="asCounter/inputs/pass-through"/>
-                  </sml:Link>
-               </sml:connection>
-               <!--          -->
-               <sml:connection>
-                  <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/latitude"/>
-                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/latitude"/>
+                     <sml:destination ref="timeSync/inputs/dataIn"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="asCounter/outputs/pass-through/longitude"/>
-                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/longitude"/>
+                     <sml:source ref="timeSync/outputs/dataOut"/>
+                     <sml:destination ref="asCounter/inputs/pass-through"/> 
+                  </sml:Link>
+               </sml:connection>        -->
+               <!-- -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/time"/>
+                     <sml:destination ref="lookVectorChain/inputs/startTime"/>
+                  </sml:Link>
+               </sml:connection>
+      <!--         <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/trueHeading"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/yaw"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/pitch"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/pitch"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/attitude/roll"/>
+                     <sml:destination ref="lookVectorChain/inputs/attitudeOrientation/roll"/>
+                  </sml:Link>
+               </sml:connection>  -->
+               <sml:connection> 
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/count/variable"/>
+                     <sml:destination ref="lookVectorChain/inputs/pixel"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
@@ -438,10 +533,23 @@
                      <sml:destination ref="arrayBuilder/inputs/arraySize"/>
                   </sml:Link>
                </sml:connection>
-               <!--          -->
+               <!-- -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="LLAtoECEF/outputs/ECEF_location"/>
+                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_view_vector"/>
+                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayDirection"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="lookVectorChain/outputs/geolocationData/ECEF_location"/>
+                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayOrigin"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="rayIntersectEllipsoid/outputs/intersection"/>
                      <sml:destination ref="arrayBuilder/inputs/arrayComponent/data"/>
                   </sml:Link>
                </sml:connection>
