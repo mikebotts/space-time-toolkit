@@ -174,12 +174,134 @@
       </member>
       <member visible="false">
          <DataItem>
+            <name>HYPERION ClearWater</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>HYPERION Data Process Chain</name>
+                  <timeExtent xlink:href="#HYPERION_TIME"/>
+                  <process xlink:href="../process/HYPERION_Process_ClearWater.xml#PROCESS"/>
+                  <value process="sosScanBand21" path="sosOptions/observables">Band_21</value>
+                  <value process="sosScanBand51" path="sosOptions/observables">Band_51</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="HYPERION_TEXTURE" enabled="true">                
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/clearwater</ogc:PropertyName>
+                              <TableValues>0 255 1 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/clearwater</ogc:PropertyName>
+                              <TableValues>0 0 1 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/clearwater</ogc:PropertyName>
+                              <TableValues>0 0 1 255</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Grid">
+               <sld:GridMeshSymbolizer enabled="false">                
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>/</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="TMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
             <name>HYPERION Band 1</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_1</value>
                </SensorMLProvider>
             </dataProvider>
@@ -300,7 +422,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_2</value>
                </SensorMLProvider>
             </dataProvider>
@@ -314,7 +436,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_3</value>
                </SensorMLProvider>
             </dataProvider>
@@ -328,7 +450,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_4</value>
                </SensorMLProvider>
             </dataProvider>
@@ -342,7 +464,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_5</value>
                </SensorMLProvider>
             </dataProvider>
@@ -356,7 +478,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_6</value>
                </SensorMLProvider>
             </dataProvider>
@@ -370,7 +492,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_7</value>
                </SensorMLProvider>
             </dataProvider>
@@ -384,7 +506,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_8</value>
                </SensorMLProvider>
             </dataProvider>
@@ -398,7 +520,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_9</value>
                </SensorMLProvider>
             </dataProvider>
@@ -412,7 +534,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_10</value>
                </SensorMLProvider>
             </dataProvider>
@@ -426,7 +548,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_11</value>
                </SensorMLProvider>
             </dataProvider>
@@ -440,7 +562,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_12</value>
                </SensorMLProvider>
             </dataProvider>
@@ -454,7 +576,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_13</value>
                </SensorMLProvider>
             </dataProvider>
@@ -468,7 +590,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_14</value>
                </SensorMLProvider>
             </dataProvider>
@@ -482,7 +604,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_15</value>
                </SensorMLProvider>
             </dataProvider>
@@ -496,7 +618,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_16</value>
                </SensorMLProvider>
             </dataProvider>
@@ -510,7 +632,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_17</value>
                </SensorMLProvider>
             </dataProvider>
@@ -524,7 +646,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_18</value>
                </SensorMLProvider>
             </dataProvider>
@@ -538,7 +660,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_19</value>
                </SensorMLProvider>
             </dataProvider>
@@ -552,7 +674,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_20</value>
                </SensorMLProvider>
             </dataProvider>
@@ -566,7 +688,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_21</value>
                </SensorMLProvider>
             </dataProvider>
@@ -580,7 +702,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_22</value>
                </SensorMLProvider>
             </dataProvider>
@@ -594,7 +716,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_23</value>
                </SensorMLProvider>
             </dataProvider>
@@ -608,7 +730,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_24</value>
                </SensorMLProvider>
             </dataProvider>
@@ -622,7 +744,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_25</value>
                </SensorMLProvider>
             </dataProvider>
@@ -636,7 +758,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_26</value>
                </SensorMLProvider>
             </dataProvider>
@@ -650,7 +772,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_27</value>
                </SensorMLProvider>
             </dataProvider>
@@ -664,7 +786,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_28</value>
                </SensorMLProvider>
             </dataProvider>
@@ -678,7 +800,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_29</value>
                </SensorMLProvider>
             </dataProvider>
@@ -692,7 +814,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_30</value>
                </SensorMLProvider>
             </dataProvider>
@@ -706,7 +828,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_31</value>
                </SensorMLProvider>
             </dataProvider>
@@ -720,7 +842,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_32</value>
                </SensorMLProvider>
             </dataProvider>
@@ -734,7 +856,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_33</value>
                </SensorMLProvider>
             </dataProvider>
@@ -748,7 +870,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_34</value>
                </SensorMLProvider>
             </dataProvider>
@@ -762,7 +884,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_35</value>
                </SensorMLProvider>
             </dataProvider>
@@ -776,7 +898,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_36</value>
                </SensorMLProvider>
             </dataProvider>
@@ -790,7 +912,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_37</value>
                </SensorMLProvider>
             </dataProvider>
@@ -804,7 +926,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_38</value>
                </SensorMLProvider>
             </dataProvider>
@@ -818,7 +940,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_39</value>
                </SensorMLProvider>
             </dataProvider>
@@ -832,7 +954,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_40</value>
                </SensorMLProvider>
             </dataProvider>
@@ -846,7 +968,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_41</value>
                </SensorMLProvider>
             </dataProvider>
@@ -860,7 +982,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_42</value>
                </SensorMLProvider>
             </dataProvider>
@@ -874,7 +996,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_43</value>
                </SensorMLProvider>
             </dataProvider>
@@ -888,7 +1010,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_44</value>
                </SensorMLProvider>
             </dataProvider>
@@ -902,7 +1024,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_45</value>
                </SensorMLProvider>
             </dataProvider>
@@ -916,7 +1038,7 @@
                <SensorMLProvider>
                   <name>HYPERION Data Process Chain</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
-                  <process xlink:href="../process/HYPERION_Process_WithData.xml#PROCESS"/>
+                  <process xlink:href="../process/HYPERION_Process_WithData4.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">Band_46</value>
                </SensorMLProvider>
             </dataProvider>
