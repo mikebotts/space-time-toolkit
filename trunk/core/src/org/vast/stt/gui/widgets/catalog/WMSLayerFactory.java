@@ -79,7 +79,7 @@ public class WMSLayerFactory
             DOMHelper dom = new DOMHelper(fileLocation, false);
 			DataTreeReader dataReader = new DataTreeReader();
 			DataItem worldItem = (DataItem)dataReader.readDataEntry(dom, dom.getRootElement());
-			worldItem.setName(caps.getId());
+			worldItem.setName(caps.getIdentifier());
 			SMLProvider provider = (SMLProvider)worldItem.getDataProvider();
 			//  load default fields from caps into SensorMLProvider 
 			loadWMSProcess(provider, caps);
@@ -114,7 +114,7 @@ public class WMSLayerFactory
 			Map serversMap = owsCaps.getGetServers();
 			String getMapUrl = (String) serversMap.get("GetMap");
 			wmsOptions.setEndpoint(getMapUrl);
-			String layerStr = wmsCaps.getId();
+			String layerStr = wmsCaps.getIdentifier();
 			wmsOptions.setLayer(layerStr);
 			// format
 			List<String> formatList = wmsCaps.getFormatList();

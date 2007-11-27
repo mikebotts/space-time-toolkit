@@ -90,7 +90,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else
 				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
-			return ((OWSLayerCapabilities)element).getId();
+			return ((OWSLayerCapabilities)element).getIdentifier();
 		} else if(element instanceof TimeInfo) {
 			return getTimeText((TimeInfo)element);
 		} else
@@ -116,7 +116,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else
 				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
-			return ((OWSLayerCapabilities)element).getName();
+			return ((OWSLayerCapabilities)element).getTitle();
 		} else if(element instanceof TimeInfo) {
 			return getTimeText((TimeInfo)element);
 		} else if(element instanceof Bbox) {
