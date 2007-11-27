@@ -242,7 +242,7 @@ public class SOSProvider extends OWSProvider
 		query.setService("SOS");
 		query.setVersion(layerCaps.getParent().getVersion());
 		query.setOperation("GetObservation");
-		query.setOffering(layerCaps.getId());
+		query.setOffering(layerCaps.getIdentifier());
 		query.setFormat(layerCaps.getFormatList().get(0));
 		query.getObservables().add(layerCaps.getObservableList().get(0));
 		query.getProcedures().add(layerCaps.getProcedureList().get(0));

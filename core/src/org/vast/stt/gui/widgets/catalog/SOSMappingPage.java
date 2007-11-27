@@ -175,7 +175,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		query.setOperation("GetObservation");
 		query.setGetServer(caps.getParent().getGetServers().get("GetObservation"));
 		query.setPostServer(caps.getParent().getGetServers().get("GetObservation"));
-		query.setOffering(caps.getId());
+		query.setOffering(caps.getIdentifier());
 		query.getObservables().add(caps.getObservableList().get(0));
 		query.getProcedures().add(caps.getProcedureList().get(0));
 		query.setVersion("0.0.31");  //  ?

@@ -359,7 +359,7 @@ public class CatalogWidget
 				OWSServiceCapabilities caps = owsUtils.getCapabilities(sosTmp, "SOS", "0.0.31");
 				List<OWSLayerCapabilities> capsTmp = caps.getLayers();
 				for(OWSLayerCapabilities thisCaps: capsTmp){
-					String thisOffering = thisCaps.getId();
+					String thisOffering = thisCaps.getIdentifier();
 					if(offerings.contains(thisOffering))
 						layerCaps.add(thisCaps);
 				}
