@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<SensorML xmlns="http://www.opengis.net/sensorML/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:swe="http://www.opengis.net/swe/1.0"
+    xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 ../../base/sensorML.xsd" version="1.0">
+    <member xlink:role="urn:x-ogc:def:sensor:OGC:processChain">
+        <ProcessChain gml:id="CLEARWATER">
+            <documentation>
+                <Document>
+                    <gml:description>Felipe et al (2006) Remote Sensing of the Environment paper
+                        describing algorithms for flood water detection</gml:description>
+                    <onlineResource xlink:href="somewhere"/>
+                </Document>
+            </documentation>
+            <inputs>
+                <InputList>
+                    <input name="0.55micronBand">
+                       <swe:Quantity definition="urn:ogc:def:phenomenon:OGC:1.0.30:hyperion_B021">
+                           <swe:uom code="W.m-2.sr-1.µm-1/40"/>
+                       </swe:Quantity>
+                    </input>
+                    <input name="0.86micronBand">
+                        <swe:Quantity definition="urn:ogc:def:phenomenon:OGC:1.0.30:hyperion_B021">
+                            <swe:uom code="W.m-2.sr-1.µm-1/40"/>
+                        </swe:Quantity>
+                    </input>
+                </InputList>
+            </inputs>
+            <outputs>
+                <OutputList>
+                    <output name="clearWater">
+                        <swe:Quantity definition="urn:ogc:def:phenomenon:OGC:classifier_clearWater"/>
+                    </output>
+                </OutputList>
+            </outputs>
+            <parameters>
+                <ParameterList>
+                    <parameter name="threshold">
+                        <swe:Quantity fixed="false" definition="urn:ogc:def:data:OGC:threshold">
+                            <swe:value>2.0</swe:value>
+                        </swe:Quantity>
+                    </parameter>
+                </ParameterList>
+            </parameters>
+            <components>
+                <ComponentList>
+                    <!--~~~~~~~~~~~~~~~~~~~~-->
+                    <!-- Binary arithmeric true heading from degree to radians -->
+                    <!--~~~~~~~~~~~~~~~~~~~~-->
+                    <component name="ratio">
+                        <ProcessModel>
+                            <inputs>
+                                <InputList>
+                                    <input name="operand1">
+                                        <swe:Quantity/>
+                                    </input>
+                                    <input name="operand2">
+                                        <swe:Quantity/>
+                                    </input>
+                                </InputList>
+                            </inputs>
+                            <outputs>
+                                <OutputList>
+                                    <output name="result">
+                                        <swe:Quantity/>
+                                    </output>
+                                </OutputList>
+                            </outputs>
+                            <parameters>
+                                <ParameterList>
+                                    <parameter name="operator">
+                                        <swe:Category>
+                                            <swe:value>division</swe:value>
+                                        </swe:Category>
+                                    </parameter>
+                                </ParameterList>
+                            </parameters>
+                            <method xlink:href="urn:vast:def:process:binaryOperation:1.0"/>
+                        </ProcessModel>
+                    </component> 
+                    <component name="greaterThan">
+                        <ProcessModel>
+                            <gml:description>determines if input value is greater than threshold and outputs a boolean</gml:description>
+                            <inputs>
+                                <InputList>
+                                    <input name="inputValue">
+                                        <swe:Quantity/>
+                                    </input>
+                                </InputList>
+                            </inputs>
+                            <outputs>
+                                <OutputList>
+                                    <output name="trueOrFalseInBinary">
+                                        <swe:Quantity/>
+                                    </output>
+                                </OutputList>
+                            </outputs>
+                            <parameters>
+                                <ParameterList>
+                                    <parameter name="threshold">
+                                        <swe:Quantity/>
+                                    </parameter>
+                                </ParameterList>
+                            </parameters>
+                            <method xlink:href="urn:ogc:def:process:greaterThanInBinary:1.0"/>
+                        </ProcessModel>
+                    </component>
+                </ComponentList>
+            </components>
+            <connections>
+                <ConnectionList>
+                    <connection name="inputToRatio1">
+                        <Link>
+                            <source ref="this/inputs/0.55micronBand"/>
+                            <destination ref="ratio/inputs/operand1"/>
+                        </Link>
+                    </connection>
+                    <connection name="inputToRatio2">
+                        <Link>
+                            <source ref="this/inputs/0.86micronBand"/>
+                            <destination ref="ratio/inputs/operand2"/>
+                        </Link>
+                    </connection>
+                    <connection name="ratioOutputToGreaterThanInput">
+                        <Link>
+                            <source ref="ratio/outputs/result"/>
+                            <destination ref="greaterThan/inputs/inputValue"/>
+                        </Link>
+                    </connection>
+                    <connection name="thresholdToThreshold">
+                        <Link>
+                            <source ref="this/parameters/threshold"/>
+                            <destination ref="greaterThan/parameters/threshold"/>
+                        </Link>
+                    </connection>
+                    <connection name="greaterThanToOutput">
+                        <Link>
+                            <source ref="greaterThan/outputs/trueOrFalseInBinary"/>
+                            <destination ref="this/outputs/clearWater"/>
+                        </Link>
+                    </connection>
+                </ConnectionList>
+            </connections>
+        </ProcessChain>
+    </member>
+</SensorML>
