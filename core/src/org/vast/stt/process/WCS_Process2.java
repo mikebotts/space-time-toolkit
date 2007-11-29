@@ -154,7 +154,7 @@ public class WCS_Process2 extends DataProcess implements DataHandler
             }
             
             // coverage and bbox crs 
-            query.setGridCrs("EPSG:4329");
+            query.getGridCrs().setBaseCrs("EPSG:4329");
         }
         catch (Exception e)
         {
