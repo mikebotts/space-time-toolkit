@@ -26,6 +26,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:reconstructedDataArrayBuilder:1.0</uri>
+      <class>org.sensorML.process.ReconstructedDataArrayBuilder_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:atomizer:1.0</uri>
       <class>org.sensorML.process.Atomizer_Process</class>
    </Process>
@@ -170,6 +175,11 @@
    <Process>
       <uri>urn:ogc:def:process:SOS:1.0</uri>
       <class>org.vast.stt.process.SOS_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:SPS:1.0</uri>
+      <class>org.vast.stt.process.SPS_Process</class>
    </Process>
    
    <Process>
