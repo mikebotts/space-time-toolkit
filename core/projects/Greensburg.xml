@@ -7,6 +7,7 @@
    xmlns:ogc="http://www.opengis.net/ogc"
    xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe"
+   xmlns:sldx="http://vast.uah.edu/sldx"
    xsi:schemaLocation="http://vast.uah.edu/stt/v3 ./ProjectFile.xsd">
    <!-- Global metadata about the project -->
    <Identification>
@@ -48,6 +49,67 @@
                   <name>Greensburg Tornado Project</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
+
+                  <member>
+                     <DataItem enabled="false">
+                        <name>JPEG2000 image</name>
+                        <dataProvider>
+                              <JPEG2000ProviderReader id="JPEG2000">
+                                 <name>JPEG 2000 local file test</name>
+                                 <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+<!--                                 <localFile>C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2</localFile>-->
+                                 <localFile>file:///C:/tcook/JPIP/JP2_Samples/WcsLevel1A_10Dec2007.jp2</localFile>
+                              </JPEG2000ProviderReader>
+                        </dataProvider> 
+
+                        <style>
+                           <sld:TextureSymbolizer enabled="true">
+                              <sld:Grid>
+                                 <sld:Dimensions>
+                                    <sld:Axis name="width">
+                                       <ogc:PropertyName>grid/row</ogc:PropertyName>
+                                    </sld:Axis>
+                                    <sld:Axis name="length">
+                                       <ogc:PropertyName>grid</ogc:PropertyName>
+                                    </sld:Axis>
+                                 </sld:Dimensions>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                              </sld:Grid>
+                              <sld:Raster>
+                                 <sld:Opacity>1.0</sld:Opacity>
+                                 <sld:Dimensions>
+                                    <sld:Axis name="width">
+                                       <ogc:PropertyName>image/row</ogc:PropertyName>
+                                    </sld:Axis>
+                                    <sld:Axis name="height">
+                                       <ogc:PropertyName>image</ogc:PropertyName>
+                                    </sld:Axis>
+                                 </sld:Dimensions>
+                                 <sld:ChannelSelection>
+                                    <sld:RedChannel>
+                                       <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                                    </sld:RedChannel>
+                                    <sld:GreenChannel>
+                                       <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                                    </sld:GreenChannel>
+                                    <sld:BlueChannel>
+                                       <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                                    </sld:BlueChannel>
+                                 </sld:ChannelSelection>
+                              </sld:Raster>
+                           </sld:TextureSymbolizer>
+                        </style>                        
+
+                     </DataItem>
+                  </member>                        
+                                    
                   <member>
                      <DataList>                        
                         <name>Wx Station Data</name>
@@ -59,13 +121,13 @@
                                  <sld:PointSymbolizer enabled="true">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
-                                          -1.536
+                                          -1.5
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          2.5236
+                                          0.61
                                        </sld:CssParameter>                                       
                                        <sld:CssParameter name="geometry-z">
-                                          0.0001
+                                          0.0
                                        </sld:CssParameter>
                                     </sld:Geometry>
                                     <sld:Graphic>
@@ -83,10 +145,10 @@
                                  <sld:TextSymbolizer enabled="false">
                                     <sld:Geometry>
                                        <sld:CssParameter name="geometry-x">
-                                          -1.536
+                                          -2.136
                                        </sld:CssParameter>
                                        <sld:CssParameter name="geometry-y">
-                                          2.5236
+                                          0.5934
                                        </sld:CssParameter>                                       
                                        <sld:CssParameter name="geometry-z">
                                           0.0 
@@ -108,7 +170,7 @@
                         </member>
                      </DataList>
                   </member>
-                  
+                  <!--
                   <member>
                      <DataList>
                         <name>Weather Satellites</name>
@@ -223,9 +285,6 @@
                                           </sld:Axis>
                                        </sld:Dimensions>
                                        <sld:ChannelSelection>
-                                          <!--<sld:GrayChannel>
-                                             <sld:SourceChannelName>coverageData/rangeData/coverage/row/data</sld:SourceChannelName>
-                                          </sld:GrayChannel>-->
                                           <sld:BlueChannel>
                                              <LookUpTable1D>
                                                 <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
@@ -281,7 +340,7 @@
                            </DataItem>
                         </member>
                      </DataList>
-                  </member>
+                  </member>  -->
                   <member>
                      <DataList>
                         <name>Doppler Radars</name>
@@ -540,6 +599,7 @@
                   <value process="sos" path="sosOptions/offering">KDDC_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
+           
            
          </ResourceList>
       </member>
