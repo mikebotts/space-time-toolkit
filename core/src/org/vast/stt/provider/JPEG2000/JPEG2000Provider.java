@@ -213,7 +213,7 @@ public class JPEG2000Provider extends AbstractProvider
         dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 	}
 
-	public String getGmlBox() {
+	public String getGMLBox() {
 		return gmlBox;
 	}
 }
