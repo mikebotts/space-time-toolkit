@@ -43,7 +43,7 @@ public class TiledMapSelector extends ExtentSelector
     public TiledMapSelector(double sizeRatio, double maxDistance, int minLevel, int maxLevel)
     {
         super(sizeRatio, minLevel, maxLevel);
-        this.maxDistance2 = maxDistance * maxDistance;
+        setMaxDistance(maxDistance);
     }
     
     
@@ -161,5 +161,11 @@ public class TiledMapSelector extends ExtentSelector
         }
         
         //System.out.println("Item selected " + item);
+    }
+    
+    
+    public void setMaxDistance(double maxDistance)
+    {
+    	this.maxDistance2 = maxDistance * maxDistance;
     }
 }

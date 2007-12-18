@@ -159,15 +159,16 @@ public abstract class TiledMapProvider extends AbstractProvider
             init();
         
         // convert extent to mercator projection
-        SpatialExtent newExtent = transformBbox(spatialExtent);        
+        SpatialExtent newExtent = transformBbox(spatialExtent);
         
         // query tree for matching and unused items 
         selectedItems.clear();
         deletedItems.clear();        
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
-        double tileRatio = spatialExtent.getXTiles() * spatialExtent.getYTiles();
-        tileSelector.setSizeRatio(tileRatio * 0.5);
+        double tileRatio = Math.floor(spatialExtent.getXTiles()) * Math.floor(spatialExtent.getYTiles());
+        tileSelector.setSizeRatio(tileRatio);
+        tileSelector.setMaxDistance(Math.sqrt(tileRatio*2));
         quadTree.accept(tileSelector);
         
         // first round of cached background items to display
