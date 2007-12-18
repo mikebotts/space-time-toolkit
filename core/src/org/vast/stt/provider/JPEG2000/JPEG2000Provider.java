@@ -102,6 +102,8 @@ public class JPEG2000Provider extends AbstractProvider
 		}
 		System.err.println("Loaded: " + imageUrl);
 		gmlBox = dec.getGmlBox();
+		//  Strip the first bytes off the GML box
+		trimGMLBox();
 		System.err.println(gmlBox);
 	}
 	
@@ -119,20 +121,9 @@ public class JPEG2000Provider extends AbstractProvider
 
 	public static void main(String [] args){
 		// Create parameter list using defaults
-		ParameterList list = new ParameterList(); //  getDefaultParams());
-		list.put("i", "C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
-
-		Decoder dec = new Decoder(list);
-		// Run the decoder
-		try {
-			dec.run();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		} finally {
-			if (dec.getExitCode() != 0) {
-				System.exit(dec.getExitCode());
-			}
-		}
+		JPEG2000Provider prov = new JPEG2000Provider();
+		prov.setImagePath("C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
+		prov.loadImage();
 	}
 	
 	protected BlockList createTextureBlockList(int width, int height){
@@ -213,6 +204,10 @@ public class JPEG2000Provider extends AbstractProvider
         dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 	}
 
+	private void trimGMLBox(){
+		gmlBox = gmlBox.substring(63);
+	}
+	
 	public String getGMLBox() {
 		return gmlBox;
 	}
