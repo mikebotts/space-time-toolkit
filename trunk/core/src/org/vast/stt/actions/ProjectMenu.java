@@ -26,7 +26,7 @@
 package org.vast.stt.actions;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.FileDialog;
@@ -68,7 +68,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                         WorldScene scene = (WorldScene)nextDisplay;
                         
                         // keep list of providers we did so we don't do them twice
-                        LinkedList processedProviders = new LinkedList<DataProvider>();
+                        List processedProviders = new ArrayList<DataProvider>(20);
                         
                         // add job progress listener to all providers
                         DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();

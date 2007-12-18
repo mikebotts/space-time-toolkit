@@ -26,6 +26,7 @@
 package org.vast.stt.project.tree;
 
 import java.util.Iterator;
+import org.vast.stt.project.scene.Scene;
 
 
 /**
@@ -80,7 +81,11 @@ public class DataItemIterator implements Iterator<DataItem>
 		DataEntry nextEntry = dataFolder.get(currentIndex);
         DataItem nextItem = null;
 
-		if (nextEntry instanceof DataFolder)
+        // if item is a sub scene, process data whole tree
+        if (nextEntry instanceof Scene)
+        	nextEntry = ((Scene)nextEntry).getDataTree();
+        
+        if (nextEntry instanceof DataFolder)
 		{
 			if (childIterator == null)
 				childIterator = ((DataFolder) nextEntry).getItemIterator();
