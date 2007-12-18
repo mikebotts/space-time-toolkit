@@ -100,10 +100,9 @@ public class JPEG2000Provider extends AbstractProvider
 				System.exit(dec.getExitCode());
 			}
 		}
-		System.err.println("Loaded: " + imageUrl);
-		gmlBox = dec.getGmlBox();
-		//  Strip the first bytes off the GML box
-		trimGMLBox();
+		String rawBox = dec.getGmlBox();
+		//  Strip junk off beginning and end of Box
+		gmlBox = trimGMLBox(rawBox);
 	}
 	
 	protected ParameterList getDefaultParams(){
@@ -207,11 +206,13 @@ public class JPEG2000Provider extends AbstractProvider
 	 * Strips unneeded info off the beginning and end of the GML Box- not sure
 	 * how to do this consistently...
 	 */
-	private void trimGMLBox(){
+	private String trimGMLBox(String oldBox){
 		//  Strip off gml-root-instance stuff at beginning
 		//  Will this ALWAYS be 63 characters?  Doubt it...
-		gmlBox = gmlBox.substring(63);
-		//  TODO:  Strip everything after </sml:SensorML>
+		String newBox = oldBox.substring(63);
+		int lastBracket = newBox.lastIndexOf('>');
+		newBox = newBox.substring(0,lastBracket+1);
+		return newBox;
 	}
 	
 	public String getGMLBox() {
