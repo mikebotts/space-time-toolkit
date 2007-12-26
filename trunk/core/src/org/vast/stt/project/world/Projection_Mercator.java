@@ -204,15 +204,24 @@ public class Projection_Mercator implements Projection
         ViewSettings view = scene.getViewSettings();
         SceneRenderer<?> renderer = scene.getRenderer();
         
-        double centerX = view.getTargetPos().x * RTD;
-        double centerY = view.getTargetPos().y * RTD;
-        double dX = view.getOrthoWidth()/2 * RTD;
+        double centerX = view.getTargetPos().x;
+        double centerY = view.getTargetPos().y;
+        double dX = view.getOrthoWidth()/2;
         double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
         
-        bbox.setMinX(Math.max(centerX - dX, -180));
-        bbox.setMaxX(Math.min(centerX + dX, +180));
-        bbox.setMinY(Math.max(centerY - dY, -90));
-        bbox.setMaxY(Math.min(centerY + dY, +90));
+        // compute bbox in mercator crs
+        double minX = Math.max(centerX - dX, -PI);
+        double maxX = Math.min(centerX + dX, +PI);
+        double minY = Math.max(centerY - dY, -PI);
+        double maxY = Math.min(centerY + dY, +PI);
+        
+        // convert to LLA crs
+        double[] min = MapProjection.MerctoLLA(minX, minY, 0);
+        double[] max = MapProjection.MerctoLLA(maxX, maxY, 0);        
+        bbox.setMinX(min[0] * RTD);
+        bbox.setMaxX(max[0] * RTD);
+        bbox.setMinY(min[1] * RTD);
+        bbox.setMaxY(max[1] * RTD);
     }
     
     

@@ -128,7 +128,7 @@ public class TiledMapSelector extends ExtentSelector
     @Override
     protected void deselectItem(QuadTreeItem item)
     {
-        removeFromList(item);        
+        removeFromList(item);
         //System.out.println("Item unselected " + item);
     }
     
