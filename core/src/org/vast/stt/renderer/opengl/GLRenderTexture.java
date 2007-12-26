@@ -76,6 +76,7 @@ public class GLRenderTexture extends GLRunnable
         GridPointGraphic point;
         float uScale = 1.0f;
         float vScale = 1.0f;
+        float eX, eY;
         int count = 0;
         float dz;
         
@@ -90,12 +91,15 @@ public class GLRenderTexture extends GLRunnable
         // compute tex coordinate scale (for padded textures)
         if (normalizeCoords)
         {
-            uScale = (float)tex.width / (float)(tex.width + tex.widthPadding + 1);
-            vScale = (float)tex.height / (float)(tex.height + tex.heightPadding + 1);
+        	uScale = (float)tex.width / (float)(tex.width + tex.widthPadding);
+            vScale = (float)tex.height / (float)(tex.height + tex.heightPadding);
+            eX = 0.5f / (float)tex.width;
+            eY = 0.5f / (float)tex.height;
         }
         else
         {
-            uScale = (float)tex.width;
+            eX = eY = 0;
+        	uScale = (float)tex.width;
             vScale = (float)tex.height;
         }
         
@@ -126,7 +130,25 @@ public class GLRenderTexture extends GLRunnable
                         else
                             dz = zOffset;
                         
-                        gl.glTexCoord2f(point.tx * uScale, point.ty * vScale);
+                        // clamp to edge
+                        if (normalizeCoords)
+                        {
+                        	if (point.tx < eX )
+                        		point.tx = eX;
+                        	else if (point.tx > 1-eX)
+                        		point.tx = 1-eX;
+                        	
+                        	if (point.ty < eY )
+                        		point.ty = eY;
+                        	else if (point.ty > 1-eY)
+                        		point.ty = 1-eY;
+                        }
+                        
+                        // apply scaling for NPOT and padding
+                        point.tx *= uScale;
+                        point.ty *= vScale;
+                        
+                        gl.glTexCoord2f(point.tx, point.ty);                        
                         gl.glVertex3d(point.x, point.y, point.z + dz);
                     }
                 }                

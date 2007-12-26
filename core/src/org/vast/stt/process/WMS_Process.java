@@ -173,7 +173,7 @@ public class WMS_Process extends DataProcess
             initRequest();
 
             URLConnection urlCon = owsUtils.sendGetRequest(request);
-
+            
             //  Check on mimeType catches all three types (blank, inimage, xml)
             //  of OGC service exceptions
             String mimeType = urlCon.getContentType();
@@ -265,8 +265,8 @@ public class WMS_Process extends DataProcess
             int width = originalWidth;
             int height = originalHeight;
             
-            // use smaller measure as reference
-            if (width <= height)
+            // use largest measure as reference
+            if (width >= height)
                 height = (int)(width * (maxY - minY) / (maxX - minX));
             else
                 width = (int)(height * (maxX - minX) / (maxY - minY));

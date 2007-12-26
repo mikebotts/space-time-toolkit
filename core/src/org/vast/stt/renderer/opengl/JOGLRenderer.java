@@ -623,8 +623,8 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glAlphaFunc(GL.GL_NOTEQUAL, 0);
         gl.glEnable(GL.GL_ALPHA_TEST);
-        gl.glShadeModel(GL.GL_SMOOTH);
-        gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+        //gl.glShadeModel(GL.GL_SMOOTH);
+        //gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         gl.glEnable(GL.GL_POLYGON_OFFSET_LINE);
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
