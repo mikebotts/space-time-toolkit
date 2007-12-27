@@ -1,7 +1,14 @@
 package org.vast.stt.provider.JPEG2000;
 
+import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.io.InputStream;
+
+import javax.swing.JLabel;
 
 import jj2000.j2k.decoder.Decoder;
 import jj2000.j2k.util.ParameterList;
@@ -17,9 +24,13 @@ import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
+import org.vast.stt.dynamics.SceneBboxUpdater;
+import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
+
+import sun.awt.image.ToolkitImage;
 
 ///  Test class for reading JPEG2000 images and metadata							
 
@@ -40,6 +51,7 @@ public class JPEG2000Provider extends AbstractProvider
 	protected ParameterList list;
 	Decoder decoder;
 	private String gmlBox;
+	private Decoder dec;
 	
 	public JPEG2000Provider() {
 		//  dummy extents- pull out of JPEG2K header
@@ -83,13 +95,14 @@ public class JPEG2000Provider extends AbstractProvider
         }
 	}
 	
+	//  TODO thread this so we don't block user actions
 	public void loadImage(){
 		// Create parameter list using defaults
 		ParameterList list = new ParameterList(getDefaultParams());
 		list.put("i", imageUrl);
 		list.put("debug", "on");
 		
-		Decoder dec = new Decoder(list);
+		dec = new Decoder(list);
 		// Run the decoder
 		try {
 			dec.run();
@@ -103,7 +116,51 @@ public class JPEG2000Provider extends AbstractProvider
 		String rawBox = dec.getGmlBox();
 		//  Strip junk off beginning and end of Box
 		gmlBox = trimGMLBox(rawBox);
+		Image imTmp = dec.getImage();
+		waitForImage(imTmp);
+		image = ((ToolkitImage)imTmp).getBufferedImage();
+		System.err.println("Image = "+ image);
+		putImageDataInBlock();
+		//dispImg();
+		//System.err.println(gmlBox);
 	}
+	
+	private void waitForImage(Image img){
+		MediaTracker tracker = new MediaTracker(new JLabel());
+		tracker.addImage(img, 1);
+		try {
+			System.err.println("waiting...");
+			tracker.waitForID(1);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+    private void putImageDataInBlock(){
+    	 // if DataBufferByte, just wrap image data with a DataBlock
+        DataBuffer buf = image.getData().getDataBuffer();
+        if (buf instanceof DataBufferByte)
+        {
+            byte[] data = ((DataBufferByte)buf).getData();
+            imageBlock = DataBlockFactory.createBlock(data);
+        }
+        else if (buf instanceof DataBufferInt)
+        {
+            int[] data = ((DataBufferInt)buf).getData();
+            byte[] byteData = new byte[data.length*3];
+            
+            for (int i=0; i<data.length; i++)
+            {
+                int b = i*3;
+                byteData[b] = (byte)(data[i] & 0xFF);
+                byteData[b+1] = (byte)((data[i] >> 8) & 0xFF);
+                byteData[b+2] = (byte)((data[i] >> 16) & 0xFF);
+            }
+            
+            imageBlock = DataBlockFactory.createBlock(byteData);
+        }
+    }
 	
 	protected ParameterList getDefaultParams(){
 		ParameterList def  = new ParameterList();
@@ -122,6 +179,7 @@ public class JPEG2000Provider extends AbstractProvider
 		JPEG2000Provider prov = new JPEG2000Provider();
 		prov.setImagePath("C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
 		prov.loadImage();
+		//prov.dispImg();
 	}
 	
 	protected BlockList createTextureBlockList(int width, int height){
@@ -144,27 +202,53 @@ public class JPEG2000Provider extends AbstractProvider
         return imageBlock;
 	}
 	
-	@Override
-	public void init() throws DataException {
-	   
-        //System.out.println(imageData);
-		DataArray rowData;
-        // create block list for grid
-        DataGroup pointData = new DataGroup(2);
-        pointData.setName("point");
-        pointData.addComponent("lat", new DataValue(DataType.FLOAT));
-        pointData.addComponent("lon", new DataValue(DataType.FLOAT));                   
-        rowData = new DataArray(10);
-        rowData.addComponent(pointData);
-        rowData.setName("row");                  
-        gridData = new DataArray(10);
-        gridData.addComponent(rowData);
-        gridData.setName("grid");
-        blockLists[1] = dataNode.createList(gridData);
-        
-        dataNode.setNodeStructureReady(true);		
-	}
-
+	 public void init() throws DataException
+	    {
+	        // create block list for textures
+	        DataGroup pixelData = new DataGroup(3);
+	        pixelData.setName("pixel");
+	        pixelData.addComponent("red", new DataValue(DataType.BYTE));
+	        pixelData.addComponent("green", new DataValue(DataType.BYTE));
+	        pixelData.addComponent("blue", new DataValue(DataType.BYTE));
+//	        if (useAlpha)
+//	            pixelData.addComponent("alpha", new DataValue(DataType.BYTE));
+	        
+	        DataArray rowData = new DataArray(1000);
+	        rowData.addComponent(pixelData);
+	        rowData.setName("row");                  
+	        DataArray imageData = new DataArray(1000);
+	        imageData.addComponent(rowData);
+	        imageData.setName("image");
+	        blockLists[0] = dataNode.createList(imageData);
+	        //System.out.println(imageData);
+	        
+	        // create block list for grid
+	        DataGroup pointData = new DataGroup(2);
+	        pointData.setName("point");
+	        pointData.addComponent("lat", new DataValue(DataType.FLOAT));
+	        pointData.addComponent("lon", new DataValue(DataType.FLOAT));                   
+	        rowData = new DataArray(10);
+	        rowData.addComponent(pointData);
+	        rowData.setName("row");                  
+	        gridData = new DataArray(10);
+	        gridData.addComponent(rowData);
+	        gridData.setName("grid");
+	        blockLists[1] = dataNode.createList(gridData);
+	        //System.out.println(gridData);
+	        
+	        // set tile sizes in updater
+	        SpatialExtentUpdater updater = this.getSpatialExtent().getUpdater();
+	        if (updater != null)
+	        {
+	            if (updater instanceof SceneBboxUpdater)
+	                ((SceneBboxUpdater)updater).setTilesize(tileWidth, tileHeight);
+	            updater.update();
+	        }
+	        
+	        dataNode.setNodeStructureReady(true);
+	    }
+	    
+	
 	@Override
 	public boolean isSpatialSubsetSupported() {
 		// TODO Auto-generated method stub
@@ -186,7 +270,7 @@ public class JPEG2000Provider extends AbstractProvider
         BlockListItem[] blockArray = new BlockListItem[2];
 		
 		loadImage();
-		blockLists[0] = createTextureBlockList(imageWidth, imageHeight);
+		//blockLists[0] = createTextureBlockList(imageWidth, imageHeight);
 		
 		//
 		loadGrid();
