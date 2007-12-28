@@ -158,7 +158,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
                 setDataItem(selectedItem);
                 refreshView();
             }
-            if (selectedObj instanceof SceneItem)
+			else if (selectedObj instanceof SceneItem)
             {
                 DataItem selectedItem = ((SceneItem)selectedObj).getDataItem();
                 setDataItem(selectedItem);

@@ -28,6 +28,7 @@ package org.vast.stt.apps;
 import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.IViewDescriptor;
 
 
 /**
@@ -45,10 +46,12 @@ public class Application implements IPlatformRunnable
 		try
 		{
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
+			
 			if (returnCode == PlatformUI.RETURN_RESTART)
 			{
 				return IPlatformRunnable.EXIT_RESTART;
-			}
+			}        
+	        
 			return IPlatformRunnable.EXIT_OK;
 		}
 		finally

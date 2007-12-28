@@ -267,6 +267,9 @@ public class DataTreeReader extends XMLReader
         
         // otherwise create appropriate reader
         XMLModuleReader reader = XMLRegistry.createReader(providerElt.getLocalName());
+        if (reader == null)
+        	return null;
+        
         reader.setObjectIds(objectIds);
         provider = (DataProvider)reader.read(dom, providerElt);
         registerObjectID(dom, providerElt, provider);

@@ -40,13 +40,11 @@ package org.vast.stt.gui.widgets.catalog;
  * @version 1.0
  */
 
-public class ServerInfo {
-
+public class ServerInfo
+{
+	public String type;
 	public String name;
 	public String version;
-	public String url;
-	///public static enum ServiceType 
-	//	{ WMS, WCS, WFS, SOS };
-	public ServiceType type;
+	public String url;	
 }
 
