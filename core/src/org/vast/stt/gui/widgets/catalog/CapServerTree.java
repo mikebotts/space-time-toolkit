@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Control;
 public class CapServerTree
 {
 	TreeViewer treeViewer;
-	List [] servers;
 	CapServers capServers;
 	
 	public CapServerTree(Composite parent, CapServers capServers){
@@ -62,8 +61,7 @@ public class CapServerTree
 		treeViewer.setContentProvider(new TreeContentProvider());
 		treeViewer.setLabelProvider(new TreeLabelProvider());
 		this.capServers = capServers;
-		loadServerLists();
-		treeViewer.setInput(servers);
+		treeViewer.setInput(capServers.allServers);
 		treeViewer.expandAll();	
 	}  
 	
@@ -139,14 +137,6 @@ public class CapServerTree
 		{
 			return getChildren(inputElement);
 		}		
-	}
-	
-	public void loadServerLists(){
-		
-		// test hack
-		servers = new List[2];
-		servers[0] = capServers.wmsServers;
-		servers[1] = capServers.sosServers;
 	}
 }
 

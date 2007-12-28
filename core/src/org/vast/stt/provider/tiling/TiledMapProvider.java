@@ -195,7 +195,7 @@ public abstract class TiledMapProvider extends AbstractProvider
                         if (!blockArray[b].isLinked())
                             blockLists[b].add(blockArray[b]);
                     }
-                }            
+                }
             }
         }
         

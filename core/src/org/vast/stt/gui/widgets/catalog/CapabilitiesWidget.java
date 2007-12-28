@@ -19,7 +19,8 @@
  Please Contact Mike Botts <mike.botts@uah.edu> for more information.
  
  Contributor(s): 
-    Alexandre Robin <robin@nsstc.uah.edu>    Tony Cook <tcook@nsstc.uah.edu>
+    Alexandre Robin <robin@nsstc.uah.edu>
+    Tony Cook <tcook@nsstc.uah.edu>
  
 ******************************* END LICENSE BLOCK ***************************/
 
@@ -66,7 +67,7 @@ import org.vast.ows.OWSUtils;
  * @version 1.0
  */
 
-public class CapabilitiesWidget implements SelectionListener 
+public class CapabilitiesWidget implements SelectionListener
 {
 	CapServers capServers;
 	Composite mainGroup;
@@ -74,27 +75,31 @@ public class CapabilitiesWidget implements SelectionListener
 	private Combo typesCombo;
 	private Combo serverCombo;
 	private LayerTree layerTree;
-    private OWSUtils owsUtils = new OWSUtils();
-	
-	public CapabilitiesWidget(Composite parent) {
+	private OWSUtils owsUtils = new OWSUtils();
+
+
+	public CapabilitiesWidget(Composite parent)
+	{
 		capServers = new CapServers();
-		capServers.loadServerData();
+		capServers.loadDefaultServerData();
 		initGui(parent);
 	}
 
-	public void initGui(Composite parent){
+
+	public void initGui(Composite parent)
+	{
 		GridData gd;
-		
+
 		mainGroup = new Composite(parent, 0x0);
 		mainGroup.setLayout(new GridLayout());
-		
+
 		Group topGroup = new Group(mainGroup, 0x0);
 		topGroup.setLayout(new GridLayout(2, false));
-		topGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false ));
+		topGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		topGroup.setText("Servers");
 
 		//  ServerType
-		Label typesLabel = new Label(topGroup, SWT.LEFT);  
+		Label typesLabel = new Label(topGroup, SWT.LEFT);
 		typesLabel.setText("Service Types:");
 		typesCombo = new Combo(topGroup, SWT.READ_ONLY);
 		typesCombo.setItems(capServers.getServiceTypes());
@@ -103,17 +108,17 @@ public class CapabilitiesWidget implements SelectionListener
 		typesCombo.setLayoutData(gd);
 		typesCombo.select(3);
 		typesCombo.addSelectionListener(this);
-		
+
 		//  Server  
 		Label serverLabel = new Label(topGroup, SWT.LEFT);
 		serverLabel.setText("Server:");
 		serverCombo = new Combo(topGroup, SWT.READ_ONLY);
-		serverCombo.setItems(new String [] {"AAA", "bbb"});
+		serverCombo.setItems(new String[] { "AAA", "bbb" });
 		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		serverCombo.setLayoutData(gd);
 		setServerComboItems();
 		serverCombo.addSelectionListener(this);
-		
+
 		//  Edit/GetCaps btns
 		//  NOTE that I had to put in a new composite to get buttons right aligned
 		Composite btnComp = new Composite(topGroup, 0x0);
@@ -121,21 +126,25 @@ public class CapabilitiesWidget implements SelectionListener
 		gd = new GridData(SWT.END, SWT.CENTER, false, false);
 		gd.horizontalSpan = 2;
 		btnComp.setLayoutData(gd);
-		
+
 		Button editBtn = new Button(btnComp, SWT.PUSH);
 		editBtn.setText("Edit");
 		editBtn.setToolTipText("Edit Capabilities Server List");
 		gd = new GridData(SWT.END, SWT.CENTER, false, false);
 		gd.widthHint = 60;
 		editBtn.setLayoutData(gd);
-		editBtn.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e){
+		editBtn.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent e)
+			{
 				new EditCapServerDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), capServers);
 			}
-			
-			public void widgetDefaultSelected(SelectionEvent e){};
+
+
+			public void widgetDefaultSelected(SelectionEvent e)
+			{
+			};
 		});
-		
+
 		getCapsBtn = new Button(btnComp, SWT.PUSH);
 		getCapsBtn.setText("Get Caps");
 		getCapsBtn.setToolTipText("Get Capabilities from selected Server");
@@ -143,100 +152,128 @@ public class CapabilitiesWidget implements SelectionListener
 		gd.widthHint = 60;
 		getCapsBtn.setLayoutData(gd);
 		getCapsBtn.addSelectionListener(this);
-		
+
 		layerTree = new LayerTree(mainGroup);
-		layerTree.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));		
+		layerTree.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
+
 	//  repopulate serverCombo with selected type's servers 
-	//  and select the 0th entry
-	protected void setServerComboItems(){
+	//  and select the first entry
+	protected void setServerComboItems()
+	{
 		String type = typesCombo.getText();
-		String [] types = capServers.getServers(type);
+		String[] servers = capServers.getServers(type);
+		
 		//  types can be null still, so check it
-		if(types == null)
-			types =  new String[]{};
-		serverCombo.setItems(types);
+		if (servers == null)
+			servers = new String[] {};
+		
+		serverCombo.setItems(servers);
 		serverCombo.select(0);
 	}
 
-	private class GetCapsRunnable implements IRunnableWithProgress {
+	private class GetCapsRunnable implements IRunnableWithProgress
+	{
 		String server;
-		ServiceType type;
+		String serviceType;
 		List<OWSLayerCapabilities> caps;
-		
-		public GetCapsRunnable(String server, ServiceType type){
+
+
+		public GetCapsRunnable(String server, String serviceType)
+		{
 			this.server = server;
-			this.type = type;
+			this.serviceType = serviceType;
 		}
-		
-		public void run(IProgressMonitor monitor) 
-			throws InvocationTargetException, InterruptedException {
-				String msg = "Attempting to read Capabilities Document from " + server + "...";
-				monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
-				caps = readCapabilities(server, type);
+
+
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+		{
+			String msg = "Attempting to read Capabilities Document from " + server + "...";
+			monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
+			caps = readCapabilities(server, serviceType);
 
 		};
-		
-		public List<OWSLayerCapabilities> getLayerCaps(){
+
+
+		public List<OWSLayerCapabilities> getLayerCaps()
+		{
 			return caps;
 		}
 	}
-	
-	protected void getCapabilities(String server, ServiceType type){
-		ProgressMonitorDialog pmd = new ProgressMonitorDialog(
-				PlatformUI.getWorkbench().getDisplay().getActiveShell());
-		
-		GetCapsRunnable runnable = new GetCapsRunnable(server, type);
-		
-		try {
+
+
+	protected void getCapabilities(String server, String serviceType)
+	{
+		ProgressMonitorDialog pmd = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		GetCapsRunnable runnable = new GetCapsRunnable(server, serviceType);
+
+		try
+		{
 			pmd.run(true, false, runnable);
-		} catch (InvocationTargetException e) {
+		}
+		catch (InvocationTargetException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<OWSLayerCapabilities> caps = runnable.getLayerCaps();
-		if(caps != null)
+		if (caps != null)
 			layerTree.setInput(caps);
-		else {
-            MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-            		"STT Error", "Error reading caps from " + server);
+		else
+		{
+			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "STT Error", "Error reading caps from " + server);
 		}
 	}
-		
+
+
 	/**
 	 *  get the Capabilities from the currently selected server
 	 */
-	protected List<OWSLayerCapabilities> readCapabilities(String server, ServiceType type){
-		ServerInfo info = capServers.getServerInfo(server, type);
+	protected List<OWSLayerCapabilities> readCapabilities(String server, String serviceType)
+	{
+		ServerInfo info = capServers.getServerInfo(server, serviceType);
 		OWSServiceCapabilities caps;
-		try {		
-			caps = owsUtils.getCapabilities(info.url, type.toString(), info.version);
-		} catch (OWSException e) {
+		try
+		{
+			caps = owsUtils.getCapabilities(info.url, serviceType, info.version);
+		}
+		catch (OWSException e)
+		{
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			return null;
 		}
 		return caps.getLayers();
 	}
-	
-	public void widgetDefaultSelected(SelectionEvent e) {
+
+
+	public void widgetDefaultSelected(SelectionEvent e)
+	{
 	}
 
-	public void widgetSelected(SelectionEvent e) {
-		Control control = (Control)e.getSource();
-		
-		if(control == getCapsBtn){
+
+	public void widgetSelected(SelectionEvent e)
+	{
+		Control control = (Control) e.getSource();
+
+		if (control == getCapsBtn)
+		{
 			String server = serverCombo.getText();
-			ServiceType type = ServiceType.getServiceType(typesCombo.getText());
-			getCapabilities(server, type);
-		} else if(control == typesCombo) {
+			getCapabilities(server, typesCombo.getText());
+		}
+		else if (control == typesCombo)
+		{
 			//  repopulate servers with selected type
 			setServerComboItems();
-		} else if(control == serverCombo) {
+		}
+		else if (control == serverCombo)
+		{
 			//  do nothing
 		}
 	}
