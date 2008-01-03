@@ -98,21 +98,27 @@ public class Projection_ECEF implements Projection
         
         // change camera target to center of bbox or 0,0,0
         Vector3d center = bbox.getCenter();
-        Vector3d newCameraPos = new Vector3d();
-        newCameraPos.add(center);
-        
-        if (newCameraPos.length() < 1e6)
+                
+        if (center.length() < 1e5)
         {
-            view.getCameraPos().set(dist*10, 0.0, 0.0);
+            view.getCameraPos().set(datum.equatorRadius + dist*10, 0.0, 0.0);
             view.getUpDirection().set(0.0, 0.0, 1.0);
-            view.getTargetPos().set(0.0, 0.0, 0.0);
+            view.getTargetPos().set(datum.equatorRadius, 0.0, 0.0);
         }
         else
         {
-            // change camera pos
+        	// calculate bbox center on earth surface
+        	double scale = datum.equatorRadius/center.length();
+            center.scale(scale);            
+            
+            // change camera target
+            view.setTargetPos(center);
+                        
+        	// change camera pos
+            Vector3d newCameraPos = center.copy();
             newCameraPos.normalize();
             newCameraPos.scale(dist*10);
-            newCameraPos.add(center);
+            newCameraPos.add(center);            
             view.setCameraPos(newCameraPos);
             
             // change camera up direction
@@ -122,9 +128,6 @@ public class Projection_ECEF implements Projection
             newUp.cross(newCameraPos, sideDir);
             newUp.normalize();        
             view.setUpDirection(newUp);
-            
-            // change camera target
-            view.setTargetPos(center);
         }
         
         // adjust z range

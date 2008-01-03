@@ -55,7 +55,7 @@ public class WorldScene extends Scene
     public WorldScene()
     {
         super();
-        cameraController = new CameraControl_Base(this);
+        cameraController = new CameraControl_Map(this);
     }
     
     
@@ -116,17 +116,28 @@ public class WorldScene extends Scene
     }
     
     
+    public void setProjection(Projection projection)
+    {
+    	// project geometry of all items and masks
+        for (int i = 0; i < sceneItems.size(); i++)
+            sceneItems.get(i).setProjection(projection);
+        for (int i = 0; i < maskItems.size(); i++)
+            maskItems.get(i).setProjection(projection);
+        
+        // select default camera controller
+        if (projection instanceof Projection_ECEF)
+        	cameraController = new CameraControl_Globe(this);
+        else
+        	cameraController = new CameraControl_Map(this);
+    }
+    
+    
     public void handleEvent(STTEvent event)
     {
         switch (event.type)
         {
             case SCENE_PROJECTION_CHANGED:
-                // project geometry of all items and masks
-                for (int i = 0; i < sceneItems.size(); i++)
-                    sceneItems.get(i).setProjection(viewSettings.getProjection());
-                for (int i = 0; i < maskItems.size(); i++)
-                    maskItems.get(i).setProjection(viewSettings.getProjection());               
-                
+                setProjection(viewSettings.getProjection());         
                 // forward event for scene fit and redraw
                 dispatchEvent(event.copy());                
                 break;

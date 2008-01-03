@@ -70,9 +70,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private int xOld;
 	private int yOld;
     private int corner;
-	private boolean rotating;
-	private boolean translating;
-	private boolean zooming;
+	private boolean draggingLeft;
+	private boolean draggingRight;
+	private boolean draggingMiddle;
     private boolean resizing;
     private boolean dragged;
     private final static double RTD = 180/Math.PI;
@@ -194,20 +194,20 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         if (e.button == 1)
 		{
 			if (e.stateMask == SWT.CTRL)
-				zooming = true;
+				draggingMiddle = true;
 			else if (e.stateMask == SWT.SHIFT)
-				translating = true;
+				draggingRight = true;
 			else
-				rotating = true;
+				draggingLeft = true;
 		}
 		
         // case of middle button pressed
         else if (e.button == 2)
-            zooming = true;
+            draggingMiddle = true;
         
         // case of right button pressed
         else if (e.button == 3)
-			translating = true;
+			draggingRight = true;
 		
 		xOld = e.x;
 		yOld = e.y;
@@ -239,9 +239,9 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));
         }
         
-        rotating = false;
-		translating = false;
-		zooming = false;
+        draggingLeft = false;
+		draggingRight = false;
+		draggingMiddle = false;
         resizing = false;
         
 		((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
@@ -254,28 +254,28 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
         
-        if (rotating)
-        {
-            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
-            scene.getCameraController().doRotation(xOld, yOld, e.x, e.y);
-            xOld = e.x;
-            yOld = e.y;
-            updateView();
-        }
-        
-        else if (translating)
+        if (draggingLeft)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-            scene.getCameraController().doTranslation(xOld, yOld, e.x, e.y);
+            scene.getCameraController().doLeftDrag(xOld, yOld, e.x, e.y);
             xOld = e.x;
             yOld = e.y;
             updateView();
         }
         
-        else if (zooming)
+        else if (draggingRight)
         {
-            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEN));
-            scene.getCameraController().doZoom(xOld, yOld, e.x, e.y);
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+            scene.getCameraController().doRightDrag(xOld, yOld, e.x, e.y);
+            xOld = e.x;
+            yOld = e.y;
+            updateView();
+        }
+        
+        else if (draggingMiddle)
+        {
+            ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+            scene.getCameraController().doMiddleDrag(xOld, yOld, e.x, e.y);
             xOld = e.x;
             yOld = e.y;
             updateView();
@@ -292,14 +292,24 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void handleEvent(Event event)
 	{
-		double amount = event.count/20.0;
-        scene.getCameraController().doZoom(amount);
+		scene.getCameraController().doWheel(event.count);
 		updateView();
 	}
 	
 	
 	public void mouseDoubleClick(MouseEvent e)
 	{
+		int viewHeight = scene.getRenderer().getViewHeight();
+		e.y = viewHeight - e.y;
+		
+		if (e.button == 1)
+			scene.getCameraController().doLeftDblClick(e.x, e.y);
+		else if (e.button == 2)
+			scene.getCameraController().doMiddleDblClick(e.x, e.y);
+		else if (e.button == 3)
+			scene.getCameraController().doRightDblClick(e.x, e.y);
+		
+        updateView();
 	}
 	
 	

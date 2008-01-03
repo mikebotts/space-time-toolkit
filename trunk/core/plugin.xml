@@ -14,16 +14,16 @@
       <view name="Time" class="org.vast.stt.gui.views.TimeExtentView" id="STT.TimeExtentView"/>
       <view name="Scene Time" class="org.vast.stt.gui.views.SceneTimeView" id="STT.SceneTimeView"/>
       <view name="Graphics" class="org.vast.stt.gui.views.SymbolizerView" id="STT.SymbolizerView"/>
-      <view name="CatalogView" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>
-      <view name="CapabilitiesView" class="org.vast.stt.gui.views.CapabilitiesView" id="STT.CapabilitiesView"/>
-      <view name="Data" class="org.vast.stt.gui.views.DataProviderView" id="STT.DataProviderView"/>
+      <view name="Catalog" class="org.vast.stt.gui.views.CatalogView" id="STT.CatalogView"/>
+      <view name="Capabilities" class="org.vast.stt.gui.views.CapabilitiesView" id="STT.CapabilitiesView"/>
       <view name="Scene Tree" class="org.vast.stt.gui.views.SceneTreeView" id="STT.SceneTreeView"/>
       <view name="Scene Items" class="org.vast.stt.gui.views.SceneItemsView" id="STT.SceneItemsView"/>
       <view name="Scene" class="org.vast.stt.gui.views.WorldView" id="STT.WorldView"/>
-      <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
-      <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
       <view name="Pressure" class="org.vast.sttx.gui.views.PressureView" id="STT.PressureView"/>
       <view name="Running Jobs" class="org.eclipse.ui.ExtensionFactory:progressView" id="org.eclipse.ui.views.ProgressView"/>
+      <!-- -->
+      <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
+      <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor class="org.vast.stt.gui.views.ProjectEditor" default="false" extensions="stt" icon="icons/gear.gif" id="STT.ProjectEditor" name="Project Editor"/>
@@ -58,16 +58,6 @@
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectLLA" label="LLA" menubarPath="STT.ViewMenu/group2" style="radio"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectECEF" label="ECEF" menubarPath="STT.ViewMenu/group2" style="radio"/>
          <action class="org.vast.stt.actions.ViewMenu" id="STT.ProjectMERC" label="Mercator" menubarPath="STT.ViewMenu/group2" style="radio"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowWorldView" label="Show World View" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneTreeView" label="Show Scene Tree" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSceneItemsView" label="Show Scene Items" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowMasterTimeView" label="Show Master Time" menubarPath="STT.ViewMenu/group3"/>    
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowTimeExtentView" label="Show Time Options" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSpatialExtentView" label="Show Bbox Options" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowSymbolizerView" label="Show Style Options" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowCapabilitiesView" label="Show Capabilities Options" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowCatalogView" label="Show Catalog Search" menubarPath="STT.ViewMenu/group3"/>
-         <action class="org.vast.stt.actions.ViewMenu" id="STT.ShowDataProviderView" label="Show Data Options" menubarPath="STT.ViewMenu/group3"/>
          <!-- File Menu -->
          <menu id="STT.FileMenu" label="&amp;File">
             <separator name="group1"/>

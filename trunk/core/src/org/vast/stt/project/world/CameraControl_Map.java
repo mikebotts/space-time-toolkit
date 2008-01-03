@@ -27,20 +27,18 @@ package org.vast.stt.project.world;
 
 import org.vast.math.Quat4d;
 import org.vast.math.Vector3d;
+import org.vast.stt.project.world.ViewSettings.CameraMode;
 import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 
 
 /**
  * <p><b>Title:</b>
- * Map Camera Control
+ * Base Camera Control
  * </p>
  *
  * <p><b>Description:</b><br/>
- * Camera Controller for use with flat map projections.
- * In normal mode, this constrains the target to the z=0 plane
- * and within the bounds of the map projection. Vertical (along z)
- * translation can be achieved only if z constraint is removed.
+ * 
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -48,16 +46,50 @@ import org.vast.stt.renderer.SceneRenderer;
  * @date Nov 11, 2006
  * @version 1.0
  */
-public class CameraControl_Map extends CameraControl_Base
+public class CameraControl_Map implements CameraControl
 {
+    protected WorldScene scene;
+    protected Vector3d P0 = new Vector3d();
+    protected Vector3d P1 = new Vector3d();
+    protected Vector3d C = new Vector3d();
+    
     
     public CameraControl_Map(WorldScene scene)
     {
-        super(scene);
+        this.setScene(scene);
     }
-
-
-    public void doRotation(int x0, int y0, int x1, int y1)
+    
+    
+    public void setScene(WorldScene scene)
+    {
+        this.scene = scene;
+    }
+    
+    
+    // translate both camera and target
+    public void doLeftDrag(int x0, int y0, int x1, int y1)
+    {
+        ViewSettings viewSettings = scene.getViewSettings();
+        Projection projection = viewSettings.getProjection();
+        //MotionConstraint transConstraint = viewSettings.getTransConstraint();
+        boolean found;
+        
+        found = projection.pointOnMap(x0, y0, scene, P0);
+        if (!found)
+            return;
+        
+        found = projection.pointOnMap(x1, y1, scene, P1);
+        if (!found)
+            return;
+        
+        P0.sub(P1);        
+        viewSettings.getTargetPos().add(P0);
+        viewSettings.getCameraPos().add(P0);
+    }
+    
+    
+    // rotate around camera target
+    public void doRightDrag(int x0, int y0, int x1, int y1)
     {
         ViewSettings viewSettings = scene.getViewSettings();
         MotionConstraint rotConstraint = viewSettings.getRotConstraint();
@@ -76,8 +108,8 @@ public class CameraControl_Map extends CameraControl_Base
             int viewWidth = renderer.getViewWidth();
             
             // unproject to world view
-            renderer.unproject(x0, viewHeight-y0, 0.0, P0);
-            renderer.unproject(x1, viewHeight-y1, 0.0, P1);
+            renderer.unproject(x0, y0, 0.0, P0);
+            renderer.unproject(x1, y1, 0.0, P1);
             renderer.unproject(viewWidth/2, viewHeight/2, 0.0, C);
             
             // viewZ vector = target - pos
@@ -87,9 +119,7 @@ public class CameraControl_Map extends CameraControl_Base
             
             // arcball radius
             double r = viewSettings.getArcballRadius();
-            if (r < 0)
-                r = viewSettings.getOrthoWidth() / 2;
-
+            
             // pos of point 0 on arcball
             P0.sub(C);
             P0.scale(1/r);
@@ -129,4 +159,108 @@ public class CameraControl_Map extends CameraControl_Base
             up.rotate(qRot);
         }
     }
+    
+    
+    // continuous zoom
+    public void doMiddleDrag(int x0, int y0, int x1, int y1)
+	{
+    	SceneRenderer<?> renderer = scene.getRenderer();
+        double amount = 2.0 * ((double)(y0 - y1)) / ((double)renderer.getViewHeight());
+        doZoom(amount);
+	}
+
+    
+    // zoom by steps with wheel
+    public void doWheel(int count)
+    {
+    	double amount = count/20.0;
+        doZoom(amount);
+    }
+    
+    
+    public void doZoom(double amount)
+    {
+        ViewSettings viewSettings = scene.getViewSettings();
+        MotionConstraint zoomConstraint = viewSettings.getZoomConstraint();
+        
+        if (zoomConstraint != MotionConstraint.NO_MOTION)
+        {
+            // zoom in ortho mode
+            if (viewSettings.getCameraMode() == CameraMode.ORTHO)
+            {
+                double currentWidth = viewSettings.getOrthoWidth();
+                double newWidth = currentWidth + amount*currentWidth;
+                
+                if (newWidth == 0.0 && amount > 0.0)
+                    newWidth = amount;
+                else if (newWidth < 0.0)
+                    newWidth = 0.0;
+                
+                viewSettings.setOrthoWidth(newWidth);
+            }
+        }
+    }
+
+
+	public void doLeftClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void doRightClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void doMiddleClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void doLeftDblClick(int x0, int y0)
+	{
+		zoomToPoint(true, x0, y0);
+	}
+	
+	
+	public void doRightDblClick(int x0, int y0)
+	{
+		zoomToPoint(false, x0, y0);
+	}
+	
+	
+	protected void zoomToPoint(boolean zoomIn, int x0, int y0)
+	{
+		ViewSettings viewSettings = scene.getViewSettings();
+        Projection projection = viewSettings.getProjection();
+        
+		boolean found = projection.pointOnMap(x0, y0, scene, P0);
+        if (!found)
+            return;
+		
+        Vector3d pos = viewSettings.getCameraPos();
+        Vector3d target = viewSettings.getTargetPos();
+        Vector3d diff = P0.copy();
+        diff.sub(target);        
+        
+        target.add(diff);
+        pos.add(diff);
+        
+        if (zoomIn)
+        	doZoom(-0.3);
+        else
+        	doZoom(+0.3);
+	}
+	
+	
+	public void doMiddleDblClick(int x0, int y0)
+	{
+		
+	}
 }
