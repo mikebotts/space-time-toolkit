@@ -28,6 +28,7 @@ package org.vast.stt.gui.widgets.time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -65,7 +66,7 @@ public class CalendarSpinnerModel extends TimeSpinnerModel {
 	
 	public CalendarSpinnerModel(String formatStr){
 		super(formatStr);
-		dateFormat = new SimpleDateFormat(formatStr);
+		dateFormat = new SimpleDateFormat(formatStr, Locale.US);
 		//   TODO  add mechanism to set initial zoneOffset
 		zoneOffset = 0;
 	}
