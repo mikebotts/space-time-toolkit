@@ -34,11 +34,16 @@ import org.vast.stt.renderer.SceneRenderer;
 
 /**
  * <p><b>Title:</b>
- * Base Camera Control
+ * Planet Camera Control
  * </p>
  *
  * <p><b>Description:</b><br/>
- * 
+ * Camera Controller for use with planet centric views.
+ * In normal mode, it constrains the camera target on the
+ * ellipsoid, so that a translation is effectively a circular
+ * translation around the planet center and a rotation is
+ * around the target on the surface.
+ * (i.e. this is close to google earth and world wind behavior)
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -46,17 +51,17 @@ import org.vast.stt.renderer.SceneRenderer;
  * @date Nov 11, 2006
  * @version 1.0
  */
-public class CameraControl_Base implements CameraControl
+public class CameraControl_Globe implements CameraControl
 {
-    protected WorldScene scene;
+	protected WorldScene scene;
     protected Vector3d P0 = new Vector3d();
     protected Vector3d P1 = new Vector3d();
     protected Vector3d C = new Vector3d();
     
     
-    public CameraControl_Base(WorldScene scene)
+    public CameraControl_Globe(WorldScene scene)
     {
-        this.setScene(scene);
+    	this.setScene(scene);
     }
     
     
@@ -64,9 +69,46 @@ public class CameraControl_Base implements CameraControl
     {
         this.scene = scene;
     }
+    
+    
+    // move/translate on globe surface (ellipsoid)
+    public void doLeftDrag(int x0, int y0, int x1, int y1)
+    {
+        ViewSettings viewSettings = scene.getViewSettings();
+        Projection projection = viewSettings.getProjection();
+        boolean found;
+        
+        // get clicking points projected on earth surface
+        found = projection.pointOnMap(x0, y0, scene, P0);
+        if (!found)
+            return;
+        
+        found = projection.pointOnMap(x1, y1, scene, P1);
+        if (!found)
+            return;
+        
+        // actual camera position
+        Vector3d up = viewSettings.getUpDirection();
+        Vector3d pos = viewSettings.getCameraPos();
+        Vector3d target = viewSettings.getTargetPos();
+        
+        // compute rotation quaternion
+        Vector3d crossP = new Vector3d();
+        crossP.cross(P0, P1);
+        crossP.normalize();
+        P0.normalize();
+        P1.normalize();
+        Quat4d qRot = new Quat4d(crossP, -Math.acos(P0.dot(P1)));
 
-
-    public void doRotation(int x0, int y0, int x1, int y1)
+        // rotate current camera position
+        pos.rotate(qRot);
+        target.rotate(qRot);
+        up.rotate(qRot);
+    }
+    
+    
+    // rotate around camera target
+    public void doRightDrag(int x0, int y0, int x1, int y1)
     {
         ViewSettings viewSettings = scene.getViewSettings();
         MotionConstraint rotConstraint = viewSettings.getRotConstraint();
@@ -96,8 +138,6 @@ public class CameraControl_Base implements CameraControl
             
             // arcball radius
             double r = viewSettings.getArcballRadius();
-            if (r < 0)
-                r = viewSettings.getOrthoWidth() / 2;
 
             // pos of point 0 on arcball
             P0.sub(C);
@@ -138,86 +178,19 @@ public class CameraControl_Base implements CameraControl
             up.rotate(qRot);
         }
     }
-
-
-    public void doTranslation(int x0, int y0, int x1, int y1)
-    {
-        ViewSettings viewSettings = scene.getViewSettings();
-        Projection projection = viewSettings.getProjection();
-        //MotionConstraint transConstraint = viewSettings.getTransConstraint();
-        boolean found;
-        
-        found = projection.pointOnMap(x0, y0, scene, P0);
-        if (!found)
-            return;
-        
-        found = projection.pointOnMap(x1, y1, scene, P1);
-        if (!found)
-            return;
-        
-        P0.sub(P1);        
-        viewSettings.getTargetPos().add(P0);
-        viewSettings.getCameraPos().add(P0);
-        
-        /*
-        if (transConstraint != MotionConstraint.NO_MOTION)
-        {
-            SceneRenderer renderer = scene.getRenderer();
-            
-            renderer.unproject(x0, -y0, 0.0, P0);
-            renderer.unproject(x1, -y1, 0.0, P1);
-            P1.sub(P0);
-            
-            Vector3d pos = viewSettings.getCameraPos();
-            Vector3d target = viewSettings.getTargetPos();
-            
-            // viewZ vector = target - pos
-            Vector3d viewZ = new Vector3d(target);
-            viewZ.sub(pos);
-            viewZ.normalize();
-            
-            double s;
-            double maxS = P1.length()*2;
-            
-            switch (transConstraint)
-            {
-                case XY:
-                    // P1 + s*viewZ = [x,y,0]
-                    s = -P1.z / viewZ.z;
-                    if (Math.abs(s) > maxS) s = Math.signum(s) * maxS;
-                    viewZ.scale(s);
-                    P1.add(viewZ);
-                    P1.z = 0.0;
-                    break;
-                    
-                case XZ:
-                    // P1 + s*viewZ = [x,0,z]
-                    s = -P1.y / viewZ.y;
-                    viewZ.scale(s);
-                    P1.add(viewZ);
-                    P1.y = 0.0;
-                    break;
-                    
-                case YZ:
-                    // P1 + s*viewZ = [0,y,z]
-                    s = -P1.x / viewZ.x;
-                    viewZ.scale(s);
-                    P1.add(viewZ);
-                    P1.x = 0.0;
-                    break;
-            }
-            
-            viewSettings.getTargetPos().sub(P1);
-            viewSettings.getCameraPos().sub(P1);
-        }
-        */
-    }
-
-
-    public void doZoom(int x0, int y0, int x1, int y1)
-    {
-        SceneRenderer<?> renderer = scene.getRenderer();
+    
+    
+    public void doMiddleDrag(int x0, int y0, int x1, int y1)
+	{
+    	SceneRenderer<?> renderer = scene.getRenderer();
         double amount = 2.0 * ((double)(y0 - y1)) / ((double)renderer.getViewHeight());
+        doZoom(amount);		
+	} 
+
+
+    public void doWheel(int count)
+    {
+    	double amount = count/20.0;
         doZoom(amount);
     }
     
@@ -244,4 +217,67 @@ public class CameraControl_Base implements CameraControl
             }
         }
     }
+
+
+    public void doLeftClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void doRightClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void doMiddleClick(int x0, int y0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void doLeftDblClick(int x0, int y0)
+	{
+		zoomToPoint(true, x0, y0);
+	}
+	
+	
+	public void doRightDblClick(int x0, int y0)
+	{
+		zoomToPoint(false, x0, y0);
+	}
+	
+	
+	protected void zoomToPoint(boolean zoomIn, int x0, int y0)
+	{
+		ViewSettings viewSettings = scene.getViewSettings();
+        Projection projection = viewSettings.getProjection();
+        
+		boolean found = projection.pointOnMap(x0, y0, scene, P0);
+        if (!found)
+            return;
+		
+        Vector3d pos = viewSettings.getCameraPos();
+        Vector3d target = viewSettings.getTargetPos();
+        Vector3d diff = P0.copy();
+        diff.sub(target);        
+        
+        target.add(diff);
+        pos.add(diff);
+        
+        if (zoomIn)
+        	doZoom(-0.3);
+        else
+        	doZoom(+0.3);
+	}
+	
+	
+	public void doMiddleDblClick(int x0, int y0)
+	{
+		
+	}
 }

@@ -32,17 +32,19 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import javax.media.opengl.GL;
+import javax.media.opengl.GLContext;
+//import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.GLDrawableFactory;
 //import javax.media.opengl.DebugGL;
 //import javax.media.opengl.TraceGL;
-import com.realityinteractive.opengl.swt.GLContext;
 import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.opengl.GLCanvas;
+import org.eclipse.swt.opengl.GLData;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.math.Vector3d;
 import org.vast.ows.sld.Color;
@@ -78,9 +80,8 @@ import org.vast.stt.style.*;
 public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
 {
     protected final static ArrayList<GLContext> contextList = new ArrayList<GLContext>(2);
-    protected GLContext swtContext;
-    protected javax.media.opengl.GLContext joglContext;
-    protected Canvas canvas;
+    protected GLContext joglContext;
+    protected GLCanvas canvas;
     protected GL gl;
     protected GLU glu;
     protected GLUT glut;
@@ -138,7 +139,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
             
             contextInUse = true;            
             joglContext.makeCurrent();
-            swtContext.setCurrent();
+            canvas.setCurrent();
         }
         catch (InterruptedException e)
         {
@@ -148,59 +149,77 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     
     protected synchronized void releaseContext()
     {
-        joglContext.release();
+    	joglContext.makeCurrent();
+    	joglContext.release();
         contextInUse = false;
         notifyAll();
     }
     
     
     @Override
-    public void cleanup(DataStyler styler, CleanupSection section)
+    public void cleanup(final DataStyler styler, final CleanupSection section)
     {
-        getContext();
         
-        switch (section)
-        {
-            case ALL:
-                textureManager.clearTextures(styler);
-                displayListManager.clearDisplayLists(styler);
-                break;
-                
-            case TEXTURES:
-                textureManager.clearTextures(styler);
-                break;
-                
-            case GEOMETRY:
-                displayListManager.clearDisplayLists(styler);
-                break;
-        }
-        
-        releaseContext();
+    	Runnable doCleanup = new Runnable()
+    	{
+    		public void run()
+    		{
+    			getContext();
+    	        
+    	        switch (section)
+    	        {
+    	            case ALL:
+    	                textureManager.clearTextures(styler);
+    	                displayListManager.clearDisplayLists(styler);
+    	                break;
+    	                
+    	            case TEXTURES:
+    	                textureManager.clearTextures(styler);
+    	                break;
+    	                
+    	            case GEOMETRY:
+    	                displayListManager.clearDisplayLists(styler);
+    	                break;
+    	        }
+    	        
+    	        releaseContext();
+    		}
+    	};
+    	
+    	canvas.getDisplay().asyncExec(doCleanup);
     }
     
     
     @Override
-    public void cleanup(DataStyler styler, Object[] objects, CleanupSection section)
+    public void cleanup(final DataStyler styler, final Object[] objects, final CleanupSection section)
     {
-        getContext();
+    	Runnable doCleanup = new Runnable()
+    	{
+    		public void run()
+    		{
+    			getContext();
+    			
+    			switch (section)
+    	        {
+    	            case ALL:
+    	                textureManager.clearTextures(styler, objects);
+    	                displayListManager.clearDisplayLists(styler, objects);
+    	                break;
+    	                
+    	            case TEXTURES:
+    	                textureManager.clearTextures(styler, objects);
+    	                break;
+    	                
+    	            case GEOMETRY:
+    	                displayListManager.clearDisplayLists(styler, objects);
+    	                break;
+    	        }
+    	        
+    	        releaseContext();
+    		}
+    	};
         
-        switch (section)
-        {
-            case ALL:
-                textureManager.clearTextures(styler, objects);
-                displayListManager.clearDisplayLists(styler, objects);
-                break;
-                
-            case TEXTURES:
-                textureManager.clearTextures(styler, objects);
-                break;
-                
-            case GEOMETRY:
-                displayListManager.clearDisplayLists(styler, objects);
-                break;
-        }
-        
-        releaseContext();
+        canvas.getDisplay().asyncExec(doCleanup);
     }
     
     
@@ -394,7 +413,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
             this.drawROI(scene, false);
         
         // swap buffers        
-        swtContext.swapBuffers();
+        canvas.swapBuffers();
         releaseContext();
     }
     
@@ -488,7 +507,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
         
-        double axisLength = view.getOrthoWidth() / getViewWidth() * 30; 
+        double axisLength = view.getOrthoWidth() / getViewWidth() * 30;
         
         gl.glLineWidth(2.0f);
         gl.glBegin(GL.GL_LINES);
@@ -583,18 +602,32 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     @Override
     public void init()
     {
-        // setup GL canvas with desired options
+        // make sure we fill the whole area
         composite.setLayout(new FillLayout());
-        canvas = new Canvas(composite, SWT.NO_REDRAW_RESIZE);
         
-        // associate to a context already created for sharing display lists
+        // create SWT GLCanvas with desired options
+        GLData glData = new GLData();
+        glData.redSize = 8;
+        glData.greenSize = 8;
+        glData.blueSize = 8;
+        glData.depthSize = 24;
+        glData.stencilSize = 1;
+        glData.doubleBuffer = true;
+        canvas = new GLCanvas(composite, SWT.NO_REDRAW_RESIZE, glData);
+        canvas.setCurrent();
+        
+        // create JOGL context
         if (contextList.isEmpty())
-            swtContext = new GLContext(canvas, 8, 8, 24, 1);
+        {
+        	joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        }
         else
-            swtContext = new GLContext(canvas, contextList.get(0));
-        contextList.add(swtContext);
-        swtContext.setCurrent();
-        joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        {
+        	joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        	//GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
+        	//joglContext = drawable.createContext(contextList.get(0));
+        }
+        contextList.add(joglContext);
         joglContext.makeCurrent();
         
         //context.setGL(new DebugGL(JOGLContext.getGL()));
@@ -649,14 +682,12 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         {
             // dispose context and remove from list
             getContext();
-            contextList.remove(swtContext);            
-            swtContext.dispose();
+            contextList.remove(joglContext);            
             canvas.dispose();
             releaseContext();
             joglContext.destroy();
             
             canvas = null;
-            swtContext = null;
             joglContext = null;
             DisplayListManager.DLTables.clear();
             TextureManager.symTextureTables.clear();

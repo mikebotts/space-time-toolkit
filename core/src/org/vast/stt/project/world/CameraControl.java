@@ -45,11 +45,25 @@ public interface CameraControl
 {
     public void setScene(WorldScene scene);
     
-    public void doRotation(int x0, int y0, int x1, int y1);
+    public void doLeftDrag(int x0, int y0, int x1, int y1);
     
-    public void doTranslation(int x0, int y0, int x1, int y1);
+    public void doRightDrag(int x0, int y0, int x1, int y1);
     
-    public void doZoom(int x0, int y0, int x1, int y1);
+    public void doMiddleDrag(int x0, int y0, int x1, int y1);
+    
+    public void doWheel(int count);
+    
+    public void doLeftClick(int x0, int y0);
+    
+    public void doRightClick(int x0, int y0);
+    
+    public void doMiddleClick(int x0, int y0);
+    
+    public void doLeftDblClick(int x0, int y0);
+    
+    public void doRightDblClick(int x0, int y0);
+    
+    public void doMiddleDblClick(int x0, int y0);
         
-    public void doZoom(double amount); 
+    public void doZoom(double amount);
 }

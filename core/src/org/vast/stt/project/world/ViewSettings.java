@@ -317,7 +317,10 @@ public class ViewSettings implements STTEventProducer
     
     public double getArcballRadius()
     {
-        return arcballRadius;
+    	if (arcballRadius < 0)
+            return getOrthoWidth() / 2;
+    	else
+    		return arcballRadius;
     }
 
 
