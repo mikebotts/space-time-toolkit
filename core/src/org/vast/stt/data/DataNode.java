@@ -56,7 +56,7 @@ public class DataNode
     protected Hashtable<String, BlockList> listMap;
     protected ArrayList<BlockList> listArray;
     protected boolean nodeStructureReady;
-    
+        
     
     public DataNode()
     {
@@ -108,6 +108,16 @@ public class DataNode
     {
         for (int i=0; i<listArray.size(); i++)
             listArray.get(i).clear();
+    }
+    
+    
+    public boolean hasData()
+    {
+    	for (int i=0; i<listArray.size(); i++)
+    		if (listArray.get(i).getSize() > 0)
+    			return true;
+    			
+    	return false;
     }
     
     

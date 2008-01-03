@@ -194,7 +194,7 @@ public abstract class AbstractProvider implements DataProvider
 	
     public DataNode getDataNode()
     {
-        if (!dataNode.isNodeStructureReady() || error)
+        if (!dataNode.isNodeStructureReady() || !dataNode.hasData() || error)
         {
             error = false;
             startUpdate(false);
@@ -305,14 +305,14 @@ public abstract class AbstractProvider implements DataProvider
         switch (e.type)
         {
             case TIME_EXTENT_CHANGED:
-                if (this.isTimeSubsetSupported())
+                if (this.isTimeSubsetSupported() && isEnabled())
                 {
                     startUpdate(true);
                     break;
                 }
                     
             case SPATIAL_EXTENT_CHANGED:
-                if (this.isSpatialSubsetSupported())
+                if (this.isSpatialSubsetSupported() && isEnabled())
                 {
                     startUpdate(true);
                     break;

@@ -26,7 +26,6 @@
 package org.vast.stt.provider.ows;
 
 import java.io.IOException;
-
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
@@ -36,7 +35,6 @@ import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.sos.GetObservationRequest.ResponseMode;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
 
@@ -61,13 +59,11 @@ public class SOSProvider extends OWSProvider
     protected SOSLayerCapabilities layerCaps;
 	protected GetObservationRequest query;
 	protected DataStreamParser dataParser;
-	protected SWEDataHandler dataHandler;
 	protected boolean usePost;
     
 
 	public SOSProvider()
-	{
-		dataHandler = new SWEDataHandler(this);
+	{		
 	}
     
     
@@ -110,9 +106,8 @@ public class SOSProvider extends OWSProvider
             System.out.println(dataEnc);
 
             // create BlockList
-            BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.createList(dataInfo.copy());
             dataNode.setNodeStructureReady(true);
-            dataHandler.setBlockList(blockList);
         }
         catch (Exception e)
         {
@@ -156,8 +151,12 @@ public class SOSProvider extends OWSProvider
             if (canceled)
                 return;
                 
-			// parse response
+			// create data handler
+            SWEDataHandler dataHandler = new SWEDataHandler(this);
+            dataHandler.setBlockList(dataNode.getListArray().get(0));
             dataHandler.reset();
+            
+            // setup parser
 			reader.parse(dataStream);
 			dataParser = reader.getDataParser();
         	dataParser.setDataHandler(dataHandler);            
@@ -165,8 +164,8 @@ public class SOSProvider extends OWSProvider
             if (canceled)
                 return;
         	
-        	 // start parsing
-            dataParser.parse(reader.getDataStream());
+        	// start parsing
+            dataParser.parse(reader.getDataStream());            
 		}
 		catch (Exception e)
 		{
