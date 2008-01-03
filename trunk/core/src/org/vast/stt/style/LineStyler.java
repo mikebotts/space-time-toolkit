@@ -240,6 +240,10 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
             }
         }
         
+        // line smooth
+        boolean smooth = this.symbolizer.getStroke().getSmooth();
+        point.smooth = smooth;
+        
         dataLists[0].indexOffset = 0;
         mappingsUpdated = true;
     }
