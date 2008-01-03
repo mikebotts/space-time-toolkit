@@ -270,9 +270,9 @@ public class CameraControl_Globe implements CameraControl
         pos.add(diff);
         
         if (zoomIn)
-        	doZoom(-0.3);
+        	doZoom(-0.5);
         else
-        	doZoom(+0.3);
+        	doZoom(1);
 	}
 	
 	
