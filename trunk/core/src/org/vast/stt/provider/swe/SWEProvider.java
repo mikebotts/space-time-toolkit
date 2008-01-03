@@ -27,12 +27,10 @@ package org.vast.stt.provider.swe;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
 import org.vast.cdm.common.DataStreamParser;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.sweCommon.URIStreamHandler;
@@ -58,13 +56,11 @@ public class SWEProvider extends AbstractProvider
     protected String rawDataUrl;
     protected String format; 
     protected DataStreamParser dataParser;
-	protected SWEDataHandler dataHandler;
     protected InputStream dataStream;
     
 	
 	public SWEProvider()
 	{
-		dataHandler = new SWEDataHandler(this);
 	}
     
     
@@ -89,9 +85,8 @@ public class SWEProvider extends AbstractProvider
             System.out.println(dataEnc);
             
             // create BlockList
-            BlockList blockList = dataNode.createList(dataInfo.copy());
+            dataNode.createList(dataInfo.copy());
             dataNode.setNodeStructureReady(true);
-            dataHandler.setBlockList(blockList);
         }
         catch (CDMException e)
         {
@@ -127,8 +122,12 @@ public class SWEProvider extends AbstractProvider
 			reader.parse(dataStream);
 			dataParser = reader.getDataParser();
 						
-			// register the CDM data handler
+			// create data handler
+            SWEDataHandler dataHandler = new SWEDataHandler(this);
+            dataHandler.setBlockList(dataNode.getListArray().get(0));
             dataHandler.reset();
+            
+            // setup parser
 			dataParser.setDataHandler(dataHandler);
             
             // override resultUri if specified in data set
