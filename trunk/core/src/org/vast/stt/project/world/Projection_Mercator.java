@@ -204,11 +204,29 @@ public class Projection_Mercator implements Projection
         ViewSettings view = scene.getViewSettings();
         SceneRenderer<?> renderer = scene.getRenderer();
         
-        double centerX = view.getTargetPos().x;
-        double centerY = view.getTargetPos().y;
+        Vector3d targetPos = view.getTargetPos();
+        Vector3d cameraPos = view.getCameraPos();
+        
+        double centerX = targetPos.x;
+        double centerY = targetPos.y;
         double dX = view.getOrthoWidth()/2;
         double dY = dX * renderer.getViewHeight() / renderer.getViewWidth();
         
+        // calculate secante (see http://fr.wikipedia.org/wiki/Fonction_trigonométrique)
+        Vector3d diff = cameraPos.copy();
+        diff.sub(targetPos);
+        diff.normalize();
+        double secante = 8;
+        if (diff.z != 0)
+        {
+        	secante = 1 / diff.z;
+        	secante = Math.min(secante, 8);
+        }        
+        
+        // scale bbox size
+	    dX = dX * secante;
+	    dY = dY * secante;
+	    
         // compute bbox in mercator crs
         double minX = Math.max(centerX - dX, -PI);
         double maxX = Math.min(centerX + dX, +PI);
@@ -237,7 +255,7 @@ public class Projection_Mercator implements Projection
         Vector3d viewDir = view.getTargetPos().copy();
         viewDir.sub(view.getCameraPos());
         
-        double s = -pos.z / viewDir.z;        
+        double s = -pos.z / viewDir.z;
         pos.x += viewDir.x * s;
         pos.y += viewDir.y * s;
         pos.z = 0.0;

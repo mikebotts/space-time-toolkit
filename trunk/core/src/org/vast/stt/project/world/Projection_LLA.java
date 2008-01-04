@@ -205,10 +205,28 @@ public class Projection_LLA implements Projection
         ViewSettings view = scene.getViewSettings();
         SceneRenderer<?> renderer = scene.getRenderer();
         
-        double centerX = view.getTargetPos().x * RTD;
-        double centerY = view.getTargetPos().y * RTD;
+        Vector3d targetPos = view.getTargetPos();
+        Vector3d cameraPos = view.getCameraPos();
+        
+        double centerX = targetPos.x * RTD;
+        double centerY = targetPos.y * RTD;
         double dX = view.getOrthoWidth()/2 * RTD;
         double dY = dX * renderer.getViewHeight()/ renderer.getViewWidth();
+        
+        // calculate secante (see http://fr.wikipedia.org/wiki/Fonction_trigonométrique)
+        Vector3d diff = cameraPos.copy();
+        diff.sub(targetPos);
+        diff.normalize();
+        double secante = 8;
+        if (diff.z != 0)
+        {
+        	secante = 1 / diff.z;
+        	secante = Math.min(secante, 8);
+        }        
+        
+        // scale bbox size
+	    dX = dX * secante;
+	    dY = dY * secante;
         
         bbox.setMinX(Math.max(centerX - dX, -180));
         bbox.setMaxX(Math.min(centerX + dX, +180));
