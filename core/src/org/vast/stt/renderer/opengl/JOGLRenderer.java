@@ -446,7 +446,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     {
         boolean maskVisible = false;
         
-        // loop through to masks to see if at least one is active
+        // loop through masks to see if at least one is active
         List<SceneItem> maskItems = sceneItem.getMaskItems();
         for (int i=0; i<maskItems.size(); i++)
             if (maskItems.get(i).isVisible())

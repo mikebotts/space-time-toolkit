@@ -120,9 +120,7 @@ public class WorldScene extends Scene
     {
     	// project geometry of all items and masks
         for (int i = 0; i < sceneItems.size(); i++)
-            sceneItems.get(i).setProjection(projection);
-        for (int i = 0; i < maskItems.size(); i++)
-            maskItems.get(i).setProjection(projection);
+            sceneItems.get(i).setProjection(projection);        
         
         // select default camera controller
         if (projection instanceof Projection_ECEF)

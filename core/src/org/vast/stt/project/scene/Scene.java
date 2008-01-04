@@ -61,13 +61,11 @@ public abstract class Scene extends AbstractDisplay
     protected SceneRenderer renderer;
     protected ArrayList<SceneItem> sceneItems;
     protected ArrayList<SceneItem> selectedItems;
-    protected ArrayList<SceneItem> maskItems;
     
 
     public Scene()
     {
         sceneItems = new ArrayList<SceneItem>();
-        maskItems = new ArrayList<SceneItem>();
         selectedItems = new ArrayList<SceneItem>(1);
     }
     
@@ -133,14 +131,15 @@ public abstract class Scene extends AbstractDisplay
             SceneItem nextItem = sceneItems.get(i);
             if (nextItem.getDataItem() == dataItem)
                 return nextItem;
-        }
-        
-        // try to find entry in maskItems list
-        for (int i=0; i<maskItems.size(); i++)
-        {
-            SceneItem nextItem = maskItems.get(i);
-            if (nextItem.getDataItem() == dataItem)
-                return nextItem;
+            
+            // also look in the masks list
+            List<SceneItem> maskItems = nextItem.getMaskItems();
+            for (int m=0; m<maskItems.size(); m++)
+			{
+			   SceneItem maskItem = maskItems.get(m);
+			   if (maskItem.getDataItem() == dataItem)
+			       return maskItem;
+			}
         }
         
         return null;
@@ -188,10 +187,8 @@ public abstract class Scene extends AbstractDisplay
         for (int i=0; i<symbolizers.size(); i++)
             newSceneItem.updateStyler(symbolizers.get(i));
         
-        // add new scene items to rendering list
-        if (dataItem.getOptions().get(DataEntry.MASK) != null)
-            maskItems.add(newSceneItem);
-        else
+        // add new scene items to rendering list (but not the masks!)
+        if (dataItem.getOptions().get(DataEntry.MASK) == null)
             sceneItems.add(newSceneItem);
         
         // recursively call this to handle mask items

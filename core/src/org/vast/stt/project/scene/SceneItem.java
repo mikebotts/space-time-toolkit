@@ -177,6 +177,10 @@ public class SceneItem implements STTEventListener
             parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.GEOMETRY);
             nextStyler.setProjection(projection);
         }
+        
+        // also reproject all masks
+        for (int i = 0; i < maskItems.size(); i++)
+            maskItems.get(i).setProjection(projection);
     }
     
     
