@@ -181,8 +181,11 @@ public class GLRenderRectBox
                 	gl.glPushName(-i-1);
                 
                 gl.glBegin(GL.GL_POINTS);
+                point.x = cX;
+                point.y = cY;
+                point.z = 0;
                 view.getProjection().project(Crs.EPSG4329, point);
-                gl.glVertex3d(cX, cY, 0.0);
+                gl.glVertex3d(point.x, point.y, point.z);
                 gl.glEnd();
                 
                 if (g == 0)
