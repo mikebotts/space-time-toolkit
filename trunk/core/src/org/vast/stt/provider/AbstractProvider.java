@@ -169,7 +169,7 @@ public abstract class AbstractProvider implements DataProvider
         };
         
         Thread updateThread = new Thread(updateRunnable, "Updating: " + getName());
-        updateThread.setPriority(Thread.MAX_PRIORITY);
+        updateThread.setPriority(Thread.NORM_PRIORITY);
         updateThread.start();
     }
     
