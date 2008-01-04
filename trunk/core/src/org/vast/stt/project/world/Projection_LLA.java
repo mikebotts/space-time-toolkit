@@ -58,6 +58,7 @@ public class Projection_LLA implements Projection
     protected double altitudeDamping = 1e-6;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
+    protected Vector3d tempPoint = new Vector3d();
     
     
     public Projection_LLA()
@@ -94,7 +95,15 @@ public class Projection_LLA implements Projection
     }
     
     
-    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    protected void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
+    	point.toVector3d(tempPoint);    	
+    	project(sourceCrs, tempPoint);
+    	point.fromVector3d(tempPoint);
+    }
+    
+    
+    public void project(Crs sourceCrs, Vector3d point)
     {
         double[] lla;
         
@@ -102,21 +111,45 @@ public class Projection_LLA implements Projection
         {
             case ECEF:
                 lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
-                point.x = lla[1];
-                point.y = lla[0];
+                point.x = lla[0];
+                point.y = lla[1];
                 point.z = lla[2];                
                 break;
                 
             case MERC:
                 lla = MapProjection.MerctoLLA(point.x, point.y, point.z);
-                point.x = lla[1];
-                point.y = lla[0];
+                point.x = lla[0];
+                point.y = lla[1];
                 point.z = lla[2];                
                 break;
         }
         
         // always apply altitude damping
         point.z = altitudeDamping * point.z;
+    }
+    
+    
+    public void unproject(Crs destCrs, Vector3d point)
+    {
+    	// always remove altitude damping
+        point.z = point.z / altitudeDamping;
+        
+    	switch (destCrs)
+        {
+            case ECEF:
+            	double[] ecf = MapProjection.LLAtoECF(point.x, point.y, point.z, null);
+                point.x = ecf[0];
+                point.y = ecf[1];
+                point.z = ecf[2];                
+                break;
+                
+            case MERC:
+            	double[] merc = MapProjection.LLAtoMerc(point.x, point.y, point.z);
+                point.x = merc[0];
+                point.y = merc[1];
+                point.z = merc[2];                
+                break;
+        }
     }
     
     

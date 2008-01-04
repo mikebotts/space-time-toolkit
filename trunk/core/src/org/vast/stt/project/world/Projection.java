@@ -55,29 +55,32 @@ public interface Projection
     }
     
     
-    public abstract void adjust(Crs sourceCrs, PrimitiveGraphic point);
+    public void adjust(Crs sourceCrs, PrimitiveGraphic point);
     
     
-    public abstract void project(Crs sourceCrs, PrimitiveGraphic point);
+    public void clip(PrimitiveGraphic point);
     
     
-    public abstract void clip(PrimitiveGraphic point);
+    public void project(Crs sourceCrs, Vector3d point);
     
     
-    public abstract void fitViewToBbox(SpatialExtent bbox, WorldScene scene, boolean adjustZRange);
+    public void unproject(Crs destCrs, Vector3d point);
+    
+        
+    public void fitViewToBbox(SpatialExtent bbox, WorldScene scene, boolean adjustZRange);
     
     
-    public abstract void fitBboxToView(SpatialExtent bbox, WorldScene scene);
+    public void fitBboxToView(SpatialExtent bbox, WorldScene scene);
     
     
-    public abstract boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos);
+    public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos);
     
     
-    public abstract MotionConstraint getDefaultTranslationConstraint();
+    public MotionConstraint getDefaultTranslationConstraint();
     
     
-    public abstract MotionConstraint getDefaultRotationConstraint();
+    public MotionConstraint getDefaultRotationConstraint();
     
     
-    public abstract MotionConstraint getDefaultZoomConstraint();
+    public MotionConstraint getDefaultZoomConstraint();
 }
