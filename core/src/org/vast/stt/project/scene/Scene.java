@@ -59,8 +59,8 @@ public abstract class Scene extends AbstractDisplay
 {
 	protected DataTree dataTree;
     protected SceneRenderer renderer;
-    protected ArrayList<SceneItem> sceneItems;
-    protected ArrayList<SceneItem> selectedItems;
+    protected List<SceneItem> sceneItems;
+    protected List<SceneItem> selectedItems;
     
 
     public Scene()
@@ -116,9 +116,9 @@ public abstract class Scene extends AbstractDisplay
     {
         return selectedItems;
     }
-    
-    
-    /**
+
+
+	/**
      * Finds the SceneItem object associated with this dataItem
      * @param dataItem
      * @return

@@ -54,6 +54,7 @@ import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTPolygonExtent;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
@@ -108,7 +109,8 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     protected GLRenderGrids gridRenderer;
     protected GLRenderGridBorder gridBorderRenderer;
     protected GLRenderTexture textureRenderer;
-    protected GLRenderBBOX bboxRenderer;
+    protected GLRenderRectBox rectBoxRenderer;
+    protected GLRenderPolyBox polyBoxRenderer;
     
     
     public JOGLRenderer()
@@ -564,21 +566,25 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
      */
     protected void drawROI(WorldScene scene, boolean onlyHandles)
     {
-        if (scene.getSelectedItems().isEmpty())
-            return;
-        
-        SceneItem sceneItem = scene.getSelectedItems().get(0);
-        DataProvider provider = sceneItem.getDataItem().getDataProvider();
-        
-        if (sceneItem.isVisible() && provider.isSpatialSubsetSupported())
-        {        
-            STTSpatialExtent extent = provider.getSpatialExtent();
-            
-            if (!extent.isNull() && extent.getUpdater() == null)
-            {
-                gl.glLoadName(sceneItem.hashCode());
-                bboxRenderer.drawROI(scene, extent, onlyHandles);
-            }
+        if (!scene.getSelectedItems().isEmpty())
+        {
+	        SceneItem sceneItem = scene.getSelectedItems().get(0);
+	        DataProvider provider = sceneItem.getDataItem().getDataProvider();
+	        
+	        if (sceneItem.isVisible() && provider.isSpatialSubsetSupported())
+	        {        
+	            STTSpatialExtent extent = provider.getSpatialExtent();
+	            
+	            if (!extent.isNull() && extent.getUpdater() == null)
+	            {
+	            	gl.glLoadName(sceneItem.hashCode());
+	            	
+	            	if (extent instanceof STTPolygonExtent)
+	            		polyBoxRenderer.drawROI(scene, (STTPolygonExtent)extent, onlyHandles);
+	                else
+	                   	rectBoxRenderer.drawROI(scene, extent, onlyHandles);
+	            }
+	        }
         }
     }
 
@@ -647,7 +653,8 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         gridRenderer = new GLRenderGrids(gl, glu);
         gridBorderRenderer = new GLRenderGridBorder(gl, glu);
         textureRenderer = new GLRenderTexture(gl, glu);        
-        bboxRenderer = new GLRenderBBOX(this, gl, glu);
+        rectBoxRenderer = new GLRenderRectBox(this, gl, glu);
+        polyBoxRenderer = new GLRenderPolyBox(this, gl, glu);
         popupRenderer = new PopupRenderer(composite);
         textureRenderer.normalizeCoords = textureManager.isNormalizationRequired();
         

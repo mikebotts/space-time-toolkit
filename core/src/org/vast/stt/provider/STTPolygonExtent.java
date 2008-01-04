@@ -23,65 +23,73 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.style;
+package org.vast.stt.provider;
 
+import java.util.ArrayList;
 import org.vast.math.Vector3d;
-
+import org.vast.stt.event.STTEventProducer;
 
 /**
  * <p><b>Title:</b><br/>
- * Primitive Graphic
+ * STT Polygon Extent
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO PrimitiveGraphic type description
+ * Class for storing the definition of a polygon domain.
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Mar 31, 2006
+ * @date Nov 15, 2005
  * @version 1.0
  */
-public abstract class PrimitiveGraphic extends TimeTaggedGraphic
+public class STTPolygonExtent extends STTSpatialExtent implements STTEventProducer
 {
-    public double x, y, z;
-    public float r, g, b;
-    public float a = 1.0f;
+    protected ArrayList<Vector3d> pointList;
     
-    
-    protected PrimitiveGraphic copy(PrimitiveGraphic p)
+
+    public STTPolygonExtent()
     {
-        super.copy(p);
+        super();
+        pointList = new ArrayList<Vector3d>();
+    }
+    
+    
+    /**
+     * Returns an exact copy of this STTSpatialExtent
+     * Copies everu field except the listeners and the updater 
+     * @return
+     */
+    public STTPolygonExtent copy()
+    {
+    	STTPolygonExtent poly = new STTPolygonExtent();
         
-        p.x = this.x;
-        p.y = this.y;
-        p.z = this.z;
-        p.r = this.r;
-        p.g = this.g;
-        p.b = this.b;
-        p.a = this.a;
+    	poly.crs = this.crs;
+    	poly.minX = this.minX;
+    	poly.minY = this.minY;
+    	poly.minZ = this.minZ;
+    	poly.maxX = this.maxX;
+    	poly.maxY = this.maxY;
+    	poly.maxZ = this.maxZ;
+    	poly.tilingEnabled = this.tilingEnabled;
+    	poly.xTiles = this.xTiles;
+    	poly.yTiles = this.yTiles;
+    	poly.zTiles = this.zTiles;
         
-        return p;
+        return poly;
     }
     
     
-    public Vector3d toVector3d(Vector3d vector)
+    public void addPoint(Vector3d point)
     {
-    	if (vector == null)
-    		vector = new Vector3d();
-    	
-    	vector.x = this.x;
-    	vector.y = this.y;
-    	vector.z = this.z;
-    	
-    	return vector;
+    	pointList.add(point);
+    	this.resizeToContain(point.x, point.y, point.z);
     }
+
+
+	public ArrayList<Vector3d> getPointList()
+	{
+		return pointList;
+	}
     
-    
-    public void fromVector3d(Vector3d vector)
-    {
-    	this.x = vector.x;
-    	this.y = vector.y;
-    	this.z = vector.z;
-    }
 }

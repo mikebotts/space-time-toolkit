@@ -54,6 +54,7 @@ public class Projection_ECEF implements Projection
     protected final static double RTD = 180 / Math.PI;
     protected RayIntersectEllipsoid rie;
     protected Datum datum;
+    protected Vector3d tempPoint = new Vector3d();
     
     
     public Projection_ECEF()
@@ -69,15 +70,37 @@ public class Projection_ECEF implements Projection
     }
     
     
-    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    protected void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
+    	point.toVector3d(tempPoint);    	
+    	project(sourceCrs, tempPoint);
+    	point.fromVector3d(tempPoint);
+    }
+    
+    
+    public void project(Crs sourceCrs, Vector3d point)
     {
         switch (sourceCrs)
         {
             case EPSG4329:
-                double[] ecef = MapProjection.LLAtoECF(point.y, point.x, point.z, null);
+                double[] ecef = MapProjection.LLAtoECF(point.x, point.y, point.z, null);
                 point.x = ecef[0];
                 point.y = ecef[1];
                 point.z = ecef[2];
+                break;
+        }
+    }
+    
+    
+    public void unproject(Crs destCrs, Vector3d point)
+    {
+    	switch (destCrs)
+        {
+        	case EPSG4329:
+            	double[] lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
+                point.x = lla[0];
+                point.y = lla[1];
+                point.z = lla[2];
                 break;
         }
     }
@@ -172,10 +195,10 @@ public class Projection_ECEF implements Projection
         if (rie.getFoundFlag())
         {
             double[] llaCenter = MapProjection.ECFtoLLA(intersect[0], intersect[1], intersect[2], null);
-            double centerX = llaCenter[1] * RTD;
+            double centerX = llaCenter[0] * RTD;
             if (centerX > 180)
                 centerX -= 360;
-            double centerY = llaCenter[0] * RTD;
+            double centerY = llaCenter[1] * RTD;
             double c = Math.min(6378137, view.getOrthoWidth()/2);
             double dX = Math.asin(c/6378137) * RTD * (1 + Math.abs(centerY)/90);
             double dY = dX;

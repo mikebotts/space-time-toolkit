@@ -58,6 +58,7 @@ public class Projection_Mercator implements Projection
     protected double altitudeDamping = 1e-6;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
+    protected Vector3d tempPoint = new Vector3d();
     
     
     public Projection_Mercator()
@@ -94,14 +95,22 @@ public class Projection_Mercator implements Projection
     }
     
     
-    public void project(Crs sourceCrs, PrimitiveGraphic point)
+    protected void project(Crs sourceCrs, PrimitiveGraphic point)
+    {
+    	point.toVector3d(tempPoint);    	
+    	project(sourceCrs, tempPoint);
+    	point.fromVector3d(tempPoint);
+    }
+    
+    
+    public void project(Crs sourceCrs, Vector3d point)
     {
         double[] ecef, lla;
         
         switch (sourceCrs)
         {
             case EPSG4329:
-                ecef = MapProjection.LLAtoMerc(point.y, point.x, point.z);
+                ecef = MapProjection.LLAtoMerc(point.x, point.y, point.z);
                 point.x = ecef[0];
                 point.y = ecef[1];
                 point.z = ecef[2];
@@ -118,6 +127,23 @@ public class Projection_Mercator implements Projection
         
         // always apply altitude damping
         point.z = altitudeDamping * point.z;
+    }
+    
+    
+    public void unproject(Crs destCrs, Vector3d point)
+    {
+    	// always remove altitude damping
+        point.z = point.z / altitudeDamping;
+        
+    	switch (destCrs)
+        {
+        	case EPSG4329:
+            	double[] lla = MapProjection.MerctoLLA(point.x, point.y, point.z);
+                point.x = lla[0];
+                point.y = lla[1];
+                point.z = lla[2];                
+                break;
+        }
     }
     
     

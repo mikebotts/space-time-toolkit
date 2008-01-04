@@ -50,12 +50,12 @@ public class WorldScene extends Scene
     protected ViewSettings viewSettings;
 	protected STTTimeExtent timeExtent;
     protected CameraControl cameraController;
-    
+        
 
     public WorldScene()
     {
         super();
-        cameraController = new CameraControl_Map(this);
+        cameraController = new CameraControl_Map(this);        
     }
     
     

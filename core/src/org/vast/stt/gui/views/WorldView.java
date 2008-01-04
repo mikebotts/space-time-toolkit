@@ -39,9 +39,13 @@ import org.eclipse.ui.PartInitException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.project.scene.SceneItem;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneRenderer;
+import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTPolygonExtent;
+import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 
@@ -79,7 +83,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
 	{
         this.parent = parent;
         parent.setLayout(new FillLayout());
-        getSite().getPage().addPartListener(this);        
+        getSite().getPage().addPartListener(this);
 	}
     	
 	
@@ -89,50 +93,80 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
 		super.init(site);
         ImageDescriptor descriptor;
         
+        // add select polygon action to toolbar
+		IAction selectPolygonAction = new Action("Select Polygon", IAction.AS_CHECK_BOX)
+		{
+			public void run()
+			{
+				if (!scene.getSelectedItems().isEmpty())
+				{
+					if (this.isChecked())
+					{
+						SceneItem selectedItem = scene.getSelectedItems().get(0);
+						DataProvider prov = selectedItem.getDataItem().getDataProvider();
+						STTSpatialExtent extent = prov.getSpatialExtent();
+						if (extent instanceof STTPolygonExtent)
+						{
+							((STTPolygonExtent)extent).getPointList().clear();
+							controller.setPointSelectionMode(true);
+							updateView();
+						}
+					}
+					else
+					{
+						controller.setPointSelectionMode(false);
+					}
+				}
+			}
+		};
+        descriptor = STTPlugin.getImageDescriptor("icons/select_point.gif");
+        selectPolygonAction.setImageDescriptor(descriptor);
+        site.getActionBars().getToolBarManager().add(selectPolygonAction);
+		
         // add show target action to toolbar
-		IAction ShowTargetAction = new Action()
+		IAction showTargetAction = new Action("Toggle Target Tripod")
 		{
 			public void run()
 			{
 				boolean targetShown = scene.getViewSettings().isShowCameraTarget();
+				this.setChecked(!targetShown);
                 scene.getViewSettings().setShowCameraTarget(!targetShown);
                 scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
 			}
 		};        
         descriptor = STTPlugin.getImageDescriptor("icons/tripod.gif");
-        ShowTargetAction.setImageDescriptor(descriptor);
-        ShowTargetAction.setToolTipText("Toggle Target Tripod");
-		site.getActionBars().getToolBarManager().add(ShowTargetAction);
+        showTargetAction.setImageDescriptor(descriptor);
+        site.getActionBars().getToolBarManager().add(showTargetAction);
         
 		// add show arcball action to toolbar
-        IAction ShowArcballAction = new Action()
+        IAction showArcballAction = new Action("Toggle Arcball")
         {
             public void run()
             {
                 boolean arcballShown = scene.getViewSettings().isShowArcball();
+                this.setChecked(!arcballShown);
                 scene.getViewSettings().setShowArcball(!arcballShown);
                 scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
             }
         };
         descriptor = STTPlugin.getImageDescriptor("icons/arcball.gif");
-        ShowArcballAction.setImageDescriptor(descriptor);
-        ShowArcballAction.setToolTipText("Toggle Arcball");
-        site.getActionBars().getToolBarManager().add(ShowArcballAction);
+        showArcballAction.setImageDescriptor(descriptor);
+        site.getActionBars().getToolBarManager().add(showArcballAction);
         
         // add show ROI action to toolbar
-        IAction ShowROIAction = new Action()
+        IAction showROIAction = new Action("Toggle ROI")
         {
             public void run()
             {
                 boolean roiShown = scene.getViewSettings().isShowItemROI();
+                this.setChecked(!roiShown);
                 scene.getViewSettings().setShowItemROI(!roiShown);
                 scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
             }
         };
         descriptor = STTPlugin.getImageDescriptor("icons/bbox.gif");
-        ShowROIAction.setImageDescriptor(descriptor);
-        ShowROIAction.setToolTipText("Toggle ROI");
-        site.getActionBars().getToolBarManager().add(ShowROIAction);
+        showROIAction.setImageDescriptor(descriptor);
+        site.getActionBars().getToolBarManager().add(showROIAction);
 	}
 	
 	

@@ -26,7 +26,6 @@
 package org.vast.stt.gui.views;
 
 import org.vast.math.Vector3d;
-import org.vast.physics.MapProjection;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.feedback.FeedbackEvent;
@@ -34,10 +33,11 @@ import org.vast.stt.project.feedback.FeedbackEventListener;
 import org.vast.stt.project.feedback.FeedbackEvent.FeedbackType;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
-import org.vast.stt.project.world.Projection_ECEF;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneRenderer;
+import org.vast.stt.project.world.Projection.Crs;
 import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTPolygonExtent;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.renderer.PickFilter;
 import org.vast.stt.renderer.PickedObject;
@@ -55,6 +55,7 @@ import org.eclipse.swt.events.*;
  *
  * <p><b>Description:</b><br/>
  * Gives user 3D control on the view (rotation, translation, zoom)
+ * and handles clicking capabilities (point and object selection)
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -66,15 +67,18 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 {
 	protected WorldScene scene;
     protected FeedbackEventListener pickListener;
+    protected boolean pointSelectionMode;
+    protected boolean objectSelectionMode;
+    
     private Vector3d P0 = new Vector3d();
 	private int xOld;
 	private int yOld;
     private int corner;
-	private boolean draggingLeft;
-	private boolean draggingRight;
-	private boolean draggingMiddle;
-    private boolean resizing;
-    private boolean dragged;
+	private boolean leftButtonDown;
+	private boolean rightButtonDown;
+	private boolean midButtonDown;
+	private boolean dragged;
+	private boolean resizing;    
     private final static double RTD = 180/Math.PI;
     
 
@@ -96,21 +100,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         if (!found)
             return;
         
-        // hack to convert from ECEF back to LLA
-        if (projection instanceof Projection_ECEF)
-        {
-            double[] lla = MapProjection.ECFtoLLA(P0.x, P0.y, P0.z, null);
-            
-            if (lla[1] > Math.PI)
-                lla[1] -= 2*Math.PI;
-            
-            else if (lla[1] < -Math.PI)
-                lla[1] += 2*Math.PI;
-            
-            P0.y = lla[0];
-            P0.x = lla[1];
-            P0.z = lla[2];
-        }
+        // convert to LLA
+        projection.unproject(Crs.EPSG4329, P0);
         
         P0.x *= RTD;
         P0.y *= RTD;
@@ -154,7 +145,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         // send event to update spatial extent listeners
         //provider.setEnabled(false);
         //bbox.dispatchEvent(new STTEvent(this, EventType.PROVIDER_SPATIAL_EXTENT_CHANGED));
-        // commented out because it would cause other providers subscribed to this bbox to redraw
+        // commented out because it causes other providers subscribed to this bbox to redraw
     }
 	
 
@@ -164,7 +155,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
         
-        // check if resizing ROI (need to call renderer pick method)
+        // check if resizing ROI
         if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
         {
             WorldSceneRenderer renderer = (WorldSceneRenderer)scene.getRenderer();
@@ -176,10 +167,10 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             pickFilter.onlyBoundingBox = true;
             PickedObject obj = renderer.pick(scene, pickFilter);
             
-            // case of corner selected
             if (obj != null && obj.indices.length > 0)
             {
-                if (obj.indices[0] < 0)
+            	// case of corner selected
+            	if (obj.indices[0] < 0)
                 {
                     corner = -obj.indices[0];
                     resizing = true;
@@ -194,20 +185,20 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         if (e.button == 1)
 		{
 			if (e.stateMask == SWT.CTRL)
-				draggingMiddle = true;
+				midButtonDown = true;
 			else if (e.stateMask == SWT.SHIFT)
-				draggingRight = true;
+				rightButtonDown = true;
 			else
-				draggingLeft = true;
+				leftButtonDown = true;
 		}
 		
         // case of middle button pressed
         else if (e.button == 2)
-            draggingMiddle = true;
+            midButtonDown = true;
         
         // case of right button pressed
         else if (e.button == 3)
-			draggingRight = true;
+			rightButtonDown = true;
 		
 		xOld = e.x;
 		yOld = e.y;
@@ -216,33 +207,76 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	public void mouseUp(MouseEvent e)
 	{
-		if (!dragged)
-		{
-            FeedbackType feedbackType = null;
+		int viewHeight = scene.getRenderer().getViewHeight();
+        e.y = viewHeight - e.y;
+        
+		// check if selecting point
+        // this mode must be activated externally
+        if (!dragged && pointSelectionMode)
+        {
+        	DataItem selectedItem = scene.getSelectedItems().get(0).getDataItem();
+            DataProvider provider = selectedItem.getDataProvider();
+            STTSpatialExtent extent = provider.getSpatialExtent();
             
-            if (e.button == 1)
-                feedbackType = FeedbackType.LEFT_CLICK;
-            else if (e.button == 2)
-                feedbackType = FeedbackType.MID_CLICK;
-            else if (e.button == 3)
-                feedbackType = FeedbackType.RIGHT_CLICK;
-            
-            FeedbackEvent event = new FeedbackEvent(feedbackType);
-            event.setSourceScene(scene);
-            pickListener.handleEvent(event);
+            if (extent instanceof STTPolygonExtent)
+            {
+            	Projection proj = scene.getViewSettings().getProjection();
+            	Vector3d newPoint = new Vector3d();
+            	boolean onMap = proj.pointOnMap(e.x, e.y, scene, newPoint);
+            	if (onMap)
+            	{
+            		proj.unproject(Crs.EPSG4329, newPoint);
+            		newPoint.z = 0;
+            		((STTPolygonExtent)extent).addPoint(newPoint);
+            		updateView();
+            	}
+            }
         }
-        else if (resizing)
+        
+        // check if selecting 3D object
+        // this mode must be activated externally
+        else if (!dragged && objectSelectionMode)
+        {
+        	WorldSceneRenderer renderer = (WorldSceneRenderer)scene.getRenderer();
+            PickFilter pickFilter = new PickFilter();
+            pickFilter.x = e.x;
+            pickFilter.y = e.y;
+            pickFilter.dX = 5;
+            pickFilter.dY = 5;
+            pickFilter.onlyBoundingBox = true;
+            PickedObject obj = renderer.pick(scene, pickFilter);
+            
+            // case of object selected
+            if (obj != null && obj.indices.length > 0)
+            {
+            	FeedbackType feedbackType = null;
+                
+                if (leftButtonDown)
+                    feedbackType = FeedbackType.LEFT_CLICK;
+                else if (midButtonDown)
+                    feedbackType = FeedbackType.MID_CLICK;
+                else if (rightButtonDown)
+                    feedbackType = FeedbackType.RIGHT_CLICK;
+                
+                FeedbackEvent event = new FeedbackEvent(feedbackType);
+                event.setSourceScene(scene);
+                pickListener.handleEvent(event);
+            }
+        }
+        
+        else if (dragged && resizing)
         {
             // trigger provider refresh when button is released
             DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
-            //provider.setEnabled(true);
             provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));
         }
         
-        draggingLeft = false;
-		draggingRight = false;
-		draggingMiddle = false;
+        // resets all flags to false
+        leftButtonDown = false;
+		rightButtonDown = false;
+		midButtonDown = false;
         resizing = false;
+        dragged = false;        
         
 		((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 	}
@@ -254,7 +288,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
         
-        if (draggingLeft)
+        if (leftButtonDown)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
             scene.getCameraController().doLeftDrag(xOld, yOld, e.x, e.y);
@@ -263,7 +297,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             updateView();
         }
         
-        else if (draggingRight)
+        else if (rightButtonDown)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
             scene.getCameraController().doRightDrag(xOld, yOld, e.x, e.y);
@@ -272,7 +306,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
             updateView();
         }
         
-        else if (draggingMiddle)
+        else if (midButtonDown)
         {
             ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
             scene.getCameraController().doMiddleDrag(xOld, yOld, e.x, e.y);
@@ -329,4 +363,28 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
     {
         this.scene = scene;
     }
+
+
+	public boolean isPointSelectionMode()
+	{
+		return pointSelectionMode;
+	}
+
+
+	public void setPointSelectionMode(boolean selectingPoint)
+	{
+		this.pointSelectionMode = selectingPoint;
+	}
+
+
+	public boolean isObjectSelectionMode()
+	{
+		return objectSelectionMode;
+	}
+
+
+	public void setObjectSelectionMode(boolean selectingObject)
+	{
+		this.objectSelectionMode = selectingObject;
+	}
 }
