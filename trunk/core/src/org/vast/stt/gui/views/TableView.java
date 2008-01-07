@@ -27,7 +27,6 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -51,7 +50,7 @@ import org.vast.stt.renderer.SceneRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class TableView extends SceneView<TableScene> implements PaintListener, ControlListener
+public class TableView extends SceneView<TableScene> implements ControlListener
 {
     public static final String ID = "STT.TableView";
     private Composite composite;

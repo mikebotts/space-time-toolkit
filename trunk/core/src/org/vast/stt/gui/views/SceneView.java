@@ -26,6 +26,7 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -51,7 +52,7 @@ import org.vast.stt.project.scene.Scene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView<SceneType extends Scene> extends ViewPart implements IPartListener2, STTEventListener
+public abstract class SceneView<SceneType extends Scene> extends ViewPart implements PaintListener, IPartListener2, STTEventListener
 {
     protected SceneType scene;
     protected boolean refreshThreadStarted = false;

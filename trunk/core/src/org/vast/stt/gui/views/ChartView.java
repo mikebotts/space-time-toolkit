@@ -26,7 +26,6 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
@@ -52,7 +51,7 @@ import org.vast.stt.renderer.JFreeChart.JFreeChartRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class ChartView extends SceneView<ChartScene> implements PaintListener, ControlListener
+public class ChartView extends SceneView<ChartScene> implements ControlListener
 {
 	public static final String ID = "STT.ChartView";
     private Composite composite;
