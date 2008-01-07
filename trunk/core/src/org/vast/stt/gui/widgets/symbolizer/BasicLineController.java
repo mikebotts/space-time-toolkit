@@ -27,11 +27,11 @@ package org.vast.stt.gui.widgets.symbolizer;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.PlatformUI;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.stt.event.EventType;
@@ -70,8 +70,9 @@ public class BasicLineController extends OptionController // implements Selectio
 		OptionParams[] params = 
 		{
 			new OptionParams(OptionControl.ControlType.SPINNER, "Line Width:", new int[] {1, 10}),	
-			//new OptionParams(OptionControl.ControlType.TEXT, "Som text:",	"blah"),
-			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",	null)
+			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Line Color:",	null),
+			new OptionParams(OptionControl.ControlType.SPINNER, "Line Opacity:", new int[] {0, 100}),
+			new OptionParams(OptionControl.ControlType.CHECKBOX, "Line Smooth:", new Boolean(true))
 		};
 		optionControls = OptionControl.createControls(parent, params);
 		loadFields();
@@ -80,9 +81,17 @@ public class BasicLineController extends OptionController // implements Selectio
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
+		// line width
 		Spinner widthSpinner = (Spinner)optionControls[0].getControl();
-		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());
-		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());
+		widthSpinner.setSelection((int)lineOptionHelper.getLineWidth());		
+		// line color
+		optionControls[1].setColorLabelColor(lineOptionHelper.getLineColor());		
+		// line opacity
+		Spinner opacitySpinner = (Spinner)optionControls[2].getControl();
+		opacitySpinner.setSelection((int)(lineOptionHelper.getLineColor().getAlphaValue()*100f));
+		// line smooth
+		Button smoothCheckbox = (Button)optionControls[3].getControl();
+		smoothCheckbox.setSelection(lineOptionHelper.getLineSmooth());
     }
 	
 	public void widgetDefaultSelected(SelectionEvent e){
@@ -91,21 +100,39 @@ public class BasicLineController extends OptionController // implements Selectio
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 
+		// line width
 		if(control == optionControls[0].getControl()) {
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			lineOptionHelper.setLineWidth(w);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
-		} else if (control == optionControls[1].getControl()) {
+		}
+		
+		// line color
+		else if (control == optionControls[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();
 			if(rgb == null)
 				return;
-			// TODO:  add alpha support
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			lineOptionHelper.setLineColor(sldColor);
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		}
+		
+		// line opacity
+		else if(control == optionControls[2].getControl()) {
+			Spinner widthSpinner = (Spinner)control;
+			float opacity = new Float(widthSpinner.getSelection()).floatValue();
+			lineOptionHelper.getLineColor().setAlphaValue((float)opacity / 100.0f);
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		}
+		
+		// line smooth
+		else if(control == optionControls[3].getControl()) {
+			Button smoothCheckbox = (Button)control;
+			lineOptionHelper.setLineSmooth(smoothCheckbox.getSelection());
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}
