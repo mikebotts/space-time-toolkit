@@ -46,7 +46,7 @@ import org.vast.stt.provider.tiling.QuadTree;
 
 public abstract class TiledMapProvider extends AbstractProvider
 {
-    private final static double DTR = Math.PI/180;
+    protected final static double DTR = Math.PI/180;
     protected QuadTree quadTree;
     protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
     protected DataArray gridData;
@@ -59,6 +59,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     
     
     protected abstract void getNewTile(QuadTreeItem item);
+    protected abstract SpatialExtent transformBbox(SpatialExtent extent);
     
     
     public TiledMapProvider()
@@ -70,14 +71,6 @@ public abstract class TiledMapProvider extends AbstractProvider
 	{
         quadTree = new QuadTree();
         
-        // also set max requestable bbox
-        maxBbox = new SpatialExtent();
-        maxBbox.setMinX(-Math.PI);
-        maxBbox.setMaxX(+Math.PI);
-        maxBbox.setMinY(-Math.PI);
-        maxBbox.setMaxY(+Math.PI);
-        quadTree.init(maxBbox);
-
         // setup objects for tile selection
         selectedItems = new ArrayList<QuadTreeItem>(100);
         deletedItems = new ArrayList<BlockListItem>(100);
@@ -136,21 +129,6 @@ public abstract class TiledMapProvider extends AbstractProvider
     }
     
     
-    protected SpatialExtent transformBbox(SpatialExtent extent)
-    {
-        SpatialExtent mercatorExtent = new SpatialExtent();
-        double minX = spatialExtent.getMinX() * DTR;
-        double maxX = spatialExtent.getMaxX() * DTR;
-        double minY = latToY(spatialExtent.getMinY() * DTR);
-        double maxY = latToY(spatialExtent.getMaxY() * DTR);
-        mercatorExtent.setMinX(minX);
-        mercatorExtent.setMaxX(maxX);
-        mercatorExtent.setMinY(minY);
-        mercatorExtent.setMaxY(maxY);
-        return mercatorExtent;
-    }
-    
-    
     @Override
     public void updateData() throws DataException
     {
@@ -163,7 +141,7 @@ public abstract class TiledMapProvider extends AbstractProvider
         
         // query tree for matching and unused items 
         selectedItems.clear();
-        deletedItems.clear();        
+        deletedItems.clear();
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
         double tileRatio = Math.floor(spatialExtent.getXTiles()) * Math.floor(spatialExtent.getYTiles());

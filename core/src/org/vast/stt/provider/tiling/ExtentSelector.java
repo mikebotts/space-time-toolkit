@@ -51,7 +51,8 @@ import org.vast.stt.provider.tiling.QuadTreeVisitor;
  */
 public abstract class ExtentSelector implements QuadTreeVisitor
 {
-    protected SpatialExtent roi1, roi2;
+	protected SpatialExtent maxExtent;
+	protected SpatialExtent roi1, roi2;
     protected boolean splitROI;
     protected double roiSize;
     protected double sizeRatio; // ratio roiSize/tileSize
@@ -60,9 +61,10 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     
     public ExtentSelector(double sizeRatio, int minLevel, int maxLevel)
     {
-        this.sizeRatio = sizeRatio;        
+        this.sizeRatio = sizeRatio;
         this.maxLevel = maxLevel;
         this.minLevel = minLevel;
+        this.maxExtent = new SpatialExtent();
     }
     
     
@@ -83,7 +85,7 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     
     public void visit(QuadTreeItem item)
     {
-        if (item.intersects(roi1) || item.intersects(roi2))
+        if (item.intersects(roi1) || (splitROI && item.intersects(roi2)))
         {
             if (currentLevel >= minLevel && item.getTileSize() * sizeRatio < roiSize)
             {
@@ -121,18 +123,18 @@ public abstract class ExtentSelector implements QuadTreeVisitor
         splitROI = false;
         
         // adjust rois
-        if (roi.getMinX() < -Math.PI)
+        if (roi.getMinX() < maxExtent.getMinX())
         {
-            roi1.setMinX(-Math.PI);
-            roi2.setMinX(roi.getMinX() + 2*Math.PI);
-            roi2.setMaxX(Math.PI);
+            roi1.setMinX(maxExtent.getMinX());
+            roi2.setMinX(roi.getMinX() + maxExtent.getSizeX());
+            roi2.setMaxX(maxExtent.getMaxX());
             splitROI = true;
         }
-        else if (roi.getMaxX() > Math.PI)
+        else if (roi.getMaxX() > maxExtent.getMaxX())
         {
-            roi1.setMaxX(Math.PI);
-            roi2.setMinX(-Math.PI);
-            roi2.setMaxX(roi.getMaxX() - 2*Math.PI);
+            roi1.setMaxX(maxExtent.getMaxX());
+            roi2.setMinX(maxExtent.getMinX());
+            roi2.setMaxX(roi.getMaxX() - maxExtent.getSizeX());
             splitROI = true;
         }
         
@@ -169,4 +171,16 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     {
         this.sizeRatio = sizeRatio;
     }
+
+
+	public SpatialExtent getMaxExtent()
+	{
+		return maxExtent;
+	}
+
+
+	public void setMaxExtent(SpatialExtent maxExtent)
+	{
+		this.maxExtent = maxExtent;
+	}
 }

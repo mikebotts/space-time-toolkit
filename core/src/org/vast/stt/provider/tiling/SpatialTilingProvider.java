@@ -33,6 +33,8 @@ import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
+import org.vast.stt.dynamics.SceneBboxUpdater;
+import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.DataProvider;
@@ -63,25 +65,28 @@ public class SpatialTilingProvider extends TiledMapProvider
     
     public SpatialTilingProvider(DataProvider subProvider)
     {
-        this.subProvider = subProvider;
+        super(256, 128, 19);
+        
+    	this.subProvider = subProvider;
         this.setSpatialExtent(subProvider.getSpatialExtent());
         this.subProvider.setSpatialExtent(new STTSpatialExtent());
         this.quadTree = new QuadTree();
         
-        // also set max requestable bbox
+        // set quad tree root extent (= max request)
         maxBbox = new SpatialExtent();
         maxBbox.setMinX(-180);
         maxBbox.setMaxX(+180);
         maxBbox.setMinY(-90);
         maxBbox.setMaxY(+90);
         quadTree.init(maxBbox);
-
-        // setup objects for tile selection
-        selectedItems = new ArrayList<QuadTreeItem>(100);
-        deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(3, 3, 0, 18);        
-        tileWidth = 256;
-        tileHeight = 256;
+        
+        // set max proj extent for splitting bbox correctly
+        SpatialExtent maxExtent = new SpatialExtent();
+        maxExtent.setMinX(-180);
+        maxExtent.setMaxX(+180);
+        maxExtent.setMinY(-90);
+        maxExtent.setMaxY(+90);
+        tileSelector.setMaxExtent(maxExtent);
     }
     
     
@@ -99,12 +104,12 @@ public class SpatialTilingProvider extends TiledMapProvider
             try
             {
                 // run sub provider with item extent
-                subProvider.clearData();
-                subProvider.getSpatialExtent().setMinX(item.getMinX());
-                subProvider.getSpatialExtent().setMinY(item.getMinY());
-                subProvider.getSpatialExtent().setMaxX(item.getMaxX());
-                subProvider.getSpatialExtent().setMaxY(item.getMaxY());
-                subProvider.getSpatialExtent().setTilingEnabled(false);
+            	STTSpatialExtent tileExtent = subProvider.getSpatialExtent();
+            	tileExtent.setMinX(item.getMinX());
+            	tileExtent.setMinY(item.getMinY());
+            	tileExtent.setMaxX(item.getMaxX());
+            	tileExtent.setMaxY(item.getMaxY());
+            	tileExtent.setTilingEnabled(false);
                 subProvider.updateData();
                 
                 // add blocks to dataNode
@@ -136,8 +141,6 @@ public class SpatialTilingProvider extends TiledMapProvider
                     // send event for redraw
                     dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                 }
-                //System.out.println(nextItem);
-                dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
             }
             catch (DataException e)
             {
@@ -145,7 +148,7 @@ public class SpatialTilingProvider extends TiledMapProvider
                     e.printStackTrace();
             }
             
-            subProvider.clearData();
+            subProvider.getDataNode().clearAll();
         }        
     }
     
@@ -163,114 +166,24 @@ public class SpatialTilingProvider extends TiledMapProvider
             DataComponent blockStructure = subProviderLists.get(i).getBlockStructure();
             blockLists[i] = dataNode.createList(blockStructure.copy());
         }
-        tileSelector.setItemLists(selectedItems, deletedItems, blockLists);  
+        tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
         dataNode.setNodeStructureReady(true);
+        
+        // set tile sizes in updater
+        SpatialExtentUpdater updater = this.getSpatialExtent().getUpdater();
+        if (updater != null)
+        {
+            if (updater instanceof SceneBboxUpdater)
+                ((SceneBboxUpdater)updater).setTilesize(tileWidth, tileHeight);
+            updater.update();
+        }
     }
     
     
     @Override
     protected SpatialExtent transformBbox(SpatialExtent extent)
     {
-        SpatialExtent newExtent = new SpatialExtent();
-        double minX = spatialExtent.getMinX();
-        double maxX = spatialExtent.getMaxX();
-        double minY = spatialExtent.getMinY();
-        double maxY = spatialExtent.getMaxY();
-        newExtent.setMinX(minX);
-        newExtent.setMaxX(maxX);
-        newExtent.setMinY(minY);
-        newExtent.setMaxY(maxY);
-        return newExtent;
-    }
-    
-    
-    @Override
-    public void updateData() throws DataException
-    {
-        // init DataNode if not done yet
-        if (!dataNode.isNodeStructureReady())
-            init();
-        
-        // query tree for matching and unused items
-        selectedItems.clear();
-        deletedItems.clear();        
-        tileSelector.setROI(spatialExtent.copy());
-        tileSelector.setCurrentLevel(0);
-        tileSelector.setSizeRatio(spatialExtent.getXTiles());
-        quadTree.accept(tileSelector);
-        
-        // first round of cached background items to display
-        for (int i=0; i<selectedItems.size(); i++)
-        {
-            QuadTreeItem nextItem = selectedItems.get(i);
-            
-            if (canceled)
-                break;
-            
-            if (nextItem.getData() == null)
-            {
-                // find first parent ready to display
-                QuadTreeItem parentItem = nextItem.getParent();
-                while (parentItem != null && parentItem.getData() == null)
-                    parentItem = parentItem.getParent();
-                
-                // add parent to list if it's not already there
-                if (parentItem != null && parentItem.getData() != null)
-                {
-                    BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
-                    for (int b=0; b<blockArray.length; b++)
-                    {
-                        if (!blockArray[b].isLinked())
-                            blockLists[b].add(blockArray[b]);
-                    }
-                }            
-            }
-        }
-        
-        // 2nd round of cached items to display
-        for (int i=0; i<selectedItems.size(); i++)
-        {
-            QuadTreeItem nextItem = selectedItems.get(i);
-            
-            if (canceled)
-                break;
-            
-            if (nextItem.getData() != null)
-            {
-                BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
-                for (int b=0; b<blockArray.length; b++)
-                    blockLists[b].add(blockArray[b]);
-                
-                // remove children and parent of that item
-                removeChildrenData(nextItem);
-                removeHiddenParent(nextItem);
-            }
-        }
-        
-        // send event for redraw
-        if (!canceled)
-            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-
-        // 3rd round of new items to load and display
-        for (int i=0; i<selectedItems.size(); i++)
-        {
-            QuadTreeItem nextItem = selectedItems.get(i);
-            
-            if (canceled)
-                break;
-            
-            if (nextItem.getData() == null)
-            {
-                getNewTile(nextItem);
-            }
-        }
-        
-        // send event to cleanup stylers cache
-        if (deletedItems.size() > 0)
-        {
-            //System.out.println("-" + deletedItems.size()/2);
-            dispatchEvent(new STTEvent(deletedItems.toArray(), EventType.PROVIDER_DATA_REMOVED));
-        }
+        return extent.copy();
     }
     
     
@@ -278,7 +191,7 @@ public class SpatialTilingProvider extends TiledMapProvider
     protected void getNewTile(QuadTreeItem item)
     {
         GetTileRunnable getTile = new GetTileRunnable(item);
-        //Thread newThread = new Thread(getTile, nextItem.toString());
+        //Thread newThread = new Thread(getTile, item.toString());
         //newThread.start();
         getTile.run();
     }

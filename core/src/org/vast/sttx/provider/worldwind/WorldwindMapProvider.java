@@ -36,6 +36,7 @@ import javax.media.jai.RenderedOp;
 import org.vast.cdm.common.DataBlock;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.data.DataArray;
@@ -232,6 +233,22 @@ public class WorldwindMapProvider extends TiledMapProvider
         imgArray.setSize(512);
         DataArray rowArray = (DataArray)imgArray.getComponent(0);
         rowArray.setSize(512);
+    }
+    
+    
+    @Override
+    protected SpatialExtent transformBbox(SpatialExtent extent)
+    {
+        SpatialExtent mercatorExtent = new SpatialExtent();
+        double minX = spatialExtent.getMinX() * DTR;
+        double maxX = spatialExtent.getMaxX() * DTR;
+        double minY = latToY(spatialExtent.getMinY() * DTR);
+        double maxY = latToY(spatialExtent.getMaxY() * DTR);
+        mercatorExtent.setMinX(minX);
+        mercatorExtent.setMaxX(maxX);
+        mercatorExtent.setMinY(minY);
+        mercatorExtent.setMaxY(maxY);
+        return mercatorExtent;
     }
     
     
