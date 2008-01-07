@@ -65,7 +65,7 @@ public class SpatialTilingProvider extends TiledMapProvider
     
     public SpatialTilingProvider(DataProvider subProvider)
     {
-        super(256, 128, 19);
+        super(256, 128, 10);
         
     	this.subProvider = subProvider;
         this.setSpatialExtent(subProvider.getSpatialExtent());
@@ -125,6 +125,7 @@ public class SpatialTilingProvider extends TiledMapProvider
                         if (it.hasNext())
                         {
                             blockArray[i] = it.next();
+                            subProviderLists.get(i).remove(blockArray[i]);
                             blockLists[i].add(blockArray[i]);
                         }
                         else
@@ -147,8 +148,6 @@ public class SpatialTilingProvider extends TiledMapProvider
                 if (!canceled)
                     e.printStackTrace();
             }
-            
-            subProvider.getDataNode().clearAll();
         }        
     }
     
@@ -194,6 +193,15 @@ public class SpatialTilingProvider extends TiledMapProvider
         //Thread newThread = new Thread(getTile, item.toString());
         //newThread.start();
         getTile.run();
+    }
+    
+    
+    public void setMaxSpatialExtent(STTSpatialExtent spatialExtent)
+    {
+    	this.maxSpatialExtent = spatialExtent;
+    	
+    	// set quad tree root extent (= max request)
+        quadTree.init(spatialExtent);
     }
 
 

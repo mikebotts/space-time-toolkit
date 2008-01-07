@@ -87,22 +87,27 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     {
         if (item.intersects(roi1) || (splitROI && item.intersects(roi2)))
         {
-            if (currentLevel >= minLevel && item.getTileSize() * sizeRatio < roiSize)
+            if (item.getTileSize() * sizeRatio < roiSize)
             {
                 selectItem(item);
             }
             else
             {
-                // enforce all children
-                for (byte i=0; i<4; i++)
-                {
-                    if (item.getChild(i) == null)
-                        new QuadTreeItem(item, i);
-                }
+                currentLevel++;
                 
-                currentLevel++;            
                 if (currentLevel < maxLevel)
-                    visitChildren(item);            
+                {
+                	// enforce all children
+                    for (byte i=0; i<4; i++)
+                    {
+                        if (item.getChild(i) == null)
+                            new QuadTreeItem(item, i);
+                    }
+                	visitChildren(item);
+                }
+                else
+                	selectItem(item);
+                
                 currentLevel--;
             }
             
