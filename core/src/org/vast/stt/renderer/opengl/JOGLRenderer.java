@@ -151,7 +151,6 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     
     protected synchronized void releaseContext()
     {
-    	joglContext.makeCurrent();
     	joglContext.release();
         contextInUse = false;
         notifyAll();

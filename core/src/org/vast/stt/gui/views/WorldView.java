@@ -30,7 +30,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -65,7 +64,7 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class WorldView extends SceneView<WorldScene> implements PaintListener, ControlListener
+public class WorldView extends SceneView<WorldScene> implements ControlListener
 {
 	public static final String ID = "STT.WorldView";
     private Composite parent;

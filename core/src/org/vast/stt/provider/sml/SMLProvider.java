@@ -158,6 +158,7 @@ public class SMLProvider extends AbstractProvider
                     }                
                     
                     // execute process until more inputs are needed
+                    int count = 0;
                     do
                     {
                         if (canceled)
@@ -185,7 +186,12 @@ public class SMLProvider extends AbstractProvider
                         }
                         
                         // send event for redraw
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                        count++;
+                        if (count == 50)
+                        {
+                            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                            count = 0;
+                        }
                         
                         // reset input needed flags to avoid a process chain to set 
                         // internal availability to true
