@@ -36,6 +36,7 @@ import javax.media.jai.RenderedOp;
 import org.vast.cdm.common.DataBlock;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
+import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -71,6 +72,22 @@ public class VirtualEarthProvider extends TiledMapProvider
     public VirtualEarthProvider()
     {
         super(256, 256, 19);
+                
+        // set quad tree root extent (= max request)
+        maxBbox = new SpatialExtent();
+        maxBbox.setMinX(-Math.PI);
+        maxBbox.setMaxX(+Math.PI);
+        maxBbox.setMinY(-Math.PI);
+        maxBbox.setMaxY(+Math.PI);
+        quadTree.init(maxBbox);
+        
+        // set max proj extent for splitting bbox correctly
+        SpatialExtent maxExtent = new SpatialExtent();
+        maxExtent.setMinX(-Math.PI);
+        maxExtent.setMaxX(+Math.PI);
+        maxExtent.setMinY(-Math.PI);
+        maxExtent.setMaxY(+Math.PI);
+        tileSelector.setMaxExtent(maxExtent);
     }
     
     
@@ -205,6 +222,22 @@ public class VirtualEarthProvider extends TiledMapProvider
                     e.printStackTrace();
             }           
         }        
+    }
+    
+    
+    @Override
+    protected SpatialExtent transformBbox(SpatialExtent extent)
+    {
+        SpatialExtent mercatorExtent = new SpatialExtent();
+        double minX = spatialExtent.getMinX() * DTR;
+        double maxX = spatialExtent.getMaxX() * DTR;
+        double minY = latToY(spatialExtent.getMinY() * DTR);
+        double maxY = latToY(spatialExtent.getMaxY() * DTR);
+        mercatorExtent.setMinX(minX);
+        mercatorExtent.setMaxX(maxX);
+        mercatorExtent.setMinY(minY);
+        mercatorExtent.setMaxY(maxY);
+        return mercatorExtent;
     }
     
     

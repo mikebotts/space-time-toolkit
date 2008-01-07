@@ -44,7 +44,7 @@ import org.vast.physics.SpatialExtent;
  */
 public class QuadTree
 {
-    protected QuadTreeItem rootItem, topItem;
+    protected QuadTreeItem rootItem;
     protected double upLevelSurfaceRatio = 9;
     protected double downLevelSurfaceRatio = 7;
     
@@ -67,6 +67,6 @@ public class QuadTree
     public void accept(QuadTreeVisitor visitor)
     {
         if (rootItem != null)
-            rootItem.accept(visitor);
+        	rootItem.accept(visitor);
     }
 }
