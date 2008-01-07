@@ -629,78 +629,6 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>SRTM Data</name>
-            <dataProvider>
-               <SensorMLProvider id="SRTM_DATA">
-                  <name>SRTM DEM</name>
-                  <description>SRTM Digital Elevation Model</description>
-                  <spatialExtent tiling="5x5">
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
-                  <process xlink:href="./SRTM_Process.xml#WCS_PROCESS"/>
-               </SensorMLProvider>
-            </dataProvider>
-            <style>
-               <sld:GridFillSymbolizer enabled="true">
-                  <sld:Dimensions>
-                     <sld:Axis name="width">
-                        <ogc:PropertyName>coverageData/coverage/row</ogc:PropertyName>
-                     </sld:Axis>
-                     <sld:Axis name="length">
-                        <ogc:PropertyName>coverageData/coverage</ogc:PropertyName>
-                     </sld:Axis>
-                  </sld:Dimensions>
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/longitude</ogc:PropertyName>
-                           <Gain>0.017453292519943295769236907684886</Gain>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/latitude</ogc:PropertyName>
-                           <Gain>0.017453292519943295769236907684886</Gain>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-z">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                           <Gain>1e-6</Gain>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                  </sld:Geometry>
-                  <sld:Fill>
-                     <sld:CssParameter name="fill-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                           <Gain>0.0025</Gain>
-                           <Offset>-0.5</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="fill-blue">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                           <Gain>-0.0025</Gain>
-                           <Offset>1.5</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="fill-green">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>coverageData/coverage/row/point/elevation</ogc:PropertyName>
-                           <Gain>-0.0025</Gain>
-                           <Offset>1.0</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                  </sld:Fill>
-               </sld:GridFillSymbolizer>
-            </style>
-         </DataItem>
-      </member>
-      <member visible="false">
-         <DataItem>
             <name>Landsat Imagery (Flat)</name>
             <dataProvider>
                <SensorMLProvider id="WMS_LANDSAT_IMAGERY_DATA">
@@ -759,7 +687,7 @@
                </sld:TextureSymbolizer>
             </style>
             <style>
-               <sld:GridMeshSymbolizer enabled="false">
+               <sld:GridBorderSymbolizer enabled="false">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
@@ -777,9 +705,9 @@
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
-                     <sld:CssParameter name="stroke">#ff0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
                   </sld:Stroke>
-               </sld:GridMeshSymbolizer>
+               </sld:GridBorderSymbolizer>
             </style>
          </DataItem>
       </member>
