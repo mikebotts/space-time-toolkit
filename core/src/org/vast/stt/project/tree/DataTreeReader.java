@@ -299,7 +299,16 @@ public class DataTreeReader extends XMLReader
         // read quadTree option
         String text = dom.getAttributeValue(providerElt, "quadTree");
         if (text != null && text.equalsIgnoreCase("true"))
+        {
             provider = new SpatialTilingProvider(provider);
+            
+            // read max spatial extent
+            Element maxSpElt = dom.getElement(providerElt, "maxSpatialExtent");
+            if (maxSpElt != null) {
+                STTSpatialExtent spatialExtent = extentReader.readSpatialExtent(dom, maxSpElt);
+                ((SpatialTilingProvider)provider).setMaxSpatialExtent(spatialExtent);
+            }
+        }
         
         return provider;
     }

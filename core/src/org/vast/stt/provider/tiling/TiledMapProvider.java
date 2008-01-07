@@ -207,7 +207,7 @@ public abstract class TiledMapProvider extends AbstractProvider
             QuadTreeItem nextItem = selectedItems.get(i);
             
             if (canceled)
-                break;
+            	break;
             
             if (nextItem.getData() == null)
             {
