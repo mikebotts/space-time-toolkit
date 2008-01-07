@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.vast.ows.sld.Color;
 import org.vast.ows.sld.GridSymbolizer;
@@ -54,7 +55,7 @@ public class BasicGridFillController extends OptionController {
 		OptionParams[] params = 
 		{
 			new OptionParams(OptionControl.ControlType.COLOR_BUTTON, "Fill Color:",	null),
-			new OptionParams(OptionControl.ControlType.NUMERIC_TEXT, "Fill Opacity:", "1.0")	
+			new OptionParams(OptionControl.ControlType.SPINNER, "Fill Opacity:", new int[] {0, 100})
 		};
 		optionControls = OptionControl.createControls(parent, params);
 		loadFields();
@@ -63,9 +64,12 @@ public class BasicGridFillController extends OptionController {
 	
 	// reset value of all controls to what is currently in symbolizer
 	public void loadFields(){
+		// fill color
 		optionControls[0].setColorLabelColor(gridOptionHelper.getGridFillColor());
-		//  TODO support opacity
-		((Text)optionControls[1].getControl()).setText(gridOptionHelper.getGridFillOpacity() + "");
+		
+		// fill opacity
+		Spinner opacitySpinner = (Spinner)optionControls[1].getControl();
+		opacitySpinner.setSelection((int)(gridOptionHelper.getGridFillOpacity()*100f));
 	}
 	
 	//  Enter key in Text widget triggers widgetDefaultSelected instead of WidgetSelected.
@@ -92,15 +96,23 @@ public class BasicGridFillController extends OptionController {
 	public void widgetSelected(SelectionEvent e) {
 		Control control = (Control)e.getSource();
 
+		// fill color
 		if(control == optionControls[0].getControl()) {
 			ColorDialog colorChooser = new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();
 			if(rgb == null)
 				return;
-			// TODO:  add alpha support
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[0].setColorLabelColor(sldColor); 
 			gridOptionHelper.setGridFillColor(sldColor);
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+		}
+		
+		// fill opacity
+		else if(control == optionControls[1].getControl()) {
+			Spinner widthSpinner = (Spinner)control;
+			float opacity = new Float(widthSpinner.getSelection()).floatValue();
+			gridOptionHelper.setGridFillOpacity((float)opacity / 100.0f);
             dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
 		}
 	}

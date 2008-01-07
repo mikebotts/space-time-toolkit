@@ -69,7 +69,7 @@ public class LineOptionHelper //implements SelectionListener
 			return 1.0f;
 		return ((Float)widthCon).floatValue();
 	}
-	
+		
 	public MappingFunction getWidthMappingFunction(){
 		ScalarParameter widthSP = symbolizer.getStroke().getWidth();
 		return widthSP.getMappingFunction();
@@ -80,6 +80,10 @@ public class LineOptionHelper //implements SelectionListener
 		if(colorSP == null)
 			return new Color(1.0f, 0.0f, 0.0f, 1.0f);
 		return colorSP;
+	}
+	
+	public boolean getLineSmooth(){
+		return symbolizer.getStroke().getSmooth();
 	}
 	
 	/**
@@ -100,5 +104,9 @@ public class LineOptionHelper //implements SelectionListener
 	public void setLineColor(org.vast.ows.sld.Color color) {
 		Stroke stroke = symbolizer.getStroke();
 		stroke.setColor(color);
+	}
+	
+	public void setLineSmooth(boolean smooth) {
+		symbolizer.getStroke().setSmooth(smooth);
 	}
 }
