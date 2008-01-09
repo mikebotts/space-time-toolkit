@@ -31,6 +31,8 @@ import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
 import org.vast.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
+import org.vast.data.DataArray;
+import org.vast.data.DataGroup;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -96,23 +98,13 @@ public class SWEDataHandler implements DataHandler
 
 	public void endDataAtom(DataComponent info, DataBlock data)
 	{
-		DataType dataType = data.getDataType();
-        
-        if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
-        {
-            UnitConverter converter = converters.get(info);
-    		
-    		if (converter == null)
-    		{
-    			String uom = (String)info.getProperty(DataComponent.UOM_CODE);
-    			converter = UnitConversion.createConverterToSI(uom);
-    	    	converters.put(info, converter);
-    		}
-    		
-        	// convert to SI
+		UnitConverter converter = converters.get(info);
+		if (converter != null)
+		{
+			// convert to SI
     		double newVal = converter.convert(data.getDoubleValue());
     		data.setDoubleValue(newVal);
-        }
+		}
 	}
 
 
@@ -123,6 +115,39 @@ public class SWEDataHandler implements DataHandler
 
 	public void startData(DataComponent info)
 	{
+		if (firstBlock)
+			convertScalarUnits(info);
+	}
+	
+	
+	protected void convertScalarUnits(DataComponent component)
+	{
+		if (component instanceof DataGroup)
+		{
+			for (int i=0; i<component.getComponentCount(); i++)
+				convertScalarUnits(component.getComponent(i));
+		}
+		else if (component instanceof DataArray)
+		{
+			if (((DataArray)component).getComponentCount() == 0)
+				((DataArray)component).updateSize(1);
+			convertScalarUnits(component.getComponent(0));
+		}
+		else
+		{
+			DataType dataType = component.getData().getDataType();
+			
+			if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
+	        {
+				String uom = (String)component.getProperty(DataComponent.UOM_CODE);
+				
+				if (uom != null && uom.equalsIgnoreCase("deg"))
+				{
+					UnitConverter converter = UnitConversion.createConverterToSI(uom);
+					converters.put(component, converter);
+				}
+	        }
+		}
 	}
 
 

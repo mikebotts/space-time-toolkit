@@ -53,11 +53,12 @@ public class Project
 	protected String author;
 	protected DateTime date;
 
-	protected ResourceList resourceList;
-	protected ArrayList<Service> serviceList;	
+	protected ArrayList<String> extensionList;
+	protected ArrayList<Service> serviceList;
 	protected ArrayList<DataProcess> processList;
 	protected ArrayList<STTDisplay> displayList;
-
+	protected ResourceList resourceList;
+	
 
     public Project()
     {
@@ -170,5 +171,17 @@ public class Project
 	public void setServiceList(ArrayList<Service> serviceList)
 	{
 		this.serviceList = serviceList;
+	}
+
+
+	public ArrayList<String> getExtensionList()
+	{
+		return extensionList;
+	}
+
+
+	public void setExtensionList(ArrayList<String> extensionList)
+	{
+		this.extensionList = extensionList;
 	}
 }

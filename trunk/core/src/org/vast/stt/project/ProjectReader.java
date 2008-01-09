@@ -91,6 +91,7 @@ public class ProjectReader extends XMLReader
 		this.dom = dom;
 		
 		readMetadata(project, projectElt);
+		readExtensions(project, projectElt);
 		
 		listElt = dom.getElement(projectElt, "ServiceList");
         if (listElt != null)
@@ -125,6 +126,38 @@ public class ProjectReader extends XMLReader
 		catch (ParseException e)
 		{
 		}
+	}
+	
+	
+	/**
+	 * Make sure we load all extension plugin classes so that
+	 * all plugins are activated
+	 * @param projectElt
+	 */
+	protected void readExtensions(Project project, Element projectElt)
+	{
+		NodeList extensionElts = dom.getElements("Extension");
+		int listSize = extensionElts.getLength();
+		ArrayList<String> extensionList = new ArrayList<String>(listSize);
+		
+		for (int i=0; i<listSize; i++)
+		{
+			Element extElt = (Element)extensionElts.item(i);
+			String className = dom.getAttributeValue(extElt, "name");
+			
+			try
+			{
+				// load the class so that the whole plugin is activated
+				Class.forName(className);
+				extensionList.add(className);
+			}
+			catch (ClassNotFoundException e)
+			{
+				ExceptionSystem.display(new Exception("Plugin " + className + " not found"));
+			}			
+		}
+		
+		project.setExtensionList(extensionList);
 	}
 	
 	
