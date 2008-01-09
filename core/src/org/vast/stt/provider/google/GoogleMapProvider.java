@@ -53,9 +53,9 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * <p><b>Description:</b><br/>
  * Requests Data from Google Map Keyhole servers
  * Ref: http://kh{x}.google.com/
- * Requests: http://kh0.google.com/kh?n=404&v=10&t=tsrrtqqttrtqrsq
- *           http://mt0.google.com/mt?n=404&v=w2.25&x=0&y=0&zoom=16
- *           http://mt0.google.com/mt?n=404&v=w2t.26&x=0&y=0&zoom=16
+ * Requests: http://kh0.google.com/kh?n=404&v=24&t=tsrrtqqttrtqrsq
+ *           http://mt0.google.com/mt?n=404&v=w2.66&x=0&y=0&zoom=16
+ *           http://mt0.google.com/mt?n=404&v=w2t.66&x=0&y=0&zoom=16
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -116,7 +116,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
                     item.accept(tileNumberGen);
                     String q = tileNumberGen.getTileNumber();
-                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=11&t=t" + q;
+                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=24&t=t" + q;
                 }
                 else if (layerId.startsWith("roads"))
                 {
@@ -126,7 +126,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2t.26&x=" + x + "&y=" + y + "&zoom=" + z;
+                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2t.66&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 else if (layerId.startsWith("map"))
                 {
@@ -136,7 +136,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
                     int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2.25&x=" + x + "&y=" + y + "&zoom=" + z;
+                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2.66&x=" + x + "&y=" + y + "&zoom=" + z;
                 }
                 
                 // increment server number
