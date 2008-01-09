@@ -144,8 +144,8 @@ public abstract class TiledMapProvider extends AbstractProvider
         deletedItems.clear();
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
-        double tileRatio = Math.floor(spatialExtent.getXTiles()) * Math.floor(spatialExtent.getYTiles());
-        tileSelector.setSizeRatio(tileRatio);
+        double tileRatio = spatialExtent.getXTiles() * spatialExtent.getYTiles();
+        tileSelector.setSizeRatio(tileRatio*0.25);
         tileSelector.setMaxDistance(Math.sqrt(tileRatio)*3);
         quadTree.accept(tileSelector);
         
