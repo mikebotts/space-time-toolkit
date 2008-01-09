@@ -49,7 +49,7 @@
                   <name>Rt</name>
                   <member>
                      <DataItem enabled="false">
-                        <name>whoCares</name>
+                        <name>gridOnly</name>
                         <dataProvider>
                            <SensorMLProvider>
                               <name>Landsat WMS + SRTM Topo</name>
