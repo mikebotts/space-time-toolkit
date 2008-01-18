@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import jj2000.j2k.decoder.Decoder;
 import jj2000.j2k.util.ParameterList;
 
-import org.sensorML.process.RPC_Process;
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataType;
 import org.vast.data.AbstractDataBlock;
@@ -30,17 +29,12 @@ import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
-import org.vast.stt.provider.sml.SMLProvider;
-import org.vast.stt.provider.sml.SMLProviderReader;
-import org.vast.xml.DOMHelper;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import sun.awt.image.ToolkitImage;
 
 ///  Test class for reading JPEG2000 images and metadata							
 
-
+	
 public class JPEG2000Provider extends AbstractProvider 
 {
 	protected String imageUrl;
@@ -118,22 +112,17 @@ public class JPEG2000Provider extends AbstractProvider
 	        dataNode.setNodeStructureReady(true);
 	}
 	
-	protected void loadGrid(int whoKnows) throws Exception {
-		RPC_Process rpcProc = new RPC_Process();
-		DOMHelper dom = new DOMHelper("file:///c:/tcook/ows5/GlobalImages_05MAY14083758-M1BS-005693793010_RPC.xml", false);
-		SMLProviderReader reader = new SMLProviderReader();
-		Element rootElt = dom.getRootElement();
-		NodeList nl = rootElt.getElementsByTagName("ProcessModel");
-		Element elt = (Element)nl.item(0);
-		System.err.println("dod");
-		//SMLProvider prov = (SMLProvider)reader.read(dom, dom.getRootElement().getElementsByTagName("ProcessModel").get(0));
-		
-		//  load rpcParams, input
-		
-		//SMLProvider smlProv = new SMLProvider();
-		//smlProv.setProcess(rpcProc);
-		
-		//  for, all grid pts
+	protected void loadGrid() throws Exception {
+		RPCGridGenerator  rpcGridGen = new RPCGridGenerator();
+		rpcGridGen.setLength(10);
+		rpcGridGen.setWidth(10);
+		SpatialExtent bounds = new SpatialExtent();
+		bounds.setMinX(27.189155*Math.PI/180);  //  These are from Spot GetCaps- dynamically load these
+		bounds.setMinY(-23.341488*Math.PI/180);
+		bounds.setMaxX(28.05903*Math.PI/180);
+		bounds.setMaxY(-22.673679*Math.PI/180);
+		rpcGridGen.setBounds(bounds);
+		gridBlock = rpcGridGen.createGrid();
 	}
 	 
 	public static void main(String [] args) throws Exception {
@@ -141,7 +130,7 @@ public class JPEG2000Provider extends AbstractProvider
 		prov.loadGrid(1);
 	}
 	
-	protected void loadGrid(){
+	protected void loadGrid(int flatGridVersion){
 		 // build grid
         int gridWidth = 10;
         int gridLength = 10;
@@ -257,7 +246,12 @@ public class JPEG2000Provider extends AbstractProvider
 		
 		loadImage();
 		//
-		loadGrid();
+		try {
+			loadGrid();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
         // add blocks to data node
         blockArray[0] = blockLists[0].addBlock((AbstractDataBlock)imageBlock);
