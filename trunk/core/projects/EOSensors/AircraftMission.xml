@@ -30,13 +30,14 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>AEROSONDE_MET_DATA</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-07-21T21:00:00Z</gml:beginPosition>
                                  <gml:endPosition>2005-07-22T05:00:00Z</gml:endPosition>
                                  <gml:timeStep>P5S</gml:timeStep>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-xml</responseFormat>
                      </GetObservation>

@@ -84,12 +84,13 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>DMSP-F15-SSMI</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                  <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>

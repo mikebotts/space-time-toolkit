@@ -118,15 +118,16 @@
                               <timeExtent xlink:href="#MODIS_TIME"/>
                               <layerId>TERRA-MODIS</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                                 <GetObservation service="SOS" version="0.0.31">
+                                 <GetObservation service="SOS" version="1.0">
                                     <offering>TERRA-MODIS</offering>
                                     <eventTime>
-                                       <ogc:During>
-                                          <gml:TimePeriod>
+                                       <ogc:TM_During>
+                                       <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                                       <gml:TimePeriod>
                                              <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                              <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                                           </gml:TimePeriod>
-                                       </ogc:During>
+                                       </ogc:TM_During>
                                     </eventTime>
                                     <resultFormat>application/com-xml</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
@@ -238,15 +239,16 @@
                               <timeExtent xlink:href="#HYPERION_TIME"/>
                               <layerId>EO1-Hyperion-NADIR</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                                 <GetObservation service="SOS" version="0.0.31">
+                                 <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-NADIR</offering>
                                     <eventTime>
-                                       <ogc:During>
+                                       <ogc:TM_During>
+                                          <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                                           <gml:TimePeriod>
                                              <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                              <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                                           </gml:TimePeriod>
-                                       </ogc:During>
+                                       </ogc:TM_During>
                                     </eventTime>
                                     <resultFormat>application/com-xml</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
@@ -289,15 +291,16 @@
                               <timeExtent xlink:href="#HYPERION_TIME"/>
                               <layerId>EO1-Hyperion-Potential</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                                 <GetObservation service="SOS" version="0.0.31">
+                                 <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-Potential</offering>
                                     <eventTime>
-                                       <ogc:During>
+                                       <ogc:TM_During>
+                                          <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                                           <gml:TimePeriod>
                                              <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                              <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                                           </gml:TimePeriod>
-                                       </ogc:During>
+                                       </ogc:TM_During>
                                     </eventTime>
                                     <resultFormat>application/com-xml</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
@@ -409,15 +412,16 @@
                               <timeExtent xlink:href="#AMSRE_TIME"/>
                               <layerId>AQUA-AMSRE</layerId>
                               <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
-                                 <GetObservation service="SOS" version="0.0.31">
+                                 <GetObservation service="SOS" version="1.0">
                                     <offering>AQUA-AMSRE</offering>
                                     <eventTime>
-                                       <ogc:During>
+                                       <ogc:TM_During>
+                                          <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                                           <gml:TimePeriod>
                                              <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                              <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                                           </gml:TimePeriod>
-                                       </ogc:During>
+                                       </ogc:TM_During>
                                     </eventTime>
                                     <resultFormat>application/com-xml</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>

@@ -1096,11 +1096,12 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimeInstant>
                                  <gml:timePosition>2006-06-06T13:00:00Z</gml:timePosition>
                               </gml:TimeInstant>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-binary-base64</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
@@ -1375,12 +1376,13 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-09-16T15:00:00Z</gml:beginPosition>
                                  <gml:endPosition>2005-09-16T16:00:00Z</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
@@ -1398,12 +1400,13 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>Port-Newark-Radiation</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>                                 
                                  <gml:beginPosition>2006-11-29T06:30:00Z</gml:beginPosition>
                                  <gml:endPosition>2006-11-29T06:45:00Z</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-xml</responseFormat>
                         <resultModel>DataValueType</resultModel>
