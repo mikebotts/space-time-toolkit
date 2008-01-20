@@ -105,23 +105,23 @@ public class Projection_Mercator implements Projection
     
     public void project(Crs sourceCrs, Vector3d point)
     {
-        double[] ecef, lla;
+        double[] merc, lla;
         
         switch (sourceCrs)
         {
             case EPSG4329:
-                ecef = MapProjection.LLAtoMerc(point.x, point.y, point.z);
-                point.x = ecef[0];
-                point.y = ecef[1];
-                point.z = ecef[2];
+                merc = MapProjection.LLAtoMerc(point.x, point.y, point.z);
+                point.x = merc[0];
+                point.y = merc[1];
+                point.z = merc[2];
                 break;
                 
             case ECEF:
                 lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
-                ecef = MapProjection.LLAtoMerc(lla[0], lla[1], lla[2]);
-                point.x = ecef[0];
-                point.y = ecef[1];
-                point.z = ecef[2];
+                merc = MapProjection.LLAtoMerc(lla[0], lla[1], lla[2]);
+                point.x = merc[0];
+                point.y = merc[1];
+                point.z = merc[2];
                 break;
         }
         
