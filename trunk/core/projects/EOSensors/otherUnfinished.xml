@@ -207,6 +207,7 @@
                         <offering>EO1-Hyperion-NADIR</offering>
                         <eventTime>
                            <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                  <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
@@ -258,6 +259,7 @@
                         <offering>EO1-Hyperion-Potential</offering>
                         <eventTime>
                            <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                  <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
