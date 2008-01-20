@@ -1353,11 +1353,12 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimeInstant>
                                  <gml:timePosition>2007-03-06T13:00:00Z</gml:timePosition>
                               </gml:TimeInstant>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-binary-base64</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>

@@ -82,12 +82,13 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>TRMM-TMI</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
                                  <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <responseFormat>application/com-xml</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
@@ -96,7 +97,7 @@
                </OWSDataProvider>
             </dataProvider>
             <style>
-               <sld:GridFillSymbolizer enabled="true">
+               <sld:GridMeshSymbolizer enabled="true">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
@@ -117,7 +118,7 @@
                      <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
                      <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                   </sld:Fill>
-               </sld:GridFillSymbolizer>
+               </sld:GridMeshSymbolizer>
             </style>
          </DataItem>
       </member> 

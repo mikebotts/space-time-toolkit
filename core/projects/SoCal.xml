@@ -192,12 +192,13 @@
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
-                           <ogc:During>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
                                  <gml:beginPosition>2005-09-16T15:00:00Z</gml:beginPosition>
                                  <gml:endPosition>2005-09-16T23:00:00Z</gml:endPosition>
                               </gml:TimePeriod>
-                           </ogc:During>
+                           </ogc:TM_During>
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
