@@ -59,6 +59,7 @@ public class Projection_LLA implements Projection
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
     protected Vector3d tempPoint = new Vector3d();
+    protected boolean insertBreaks = true;
     
     
     public Projection_LLA()
@@ -81,7 +82,7 @@ public class Projection_LLA implements Projection
         clip(point);
         
         // break geometry if needed
-        if (xSav != Double.NaN && !point.graphBreak)
+        if (insertBreaks && xSav != Double.NaN && !point.graphBreak)
         {
             if (Math.abs(point.x - xSav) > PI)
                 point.graphBreak = true;
@@ -346,5 +347,17 @@ public class Projection_LLA implements Projection
     public void setAltitudeDamping(double altitudeDamping)
     {
         this.altitudeDamping = altitudeDamping;
+    }
+    
+    
+    public boolean isInsertBreaks()
+    {
+        return insertBreaks;
+    }
+
+
+    public void setInsertBreaks(boolean clip)
+    {
+        this.insertBreaks = clip;
     }
 }
