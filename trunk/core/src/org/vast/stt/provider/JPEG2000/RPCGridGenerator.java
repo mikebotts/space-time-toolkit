@@ -86,7 +86,7 @@ public class RPCGridGenerator {
 			rpcProc.init();
 
 			// print out the chain layout
-			System.out.println(rpcProc);
+			//System.out.println(rpcProc);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -97,7 +97,7 @@ public class RPCGridGenerator {
 	 * @param valueStr - String containing values section of rpcBlock
 	 */
 	public void readParamValues(String valueStr) throws DOMHelperException {
-		System.err.println(valueStr);
+		//System.err.println(valueStr);
 		StringTokenizer st = new StringTokenizer(valueStr, ",");
 		int valueCnt = st.countTokens();
 		if(valueCnt != 96) {
