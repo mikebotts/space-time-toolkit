@@ -1,3 +1,27 @@
+/***************************** BEGIN LICENSE BLOCK ***************************
+
+ The contents of this file are subject to the Mozilla Public License Version
+ 1.1 (the "License"); you may not use this file except in compliance with
+ the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/MPL-1.1.html
+ 
+ Software distributed under the License is distributed on an "AS IS" basis,
+ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ for the specific language governing rights and limitations under the License.
+ 
+ The Original Code is the "Space Time Toolkit".
+ 
+ The Initial Developer of the Original Code is the VAST team at the
+ University of Alabama in Huntsville (UAH). <http://vast.uah.edu>
+ Portions created by the Initial Developer are Copyright (C) 2007
+ the Initial Developer. All Rights Reserved.
+ 
+ Please Contact Mike Botts <mike.botts@uah.edu> for more information.
+ 
+ Contributor(s): 
+    Tony Cook <tcook@nsstc.uah.edu>
+ 
+******************************* END LICENSE BLOCK ***************************/
 package org.vast.stt.provider.JPEG2000;
 
 import java.awt.Image;
@@ -32,9 +56,25 @@ import org.vast.stt.provider.AbstractProvider;
 
 import sun.awt.image.ToolkitImage;
 
-///  Test class for reading JPEG2000 images and metadata							
+/**
+ * <p><b>Title:</b><br/>
+ * JPeg2000Provider
+ * </p>
+ *
+ * <p><b>Description:</b><br/>
+ * Load and geolocation a JPEG2000 image with RPC coordaintes embedded in the
+ * "back" channel
+ * </p>
+ *
+ * <p>Copyright (c) 2007</p>
+ * @author Tony Cook
+ * @date Jan 22, 2008
+ * @version 1.0
+ * 
+ *   TODO:  connect this to inputStream from WCS
+ *   TODO:  separate this into RPC JP2 and generic JP2 readers
+ */
 
-	
 public class JPEG2000Provider extends AbstractProvider 
 {
 	protected String imageUrl;
@@ -50,7 +90,7 @@ public class JPEG2000Provider extends AbstractProvider
 	private int imageHeight;
 	protected ParameterList list;
 	Decoder decoder;
-	private String gmlBox;
+	private String rpcBlock;
 	private Decoder dec;
 	
 	public JPEG2000Provider() {
@@ -122,6 +162,8 @@ public class JPEG2000Provider extends AbstractProvider
 		bounds.setMaxX(28.05903*Math.PI/180);
 		bounds.setMaxY(-22.673679*Math.PI/180);
 		rpcGridGen.setBounds(bounds);
+		//  mod this to load params from actual JP2 files or stream
+		rpcGridGen.loadRPCParams(rpcBlock);
 		gridBlock = rpcGridGen.createGrid();
 	}
 	 
@@ -178,13 +220,12 @@ public class JPEG2000Provider extends AbstractProvider
 		}
 		String rawBox = dec.getGmlBox();
 		//  Strip junk off beginning and end of Box
-		gmlBox = trimGMLBox(rawBox);
+		rpcBlock = trimRPCBlock(rawBox);
 		Image imTmp = dec.getImage();
 		waitForImage(imTmp);
 		image = ((ToolkitImage)imTmp).getBufferedImage();
-		//System.err.println("Image = "+ image);
 		putImageDataInBlock();
-		System.err.println(gmlBox);
+		//System.err.println(gmlBox);
 	}
 	
 	private void waitForImage(Image img){
@@ -268,7 +309,7 @@ public class JPEG2000Provider extends AbstractProvider
 	 * Strips unneeded info off the beginning and end of the GML Box- not sure
 	 * how to do this consistently...
 	 */
-	private String trimGMLBox(String oldBox){
+	private String trimRPCBlock(String oldBox){
 		//  Strip off gml-root-instance stuff at beginning
 		//  Will this ALWAYS be 63 characters?  Doubt it...
 		String newBox = oldBox.substring(63);
@@ -278,15 +319,7 @@ public class JPEG2000Provider extends AbstractProvider
 	}
 	
 	public String getGMLBox() {
-		return gmlBox;
-	}
-
-	public static void main(String [] args, int j){
-		// Create parameter list using defaults
-		JPEG2000Provider prov = new JPEG2000Provider();
-		prov.setImagePath("C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
-		prov.loadImage();
-		//prov.dispImg();
+		return rpcBlock;
 	}
 
 	@Override
@@ -299,6 +332,14 @@ public class JPEG2000Provider extends AbstractProvider
 	public boolean isTimeSubsetSupported() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public static void main(String [] args, int j){
+		// Create parameter list using defaults
+		JPEG2000Provider prov = new JPEG2000Provider();
+		prov.setImagePath("C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
+		prov.loadImage();
+		//prov.dispImg();
 	}
 
 }
