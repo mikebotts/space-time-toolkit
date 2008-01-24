@@ -148,7 +148,7 @@ public class GLRenderTexture extends GLRunnable
                         point.tx *= uScale;
                         point.ty *= vScale;
                         
-                        gl.glTexCoord2f(point.tx, point.ty);                        
+                        gl.glTexCoord2f((float)point.tx, (float)point.ty);                        
                         gl.glVertex3d(point.x, point.y, point.z + dz);
                     }
                 }                

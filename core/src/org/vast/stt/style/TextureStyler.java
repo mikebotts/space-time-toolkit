@@ -39,7 +39,7 @@ import org.vast.stt.data.BlockListItem;
  * </p>
  *
  * <p><b>Description:</b><br/>
- * 
+ * Styler for 2D Texture rendering
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -54,8 +54,9 @@ public class TextureStyler extends AbstractStyler
     protected RasterPixelGraphic pixel;
     protected GridPointGraphic point;
     protected ListInfo gridBlocks, texBlocks;
-    protected int[] gridIndex = new int[4];
-    protected int[] texIndex = new int[4];  
+    protected int[] gridIndex = new int[4]; //grid width, grid height, 0, 0 
+    protected int[] texIndex = new int[4]; // 0, 0, raster width, raster height
+    protected boolean generateTexCoords;
     
     
 	public TextureStyler()
@@ -171,8 +172,11 @@ public class TextureStyler extends AbstractStyler
         gridBlocks.getData(gridIndex);
         
         // compute texture coordinates
-        point.tx = (float)u / (float)(patch.grid.width-1);
-        point.ty = (float)v / (float)(patch.grid.length-1);
+        if (generateTexCoords)
+        {
+            point.tx = (float)u / (float)(patch.grid.width-1);
+            point.ty = (float)v / (float)(patch.grid.length-1);
+        }
         
         // adjust geometry to fit projection
         projection.adjust(geometryCrs, point);
@@ -318,15 +322,17 @@ public class TextureStyler extends AbstractStyler
         Object value;
         RasterChannel channel;
         String propertyName = null;   
-        
+               
         // reset all parameters
         pixel = new RasterPixelGraphic();
         point = new GridPointGraphic();
         patch.getTexture().bands = 3;
-        this.clearAllMappers();
         
         // X,Y,Z are initialized to 0 by default
         constantX = constantY = constantZ = 0.0;
+        generateTexCoords = true;
+        
+        this.clearAllMappers();
         
         // grid width array
         propertyName = this.symbolizer.getGridDimensions().get("width");
@@ -360,6 +366,19 @@ public class TextureStyler extends AbstractStyler
         // geometry T
         param = this.symbolizer.getGeometry().getT();
         updateMappingT(patch.grid, param);
+        
+        // Texture coordinates
+        // geometry Tx
+        param = this.symbolizer.getTextureCoordinates().getX();
+        updateMappingTx(point, param);
+        
+        // geometry Ty
+        param = this.symbolizer.getTextureCoordinates().getY();
+        updateMappingTy(point, param);
+        
+        // geometry Tz
+        param = this.symbolizer.getTextureCoordinates().getZ();
+        updateMappingTz(point, param);
                 
         // make sure we keep a handle to the block list containing grid data
         gridBlocks = dataLists[dataLists.length-1];
@@ -440,6 +459,93 @@ public class TextureStyler extends AbstractStyler
         // make sure we keep a handle to the block list containing image data
         texBlocks = dataLists[dataLists.length-1];        
         mappingsUpdated = true;
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry Tx property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingTx(GridPointGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.tx = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new TexCoordXMapper(point, param.getMappingFunction()));
+                }
+            }
+            
+            generateTexCoords = false;
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry Ty property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingTy(GridPointGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.ty = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new TexCoordYMapper(point, param.getMappingFunction()));
+                }
+            }
+            
+            generateTexCoords = false;
+        }
+    }
+    
+    
+    /**
+     * Sets up mapping for geometry Tz property
+     * @param point
+     * @param param
+     * @return
+     */
+    protected void updateMappingTz(GridPointGraphic point, ScalarParameter param)
+    {
+        if (param != null)
+        {
+            if (param.isConstant())
+            {
+                Object value = param.getConstantValue();
+                point.tz = (Float)value;
+            }
+            else
+            {
+                String propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new TexCoordZMapper(point, param.getMappingFunction()));                    
+                }
+            }
+            
+            generateTexCoords = false;
+        }
     }
     
     

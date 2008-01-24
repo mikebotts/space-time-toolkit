@@ -25,25 +25,47 @@
 
 package org.vast.stt.style;
 
+import org.vast.cdm.common.DataBlock;
+import org.vast.ows.sld.MappingFunction;
+
 
 /**
  * <p><b>Title:</b><br/>
- * Grid Point Graphic
+ * Texture Z Coordinate Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * TODO GridPointGraphic Class Description
+ * This transfers a value from the DataNode to the TZ coordinate value.
+ * It will use a mapping function if provided.
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Alexandre Robin
- * @date Nov 15, 2005
+ * @date Jan 24, 2008
  * @version 1.0
  */
-public class GridPointGraphic extends PrimitiveGraphic
+public class TexCoordZMapper extends PropertyMapper
 {
-    public double tx;
-    public double ty;
-    public double tz;
-    public boolean normalizedTexCoords;
+    GridPointGraphic graphic;
+    
+    
+    public TexCoordZMapper(GridPointGraphic graphic, MappingFunction mappingFunction)
+    {
+        this.graphic = graphic;
+        this.mappingFunction = mappingFunction;
+        if (mappingFunction != null)
+            this.useMappingFunction = true;
+    }    
+
+
+    public void mapData(DataBlock data)
+    {
+        if (useMappingFunction)
+        {
+            double val = data.getDoubleValue();
+            graphic.tz = mappingFunction.compute(val);
+        }
+        else
+            graphic.tz = data.getDoubleValue();     
+    }    
 }
