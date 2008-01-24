@@ -58,8 +58,7 @@
                               <JPEG2000Provider id="JPEG2000">
                                  <name>JPEG 2000 local file test</name>
                                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-<!--                                 <localFile>C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2</localFile>-->
-                                 <localFile>file:///C:/tcook/JPIP/JP2_Samples/WcsLevel1A_10Dec2007.jp2</localFile>
+d                                 <localFile>file:///C:/tcook/JPIP/JP2_Samples/WcsLevel1A_10Dec2007.jp2</localFile>
                               </JPEG2000Provider>
                         </dataProvider> 
 
@@ -82,6 +81,14 @@
                                        <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
                                     </sld:CssParameter>
                                  </sld:Geometry>
+                                 <!-- ************** -->
+                                 <sld:CssParameter name="geometry-tx">
+                                    <ogc:PropertyName>grid/row/point/texX</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-ty">
+                                    <ogc:PropertyName>grid/row/point/texY</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <!-- ************** -->
                               </sld:Grid>
                               <sld:Raster>
                                  <sld:Opacity>1.0</sld:Opacity>
