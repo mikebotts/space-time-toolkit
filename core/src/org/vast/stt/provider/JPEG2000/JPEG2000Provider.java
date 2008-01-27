@@ -31,6 +31,7 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.InputStream;
+import java.util.Hashtable;
 
 import javax.swing.JLabel;
 
@@ -45,6 +46,7 @@ import org.vast.data.DataBlockFactory;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.physics.SpatialExtent;
+import org.vast.sensorML.ProcessLoader;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
@@ -100,6 +102,7 @@ public class JPEG2000Provider extends AbstractProvider
 		bounds.setMinY(30.0 * Math.PI/180.0) ;
 		bounds.setMaxX(-85.0 * Math.PI/180.0);
 		bounds.setMaxY(35.0 * Math.PI/180.0);
+        ProcessLoader.processMap.put("urn:ogc:def:process:CSM:RPC:1.0", "org.sensorML.process.RPC_Process");
 		
 	}
 
@@ -127,10 +130,12 @@ public class JPEG2000Provider extends AbstractProvider
 	        //System.out.println(imageData);
 	        
 	        // create block list for grid
-	        DataGroup pointData = new DataGroup(2);
+	        DataGroup pointData = new DataGroup(4);
 	        pointData.setName("point");
 	        pointData.addComponent("lat", new DataValue(DataType.FLOAT));
-	        pointData.addComponent("lon", new DataValue(DataType.FLOAT));                   
+	        pointData.addComponent("lon", new DataValue(DataType.FLOAT));
+            pointData.addComponent("imgX", new DataValue(DataType.FLOAT));
+            pointData.addComponent("imgY", new DataValue(DataType.FLOAT));
 	        rowData = new DataArray(10);
 	        rowData.addComponent(pointData);
 	        rowData.setName("row");                  
@@ -148,7 +153,7 @@ public class JPEG2000Provider extends AbstractProvider
 	                ((SceneBboxUpdater)updater).setTilesize(tileWidth, tileHeight);
 	            updater.update();
 	        }
-	        
+
 	        dataNode.setNodeStructureReady(true);
 	}
 	
@@ -160,17 +165,13 @@ public class JPEG2000Provider extends AbstractProvider
 		bounds.setMinX(27.189155*Math.PI/180);  //  These are from Spot GetCaps- dynamically load these
 		bounds.setMinY(-23.341488*Math.PI/180);
 		bounds.setMaxX(28.05903*Math.PI/180);
-		bounds.setMaxY(-22.673679*Math.PI/180);
+		bounds.setMaxY(-22.673679*Math.PI/180);       
 		rpcGridGen.setBounds(bounds);
 		//  mod this to load params from actual JP2 files or stream
-		rpcGridGen.loadRPCParams(rpcBlock);
+		//rpcGridGen.loadRPCParams(rpcBlock);
 		gridBlock = rpcGridGen.createGrid();
 	}
-	 
-	public static void main(String [] args) throws Exception {
-		JPEG2000Provider prov = new JPEG2000Provider();
-		prov.loadGrid(1);
-	}
+
 	
 	protected void loadGrid(int flatGridVersion){
 		 // build grid
@@ -295,12 +296,9 @@ public class JPEG2000Provider extends AbstractProvider
 		}
 		
         // add blocks to data node
-        blockArray[0] = blockLists[0].addBlock((AbstractDataBlock)imageBlock);
-        blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridBlock);
-            
-        dataNode.getListArray().add(blockLists[0]);
-        dataNode.getListArray().add(blockLists[1]);
-        
+        blockLists[0].addBlock((AbstractDataBlock)imageBlock);
+        blockLists[1].addBlock((AbstractDataBlock)gridBlock);
+                
         //  redraw
         dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 	}
@@ -334,12 +332,22 @@ public class JPEG2000Provider extends AbstractProvider
 		return false;
 	}
 
-	public static void main(String [] args, int j){
-		// Create parameter list using defaults
-		JPEG2000Provider prov = new JPEG2000Provider();
-		prov.setImagePath("C:\\tcook\\JPIP\\JP2_Samples\\WcsLevel1A_10Dec2007.jp2");
-		prov.loadImage();
-		//prov.dispImg();
+	public static void main(String [] args){
+		try
+        {
+            // Create parameter list using defaults
+            ProcessLoader.processMap = new Hashtable<String,String>();
+            JPEG2000Provider prov = new JPEG2000Provider();
+            prov.setImagePath("D:\\WcsLevel1A.jp2");
+            //prov.loadImage();
+            prov.loadGrid();
+            //prov.dispImg();
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 
 }

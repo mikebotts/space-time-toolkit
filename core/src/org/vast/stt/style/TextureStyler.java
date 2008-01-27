@@ -116,20 +116,20 @@ public class TextureStyler extends AbstractStyler
             
             // if this is the last data chunk that has not been processed yet
             // get all the data left (or max 256) and render it
-            if (patch.grid.block.blockCount == 0)
+            if (nextGrid.blockCount == 0)
             {
                 int newBlockCount = gridBlocks.blockIterator.getList().getSize() - blockOffset;
                 if (newBlockCount < 2)
                     return null;
-                patch.grid.block.blockCount = Math.min(newBlockCount, 256);
+                nextGrid.blockCount = Math.min(newBlockCount, 256);
             }
             
             // assign block count to texture height and grid length
-            patch.grid.length = patch.grid.block.blockCount;
-            patch.texture.height = patch.grid.block.blockCount;
+            patch.grid.length = nextGrid.blockCount;
+            patch.texture.height = nextGrid.blockCount;
             
             // skip blocks to start of next tile
-            this.skipBlocks(patch.grid.length - 2);
+            this.skipBlocks(nextGrid.blockCount - 2); // -2 to make sure we overlap one grid row!
         }
         
         // see what's needed on this block

@@ -73,7 +73,7 @@ public class RPCGridGenerator {
 
 	protected void initRPC_Process() {
 		try {
-			URL procUrl = RPCGridGenerator.class.getResource("SpotRPC.xml");
+			URL procUrl = new URL("file:/D:/SpotRPC.xml");//RPCGridGenerator.class.getResource("SpotRPC.xml");
 
 			// launch SensorML reader using the version agnostic helper
 			DOMHelper dom = new DOMHelper(procUrl.toString(), false);
@@ -211,8 +211,8 @@ public class RPCGridGenerator {
 		double minX = bounds.getMinX();
 		double maxX = bounds.getMaxX();
 
-		gridBlock = DataBlockFactory.createBlock(new double[width*length * 3]);
-		//gridBlock = DataBlockFactory.createBlock(new double[width*length * 2]);
+		gridBlock = DataBlockFactory.createBlock(new float[width*length * 4]); // for lat,lon,imgX,imgY
+
 		// compute data for grid block
 		double xStep = (maxX - minX) / (width - 1);
 		double yStep = (maxY - minY) / (length - 1);
@@ -230,14 +230,16 @@ public class RPCGridGenerator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				double imX = rpcProc.getOutputX();
-				double imY = rpcProc.getOutputY();
+				double imgX = rpcProc.getOutputX();
+				double imgY = rpcProc.getOutputY();
 
 				gridBlock.setDoubleValue(pointNum, lat);
-//				gridBlock.setDoubleValue(pointNum, imX);
-				pointNum++;
+                pointNum++;
 				gridBlock.setDoubleValue(pointNum, lon);
-//				gridBlock.setDoubleValue(pointNum, imY);
+                pointNum++;
+                gridBlock.setDoubleValue(pointNum, imgX);
+                pointNum++;
+                gridBlock.setDoubleValue(pointNum, imgY);
 				pointNum++;
 				//  Add Z- must change project file styler mapping also....
 //				gridBlock.setDoubleValue(pointNum, 0.0); // flat earth for now
