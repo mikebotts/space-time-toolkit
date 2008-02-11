@@ -136,10 +136,10 @@ public class JPEG2000Provider extends AbstractProvider
 	        pointData.addComponent("lon", new DataValue(DataType.FLOAT));
             pointData.addComponent("imgX", new DataValue(DataType.FLOAT));
             pointData.addComponent("imgY", new DataValue(DataType.FLOAT));
-	        rowData = new DataArray(10);
+	        rowData = new DataArray(50);
 	        rowData.addComponent(pointData);
 	        rowData.setName("row");                  
-	        gridData = new DataArray(10);
+	        gridData = new DataArray(50);
 	        gridData.addComponent(rowData);
 	        gridData.setName("grid");
 	        blockLists[1] = dataNode.createList(gridData);
@@ -159,13 +159,13 @@ public class JPEG2000Provider extends AbstractProvider
 	
 	protected void loadGrid() throws Exception {
 		RPCGridGenerator  rpcGridGen = new RPCGridGenerator();
-		rpcGridGen.setLength(10);
-		rpcGridGen.setWidth(10);
+		rpcGridGen.setLength(50);
+		rpcGridGen.setWidth(50);
 		SpatialExtent bounds = new SpatialExtent();
-		bounds.setMinX(27.189155*Math.PI/180);  //  These are from Spot GetCaps- dynamically load these
-		bounds.setMinY(-23.341488*Math.PI/180);
-		bounds.setMaxX(28.05903*Math.PI/180);
-		bounds.setMaxY(-22.673679*Math.PI/180);       
+		bounds.setMinX(27.078285);  //  These are from Spot GetCaps- dynamically load these
+		bounds.setMinY(-23.839041);
+		bounds.setMaxX(27.951421);
+		bounds.setMaxY(-23.17148);       
 		rpcGridGen.setBounds(bounds);
 		//  mod this to load params from actual JP2 files or stream
 		//rpcGridGen.loadRPCParams(rpcBlock);
@@ -175,8 +175,8 @@ public class JPEG2000Provider extends AbstractProvider
 	
 	protected void loadGrid(int flatGridVersion){
 		 // build grid
-        int gridWidth = 10;
-        int gridLength = 10;
+        int gridWidth = 50;
+        int gridLength = 50;
         double minY = bounds.getMinY();
         double maxY = bounds.getMaxY();
         double minX = bounds.getMinX();

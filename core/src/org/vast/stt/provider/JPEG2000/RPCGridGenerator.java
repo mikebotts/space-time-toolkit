@@ -230,14 +230,16 @@ public class RPCGridGenerator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				double imgX = rpcProc.getOutputX();
-				double imgY = rpcProc.getOutputY();
-
-				gridBlock.setDoubleValue(pointNum, lat);
+                
+                //System.out.println(rpcProc.getOutputX() + "," + rpcProc.getOutputY());
+				double imgX = (rpcProc.getOutputX() - 3000) / 1000;
+				double imgY = (rpcProc.getOutputY() - 4000) / 1000;				
+                
+				gridBlock.setDoubleValue(pointNum, lat * Math.PI/180);
                 pointNum++;
-				gridBlock.setDoubleValue(pointNum, lon);
+				gridBlock.setDoubleValue(pointNum, lon * Math.PI/180);
                 pointNum++;
-                gridBlock.setDoubleValue(pointNum, imgX);
+                gridBlock.setDoubleValue(pointNum, imgX);                
                 pointNum++;
                 gridBlock.setDoubleValue(pointNum, imgY);
 				pointNum++;
