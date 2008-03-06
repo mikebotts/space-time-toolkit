@@ -37,6 +37,7 @@ import org.vast.stt.data.BlockList;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.DataProvider;
+import org.vast.sweCommon.SweConstants;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -139,7 +140,7 @@ public class SWEDataHandler implements DataHandler
 			
 			if (dataType != DataType.UTF_STRING && dataType != DataType.ASCII_STRING)
 	        {
-				String uom = (String)component.getProperty(DataComponent.UOM_CODE);
+				String uom = (String)component.getProperty(SweConstants.UOM_CODE);
 				
 				if (uom != null && uom.equalsIgnoreCase("deg"))
 				{
