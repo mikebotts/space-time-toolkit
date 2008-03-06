@@ -41,6 +41,7 @@ import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.util.TimeInfo;
 import org.vast.physics.TimeExtent;
 import org.vast.process.*;
+import org.vast.sweCommon.SweConstants;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 
@@ -430,7 +431,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             if (converter == null)
             {
-                String uom = (String)info.getProperty(DataComponent.UOM_CODE);
+                String uom = (String)info.getProperty(SweConstants.UOM_CODE);
                 converter = UnitConversion.createConverterToSI(uom);
                 converters.put(info, converter);
             }
