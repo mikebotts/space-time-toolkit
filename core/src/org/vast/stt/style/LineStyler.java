@@ -26,6 +26,7 @@
 package org.vast.stt.style;
 
 import org.vast.data.AbstractDataBlock;
+import org.vast.ows.sld.Dimensions;
 import org.vast.ows.sld.LineSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -132,7 +133,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         // reset point values
         point.x = constantX;
         point.y = constantY;
-        point.z = constantZ;       
+        point.z = constantZ;
         
         if (dataLists[0].indexOffset == 0)
         {
@@ -175,17 +176,36 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         Object value;
         
         // reset all parameters
+        segment = new LineSegmentGraphic();
         point = new LinePointGraphic();
         this.clearAllMappers();       
         
-        // geometry breaks
-        param = this.symbolizer.getGeometry().getBreaks();
-        if (param != null)
+        
+        // line segment size (dimension or breaks)
+        Dimensions dims = this.symbolizer.getDimensions();
+        if (dims != null)
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
+	        propertyName = dims.get("numPoints");
+	        if (propertyName != null)
+	        {
+	            if (propertyName.equals("/"))
+	                dataLists[0].indexOffset = 0;
+	            else    
+	                addPropertyMapper(propertyName, new LineSizeMapper(0, segment, null));
+	        }
+        }
+        else
+        {
+        	// geometry breaks
+            param = this.symbolizer.getGeometry().getBreaks();
+            if (param != null)
             {
-                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));
+                    dataLists[0].indexOffset = 0; //TODO remove this and use breaks only with real boolean flags!
+                }
             }
         }
         
@@ -244,7 +264,6 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         boolean smooth = this.symbolizer.getStroke().getSmooth();
         point.smooth = smooth;
         
-        dataLists[0].indexOffset = 0;
         mappingsUpdated = true;
     }
     

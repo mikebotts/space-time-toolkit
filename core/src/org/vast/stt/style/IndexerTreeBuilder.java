@@ -110,6 +110,12 @@ public class IndexerTreeBuilder
             }
         }
         
+        // case of DataChoice
+        else if (component instanceof DataChoice)
+        {
+        	// TODO data choice support in STT indexers!
+        }
+        
         // case of DataArray
         else if (component instanceof DataArray)
         {
@@ -268,7 +274,7 @@ public class IndexerTreeBuilder
      */
     private DataIndexer addVarSizeMapper(DataArray dataArray, DataArrayIndexer arrayIndexer)
     {
-        DataValue sizeData = dataArray.getSizeData();
+        DataValue sizeData = dataArray.getSizeComponent();
         AbstractDataComponent parentComponent = sizeData.getParent();
         int index = parentComponent.getComponentIndex(sizeData.getName());
         
@@ -280,7 +286,7 @@ public class IndexerTreeBuilder
             parentComponent = parentComponent.getParent();
         }
         
-        DataIndexer sizeIndexer = indexerMap.get(sizeData);            
+        DataIndexer sizeIndexer = indexerMap.get(sizeData);
         if (sizeIndexer == null)
         {
             sizeIndexer = new DataValueIndexer(index);

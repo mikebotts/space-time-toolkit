@@ -116,7 +116,7 @@ public class SWEProvider extends AbstractProvider
         
         try
 		{
-		    // parse response
+		    // read xml response
             SWEResourceReader reader = new SWEResourceReader();
             dataStream = URIStreamHandler.openStream(sweDataUrl);
 			reader.parse(dataStream);
@@ -135,7 +135,7 @@ public class SWEProvider extends AbstractProvider
             if (resultUri != null)
                 reader.setResultUri(resultUri);
 			
-			// start parsing if not cancelled
+			// start parsing data if not cancelled
 			if (!canceled)
 			    dataParser.parse(reader.getDataStream());
 		}

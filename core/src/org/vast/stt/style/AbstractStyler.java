@@ -61,7 +61,7 @@ public abstract class AbstractStyler implements DataStyler
     {
         protected BlockListIterator blockIterator;
         protected DataIndexer blockIndexer;
-        protected int indexOffset = -1; // indicates grid/image dim to map along the list dim itself
+        protected int indexOffset = -1; // use when grid/image dim should map along the list dim itself
         
         public ListInfo(BlockList blockList, DataIndexer dataIndexer)
         {

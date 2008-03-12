@@ -25,6 +25,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.ows.sld.Dimensions;
 import org.vast.ows.sld.PolygonSymbolizer;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -47,14 +48,25 @@ import org.vast.ows.sld.Symbolizer;
  */
 public class PolygonStyler extends AbstractStyler
 {
-    protected PolygonPointGraphic point;
-    protected PolygonSymbolizer symbolizer;    
+	protected PolygonGraphic poly;
+	protected PolygonPointGraphic point;
+    protected PolygonSymbolizer symbolizer;
 	
 	
 	public PolygonStyler()
 	{
-        point = new PolygonPointGraphic();
+        poly = new PolygonGraphic();
+		point = new PolygonPointGraphic();
 	}
+	
+	
+	public int getNumPoints()
+    {
+        if (dataLists[0].indexOffset == 0)
+            return dataLists[0].blockIterator.getList().getSize();
+        else
+            return poly.numPoints;
+    }
     
     
     public PolygonPointGraphic nextPoint()
@@ -97,21 +109,38 @@ public class PolygonStyler extends AbstractStyler
         String propertyName = null;
         
         // reset all parameters
+        poly = new PolygonGraphic();
         point = new PolygonPointGraphic();
         this.clearAllMappers();
         
         // X,Y,Z are initialized to 0 by default
         constantX = constantY = constantZ = 0.0;
         
-        // geometry breaks
-        param = this.symbolizer.getGeometry().getBreaks();
-        if (param != null)
+        // polygon size (dimension or breaks)
+        Dimensions dims = this.symbolizer.getDimensions();
+        if (dims != null)
         {
-            propertyName = param.getPropertyName();
-            if (propertyName != null)
-            {
-                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
-            }
+	        propertyName = dims.get("numPoints");
+	        if (propertyName != null)
+	        {
+	            if (propertyName.equals("/"))
+	                dataLists[0].indexOffset = 0;
+	            else    
+	                addPropertyMapper(propertyName, new PolySizeMapper(0, poly, null));
+	        }
+        }
+        else
+        {
+	        // geometry breaks
+	        param = this.symbolizer.getGeometry().getBreaks();
+	        if (param != null)
+	        {
+	            propertyName = param.getPropertyName();
+	            if (propertyName != null)
+	            {
+	                addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));               
+	            }
+	        }
         }
         
         // geometry X
