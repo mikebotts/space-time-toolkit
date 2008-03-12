@@ -127,7 +127,7 @@ public class IndexerTreeBuilder
                 indexerMap.put(component, indexer);                
                 
                 int atomCount = countDescendants(component, 0);
-                ((DataArrayIndexer)indexer).setAtomCount(atomCount);
+                ((DataArrayIndexer)indexer).setChildScalarCount(atomCount);
                 
                 // add VarSizeMapper if array has variable size
                 if (((DataArray)component).isVariableSize())
@@ -168,8 +168,18 @@ public class IndexerTreeBuilder
                     
                     if (arrayIndexer.getVarSizeIndexer() == null)
                     {
-                        int arraySize = arrayIndexer.getArraySize();
-                        ((DimensionMapper)visitor).setDimensionSize(arraySize);
+                        // case of implicit variable size
+                    	if (((DataArray)component).isVariableSize())
+                        {
+                    		arrayIndexer.setVarSizeVisitor(visitor);
+                        }
+                    	
+                    	// case of fixed size
+                        else
+                        {
+                        	int arraySize = arrayIndexer.getArraySize();
+                        	((DimensionMapper)visitor).setDimensionSize(arraySize);
+                        }                        
                     }
                     else
                     {
@@ -276,10 +286,13 @@ public class IndexerTreeBuilder
     {
         DataValue sizeData = dataArray.getSizeComponent();
         AbstractDataComponent parentComponent = sizeData.getParent();
+        if (parentComponent == null)
+        	return null;
+        
         int index = parentComponent.getComponentIndex(sizeData.getName());
         
         // get parent until we find something already registered in the map...
-        DataIndexer parentIndexer = null;        
+        DataIndexer parentIndexer = null;
         while (parentIndexer == null)
         {
             parentIndexer = indexerMap.get(parentComponent);
