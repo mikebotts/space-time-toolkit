@@ -70,7 +70,7 @@ public class STTConfig
         XMLRegistry.registerReader("GoogleMapProvider", GoogleMapProviderReader.class);
         XMLRegistry.registerReader("WorldwindProvider", WorldwindMapProviderReader.class);
         XMLRegistry.registerReader("PhenomenonDetectionProvider", PhenomenaDetectionProviderReader.class);
-//        XMLRegistry.registerReader("JPEG2000Provider", JPEG2000ProviderReader.class);
+        XMLRegistry.registerReader("JPEG2000Provider", JPEG2000ProviderReader.class);
         
         // register basic display type reader/writers
         XMLRegistry.registerReader("Scene", WorldSceneReader.class);
