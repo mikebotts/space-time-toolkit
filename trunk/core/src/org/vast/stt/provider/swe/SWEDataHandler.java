@@ -142,7 +142,7 @@ public class SWEDataHandler implements DataHandler
 	        {
 				String uom = (String)component.getProperty(SweConstants.UOM_CODE);
 				
-				if (uom != null && uom.equalsIgnoreCase("deg"))
+				if (uom != null && uom.contains("deg"))
 				{
 					UnitConverter converter = UnitConversion.createConverterToSI(uom);
 					converters.put(component, converter);
