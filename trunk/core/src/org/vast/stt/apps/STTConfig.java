@@ -30,6 +30,7 @@ import org.vast.stt.project.chart.ChartSceneReader;
 import org.vast.stt.project.table.TableSceneReader;
 import org.vast.stt.project.world.WorldSceneReader;
 //import org.vast.stt.provider.JPEG2000.JPEG2000ProviderReader;
+import org.vast.stt.provider.JPEG2000.JPEG2000ProviderReader;
 import org.vast.stt.provider.google.GoogleMapProviderReader;
 import org.vast.stt.provider.ows.OWSProviderReader;
 import org.vast.stt.provider.sml.SMLProviderReader;
