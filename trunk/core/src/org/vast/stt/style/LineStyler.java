@@ -88,6 +88,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         
         // copy current item in the segment object
         segment.block = nextItem;
+        point.graphBreak = true;
         
         return segment;
     }
