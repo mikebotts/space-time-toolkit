@@ -71,7 +71,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
      * Method called when the view needs to be refreshed 
      * (i.e. typically after a "CHANGE" event is received)
      */
-    protected void refreshView()
+    public void refreshView()
     {
         if (this.item != null)
             updateView();
@@ -80,7 +80,7 @@ public abstract class DataItemView extends ViewPart implements ISelectionListene
     }
     
     
-    protected void refreshViewAsync()
+    public void refreshViewAsync()
     {
         getSite().getShell().getDisplay().asyncExec(runRefresh);
     }
