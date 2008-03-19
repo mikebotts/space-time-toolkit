@@ -28,6 +28,7 @@ package org.vast.stt.project;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
+import org.vast.stt.project.tree.DataEntry;
 
 
 /**
@@ -49,6 +50,7 @@ public abstract class AbstractDisplay implements STTDisplay
     protected String name;
     protected String description;
     protected String rendererClass;
+    protected DataEntry parent;
     protected STTEventListeners listeners;
     
     
@@ -80,6 +82,18 @@ public abstract class AbstractDisplay implements STTDisplay
     {
         this.description = description;
     }
+    
+    
+    public DataEntry getParent()
+	{
+		return parent;
+	}
+
+
+	public void setParent(DataEntry parent)
+	{
+		this.parent = parent;		
+	}
 
 
     public void addListener(STTEventListener listener)
