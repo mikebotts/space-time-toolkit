@@ -57,6 +57,7 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 {
 	protected String name;
     protected String description;
+    protected DataEntry parent;
 	protected boolean enabled = true;
 	protected Hashtable<String, Object> options;
 	protected DataProvider dataProvider;
@@ -98,6 +99,18 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
     {
         this.description = description;
     }
+    
+    
+    public DataEntry getParent()
+	{
+		return parent;
+	}
+
+
+	public void setParent(DataEntry parent)
+	{
+		this.parent = parent;		
+	}
 
 
 	public DataProvider getDataProvider()

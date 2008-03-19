@@ -192,8 +192,11 @@ public class DataTreeReader extends XMLReader
         
 		// data provider
 		Element providerElt = dom.getElement(dataItemElt, "dataProvider/*");
-        DataProvider provider = readDataProvider(dom, providerElt);
-        dataItem.setDataProvider(provider);
+        if (providerElt != null)
+        {
+			DataProvider provider = readDataProvider(dom, providerElt);
+	        dataItem.setDataProvider(provider);
+        }
 		
         ///////////////////////////
 		// style/symbolizer list //

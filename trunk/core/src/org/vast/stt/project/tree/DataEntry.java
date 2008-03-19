@@ -54,4 +54,10 @@ public interface DataEntry
     
     
     public void setDescription(String description);
+    
+    
+    public DataEntry getParent();
+    
+    
+    public void setParent(DataEntry parent);
 }

@@ -49,6 +49,7 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
 	static final long serialVersionUID = 0;
 	protected String name;
     protected String description;
+    protected DataEntry parent;
 	protected DataItemIterator iterator;
 	
 	
@@ -141,4 +142,59 @@ public class DataFolder extends ArrayList<DataEntry> implements DataEntry
         
         return false;
     }
+    
+    
+    public DataEntry getParent()
+	{
+		return parent;
+	}
+
+
+	public void setParent(DataEntry parent)
+	{
+		this.parent = parent;		
+	}
+
+
+	@Override
+	public boolean add(DataEntry dataEntry)
+	{
+		dataEntry.setParent(this);
+		return super.add(dataEntry);
+	}
+
+
+	@Override
+	public void add(int index, DataEntry dataEntry)
+	{
+		dataEntry.setParent(this);
+		super.add(index, dataEntry);
+	}
+
+
+	@Override
+	public DataEntry set(int index, DataEntry dataEntry)
+	{
+		dataEntry.setParent(this);
+		return super.set(index, dataEntry);
+	}
+    
+    
+    @Override
+	public DataEntry remove(int index)
+	{
+		DataEntry dataEntry = super.remove(index);
+		dataEntry.setParent(null);
+		return dataEntry;
+	}
+
+
+	@Override
+	public boolean remove(Object obj)
+	{
+		boolean found = super.remove(obj);
+		if (found)
+			((DataEntry)obj).setParent(null);
+		return found;
+	}
 }
