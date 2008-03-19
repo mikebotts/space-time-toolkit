@@ -105,7 +105,7 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
      * Method called when the view needs to be refreshed 
      * (i.e. typically after a "CHANGE" event is received)
      */
-    protected void refreshView()
+    public void refreshView()
     {
         if (doRefresh)
         {
@@ -117,7 +117,7 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     }
 
 
-    protected void refreshViewAsync()
+    public void refreshViewAsync()
     {
         if (doRefresh)
         {

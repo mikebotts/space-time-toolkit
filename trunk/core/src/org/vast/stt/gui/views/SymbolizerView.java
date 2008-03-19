@@ -71,7 +71,8 @@ public class SymbolizerView extends DataItemView
     @Override
     public void updateView()
     {
-        symbolizerWidget.setDataItem(this.item);
+        if (!item.getSymbolizers().isEmpty())
+        	symbolizerWidget.setDataItem(item);
     }
     
     
