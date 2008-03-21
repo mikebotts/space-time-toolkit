@@ -35,7 +35,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -66,6 +68,8 @@ public class WCSTWidget implements SelectionListener
 	String [] servers;
 	Text nlatText, slatText, wlonText, elonText;
 	Combo formatCombo;
+	private Button submitBtn;
+	private Text idText;
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
@@ -93,60 +97,68 @@ public class WCSTWidget implements SelectionListener
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.verticalSpacing = 10;
+		layout.makeColumnsEqualWidth = true;
 		mainGroup.setLayout(layout);
 		
-		// Coverage ID Text
-		Composite idGroup = new Composite(mainGroup, 0x0);
+		Label idLabel = new Label(mainGroup, 0x0);
+		idLabel.setText("Coverage ID: ");
 		GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.END;
-		gd.horizontalSpan = 2;
-		idGroup.setLayoutData(gd);
-		RowLayout rl = new RowLayout(SWT.HORIZONTAL);
-		idGroup.setLayout(rl);
+		gd.verticalAlignment = SWT.CENTER;
+		idLabel.setLayoutData(gd);
 		
-		Label idLabel = new Label(idGroup, 0x0);
-		idLabel.setText("Coverage ID:  ");
-		Text idText = new Text(idGroup, 0x0);
+		idText = new Text(mainGroup, 0x0);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.BEGINNING;
+		gd.verticalAlignment = SWT.CENTER;
+		idText.setLayoutData(gd);
+		idText.setText("Coverage01");
 		
-	//  Format combo
-		Composite serverGroup = new Composite(mainGroup, 0x0);
+		Label serverLabel = new Label(mainGroup, SWT.CENTER);
+		serverLabel.setText("Server: ");
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.END;
-		gd.horizontalSpan = 2;
-		serverGroup.setLayoutData(gd);
-		rl = new RowLayout(SWT.HORIZONTAL);
-		serverGroup.setLayout(rl);
-		
-		Label serverLabel = new Label(serverGroup, SWT.CENTER);
-		serverLabel.setText("Server:");
+		gd.verticalAlignment = SWT.CENTER;
+		serverLabel.setLayoutData(gd);
 //		
-		Combo serverCombo  = new Combo(serverGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		Combo serverCombo  = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
 		serverCombo.addSelectionListener(this);
 		serverCombo.add(servers[0]);
 		serverCombo.add(servers[1]);
 		serverCombo.select(0);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.BEGINNING;
+		gd.verticalAlignment = SWT.CENTER;
+		serverCombo.setLayoutData(gd);
 //		
-		//  Selection method Combo
-		Composite selGroup = new Composite(mainGroup, 0x0);
+		Label selLabel = new Label(mainGroup, SWT.CENTER);
+		selLabel.setText("Selection Method: ");
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.END;
-		gd.horizontalSpan = 2;
-		selGroup.setLayoutData(gd);
-		rl = new RowLayout(SWT.HORIZONTAL);
-		selGroup.setLayout(rl);
+		gd.verticalAlignment = SWT.CENTER;
+		selLabel.setLayoutData(gd);
 		
-		Label selLabel = new Label(selGroup, SWT.CENTER);
-		selLabel.setText("Selection Method:");
-		
-		Combo selCombo  = new Combo(selGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		Combo selCombo  = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
 		selCombo.addSelectionListener(this);
-		//  May add options for dd'mm"ss later
 		selCombo.add("View Bounds");
 		selCombo.add("Compass");
 		selCombo.select(0);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.BEGINNING;
+		gd.verticalAlignment = SWT.CENTER;
+		selCombo.setLayoutData(gd);
 		
 		//  BBox widget (active only if selection Method==Bbox
 		createCompass(mainGroup);
+		
+	//  Submit Button
+		submitBtn = new Button(mainGroup, SWT.PUSH);
+		submitBtn.setText("Submit Request");
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.CENTER;
+		gd.horizontalSpan = 2;
+		submitBtn.setLayoutData(gd);
+		submitBtn.addSelectionListener(this);
 		
 	//  Set Default scroller size
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -156,6 +168,7 @@ public class WCSTWidget implements SelectionListener
 	private void createCompass(Composite parent){
 	//  Create a Group for the compass Grid
 		Composite compassGroup = new Composite(parent, SWT.SHADOW_NONE);
+		compassGroup.setEnabled(false);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.CENTER;
         gridData.horizontalSpan = 2;
@@ -230,7 +243,7 @@ public class WCSTWidget implements SelectionListener
 		//  Format combo
 		Composite formatGrp = new Composite(mainGroup, 0x0);
 		gridData = new GridData();
-		gridData.horizontalAlignment = SWT.END;
+		gridData.horizontalAlignment = SWT.CENTER;
         gridData.horizontalSpan = 2;
 		formatGrp.setLayoutData(gridData);
 		RowLayout formatLayout = new RowLayout(SWT.HORIZONTAL);
@@ -243,8 +256,6 @@ public class WCSTWidget implements SelectionListener
 		formatCombo.add("degrees");
 		formatCombo.add("radians");
 		formatCombo.select(0);
-		
-		//  Submit Button
 	}
 
 	//  Obviously, we want something a little more elegant here
@@ -258,14 +269,13 @@ public class WCSTWidget implements SelectionListener
 	{
 		Control control = (Control) e.getSource();
 
-//		if (control == getCapsBtn)
-//		{
-//		}
-//		else if (control == typesCombo)
-//		{
-//		}
-//		else if (control == serverCombo)
-//		{
-//		}
+		if (control == submitBtn){
+			System.err.println("Submit");
+			submitRequest();
+		}
+	}
+	
+	public void submitRequest(){
+		//  Read the params from the controls and build a WCS-T request
 	}
 }
