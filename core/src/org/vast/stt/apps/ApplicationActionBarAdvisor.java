@@ -99,7 +99,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
 
 		for (int i = 0; i < allViews.length; i++)
 		{
-			String actionLabel = "Show " + allViews[i].getLabel() + " View";
+			String actionLabel = allViews[i].getLabel() + " View";
 			String actionId = "STT.Show" + allViews[i].getId().substring(4);
 			IAction action = new ShowViewAction(actionId, actionLabel);
 			showViewActions[i] = action;

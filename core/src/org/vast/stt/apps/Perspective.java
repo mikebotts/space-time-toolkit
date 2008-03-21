@@ -42,7 +42,7 @@ public class Perspective implements IPerspectiveFactory
 		layout.setFixed(false);
 
 		IFolderLayout resFolder = layout.createFolder(resFolderID, IPageLayout.LEFT, 1.0f, layout.getEditorArea());
-		IFolderLayout sceneFolder = layout.createFolder(sceneFolderID, IPageLayout.RIGHT, 0.25f, resFolderID);
+		IFolderLayout sceneFolder = layout.createFolder(sceneFolderID, IPageLayout.RIGHT, 0.2f, resFolderID);
         IFolderLayout resOptFolder = layout.createFolder(resOptFolderID, IPageLayout.BOTTOM, 0.5f, resFolderID);
         IFolderLayout sceneOptFolder = layout.createFolder(sceneOptFolderID, IPageLayout.BOTTOM, 0.75f, sceneFolderID);
         
