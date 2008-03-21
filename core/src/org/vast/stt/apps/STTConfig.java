@@ -29,8 +29,6 @@ import org.vast.stt.project.XMLRegistry;
 import org.vast.stt.project.chart.ChartSceneReader;
 import org.vast.stt.project.table.TableSceneReader;
 import org.vast.stt.project.world.WorldSceneReader;
-//import org.vast.stt.provider.JPEG2000.JPEG2000ProviderReader;
-import org.vast.stt.provider.JPEG2000.JPEG2000ProviderReader;
 import org.vast.stt.provider.google.GoogleMapProviderReader;
 import org.vast.stt.provider.ows.OWSProviderReader;
 import org.vast.stt.provider.sml.SMLProviderReader;
@@ -71,7 +69,6 @@ public class STTConfig
         XMLRegistry.registerReader("GoogleMapProvider", GoogleMapProviderReader.class);
         XMLRegistry.registerReader("WorldwindProvider", WorldwindMapProviderReader.class);
         XMLRegistry.registerReader("PhenomenonDetectionProvider", PhenomenaDetectionProviderReader.class);
-        XMLRegistry.registerReader("JPEG2000Provider", JPEG2000ProviderReader.class);
         
         // register basic display type reader/writers
         XMLRegistry.registerReader("Scene", WorldSceneReader.class);
