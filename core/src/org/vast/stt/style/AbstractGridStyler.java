@@ -160,11 +160,12 @@ public abstract class AbstractGridStyler extends AbstractStyler
     public void computeBoundingBox()
     {
         this.resetIterators();
-        PrimitiveGraphic point;
+        GridPatchGraphic patch;
         
-        while (nextPatch() != null)
-            while ((point = nextPoint()) != null)
-                addToExtent(point);
+        while ((patch = nextPatch()) != null)
+            for (int u=0; u<patch.width; u++)
+            	for (int v=0; v<patch.length; v++)
+            		addToExtent(getPoint(u, v));
     }
 
 

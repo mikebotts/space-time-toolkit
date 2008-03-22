@@ -186,12 +186,12 @@ public class SMLProvider extends AbstractProvider
                         }
                         
                         // send event for redraw
+                        if (count == 0)
+                        	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                        
                         count++;
                         if (count == 50)
-                        {
-                            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-                            count = 0;
-                        }
+                        	count = 0;                       
                         
                         // reset input needed flags to avoid a process chain to set 
                         // internal availability to true
