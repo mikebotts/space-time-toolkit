@@ -54,7 +54,8 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
     protected LinePointGraphic point;
     protected LineSegmentGraphic segment;
     protected int[] lineIndex = new int[1];
-        
+    protected boolean breakBtwBlocks = true;
+    
 	
 	public LineStyler()
 	{
@@ -88,7 +89,9 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         
         // copy current item in the segment object
         segment.block = nextItem;
-        point.graphBreak = true;
+        
+        if (breakBtwBlocks)
+        	point.graphBreak = true;
         
         return segment;
     }
@@ -205,9 +208,13 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
                 if (propertyName != null)
                 {
                     addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));
-                    dataLists[0].indexOffset = 0; //TODO remove this and use breaks only with real boolean flags!
+                    dataLists[0].indexOffset = 0;
+                    //TODO remove this and use breaks only with real boolean flags!
+                    //TODO need to update all stylers in projects
                 }
             }
+            else
+            	breakBtwBlocks = false;
         }
         
         // geometry X
