@@ -98,7 +98,7 @@ public class TextureStyler extends AbstractStyler
             AbstractDataBlock nextTexBlock = nextTexture.getData();
             texBlocks.blockIndexer.setData(nextTexBlock);
             texBlocks.blockIndexer.reset();
-            texBlocks.blockIndexer.next(); // to make sure we visit array size data
+            texBlocks.blockIndexer.next(); // make sure we visit variable array size data
         }
         
         // copy current item in the patch object
@@ -258,31 +258,7 @@ public class TextureStyler extends AbstractStyler
     }*/
     
     
-    private BlockListItem nextGridBlock()
-    {
-        ListInfo listInfo = dataLists[0];
-        
-        // if no more items in the list, just return null
-        if (!listInfo.blockIterator.hasNext())
-            return null;
-        
-        // otherwise get the next item
-        BlockListItem nextItem = listInfo.blockIterator.next();
-
-        // setup indexer with new data 
-        AbstractDataBlock nextBlock = nextItem.getData();
-        listInfo.blockIndexer.setData(nextBlock);
-        listInfo.blockIndexer.reset();
-        //listInfo.blockIndexer.getData(0,0,0);
-        
-        // see what's needed on this block
-        prepareBlock(nextItem);
-        
-        return nextItem;
-    }
-    
-    
-    private GridPointGraphic nextPoint()
+    public GridPointGraphic nextGridPoint()
     {
         if (gridBlocks.blockIndexer.hasNext())
         {
@@ -291,7 +267,7 @@ public class TextureStyler extends AbstractStyler
             point.y = constantY;
             point.z = constantZ;
             
-            dataLists[0].blockIndexer.next();
+            gridBlocks.blockIndexer.next();
             
             // adjust geometry to fit projection
             projection.adjust(geometryCrs, point);
@@ -307,11 +283,12 @@ public class TextureStyler extends AbstractStyler
     public void computeBoundingBox()
     {
         this.resetIterators();
-        PrimitiveGraphic point;
+        TexturePatchGraphic patch;
         
-        while (nextGridBlock() != null)
-            while ((point = nextPoint()) != null)
-                addToExtent(point);
+        while ((patch = nextTile()) != null)
+            for (int u=0; u<patch.grid.width; u++)
+            	for (int v=0; v<patch.grid.length; v++)
+            		addToExtent(getGridPoint(u, v));
     }
 
 
