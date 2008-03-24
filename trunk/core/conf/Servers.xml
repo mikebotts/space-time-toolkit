@@ -26,14 +26,23 @@
     <Server name="NASA Globe Program" type="WMS" version="1.1.1">
         <URL>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</URL>
     </Server>
-   <Server name="UAH GOES" type="WCS" version="0.6">
+    <Server name="UAH GOES" type="WCS" version="0.6">
         <URL>http://vast.uah.edu:8080/ows-dev/goes</URL>
+    </Server>
+    <Server name="PCI" type="WCS" version="1.1.1">
+        <URL>http://ogcdemo.pcigeomatics.com:8181/swe/wcs</URL>
     </Server>
     <Server name="UAH SRTM Topo data" type="WCS" version="0.6">
         <URL>http://vast.uah.edu:8080/ows-dev/srtmWcs</URL>
     </Server>
-        <Server name="UAH Weather data" type="SOS" version="0.0.31">
+    <Server name="ECS WMS" type="WMS" version="1.1.1">
+        <URL>http://g0hep12u.ecs.nasa.gov/mapserv-bin/wms_ogc</URL>
+    </Server>
+    <Server name="UAH Weather data" type="SOS" version="0.0.31">
             <URL>http://vast.uah.edu:8080/ows-dev/weather</URL>
+    </Server>
+    <Server name="TAMU OceansIE SOS" type="SOS" version="0.0.31">
+            <URL>http://sos-ws.tamu.edu/tethys/tabs</URL>
     </Server>
     <Server name="IFGI Weather" type="SOS" version="0.0.31">
         <URL>http://mars.uni-muenster.de:8080/52nSosWNY/sos</URL>
