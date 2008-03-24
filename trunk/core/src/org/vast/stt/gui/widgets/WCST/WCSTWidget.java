@@ -58,6 +58,10 @@ import org.vast.ows.wcs.CoverageRefGroup;
 import org.vast.ows.wcst.CoverageTransaction;
 import org.vast.ows.wcst.WCSTransactionRequest;
 import org.vast.stt.apps.STTPlugin;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
+import org.vast.stt.provider.DataProvider;
+import org.vast.stt.provider.STTSpatialExtent;
 
 
 /**
@@ -77,6 +81,8 @@ import org.vast.stt.apps.STTPlugin;
 
 public class WCSTWidget implements SelectionListener
 {
+	WorldScene scene;
+	DataItem dataItem;
 	private Group mainGroup; 
 	String [] servers;
 	Text nlatText, slatText, wlonText, elonText;
@@ -271,6 +277,36 @@ public class WCSTWidget implements SelectionListener
 		formatCombo.select(0);
 	}
 
+
+	public void setDataItem(DataItem item){
+		this.dataItem = item;
+		mainGroup.setText(item.getName());
+		DataProvider prov = item.getDataProvider();
+		//  If provider is null, this widget isn't supported.
+		if(prov!=null) {
+			STTSpatialExtent ext = prov.getSpatialExtent();
+			this.setSpatialExtent(ext);
+		}
+	}
+	
+//  Use org.vast.stt.util.SpatialExtent, or Bbox here? 
+	public void setSpatialExtent(STTSpatialExtent bbox){
+		setValue(nlatText, bbox.getMaxY());
+		setValue(slatText, bbox.getMinY());
+		setValue(wlonText, bbox.getMinX());
+		setValue(elonText, bbox.getMaxX());
+	}
+	
+    
+    public void setScene(WorldScene scene){
+        this.scene = scene;
+    }
+	
+	public void setValue(Text text, double d){
+		String dubStr = Double.toString(d);
+		text.setText(dubStr);
+	}
+	
 	//  Obviously, we want something a little more elegant here
 	private void initServers(){
 		servers = new String[2];
