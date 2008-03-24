@@ -26,6 +26,14 @@
 
 package org.vast.stt.gui.widgets.WCST;
 
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -35,7 +43,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -44,6 +51,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
+import org.vast.ows.OWSReference;
+import org.vast.ows.OWSUtils;
+import org.vast.ows.wcs.CoverageRefGroup;
+import org.vast.ows.wcst.CoverageTransaction;
+import org.vast.ows.wcst.WCSTransactionRequest;
 import org.vast.stt.apps.STTPlugin;
 
 
@@ -70,6 +83,7 @@ public class WCSTWidget implements SelectionListener
 	Combo formatCombo;
 	private Button submitBtn;
 	private Text idText;
+	private Combo serverCombo;
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
@@ -120,8 +134,7 @@ public class WCSTWidget implements SelectionListener
 		gd.horizontalAlignment = SWT.END;
 		gd.verticalAlignment = SWT.CENTER;
 		serverLabel.setLayoutData(gd);
-//		
-		Combo serverCombo  = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		serverCombo = new Combo(mainGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
 		serverCombo.addSelectionListener(this);
 		serverCombo.add(servers[0]);
 		serverCombo.add(servers[1]);
@@ -271,11 +284,125 @@ public class WCSTWidget implements SelectionListener
 
 		if (control == submitBtn){
 			System.err.println("Submit");
-			submitRequest();
+			WCSTransactionRequest req = buildRequest();
+			ProgressMonitorDialog pmd = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+			AddCoverageRunnable runnable = new AddCoverageRunnable(req);
+
+			try
+			{
+				pmd.run(true, false, runnable);
+				String response = runnable.getResponse();
+			//  For now, just print the response in a dialog
+				int responseIndex = (response==null) ? -1 : response.indexOf("<Coverage>");
+				if(responseIndex >= 0) {
+					MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"AddCoverage Response", response);
+				} else {
+					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+							"STT Error", "Server error while performing AddCoverage operation: " + response);
+				}
+			}
+			catch (InvocationTargetException ite)
+			{
+				// TODO Auto-generated catch block
+				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+						"STT Error", "Thread error while performing AddCoverage operation.\n" + ite.getMessage());
+				ite.printStackTrace();
+				ite.getCause().printStackTrace();
+			}
+			catch (InterruptedException ex)
+			{
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
 		}
 	}
 	
-	public void submitRequest(){
-		//  Read the params from the controls and build a WCS-T request
+	private  WCSTransactionRequest buildRequest() {
+		WCSTransactionRequest request = new WCSTransactionRequest();
+		request.setVersion("1.1.1");
+		//  These need to be moved, probably to the conf/server.xml file
+		String pciUrl = "http://ogcdemo.pcigeomatics.com:8181/swe/wcs";
+		String spotUrl = "http://ws.spotimage.com/axis2/services/WcstLevel1A";
+		if(serverCombo.getSelectionIndex() == 0)
+			request.setPostServer(pciUrl);
+		else
+			request.setPostServer(spotUrl);
+
+		//  Add 1 Coverage Transctn	to request
+		CoverageTransaction transPixels = new CoverageTransaction();
+		transPixels.setTitle("Add");
+		transPixels.setDescription("OWS5 WCS-T add coverage demo");
+		
+		//  Add 2 OWSReference to transactn
+		OWSReference refPixels = new OWSReference();
+		refPixels.setRole(CoverageRefGroup.ROLE_COV_PIXELS);
+		//  COV_PIXELS href is either 
+		//  (1)  JPIP query- need to build a valid one and get the covDesc 
+		//    or
+		//  (2)  Static JP2 image- this requires us to save the image and send a reference to it,
+		//                         but does not require CoverageDesc
+		refPixels.setHref("http://vast.uah.edu/tmp/WcsLevel1A_10Dec2007.jp2");
+		refPixels.setFormat("image/jp2; type=urn:ogc:def:wcs:jp2:1.0.0:jpip");
+		transPixels.getReferenceList().add(refPixels);
+		
+		//  Don't need covDesc for JP2 image (according to SK from PCI)
+//		OWSReference refDesc = new OWSReference();
+//		refDesc.setRole(CoverageRefGroup.ROLE_COV_DESCRIPTION);
+////		refDesc.setHref("cid:coveragedescription"); 
+//		refDesc.setHref("http://vast.uah.edu/tmp/TestCovDesc.xml");  
+//		transPixels.getReferenceList().add(refDesc);
+		
+		request.getInputCoverages().add(transPixels);
+		
+		return request;
 	}
+	
+	public String submitRequest(WCSTransactionRequest request){
+		OWSUtils owsUtils = new OWSUtils();
+		StringBuffer buff = new StringBuffer(100);
+		
+		try {
+			HttpURLConnection con = owsUtils.sendPostRequest(request);
+			InputStream is = con.getInputStream();
+			boolean eos = false;
+			int b = 0;
+			while(!eos) {
+				b= is.read();
+				if(b==-1)
+					break;
+				buff.append((char)b);
+			}
+		} catch (Exception e) {
+			//  MessgaeBox
+			System.err.println(e.getMessage());
+		}
+		return buff.toString();
+	}
+	
+	private class AddCoverageRunnable implements IRunnableWithProgress
+	{
+		WCSTransactionRequest request;
+		String response;
+
+		public AddCoverageRunnable(WCSTransactionRequest request)
+		{
+			this.request = request;
+		}
+
+
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+		{
+			String msg = "Sending AddCoverage Request...";
+			monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
+			response = submitRequest(request);
+			
+		};
+		
+		public String getResponse(){
+			return response;
+		}
+
+	}
+
 }
