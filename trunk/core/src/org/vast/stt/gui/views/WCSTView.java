@@ -28,8 +28,8 @@ package org.vast.stt.gui.views;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.widgets.WCST.WCSTWidget;
-import org.vast.stt.gui.widgets.bbox.BboxWidget;
-import org.vast.stt.gui.widgets.catalog.CatalogWidget;
+import org.vast.stt.project.tree.DataItem;
+import org.vast.stt.project.world.WorldScene;
 
 
 /**
@@ -69,10 +69,39 @@ public class WCSTView extends DataItemView
     
 
     @Override
+    public void setDataItem(DataItem dataItem)
+    {
+        if (item != dataItem)
+        {
+            if (item != null)
+            {
+                item.removeListener(this);
+                item.getDataProvider().getSpatialExtent().removeListener(this);
+            }
+            
+            item = dataItem;
+            
+            if (item != null)
+            {
+                item.addListener(this);
+                item.getDataProvider().getSpatialExtent().addListener(this);
+            }
+        }
+    }
+
+
+    @Override
     public void updateView()
     {
+        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+        if (pageInput != null)
+        {
+        	wcstWidget.setScene((WorldScene)pageInput.getScene());        
+        	wcstWidget.setDataItem(item);
+        }
     }
-    
+
+
     
     @Override
     public void clearView()
