@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>OWS5 Demo Project</name>
+      <author>Alex Robin</author>
+      <dateCreated>2008-03-20T10:23:00</dateCreated>
+      <description>Unrectified Imagery Demo for OWS5 Test Bed</description>
+   </Identification>
+   <!-- Extension used in the project -->
+   <Extension name="com.spotimage.stt.sps.SPSPlugin"/>
+   <Extension name="org.vast.sttx.jpip.JPIPPlugin"/>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>3D World View</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2008-01-09T11:00:00</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+               <ViewSettings showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>0.0 0.0 10</cameraPos>
+                  <targetPos>0.0 0.0 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>6.3</orthoWidth>
+                  <nearClip>0</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>OWS5 Demo Project</name>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/>
+                  <member>
+                     <DataList>
+                        <name>SPOT Satellites</name>
+                        <member visible="false">
+                           <DataItem>
+                              <name>SPOTMaps i-Cubed WMS</name>
+                              <dataProvider>
+                                 <SensorMLProvider quadTree="true">
+                                    <name>i-Cubed WMS</name>
+                                    <description>SPOTMaps Data on top of flat grid</description>
+                                    <spatialExtent autoUpdate="#SCENE_01"/>
+                                    <maxSpatialExtent>
+                                       <BoundingBox srsName="EPSG:4326">
+                                          <gml:coordinates>-10,35 9,51</gml:coordinates>
+                                       </BoundingBox>
+                                    </maxSpatialExtent>
+                                    <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+                                    <value process="wmsProcess" path="wmsOptions/endPoint">http://www.datadoors.net/$_streaminguid.8f1946a6-e277-494c-b415-f869815a5db2/wms.ashx</value>
+                                    <value process="wmsProcess" path="wmsOptions/layer">b801c045-0fdf-4a00-bf53-adcd2e7fe6dc</value>
+                                 </SensorMLProvider>
+                              </dataProvider>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                       </sld:Geometry>
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>imageData/image</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:ChannelSelection>
+                                          <sld:RedChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                                          </sld:BlueChannel>
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>SPOT-5 Geometry</name>
+                              <dataProvider>
+                                 <SensorMLProvider>
+                                    <name>SPOT Geometric Process Chain</name>
+                                    <timeExtent>
+                                       <TimeExtent id="SPOT_TIME">
+                                          <baseTime>2008-03-22T08:05:52Z</baseTime>
+                                          <leadTime>1800</leadTime>
+                                          <lagTime>1800</lagTime>
+                                          <stepTime>60</stepTime>
+                                       </TimeExtent>
+                                    </timeExtent>
+                                    <process xlink:href="./process/SPOT_Process.xml#LOOKRAY_PROCESS"/>
+                                    <value process="lookVectorChain/SPOT_generic/tle" path="tleDataUrl">spot-5.txt</value>
+                                 </SensorMLProvider>
+                              </dataProvider>
+                              <style name="Lookrays">
+                                 <sld:VectorSymbolizer enabled="false">
+                                    <sld:Geometry srsName="ECEF">
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Direction srsName="ECEF" type="ABS">
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                                    </sld:Direction>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:VectorSymbolizer>
+                              </style>
+                              <style name="Trajectory">
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Geometry srsName="ECEF">
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-z">
+                                          <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-smooth">true</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <member visible="false">
+                           <DataItem>
+                              <name>SPOT-5 Footprints</name>
+                              <dataProvider>
+                                 <OWSDataProvider>
+                                    <name>SPOT5 Footprints from VAST SOS</name>
+                                    <timeExtent xlink:href="#SPOT_TIME"/>
+                                    <layerId>SPOT5</layerId>
+                                    <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                                       <GetObservation service="SOS" version="1.0">
+                                          <offering>SPOT5</offering>
+                                          <responseFormat>application/com-xml</responseFormat>
+                                          <resultModel>swe:DataValueType</resultModel>
+                                       </GetObservation>
+                                    </request>
+                                 </OWSDataProvider>
+                              </dataProvider>
+                              <style>
+                                 <sld:GridFillSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:GridFillSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>
+                        <!--                      
+                        <member visible="false">
+                           <DataItem>
+                              <name>SPOT EO-SPS</name>
+                              <dataProvider>
+                                 <SPSFeasibilityProvider>
+                                    <name>SPOT EO-SPS</name>
+                                    <description>Spotimage EO-SPS</description>
+                                    <request postUrl="http://localhost:8080/axis2/services/SPSv11">
+                                       <DescribeTasking service="SPS" version="1.1">
+                                          <sensorID>urn:ogc:id:SPOT:ALL</sensorID>
+                                       </DescribeTasking>
+                                    </request>
+                                 </SPSFeasibilityProvider>
+                              </dataProvider>
+                              <style>
+                                 <sld:PolygonSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="numPoints">
+                                          <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <sld:LinearAdjustment>
+                                             <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior/elementType/lon</ogc:PropertyName>
+                                             <sld:Gain>0.017453292519943296</sld:Gain>  
+                                          </sld:LinearAdjustment> 
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <sld:LinearAdjustment>
+                                             <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior/elementType/lat</ogc:PropertyName>
+                                             <sld:Gain>0.017453292519943296</sld:Gain>  
+                                          </sld:LinearAdjustment>                                          
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#CCCCCC</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">0.2</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:PolygonSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:LineSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="numPoints">
+                                          <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <sld:LinearAdjustment>
+                                             <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior/elementType/lon</ogc:PropertyName>
+                                             <sld:Gain>0.017453292519943296</sld:Gain>  
+                                          </sld:LinearAdjustment> 
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <sld:LinearAdjustment>
+                                             <ogc:PropertyName>FeasibilityStudyParameters/Geolocation/exterior/elementType/lat</ogc:PropertyName>
+                                             <sld:Gain>0.017453292519943296</sld:Gain>  
+                                          </sld:LinearAdjustment> 
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>                                 
+                                       <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+                                       <sld:CssParameter name="stroke-smooth">true</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:LineSymbolizer>
+                              </style>                        
+                           </DataItem>
+                        </member>
+                        -->
+                        <member visible="false">
+                           <DataItem>
+                              <name>Spot Image JPIP Server</name>
+                              <dataProvider>
+                                 <JPIPProvider>
+                                    <name>Spot Image JPIP Server</name>
+                                    <spatialExtent autoUpdate="#SCENE_01"/>
+                                    <server>http://localhost</server>
+                                    <target>RSA1.jp2</target>
+                                    <components>0 1 2</components>
+                                 </JPIPProvider>
+                              </dataProvider>
+                              <style>
+                                 <sld:TextureSymbolizer enabled="true">
+                                    <sld:Grid>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="length">
+                                             <ogc:PropertyName>grid/array</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:Geometry>
+                                          <sld:CssParameter name="geometry-x">
+                                             <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-y">
+                                             <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <!-- ************** -->
+                                          <sld:CssParameter name="geometry-tx">
+                                             <ogc:PropertyName>grid/array/row/point/imgX</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <sld:CssParameter name="geometry-ty">
+                                             <ogc:PropertyName>grid/array/row/point/imgY</ogc:PropertyName>
+                                          </sld:CssParameter>
+                                          <!-- ************** -->
+                                       </sld:Geometry>                                 
+                                    </sld:Grid>
+                                    <sld:Raster>
+                                       <sld:Opacity>1.0</sld:Opacity>
+                                       <sld:Dimensions>
+                                          <sld:Axis name="width">
+                                             <ogc:PropertyName>image/array/row</ogc:PropertyName>
+                                          </sld:Axis>
+                                          <sld:Axis name="height">
+                                             <ogc:PropertyName>image/array</ogc:PropertyName>
+                                          </sld:Axis>
+                                       </sld:Dimensions>
+                                       <sld:ChannelSelection>
+                                          <sld:RedChannel>
+                                             <sld:SourceChannelName>image/array/row/pixel/red</sld:SourceChannelName>
+                                          </sld:RedChannel>
+                                          <sld:GreenChannel>
+                                             <sld:SourceChannelName>image/array/row/pixel/green</sld:SourceChannelName>
+                                          </sld:GreenChannel>
+                                          <sld:BlueChannel>
+                                             <sld:SourceChannelName>image/array/row/pixel/blue</sld:SourceChannelName>
+                                          </sld:BlueChannel>
+                                       </sld:ChannelSelection>
+                                    </sld:Raster>
+                                 </sld:TextureSymbolizer>
+                              </style>                        
+                              <style>
+                                 <sld:GridMeshSymbolizer enabled="false">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>grid/array</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridMeshSymbolizer>
+                              </style>
+                              <style>
+                                 <sld:GridBorderSymbolizer enabled="true">
+                                    <sld:Dimensions>
+                                       <sld:Axis name="width">
+                                          <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                                       </sld:Axis>
+                                       <sld:Axis name="length">
+                                          <ogc:PropertyName>grid/array</ogc:PropertyName>
+                                       </sld:Axis>
+                                    </sld:Dimensions>
+                                    <sld:Geometry>
+                                       <sld:CssParameter name="geometry-x">
+                                          <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                       <sld:CssParameter name="geometry-y">
+                                          <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                                       </sld:CssParameter>
+                                    </sld:Geometry>
+                                    <sld:Stroke>
+                                       <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                    </sld:Stroke>
+                                 </sld:GridBorderSymbolizer>
+                              </style>
+                           </DataItem>
+                        </member>                        
+                     </DataList>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>

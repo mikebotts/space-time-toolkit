@@ -124,7 +124,7 @@
                                  </swe:field>
                                  <swe:field name="version">
                                     <swe:Category definition="urn:ogc:def:identifier:version">
-                                       <swe:value>0.0.31</swe:value>
+                                       <swe:value>1.0</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="offering">
@@ -225,7 +225,7 @@
                                  </swe:field>
                                  <swe:field name="version">
                                     <swe:Category definition="urn:ogc:def:identifier:version">
-                                       <swe:value>0.0.31</swe:value>
+                                       <swe:value>1.0</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="offering">
