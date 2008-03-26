@@ -331,8 +331,9 @@ public class WCSTWidget implements SelectionListener
 			//  For now, just print the response in a dialog
 				int responseIndex = (response==null) ? -1 : response.indexOf("<Coverage>");
 				if(responseIndex >= 0) {
+					String success = "AddCoverage request succeeded.  Server response:  \n";
 					MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-							"AddCoverage Response", response);
+							"AddCoverage Response", success + response);
 				} else {
 					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 							"STT Error", "Server error while performing AddCoverage operation: " + response);
