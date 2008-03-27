@@ -51,7 +51,7 @@ public class STTEventManager implements Runnable
     }
     
     
-    public static STTEventManager getInstance()
+    public synchronized static STTEventManager getInstance()
     {
         if (eventManager != null)
             return eventManager;

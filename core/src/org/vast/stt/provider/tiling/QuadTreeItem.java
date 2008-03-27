@@ -71,107 +71,107 @@ public class QuadTreeItem extends SpatialExtent
     /**
      * Constructs a new item and add it as a child in the specified quadrant.
      * Quadrant is in the range 0-3, where 0 is lower left and going counter clockwise. 
-     * @param parentBlock
+     * @param parentItem
      * @param quadrant
      */
-    public QuadTreeItem(QuadTreeItem parentBlock, byte quadrant)
+    public QuadTreeItem(QuadTreeItem parentItem, byte quadrant)
     {
         this();
-        this.parent = parentBlock;
+        this.parent = parentItem;
         this.quadrant = quadrant;
                 
-        double dX = (parentBlock.maxX - parentBlock.minX) / 2;
-        double dY = (parentBlock.maxY - parentBlock.minY) / 2;
+        double dX = (parentItem.maxX - parentItem.minX) / 2;
+        double dY = (parentItem.maxY - parentItem.minY) / 2;
         tileSize = Math.abs(dX) * Math.abs(dY);
         
         switch (quadrant)
         {
             case 0:
-                minX = parentBlock.minX;
-                minY = parentBlock.minY;
+                minX = parentItem.minX;
+                minY = parentItem.minY;
                 maxX = minX + dX;
                 maxY = minY + dY;
                 break;
                 
             case 1:
-                minX = parentBlock.minX + dX;
-                minY = parentBlock.minY;
+                minX = parentItem.minX + dX;
+                minY = parentItem.minY;
                 maxX = minX + dX;
                 maxY = minY + dY;
                 break;
                 
             case 2:
-                minX = parentBlock.minX + dX;
-                minY = parentBlock.minY + dY;
+                minX = parentItem.minX + dX;
+                minY = parentItem.minY + dY;
                 maxX = minX + dX;
                 maxY = minY + dY;
                 break;
                 
             case 3:
-                minX = parentBlock.minX;
-                minY = parentBlock.minY + dY;
+                minX = parentItem.minX;
+                minY = parentItem.minY + dY;
                 maxX = minX + dX;
                 maxY = minY + dY;
                 break;
         }
         
-        parentBlock.setChild(quadrant, this);
+        parentItem.setChild(quadrant, this);
     }
     
     
     /**
      * Constructs a new item and set it as the parent of the given child
      * expanding in the specified direction.
-     * @param childBlock
+     * @param childItem
      * @param directionOfExpansion
      */
-    public QuadTreeItem(QuadTreeItem childBlock, int directionOfExpansion, boolean nothing)
+    public QuadTreeItem(QuadTreeItem childItem, int directionOfExpansion, boolean nothing)
     {
         this();
         
-        double dX = (childBlock.maxX - childBlock.minX) * 2;
-        double dY = (childBlock.maxY - childBlock.minY) * 2;
+        double dX = (childItem.maxX - childItem.minX) * 2;
+        double dY = (childItem.maxY - childItem.minY) * 2;
         tileSize = Math.abs(dX) * Math.abs(dY);
         
         switch (directionOfExpansion)
         {
             case N:
             case NE:
-                children[0] = childBlock;
-                childBlock.quadrant = 0;
-                minX = childBlock.minX;
-                minY = childBlock.minY;
+                children[0] = childItem;
+                childItem.quadrant = 0;
+                minX = childItem.minX;
+                minY = childItem.minY;
                 maxX = minX + dX;
                 maxY = minY + dY;
                 break;
             
             case E:    
             case SE:
-                children[3] = childBlock;
-                childBlock.quadrant = 3;
-                minX = childBlock.minX;
-                minY = childBlock.maxY - dY;
+                children[3] = childItem;
+                childItem.quadrant = 3;
+                minX = childItem.minX;
+                minY = childItem.maxY - dY;
                 maxX = minX + dX;
-                maxY = childBlock.maxY;
+                maxY = childItem.maxY;
                 break;
             
             case S:
             case SW:
-                children[2] = childBlock;
-                childBlock.quadrant = 2;
-                minX = childBlock.maxX - dX;
-                minY = childBlock.maxY - dY;
-                maxX = childBlock.maxX;
-                maxY = childBlock.maxY;
+                children[2] = childItem;
+                childItem.quadrant = 2;
+                minX = childItem.maxX - dX;
+                minY = childItem.maxY - dY;
+                maxX = childItem.maxX;
+                maxY = childItem.maxY;
                 break;
                 
             case W:
             case NW:
-                children[1] = childBlock;
-                childBlock.quadrant = 1;
-                minX = childBlock.maxX - dX;
-                minY = childBlock.minY;
-                maxX = childBlock.maxX;
+                children[1] = childItem;
+                childItem.quadrant = 1;
+                minX = childItem.maxX - dX;
+                minY = childItem.minY;
+                maxX = childItem.maxX;
                 maxY = minY + dY;
                 break;
         }
@@ -379,6 +379,16 @@ public class QuadTreeItem extends SpatialExtent
     public void setNeeded(boolean needed)
     {
         this.needed = needed;
+    }
+    
+    
+    public int getLevel()
+    {
+    	int level = 0;
+    	QuadTreeItem item = this;
+    	while ((item = item.getParent()) != null)
+    		level++;
+    	return level;
     }
     
     

@@ -126,6 +126,18 @@ public class BlockList
     }
     
     
+    public boolean contains(BlockListItem item)
+    {
+    	if (item.nextItem != null || item.prevItem != null)
+            return true;
+    	
+    	if (item == firstItem)
+    		return true;
+    	
+    	return false;
+    }
+    
+    
     public BlockListItem addBlock(AbstractDataBlock dataBlock)
     {
         BlockListItem newItem = new BlockListItem(dataBlock, null, null);

@@ -64,7 +64,7 @@ public class BlockListIterator implements Iterator<BlockListItem>
     
     public BlockListItem next()
     {
-        BlockListItem item = currentItem;
+    	BlockListItem item = currentItem;
         currentItem = currentItem.nextItem;
         if (currentItem == null)
             hasNext = false;

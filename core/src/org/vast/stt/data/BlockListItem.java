@@ -102,10 +102,4 @@ public class BlockListItem
     {
         this.hidden = hidden;
     }
-    
-    
-    public boolean isLinked()
-    {
-        return (nextItem != null || prevItem != null);
-    }
 }

@@ -63,18 +63,17 @@ public abstract class TiledMapProvider extends AbstractProvider
     
     
     public TiledMapProvider()
-    {        
+    {
+    	quadTree = new QuadTree();
+        selectedItems = new ArrayList<QuadTreeItem>(100);
+        deletedItems = new ArrayList<BlockListItem>(100);
     }
     
     
     public TiledMapProvider(int tileWidth, int tileHeight, int maxLevel)
 	{
-        quadTree = new QuadTree();
-        
-        // setup objects for tile selection
-        selectedItems = new ArrayList<QuadTreeItem>(100);
-        deletedItems = new ArrayList<BlockListItem>(100);
-        tileSelector = new TiledMapSelector(3, 3, 0, maxLevel);
+        this();
+    	tileSelector = new TiledMapSelector(3, 3, 0, maxLevel);
         tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
@@ -170,7 +169,7 @@ public abstract class TiledMapProvider extends AbstractProvider
                     BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
                     for (int b=0; b<blockArray.length; b++)
                     {
-                        if (!blockArray[b].isLinked())
+                        if (!blockLists[b].contains(blockArray[b]))
                             blockLists[b].add(blockArray[b]);
                     }
                 }
@@ -189,7 +188,10 @@ public abstract class TiledMapProvider extends AbstractProvider
             {
                 BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
                 for (int b=0; b<blockArray.length; b++)
-                    blockLists[b].add(blockArray[b]);
+                {
+                    if (!blockLists[b].contains(blockArray[b]))
+                        blockLists[b].add(blockArray[b]);
+                }
                 
                 // remove children and parent of that item
                 removeChildrenData(nextItem);

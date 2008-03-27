@@ -81,7 +81,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     
     public void setScene(WorldScene scene)
     {
-        this.scene = scene;
+        this.scene = scene;        
         scene.getViewSettings().addListener(this);
     }
     
@@ -91,8 +91,11 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
         switch (e.type)
         {
             case SCENE_VIEW_CHANGED:
-                update();
-                spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED));
+                if (enabled)
+                {
+                	update();
+                	spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED));
+                }
                 break;
         }
     }
