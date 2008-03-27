@@ -341,7 +341,6 @@
                               </style>                        
                            </DataItem>
                         </member>
-                        -->
                         <member visible="false">
                            <DataItem>
                               <name>Spot Image JPIP Server</name>
@@ -350,7 +349,7 @@
                                     <name>Spot Image JPIP Server</name>
                                     <spatialExtent autoUpdate="#SCENE_01"/>
                                     <server>http://localhost</server>
-                                    <target>RSA1.jp2</target>
+                                    <target>RSA2.jp2</target>
                                     <components>0 1 2</components>
                                  </JPIPProvider>
                               </dataProvider>
@@ -372,14 +371,12 @@
                                           <sld:CssParameter name="geometry-y">
                                              <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
                                           </sld:CssParameter>
-                                          <!-- ************** -->
                                           <sld:CssParameter name="geometry-tx">
                                              <ogc:PropertyName>grid/array/row/point/imgX</ogc:PropertyName>
                                           </sld:CssParameter>
                                           <sld:CssParameter name="geometry-ty">
                                              <ogc:PropertyName>grid/array/row/point/imgY</ogc:PropertyName>
                                           </sld:CssParameter>
-                                          <!-- ************** -->
                                        </sld:Geometry>                                 
                                     </sld:Grid>
                                     <sld:Raster>
@@ -452,8 +449,9 @@
                                     </sld:Stroke>
                                  </sld:GridBorderSymbolizer>
                               </style>
-                           </DataItem>
-                        </member>                        
+                           </DataItem>                          
+                        </member>
+                        -->                  
                      </DataList>
                   </member>
                </DataList>
