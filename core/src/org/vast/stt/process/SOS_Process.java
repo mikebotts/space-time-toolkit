@@ -80,8 +80,9 @@ public class SOS_Process extends DataProcess implements DataHandler
     protected Hashtable<DataComponent, UnitConverter> converters;
     protected Vector3d obsLocation;
     protected String obsName, obsProcedure;
+    protected String url, version, requestMethod, offeringID, procedures, observables, format;
+    protected DataGroup sosParams;
     
-
     public SOS_Process()
     {
         request = new GetObservationRequest();
@@ -131,54 +132,74 @@ public class SOS_Process extends DataProcess implements DataHandler
             outputObsData = outputData.getComponent("observationData");
             
             // Read parameters mappings + values
-            DataGroup sosParams = (DataGroup)paramData.getComponent("sosOptions");
+            sosParams = (DataGroup)paramData.getComponent("sosOptions");
             
-            // service end point url
-            String url = sosParams.getComponent("endPoint").getData().getStringValue();
-            String requestMethod = sosParams.getComponent("requestMethod").getData().getStringValue();
-            if (requestMethod.equalsIgnoreCase("post"))
-                request.setPostServer(url);
-            else
-                request.setGetServer(url);
-            
-            // version
-            String version = sosParams.getComponent("version").getData().getStringValue();
-            request.setVersion(version);
-            
-            // offering ID
-            String offeringID = sosParams.getComponent("offering").getData().getStringValue();
-            request.setOffering(offeringID);
-            
-            // procedure IDs
-            if (sosParams.existComponent("procedures"))
-            {
-                String procedures = sosParams.getComponent("procedures").getData().getStringValue();            
-                String[] procArray = procedures.split(" ");
-                for (int i=0; i<procArray.length; i++)
-                    request.getProcedures().add(procArray[i]);
-            }
-            
-            // observable IDs
-            String observables = sosParams.getComponent("observables").getData().getStringValue();
-            String[] obsArray = observables.split(" ");
-            for (int i=0; i<obsArray.length; i++)
-                request.getObservables().add(obsArray[i]);
-            
-            // response format
-            String format = sosParams.getComponent("format").getData().getStringValue();
-            request.setFormat(format);
-
-            // request name
-            request.setOperation("GetObservation");
-            
-            checkData();
             reset();
+            
         }
         catch (Exception e)
         {
             throw new ProcessException(ioError, e);
         }
     }
+            
+    
+    public void setRequest() throws ProcessException
+    {
+        // Read I/O mappings
+        try
+        {
+            // service end point url
+            url = sosParams.getComponent("endPoint").getData().getStringValue();
+            requestMethod = sosParams.getComponent("requestMethod").getData().getStringValue();
+            if (requestMethod.equalsIgnoreCase("post"))
+                request.setPostServer(url);
+            else
+                request.setGetServer(url);
+            
+            // version
+            version = sosParams.getComponent("version").getData().getStringValue();
+            request.setVersion(version);
+            
+            // offering ID
+            offeringID = sosParams.getComponent("offering").getData().getStringValue();
+            request.setOffering(offeringID);
+            
+            // procedure IDs
+            if (sosParams.existComponent("procedures"))
+            {
+                procedures = sosParams.getComponent("procedures").getData().getStringValue();            
+                String[] procArray = procedures.split(" ");
+                for (int i=0; i<procArray.length; i++)
+                    request.getProcedures().add(procArray[i]);
+            }
+            
+            // observable IDs
+            if (sosParams.existComponent("observables"))
+            {
+            	observables = sosParams.getComponent("observables").getData().getStringValue();
+            	String[] obsArray = observables.split(" ");
+            	for (int i=0; i<obsArray.length; i++)
+            		request.getObservables().add(obsArray[i]);
+            }
+            
+            // response format
+            format = sosParams.getComponent("format").getData().getStringValue();
+            request.setFormat(format);
+
+            // request name
+            request.setOperation("GetObservation");
+            
+            checkData();
+            
+    }
+    
+    catch (Exception e)
+    {
+        throw new ProcessException(ioError, e);
+    }
+}            
+
     
     
     @Override
@@ -203,7 +224,8 @@ public class SOS_Process extends DataProcess implements DataHandler
     @Override
     public void execute() throws ProcessException
     {
-        // get input variables only if previous request is done
+    	setRequest();
+       // get input variables only if previous request is done
         if (done)
         {
             final DataHandler handler = this;
@@ -266,7 +288,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             for (int i=0; i<inputConnections.size(); i++)
                 inputConnections.get(i).setNeeded(false);
         }
-        
+
         // now let the worker thread run one more time
         synchronized (this)
         {
@@ -357,6 +379,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             }
             
             request.getTime().setTimeStep(step);
+            System.out.println("dd");
         }
     }
     
@@ -401,6 +424,7 @@ public class SOS_Process extends DataProcess implements DataHandler
             
             // write observation data
             ///System.out.println("out " + name);
+
             outputObsData.setData(data);
             
             // also write observation info
