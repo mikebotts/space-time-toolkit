@@ -120,7 +120,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows-dev/masSos</swe:value>
+                                       <swe:value>http://vast.uah.edu/ows-dev/masSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -145,7 +145,7 @@
                                  </swe:field>
                                  <swe:field name="format">
                                     <swe:Category definition="urn:ogc:def:identifier:mimeType">
-                                       <swe:value>application/com-xml</swe:value>
+                                       <swe:value>text/xml; subtype="om/1.0"</swe:value>
                                     </swe:Category>
                                  </swe:field>
                               </swe:DataRecord>
@@ -221,7 +221,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows-dev/masSos</swe:value>
+                                       <swe:value>http://vast.uah.edu/ows-dev/masSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">

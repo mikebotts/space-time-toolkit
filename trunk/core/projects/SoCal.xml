@@ -188,7 +188,7 @@
                   <description>Langrangian Plume Model Data for OWS3 demo</description>
                   <layerId>PLUME_DATA</layerId>
                   <!--<capabilities xlink:href="file:///D:/Projects/NSSTC/STT2/conf/PlumeSosCaps.xml"/>-->
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
+                  <request postUrl="http://vast.uah.edu/ows-dev/plumeSos">
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
@@ -202,7 +202,7 @@
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>

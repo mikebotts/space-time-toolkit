@@ -78,7 +78,7 @@
                   <name>EO1 HYPERION Footprints</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
                   <layerId>EO1-Hyperion-NADIR</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>EO1-Hyperion-NADIR</offering>
                         <eventTime>
@@ -90,7 +90,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -130,7 +130,7 @@
                   <name>EO1 Hyperion Potential Pointing Footprint</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
                   <layerId>EO1-Hyperion-Potential</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>EO1-Hyperion-Potential</offering>
                         <eventTime>
@@ -142,7 +142,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>

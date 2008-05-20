@@ -134,7 +134,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu:8080/ows-dev/ssmiSos</swe:value>
+                                       <swe:value>http://vast.uah.edu/ows-dev/ssmiSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">

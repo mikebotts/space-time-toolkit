@@ -410,7 +410,7 @@
                <OWSDataProvider id="PROVIDER_11">
                   <name>Temperature Data</name>
                   <layerId>MaxT_SFC</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                  <request postUrl="http://vast.uah.edu/ows-dev/netcdf">
                      <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
