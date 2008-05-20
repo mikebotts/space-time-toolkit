@@ -80,7 +80,7 @@
                   <name>DMSP-F13 SSMI Footprints</name>
                   <timeExtent xlink:href="#SSMI_TIME"/>
                   <layerId>DMSP-F13-SSMI</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>DMSP-F13-SSMI</offering>
                         <eventTime>
@@ -92,7 +92,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>

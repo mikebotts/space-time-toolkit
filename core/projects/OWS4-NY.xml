@@ -1092,7 +1092,7 @@
                <OWSDataProvider id="PROVIDER_13">
                   <name>Forecast Temperature SOS</name>
                   <layerId>MaxT_SFC</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/netcdf">
+                  <request postUrl="http://vast.uah.edu/ows-dev/netcdf">
                      <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
@@ -1372,7 +1372,7 @@
                <OWSDataProvider id="PLUME_SOS">
                   <name>NY Chemical Plume SOS</name>
                   <layerId>PLUME_DATA</layerId>
-                  <request postUrl="http://vast.uah.edu:8080/ows-dev/plumeSos">
+                  <request postUrl="http://vast.uah.edu/ows-dev/plumeSos">
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
@@ -1386,7 +1386,7 @@
                         </eventTime>
                         <procedure>urn:vast:sensor:plumeModel</procedure>
                         <observedProperty>PARTICLE_LOCATIONS</observedProperty>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>
@@ -1408,7 +1408,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>DataValueType</resultModel>
                         <responseMode>inline</responseMode>                        
                      </GetObservation>                     

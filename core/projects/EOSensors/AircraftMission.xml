@@ -39,7 +39,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                      </GetObservation>
                   </request>
                </OWSDataProvider>

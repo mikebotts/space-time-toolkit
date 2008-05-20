@@ -213,7 +213,7 @@
                                     <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                                        <GetObservation service="SOS" version="1.0">
                                           <offering>SPOT5</offering>
-                                          <responseFormat>application/com-xml</responseFormat>
+                                          <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                                           <resultModel>swe:DataValueType</resultModel>
                                        </GetObservation>
                                     </request>

@@ -80,15 +80,15 @@
                                     <sld:CssParameter name="geometry-y">
                                        <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
                                     </sld:CssParameter>
-                                 </sld:Geometry>
-                                 <!-- ************** -->
-                                 <sld:CssParameter name="geometry-tx">
-                                    <ogc:PropertyName>grid/row/point/imgX</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-ty">
-                                    <ogc:PropertyName>grid/row/point/imgY</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <!-- ************** -->
+                                    <!-- ************** -->
+                                    <sld:CssParameter name="geometry-tx">
+                                       <ogc:PropertyName>grid/row/point/imgX</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-ty">
+                                       <ogc:PropertyName>grid/row/point/imgY</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <!-- ************** -->
+                                 </sld:Geometry>                                 
                               </sld:Grid>
                               <sld:Raster>
                                  <sld:Opacity>1.0</sld:Opacity>
@@ -113,7 +113,31 @@
                                  </sld:ChannelSelection>
                               </sld:Raster>
                            </sld:TextureSymbolizer>
-                        </style>                        
+                        </style>
+                        
+                        <style>
+                           <sld:GridMeshSymbolizer enabled="false">
+                              <sld:Dimensions>
+                                 <sld:Axis name="width">
+                                    <ogc:PropertyName>grid/row</ogc:PropertyName>
+                                 </sld:Axis>
+                                 <sld:Axis name="length">
+                                    <ogc:PropertyName>grid</ogc:PropertyName>
+                                 </sld:Axis>
+                              </sld:Dimensions>
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:GridMeshSymbolizer>
+                        </style>     
 
                      </DataItem>
                   </member>                        
@@ -546,7 +570,7 @@
                <OWSDataProvider id="PT_PROV">
                   <name>Test UASH Wx Points</name>
                   <layerId>WEATHER_DATA</layerId>
-                  <request getUrl="http://vast.uah.edu:8080/ows-dev/weather">
+                  <request getUrl="http://vast.uah.edu/ows-dev/weather">
                      <GetObservation service="SOS" version="1.0">
                         <offering>WEATHER_DATA</offering>
                         <eventTime>
@@ -557,7 +581,7 @@
                               </gml:TimeInstant>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>application/com-xml</responseFormat>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
                   </request>

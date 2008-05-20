@@ -102,7 +102,7 @@
                         <sml:parameter name="sosOptions">
                            <swe:DataGroup fixed="true">
                               <swe:component name="endPoint">
-                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu:8080/ows-dev/dopplerSos</swe:Category>
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/ows-dev/dopplerSos</swe:Category>
                               </swe:component>
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>

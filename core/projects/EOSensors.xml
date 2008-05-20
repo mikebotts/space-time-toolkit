@@ -117,7 +117,7 @@
                               <name>TERRA MODIS Footprints</name>
                               <timeExtent xlink:href="#MODIS_TIME"/>
                               <layerId>TERRA-MODIS</layerId>
-                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                              <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>TERRA-MODIS</offering>
                                     <eventTime>
@@ -129,7 +129,7 @@
                                           </gml:TimePeriod>
                                        </ogc:TM_During>
                                     </eventTime>
-                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultFormat>text/xml; subtype="om/1.0"</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
                                  </GetObservation>
                               </request>
@@ -238,7 +238,7 @@
                               <name>TRMM PR Footprints</name>
                               <timeExtent xlink:href="#HYPERION_TIME"/>
                               <layerId>EO1-Hyperion-NADIR</layerId>
-                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                              <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-NADIR</offering>
                                     <eventTime>
@@ -250,7 +250,7 @@
                                           </gml:TimePeriod>
                                        </ogc:TM_During>
                                     </eventTime>
-                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultFormat>text/xml; subtype="om/1.0"</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
                                  </GetObservation>
                               </request>
@@ -290,7 +290,7 @@
                               <name>EO1 Hyperion Potential Pointing Footprint</name>
                               <timeExtent xlink:href="#HYPERION_TIME"/>
                               <layerId>EO1-Hyperion-Potential</layerId>
-                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                              <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-Potential</offering>
                                     <eventTime>
@@ -302,7 +302,7 @@
                                           </gml:TimePeriod>
                                        </ogc:TM_During>
                                     </eventTime>
-                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultFormat>text/xml; subtype="om/1.0"</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
                                  </GetObservation>
                               </request>
@@ -411,7 +411,7 @@
                               <name>AQUA AMSRE Footprints</name>
                               <timeExtent xlink:href="#AMSRE_TIME"/>
                               <layerId>AQUA-AMSRE</layerId>
-                              <request postUrl="http://vast.uah.edu:8080/ows-dev/footprint">
+                              <request postUrl="http://vast.uah.edu/ows-dev/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>AQUA-AMSRE</offering>
                                     <eventTime>
@@ -423,7 +423,7 @@
                                           </gml:TimePeriod>
                                        </ogc:TM_During>
                                     </eventTime>
-                                    <resultFormat>application/com-xml</resultFormat>
+                                    <resultFormat>text/xml; subtype="om/1.0"</resultFormat>
                                     <resultModel>swe:DataValueType</resultModel>
                                  </GetObservation>
                               </request>
