@@ -97,7 +97,7 @@
                </OWSDataProvider>
             </dataProvider>
             <style>
-               <sld:GridMeshSymbolizer enabled="true">
+               <sld:GridFillSymbolizer enabled="true">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
@@ -118,7 +118,7 @@
                      <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
                      <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                   </sld:Fill>
-               </sld:GridMeshSymbolizer>
+               </sld:GridFillSymbolizer>
             </style>
          </DataItem>
       </member> 
