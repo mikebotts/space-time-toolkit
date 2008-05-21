@@ -224,7 +224,10 @@ public class TextureManager
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
-            
+            //gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_BORDER);
+            //gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_BORDER);
+            //gl.glTexParameterfv(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_BORDER_COLOR, new float[] {0.0f,0.0f,0.0f,0.0f}, 0);
+                        
             // figure out image format
             int format = 0;
             switch (tex.bands)
