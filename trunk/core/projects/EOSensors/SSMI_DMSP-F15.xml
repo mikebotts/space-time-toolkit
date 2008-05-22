@@ -80,7 +80,7 @@
                   <name>DMSP-F15 SSMI Footprints</name>
                   <timeExtent xlink:href="#SSMI_TIME"/>
                   <layerId>DMSP-F15-SSMI</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>DMSP-F15-SSMI</offering>
                         <eventTime>

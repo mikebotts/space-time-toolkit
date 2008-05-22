@@ -570,7 +570,7 @@
                <OWSDataProvider id="PT_PROV">
                   <name>Test UASH Wx Points</name>
                   <layerId>WEATHER_DATA</layerId>
-                  <request getUrl="http://vast.uah.edu/ows-dev/weather">
+                  <request getUrl="http://vast.uah.edu/vast/weather">
                      <GetObservation service="SOS" version="1.0">
                         <offering>WEATHER_DATA</offering>
                         <eventTime>

@@ -78,7 +78,7 @@
                   <name>TRMM PR Footprints</name>
                   <timeExtent xlink:href="#PR_TIME"/>
                   <layerId>TRMM-PR</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>TRMM-PR</offering>
                         <eventTime>

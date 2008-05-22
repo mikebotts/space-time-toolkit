@@ -78,7 +78,7 @@
                   <name>AQUA AMSRE Footprints</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <layerId>AQUA-AMSRE</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>AQUA-AMSRE</offering>
                         <eventTime>
