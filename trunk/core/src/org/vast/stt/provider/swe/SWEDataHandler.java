@@ -65,15 +65,22 @@ public class SWEDataHandler implements DataHandler
     
 
 	public SWEDataHandler(DataProvider provider)
-	{
-		this.provider = provider;
+    {
+        this.provider = provider;
         converters = new Hashtable<DataComponent, UnitConverter>();
+    }
+	
+	
+	public SWEDataHandler(DataProvider provider, BlockList blockList)
+	{
+		this(provider);
+		this.blockList = blockList;
 	}
 	
 	
 	public void setBlockList(BlockList blockList)
 	{
-        this.blockList = blockList;
+	    this.blockList = blockList;
 	}
     
     

@@ -28,12 +28,12 @@ package org.vast.stt.provider.ows;
 import java.io.IOException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
-import org.vast.cdm.common.DataStreamParser;
+import org.vast.ogc.OGCRegistry;
 import org.vast.ows.OWSRequest;
 import org.vast.ows.OWSServiceCapabilities;
+import org.vast.ows.om.ObservationStreamReader;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.sos.GetObservationRequest.ResponseMode;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.swe.SWEDataHandler;
@@ -57,8 +57,7 @@ import org.vast.stt.provider.swe.SWEDataHandler;
 public class SOSProvider extends OWSProvider
 {
     protected SOSLayerCapabilities layerCaps;
-	protected GetObservationRequest query;
-	protected DataStreamParser dataParser;
+	protected GetObservationRequest request;
 	protected boolean usePost;
     
 
@@ -74,9 +73,6 @@ public class SOSProvider extends OWSProvider
         {
             initRequest();  
             
-            // create reader
-            SOSResponseReader reader = new SOSResponseReader();
-            
             // create template request here
             //double time = new DateTime().getJulianTime();
             //query.getTime().setBaseTime(time - 3600);
@@ -84,19 +80,20 @@ public class SOSProvider extends OWSProvider
             //query.setResponseMode(SOSQuery.ResponseMode.RESULT_TEMPLATE);
             
             // select request type (post or get)
-            if (query.getPostServer() != null)
+            if (request.getPostServer() != null)
                 usePost = true;
-            else if (query.getGetServer() == null)
+            else if (request.getGetServer() == null)
                 throw new DataException("No GET or POST Server URL specified");
             
             // send request
             if(usePost)
-            	dataStream = owsUtils.sendPostRequest(query).getInputStream();
+            	dataStream = owsUtils.sendPostRequest(request).getInputStream();
             else 
-            	dataStream = owsUtils.sendGetRequest(query).getInputStream();
+            	dataStream = owsUtils.sendGetRequest(request).getInputStream();
             
-            // parse response
-            reader.parse(dataStream);
+            // create reader and parse response
+            ObservationStreamReader reader = (ObservationStreamReader)OGCRegistry.createReader("OM", "ObservationStream", request.getVersion());
+            reader.readObservationStream(dataStream, null);
             
             // display data structure and encoding
             DataComponent dataInfo = reader.getDataComponents();
@@ -111,9 +108,9 @@ public class SOSProvider extends OWSProvider
         }
         catch (Exception e)
         {
-            String server = query.getPostServer();
+            String server = request.getPostServer();
             if (server == null)
-                server = query.getGetServer();
+                server = request.getGetServer();
             throw new DataException("Error while reading data from " + server, e);
         }
         finally
@@ -134,46 +131,37 @@ public class SOSProvider extends OWSProvider
         {    
             // init request using spatial + time extent
             initRequest();
-            query.setResponseMode(ResponseMode.INLINE);
-            
-			// create reader
-			SOSResponseReader reader = new SOSResponseReader();
+            request.setResponseMode(ResponseMode.INLINE);
 			
             if (canceled)
                 return;
             
             // send request
             if(usePost)
-            	dataStream = owsUtils.sendPostRequest(query).getInputStream();
+            	dataStream = owsUtils.sendPostRequest(request).getInputStream();
             else 
-            	dataStream = owsUtils.sendGetRequest(query).getInputStream();
+            	dataStream = owsUtils.sendGetRequest(request).getInputStream();
             
             if (canceled)
                 return;
-                
+            
+            // create the right reader
+            ObservationStreamReader reader =
+                (ObservationStreamReader)OGCRegistry.createReader("OM", "ObservationStream", request.getVersion());
+                            
 			// create data handler
-            SWEDataHandler dataHandler = new SWEDataHandler(this);
-            dataHandler.setBlockList(dataNode.getListArray().get(0));
-            dataHandler.reset();
-            
-            // setup parser
-			reader.parse(dataStream);
-			dataParser = reader.getDataParser();
-        	dataParser.setDataHandler(dataHandler);            
-        	
-            if (canceled)
-                return;
-        	
-        	// start parsing
-            dataParser.parse(reader.getDataStream());            
+            SWEDataHandler dataHandler = new SWEDataHandler(this, dataNode.getListArray().get(0));
+                        
+            // launch parser
+            reader.readObservationStream(dataStream, dataHandler);
 		}
 		catch (Exception e)
 		{
 			if (!canceled)
             {
-                String server = query.getPostServer();
+                String server = request.getPostServer();
                 if (server == null)
-                    server = query.getGetServer();
+                    server = request.getGetServer();
                 throw new DataException("Error while reading data from " + server, e);
             }
 		}
@@ -187,15 +175,15 @@ public class SOSProvider extends OWSProvider
 	protected void initRequest()
 	{
 	    // update time range
-        query.getTime().setBaseTime(timeExtent.getAdjustedLagTime());
-        query.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
-        query.getTime().setTimeStep(timeExtent.getTimeStep());
+        request.getTime().setBaseTime(timeExtent.getAdjustedLagTime());
+        request.getTime().setStopTime(timeExtent.getAdjustedLeadTime());
+        request.getTime().setTimeStep(timeExtent.getTimeStep());
         
         // update bounding box
-        query.getBbox().setMinX(spatialExtent.getMinX());
-        query.getBbox().setMaxX(spatialExtent.getMaxX());
-        query.getBbox().setMinY(spatialExtent.getMinY());
-        query.getBbox().setMaxY(spatialExtent.getMaxY());
+        request.getBbox().setMinX(spatialExtent.getMinX());
+        request.getBbox().setMaxX(spatialExtent.getMaxX());
+        request.getBbox().setMinY(spatialExtent.getMinY());
+        request.getBbox().setMaxY(spatialExtent.getMaxY());
 	}
 	
 	
@@ -204,14 +192,13 @@ public class SOSProvider extends OWSProvider
 		// close stream(s)
 		try
 		{
-            if (dataParser != null)
-                dataParser.stop();
+            //if (dataParser != null)
+            //    dataParser.stop();
             
             if (dataStream != null)
 				dataStream.close();
             
             dataStream = null;
-            dataParser = null;
 		}
 		catch (IOException e)
 		{
@@ -233,50 +220,48 @@ public class SOSProvider extends OWSProvider
 	{
 		if (layerCaps == null) return;
 		
-		String request = "GetObservation";
-		query = new GetObservationRequest();
-		query.setGetServer(layerCaps.getParent().getGetServers().get(request));
-		query.setPostServer(layerCaps.getParent().getPostServers().get(request));
-		query.setService(layerCaps.getParent().getService());
-		query.setService("SOS");
-		query.setVersion(layerCaps.getParent().getVersion());
-		query.setOperation("GetObservation");
-		query.setOffering(layerCaps.getIdentifier());
-		query.setFormat(layerCaps.getFormatList().get(0));
-		query.getObservables().add(layerCaps.getObservableList().get(0));
-		query.getProcedures().add(layerCaps.getProcedureList().get(0));
-		query.getTime().setStartTime(layerCaps.getTimeList().get(0).getStartTime());
-		query.getTime().setStopTime(query.getTime().getStartTime());		
+		request = new GetObservationRequest();
+		request.setGetServer(layerCaps.getParent().getGetServers().get(request));
+		request.setPostServer(layerCaps.getParent().getPostServers().get(request));
+		request.setService(layerCaps.getParent().getService());
+		request.setService("SOS");
+		request.setVersion(layerCaps.getParent().getVersion());
+		request.setOffering(layerCaps.getIdentifier());
+		request.setFormat(layerCaps.getFormatList().get(0));
+		request.getObservables().add(layerCaps.getObservableList().get(0));
+		request.getProcedures().add(layerCaps.getProcedureList().get(0));
+		request.getTime().setStartTime(layerCaps.getTimeList().get(0).getStartTime());
+		request.getTime().setStopTime(request.getTime().getStartTime());		
 	}
 
     
     @Override
 	public GetObservationRequest getQuery()
 	{
-		return query;
+		return request;
 	}
 
 
     @Override
-	public void setQuery(OWSRequest query)
+	public void setQuery(OWSRequest request)
 	{
-		this.query = (GetObservationRequest)query;
+		this.request = (GetObservationRequest)request;
 		
 		// set up spatial extent
-		if (this.query.getBbox() != null)
+		if (this.request.getBbox() != null)
 		{
-			this.spatialExtent.setMaxX(this.query.getBbox().getMaxX());
-			this.spatialExtent.setMaxY(this.query.getBbox().getMaxY());
-			this.spatialExtent.setMinX(this.query.getBbox().getMinX());
-			this.spatialExtent.setMinY(this.query.getBbox().getMinY());
+			this.spatialExtent.setMaxX(this.request.getBbox().getMaxX());
+			this.spatialExtent.setMaxY(this.request.getBbox().getMaxY());
+			this.spatialExtent.setMinX(this.request.getBbox().getMinX());
+			this.spatialExtent.setMinY(this.request.getBbox().getMinY());
 		}
 		
 		// set up time extent
-		if (this.query.getTime() != null)
+		if (this.request.getTime() != null)
 		{
-			double start = this.query.getTime().getStartTime();
-			double stop = this.query.getTime().getStopTime();
-            double step = this.query.getTime().getTimeStep();
+			double start = this.request.getTime().getStartTime();
+			double stop = this.request.getTime().getStopTime();
+            double step = this.request.getTime().getTimeStep();
 			this.timeExtent.setBaseTime(start);
 			this.timeExtent.setLeadTimeDelta(stop - start);
             this.timeExtent.setTimeStep(step);

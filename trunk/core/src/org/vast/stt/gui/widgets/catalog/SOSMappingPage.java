@@ -46,9 +46,9 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
 import org.vast.ows.OWSUtils;
+import org.vast.ows.om.ObservationStreamReaderV0;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.sos.SOSResponseReader;
 import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
@@ -196,14 +196,14 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		InputStream dataStream = null;
 		try {
 			// create reader
-			SOSResponseReader reader = new SOSResponseReader();
+			ObservationStreamReaderV0 reader = new ObservationStreamReaderV0();
 
 			//  send request
 			OWSUtils owsUtils = new OWSUtils();
 			dataStream = owsUtils.sendGetRequest(query).getInputStream();
 
 			// parse response
-			reader.parse(dataStream);
+			reader.parse(dataStream, null);
 
 			// display data structure and encoding
 			DataComponent dataInfo = reader.getDataComponents();
