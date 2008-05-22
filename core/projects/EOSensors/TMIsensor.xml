@@ -78,7 +78,7 @@
                   <name>TRMM TMI Footprints</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <layerId>TRMM-TMI</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>TRMM-TMI</offering>
                         <eventTime>

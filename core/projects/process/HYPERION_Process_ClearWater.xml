@@ -114,7 +114,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
+                                       <swe:value>http://localhost:8080/vast/eo1Sos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -215,7 +215,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
+                                       <swe:value>http://localhost:8080/vast/eo1Sos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -334,7 +334,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/ows-dev/eo1Sos</swe:value>
+                                       <swe:value>http://localhost:8080/vast/eo1Sos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">

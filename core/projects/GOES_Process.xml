@@ -113,7 +113,7 @@
             <sml:parameter name="wcsOptions">
                <swe:DataGroup fixed="true">
                   <swe:component name="endPoint">
-                     <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/ows-dev/goes</swe:Category>
+                     <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/vast/goes</swe:Category>
                   </swe:component>
                   <swe:component name="requestMethod">
                      <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>

@@ -110,7 +110,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu/ows-dev/tmiSos</swe:value>
+                                       <swe:value>http://vast.uah.edu/vast/tmiSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -211,7 +211,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://vast.uah.edu/ows-dev/tmiL2cSos</swe:value>
+                                       <swe:value>http://vast.uah.edu/vast/tmiL2cSos</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">

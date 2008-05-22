@@ -1092,7 +1092,7 @@
                <OWSDataProvider id="PROVIDER_13">
                   <name>Forecast Temperature SOS</name>
                   <layerId>MaxT_SFC</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/netcdf">
+                  <request postUrl="http://vast.uah.edu/vast/netcdf">
                      <GetObservation service="SOS" version="1.0">
                         <offering>MaxT_SFC</offering>
                         <eventTime>
@@ -1372,7 +1372,7 @@
                <OWSDataProvider id="PLUME_SOS">
                   <name>NY Chemical Plume SOS</name>
                   <layerId>PLUME_DATA</layerId>
-                  <request postUrl="http://vast.uah.edu/ows-dev/plumeSos">
+                  <request postUrl="http://vast.uah.edu/vast/plumeSos">
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>

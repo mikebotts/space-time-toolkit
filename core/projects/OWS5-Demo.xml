@@ -210,7 +210,7 @@
                                     <name>SPOT5 Footprints from VAST SOS</name>
                                     <timeExtent xlink:href="#SPOT_TIME"/>
                                     <layerId>SPOT5</layerId>
-                                    <request postUrl="http://vast.uah.edu/ows-dev/footprint">
+                                    <request postUrl="http://vast.uah.edu/vast/footprint">
                                        <GetObservation service="SOS" version="1.0">
                                           <offering>SPOT5</offering>
                                           <responseFormat>text/xml; subtype="om/1.0"</responseFormat>

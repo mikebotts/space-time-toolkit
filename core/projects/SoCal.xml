@@ -188,7 +188,7 @@
                   <description>Langrangian Plume Model Data for OWS3 demo</description>
                   <layerId>PLUME_DATA</layerId>
                   <!--<capabilities xlink:href="file:///D:/Projects/NSSTC/STT2/conf/PlumeSosCaps.xml"/>-->
-                  <request postUrl="http://vast.uah.edu/ows-dev/plumeSos">
+                  <request postUrl="http://vast.uah.edu/vast/plumeSos">
                      <GetObservation service="SOS" version="1.0">
                         <offering>PLUME_DATA</offering>
                         <eventTime>
