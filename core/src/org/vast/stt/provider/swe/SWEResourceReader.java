@@ -27,6 +27,7 @@ package org.vast.stt.provider.swe;
 
 import java.io.*;
 import org.vast.cdm.common.CDMException;
+import org.vast.cdm.common.DataHandler;
 import org.vast.sweCommon.SWEFilter;
 import org.vast.sweCommon.SWEReader;
 import org.vast.sweCommon.SWECommonUtils;
@@ -42,11 +43,12 @@ public class SWEResourceReader extends SWEReader
     protected SWEFilter streamFilter;
 	
 	
-	public void parse(InputStream inputStream) throws CDMException
+	public void parse(InputStream inputStream, DataHandler handler) throws CDMException
 	{
 		try
 		{
-			streamFilter = new SWEFilter(inputStream);
+			dataHandler = handler;
+		    streamFilter = new SWEFilter(inputStream);
 			streamFilter.setDataElementName("data");
 					
 			// parse xml header using DataComponent and DataEncoding readers
@@ -58,9 +60,17 @@ public class SWEResourceReader extends SWEReader
             SWECommonUtils utils = new SWECommonUtils();
             this.dataComponents = utils.readComponentProperty(dom, defElt);
             this.dataEncoding = utils.readEncodingProperty(dom, encElt);
+			this.dataParser = createDataParser();
 			
 			// read external link if present
 			resultUri = dom.getAttributeValue(dataElt, "data/externalLink");
+			
+			// launch data stream parser if handler was provided
+            if (dataHandler != null)
+            {
+                dataParser.setDataHandler(dataHandler);
+                dataParser.parse(getDataStream());
+            }
 		}
 		catch (DOMHelperException e)
 		{

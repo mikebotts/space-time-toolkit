@@ -30,7 +30,6 @@ import java.io.InputStream;
 import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
-import org.vast.cdm.common.DataStreamParser;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.sweCommon.URIStreamHandler;
@@ -55,7 +54,6 @@ public class SWEProvider extends AbstractProvider
     protected String sweDataUrl;
     protected String rawDataUrl;
     protected String format; 
-    protected DataStreamParser dataParser;
     protected InputStream dataStream;
     
 	
@@ -76,7 +74,7 @@ public class SWEProvider extends AbstractProvider
             // parse response
             SWEResourceReader reader = new SWEResourceReader();
             dataStream = URIStreamHandler.openStream(sweDataUrl);            
-            reader.parse(dataStream);
+            reader.parse(dataStream, null);
                         
             // display data structure and encoding
             DataComponent dataInfo = reader.getDataComponents();
@@ -119,17 +117,10 @@ public class SWEProvider extends AbstractProvider
 		    // read xml response
             SWEResourceReader reader = new SWEResourceReader();
             dataStream = URIStreamHandler.openStream(sweDataUrl);
-			reader.parse(dataStream);
-			dataParser = reader.getDataParser();
-						
+									
 			// create data handler
-            SWEDataHandler dataHandler = new SWEDataHandler(this);
-            dataHandler.setBlockList(dataNode.getListArray().get(0));
-            dataHandler.reset();
-            
-            // setup parser
-			dataParser.setDataHandler(dataHandler);
-            
+            SWEDataHandler dataHandler = new SWEDataHandler(this, dataNode.getListArray().get(0));
+                        
             // override resultUri if specified in data set
             String resultUri = rawDataUrl;
             if (resultUri != null)
@@ -137,7 +128,7 @@ public class SWEProvider extends AbstractProvider
 			
 			// start parsing data if not cancelled
 			if (!canceled)
-			    dataParser.parse(reader.getDataStream());
+			    reader.parse(dataStream, dataHandler);
 		}
 		catch (CDMException e)
 		{
@@ -149,7 +140,6 @@ public class SWEProvider extends AbstractProvider
 			{
 				if (dataStream != null)
 				    dataStream.close();
-                dataParser = null;
 			}
 			catch (IOException e)
 			{
@@ -166,15 +156,11 @@ public class SWEProvider extends AbstractProvider
         
         // close stream(s)
         try
-        {
-            if (dataParser != null)
-                dataParser.stop();
-            
+        {           
             if (dataStream != null)
                 dataStream.close();
             
             dataStream = null;
-            dataParser = null;
         }
         catch (IOException e)
         {

@@ -30,7 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataStreamParser;
-import org.vast.ows.sos.SOSResponseReader;
+import org.vast.ows.om.ObservationStreamReader;
+import org.vast.ows.om.ObservationStreamReaderV0;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
@@ -98,9 +99,6 @@ public class PhenomenaDetectionProvider extends AbstractProvider
             // init request using spatial + time extent + pressure range 
             DOMHelper dom = buildRequest();
                         
-            // create reader
-            SOSResponseReader reader = new SOSResponseReader();
-            
             if (canceled)
                 return;
             
@@ -129,7 +127,8 @@ public class PhenomenaDetectionProvider extends AbstractProvider
                 
             // parse response
             dataHandler.reset();
-            reader.parse(dataStream);
+            ObservationStreamReader reader = new ObservationStreamReaderV0();
+            reader.parse(dataStream, null);
             
             // create block list if not done yet
             if (!dataNode.isNodeStructureReady())
