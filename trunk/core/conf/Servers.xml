@@ -27,19 +27,16 @@
         <URL>http://globe.digitalearth.gov/cgi-bin/wmt.cgi</URL>
     </Server>
     <Server name="UAH GOES" type="WCS" version="0.6">
-        <URL>http://vast.uah.edu:8080/ows-dev/goes</URL>
+        <URL>http://vast.uah.edu/vast/goes</URL>
     </Server>
     <Server name="PCI" type="WCS" version="1.1.1">
         <URL>http://ogcdemo.pcigeomatics.com:8181/swe/wcs</URL>
     </Server>
     <Server name="UAH SRTM Topo data" type="WCS" version="0.6">
-        <URL>http://vast.uah.edu:8080/ows-dev/srtmWcs</URL>
+        <URL>http://vast.uah.edu/vast/srtmWcs</URL>
     </Server>
     <Server name="ECS WMS" type="WMS" version="1.1.1">
         <URL>http://g0hep12u.ecs.nasa.gov/mapserv-bin/wms_ogc</URL>
-    </Server>
-    <Server name="UAH Weather data" type="SOS" version="0.0.31">
-            <URL>http://vast.uah.edu:8080/ows-dev/weather</URL>
     </Server>
     <Server name="TAMU OceansIE SOS" type="SOS" version="0.0.31">
             <URL>http://sos-ws.tamu.edu/tethys/tabs</URL>
@@ -49,17 +46,29 @@
     </Server>
     <Server name="CSIRO Weather" type="SOS" version="0.0.31">
         <URL>http://ogctestbed.act.cmis.csiro.au:8080/52nSOSv2/sos</URL>
-    </Server>    
-    <Server name="TAMU Madis Data" type="SOS" version="0.0.31">
+    </Server>  
+    <Server name="TAMU Madis Data" type="SOS" version="1.0">
         <URL>http://sos-ws.tamu.edu/tethys/madis</URL>
     </Server>
-    <Server name="UAH Doppler" type="SOS" version="0.0.31">
-        <URL>http://vast.uah.edu:8080/ows-dev/dopplerSos</URL>
+	<Server name="UAH Weather data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/weather</URL>
     </Server>
-    <Server name="UAH Plume model" type="SOS" version="0.0.31">
-        <URL>http://vast.uah.edu:8080/ows-dev/plumeSos</URL>
+    <Server name="UAH Doppler" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/dopplerSos</URL>
     </Server>
-    <Server name="UAH Airdas data" type="SOS" version="0.0.31">
-        <URL>http://vast.uah.edu:8080/ows-dev/airdas</URL>
+    <Server name="UAH Plume model" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/plumeSos</URL>
+    </Server>
+    <Server name="UAH Airdas data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/airdas</URL>
+    </Server>
+	<Server name="UAH Satellite Nadir Track data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/nadir</URL>
+    </Server>
+	<Server name="UAH Satellite Footprint data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/footprint</URL>
+    </Server>
+	<Server name="UAH Satellite TLE data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vast/tle</URL>
     </Server>
 </ServerList>
