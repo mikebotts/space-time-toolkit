@@ -130,7 +130,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_10GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
@@ -251,7 +251,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_10GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
@@ -265,7 +265,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">19GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_19GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
@@ -279,7 +279,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">19GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_19GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
@@ -293,7 +293,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">21GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_21GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
@@ -307,7 +307,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">37GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_37GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
@@ -321,7 +321,7 @@
                   <name>TMI Data Process Chain</name>
                   <timeExtent xlink:href="#TMI_TIME"/>
                   <process xlink:href="../process/TMI_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">37GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_37GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
