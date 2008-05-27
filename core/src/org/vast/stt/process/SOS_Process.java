@@ -380,7 +380,6 @@ public class SOS_Process extends DataProcess implements DataHandler
             }
             
             request.getTime().setTimeStep(step);
-            System.out.println("dd");
         }
     }
     
