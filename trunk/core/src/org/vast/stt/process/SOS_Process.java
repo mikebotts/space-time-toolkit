@@ -35,8 +35,9 @@ import org.vast.cdm.common.DataStreamParser;
 import org.vast.cdm.common.DataType;
 import org.vast.data.*;
 import org.vast.math.Vector3d;
+import org.vast.ogc.OGCRegistry;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.om.ObservationStreamReaderV0;
+import org.vast.ows.om.ObservationStreamReader;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.util.TimeInfo;
 import org.vast.physics.TimeExtent;
@@ -240,9 +241,6 @@ public class SOS_Process extends DataProcess implements DataHandler
                             // init request using spatial + time extent
                             initRequest();
                             
-                            // create reader
-                            ObservationStreamReaderV0 reader = new ObservationStreamReaderV0();
-                            
                             // select request type (post or get)
                             boolean usePost = (request.getPostServer() != null);
                             //System.out.println(owsUtils.buildURLQuery(query));
@@ -251,7 +249,10 @@ public class SOS_Process extends DataProcess implements DataHandler
                             else 
                             	dataStream = owsUtils.sendGetRequest(request).getInputStream();
                             
-                            // parse response
+                            // create reader and parse response
+                            ObservationStreamReader reader = (ObservationStreamReader)OGCRegistry.createReader("OM", "ObservationStream", request.getVersion());
+
+                            // parse XML header
                             reader.parse(dataStream);
                             dataParser = reader.getDataParser();
                             dataParser.setDataHandler(handler);
@@ -261,7 +262,7 @@ public class SOS_Process extends DataProcess implements DataHandler
                             obsProcedure = reader.getProcedure();
                             obsLocation = reader.getFoiLocation();
                             
-                            // start parsing
+                            // parse data stream
                             dataParser.parse(reader.getDataStream());
                             done = true;
                         }
