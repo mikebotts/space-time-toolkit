@@ -130,7 +130,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">6GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_6GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
@@ -224,7 +224,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">6GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_6GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -238,7 +238,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_10GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -252,7 +252,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_10GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -266,7 +266,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">18GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_18GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -280,7 +280,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">18GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_18GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -294,7 +294,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">23GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_23GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -308,7 +308,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">23GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_23GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -322,7 +322,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">36GHzVP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_36GHzVP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
@@ -336,7 +336,7 @@
                   <name>AMSR-E Data Process Chain</name>
                   <timeExtent xlink:href="#AMSRE_TIME"/>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">36GHzHP</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_36GHzHP</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMSRE_TEXTURE"/>
