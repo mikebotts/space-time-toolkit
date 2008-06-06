@@ -174,7 +174,7 @@
    
    <Process>
       <uri>urn:ogc:def:process:SOS:1.0</uri>
-      <class>org.vast.stt.process.SOS_Process</class>
+      <class>org.sensorML.process.SOS_Process</class>
    </Process>
    
    <Process>
