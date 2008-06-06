@@ -26,7 +26,7 @@
 package org.vast.stt.gui.widgets.catalog;
 
 import java.util.List;
-
+import org.sensorML.process.SOS_Process;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
@@ -39,7 +39,6 @@ import org.vast.ows.util.Bbox;
 import org.vast.ows.util.TimeInfo;
 import org.vast.process.DataProcess;
 import org.vast.stt.data.DataException;
-import org.vast.stt.process.SOS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.STTTimeExtent;
