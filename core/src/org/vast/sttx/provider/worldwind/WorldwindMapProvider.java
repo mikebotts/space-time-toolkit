@@ -36,7 +36,6 @@ import javax.media.jai.RenderedOp;
 import org.vast.cdm.common.DataBlock;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.data.DataArray;
@@ -45,6 +44,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.TiledMapProvider;
 import org.vast.stt.provider.tiling.TiledMapSelector;
+import org.vast.util.SpatialExtent;
 
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;

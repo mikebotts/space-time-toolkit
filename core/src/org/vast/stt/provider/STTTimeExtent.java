@@ -25,12 +25,12 @@
 
 package org.vast.stt.provider;
 
-import org.vast.physics.TimeExtent;
 import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
+import org.vast.util.TimeExtent;
 
 
 /**

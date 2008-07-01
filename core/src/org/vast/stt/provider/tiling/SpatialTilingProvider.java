@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.vast.cdm.common.DataComponent;
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
@@ -41,6 +40,7 @@ import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.TiledMapProvider;
+import org.vast.util.SpatialExtent;
 
 
 /**

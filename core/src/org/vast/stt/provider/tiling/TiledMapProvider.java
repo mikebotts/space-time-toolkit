@@ -31,7 +31,6 @@ import org.vast.cdm.common.DataType;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
@@ -42,6 +41,7 @@ import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
 import org.vast.stt.provider.tiling.QuadTree;
+import org.vast.util.SpatialExtent;
 
 
 public abstract class TiledMapProvider extends AbstractProvider
