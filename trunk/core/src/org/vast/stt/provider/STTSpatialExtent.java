@@ -25,12 +25,12 @@
 
 package org.vast.stt.provider;
 
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.event.STTEventListeners;
 import org.vast.stt.event.STTEventProducer;
+import org.vast.util.SpatialExtent;
 
 /**
  * <p><b>Title:</b><br/>

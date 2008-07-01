@@ -25,7 +25,7 @@
 
 package org.vast.stt.provider.tiling;
 
-import org.vast.physics.SpatialExtent;
+import org.vast.util.SpatialExtent;
 
 
 /**

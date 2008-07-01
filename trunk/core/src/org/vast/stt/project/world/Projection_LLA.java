@@ -27,10 +27,10 @@ package org.vast.stt.project.world;
 
 import org.vast.math.Vector3d;
 import org.vast.physics.MapProjection;
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
+import org.vast.util.SpatialExtent;
 
 
 /**

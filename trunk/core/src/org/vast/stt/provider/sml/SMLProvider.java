@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import org.vast.cdm.common.DataComponent;
 import org.vast.data.*;
-import org.vast.physics.TimeExtent;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.stt.data.BlockList;
@@ -37,6 +36,7 @@ import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.AbstractProvider;
+import org.vast.util.TimeExtent;
 
 
 /**

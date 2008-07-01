@@ -40,11 +40,11 @@ import org.vast.ows.util.Bbox;
 import org.vast.ows.util.TimeInfo;
 import org.vast.ows.wcs.GetCoverageRequest;
 import org.vast.ows.wcs.WCSResponseReader;
-import org.vast.physics.TimeExtent;
 import org.vast.process.*;
 import org.vast.sweCommon.SweConstants;
 import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
+import org.vast.util.TimeExtent;
 
 
 /**

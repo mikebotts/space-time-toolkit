@@ -25,9 +25,9 @@
 
 package org.vast.stt.provider.tiling;
 
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.QuadTreeVisitor;
+import org.vast.util.SpatialExtent;
 
 
 /**

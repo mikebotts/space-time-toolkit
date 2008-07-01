@@ -28,10 +28,10 @@ package org.vast.stt.renderer.opengl;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 import org.vast.math.Vector3d;
-import org.vast.physics.SpatialExtent;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.Projection.Crs;
+import org.vast.util.SpatialExtent;
 
 
 /**
