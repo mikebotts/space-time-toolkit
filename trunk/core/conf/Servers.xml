@@ -71,7 +71,7 @@
 	<Server name="UAH Satellite TLE data" type="SOS" version="1.0">
         <URL>http://vast.uah.edu/vast/tle</URL>
     </Server>
-    <Server name="UAH SAS Server" type="SAS" version="1.0">
-        <URL>http://smartdev.itsc.uah.edu/smartSAS/</URL>
+    <Server name="UAH SAS Server" type="SAS" version="0.0">
+        <URL>http://smartdev.itsc.uah.edu/smartSAS/sas</URL>
     </Server>
 </ServerList>
