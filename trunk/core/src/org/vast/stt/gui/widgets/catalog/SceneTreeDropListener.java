@@ -36,6 +36,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.PlatformUI;
 import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
@@ -88,6 +89,9 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 //				dropItem(items[i]);
 //			}
 			return true;
+		} else if (data instanceof SASLayerCapabilities) {
+			startAddItemWizard((SASLayerCapabilities)caps);
+			return true;
 		} else if (data instanceof WMSLayerCapabilities) {
 			DataItem item = WMSLayerFactory.createWMSLayer((WMSLayerCapabilities)caps);
 			return dropItem(item);
@@ -106,6 +110,16 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 
 	public void startAddItemWizard(SOSLayerCapabilities caps){
 		AddSOSItemWizard addItemWizard = new AddSOSItemWizard(caps, this);
+		addItemWizard.init(PlatformUI.getWorkbench(), null);
+		// Instantiates the wizard container with the wizard and opens it
+		WizardDialog dialog = 
+			new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), addItemWizard);
+		dialog.create();
+		dialog.open();
+	}
+	
+	public void startAddItemWizard(SASLayerCapabilities caps){
+		AddSASItemWizard addItemWizard = new AddSASItemWizard(caps, this);
 		addItemWizard.init(PlatformUI.getWorkbench(), null);
 		// Instantiates the wizard container with the wizard and opens it
 		WizardDialog dialog = 
