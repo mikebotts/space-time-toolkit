@@ -226,7 +226,7 @@ public class SASProvider extends OWSProvider
 		request.setService(layerCaps.getParent().getService());
 		request.setService("SAS");
 		request.setVersion(layerCaps.getParent().getVersion());
-		request.setOffering(layerCaps.getSubscriptionOfferingID());
+		request.setOffering(layerCaps.getSubscriptionOfferingIDList().get(0));
 		//request.setOffering(layerCaps.getIdentifier());
 		//request.setFormat(layerCaps.getFormatList().get(0));
 		//request.getObservables().add(layerCaps.getObservableList().get(0));

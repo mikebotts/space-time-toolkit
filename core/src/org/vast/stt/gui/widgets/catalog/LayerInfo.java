@@ -108,6 +108,7 @@ public class LayerInfo {
 		return new List[] {
 				sasCaps.getSubscriptionOfferingIDList(),
 				sasCaps.getSensorIDList(),
+				sasCaps.getFrequencyList(),
 				sasCaps.getMessageStructureNameList(),
 				sasCaps.getMessageStructureList()
 		};
