@@ -90,7 +90,7 @@ public class SASSubscriptionChooserPage extends WizardPage
 						.newCheckList(comp, SWT.BORDER | SWT.MULTI);
 		checkboxTableViewer.setLabelProvider(new LabelProvider());
 		checkboxTableViewer.setContentProvider(new SubscriptionContentProvider());
-		String procs = caps.getSubscriptionOfferingID();
+		String procs = caps.getSubscriptionOfferingIDList().get(0);
 		checkboxTableViewer.setInput(procs);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 		checkboxTableViewer.getTable().setLayoutData(gd);

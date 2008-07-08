@@ -90,7 +90,7 @@ public class LayerLabelProvider extends LabelProvider {
 			else if (element == sasCaps.getMessageStructureList()) 
 				return "Swe Common Alert Structure";
 			else if (element == sasCaps.getFrequencyList())				
-				return "Frequency";
+				return "Reporting Frequency";
 			else
 			return element.toString();
 	}
