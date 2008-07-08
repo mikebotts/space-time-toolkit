@@ -25,9 +25,11 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
@@ -59,6 +61,8 @@ public class LayerInfo {
 	public List [] getOptions(){
 		if(caps instanceof SOSLayerCapabilities) {
 			return getSOSOptions();
+		} else if(caps instanceof SASLayerCapabilities) {
+			return getSASOptions();
 		} else if(caps instanceof WMSLayerCapabilities) {
 			return getWMSOptions();
 		} else if(caps instanceof WCSLayerCapabilities) {
@@ -67,6 +71,46 @@ public class LayerInfo {
 			return getWFSOptions();
 		} else
 			return null;
+	}
+	/*
+	public List [] getSASOptions(){
+		SASLayerCapabilities sasCaps = (SASLayerCapabilities)caps;
+		return SASCreateList(sasCaps);
+	}
+	
+	private List[] SASCreateList(SASLayerCapabilities sasCaps) {
+		
+		List<String> subscriptionOfferingIDList = new ArrayList<String>(1);
+		List<String> sensorIDList = new ArrayList<String>(1);
+		List<String> messageStructureNameList = new ArrayList<String>(1);
+		List<String> messageStructureList = new ArrayList<String>(1);
+		List<String> frequencyList = new ArrayList<String>(1);
+		
+		subscriptionOfferingIDList.add(sasCaps.getSubscriptionOfferingID());
+		sensorIDList.add(sasCaps.getSensorID());
+		messageStructureNameList.add(sasCaps.getMessageStructureName());
+		messageStructureList.add(sasCaps.getMessageStructure());
+		if(sasCaps.getFrequency() == null){
+			frequencyList.add("unknown");}
+		else frequencyList.add(sasCaps.getFrequency());
+		
+		List [] listFromString = new List[] {
+				subscriptionOfferingIDList,
+				sensorIDList,
+				messageStructureNameList,
+				messageStructureList		
+		};
+		return listFromString;
+	} */
+
+	public List [] getSASOptions(){
+		SASLayerCapabilities sasCaps = (SASLayerCapabilities)caps;
+		return new List[] {
+				sasCaps.getSubscriptionOfferingIDList(),
+				sasCaps.getSensorIDList(),
+				sasCaps.getMessageStructureNameList(),
+				sasCaps.getMessageStructureList()
+		};
 	}
 	
 	public List [] getSOSOptions(){

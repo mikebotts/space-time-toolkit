@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.vast.ows.OWSLayerCapabilities;
+import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.util.TimeInfo;
@@ -65,6 +66,8 @@ public class LayerLabelProvider extends LabelProvider {
 			caps = (OWSLayerCapabilities)element;
 		if(caps instanceof SOSLayerCapabilities)
 			return getSOSText(element);
+		else if(caps instanceof SASLayerCapabilities)
+			return getSASText(element);
 		else if(caps instanceof WMSLayerCapabilities)
 			return getWMSText(element);
 		else if(caps instanceof WFSLayerCapabilities)
@@ -72,6 +75,23 @@ public class LayerLabelProvider extends LabelProvider {
 		else if(caps instanceof WCSLayerCapabilities)
 			return getWCSText(element);
 		else
+			return element.toString();
+	}
+	
+	public String getSASText(Object element)
+	{
+		SASLayerCapabilities sasCaps = (SASLayerCapabilities)caps;
+			if(element == sasCaps.getSubscriptionOfferingIDList())
+				return "Subscription Offering ID";
+			else if (element == sasCaps.getSensorIDList())
+				return "Sensor ID";
+			else if (element == sasCaps.getMessageStructureNameList())
+				return "Alert Structure Name";
+			else if (element == sasCaps.getMessageStructureList()) 
+				return "Swe Common Alert Structure";
+			else if (element == sasCaps.getFrequencyList())				
+				return "Frequency";
+			else
 			return element.toString();
 	}
 	
