@@ -38,8 +38,8 @@
                <DataList>
                   <name>Empire Challenge 08</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
-                  <!--              <member xlink:href="./EOSensors/SatelliteNadirAndFootprint.xml#SatelliteObs"/>
-                 <member visible="false">
+                  <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>
+          <!--       <member visible="false">
                      <DataItem>
                         <name>MODIS Lookrays</name>
                         <dataProvider>
