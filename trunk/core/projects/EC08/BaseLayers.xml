@@ -10,7 +10,7 @@
                   <name>World Coast Lines - 13</name>
                   <description>World Coast Lines</description>
                   <format>SWE</format>
-                  <sweData href="http://localhost:8080/docs/mapcil13.xml"/>
+                  <sweData href="http://vast.uah.edu/SWEData/coastlines/mapcil13.xml"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
