@@ -25,6 +25,8 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -33,9 +35,15 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.vast.math.Vector3d;
-import org.vast.ows.sas.SASLayerCapabilities;
+import org.vast.ows.OWSException;
+import org.vast.ows.OWSExceptionReader;
+import org.vast.ows.OWSUtils;
 import org.vast.ows.sas.*;
 import org.vast.stt.project.tree.DataItem;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
+import org.w3c.dom.Element;
+
 
 /**
  * <p><b>AddItemWizard:</b>
@@ -66,18 +74,50 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		
 		//first we must subscribe to the selected SAS
-		SASSubscribeWriter sasSubscribe = new SASSubscribeWriter(new DOMHelper(),null);
+		SASSubscribeRequest request = new SASSubscribeRequest();
+		request.setPostServer(caps.getParent().getGetServers().get("Subscribe"));	
+		request.setSubscriptionOfferingID(caps.getSubscriptionOfferingIDList().get(0));
+
+		InputStream dataStream = null;
+		
+			try {
+				// create reader
+				SASSubscribeResponseReader reader = new SASSubscribeResponseReader();
+
+				//  send request
+				OWSUtils owsUtils = new OWSUtils();
+				dataStream = owsUtils.sendPostRequest(request).getInputStream();		
+				DOMHelper dom = new DOMHelper(dataStream, false);
+				OWSExceptionReader.checkException(dom);
+				
+				// find first Subscribe response element
+				Element rootElement = dom.getRootElement();
+				// parse response
+				SASSubscribeResponse subscribeResponse = reader.parseSASSubscribeXMLResponse(dom, rootElement);
+				caps.setXMPPURI(subscribeResponse.getXMPPURI());
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OWSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DOMHelperException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 	}
 	
 	public void addPages()
 	{
-		
 		mappingPage = new SASMappingPage(caps);
+		mappingPage.
 		addPage(mappingPage);
-		//symPage = new SASSymbolizerPage();
-		//addPage(symPage);
+		symPage = new SASSymbolizerPage();
+		addPage(symPage);
 	}	
 
 	@Override
