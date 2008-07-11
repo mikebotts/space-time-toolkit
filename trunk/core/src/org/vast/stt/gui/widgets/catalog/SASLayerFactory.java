@@ -31,6 +31,7 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
 import org.vast.ows.sas.SASLayerCapabilities;
+import org.vast.ows.sas.SASSubscribeResponse;
 import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
@@ -74,11 +75,11 @@ public class SASLayerFactory
 		item.setName(item.getName() + "_" + procedure);
 	}*/
 	
-	public static DataItem createSASLayer(String offering, SASLayerCapabilities caps, 
+	public static DataItem createSASLayer(SASSubscribeResponse subResponse, SASLayerCapabilities caps, 
 			String [] mappings, String symType, int usesSMLProvider_notWorkingYet){
-		System.err.println("Create SAS layer: " + offering + " " + mappings[0] + " " + symType);
+		System.err.println("Create SAS layer: " + caps.getTitle() + " " + mappings[0] + " " + symType);
 		DataItem item = new DataItem();
-		item.setName(offering);
+		item.setName(caps.getTitle());
 		
 		SMLProvider provider = new SMLProvider();
 		//List<String> procs = caps.getProcedureList();

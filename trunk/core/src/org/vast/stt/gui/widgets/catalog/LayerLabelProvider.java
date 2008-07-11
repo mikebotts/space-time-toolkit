@@ -87,7 +87,7 @@ public class LayerLabelProvider extends LabelProvider {
 				return "Sensor ID";
 			else if (element == sasCaps.getMessageStructureNameList())
 				return "Alert Structure Name";
-			else if (element == sasCaps.getMessageStructureList()) 
+			else if (element == sasCaps.getSweDataComponentList()) 
 				return "Swe Common Alert Structure";
 			else if (element == sasCaps.getFrequencyList())				
 				return "Reporting Frequency";

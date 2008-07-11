@@ -110,7 +110,7 @@ public class LayerInfo {
 				sasCaps.getSensorIDList(),
 				sasCaps.getFrequencyList(),
 				sasCaps.getMessageStructureNameList(),
-				sasCaps.getMessageStructureList()
+				sasCaps.getSweDataComponentList()
 		};
 	}
 	

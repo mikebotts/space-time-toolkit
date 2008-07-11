@@ -25,8 +25,12 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,19 +44,29 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
+import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.om.ObservationStreamReaderV0;
 import org.vast.ows.sas.SASLayerCapabilities;
+import org.vast.ows.sas.SASSubscribeRequest;
+import org.vast.ows.sas.SASSubscribeResponse;
+import org.vast.ows.sas.SASSubscribeResponseReader;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
+import org.vast.sweCommon.SWECommonUtils;
+import org.vast.sweCommon.SWEReader;
+import org.vast.xml.DOMHelper;
+import org.vast.xml.DOMHelperException;
+import org.w3c.dom.Element;
 
 /**
  * <p><b>Title:</b>
@@ -62,15 +76,15 @@ import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
  * </p>
  *
  * <p>Copyright (c) 2007</p>
- * @author Tony Cook
- * @date Mar 21, 2007
+ * @author Gregoire Berthiau & Susan Ingenthron
+ * @date Mar 21, 2008
  * @version 1.0
  */
 
 public class SASMappingPage extends WizardPage implements SelectionListener
 {
+	
 	SASLayerCapabilities caps;
-	String [] offerings;
 	private AdvancedGeometryTab geometryComp;
 	Button procBtn, directBtn;
 	List<String>possibleMappings = new ArrayList<String>(3);
@@ -88,10 +102,9 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 		setDescription("Map the SAS Offering components to Display space");
 	}
 	
-	public void setOfferings(String [] offerings){
-		this.offerings = offerings;
-		offeringIndex = 0;
-		String [] dataComponents = getComponents(offeringIndex);
+	public void setSubscription(){
+		String [] dataComponents = null;
+		dataComponents[0] = getComponents();
 		if(dataComponents != null) {
 			geometryComp.setMappableItems(dataComponents);
 			assignDefaultComponents(dataComponents);
@@ -99,15 +112,15 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 			; //  disable combos, require ProcessChain?
 	}
 	
-	private String [] getComponents(int index){
-		setTitle(offerings[offeringIndex] + " Geometry Mapper");
-		String [] components = mappings.get(offerings[index]);
+	private String getComponents(){
+		setTitle(caps.getTitle() + " Geometry Mapper");
+		String [] components = mappings.get(caps.getTitle());
 		if(components == null){
 			components = requestComponents();
 			if(components == null)
 				return null;//  didn't work, return null
 			else 
-				mappings.put(offerings[index], components);
+				mappings.put(caps.getTitle(), components);
 		}
 		return components;
 	}
@@ -115,7 +128,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 	private String [] requestComponents(){
 		DataComponent component = null; 
 		try {
-			component = issueRequest();
+			component = getSweReader().getDataComponents();
 		} catch (DataException e) {
 			e.printStackTrace();
 			//  TODO: report error and disable this offering (or force to processChain mapping)
@@ -163,66 +176,41 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 		}
 	}
 	
-	//  This creates a dummy request just to get the DataComponents back
-	//  This is a problematic approach, though.  It will be impossible 
-	//  to predict what constitutes a valid request, since time beheavior and
-	//  bbox behavior or both highly servlet-dependent.
-	//  Fudging some stuff now just to make it work, in the hopes that future
-	//  SOS implemntations (including our own) will support the getTemplate() 
-	//  method.    TC 3/22/07
-	private DataComponent issueRequest() throws DataException {
-		GetObservationRequest query = new GetObservationRequest();
-		//SOSQuery query = new SOSQuery();
-		query.setOperation("GetObservation");
-		query.setGetServer(caps.getParent().getGetServers().get("GetObservation"));
-		query.setPostServer(caps.getParent().getGetServers().get("GetObservation"));
-		query.setOffering(caps.getIdentifier());
-		//query.getObservables().add(caps.getObservableList().get(0));
-		//query.getProcedures().add(caps.getProcedureList().get(0));
-		query.setVersion("0.0.31");  //  ?
-		//query.setFormat(caps.getFormatList().get(0));
-		query.setService("SAS");
-		caps.getParent().getGetServers();
-		//  TimeInfo kludge
-		//TimeInfo capsTime = caps.getTimeList().get(0);
-		//TimeInfo requestTime = capsTime.copy();
-		//  if this is a realtime dataset, mod the requestTime
-		//  to request some data for a short period
-		//if(capsTime.isEndNow() == true)
-		//	requestTime.setBeginNow(true);
-		//else  //  hardwire 10 minute request, if not rt
-		//	requestTime.setStopTime(requestTime.getStartTime() + 600.0);
-		//query.setTime(requestTime);
+	// This parse the SWECommon description held in the layerCap
+	private SWEReader getSweReader() throws DataException {
 		
-		InputStream dataStream = null;
+		SWEReader reader = null;
 		try {
-			// create reader
-			ObservationStreamReaderV0 reader = new ObservationStreamReaderV0();
-
-			//  send request
-			OWSUtils owsUtils = new OWSUtils();
-			dataStream = owsUtils.sendGetRequest(query).getInputStream();
-
-			// parse response
-			reader.parse(dataStream, null);
-
-			// display data structure and encoding
-			DataComponent dataInfo = reader.getDataComponents();
-			//  NOTE- how do we know what CRS FOI is in (and radians or degrees?)
-			foiLocation = reader.getFoiLocation();
-			return dataInfo;
-		} catch (Exception e) {
-			String server = query.getPostServer();
-			if (server == null)
-				server = query.getGetServer();
-			throw new DataException("Error while reading data from " + server, e);
-		} finally {
-			try {
-				if (dataStream != null) 
-					dataStream.close();
-			} catch (IOException e){
-			}
-		}		
+			byte[] bytes = caps.getMessageStructure().getBytes("UTF-8");
+			InputStream messageStructureStream = new ByteArrayInputStream(bytes);
+			
+			DOMHelper dom = new DOMHelper(messageStructureStream, false);
+			Element rootElement = dom.getRootElement();
+			
+			Element defElt = dom.getElement(rootElement, "DataDefinition");
+			if (defElt == null)
+			    defElt = dom.getElement(rootElement, "DataBlockDefinition");            
+			Element dataElt = dom.getElement(defElt, "dataComponents");
+			if (dataElt == null)
+			    dataElt = dom.getElement(defElt, "components");
+			
+			Element encElt = dom.getElement(defElt, "encoding");		
+			SWECommonUtils utils = new SWECommonUtils();
+			reader.setDataComponents(utils.readComponentProperty(dom, dataElt));
+			if (encElt == null)
+				reader.setDataEncoding(utils.readEncodingProperty(dom, encElt));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DOMHelperException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CDMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reader;		
 	}
 	
 	private void findPossibleMappings(DataComponent component, String componentPath) {
