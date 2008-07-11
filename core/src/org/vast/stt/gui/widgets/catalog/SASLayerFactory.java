@@ -59,7 +59,7 @@ import org.vast.stt.style.SymbolizerFactory;
 
 public class SASLayerFactory 
 {
-	public static void setSASProcedure(DataItem item, String procedure){
+/*	public static void setSASProcedure(DataItem item, String procedure){
 		SMLProvider provider = (SMLProvider)item.getDataProvider();
 		DataProcess process = provider.getProcess();
 		SOS_Process sosProc = (SOS_Process) process;
@@ -72,7 +72,7 @@ public class SASLayerFactory
 		dbs.setStringValue(procedure);
 		procDv.setData(dbs);
 		item.setName(item.getName() + "_" + procedure);
-	}
+	}*/
 	
 	public static DataItem createSASLayer(String offering, SASLayerCapabilities caps, 
 			String [] mappings, String symType, int usesSMLProvider_notWorkingYet){

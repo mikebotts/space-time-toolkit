@@ -49,7 +49,7 @@ import org.vast.ows.OWSUtils;
 import org.vast.ows.om.ObservationStreamReaderV0;
 import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.sos.GetObservationRequest;
-import org.vast.ows.sos.SOSLayerCapabilities;
+import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
@@ -85,7 +85,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 	public SASMappingPage(SASLayerCapabilities caps){
 		super("Map Offerings");
 		this.caps = caps;
-		setDescription("Map the SOS Offering components to Display space");
+		setDescription("Map the SAS Offering components to Display space");
 	}
 	
 	public void setOfferings(String [] offerings){
@@ -281,17 +281,6 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 	     return true;
 	}
 	
-	public IWizardPage getPreviousPage(){
-		if(offeringIndex == 0)
-			return ((AddSOSItemWizard)this.getWizard()).sosChooserPage;
-		offeringIndex--;
-		String [] dataComponents = getComponents(offeringIndex);
-		if(dataComponents != null) {
-			geometryComp.setMappableItems(dataComponents);
-			assignDefaultComponents(dataComponents);
-		}
-		return this;
-	}
 	
 	public HashMap<String, String []> getSelectedMappings(){
 		return selectedMappings;
@@ -318,7 +307,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 			}
 			return this;
 		}
-		return ((AddSOSItemWizard)this.getWizard()).symPage;
+		return ((AddSASItemWizard)this.getWizard()).symPage;
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {

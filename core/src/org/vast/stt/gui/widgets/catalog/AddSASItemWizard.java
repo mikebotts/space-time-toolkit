@@ -34,6 +34,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.vast.math.Vector3d;
 import org.vast.ows.sas.SASLayerCapabilities;
+import org.vast.ows.sas.*;
 import org.vast.stt.project.tree.DataItem;
 
 /**
@@ -54,7 +55,6 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 	SASLayerCapabilities caps;
 	SASMappingPage mappingPage;
 	SASSymbolizerPage symPage;
-	SASSubscriptionChooserPage sasChooserPage;
 	DataItem [] newItems;
 	boolean canFinish = false;
 	SceneTreeDropListener dropListener;
@@ -66,16 +66,18 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		//first we must subscribe to the selected SAS
+		SASSubscribeWriter sasSubscribe = new SASSubscribeWriter(new DOMHelper(),null);
+		
 	}
 	
 	public void addPages()
 	{
-		sasChooserPage = new SASSubscriptionChooserPage(caps);
-		addPage(sasChooserPage);
+		
 		mappingPage = new SASMappingPage(caps);
 		addPage(mappingPage);
-		symPage = new SASSymbolizerPage();
-		addPage(symPage);
+		//symPage = new SASSymbolizerPage();
+		//addPage(symPage);
 	}	
 
 	@Override
