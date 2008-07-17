@@ -39,7 +39,9 @@
                   <name>Empire Challenge 08</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
-                  <member xlink:href="./GoesImagery.xml#GoesObs"/>
+                  <member xlink:href="./DopplerRadar.xml#Radar"/>
+                  <member xlink:href="./SAIC.xml#SAIC"/>
+                  <member xlink:href="./ERDAS.xml#ERDAS"/>
                </DataList>
             </contents>
          </Scene>
