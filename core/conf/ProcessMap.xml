@@ -6,6 +6,11 @@
    </ProcessPackage>
    
    <Process>
+      <uri>urn:ogc:def:process:gridBuilder:1.0</uri>
+      <class>org.sensorML.process.GridBuilder_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:vast:def:process:binaryOperation:1.0</uri>
       <class>org.sensorML.process.BinaryOperation_Process</class>
    </Process>
