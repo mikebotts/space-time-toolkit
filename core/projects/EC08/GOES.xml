@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe" xmlns:sldx="http://vast.uah.edu/sldx">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>GOES Demo Project</name>
+      <author>T Cook</author>
+      <dateCreated>2006-06-15T22:23:00</dateCreated>
+      <description>Goes Test</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>3D ECF View</name>
+            <time>
+               <TimeSettings>
+                  <currentTime>2004-01-01T12:00:00Z</currentTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+                  <realTimeMode>on</realTimeMode>
+               </TimeSettings>
+            </time>
+            <view>
+               <ViewSettings>
+                  <backgroundColor>#FFFFFF</backgroundColor>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-1.514 0.6032 10</cameraPos>
+                  <targetPos>-1.514 0.6032 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>1.0</orthoWidth>
+                  <orthoHeight>0.7</orthoHeight>
+                  <nearClip>0</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>GOES Demo Project</name>                  
+                  <member visible="false">
+                     <DataItem enabled="true">
+                        <name>GOES Imagery</name>
+                        <dataProvider xlink:href="#GOES_PROCESS"/>
+                        <style>
+                           <sldx:TextureSymbolizer enabled="true">
+                              <sldx:Grid>
+                                 <sldx:Dimensions>
+                                    <sldx:Axis name="width">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                    </sldx:Axis>
+                                    <sldx:Axis name="length">
+                                       <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                    </sldx:Axis>
+                                 </sldx:Dimensions>
+                                 <sld:Geometry>
+                                    <sld:CssParameter name="geometry-x">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                    <sld:CssParameter name="geometry-y">
+                                       <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                    </sld:CssParameter>
+                                 </sld:Geometry>
+                              </sldx:Grid>
+                              <sldx:Raster>
+                                 <sldx:Dimensions>
+                                    <sldx:Axis name="width">
+                                       <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                                    </sldx:Axis>
+                                    <sldx:Axis name="height">
+                                       <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                                    </sldx:Axis>
+                                 </sldx:Dimensions>
+                                 <sld:Opacity>1.0</sld:Opacity>                              
+                                 <sld:ChannelSelection>
+                                    <sld:GrayChannel>
+                                       <LinearAdjustment>
+                                          <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                                          <Gain>1.0</Gain>
+                                       </LinearAdjustment>
+                                    </sld:GrayChannel>
+                                 </sld:ChannelSelection>
+                              </sldx:Raster>
+                           </sldx:TextureSymbolizer>
+                        </style>
+                        <style>
+                           <sldx:GridMeshSymbolizer enabled="false">
+                              <sldx:Dimensions>
+                                 <sldx:Axis name="width">
+                                    <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                                 </sldx:Axis>
+                                 <sldx:Axis name="length">
+                                    <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                                 </sldx:Axis>
+                              </sldx:Dimensions>
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sldx:GridMeshSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member visible="true">
+                     <DataItem enabled="true">
+                        <name>Coast Lines - 100km</name>
+                        <dataProvider xlink:href="#COASTLINE_PROV"/>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>                                       
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>                             
+                     </DataItem>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources (preloaded capabilities) -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            <member>
+               <SensorMLProvider id="GOES_PROCESS">
+                  <name>GOES Process</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <spatialExtent tiling="2x2"> 
+                     <BoundingBox srsName="EPSG:4326">
+                        <gml:coordinates>-94.2,23.4 -85.3,44.4</gml:coordinates>
+                     </BoundingBox>
+                  </spatialExtent>
+                  <process xlink:href="./GOES_Process.xml#GOES_WCS_PROCESS"/>
+               </SensorMLProvider>
+            </member>
+            <member>
+               <SWEDataProvider id="COASTLINE_PROV">
+                  <name>World Coast Lines - 100</name>
+                  <description>World Coast Lines</description>
+                  <format>SWE</format>
+                  <sweData xlink:href="http://vast.uah.edu/SWEData/coastlines/mapcil100.xml"/>
+               </SWEDataProvider>
+            </member>
+ 
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
