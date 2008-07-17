@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="GoesObs">
+      <name>Goes Imagery</name>
+      <member>
+         <DataItem>
+            <name>Region Of Interest</name>
+            <dataProvider>
+            <SensorMLProvider id="FLATGRID_PROCESS">
+               <name>Flat Grid Process</name>
+               <description>Grid for Region of Interest</description>
+               <spatialExtent tiling="1x1">
+                  <BoundingBox id="ROI" srsName="EPSG:4326">
+                     <!--<gml:coordinates>-112.2,15.4 -72.3,45.4</gml:coordinates>-->
+                     <gml:coordinates>-89.9,15.4 -61.2,45.4</gml:coordinates>
+                  </BoundingBox>
+               </spatialExtent>
+               <process xlink:href="./FlatGrid_Process.xml#GRID_GENERATOR"/>
+            </SensorMLProvider>
+               </dataProvider>
+            <style>
+               <sld:GridBorderSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridBorderSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member>
+         <DataItem>
+            <name>GOES VIS Imagery</name>
+            <dataProvider>
+            <SensorMLProvider id="GOES_VIS">
+               <name>GOES Visible WCS</name>
+               <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+               <timeExtent autoUpdate="#SCENE_01">
+                  <TimeExtent id="GOES_TIME">
+                     <!--<baseTime>2005-08-28T16:00:00</baseTime>-->
+                     <!--<baseTime>2007-06-03T07:46:00</baseTime>-->
+                     <baseTime>2007-06-03T06:00:00</baseTime>
+                  </TimeExtent>
+               </timeExtent>
+               <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+               <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+               <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
+            </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:GrayChannel>
+                           <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues> 0 0 1 2.318181795 2 4.63636359 3 6.954545385 4
+                                 9.272726925 5 11.59090847 6 13.90909103 7 16.2272718 8 18.54545385
+                                 9 20.8636359 10 23.18181693 11 25.49999847 12 27.81818205 13
+                                 30.1363641 14 32.45454615 15 34.77272565 16 37.0909077 17
+                                 39.4090923 18 41.7272718 19 44.04545385 20 46.36363335 21
+                                 48.68181795 22 50.99999745 23 53.3181795 24 55.6363641 25
+                                 57.9545436 26 60.27272565 27 62.59090515 28 64.90908975 29
+                                 67.22726925 30 69.54544875 31 71.8636359 32 74.1818154 33
+                                 76.4999949 34 78.8181795 35 81.136359 36 83.4545385 37 85.772718 38
+                                 88.0909077 39 90.4090872 40 92.7272667 41 95.04545385 42 97.3636359
+                                 43 99.6818154 44 101.9999949 45 104.3181795 46 106.636359 47
+                                 108.9545385 48 111.2727282 49 113.5909077 50 115.9090872 51
+                                 118.2272667 52 120.5454539 53 122.8636334 54 125.1818129 55
+                                 127.4999924 56 129.8181795 57 132.136359 58 134.4545385 59
+                                 136.772718 60 139.0908975 61 141.4090923 62 143.7272718 63
+                                 146.0454513 64 148.3636308 65 150.6818103 66 152.9999898 67
+                                 155.3181693 68 157.636359 69 159.9545385 70 162.272718 71
+                                 164.5908975 72 166.909077 73 169.2272565 74 171.545436 75
+                                 173.863641 76 176.1818205 77 178.5 78 180.8181795 79 183.136359 80
+                                 185.4545385 81 187.772718 82 190.0909103 83 192.4090898 84
+                                 194.7272693 85 197.0454488 86 199.3636283 87 201.6818078 88
+                                 203.9999873 89 206.3181795 90 208.636359 91 210.9545385 92
+                                 213.272718 93 215.5908975 94 217.909077 95 220.2272565 96
+                                 222.5454615 97 224.863641 98 227.1818205 99 229.5 100 231.8181795
+                                 101 234.136359 102 236.4545385 103 238.772718 104 241.0909077 105
+                                 243.4090872 106 245.7272667 107 248.0454462 108 250.3636257 109
+                                 252.6818052 110 255 255 255 </TableValues>
+                           </LookUpTable1D>
+                        </sld:GrayChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style>
+               <sld:GridMeshSymbolizer enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+            <mask>
+               <DataItem id="GOES_BBOX_MASK" enabled="true">
+                  <name>ROI Mask</name>
+                  <dataProvider xlink:href="#FLATGRID_PROCESS"/>
+                  <style>
+                     <sld:GridFillSymbolizer enabled="true">
+                        <sld:Dimensions>
+                           <sld:Axis name="width">
+                              <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
+                           </sld:Axis>
+                           <sld:Axis name="length">
+                              <ogc:PropertyName>gridData/grid</ogc:PropertyName>
+                           </sld:Axis>
+                        </sld:Dimensions>
+                        <sld:Geometry>
+                           <sld:CssParameter name="geometry-x">
+                              <ogc:PropertyName>gridData/grid/row/point/lon</ogc:PropertyName>
+                           </sld:CssParameter>
+                           <sld:CssParameter name="geometry-y">
+                              <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                           </sld:CssParameter>
+                        </sld:Geometry>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:GridFillSymbolizer>
+                  </style>
+               </DataItem>
+            </mask>
+         </DataItem>
+      </member>
+      <member>
+         <DataItem>
+            <name>GOES IR Imagery</name>
+            <dataProvider>
+               <SensorMLProvider id="GOES_IR">
+                  <name>GOES IR WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent xlink:href="#GOES_TIME"/>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:ChannelSelection>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 255 15 255 19 128 20 0 30 0 41 0 45 128 54 255 63 128
+                                 69 0 70 165 128 88 255 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 255 15 255 19 128 20 0 30 255 41 255 45 128 54 0 63 0
+                                 69 0 70 165 128 88 255 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 255 15 255 19 255 20 255 30 255 41 0 45 0 54 0 63 128
+                                 69 0 70 165 128 88 255 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 255 70 255 127 0 255 0</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style>
+               <sld:GridMeshSymbolizer enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+            <mask xlink:href="#GOES_BBOX_MASK"/>
+         </DataItem>
+      </member>
+      <member>
+         <DataItem>
+            <name>GOES CTP Imagery</name>
+            <dataProvider>
+               <SensorMLProvider id="GOES_CTP">
+                  <name>GOES CTP WCS</name>
+                  <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
+                  <timeExtent xlink:href="#GOES_TIME"/>
+                  <spatialExtent tiling="1x1" xlink:href="#ROI"/>
+                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <value path="wcsOptions/layer">GOES12_CONUS_CTP</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>coverageData/rangeData/coverage/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>coverageData/rangeData/coverage</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:ChannelSelection normalizedColors="true">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 0.6 100 0.6 100 0.57 200 0.71 200 0.00 300 0.00 300
+                                 0.12 400 0.06 400 0.00 500 0.00 500 0.49 600 0.93 600 1.00 700 0.82
+                                 700 1.00 800 1.00 800 0.71 900 0.53 900 0.78 1000
+                              1.00</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 0.6 100 0.6 100 0.17 200 0.66 200 0.93 300 0.71 300
+                                 0.56 400 0.30 400 0.54 500 0.79 500 1.00 600 0.93 600 0.84 700 0.54
+                                 700 0.49 800 0.00 800 0.00 900 0.00 900 0.00 1000
+                              0.68</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 0.6 100 0.6 100 0.93 200 0.82 200 0.93 300 0.93 300
+                                 1.00 400 0.54 400 0.00 500 0.00 500 0.00 600 0.00 600 0.00 700 0.00
+                                 700 0.00 800 0.00 800 0.00 900 0.00 900 0.47 1000
+                              0.72</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>coverageData/rangeData/coverage/row/data</ogc:PropertyName>
+                              <TableValues>0 0.0 100 0.0 100 1.0</TableValues>
+                           </LookUpTable1D>
+                        </sld:AlphaChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style>
+               <sld:GridMeshSymbolizer enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>coverageData/domainData/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>coverageData/domainData/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/longitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>coverageData/domainData/grid/row/point/latitude</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#EECCCC</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+            <mask xlink:href="#GOES_BBOX_MASK"/>
+         </DataItem>
+      </member>
+   </DataList>
+</STTProject>
