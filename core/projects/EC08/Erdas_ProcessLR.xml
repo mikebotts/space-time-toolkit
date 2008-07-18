@@ -149,7 +149,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/erdas</swe:value>
+                                       <swe:value>http://localhost:8080/KCMHD</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -208,7 +208,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>2</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -265,7 +265,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>2</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -368,6 +368,16 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="heightAboveEllipsoid">
+                              <swe:Quantity>
+                                 <swe:value>719</swe:value>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
                      <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
