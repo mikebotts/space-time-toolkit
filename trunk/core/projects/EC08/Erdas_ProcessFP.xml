@@ -148,7 +148,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/erdas</swe:value>
+                                       <swe:value>http://localhost:8080/KCMHD</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -367,6 +367,16 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="heightAboveEllipsoid">
+                              <swe:Quantity>
+                                 <swe:value>719</swe:value>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
                      <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
@@ -437,51 +447,6 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:parameters>
-                        <sml:ParameterList>
-                           <sml:parameter name="emptyGrid">
-                              <swe:DataArray>
-                                 <swe:elementCount>
-                                    <swe:Count>
-                                       <swe:value>4</swe:value>
-                                    </swe:Count>
-                                 </swe:elementCount>
-                                 <swe:elementType name="acrossTrackPoints">
-                                    <swe:DataArray>
-                                       <swe:elementCount>
-                                          <swe:Count>
-                                             <swe:value>4</swe:value>
-                                          </swe:Count>
-                                       </swe:elementCount>
-                                       <swe:elementType name="groundPoint">
-                                          <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
-                                             <swe:coordinate name="x">
-                                                <swe:Quantity>
-                                                   <swe:uom code="m"/>
-                                                </swe:Quantity>
-                                             </swe:coordinate>
-                                             <swe:coordinate name="y">
-                                                <swe:Quantity>
-                                                   <swe:uom code="m"/>
-                                                </swe:Quantity>
-                                             </swe:coordinate>
-                                             <swe:coordinate name="z">
-                                                <swe:Quantity>
-                                                   <swe:uom code="m"/>
-                                                </swe:Quantity>
-                                             </swe:coordinate>
-                                          </swe:Vector>
-                                       </swe:elementType>                                      
-                                    </swe:DataArray>
-                                 </swe:elementType>
-                                 <swe:encoding>
-                                    <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
-                                 </swe:encoding>
-                                 <swe:values>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</swe:values> 
-                                 </swe:DataArray>
-                           </sml:parameter>
-                        </sml:ParameterList>
-                     </sml:parameters>
                      <sml:method xlink:href="urn:ogc:def:process:gridBuilder:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
