@@ -78,7 +78,7 @@
             <name>EO1 Hyperion Footprint at Nadir pointing</name>
             <dataProvider>
                <OWSDataProvider>
-                  <name>TRMM PR Footprints</name>
+                  <name>EO-1 Hyperion Footprints</name>
                   <timeExtent xlink:href="#HYPERION_TIME"/>
                   <layerId>EO1-Hyperion-NADIR</layerId>
                   <request postUrl="http://localhost:8080/footprint">

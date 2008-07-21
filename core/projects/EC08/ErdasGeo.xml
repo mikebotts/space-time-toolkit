@@ -145,7 +145,7 @@
                                  <swe:encoding>
                                     <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                                  </swe:encoding>
-                                 <swe:values>1.0,-0.079521564043991641348585660639262 4.0,0.079521564043991641348585660639262</swe:values>
+                                 <swe:values>1.0,0.079521564043991641348585660639262 4.0,-0.079521564043991641348585660639262</swe:values>
                               </swe:Curve>
                            </sml:parameter>
                         </sml:ParameterList>
@@ -201,7 +201,7 @@
                                  <swe:encoding>
                                     <swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
                                  </swe:encoding>
-                                 <swe:values> 1.0,-0.14137166941154069573081895224758 4.0,0.14137166941154069573081895224758 </swe:values>
+                                 <swe:values> 1.0,0.14137166941154069573081895224758 4.0,-0.14137166941154069573081895224758 </swe:values>
                               </swe:Curve>
                            </sml:parameter>
                         </sml:ParameterList>
