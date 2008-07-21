@@ -13,9 +13,9 @@
                   <name>KCM-HD Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="ERDAS_TIME">
-                        <baseTime>2008-07-17T15:20:21</baseTime>
-                        <leadTime>600</leadTime>
-                        <stepTime>2</stepTime>
+                        <baseTime>2008-07-17T15:33:14</baseTime>
+                        <leadTime>9</leadTime>
+                        <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Erdas_ProcessLR.xml#LOOKRAY_PROCESS"/>
@@ -163,7 +163,66 @@
                      <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                   </sld:Stroke>
                </sld:GridMeshSymbolizer>
-            </style>           
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem enabled="true">
+            <name>KCM-HD Frame Imagery</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>KCM-HD Process</name>
+                  <timeExtent xlink:href="#ERDAS_TIME"/>
+                  <process xlink:href="./Erdas_ProcessFrame.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>frameData/frame</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>frameData/frame/acrossTrackLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                           <sld:RedChannel>
+                              <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/red</sld:SourceChannelName>
+                           </sld:RedChannel>
+                           <sld:GreenChannel>
+                              <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/green</sld:SourceChannelName>
+                           </sld:GreenChannel>
+                           <sld:BlueChannel>
+                              <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/blue</sld:SourceChannelName>
+                           </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
          </DataItem>
       </member>
    </DataList>
