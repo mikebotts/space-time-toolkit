@@ -1190,6 +1190,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AMSU-A</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1209,6 +1210,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AMSU-B</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1228,6 +1230,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>NOAA15-AVHRR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1247,6 +1250,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>NOAA12-AMSU-A</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1266,6 +1270,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>NOAA12-AVHRR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1285,6 +1290,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>AQUA-MODIS</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1304,6 +1310,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>SPOT4-HRVIR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1323,6 +1330,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>SPOT4-HRVIR-Potential</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1342,6 +1350,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>SPOT5-HRG</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1361,6 +1370,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>SPOT5-HRG-Potential</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1380,6 +1390,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>TRMM-TMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1399,6 +1410,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>METOP-A-IASI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1418,6 +1430,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>CALIPSO-LIDAR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
@@ -1437,6 +1450,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>CLOUDSAT-RADAR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                         <resultModel>swe:DataValueType</resultModel>
                      </GetObservation>
