@@ -7,17 +7,48 @@
       <name>Erdas UAS TigerShark</name>
       <member visible="false">
          <DataItem>
-            <name>KCM-HD Lookrays</name>
+            <name>TigerShark Track</name>
             <dataProvider>
                <SensorMLProvider>
-                  <name>KCM-HD Lookrays Process Chain</name>
+                  <name>TigerShark Track Data</name>
                   <timeExtent>
                      <TimeExtent id="ERDAS_TIME">
-                        <baseTime>2008-07-17T15:33:14</baseTime>
+                        <baseTime>2008-07-21T17:39:01</baseTime>
                         <leadTime>9</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
+                  <process xlink:href="./Erdas_ProcessTrack.xml#TRACK_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member>
+         <DataItem>
+            <name>KCM-HD Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>KCM-HD Lookrays Process Chain</name>
+                  <timeExtent xlink:href="#ERDAS_TIME"/>
                   <process xlink:href="./Erdas_ProcessLR.xml#LOOKRAY_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -78,7 +109,7 @@
             <name>KCM-HD Footprint</name>
             <dataProvider>
                <SensorMLProvider>
-                  <name>KCM-HD Lookrays Process Chain</name>
+                  <name>KCM-HD Footprint Process Chain</name>
                   <timeExtent xlink:href="#ERDAS_TIME"/>
                   <process xlink:href="./Erdas_ProcessFP.xml#FOOTPRINT_PROCESS"/>
                </SensorMLProvider>
@@ -172,7 +203,13 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>KCM-HD Process</name>
-                  <timeExtent xlink:href="#ERDAS_TIME"/>
+                  <timeExtent>
+                     <TimeExtent id="ERDAS_TIME">
+                        <baseTime>2008-07-21T17:39:01</baseTime>
+                        <leadTime>9</leadTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <process xlink:href="./Erdas_ProcessFrame.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -224,6 +261,6 @@
                </sld:TextureSymbolizer>
             </style>
          </DataItem>
-      </member>
+      </member>  
    </DataList>
 </STTProject>

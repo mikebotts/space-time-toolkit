@@ -42,6 +42,7 @@
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
                   <member xlink:href="./DopplerRadar.xml#Radar"/>
                   <member xlink:href="./SAIC.xml#SAIC"/>
+                  <member xlink:href="./ESRI.xml#ESRI"/>
                   <member xlink:href="./ERDAS.xml#ERDAS"/>
                </DataList>
             </contents>

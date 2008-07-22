@@ -148,7 +148,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/KCMHDresampled</swe:value>
+                                       <swe:value>http://localhost:8080/KCMHD</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
