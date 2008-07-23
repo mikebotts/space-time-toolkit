@@ -120,6 +120,7 @@
                               <request postUrl="http://vast.uah.edu/vast/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>TERRA-MODIS</offering>
+                                    <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                                     <eventTime>
                                        <ogc:TM_During>
                                        <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
@@ -241,6 +242,7 @@
                               <request postUrl="http://vast.uah.edu/vast/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-NADIR</offering>
+                                    <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                                     <eventTime>
                                        <ogc:TM_During>
                                           <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
@@ -293,6 +295,7 @@
                               <request postUrl="http://vast.uah.edu/vast/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>EO1-Hyperion-Potential</offering>
+                                    <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                                     <eventTime>
                                        <ogc:TM_During>
                                           <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
@@ -414,6 +417,7 @@
                               <request postUrl="http://vast.uah.edu/vast/footprint">
                                  <GetObservation service="SOS" version="1.0">
                                     <offering>AQUA-AMSRE</offering>
+                                    <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                                     <eventTime>
                                        <ogc:TM_During>
                                           <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
