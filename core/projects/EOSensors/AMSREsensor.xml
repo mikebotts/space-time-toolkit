@@ -10,8 +10,8 @@
                   <name>AMSR-E Lookrays Process Chain</name>
                   <timeExtent>
                      <TimeExtent id="AMSRE_TIME">
-                        <baseTime>2007-04-30T23:43:00</baseTime>
-                        <leadTime>900</leadTime>
+                        <baseTime>2007-04-30T23:59:00</baseTime>
+                        <leadTime>60</leadTime>
                         <stepTime>60</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -81,6 +81,7 @@
                   <request postUrl="http://vast.uah.edu/vast/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>AQUA-AMSRE</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                         <eventTime>
                            <ogc:TM_During>
                               <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
@@ -292,7 +293,14 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>AMSR-E Data Process Chain</name>
-                  <timeExtent xlink:href="#AMSRE_TIME"/>
+<!--                  <timeExtent xlink:href="#AMSRE_TIME"/>-->
+                  <timeExtent>
+                     <TimeExtent id="AMSRE_TIME_TMP">
+                        <baseTime>2007-04-30T23:59:00</baseTime>
+                        <lagTime>900</lagTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
                   <process xlink:href="../process/AMSR-E_Process_WithData.xml#PROCESS"/>
                   <value process="sosScan" path="sosOptions/observables">BAND_23GHzVP</value>
                </SensorMLProvider>

@@ -213,6 +213,7 @@
                                     <request postUrl="http://vast.uah.edu/vast/footprint">
                                        <GetObservation service="SOS" version="1.0">
                                           <offering>SPOT5</offering>
+                                          <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
                                           <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
                                           <resultModel>swe:DataValueType</resultModel>
                                        </GetObservation>
