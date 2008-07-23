@@ -3,8 +3,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
    xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe">
-   <DataList id="ERDAS">
-      <name>Erdas UAS TigerShark</name>
+   <DataList id="ERDASwithCSM">
+      <name>Erdas UAS TigerShark with CSM</name>
       <member visible="false">
          <DataItem>
             <name>TigerShark Track</name>
@@ -55,7 +55,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./Erdas_ProcessLR.xml#LOOKRAY_PROCESS"/>
+                  <process xlink:href="./Erdas_ProcessLRwithCSM.xml#LOOKRAY_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
@@ -117,7 +117,7 @@
                <SensorMLProvider>
                   <name>KCM-HD Footprint Process Chain</name>
                   <timeExtent xlink:href="#ERDAS_TIME2"/>
-                  <process xlink:href="./Erdas_ProcessFP.xml#FOOTPRINT_PROCESS"/>
+                  <process xlink:href="./Erdas_ProcessFPwithCSM.xml#FOOTPRINT_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
@@ -216,7 +216,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./Erdas_ProcessFrame.xml#FRAME_PROCESS"/>
+                  <process xlink:href="./Erdas_ProcessFramewithCSM.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
