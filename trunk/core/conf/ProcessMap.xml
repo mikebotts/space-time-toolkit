@@ -6,8 +6,13 @@
    </ProcessPackage>
    
    <Process>
-      <uri>urn:ogc:def:process:gridBuilder:1.0</uri>
-      <class>org.sensorML.process.GridBuilder_Process</class>
+      <uri>urn:ogc:def:process:CSM:frameSensorModel</uri>
+      <class>org.sensorML.process.CSM_FrameCameraModel_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:gridBuilderEC:1.0</uri>
+      <class>org.sensorML.process.GridBuilderEC_Process</class>
    </Process>
    
    <Process>
