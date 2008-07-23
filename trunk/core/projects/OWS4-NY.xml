@@ -1196,6 +1196,7 @@
                   </timeExtent>
                   <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KOKX_DOPPLER_TILT0</value>
+                  <value process="sos" path="sosOptions/observables">urn:vast:phenomenon:reflectivity</value>
                </SensorMLProvider>
             </member>
             <member>
