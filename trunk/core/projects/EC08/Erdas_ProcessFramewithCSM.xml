@@ -325,7 +325,7 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>1920</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
@@ -382,7 +382,7 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>1080</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
@@ -421,7 +421,7 @@
                   </sml:ProcessModel>
                </sml:component>
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./ErdasGeo.xml#ERDAS_GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./ErdasGeoWithCSM.xml#GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
                <sml:component name="rayIntersectEllipsoid">
                   <sml:ProcessModel>
@@ -494,7 +494,7 @@
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
                               <swe:Quantity>
-                                 <swe:value>715.5</swe:value>
+                                 <swe:value>635</swe:value>
                                  <swe:uom code="m"/>
                               </swe:Quantity>
                            </sml:parameter>
