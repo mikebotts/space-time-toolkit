@@ -151,7 +151,7 @@
                                     </swe:Quantity>
                                  </swe:quality>
                                  <swe:uom code="mm"/>
-                                 <swe:value>51.5465</swe:value>
+                               <swe:value>51.5465</swe:value>
                               </swe:Quantity>
                            </sml:parameter>
                            <sml:parameter name="pixelGridCharacteristics">

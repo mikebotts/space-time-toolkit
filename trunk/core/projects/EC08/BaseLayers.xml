@@ -27,7 +27,7 @@
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
-                     <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                     <sld:CssParameter name="stroke">#FF6600</sld:CssParameter>
                      <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                   </sld:Stroke>
                </sld:LineSymbolizer>
@@ -59,7 +59,7 @@
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
-                     <sld:CssParameter name="stroke">#FF6600</sld:CssParameter>
+                     <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
                      <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                   </sld:Stroke>
                </sld:LineSymbolizer>
