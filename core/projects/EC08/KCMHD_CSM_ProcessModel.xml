@@ -80,13 +80,13 @@
                      <swe:field name="Row Spacing">
                         <swe:Quantity definition="urn:ogc:def:property:CSM:ROW_SPACING">
                            <swe:uom code="mm"/>
-                           <swe:value>0.007</swe:value>
+                           <swe:value>0.0074</swe:value>
                         </swe:Quantity>
                      </swe:field>
                      <swe:field name="Column Spacing">
                         <swe:Quantity definition="urn:ogc:def:property:CSM:COL_SPACING">
                            <swe:uom code="mm"/>
-                           <swe:value>0.007</swe:value>
+                           <swe:value>0.0074</swe:value>
                         </swe:Quantity>
                      </swe:field>
                   </swe:DataRecord>
