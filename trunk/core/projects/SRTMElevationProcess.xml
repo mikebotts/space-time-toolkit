@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:ProcessModel
+   xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+   xmlns:swe="http://www.opengis.net/swe/1.0.1"
+   xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ism="urn:us:gov:ic:ism:v2"
+   xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0.1">
+   <gml:description>Process for getting Elevation from SRTM based on LatLon</gml:description>
+   <gml:name>SRTMElevationProcess</gml:name>
+   <sml:inputs>
+      <sml:InputList>
+         <sml:input name="CoverageIn">
+            <swe:Vector referenceFrame="urn:ogc:def:crs:ESPG::4329">
+               <swe:coordinate name="lon">
+                  <swe:Quantity definition="urn:ogc:def:property:OGC::longitude">
+                     <swe:uom code="deg"/>
+                  </swe:Quantity>
+               </swe:coordinate>
+               <swe:coordinate name="lat">
+                  <swe:Quantity definition="urn:ogc:def:property:OGC::latitude">
+                     <swe:uom code="deg"/>
+                     </swe:Quantity>
+               </swe:coordinate>
+            </swe:Vector>
+         </sml:input>
+      </sml:InputList>
+   </sml:inputs>
+   <sml:outputs>
+      <sml:OutputList>
+         <sml:output name="CoverageOut">
+            <swe:Vector referenceFrame="urn:ogc:def:crs:ESPG::4329">
+               <swe:coordinate name="lon">
+                  <swe:Quantity definition="urn:ogc:def:property:OGC::longitude">
+                     <swe:uom code="deg"/>
+                  </swe:Quantity>
+               </swe:coordinate>
+               <swe:coordinate name="lat">
+                  <swe:Quantity definition="urn:ogc:def:property:OGC::latitude">
+                     <swe:uom code="deg"/>
+                  </swe:Quantity>
+               </swe:coordinate>
+               <swe:coordinate name="alt">
+                  <swe:Quantity definition="urn:ogc:def:property:OGC::altitude">
+                     <swe:uom code="deg"/>
+                  </swe:Quantity>
+               </swe:coordinate>
+            </swe:Vector>
+         </sml:output>
+      </sml:OutputList>
+   </sml:outputs>
+    <sml:method xlink:href="urn:ogc:def:process:OGC:SRTM_ElevationProcess"/>
+</sml:ProcessModel>
