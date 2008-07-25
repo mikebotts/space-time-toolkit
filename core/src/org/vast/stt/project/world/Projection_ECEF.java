@@ -199,8 +199,10 @@ public class Projection_ECEF implements Projection
             if (centerX > 180)
                 centerX -= 360;
             double centerY = llaCenter[1] * RTD;
-            double c = Math.min(6378137, view.getOrthoWidth()/2);
-            double dX = Math.asin(c/6378137) * RTD * (1 + Math.abs(centerY)/90);
+//            double c = Math.min(6378137, view.getOrthoWidth()/2);
+//            double dX = Math.asin(c/6378137) * RTD * (1 + Math.abs(centerY)/90);
+            double c = Math.min(datum.equatorRadius, view.getOrthoWidth()/2);
+            double dX = Math.asin(c/datum.equatorRadius) * RTD * (1 + Math.abs(centerY)/90);
             double dY = dX;
             if (90 - Math.abs(centerY) < dX) dX = 180;
 
