@@ -14,7 +14,7 @@
                   <timeExtent>
                      <TimeExtent id="ERDAS_TIME">
                         <baseTime>2008-07-21T17:39:01</baseTime>
-                        <leadTime>9</leadTime>
+                        <lagTime>30</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -51,7 +51,7 @@
                   <timeExtent>
                      <TimeExtent id="ERDAS_TIME2">
                         <baseTime>2008-07-21T17:39:01</baseTime>
-                        <leadTime>9</leadTime>
+                        <lagTime>9</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -212,7 +212,7 @@
                   <timeExtent>
                      <TimeExtent id="ERDAS_TIME3">
                         <baseTime>2008-07-21T17:39:01</baseTime>
-                        <leadTime>9</leadTime>
+                        <lagTime>9</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>

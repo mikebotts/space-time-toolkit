@@ -203,7 +203,7 @@
                                  </swe:field>
                                  <swe:field name="stop">
                                     <swe:Quantity>
-                                       <swe:value>1980</swe:value>
+                                       <swe:value>1920</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                                  <swe:field name="stepCount">
@@ -368,6 +368,7 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
+                     <!--
                      <sml:parameters>
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
@@ -378,6 +379,7 @@
                            </sml:parameter>
                         </sml:ParameterList>
                      </sml:parameters>
+                     -->
                      <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
