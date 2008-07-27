@@ -17,7 +17,7 @@
                         <gml:coordinates>-180,-90 180,90</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <process href="./WMS_FlatGrid_Process_EC08.xml#PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
