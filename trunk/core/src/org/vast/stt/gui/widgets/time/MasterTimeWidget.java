@@ -146,6 +146,7 @@ public final class MasterTimeWidget
     }
     
     public void addListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
+    	
     	 absTimeSpinner.addTimeSpinnerListener(spinnerListener);
     	 stepTimeSpinner.addTimeSpinnerListener(spinnerListener);
          absTimeSpinner.rtBtn.addSelectionListener(selectionListener);
@@ -155,11 +156,11 @@ public final class MasterTimeWidget
     }
     
     public void removeListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
-   	    absTimeSpinner.addTimeSpinnerListener(spinnerListener);
-   	    stepTimeSpinner.addTimeSpinnerListener(spinnerListener);
-        absTimeSpinner.rtBtn.addSelectionListener(selectionListener);
-        setBtn.addSelectionListener(selectionListener);
+   	    absTimeSpinner.removeTimeSpinnerListener(spinnerListener);
+   	    stepTimeSpinner.removeTimeSpinnerListener(spinnerListener);
+        absTimeSpinner.rtBtn.removeSelectionListener(selectionListener);
+        setBtn.removeSelectionListener(selectionListener);
         if(showTimeAtNow)
-       	    baseAtNowBtn.addSelectionListener(selectionListener);
+       	    baseAtNowBtn.removeSelectionListener(selectionListener);
    }
 }

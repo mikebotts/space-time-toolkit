@@ -193,6 +193,10 @@ public class TimeExtentWidget
 		biasCombo.select(index);
 	}
 	
+	public boolean getOverrideSceneTime(){
+		return overrideTimeBtn.getSelection();
+	}
+	
 	public void addListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
 		overrideTimeBtn.addSelectionListener(selectionListener);
 		updateNowBtn.addSelectionListener(selectionListener);
