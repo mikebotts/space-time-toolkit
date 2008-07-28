@@ -456,7 +456,6 @@ public class TimeSpinner
 	}
 
 	public void focusLost(FocusEvent e) {
-		System.err.print("Focus lost...");
 		if(e.widget == upBtn || e.widget == downBtn) {
 //			System.err.println("stop spin thread (if running)");
 			stopSpinThread();
