@@ -62,8 +62,11 @@ public class SWEResourceReader extends SWEReader
             this.dataEncoding = utils.readEncodingProperty(dom, encElt);
 			this.dataParser = createDataParser();
 			
-			// read external link if present
-			resultUri = dom.getAttributeValue(dataElt, "data/externalLink");
+			// Override external link if present; otherwise, don't change it (we have a set method for this variable, too.
+			//  The value that gets set was being overriden here and reset to null ater SweProvider set it.
+			String resUriTmp = dom.getAttributeValue(dataElt, "data/externalLink");
+			if(resUriTmp != null)
+				resultUri = resUriTmp;
 			
 			// launch data stream parser if handler was provided
             if (dataHandler != null)
