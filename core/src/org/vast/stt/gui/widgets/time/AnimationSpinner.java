@@ -104,7 +104,7 @@ public class AnimationSpinner extends TimeSpinner implements SelectionListener{
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
 		text.addKeyListener(this);
-		text.addFocusListener(this);
+//		text.addFocusListener(this);
 
 		// SpinnerGroup
 		spinnerGroup = new Composite(spinnerGroup, SWT.SHADOW_NONE);
@@ -125,14 +125,14 @@ public class AnimationSpinner extends TimeSpinner implements SelectionListener{
 		gridData.widthHint = BTN_SIZE;
     	upBtn.setLayoutData(gridData);
     	upBtn.addMouseListener(this);
-    	upBtn.addFocusListener(this);
+//    	upBtn.addFocusListener(this);
 		downBtn = new Button(spinnerGroup, SWT.ARROW | SWT.DOWN);
 		gridData = new GridData();
 		gridData.heightHint = BTN_SIZE;
 		gridData.widthHint = BTN_SIZE;
 		downBtn.setLayoutData(gridData);
     	downBtn.addMouseListener(this);
-    	downBtn.addFocusListener(this);
+//    	downBtn.addFocusListener(this);
 	}
 
 	//  Should set widthHint == the widest possible date the widget can support.  That
