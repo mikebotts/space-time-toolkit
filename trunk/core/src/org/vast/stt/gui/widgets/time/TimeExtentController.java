@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.dynamics.RealTimeUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
+import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
@@ -100,7 +101,11 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 	private void setOverrideSceneTime(boolean b){
 		extentWidget.manualTimeWidget.setEnabled(b);
 		//	disable old updater (this should ensure old updater Thread terminates)
-		timeExtent.getUpdater().setEnabled(false);
+		TimeExtentUpdater updater = timeExtent.getUpdater();
+		if(updater != null) {
+			updater.setEnabled(false);
+			updater = null;
+		}
 		
 		// switch between RealTime or SceneTime updater
 		if(b){
@@ -109,11 +114,13 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 				RealTimeUpdater rtu = createRealtimeUpdater();
 				rtu.setEnabled(true);
 				timeExtent.setUpdater(rtu);
-			}
+			} else
+	            extentWidget.manualTimeWidget.addListeners(this, this);
 		} else { 
 			SceneTimeUpdater sceneUpdater = createSceneTimeUpdater();
 			sceneUpdater.setEnabled(true);
             timeExtent.setUpdater(sceneUpdater);
+            extentWidget.manualTimeWidget.removeListeners(this, this);
 		}
 		timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
 	}
