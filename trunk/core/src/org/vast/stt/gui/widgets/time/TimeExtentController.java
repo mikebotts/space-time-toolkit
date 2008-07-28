@@ -62,7 +62,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			return;
 			
 		//  Reset widget values based on new timeExtent object state
-		extentWidget.biasSpinner.setValue(timeExtent.getTimeBias());
+		extentWidget.setBiasValue(timeExtent.getTimeBias());
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		extentWidget.stepSpinner.setValue(timeExtent.getTimeStep());
@@ -147,8 +147,8 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
 			}       
         } else if(e.widget == extentWidget.biasCombo){
-			double sense = (extentWidget.biasCombo.getSelectionIndex() == 0) ? 1.0 : -1.0;
-			timeExtent.setTimeBias(timeExtent.getTimeBias() * sense);
+			timeExtent.setTimeBias(Math.abs(timeExtent.getTimeBias()) * extentWidget.getBiasSense());
+			timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
         } else if(e.widget == extentWidget.continuousUpdateBtn){
         	extentWidget.updateNowBtn.setEnabled(!extentWidget.continuousUpdateBtn.getSelection());
         } else if(e.widget == extentWidget.manualTimeWidget.baseAtNowBtn){
@@ -184,7 +184,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
         timeExtent.setLagTimeDelta(extentWidget.lagSpinner.getValue());
         timeExtent.setLeadTimeDelta(extentWidget.leadSpinner.getValue());
         timeExtent.setTimeStep(extentWidget.stepSpinner.getValue());
-        timeExtent.setTimeBias(extentWidget.biasSpinner.getValue());
+        timeExtent.setTimeBias(extentWidget.biasSpinner.getValue() * extentWidget.getBiasSense());
         if (extentWidget.continuousUpdateBtn.getSelection() == true)
             timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
     }
