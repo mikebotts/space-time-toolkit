@@ -65,9 +65,9 @@ public class StepSpinner extends TimeSpinner implements SelectionListener
 //		upBtn.addSelectionListener(this);
 //		downBtn.addSelectionListener(this);
 		upBtn.addMouseListener(this);
-    	upBtn.addFocusListener(this);
+//    	upBtn.addFocusListener(this);
     	downBtn.addMouseListener(this);
-    	downBtn.addFocusListener(this);
+//    	downBtn.addFocusListener(this);
 	}
 	
 	public void setEnabled(boolean b){

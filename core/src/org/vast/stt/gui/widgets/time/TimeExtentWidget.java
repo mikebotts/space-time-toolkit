@@ -182,6 +182,17 @@ public class TimeExtentWidget
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 	}
 
+	public int getBiasSense(){
+		int index = biasCombo.getSelectionIndex();
+		return (index == 0 ? 1 : -1);
+	}
+	
+	public void setBiasValue(double value){
+		biasSpinner.setValue(Math.abs(value));
+		int index = (value >= 0.0 ? 0: 1);
+		biasCombo.select(index);
+	}
+	
 	public void addListeners(TimeSpinnerListener spinnerListener, SelectionListener selectionListener){
 		overrideTimeBtn.addSelectionListener(selectionListener);
 		updateNowBtn.addSelectionListener(selectionListener);

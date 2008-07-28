@@ -28,6 +28,7 @@ package org.vast.stt.gui.widgets.time;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.xmlbeans.impl.common.SystemCache;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -113,11 +114,11 @@ public class TimeSpinner
 		text.addTraverseListener(this);
 		text.addMouseListener(this);
 		text.addKeyListener(this);
-		text.addFocusListener(this);
+//		text.addFocusListener(this);
 		upBtn.addMouseListener(this);
-    	upBtn.addFocusListener(this);
+//    	upBtn.addFocusListener(this);
     	downBtn.addMouseListener(this);
-    	downBtn.addFocusListener(this);
+//    	downBtn.addFocusListener(this);
 	}
 	
 	public void setLayoutData(GridData gridData){
@@ -146,6 +147,7 @@ public class TimeSpinner
 	protected void initGui(Composite parent, String label){
 		//  Create main group for text and Buttons
 		mainGroup = new Group(parent, SWT.SHADOW_NONE);
+		name = label;
 		mainGroup.setText(label);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
@@ -202,10 +204,11 @@ public class TimeSpinner
 
 	protected void timeUp(){
 		int caretPos;
-		if(text.isFocusControl())
+//		if(text.isFocusControl()) {
 			caretPos = text.getCaretOffset();
-		else
-			caretPos = currentCaretOffset;
+//		} else {
+//			caretPos = currentCaretOffset;
+//		}
 		currentField = getCurrentField(caretPos);
 		tsModel.increment(currentField);
 		text.setText(tsModel.toString());
@@ -256,10 +259,15 @@ public class TimeSpinner
 			timeDown();
 		}
 	};
+	private String name;
 
 	private void startSpinUpThread(){
-		if(btnDown)
+//		System.err.println("StartSpinUpThread");
+		if(btnDown) {
+			System.err.println("Btn ALREADY down...  returning");
 			return;
+		}
+//		System.err.println("btn!down, settin btnDown");
 		btnDown = true;
 		timeUp();
 		SpinThread spinThread = new SpinThread(spinUpThread);
@@ -278,6 +286,8 @@ public class TimeSpinner
 
 	class SpinThread extends Thread {
 		Runnable childThread;
+		//  Initial delay before spinning starts
+		long intialDelay = 300l;
 		
 		SpinThread(Runnable child){
 			childThread = child;
@@ -285,7 +295,7 @@ public class TimeSpinner
 		
 		public  void run(){
 			try {		
-				Thread.sleep(300l);  //  make this less sensitive (mouseEvents seem to be getting queued here)
+				Thread.sleep(intialDelay);  //  make this less sensitive (mouseEvents seem to be getting queued here)
 				while(btnDown){
 					Thread.sleep(60l);
 					if(!text.isDisposed()) {
@@ -308,6 +318,9 @@ public class TimeSpinner
 	public void setValue(double value){
 		tsModel.setValue(new Double(value));
 		text.setText(tsModel.toString());
+//		System.err.println(name + " setValue() cField = " + currentField);
+    	currentCaretOffset = start[currentField];
+    	text.setCaretOffset(currentCaretOffset);
 		hiliteField(currentField, true);
 	}
 	
@@ -330,6 +343,7 @@ public class TimeSpinner
 
 	protected void hiliteField(int field, boolean onOff){
 		//  Set new field to hilite colors
+//		System.err.println(name + " hiliteField() initial:  field, cP =" + field + ", "+ text.getCaretOffset());
         Display display = text.getDisplay();
         Color fgColor, bgColor;
         if(onOff) {
@@ -342,6 +356,7 @@ public class TimeSpinner
         	
 		StyleRange range = new StyleRange(start[field],len[field],fgColor, bgColor);
 		text.setStyleRange(range);
+//		System.err.println(name + "hiliteField. Post setStyleRange(): cP =" + text.getCaretOffset());
 	}
 
 	/** 
@@ -366,7 +381,8 @@ public class TimeSpinner
 			timeDown();
 		} else if (e.keyCode == SWT.ARROW_UP) {
 			timeUp();
-		} else {
+		} else {  //  If it is left-right arrow, will reset hilited field
+				  //  If not, nothing occurs
 			hiliteField(currentField, false);
 			currentField = getCurrentField(text.getCaretOffset());
 			hiliteField(currentField, true);
@@ -379,9 +395,13 @@ public class TimeSpinner
 
 	public void mouseDown(MouseEvent e) {
 		if(e.widget == upBtn) {
-			startSpinUpThread();
+//			startSpinUpThread();
+			text.setFocus();
+			timeUp();
 		} else if(e.widget == downBtn) {
-			startSpinDownThread();
+			//startSpinDownThread();
+			text.setFocus();
+			timeDown();
 		} else if(e.widget == text){
 			hiliteField(currentField, false);
 			currentField = getCurrentField(text.getCaretOffset());
@@ -431,14 +451,17 @@ public class TimeSpinner
 
 	public void focusGained(FocusEvent e) {
 		if(e.widget == text) {
+//			System.err.println("FocusGained: curCarOff = " + currentCaretOffset);
 			text.setCaretOffset(currentCaretOffset);
 		}
 	}
 
 	public void focusLost(FocusEvent e) {
-		if(e.widget == upBtn || e.widget == downBtn)
+		System.err.print("Focus lost...");
+		if(e.widget == upBtn || e.widget == downBtn) {
+//			System.err.println("stop spin thread (if running)");
 			stopSpinThread();
-		else if(e.widget == text) {
+		} else if(e.widget == text) {
 			currentCaretOffset = text.getCaretOffset();
 		}
 	}
