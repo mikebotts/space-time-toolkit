@@ -88,6 +88,23 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	}
     
     
+	//  thrown in to report LLA temporarily for EC08- clean up SOON!
+	protected void reportLLTemp(int x1, int y1){
+		 Projection projection = scene.getViewSettings().getProjection();
+	        boolean found = projection.pointOnMap(x1, y1, scene, P0);
+	        
+	        if (!found)
+	            return;
+	        
+	        // convert to LLA
+	        projection.unproject(Crs.EPSG4329, P0);
+	        
+	        P0.x *= RTD;
+	        P0.y *= RTD;
+	        System.err.println("Lat Lon = " + P0.y +","+P0.x);
+	        
+	}
+	
     protected void doChangeROI(int x0, int y0, int x1, int y1)
     {
         DataItem selectedItem = scene.getSelectedItems().get(0).getDataItem();
@@ -154,7 +171,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
         dragged = false;
         int viewHeight = scene.getRenderer().getViewHeight();
         e.y = viewHeight - e.y;
-        
+        reportLLTemp(e.x,e.y);
         // check if resizing ROI
         if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
         {
