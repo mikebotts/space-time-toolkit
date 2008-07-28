@@ -28,7 +28,6 @@ package org.vast.stt.gui.widgets.time;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xmlbeans.impl.common.SystemCache;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -219,10 +218,10 @@ public class TimeSpinner
 	
 	protected void timeDown(){
 		int caretPos;
-		if(text.isFocusControl())
+//		if(text.isFocusControl())
 			caretPos = text.getCaretOffset();
-		else
-			caretPos = currentCaretOffset;
+//		else
+//			caretPos = currentCaretOffset;
 		currentField = getCurrentField(caretPos);
 		tsModel.decrement(currentField);
 		text.setText(tsModel.toString());
