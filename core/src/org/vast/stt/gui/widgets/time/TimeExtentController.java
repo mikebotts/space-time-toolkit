@@ -63,11 +63,13 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			return;
 			
 		//  Reset widget values based on new timeExtent object state
+		if(extentWidget.getOverrideSceneTime()) {
+			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
+		}
 		extentWidget.setBiasValue(timeExtent.getTimeBias());
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		extentWidget.stepSpinner.setValue(timeExtent.getTimeStep());
-		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
 		//  Is an updater enabled?  If so, disable controls
 		boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
         extentWidget.manualTimeWidget.setEnabled(!useAutoTime);
@@ -117,10 +119,11 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			} else
 	            extentWidget.manualTimeWidget.addListeners(this, this);
 		} else { 
+            extentWidget.manualTimeWidget.removeListeners(this, this);
 			SceneTimeUpdater sceneUpdater = createSceneTimeUpdater();
 			sceneUpdater.setEnabled(true);
             timeExtent.setUpdater(sceneUpdater);
-            extentWidget.manualTimeWidget.removeListeners(this, this);
+//            extentWidget.manualTimeWidget.removeListeners(this, this);
 		}
 		timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
 	}
@@ -158,6 +161,8 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
         } else if(e.widget == extentWidget.continuousUpdateBtn){
         	extentWidget.updateNowBtn.setEnabled(!extentWidget.continuousUpdateBtn.getSelection());
+        	if(extentWidget.continuousUpdateBtn.getSelection())
+        		timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
         } else if(e.widget == extentWidget.manualTimeWidget.baseAtNowBtn){
         	timeExtent.setBaseAtNow(extentWidget.continuousUpdateBtn.getSelection());
         	//  How to interact with manual time controls/RT..etc...
