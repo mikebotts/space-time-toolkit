@@ -121,7 +121,6 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         descriptor = STTPlugin.getImageDescriptor("icons/select_point.gif");
         selectPolygonAction.setImageDescriptor(descriptor);
         site.getActionBars().getToolBarManager().add(selectPolygonAction);
-		
         // add show target action to toolbar
 		IAction showTargetAction = new Action("Toggle Target Tripod")
 		{
@@ -166,6 +165,9 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         descriptor = STTPlugin.getImageDescriptor("icons/bbox.gif");
         showROIAction.setImageDescriptor(descriptor);
         site.getActionBars().getToolBarManager().add(showROIAction);
+        LatLonStatusLine llStatus = new LatLonStatusLine();
+        controller.setLatLonStatusLine(llStatus);
+		site.getActionBars().getStatusLineManager().add(llStatus);
 	}
 	
 	
