@@ -1,17 +1,11 @@
 package org.vast.stt.gui.views;
 
-import java.text.NumberFormat;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
-import org.vast.stt.project.world.Projection;
-import org.vast.stt.project.world.Projection.Crs;
 
 public class LatLonStatusLine extends WorkbenchWindowControlContribution {
 	public static final String ID = "STT.control4";

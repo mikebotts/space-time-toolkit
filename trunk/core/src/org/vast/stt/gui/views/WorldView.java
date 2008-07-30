@@ -19,7 +19,8 @@
  Please Contact Mike Botts <mike.botts@uah.edu> for more information.
  
  Contributor(s): 
-    Alexandre Robin <robin@nsstc.uah.edu>    Tony Cook <tcook@nsstc.uah.edu>
+    Alexandre Robin <robin@nsstc.uah.edu>
+    Tony Cook <tcook@nsstc.uah.edu>
  
 ******************************* END LICENSE BLOCK ***************************/
 
@@ -27,6 +28,8 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;

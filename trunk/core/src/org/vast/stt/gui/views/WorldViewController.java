@@ -191,7 +191,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		dragged = false;
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
-		
+		reportLLTemp(e.x,e.y);
+
 		// check if resizing ROI
 		if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
 		{
