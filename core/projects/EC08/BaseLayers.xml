@@ -2,7 +2,7 @@
 <STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
    <DataList id="GIS">
       <name>GIS Data</name>
-      <member visible="true">
+      <member visible="false">
          <DataItem>
             <name>Coast Lines</name>
             <dataProvider>
@@ -25,6 +25,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#FF6600</sld:CssParameter>
@@ -34,7 +37,7 @@
             </style>
          </DataItem>
       </member>
-      <member visible="true">
+      <member visible="false">
          <DataItem>
             <name>Countries Boundaries</name>
             <dataProvider>
@@ -57,6 +60,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
@@ -66,73 +72,7 @@
             </style>
          </DataItem>
       </member>
-      <member visible="false">
-         <DataItem>
-            <name>AR State Boundaries</name>
-            <dataProvider>
-               <SWEDataProvider id="AR_STATE_BOUNDARIES_DATA">
-                  <name>Arizona borders</name>
-                  <description>California border data</description>
-                  <format>SWE</format>
-                  <sweData xlink:href="http://localhost:8080/docs/SweData/stateSwe.xml"/>
-                  <rawData xlink:href="http://localhost:8080/docs/SweData/AR_state.swe"/>
-               </SWEDataProvider>
-            </dataProvider>
-            <style>
-               <sld:LineSymbolizer enabled="true">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-breaks">
-                        <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                     </sld:CssParameter>
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-         </DataItem>
-      </member>
-      <member visible="false">
-         <DataItem>
-            <name>AR County Boundaries</name>
-            <dataProvider>
-               <SWEDataProvider id="AR_COUNTIES_BOUNDARIES_DATA">         
-                  <name>Arizona counties</name>
-                  <description>Arizona county border data</description>
-                  <format>SWE</format>
-                  <sweData xlink:href="http://localhost:8080/docs/SweData/countySwe.xml"/>
-                  <rawData xlink:href="http://localhost:8080/docs/SweData/AR_county.swe"/>
-               </SWEDataProvider>
-            </dataProvider>
-            <style>
-               <sld:LineSymbolizer enabled="true">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-breaks">
-                        <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                     </sld:CssParameter>
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-         </DataItem>
-      </member>
-      <member visible="false">
+      <member visible="true">
          <DataItem>
             <name>CA State Boundaries</name>
             <dataProvider>
@@ -155,6 +95,9 @@
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
@@ -189,6 +132,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
@@ -222,6 +168,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>
@@ -241,6 +190,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
@@ -256,6 +208,9 @@
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Graphic>
@@ -313,6 +268,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
@@ -352,6 +310,9 @@
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                         </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
@@ -396,6 +357,9 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                     </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
                      <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
@@ -432,6 +396,9 @@
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                         </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
@@ -490,6 +457,9 @@
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
                         </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
                   <sld:Raster>
@@ -547,6 +517,9 @@
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
                         </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
                   <sld:Raster>
@@ -603,6 +576,9 @@
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                         </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
@@ -663,6 +639,9 @@
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                         </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
@@ -726,6 +705,9 @@
                         <sld:CssParameter name="geometry-y">
                            <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
                         </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
                   <sld:Raster>
@@ -768,6 +750,9 @@
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>

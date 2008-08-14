@@ -4,10 +4,10 @@
    xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe">
    <DataList id="SAIC">
-      <name>SAIC</name>
+      <name>Ground Sensors</name>
       <member visible="false">
          <DataItem>
-            <name>Sismic Sensor</name>
+            <name>Seismic Sensor</name>
             <dataProvider>
                <OWSDataProvider>
                   <name>SAIC SOS</name>
@@ -18,7 +18,7 @@
                         <stepTime>60</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <layerId>SAIC-SISMIC</layerId>
+                  <layerId>SAIC-SEISMIC</layerId>
                   <request postUrl="http://localhost:8080/footprint">
                      <GetObservation service="SOS" version="1.0">
                         <offering>name of SOS offering to be put here</offering>
