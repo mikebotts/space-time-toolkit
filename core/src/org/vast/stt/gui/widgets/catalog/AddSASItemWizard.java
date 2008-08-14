@@ -77,7 +77,10 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 		
 		//first we must subscribe to the selected SAS
 		SASSubscribeRequest request = new SASSubscribeRequest();
-		request.setPostServer(caps.getParent().getGetServers().get("Subscribe"));	
+		String postServer = caps.getParent().getPostServers().get("Subscribe");
+		request.setPostServer(postServer);
+		String version = caps.getParent().getVersion();
+		request.setVersion(version);	
 		request.setSubscriptionOfferingID(caps.getSubscriptionOfferingIDList().get(0));
 
 		InputStream dataStream = null;
@@ -97,7 +100,7 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 				// parse response
 				SASSubscribeResponse subscribeResponse = reader.parseSASSubscribeXMLResponse(dom, rootElement);
 				caps.setXMPPURI(subscribeResponse.getXMPPURI());
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,8 +117,8 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 	public void addPages()
 	{
 		mappingPage = new SASMappingPage(caps);
-		mappingPage.
-		addPage(mappingPage);
+		mappingPage.setSubscription();
+	    addPage(mappingPage);
 		symPage = new SASSymbolizerPage();
 		addPage(symPage);
 	}	
