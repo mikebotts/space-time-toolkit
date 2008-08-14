@@ -104,7 +104,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 	
 	public void setSubscription(){
 		String [] dataComponents = null;
-		dataComponents[0] = getComponents();
+		dataComponents = getComponents();
 		if(dataComponents != null) {
 			geometryComp.setMappableItems(dataComponents);
 			assignDefaultComponents(dataComponents);
@@ -112,7 +112,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 			; //  disable combos, require ProcessChain?
 	}
 	
-	private String getComponents(){
+	private String [] getComponents(){
 		setTitle(caps.getTitle() + " Geometry Mapper");
 		String [] components = mappings.get(caps.getTitle());
 		if(components == null){
@@ -136,7 +136,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 		}
 		//  Get DataComponents;
 		//  TODO  store these so they don't have to be reloaded in the event
-		//  of user selecting prev/next repeatedlyd
+		//  of user selecting prev/next repeatedly
 		if(component != null)
 			findPossibleMappings(component, component.getName());
 		//  Add lat/lon from FOI- this assumes FOI is a simple point, which may not always
@@ -179,7 +179,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 	// This parse the SWECommon description held in the layerCap
 	private SWEReader getSweReader() throws DataException {
 		
-		SWEReader reader = null;
+		SWEReader sweReader = null;
 		try {
 			byte[] bytes = caps.getMessageStructure().getBytes("UTF-8");
 			InputStream messageStructureStream = new ByteArrayInputStream(bytes);
@@ -196,9 +196,9 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 			
 			Element encElt = dom.getElement(defElt, "encoding");		
 			SWECommonUtils utils = new SWECommonUtils();
-			reader.setDataComponents(utils.readComponentProperty(dom, dataElt));
+			sweReader.setDataComponents(utils.readComponentProperty(dom, dataElt));
 			if (encElt == null)
-				reader.setDataEncoding(utils.readEncodingProperty(dom, encElt));
+				sweReader.setDataEncoding(utils.readEncodingProperty(dom, encElt));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -210,7 +210,7 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 			e.printStackTrace();
 		}
 		
-		return reader;		
+		return sweReader;		
 	}
 	
 	private void findPossibleMappings(DataComponent component, String componentPath) {
@@ -282,20 +282,20 @@ public class SASMappingPage extends WizardPage implements SelectionListener
 		selMappings[2] = geometryComp.getMapFromZ();
 		selMappings[3] = geometryComp.getMapFromTime();
 		selMappings[4] = geometryComp.getMapFromBreak();
-		selectedMappings.put(offerings[offeringIndex], selMappings);
+	//	selectedMappings.put(offerings[offeringIndex], selMappings);
 	}
 	
 	public IWizardPage getNextPage(){
 		storeSelectedMappings();
-		if(++offeringIndex < offerings.length) {
-			String [] dataComponents = getComponents(offeringIndex);
+	//	if(++offeringIndex < offerings.length) {
+			String [] dataComponents = getComponents();
 			if(dataComponents != null) {
 				geometryComp.setMappableItems(dataComponents);
 				assignDefaultComponents(dataComponents);
 			}
 			return this;
-		}
-		return ((AddSASItemWizard)this.getWizard()).symPage;
+	//	}
+	//	return ((AddSASItemWizard)this.getWizard()).symPage;
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {

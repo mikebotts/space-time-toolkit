@@ -86,9 +86,9 @@ public class SASSymbolizerPage extends WizardPage
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		Object [] checked = checkboxTableViewer.getCheckedElements();
 		if(checked != null && checked.length > 0)
-			((AddSOSItemWizard)this.getWizard()).setCanFinish(true);
+			((AddSASItemWizard)this.getWizard()).setCanFinish(true);
 		else
-			((AddSOSItemWizard)this.getWizard()).setCanFinish(false);
+			((AddSASItemWizard)this.getWizard()).setCanFinish(false);
 		this.getWizard().getContainer().updateButtons();
 	}
 	

@@ -26,6 +26,7 @@
 
 package org.vast.stt.gui.widgets.catalog;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -192,7 +193,6 @@ public class CapabilitiesWidget implements SelectionListener
 			String msg = "Attempting to read Capabilities Document from " + server + "...";
 			monitor.beginTask(msg, IProgressMonitor.UNKNOWN);
 			caps = readCapabilities(server, serviceType);
-
 		};
 
 
@@ -207,7 +207,7 @@ public class CapabilitiesWidget implements SelectionListener
 	{
 		ProgressMonitorDialog pmd = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 		GetCapsRunnable runnable = new GetCapsRunnable(server, serviceType);
-
+		
 		try
 		{
 			pmd.run(true, false, runnable);
@@ -245,8 +245,6 @@ public class CapabilitiesWidget implements SelectionListener
 		}
 		catch (OWSException e)
 		{
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 			return null;
 		}
 		return caps.getLayers();

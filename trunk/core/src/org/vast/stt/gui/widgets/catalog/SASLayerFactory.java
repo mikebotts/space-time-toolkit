@@ -96,7 +96,8 @@ public class SASLayerFactory
 			e.printStackTrace();
 		}
 		//SOSLayerFactory.setSOSProcedure(item,procs.get(0));
-		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(offering, symType);
+
+		Symbolizer sym = SymbolizerFactory.createDefaultSymbolizer(null, symType);
         item.getSymbolizers().add(sym);
 		 
         return item;
