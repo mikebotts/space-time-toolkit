@@ -9,22 +9,16 @@
    <!-- List of scenes (separate 2d or 3D view windows) -->
    <SceneList>
       <member>
-         <Scene id="SCENE_01">
-            <name>Empire Challenge 08</name>
- <!--           <time>
+         <Scene id="SCENE_01" autoUpdate="#SCENE_01">
+            <name>World View</name>
+            <time>
                <TimeExtent>
-                  <baseTime>2008-07-21T17:39:00Z</baseTime>
+                  <baseTime>2007-07-21T17:39:00Z</baseTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
                   <stepTime>60</stepTime>
                </TimeExtent>
-            </time> -->
-            <time updatePeriod="3">
-               <TimeExtent>
-                  <baseTime>2008-07-21T17:39:00Z</baseTime>
-                  <stepTime>10</stepTime>
-               </TimeExtent>
-            </time>           
+            </time>
             <view>
                <ViewSettings showTripod="true" showArcball="false" showROI="true">
                   <backgroundColor>#000000</backgroundColor>
@@ -48,7 +42,8 @@
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
                   <member xlink:href="./DopplerRadar.xml#Radar"/>
                   <member xlink:href="./SAIC.xml#SAIC"/>
-                  <member xlink:href="./ESRI.xml#ESRI_MAPS"/>
+                  <member xlink:href="./ESRI.xml#ESRI"/>
+                  <member xlink:href="./EC08_CoT.xml#CoT_Forces"/>
                  <!-- <member xlink:href="./ERDAS.xml#ERDAS"/> -->
                   <member xlink:href="./ERDASwithCSM.xml#ERDASwithCSM"/>
                </DataList>
