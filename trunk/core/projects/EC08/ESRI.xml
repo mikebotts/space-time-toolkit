@@ -3,8 +3,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
    xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe">
-   <DataList id="ESRI">
-      <name>ESRI</name>
+   <DataList id="ESRI_MAPS">
+      <name>ESRI Maps</name>
       <member visible="false">
          <DataItem>
             <name>Digital Chart of the World</name>
