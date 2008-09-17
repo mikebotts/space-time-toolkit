@@ -24,7 +24,7 @@ public class LatLonStatusLine extends WorkbenchWindowControlContribution {
 		layout.marginWidth = 2;
 		comp.setLayout(layout);
 		llLabel = new Label(comp, SWT.BORDER | SWT.CENTER);
-		llLabel.setText(" Lat: xxx.xxxx  Lon: xxxx.xxxx ");
+		llLabel.setText(" Lat: xxx.xxxxxx  Lon: xxxx.xxxxxxx ");
 		comp.setVisible(true);
 		
 		return comp;
