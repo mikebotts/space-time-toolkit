@@ -40,12 +40,16 @@ import org.vast.stt.process.WMS_Process;
  *
  * <p><b>Description:</b><br/>
  * Convenience class for setting options in a WMSProcess
+ *   NOTE that this also needs to modify the underlying WMS_Process,
+ *   not just the request params!
  * </p>
  *
  * <p>Copyright (c) 2007</p>
  * @author Tony Cook
  * @date Apr 4, 2007
  * @version 1.0
+ * 
+ *  TODO  modify underlying process based on user changes
  */
 
 public class WMSProcessOptions 
