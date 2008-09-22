@@ -114,7 +114,7 @@
                                  <swe:Category>KOKX_DOPPLER_TILT0</swe:Category>
                               </swe:component>
                               <swe:component name="observables">
-                                 <swe:Category>REFLECTIVITY</swe:Category>
+                                 <swe:Category>urn:vast:phenomenon:reflectivity</swe:Category>
                               </swe:component>
                               <swe:component name="format">
                                  <swe:Category definition="urn:ogc:def:identifier:mimeType">application/com-binary-base64</swe:Category>
@@ -133,7 +133,7 @@
                      <sml:InputList>
                         <sml:input name="pass-through">
                            <swe:DataGroup>
-                              <swe:component name="location" xlink:href="#OBS_TIME"/>
+                              <swe:component name="location" xlink:href="#OBS_LOC"/>
                               <swe:component name="elevation" xlink:href="#OBS_ELEV"/>
                               <swe:component name="azimuth" xlink:href="#OBS_AZIM"/>                              
                            </swe:DataGroup>
@@ -157,7 +157,7 @@
                      <sml:OutputList>
                         <sml:output name="pass-through">
                            <swe:DataGroup>
-                              <swe:component name="location" xlink:href="#OBS_TIME"/>
+                              <swe:component name="location" xlink:href="#OBS_LOC"/>
                               <swe:component name="elevation" xlink:href="#OBS_ELEV"/>
                               <swe:component name="azimuth" xlink:href="#OBS_AZIM"/>
                            </swe:DataGroup>
