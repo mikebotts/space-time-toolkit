@@ -31,16 +31,24 @@ import java.awt.image.renderable.ParameterBlock;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+
+import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataType;
-import org.vast.data.*;
+import org.vast.data.DataArray;
+import org.vast.data.DataBlockByte;
+import org.vast.data.DataGroup;
+import org.vast.data.DataValue;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.util.Bbox;
 import org.vast.ows.wms.GetMapRequest;
 import org.vast.ows.wms.WMSLayerCapabilities;
-import org.vast.process.*;
+import org.vast.process.DataProcess;
+import org.vast.process.ProcessException;
+
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 
@@ -161,6 +169,20 @@ public class WMS_Process extends DataProcess
     }
 
 
+    public void switchBytes(){
+    	 //  need to dynamically alter process output....
+        DataComponent pixel = output.getComponent("image").getComponent("row").getComponent("pixel");
+        DataComponent red = pixel.getComponent("red");
+        DataComponent green = pixel.getComponent("green");
+        DataComponent blue = pixel.getComponent("blue");
+        DataGroup pixArr = (DataGroup)pixel;
+        pixArr.removeAllComponents();
+        pixArr.addComponent(red);
+        pixArr.addComponent(green);
+        pixArr.addComponent(blue);
+        output.renewDataBlock();
+    }
+    
     /**
      * Executes process algorithm on inputs and set output data
      */
@@ -171,7 +193,8 @@ public class WMS_Process extends DataProcess
         try
         {
             initRequest();
-
+            //switchBytes();
+            
             URLConnection urlCon = owsUtils.sendGetRequest(request);
             
             //  Check on mimeType catches all three types (blank, inimage, xml)
@@ -217,6 +240,8 @@ public class WMS_Process extends DataProcess
             outputWidth.getData().setIntValue(width);
             outputHeight.getData().setIntValue(height);
             output.combineDataBlocks();
+            System.err.println(this);
+
         }
         catch (Exception e)
         {
