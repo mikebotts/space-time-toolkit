@@ -25,18 +25,32 @@
 
 package org.vast.stt.actions;
 
+import java.awt.AWTException;
+import java.awt.HeadlessException;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.*;
-import org.vast.stt.commands.*;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
+import org.vast.stt.commands.OpenProject;
 import org.vast.stt.gui.dialogs.DataProviderJob;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.Project;
 import org.vast.stt.project.STTDisplay;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataItemIterator;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.DataProvider;
@@ -74,8 +88,9 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                         DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();
                         while (it.hasNext())
                         {
-                            DataProvider provider = it.next().getDataProvider();
-                            
+                        	DataItem item = it.next();
+                            DataProvider provider = item.getDataProvider();
+                            System.err.println("Prov " + provider + " " + provider.getName());
                             if (!processedProviders.contains(provider))
                             {
                                 if (provider.getSpatialExtent().getUpdater() == null)
@@ -83,7 +98,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                                 processedProviders.add(provider);
                             }
                         }
-                        
+//                        
                         // create scene page input and open new page
                         ScenePageInput pageInput = new ScenePageInput(scene);
                         IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -132,7 +147,8 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         }
         else if (actionId.endsWith("OpenTestProject"))
         {
-            url = "file:///D:/Projects/NSSTC/STT3/projects/SoCal.xml";
+            testScreenCap();
+            return;
         }
 
         // launch OpenProject command in separate thread
@@ -169,5 +185,32 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
 
     public void init(IWorkbenchWindow window)
     {
+    }
+    
+    int cnt=1;
+    public void testScreenCap() {
+    	
+    	try {
+			Robot robot = new Robot();
+			Rectangle appBounds = PlatformUI.getWorkbench().getDisplay().getActiveShell().getBounds();
+			java.awt.Rectangle appBoundsAwt = new java.awt.Rectangle();
+			appBoundsAwt.x = appBounds.x;
+			appBoundsAwt.y = appBounds.y;
+			appBoundsAwt.width = appBounds.width;
+			appBoundsAwt.height = appBounds.height;
+			
+			BufferedImage screenShot = robot.createScreenCapture(appBoundsAwt);
+			ImageIO.write(screenShot, "PNG", new File("C:/tcook/ows5/AMSR_anim/amsrE_" + cnt + ".png"));
+			cnt++;
+		} catch (HeadlessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AWTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
