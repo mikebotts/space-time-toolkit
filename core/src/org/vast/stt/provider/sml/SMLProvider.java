@@ -189,9 +189,9 @@ public class SMLProvider extends AbstractProvider
                         if (count == 0)
                         	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                         
-                        count++;
-                        if (count == 50)
-                        	count = 0;                       
+               //         count++;
+               //         if (count == 50)
+               //         	count = 0;                       
                         
                         // reset input needed flags to avoid a process chain to set 
                         // internal availability to true
