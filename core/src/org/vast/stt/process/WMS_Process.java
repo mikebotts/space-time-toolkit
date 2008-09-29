@@ -41,7 +41,7 @@ import org.vast.data.DataArray;
 import org.vast.data.DataBlockByte;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
-import org.vast.ows.OWSExceptionReader;
+import org.vast.ogc.OGCExceptionReader;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.wms.GetMapRequest;
 import org.vast.ows.wms.WMSLayerCapabilities;
@@ -202,7 +202,7 @@ public class WMS_Process extends DataProcess
             String mimeType = urlCon.getContentType();
             if (mimeType.contains("xml") || mimeType.startsWith("application"))
             {
-                OWSExceptionReader reader = new OWSExceptionReader();
+                OGCExceptionReader reader = new OGCExceptionReader();
                 reader.parseException(urlCon.getInputStream());
             }
             else

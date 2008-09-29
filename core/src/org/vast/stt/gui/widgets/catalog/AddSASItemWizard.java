@@ -35,8 +35,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.vast.math.Vector3d;
+import org.vast.ogc.OGCException;
+import org.vast.ogc.OGCExceptionReader;
 import org.vast.ows.OWSException;
-import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sas.*;
 import org.vast.stt.project.tree.DataItem;
@@ -93,7 +94,7 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 				OWSUtils owsUtils = new OWSUtils();
 				dataStream = owsUtils.sendPostRequest(request).getInputStream();		
 				DOMHelper dom = new DOMHelper(dataStream, false);
-				OWSExceptionReader.checkException(dom);
+				OGCExceptionReader.checkException(dom);
 				
 				// find first Subscribe response element
 				Element rootElement = dom.getRootElement();
@@ -108,6 +109,9 @@ public class AddSASItemWizard extends Wizard implements INewWizard
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DOMHelperException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OGCException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
