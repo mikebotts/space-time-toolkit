@@ -43,12 +43,12 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.ows.OWSExceptionReader;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.util.Bbox;
 import org.vast.ows.wms.GetMapRequest;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessException;
 
+import org.vast.util.Bbox;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 
 

@@ -35,8 +35,6 @@ import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.ScalarParameter;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.util.Bbox;
-import org.vast.ows.util.TimeInfo;
 import org.vast.process.DataProcess;
 import org.vast.stt.data.DataException;
 import org.vast.stt.project.tree.DataItem;
@@ -45,6 +43,8 @@ import org.vast.stt.provider.STTTimeExtent;
 import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
+import org.vast.util.Bbox;
+import org.vast.util.TimeInfo;
 
 /**
  * <p><b>Title:</b>

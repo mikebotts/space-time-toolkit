@@ -54,7 +54,6 @@ import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.util.Bbox;
 import org.vast.ows.wrs.WRSQuery;
 import org.vast.ows.wrs.WRSRequestWriter;
 import org.vast.ows.wrs.WRSResponseReader;
@@ -62,6 +61,7 @@ import org.vast.ows.wrs.WRSQuery.QueryType;
 import org.vast.stt.gui.views.ScenePageInput;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
+import org.vast.util.Bbox;
 
 /**
  * <p><b>Title:</b>

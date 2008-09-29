@@ -45,13 +45,13 @@ import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
+import org.vast.ogc.om.ObservationStreamReaderV0;
 import org.vast.ows.OWSUtils;
-import org.vast.ows.om.ObservationStreamReaderV0;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.util.TimeInfo;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
+import org.vast.util.TimeInfo;
 
 /**
  * <p><b>Title:</b>

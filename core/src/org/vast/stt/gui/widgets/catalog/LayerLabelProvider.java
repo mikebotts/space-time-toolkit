@@ -31,12 +31,12 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.sas.SASLayerCapabilities;
 import org.vast.ows.sos.SOSLayerCapabilities;
-import org.vast.ows.util.Bbox;
-import org.vast.ows.util.TimeInfo;
 import org.vast.ows.wcs.WCSLayerCapabilities;
 import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
+import org.vast.util.Bbox;
 import org.vast.util.DateTimeFormat;
+import org.vast.util.TimeInfo;
 
 /**
  * <p><b>Title:</b>
