@@ -48,6 +48,7 @@
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
                   <member xlink:href="./DopplerRadar.xml#Radar"/> 
                   <!-- <member xlink:href="./SAIC.xml#SAIC"/>  -->
+                  <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
                   <member xlink:href="./NORTHROPGRUNMAN.xml#NORTHROPGRUNMAN"/>
                   <!--      <member xlink:href="./ERDAS.xml#ERDAS"/> -->
                   <member xlink:href="./ERDASwithCSM.xml#ERDASwithCSM"/>
