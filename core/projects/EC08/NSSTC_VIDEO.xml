@@ -11,14 +11,12 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>Video Camera Streaming SOS</name>
-   <!--               <timeExtent>
-                     <TimeExtent>
-                        <baseTime>0</baseTime>
-                        <lagTime>0</lagTime>
-                        <leadTime>0</leadTime>
-                        <stepTime>0</stepTime>
-                     </TimeExtent>
-                  </timeExtent> -->
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
                   <process xlink:href="./SOSvideoProcessChain.xml#PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -51,7 +49,7 @@
                            <ogc:PropertyName>video/Image</ogc:PropertyName>
                         </sld:Axis>
                         <sld:Axis name="height">
-                           <ogc:PropertyName>video/Image/acrossTrackLine</ogc:PropertyName>
+                           <ogc:PropertyName>video/Image/scanLine</ogc:PropertyName>
                         </sld:Axis>
                      </sld:Dimensions>
                      <sld:Opacity>1.0</sld:Opacity>
