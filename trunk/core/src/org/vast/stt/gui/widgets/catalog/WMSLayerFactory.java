@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
-import org.vast.ows.util.Bbox;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
@@ -42,6 +41,7 @@ import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.sml.SMLProvider;
+import org.vast.util.Bbox;
 import org.vast.util.ExceptionSystem;
 import org.vast.xml.DOMHelper;
 
