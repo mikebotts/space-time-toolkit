@@ -139,9 +139,9 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
             while (contextInUse)
                 wait();
             
-            contextInUse = true;            
-            joglContext.makeCurrent();
+            contextInUse = true;
             canvas.setCurrent();
+            joglContext.makeCurrent();            
         }
         catch (InterruptedException e)
         {
@@ -629,6 +629,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         else
         {
         	joglContext = GLDrawableFactory.getFactory().createExternalGLContext();
+        	//TODO re-estabish linked context capabilities for sharing textures
         	//GLDrawable drawable = GLDrawableFactory.getFactory().createExternalGLDrawable();
         	//joglContext = drawable.createContext(contextList.get(0));
         }
