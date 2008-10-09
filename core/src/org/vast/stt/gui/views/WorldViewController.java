@@ -88,7 +88,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean dragged;
 	private boolean resizing;    
 	private final static double RTD = 180/Math.PI;
-// ***  Figure out how this shoud 
+// ***  Figure out where this should go 
 	LatLonStatusLine llStatus;
 	
 
