@@ -87,8 +87,8 @@
                                  <swe:Count id="NUM_BINS"/>
                               </swe:component>
                               <swe:component name="data">
-                                 <swe:DataArray arraySize="#NUM_BINS">
-                                    <swe:component name="reflectivity">
+                                 <swe:DataArray arraySize="#NUM_BINS"> 
+                                    <swe:component name="reflectivity"> <!-- or velocity/sw  -->
                                        <swe:Quantity definition="urn:ogc:phenomenon:returnedPower" uom="urn:ogc:unit:dbZ"/>
                                     </swe:component>
                                  </swe:DataArray>
@@ -102,7 +102,7 @@
                         <sml:parameter name="sosOptions">
                            <swe:DataGroup fixed="true">
                               <swe:component name="endPoint">
-                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/vast/dopplerSos</swe:Category>
+                                 <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/vastGC/dopplerSos</swe:Category>
                               </swe:component>
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
