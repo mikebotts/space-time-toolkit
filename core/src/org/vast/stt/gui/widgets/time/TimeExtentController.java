@@ -192,7 +192,9 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
     		extentWidget.manualTimeWidget.absTimeSpinner.setValue(baseTime);
     	}
         // update time extent object 
-        timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+    	if(extentWidget.getOverrideSceneTime()) {
+    		timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+    	}
         timeExtent.setLagTimeDelta(extentWidget.lagSpinner.getValue());
         timeExtent.setLeadTimeDelta(extentWidget.leadSpinner.getValue());
         timeExtent.setTimeStep(extentWidget.stepSpinner.getValue());
