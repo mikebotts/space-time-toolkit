@@ -43,7 +43,7 @@ import org.vast.stt.project.world.WorldScene;
  *
  * <p>Copyright (c) 2008</p>
  * @author Tony Cook
- * @date Mar 15, 2008
+ * @date Oct 8, 2008
  * @version 1.0
  */
 public class SPSView extends DataItemView
@@ -101,13 +101,6 @@ public class SPSView extends DataItemView
         }
     }
 
-    @Override
-    //  NOTE:  for testing only! Remove once item is not null
-    public void refreshView()
-    {
-            updateView();
-    }
-    
     @Override
     public void clearView()
     {
