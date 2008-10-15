@@ -26,21 +26,28 @@
 
 package org.vast.stt.gui.widgets.SPS;
 
+import java.text.NumberFormat;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.vast.math.Vector3d;
+import org.vast.stt.gui.views.WorldView;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.DataProvider;
@@ -57,11 +64,11 @@ import org.vast.stt.provider.DataProvider;
  *
  * <p>Copyright (c) 2008</p>
  * @author Tony Cook
- * @date Mar 17, 2008
+ * @date Oct 8, 2008
  * @version 1.0
  */
 
-public class SPSWidget implements SelectionListener
+public class SPSWidget implements SelectionListener, MouseListener
 {
 	WorldScene scene;
 	DataItem dataItem;
@@ -70,7 +77,10 @@ public class SPSWidget implements SelectionListener
 	private Button getLLBtn;
 	private Text lonText;
 	private Text latText;
-	private Control canvas;
+	private Text altText;
+	private Spinner zoomSpinner;
+	//  Temporary SPSSubmit class
+	SPSSubmitTmp spsSubmitter;
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
@@ -79,6 +89,7 @@ public class SPSWidget implements SelectionListener
 	public SPSWidget(Composite parent)
 	{
 		initGui(parent);
+		spsSubmitter = new SPSSubmitTmp("http://vastcam1.nsstc.uah.edu");
 	}
 
 	public void initGui(Composite parent)
@@ -114,7 +125,7 @@ public class SPSWidget implements SelectionListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		latText.setLayoutData(gd);
-//		labelText.setText("");
+//		latText.setText("0.0");
 		
 		Label lonLabel = new Label(mainGroup, 0x0);
 		lonLabel.setText("Longitude: ");
@@ -128,7 +139,7 @@ public class SPSWidget implements SelectionListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		lonText.setLayoutData(gd);
-//		labelText.setText("");
+//		lonText.setText("0.0");
 		
 		Label altlabel = new Label(mainGroup, 0x0);
 		altlabel.setText("Altitude: ");
@@ -137,28 +148,31 @@ public class SPSWidget implements SelectionListener
 		gd.verticalAlignment = SWT.CENTER;
 		altlabel.setLayoutData(gd);
 		
-		Text altText = new Text(mainGroup, 0x0);
+		altText = new Text(mainGroup, 0x0);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		altText.setLayoutData(gd);
-//		labelText.setText("");
+		altText.setText("   2500");
+		//  Fix temporarily with lenient value
+		altText.setEditable(false);
 //		
-		Label fovLabel = new Label(mainGroup, 0x0);
-		fovLabel.setText("FOV: ");
+		Label zoomLabel = new Label(mainGroup, 0x0);
+		zoomLabel.setText("ZOOM: ");
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.END;
 		gd.verticalAlignment = SWT.CENTER;
-		fovLabel.setLayoutData(gd);
+		zoomLabel.setLayoutData(gd);
 		
-		Spinner fovSpinner = new Spinner(mainGroup, 0x0);
+		zoomSpinner = new Spinner(mainGroup, 0x0);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
-		fovSpinner.setLayoutData(gd);
-		fovSpinner.setMinimum(1);
-		fovSpinner.setMinimum(70);
-		fovSpinner.setValues(10, 1, 70, 0, 1, 5);
+		zoomSpinner.setLayoutData(gd);
+		zoomSpinner.setMinimum(1);
+		zoomSpinner.setMinimum(70);
+		zoomSpinner.setValues(10, 5, 70, 0, 1, 10);
+		zoomSpinner.setSelection(55);
 		
 		getLLBtn = new Button(mainGroup, SWT.PUSH);
 		getLLBtn.setText("Get LatLon");
@@ -205,30 +219,64 @@ public class SPSWidget implements SelectionListener
 		}
 	}
 	
-	private void setLatLon(double lat, double lon){
-		latText.setText("" + lat);
-		lonText.setText("" + lon);
+	private void setLatLon(String lat, String lon){
+		latText.setText(lat);
+		lonText.setText(lon);
 	}
 	
-	public void submitRequest(){
-		
+	public void submitRequest() {
+		//  Get Values
+		try {
+			double lat = Double.parseDouble(latText.getText().trim());
+			double lon = Double.parseDouble(lonText.getText().trim());
+			double alt = Double.parseDouble(altText.getText().trim());
+			int zoom = zoomSpinner.getSelection();
+			
+			System.err.println("Submit: " + lat + " " + lon + " " + alt + " " + zoom);
+			spsSubmitter.requestSPS(lat, lon, alt, (double)zoom);
+		} catch (NumberFormatException e) {
+			MessageDialog.openWarning(null, "SPS Submission error", 
+					"Number Format error in Lat/Lon/Alt fields.");
+			return;
+		}
 	}
 	
 	public void pickLL(){
-		// uspend normal UI actions 
-//		worldViewController.suspendListeners();
-		
+		getLLBtn.setText("Cancel");
 		// Change cursor
-		canvas = scene.getRenderer().getCanvas();
+		Composite canvas = scene.getRenderer().getCanvas();
 		canvas.setCursor(canvas.getDisplay().getSystemCursor(SWT.CURSOR_CROSS));
-		
-		//  Allow user left-click only?
-		
-		//  get coords
-		
-		//  load into LL fields
-		setLatLon(30.1,-90.2);
+		canvas.addMouseListener(this);
 	}
 	
 
+	public void mouseDoubleClick(MouseEvent arg0) {
+	}
+
+//  move to mouse up if desired behavior is to not submit until btn is released
+	public void mouseDown(MouseEvent e) {
+		if (e.button == 1 || e.button == 3) {  //  accept left or right button
+			//  get LatLon from WV
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			WorldView view = (WorldView)page.findView(WorldView.ID);
+			//e.y = viewHeight - e.y;
+			Vector3d llPos = view.getProjectedPosition(e.x, e.y);
+			NumberFormat nf  = NumberFormat.getInstance();
+			nf.setMaximumIntegerDigits(3);
+			nf.setMinimumFractionDigits(4);
+			String lonStr = nf.format(llPos.x);
+			String latStr = nf.format(llPos.y);
+			setLatLon(latStr, lonStr);
+			getLLBtn.setText("Get LatLon");
+			
+			Composite canvas = scene.getRenderer().getCanvas();
+			canvas.removeMouseListener(this);
+			//view.restoreMouseListeners();
+			
+			//  reset canvas cursor
+		}
+	}
+
+	public void mouseUp(MouseEvent arg0) {
+	}
 }

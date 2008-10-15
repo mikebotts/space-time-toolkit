@@ -1,0 +1,54 @@
+<Submit xmlns="http://www.opengis.net/sps/1.0" xmlns:gml="http://www.opengis.net/gml"
+    xmlns:swe="http://www.opengis.net/swe/1.0" service="SPS" version="1.0.0">
+    <notificationTarget>
+        <notificationID>1</notificationID>
+        <notificationURL>http://127.0.0.1:8080/52nWNS/wns</notificationURL>
+    </notificationTarget>
+    <sensorParam>
+        <sensorID>urn:ogc:object:feature:Sensor:VAST:vastcam1_system</sensorID>
+        <parameters>
+            <InputParameter parameterID="AOV">
+                <value>
+                    <swe:Quantity>
+                        <swe:value>7</swe:value>
+                    </swe:Quantity>
+                </value>
+            </InputParameter>
+            <InputParameter parameterID="PositionToPointAt">
+                <value>
+                    <swe:Position>
+                        <swe:location>
+                            <swe:Vector>
+                                <swe:coordinate name="Geodetic latitude">
+                                    <swe:Quantity axisID="Lat">
+                                        <swe:uom code="deg"/>
+                                        <swe:value>34.72801</swe:value>
+                                    </swe:Quantity>
+                                </swe:coordinate>
+                                <swe:coordinate name="Geodetic longitude">
+                                    <swe:Quantity axisID="Long">
+                                        <swe:uom code="deg"/>
+                                        <swe:value>-86.64419</swe:value>
+                                    </swe:Quantity>
+                                </swe:coordinate>
+                                <swe:coordinate name="Ellipsoidal height">
+                                    <swe:Quantity axisID="h">
+                                        <swe:uom code="m"/>
+                                        <swe:value>
+                                            230
+                                        </swe:value>
+                                    </swe:Quantity>
+                                </swe:coordinate>
+                            </swe:Vector>
+                        </swe:location>
+                    </swe:Position>
+                </value>
+            </InputParameter>
+        </parameters>
+    </sensorParam>
+    <timeFrame>
+        <gml:TimeInstant>
+            <gml:timePosition>2009-10-05T12:00:00</gml:timePosition>
+        </gml:TimeInstant>
+    </timeFrame>
+</Submit>
