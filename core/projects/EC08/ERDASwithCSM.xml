@@ -130,7 +130,7 @@
                </SensorMLProvider>
             </dataProvider>
             <style>
-               <sld:GridFillSymbolizer enabled="true">
+               <sld:GridFillSymbolizer enabled="false">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
