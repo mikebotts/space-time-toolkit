@@ -28,8 +28,6 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -38,6 +36,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.vast.math.Vector3d;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -73,8 +72,8 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
     private Composite parent;
     private WorldViewController controller;
     
-    
-    public WorldView()
+   
+	public WorldView()
     {
         controller = new WorldViewController();
     }
@@ -240,6 +239,18 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         }
     }
     
+    //  Remove these if not needed for SPSWidget
+    public void removeMouseListeners(){
+    	 parent.removeMouseListener(controller);
+         parent.removeMouseMoveListener(controller);
+         parent.removeListener(SWT.MouseWheel , controller);
+    }
+    
+    public void restoreMouseListeners(){
+    	 parent.addMouseListener(controller);
+         parent.addMouseMoveListener(controller);
+         parent.addListener(SWT.MouseWheel , controller);
+    }
     
     @Override
     public void updateView()
@@ -304,5 +315,12 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
 	
 	public void controlMoved(ControlEvent e)
 	{
+	}
+	
+	//  Added so SPSWidget can convert from canvas x,y to lat,lon
+	//  Probably a cleaner way to do this would be to have listeners on the canvas,
+	//  and have canvas publish "position" events based on mouse click and move  
+	public Vector3d getProjectedPosition(int x, int y) {
+		return controller.getLatLon(x, y);
 	}
 }

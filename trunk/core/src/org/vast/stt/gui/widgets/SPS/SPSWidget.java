@@ -125,7 +125,7 @@ public class SPSWidget implements SelectionListener, MouseListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		latText.setLayoutData(gd);
-//		latText.setText("0.0");
+		latText.setText("     34.7205");
 		
 		Label lonLabel = new Label(mainGroup, 0x0);
 		lonLabel.setText("Longitude: ");
@@ -139,7 +139,7 @@ public class SPSWidget implements SelectionListener, MouseListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		lonText.setLayoutData(gd);
-//		lonText.setText("0.0");
+		lonText.setText("     -86.641");
 		
 		Label altlabel = new Label(mainGroup, 0x0);
 		altlabel.setText("Altitude: ");

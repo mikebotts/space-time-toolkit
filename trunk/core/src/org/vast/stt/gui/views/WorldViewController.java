@@ -88,7 +88,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean dragged;
 	private boolean resizing;    
 	private final static double RTD = 180/Math.PI;
-// ***  Figure out where this should go 
+// ***  Figure out where this should go- use page.findView(WorldView.ID) as in SPSWidget,
+	//  and this can be removed from this class
 	LatLonStatusLine llStatus;
 	
 
@@ -103,17 +104,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	//  thrown in to report LLA temporarily for EC08- clean up SOON!
 	protected void reportLLTemp(int x1, int y1){
-		Projection projection = scene.getViewSettings().getProjection();
-		boolean found = projection.pointOnMap(x1, y1, scene, P0);
-
-		if (!found)
-			return;
-
-		// convert to LLA
-		projection.unproject(Crs.EPSG4329, P0);
-
-		P0.x *= RTD;
-		P0.y *= RTD;
+		Vector3d P0 = getLatLon(x1, y1);
 		StringBuffer llStrBuff = new StringBuffer(40);
 		NumberFormat nf  = NumberFormat.getInstance();
 		nf.setMaximumIntegerDigits(3);
@@ -125,6 +116,25 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		llStatus.setText(llStrBuff.toString());
 	}
 
+	//  Method to allow other classes to get Lat-Lon from this canvas based on mouse click
+	//  Used by SPSWidget only right now.  TC
+	public Vector3d getLatLon(int x1, int y1){
+//		System.err.println(x1 +  " " + y1);
+		Projection projection = scene.getViewSettings().getProjection();
+		boolean found = projection.pointOnMap(x1, y1, scene, P0);
+
+		if (!found)
+			return new Vector3d();
+
+		// convert to LLA
+		projection.unproject(Crs.EPSG4329, P0);
+
+		P0.x *= RTD;
+		P0.y *= RTD;
+		
+		return P0;
+	}
+	
 	protected void doChangeROI(int x0, int y0, int x1, int y1)
 	{
 		DataItem selectedItem = scene.getSelectedItems().get(0).getDataItem();
