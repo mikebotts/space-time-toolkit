@@ -72,7 +72,7 @@
             </style>
          </DataItem>
       </member>
-      <member visible="true">
+      <member visible="false">
          <DataItem>
             <name>CA State Boundaries</name>
             <dataProvider>
