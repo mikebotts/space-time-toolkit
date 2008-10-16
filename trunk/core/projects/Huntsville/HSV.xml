@@ -30,8 +30,8 @@
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>-1.5122368651990576 0.6060694224793853 10</cameraPos>
-                  <targetPos>-1.5122368651990576 0.6060694224793853 0</targetPos>
+                  <cameraPos>-1.5122368651990576 0.6060725640720389 5</cameraPos>
+                  <targetPos>-1.5122368651990576 0.6060725640720389 0</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>6.0</orthoWidth>
                   <orthoHeight>4.0</orthoHeight>
