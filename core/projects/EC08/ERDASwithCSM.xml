@@ -12,7 +12,7 @@
                <SensorMLProvider>
                   <name>TigerShark Track Data</name>
                   <timeExtent>
-                  <TimeExtent id="ERDAS_TIME4">
+                  <TimeExtent autoUpdate="#SCENE_01" id="ERDAS_TIME4">
                      <baseTime>2008-07-21T17:40:02</baseTime>
                      <leadTime>60</leadTime>
                      <lagTime>20</lagTime>
@@ -50,7 +50,7 @@
                <SensorMLProvider>
                   <name>KCM-HD Lookrays Process Chain</name>
                   <timeExtent>
-                     <TimeExtent id="ERDAS_TIME4">
+                     <TimeExtent autoUpdate="#SCENE_01" id="ERDAS_TIME4">
                         <baseTime>2008-07-21T17:38:00</baseTime>
                         <leadTime>20</leadTime>
                         <lagTime>0</lagTime>
@@ -119,7 +119,7 @@
                <SensorMLProvider>
                   <name>KCM-HD Footprint Process Chain</name>
                   <timeExtent>
-                     <TimeExtent id="ERDAS_TIME4">
+                     <TimeExtent autoUpdate="#SCENE_01" id="ERDAS_TIME4">
                         <baseTime>2008-07-21T17:38:00</baseTime>
                         <leadTime>20</leadTime>
                         <lagTime>0</lagTime>
@@ -219,7 +219,7 @@
                <SensorMLProvider>
                   <name>KCM-HD Process</name>
                   <timeExtent>
-                     <TimeExtent id="ERDAS_TIME4">
+                     <TimeExtent autoUpdate="#SCENE_01" id="ERDAS_TIME4">
                         <baseTime>2008-07-21T17:38:00</baseTime>
                         <leadTime>20</leadTime>
                         <lagTime>0</lagTime>
