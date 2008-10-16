@@ -33,6 +33,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -68,7 +69,7 @@ import org.vast.stt.provider.DataProvider;
  * @version 1.0
  */
 
-public class SPSWidget implements SelectionListener, MouseListener
+public class SPSWidget implements SelectionListener, MouseListener, MouseMoveListener
 {
 	WorldScene scene;
 	DataItem dataItem;
@@ -79,6 +80,10 @@ public class SPSWidget implements SelectionListener, MouseListener
 	private Text latText;
 	private Text altText;
 	private Spinner zoomSpinner;
+	private enum Mode { PICK, CANCEL};
+	private Mode currentMode = Mode.PICK;
+	private double defaultLat = 34.725, defaultLon = -86.645;
+	private double oldLat = defaultLat, oldLon=defaultLon; 
 	//  Temporary SPSSubmit class
 	SPSSubmitTmp spsSubmitter;
 	
@@ -125,7 +130,7 @@ public class SPSWidget implements SelectionListener, MouseListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		latText.setLayoutData(gd);
-		latText.setText("     34.7205");
+		latText.setText("      " + defaultLat);
 		
 		Label lonLabel = new Label(mainGroup, 0x0);
 		lonLabel.setText("Longitude: ");
@@ -139,7 +144,7 @@ public class SPSWidget implements SelectionListener, MouseListener
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		lonText.setLayoutData(gd);
-		lonText.setText("     -86.641");
+		lonText.setText("     " + defaultLon);
 		
 		Label altlabel = new Label(mainGroup, 0x0);
 		altlabel.setText("Altitude: ");
@@ -174,12 +179,14 @@ public class SPSWidget implements SelectionListener, MouseListener
 		zoomSpinner.setValues(10, 5, 70, 0, 1, 10);
 		zoomSpinner.setSelection(55);
 		
-		getLLBtn = new Button(mainGroup, SWT.PUSH);
+		getLLBtn = new Button(mainGroup, SWT.PUSH  | SWT.SHADOW_OUT);
 		getLLBtn.setText("Get LatLon");
+		getLLBtn.setToolTipText("Select LatLon from the Worldview");
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.CENTER;
 		getLLBtn.setLayoutData(gd);
 		getLLBtn.addSelectionListener(this);
+		getLLBtn.setEnabled(false);
 		
 		//  Submit Button
 		submitBtn = new Button(mainGroup, SWT.PUSH);
@@ -188,6 +195,7 @@ public class SPSWidget implements SelectionListener, MouseListener
 		gd.horizontalAlignment = SWT.CENTER;
 		submitBtn.setLayoutData(gd);
 		submitBtn.addSelectionListener(this);
+		submitBtn.setEnabled(false);
 		
 	//  Set Default scroller size
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -207,6 +215,8 @@ public class SPSWidget implements SelectionListener, MouseListener
 	
     public void setScene(WorldScene scene){
         this.scene = scene;
+        getLLBtn.setEnabled(true);
+        submitBtn.setEnabled(true);
     }
 	
 	public void widgetSelected(SelectionEvent e) { 
@@ -215,13 +225,22 @@ public class SPSWidget implements SelectionListener, MouseListener
 		if (control == submitBtn){
 			submitRequest();
 		} else if (control == getLLBtn) {
-			pickLL();
+			if (currentMode == Mode.PICK) {
+				pickLL();
+			} else 
+				cancelPick();
 		}
 	}
 	
-	private void setLatLon(String lat, String lon){
-		latText.setText(lat);
-		lonText.setText(lon);
+	private void setLatLon(double lat, double lon){
+		NumberFormat nf  = NumberFormat.getInstance();
+		
+		nf.setMaximumIntegerDigits(3);
+		nf.setMinimumFractionDigits(4);
+		String lonStr = nf.format(lon);
+		String latStr = nf.format(lat);
+		latText.setText(latStr);
+		lonText.setText(lonStr);
 	}
 	
 	public void submitRequest() {
@@ -233,7 +252,14 @@ public class SPSWidget implements SelectionListener, MouseListener
 			int zoom = zoomSpinner.getSelection();
 			
 			System.err.println("Submit: " + lat + " " + lon + " " + alt + " " + zoom);
-			spsSubmitter.requestSPS(lat, lon, alt, (double)zoom);
+			boolean reqOk = spsSubmitter.requestSPS(lat, lon, alt, (double)zoom);
+			if(reqOk) {
+				MessageDialog.openInformation(null, "SPS Submission Status", 
+					"Parameters okay.  Submitting request to Vastcam SPS...");
+			}else {
+				MessageDialog.openError(null, "SPS Submission Error", 
+				"Requested Lat/Lon/Alt parameters out of Range.\nRequest not submitted");
+			}
 		} catch (NumberFormatException e) {
 			MessageDialog.openWarning(null, "SPS Submission error", 
 					"Number Format error in Lat/Lon/Alt fields.");
@@ -241,12 +267,32 @@ public class SPSWidget implements SelectionListener, MouseListener
 		}
 	}
 	
+	private void cancelPick(){
+		getLLBtn.setText("Get LatLon");
+		setLatLon(oldLat, oldLon);
+		currentMode = Mode.PICK;
+		getLLBtn.setToolTipText("Select LatLon from the Worldview");
+		Composite canvas = scene.getRenderer().getCanvas();
+		canvas.removeMouseListener(this);
+		canvas.removeMouseMoveListener(this);
+		canvas.setCursor(canvas.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
+
+	}
+	
 	public void pickLL(){
+		oldLat = Double.parseDouble(latText.getText().trim());
+		oldLon = Double.parseDouble(lonText.getText().trim());
 		getLLBtn.setText("Cancel");
+		currentMode = Mode.CANCEL;
+		getLLBtn.setToolTipText("Cancel the LatLon Picking Process");
 		// Change cursor
 		Composite canvas = scene.getRenderer().getCanvas();
 		canvas.setCursor(canvas.getDisplay().getSystemCursor(SWT.CURSOR_CROSS));
 		canvas.addMouseListener(this);
+		//  The proper way to do this would be to have Cavnas be a HoverListener, or the equivalent of that
+		//  But don't want to risk side effects of that before demo.  This shoudl work safely until then. T 
+		boolean setOk = canvas.setFocus();
+		canvas.addMouseMoveListener(this);
 	}
 	
 
@@ -261,22 +307,39 @@ public class SPSWidget implements SelectionListener, MouseListener
 			WorldView view = (WorldView)page.findView(WorldView.ID);
 			//e.y = viewHeight - e.y;
 			Vector3d llPos = view.getProjectedPosition(e.x, e.y);
-			NumberFormat nf  = NumberFormat.getInstance();
-			nf.setMaximumIntegerDigits(3);
-			nf.setMinimumFractionDigits(4);
-			String lonStr = nf.format(llPos.x);
-			String latStr = nf.format(llPos.y);
-			setLatLon(latStr, lonStr);
+//			NumberFormat nf  = NumberFormat.getInstance();
+//			
+//			nf.setMaximumIntegerDigits(3);
+//			nf.setMinimumFractionDigits(4);
+//			String lonStr = nf.format(llPos.x);
+//			String latStr = nf.format(llPos.y);
+			setLatLon(llPos.y, llPos.x);
 			getLLBtn.setText("Get LatLon");
-			
+			currentMode = Mode.PICK;
+			getLLBtn.setToolTipText("Select LatLon from the Worldview");
+
 			Composite canvas = scene.getRenderer().getCanvas();
 			canvas.removeMouseListener(this);
+			canvas.removeMouseMoveListener(this);
+			canvas.setCursor(canvas.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
+
 			//view.restoreMouseListeners();
 			
 			//  reset canvas cursor
 		}
 	}
 
+	//  I think Mousemove listener isn't working bc View loses Focus.  Note that the WorldViewController also stops getting mouseMoved events 
+	//  until selection is made to bring Focus back to Canvas
+	public void mouseMove(MouseEvent e)
+	{
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		WorldView view = (WorldView)page.findView(WorldView.ID);
+		//e.y = viewHeight - e.y;
+		Vector3d llPos = view.getProjectedPosition(e.x, e.y);
+		setLatLon(llPos.y, llPos.x);
+	}
+	
 	public void mouseUp(MouseEvent arg0) {
 	}
 }

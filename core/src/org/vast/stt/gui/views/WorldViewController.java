@@ -121,7 +121,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	public Vector3d getLatLon(int x1, int y1){
 //		System.err.println(x1 +  " " + y1);
 		Projection projection = scene.getViewSettings().getProjection();
-		boolean found = projection.pointOnMap(x1, y1, scene, P0);
+		boolean found = projection.pointOnMap(x1, scene.getRenderer().getViewHeight()-y1, scene, P0);
 
 		if (!found)
 			return new Vector3d();
@@ -335,6 +335,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		dragged = true;
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
+//		System.err.println("MM: " + e.x + " " +e.y);
 		reportLLTemp(e.x,e.y);
 		
 		if (leftButtonDown)
