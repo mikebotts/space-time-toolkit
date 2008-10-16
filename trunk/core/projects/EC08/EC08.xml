@@ -16,7 +16,7 @@
                   <baseTime>2008-07-21T17:38:00Z</baseTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
-                  <stepTime>60</stepTime>
+                  <stepTime>30</stepTime>
                </TimeExtent>
             </time> 
         <!--   <time updatePeriod="3">
@@ -30,25 +30,25 @@
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>0 0 10</cameraPos>
-                  <targetPos>0 0 0</targetPos>
+                  <cameraPos>-2.0435292266730727 0.6200543967097655 10</cameraPos>
+                  <targetPos>-2.0435292266730727 0.6200543967097655 0</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>6.0</orthoWidth>
                   <orthoHeight>4.0</orthoHeight>
                   <nearClip>1</nearClip>
                   <farClip>100</farClip>
-                  <zFudgeFactor>1000</zFudgeFactor>
+                  <zFudgeFactor>100</zFudgeFactor>
                </ViewSettings>
             </view>
             <contents>
                <DataList>
                   <name>Empire Challenge 08</name>
-              <!--    <member xlink:href="../BaseLayers.xml#GIS"/>  -->
+                  <member xlink:href="./BaseLayers.xml#GIS"/> 
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
                   <member xlink:href="./DopplerRadar.xml#Radar"/> 
-                  <!-- <member xlink:href="./SAIC.xml#SAIC"/>  -->
-                  <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
+                  <!-- <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> -->
+                  <!-- <member xlink:href="./SAIC.xml#SAIC"/> -->
                   <member xlink:href="./NORTHROPGRUNMAN.xml#NORTHROPGRUNMAN"/>
                   <!--      <member xlink:href="./ERDAS.xml#ERDAS"/> -->
                   <member xlink:href="./ERDASwithCSM.xml#ERDASwithCSM"/>
