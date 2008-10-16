@@ -96,10 +96,10 @@ public class SPSSubmitTmp {
 				//System.err.println("GOOD: " + llaz);
 				return true;
 			} else {
-				MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-						"STT Error", "SPS Submission error.  Requested point out of range for Camera vastcam1.");
+				//MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				//		"STT Error", "SPS Submission error.  Requested point out of range for Camera vastcam1.");
 				//badPoints.add(llaz);
-				//System.err.println("BAD: " + llaz);
+				System.err.println("BAD: " + llaz);
 				return false;
 			}
 			
@@ -250,12 +250,12 @@ public class SPSSubmitTmp {
 //		System.exit(1);
 //		<ows:LowerCorner>-86.764190 34.638439</ows:LowerCorner>
 //		<ows:UpperCorner>-86.546472 34.823472</ows:UpperCorner>
-		double westLon = -88.0;
-		double eastLon = -84.0;
-		double southLat = 33.0;
-		double northLat = 37.0;
-		double latStep = .25;
-		double lonStep = .25;
+		double westLon = -87.0;
+		double eastLon = -85.0;
+		double southLat = 34.0;
+		double northLat = 36.0;
+		double latStep = .2;
+		double lonStep = .2;
 		for(lat = southLat; lat < northLat; lat+= latStep){
 			for(lon = westLon; lon <eastLon; lon+= lonStep) {
 				boolean ok = acp.requestSPS(lat, lon, height, zoom);
