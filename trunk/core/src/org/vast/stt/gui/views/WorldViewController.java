@@ -199,6 +199,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	public void mouseDown(MouseEvent e)
 	{
 		dragged = false;
+		
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
 		reportLLTemp(e.x,e.y);
@@ -333,10 +334,13 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	public void mouseMove(MouseEvent e)
 	{
 		dragged = true;
+		//  For now, reportLLTemp is reversing y convention to do computation.  Fix to be 
+		//  consistent later today...  T
+		reportLLTemp(e.x,e.y);
+
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
 //		System.err.println("MM: " + e.x + " " +e.y);
-		reportLLTemp(e.x,e.y);
 		
 		if (leftButtonDown)
 		{
