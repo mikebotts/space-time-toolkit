@@ -41,14 +41,14 @@
                   <swe:DataArray>
                      <swe:elementCount>
                         <swe:Count>
-                           <swe:value>4</swe:value>
+                           <swe:value>30</swe:value>
                         </swe:Count>
                      </swe:elementCount>
                      <swe:elementType name="acrossTrackPoints">
                         <swe:DataArray>
                            <swe:elementCount>
                               <swe:Count>
-                                 <swe:value>4</swe:value>
+                                 <swe:value>30</swe:value>
                               </swe:Count>
                            </swe:elementCount>
                            <swe:elementType name="groundPoint">
@@ -392,7 +392,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>30</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -449,7 +449,7 @@
                                  </swe:field>
                                  <swe:field name="stepCount">
                                     <swe:Quantity>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>30</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
@@ -483,7 +483,7 @@
                   </sml:ProcessModel>
                </sml:component>       
                <!-- Actual chain doing the geolocation job -->
-               <sml:component name="lookVectorChain" xlink:href="./NsstcCameraFrameGeolocation.xml#GEOLOCATION"/>
+               <sml:component name="lookVectorChain" xlink:href="./NsstcCameraFrameGeolocation2.xml#GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
                <sml:component name="rayIntersectSphere">
                   <sml:ProcessModel>
@@ -597,14 +597,14 @@
                               <swe:DataArray>
                                  <swe:elementCount>
                                     <swe:Count>
-                                       <swe:value>4</swe:value>
+                                       <swe:value>30</swe:value>
                                     </swe:Count>
                                  </swe:elementCount>
                                  <swe:elementType name="acrossTrackPoints">
                                     <swe:DataArray>
                                        <swe:elementCount>
                                           <swe:Count>
-                                             <swe:value>4</swe:value>
+                                             <swe:value>30</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
                                        <swe:elementType name="groundPoint">
@@ -632,7 +632,7 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:method xlink:href="urn:ogc:def:process:gridBuilderEC:1.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:gridBuilderVideo:1.0"/>
                   </sml:ProcessModel>
                </sml:component>        
                <!-- connection -->
