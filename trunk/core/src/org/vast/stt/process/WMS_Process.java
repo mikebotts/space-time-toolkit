@@ -240,8 +240,6 @@ public class WMS_Process extends DataProcess
             outputWidth.getData().setIntValue(width);
             outputHeight.getData().setIntValue(height);
             output.combineDataBlocks();
-            System.err.println(this);
-
         }
         catch (Exception e)
         {
