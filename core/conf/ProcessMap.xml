@@ -16,13 +16,8 @@
    </Process>
    
    <Process>
-      <uri>urn:ogc:def:process:gridBuilderVideo:1.0</uri>
-      <class>org.sensorML.process.GridBuilderVideo_Process</class>
-   </Process>
-   
-   <Process>
-      <uri>urn:ogc:def:process:gridBuilderEC:1.0</uri>
-      <class>org.sensorML.process.GridBuilderEC_Process</class>
+      <uri>urn:ogc:def:process:gridBuilder:1.0</uri>
+      <class>org.sensorML.process.GridBuilder_Process</class>
    </Process>
    
    <Process>
@@ -202,7 +197,6 @@
       <class>org.sensorML.process.SOS_Process</class>
    </Process>
    
-
    <Process>
       <uri>urn:ogc:def:process:flatGridGenerator:1.0</uri>
       <class>org.vast.stt.process.FlatGridGenerator_Process</class>
