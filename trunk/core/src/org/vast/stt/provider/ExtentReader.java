@@ -26,7 +26,7 @@
 package org.vast.stt.provider;
 
 import java.text.ParseException;
-import org.vast.xml.DOMHelper;
+
 import org.vast.stt.dynamics.RealTimeUpdater;
 import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SceneTimeUpdater;
@@ -35,7 +35,8 @@ import org.vast.stt.dynamics.TimeExtentUpdater;
 import org.vast.stt.project.XMLReader;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.util.DateTimeFormat;
-import org.w3c.dom.*;
+import org.vast.xml.DOMHelper;
+import org.w3c.dom.Element;
 
 
 /**
@@ -153,9 +154,14 @@ public class ExtentReader extends XMLReader
                     {
     	                if (val.equalsIgnoreCase("now"))
     	                    timeExtent.setBaseAtNow(true);
-    	                else
+    	                else {
+    	                	System.err.println("ER.setBaseTime: " + val);
     	                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
-                    }
+    	                }
+                    }  // else {
+                    //   val==null, no baseTime present.  Set def here if desired
+                    //   otherwise, def is Jan 1, 1970...  TC
+                    //  {
 	                
 	                // read lag time
 	                val = dom.getElementValue(extentElt, "lagTime");
@@ -171,7 +177,7 @@ public class ExtentReader extends XMLReader
 	                val = dom.getElementValue(extentElt, "stepTime");
 	                if (val != null)
 	                    timeExtent.setTimeStep(Double.parseDouble(val));
-	            
+	                
 	                // store that in the hashtable
 	                registerObjectID(dom, extentElt, timeExtent);
 	            }
@@ -188,6 +194,10 @@ public class ExtentReader extends XMLReader
         	if(updateVal.startsWith("#")){
 	            String sceneId = updateVal.substring(1);
 	            WorldScene scene = (WorldScene)objectIds.get(sceneId);
+	            //  
+	            if(scene == null){
+	            	throw new IllegalStateException("Invalid SCENE_ID for time attribtue 'autoUpdate': " + updateVal);
+	            }
 	            TimeExtentUpdater updater = new SceneTimeUpdater(scene);
 	            timeExtent.setUpdater(updater);
 	            updater.setEnabled(true);
