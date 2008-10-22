@@ -63,9 +63,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			return;
 			
 		//  Reset widget values based on new timeExtent object state
-		if(extentWidget.getOverrideSceneTime()) {
-			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
-		}
+		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
 		extentWidget.setBiasValue(timeExtent.getTimeBias());
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
