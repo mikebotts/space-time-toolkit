@@ -17,7 +17,7 @@
                      <stepTime>0</stepTime>
                    </TimeExtent>
                   </timeExtent> 
-                  <process xlink:href="./SOSvideoProcessChainWithGeo.xml#PROCESS"/>
+                  <process xlink:href="./SOSvideoProcessChainWithGeo2.xml#PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
