@@ -208,6 +208,23 @@ public class BlockList
     }
     
     
+    public BlockListItem getLastItem()
+    {
+        return lastItem;
+    }
+    
+    public BlockListItem getCurrentItem()
+    {
+        return currentItem;
+    }
+    
+    
+    public BlockListItem getFirstItem()
+    {
+        return firstItem;
+    }
+    
+    
     public int getSize()
     {
         return size;
