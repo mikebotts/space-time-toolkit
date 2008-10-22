@@ -91,8 +91,11 @@ public class FlatGridGenerator_Process extends DataProcess
             // Read parameter values
             width = paramData.getComponent("gridWidth").getData().getIntValue();
             length = paramData.getComponent("gridLength").getData().getIntValue();
-            if (paramData.getComponent("heightAboveEllipsoid")!=null)
+            
+            if (paramData.getComponent("heightAboveEllipsoid")!=null){
             	heightAboveEllipse = paramData.getComponent("heightAboveEllipsoid").getData().getDoubleValue();
+            	//System.out.println("FlatGridGenerator: heightAboveEllipsoid = " + heightAboveEllipse);
+            }
             outputWidth.getData().setIntValue(width);
             outputLength.getData().setIntValue(length);
             outputGrid.setSize(length);
