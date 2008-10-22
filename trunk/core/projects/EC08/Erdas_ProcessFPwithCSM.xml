@@ -447,7 +447,7 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                     <sml:method xlink:href="urn:ogc:def:process:gridBuilderEC:1.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:gridBuilder:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
             </sml:ComponentList>
