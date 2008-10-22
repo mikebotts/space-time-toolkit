@@ -58,7 +58,7 @@ public class SMLProvider extends AbstractProvider
 {
     protected DataProcess process;
     protected ArrayList<BlockList> blockListArray;
-    
+    protected String persistency;
     
 	public SMLProvider()
 	{      
@@ -183,6 +183,8 @@ public class SMLProvider extends AbstractProvider
                         {
                             BlockList blockList = blockListArray.get(c);
                             blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
+                            if(persistency!=null && blockList.getSize()==Integer.parseInt(persistency+1))
+                            	blockList.remove(blockList.getFirstItem());
                         }
                         
                         // send event for redraw
@@ -269,5 +271,17 @@ public class SMLProvider extends AbstractProvider
     public void setProcess(DataProcess process)
     {
         this.process = process;
+    }
+
+
+    public String getPersistency()
+    {
+        return persistency;
+    }
+
+
+    public void setPersistency(String persistency)
+    {
+        this.persistency = persistency;
     }
 }

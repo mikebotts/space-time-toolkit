@@ -48,7 +48,7 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
 
     public Object read(DOMHelper dom, Element providerElt)
     {
-        SMLProvider provider = new SMLProvider();
+    	SMLProvider provider = new SMLProvider();
         
         try
         {
@@ -59,6 +59,9 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
             DataProcess rootProcess = smlUtils.readProcessProperty(dom, processElt);
             provider.setProcess(rootProcess);
             
+            // read persistency of data
+            provider.setPersistency(dom.getAttributeValue(providerElt, "dataPersistency"));
+
             // read custom values and assign them to chain signals
             NodeList valueElts = dom.getElements(providerElt, "value");
             for (int i=0; i<valueElts.getLength(); i++)
