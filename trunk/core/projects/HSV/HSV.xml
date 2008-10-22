@@ -4,7 +4,7 @@
       <name>Empire Challenge 08 Project</name>
       <author>Gregoire Berthiau</author>
       <dateCreated>2008-07-08T09:23:00</dateCreated>
-      <description>Various Service from and for Empire Challenge 08</description>
+      <description>Project for Huntsville Webcams</description>
    </Identification>
    <!-- List of scenes (separate 2d or 3D view windows) -->
    <SceneList>
@@ -30,8 +30,8 @@
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>0 0 10</cameraPos>
-                  <targetPos>0 0 0</targetPos>
+                  <cameraPos>-1.5122368651990576 0.6060725640720389 5</cameraPos>
+                  <targetPos>-1.5122368651990576 0.6060725640720389 0</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>6.0</orthoWidth>
                   <orthoHeight>4.0</orthoHeight>
