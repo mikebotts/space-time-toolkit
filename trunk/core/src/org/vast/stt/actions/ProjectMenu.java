@@ -37,6 +37,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.FileDialog;
@@ -90,7 +91,6 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                         {
                         	DataItem item = it.next();
                             DataProvider provider = item.getDataProvider();
-                            System.err.println("Prov " + provider + " " + provider.getName());
                             if (!processedProviders.contains(provider))
                             {
                                 if (provider.getSpatialExtent().getUpdater() == null)
