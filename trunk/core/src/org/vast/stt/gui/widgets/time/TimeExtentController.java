@@ -63,13 +63,14 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			return;
 			
 		//  Reset widget values based on new timeExtent object state
-		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
 		extentWidget.setBiasValue(timeExtent.getTimeBias());
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		extentWidget.stepSpinner.setValue(timeExtent.getTimeStep());
 		//  Is an updater enabled?  If so, disable controls
 		boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
+		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getDefaultBaseTime());
+
         extentWidget.manualTimeWidget.setEnabled(!useAutoTime);
         extentWidget.overrideTimeBtn.setSelection(!useAutoTime);
 //		//  Fix for baseAtNow btn
@@ -191,7 +192,9 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
     	}
         // update time extent object 
     	if(extentWidget.getOverrideSceneTime()) {
-    		timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+    		double newBaseTime = extentWidget.manualTimeWidget.absTimeSpinner.getValue();
+    		timeExtent.setBaseTime(newBaseTime);
+    		timeExtent.setDefaultBaseTime(newBaseTime);
     	}
         timeExtent.setLagTimeDelta(extentWidget.lagSpinner.getValue());
         timeExtent.setLeadTimeDelta(extentWidget.leadSpinner.getValue());
