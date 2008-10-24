@@ -155,8 +155,9 @@ public class ExtentReader extends XMLReader
     	                if (val.equalsIgnoreCase("now"))
     	                    timeExtent.setBaseAtNow(true);
     	                else {
-    	                	System.err.println("ER.setBaseTime: " + val);
+    	                	double baseTime = DateTimeFormat.parseIso(val);
     	                    timeExtent.setBaseTime(DateTimeFormat.parseIso(val));
+    	                    timeExtent.setDefaultBaseTime(baseTime);
     	                }
                     }  // else {
                     //   val==null, no baseTime present.  Set def here if desired
