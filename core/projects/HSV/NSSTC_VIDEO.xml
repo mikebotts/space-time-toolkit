@@ -76,7 +76,7 @@
          <DataItem>
             <name>NSSTC Video Camera - Streaming</name>
             <dataProvider>
-               <SensorMLProvider dataPersistency="2">
+               <SensorMLProvider dataPersistency="1">
                   <name>Video Camera Streaming SOS</name>
                   <timeExtent>
                    <TimeExtent>
