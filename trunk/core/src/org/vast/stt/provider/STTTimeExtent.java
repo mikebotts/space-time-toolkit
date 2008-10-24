@@ -51,9 +51,9 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
 {
     protected STTEventListeners listeners;
     protected TimeExtentUpdater updater;
-
-    
-    public STTTimeExtent()
+    protected double defaultBaseTime;
+  
+	public STTTimeExtent()
     {
         listeners = new STTEventListeners(1);
     }
@@ -107,4 +107,15 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
         event.producer = this;
         listeners.dispatchEvent(event);
     }
+    
+    
+    public double getDefaultBaseTime() {
+		return defaultBaseTime;
+	}
+
+
+	public void setDefaultBaseTime(double defaultBaseTime) {
+		this.defaultBaseTime = defaultBaseTime;
+	}
+
 }
