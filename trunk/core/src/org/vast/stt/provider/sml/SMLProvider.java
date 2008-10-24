@@ -32,6 +32,7 @@ import org.vast.data.*;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessChain;
 import org.vast.stt.data.BlockList;
+import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -58,7 +59,8 @@ public class SMLProvider extends AbstractProvider
 {
     protected DataProcess process;
     protected ArrayList<BlockList> blockListArray;
-    protected String persistency;
+    protected int persistency = -1;
+    
     
 	public SMLProvider()
 	{      
@@ -183,17 +185,24 @@ public class SMLProvider extends AbstractProvider
                         {
                             BlockList blockList = blockListArray.get(c);
                             blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
-                            if(persistency!=null && blockList.getSize()==Integer.parseInt(persistency+1))
-                            	blockList.remove(blockList.getFirstItem());
+                            
+                            if (persistency > 0 && blockList.getSize() >= persistency + 1)
+                            {
+                                BlockListItem item = blockList.getFirstItem();
+                                blockList.remove(item);
+                                
+                                // send event to clear rendering cache
+                                dispatchEvent(new STTEvent(new Object[] {item}, EventType.PROVIDER_DATA_REMOVED));
+                            }
                         }
                         
                         // send event for redraw
                         if (count == 0)
                         	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
                         
-               //         count++;
-               //         if (count == 50)
-               //         	count = 0;                       
+                        // count++;
+                        // if (count == 50)
+                        //     count = 0;                       
                         
                         // reset input needed flags to avoid a process chain to set 
                         // internal availability to true
@@ -274,13 +283,13 @@ public class SMLProvider extends AbstractProvider
     }
 
 
-    public String getPersistency()
+    public int getPersistency()
     {
         return persistency;
     }
 
 
-    public void setPersistency(String persistency)
+    public void setPersistency(int persistency)
     {
         this.persistency = persistency;
     }

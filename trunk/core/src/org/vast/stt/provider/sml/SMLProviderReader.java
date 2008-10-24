@@ -60,7 +60,9 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
             provider.setProcess(rootProcess);
             
             // read persistency of data
-            provider.setPersistency(dom.getAttributeValue(providerElt, "dataPersistency"));
+            String persistency = dom.getAttributeValue(providerElt, "dataPersistency");
+            if (persistency != null)
+                provider.setPersistency(Integer.parseInt(persistency));
 
             // read custom values and assign them to chain signals
             NodeList valueElts = dom.getElements(providerElt, "value");
