@@ -131,6 +131,7 @@
                            <sld:SourceChannelName>video/Image/scanLine/pixel/blue</sld:SourceChannelName>
                         </sld:BlueChannel>
                      </sld:ChannelSelection>
+                     <sld:RasterPoolSize>3</sld:RasterPoolSize>
                   </sld:Raster>
                </sld:TextureSymbolizer>
             </style>                        
