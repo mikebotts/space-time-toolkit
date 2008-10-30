@@ -62,4 +62,5 @@ public interface StylerVisitor
 	public void visit(RasterStyler styler);    
     
     public void visit(TextureStyler styler);
+
 }
