@@ -29,10 +29,12 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridPatchGraphic;
@@ -63,6 +65,8 @@ public class TextureManager
 {
     protected static Hashtable<Symbolizer, GLTextureTable> symTextureTables
                = new Hashtable<Symbolizer, GLTextureTable>();
+    protected Hashtable<Symbolizer, Boolean> symTexturePoolSizeReachedTable = new Hashtable<Symbolizer, Boolean>();
+    protected Hashtable<Symbolizer, LinkedList<Integer>> symTextureStackTable = new Hashtable<Symbolizer, LinkedList<Integer>>();
     protected GL gl;
     protected GLU glu;
     protected boolean forceNoExt = false;
@@ -207,13 +211,58 @@ public class TextureManager
     {
         // fetch texture data from styler
         fillTexData(styler, tex, texInfo);
+        Symbolizer sym = styler.getSymbolizer();
         
         // if texture was successfully constructed, bind it with GL
         if (tex.hasRasterData)
         {
+        	// size of texture pool
+        	int texPoolSize = styler.getSymbolizer().getTexPoolSize();
+
             // create new texture name and bind it
             int[] id = new int[1];
-            gl.glGenTextures(1, id, 0); 
+            
+            boolean lastNewTexture = false;
+            // ACCORDING TO WHETHER THE TEXTURE POOL SIZE HAS BEEN REACHED
+            // A NEW TEXTURE IS GENERATED OR THE FIRST OF THE STACK IS REUSED
+            // FOR THE MOST RECENT RASTER DATA
+            if((symTexturePoolSizeReachedTable == null) || !symTexturePoolSizeReachedTable.containsKey(sym))
+            {
+            	// create new texture name
+            	gl.glGenTextures(1, id, 0); 
+            	if(texPoolSize>0)
+            	{
+            		if(id[0]<(texPoolSize+1))
+            		{
+            			if(!symTextureStackTable.containsKey(sym))
+            			{
+            				LinkedList<Integer> TexIdStack = new LinkedList<Integer>();
+            				TexIdStack.addLast(id[0]);
+            				symTextureStackTable.put(sym, TexIdStack);
+            			}
+            			else
+            			{
+            				LinkedList<Integer> stack = symTextureStackTable.get(sym);
+            				stack.addLast(id[0]);
+            				symTextureStackTable.put(sym, stack);
+            				if(id[0]==texPoolSize)
+            				{
+            					symTexturePoolSizeReachedTable.put(sym, true); 
+            					lastNewTexture = true;
+            				}
+            					
+            			}
+            		}
+            	}
+            }
+            else if ((symTexturePoolSizeReachedTable != null) || symTexturePoolSizeReachedTable.containsKey(sym))
+            {
+            	LinkedList<Integer> stack = symTextureStackTable.get(sym);
+	           	id[0] = stack.pollFirst();
+	           	stack.addLast(id[0]);        	 
+            }
+            
+            // Bind the texture to the texture Id
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
             
             // set texture parameters
@@ -249,12 +298,27 @@ public class TextureManager
                     break;                
             }
             
-            // create texture in GL memory
             gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-            gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
-                    tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
-                    0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
             
+            // create texture in GL memory
+            
+            if(!symTexturePoolSizeReachedTable.containsKey(sym) || lastNewTexture)
+            {
+            	
+            	gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
+            					tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
+            					0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
+            }
+            else
+            {
+            	gl.glTexImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, tex.bands,
+            					tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
+            					0, format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
+            //	gl.glTexSubImage2D(OpenGLCaps.TEXTURE_2D_TARGET, 0, 0, 0,
+            //		               tex.width + texInfo.widthPadding, tex.height + texInfo.heightPadding,
+            //		               format, GL.GL_UNSIGNED_BYTE, tex.rasterData);
+            }
+
             // erase temp buffer
             tex.rasterData = null;
             
@@ -266,7 +330,7 @@ public class TextureManager
             if (oldID > 0)
             {
                 gl.glDeleteTextures(1, new int[] {oldID}, 0);
-                //System.err.println("Tex #" + oldID + " deleted");
+                System.err.println("Tex #" + oldID + " deleted");
             }
             
             //texCount++;
