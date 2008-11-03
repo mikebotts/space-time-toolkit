@@ -405,7 +405,8 @@
                   <name>KESX Doppler SOS</name>
                   <timeExtent>
                      <TimeExtent>
-                        <baseTime>2008-07-21T22:00:00</baseTime>
+<!--                        <baseTime>2008-07-21T22:00:00</baseTime>-->
+                        <baseTime>1934-04-12T22:00:00</baseTime>
                         <lagTime>0</lagTime>
                         <leadTime>300</leadTime>
                         <stepTime>0</stepTime>
