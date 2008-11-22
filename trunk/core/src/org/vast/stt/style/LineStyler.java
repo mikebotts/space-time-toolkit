@@ -185,38 +185,6 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         this.clearAllMappers();       
         
         
-        // line segment size (dimension or breaks)
-        Dimensions dims = this.symbolizer.getDimensions();
-        if (dims != null)
-        {
-	        propertyName = dims.get("numPoints");
-	        if (propertyName != null)
-	        {
-	            if (propertyName.equals("/"))
-	                dataLists[0].indexOffset = 0;
-	            else    
-	                addPropertyMapper(propertyName, new LineSizeMapper(0, segment, null));
-	        }
-        }
-        else
-        {
-        	// geometry breaks
-            param = this.symbolizer.getGeometry().getBreaks();
-            if (param != null)
-            {
-                propertyName = param.getPropertyName();
-                if (propertyName != null)
-                {
-                    addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));
-                    dataLists[0].indexOffset = 0;
-                    //TODO remove this and use breaks only with real boolean flags!
-                    //TODO need to update all stylers in projects
-                }
-            }
-            else
-            	breakBtwBlocks = false;
-        }
-        
         // geometry X
         param = this.symbolizer.getGeometry().getX();
         updateMappingX(point, param);
@@ -248,6 +216,38 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         // color - alpha 
         param = this.symbolizer.getStroke().getColor().getAlpha();
         updateMappingAlpha(point, param);
+        
+        // line segment size (dimension or breaks)
+        Dimensions dims = this.symbolizer.getDimensions();
+        if (dims != null)
+        {
+            propertyName = dims.get("numPoints");
+            if (propertyName != null)
+            {
+                if (propertyName.equals("/"))
+                    dataLists[0].indexOffset = 0;
+                else    
+                    addPropertyMapper(propertyName, new LineSizeMapper(0, segment, null));
+            }
+        }
+        else
+        {
+            // geometry breaks
+            param = this.symbolizer.getGeometry().getBreaks();
+            if (param != null)
+            {
+                propertyName = param.getPropertyName();
+                if (propertyName != null)
+                {
+                    addPropertyMapper(propertyName, new GenericBreakMapper(point, param.getMappingFunction()));
+                    dataLists[0].indexOffset = 0;
+                    //TODO remove this and use breaks only with real boolean flags!
+                    //TODO need to update all stylers in projects
+                }
+            }
+            else
+                breakBtwBlocks = false;
+        }
         
         // line width
         param = this.symbolizer.getStroke().getWidth();

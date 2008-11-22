@@ -275,7 +275,8 @@ public class SceneItem implements STTEventListener
         {
             case ITEM_SYMBOLIZER_CHANGED:
                 Symbolizer symbolizer = (Symbolizer)event.source;
-                updateStyler(symbolizer);
+                if (dataItem.isEnabled())
+                    updateStyler(symbolizer);
                 break;
                             
             case PROVIDER_DATA_CLEARED:

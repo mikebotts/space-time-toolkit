@@ -194,12 +194,6 @@ public abstract class AbstractProvider implements DataProvider
 	
     public DataNode getDataNode()
     {
-        if (!dataNode.isNodeStructureReady() || !dataNode.hasData() || error)
-        {
-            error = false;
-            startUpdate(false);
-        }
-        
         return dataNode;
     }
 	
@@ -341,7 +335,19 @@ public abstract class AbstractProvider implements DataProvider
     
     public void setEnabled(boolean enabled)
     {
-        this.enabled = enabled;
+        if (this.enabled == enabled)
+            return;
+        else
+            this.enabled = enabled;
+        
+        if (enabled)
+        {
+            if (!dataNode.isNodeStructureReady() || !dataNode.hasData() || error)
+            {
+                error = false;
+                startUpdate(false);
+            }
+        }
     }
     
     
