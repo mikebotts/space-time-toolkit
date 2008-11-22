@@ -35,6 +35,7 @@ import org.vast.stt.project.XMLRegistry;
 import org.vast.stt.project.feedback.ItemActionReader;
 import org.vast.stt.project.feedback.ItemAction;
 import org.vast.stt.project.scene.Scene;
+import org.vast.stt.provider.CachedProvider;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.ExtentReader;
 import org.vast.stt.provider.STTSpatialExtent;
@@ -300,6 +301,8 @@ public class DataTreeReader extends XMLReader
         }
         
         // read quadTree option
+        // TODO implement XMLReader and handle as cache extension
+        // TODO modify project files accordingly
         String text = dom.getAttributeValue(providerElt, "quadTree");
         if (text != null && text.equalsIgnoreCase("true"))
         {
@@ -313,6 +316,23 @@ public class DataTreeReader extends XMLReader
             }
         }
         
+        // read cache options
+        Element cacheElt = dom.getElement(providerElt, "cache/*");
+        if (cacheElt != null)
+        {
+            // create appropriate reader
+            reader = XMLRegistry.createReader(cacheElt.getLocalName());
+            if (reader == null)
+                return null;
+            
+            // read cache options
+            CachedProvider cachedProvider = (CachedProvider)reader.read(dom, cacheElt);
+            
+            // wrap provider with cached provider
+            cachedProvider.setSubProvider(provider);
+            provider = cachedProvider;
+        }
+                
         return provider;
     }
     
