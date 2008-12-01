@@ -221,8 +221,8 @@ public class SOSProvider extends OWSProvider
 		if (layerCaps == null) return;
 		
 		request = new GetObservationRequest();
-		request.setGetServer(layerCaps.getParent().getGetServers().get(request));
-		request.setPostServer(layerCaps.getParent().getPostServers().get(request));
+		request.setGetServer(layerCaps.getParent().getGetServers().get("GetObservation"));
+		request.setPostServer(layerCaps.getParent().getPostServers().get("GetObservation"));
 		request.setService(layerCaps.getParent().getService());
 		request.setService("SOS");
 		request.setVersion(layerCaps.getParent().getVersion());
