@@ -46,6 +46,7 @@ import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
 import org.vast.ogc.om.ObservationStreamReaderV0;
+import org.vast.ogc.om.ObservationStreamReaderV10;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
@@ -178,7 +179,7 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		query.setOffering(caps.getIdentifier());
 		query.getObservables().add(caps.getObservableList().get(0));
 		query.getProcedures().add(caps.getProcedureList().get(0));
-		query.setVersion("0.0.31");  //  ?
+		query.setVersion("1.0");  //  ?
 		query.setFormat(caps.getFormatList().get(0));
 		query.setService("SOS");
 		caps.getParent().getGetServers();
@@ -196,7 +197,8 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		InputStream dataStream = null;
 		try {
 			// create reader
-			ObservationStreamReaderV0 reader = new ObservationStreamReaderV0();
+//			ObservationStreamReaderV10 reader = new ObservationStreamReaderV10();
+			ObservationStreamReaderV10 reader = new ObservationStreamReaderV10();
 
 			//  send request
 			OWSUtils owsUtils = new OWSUtils();
@@ -331,5 +333,3 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		return foiLocation;
 	}
 }
-
-
