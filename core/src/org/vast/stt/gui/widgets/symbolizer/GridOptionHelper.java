@@ -112,15 +112,14 @@ public class GridOptionHelper
 	public float getGridFillOpacity(){
 		Fill fill = ((GridFillSymbolizer)symbolizer).getFill();
 		if(fill == null) {
-			System.err.println("Fill is NULL.  Do what now?");
+			System.err.println("GridOptionHelper.getGridFillOpacity:\n\tFill is NULL.  Do what now?");
 			return 1.0f;		
-			//return null;
 		}
 		
 		ScalarParameter opSp = fill.getOpacity();
 		
-		if(!opSp.isConstant()) {
-			System.err.println("Opacity is mapped- Not supported yet");
+		if(opSp==null || !opSp.isConstant()) {
+			System.err.println("GridOptionHelper.getGridFillOpacity:\n\tOpacity is either NULL or mapped- Not supported yet");
 			return 1.0f;		
 		}
 		
