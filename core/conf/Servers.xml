@@ -1,4 +1,7 @@
 <ServerList>
+    <Server name="MVCO ADCP Data" type="SOS" version="1.0">
+        <URL>http://vast.uah.edu/vastGC/adcp</URL>
+    </Server>
     <Server name="ESRI EC08 Indonesia" type="WMS" version="1.1.1">
         <URL>http://wdcb4.esri.com/arcgis/services/empire08/empire08map1/MapServer/WMSServer</URL>
     </Server>
