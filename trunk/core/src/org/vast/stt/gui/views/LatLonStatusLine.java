@@ -31,6 +31,9 @@ public class LatLonStatusLine extends WorkbenchWindowControlContribution {
 	}
 	
 	public void setText(String s){
+		//  Have to check for disposed, otherwise this throws "Widget is Disposed" SWTException.
+		//  Not sure why, yet, but this at least prevents the exception.  T
+		if(llLabel == null || llLabel.isDisposed())  return;
 		llLabel.setText(s);
 		llLabel.redraw();
 	}
