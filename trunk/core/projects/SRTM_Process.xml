@@ -44,7 +44,18 @@
                         <swe:component name="row">
                            <swe:DataArray arraySize="#GRID_WIDTH">
                               <swe:component name="point">
-                                 <swe:DataGroup>
+                                 <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
+                                    <swe:coordinate name="latitude">
+                                       <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                                    </swe:coordinate>
+                                    <swe:coordinate name="longitude">
+                                       <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                                    </swe:coordinate>
+                                    <swe:coordinate name="elevation">
+                                       <swe:Quantity definition="urn:ogc:def:phenomenon:altitude" uom="urn:ogc:def:unit:meter"/>
+                                    </swe:coordinate>
+                                 </swe:Vector>
+<!--                                 <swe:DataGroup>
                                     <swe:component name="latitude">
                                        <swe:Time definition="urn:ogc:phenomenon:latitude" uom="urn:ogc:unit:degree"/>
                                     </swe:component>
@@ -55,7 +66,7 @@
                                        <swe:Quantity definition="urn:ogc:phenomenon:elevation" uom="urn:ogc:unit:meter"/>
                                     </swe:component>
                                  </swe:DataGroup>
-                              </swe:component>
+-->                              </swe:component>
                            </swe:DataArray>
                         </swe:component>                        
                      </swe:DataArray>
@@ -69,25 +80,25 @@
             <sml:parameter name="wcsOptions">
                <swe:DataGroup fixed="true">
                   <swe:component name="endPoint">
-                     <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/vast/srtmWcs</swe:Category>
+                     <swe:Category definition="urn:ogc:def:identifier:URL">http://vast.uah.edu/vastGC/srtm</swe:Category>
                   </swe:component>
                   <swe:component name="requestMethod">
                      <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                   </swe:component>
-                  <swe:component name="layer">
+                  <swe:component name="coverage">
                      <swe:Category>SRTM</swe:Category>
                   </swe:component>
                   <swe:component name="format">
                      <swe:Category definition="urn:ogc:def:identifier:mimeType">application/com-binary-base64</swe:Category>
                   </swe:component>
                   <swe:component name="version">
-                     <swe:Category definition="urn:ogc:def:identifier:version">0.7</swe:Category>
+                     <swe:Category definition="urn:ogc:def:identifier:version">1.0</swe:Category>
                   </swe:component>
-                  <swe:component name="skipX">
-                     <swe:Count>2</swe:Count>
+                  <swe:component name="resX">
+                     <swe:Count>1</swe:Count>
                   </swe:component>
-                  <swe:component name="skipY">
-                     <swe:Count>2</swe:Count>
+                  <swe:component name="resY">
+                     <swe:Count>1</swe:Count>
                   </swe:component>
                </swe:DataGroup>
             </sml:parameter>
