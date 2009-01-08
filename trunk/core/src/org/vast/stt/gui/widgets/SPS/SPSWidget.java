@@ -82,7 +82,7 @@ public class SPSWidget implements SelectionListener, MouseListener, MouseMoveLis
 	private Spinner zoomSpinner;
 	private enum Mode { PICK, CANCEL};
 	private Mode currentMode = Mode.PICK;
-	private double defaultLat = 34.725, defaultLon = -86.645;
+	private double defaultLat = 34.725, defaultLon = -86.645, defaultAlt = 300;
 	private double oldLat = defaultLat, oldLon=defaultLon; 
 	//  Temporary SPSSubmit class
 	SPSSubmitTmp spsSubmitter;
@@ -158,9 +158,9 @@ public class SPSWidget implements SelectionListener, MouseListener, MouseMoveLis
 		gd.horizontalAlignment = SWT.BEGINNING;
 		gd.verticalAlignment = SWT.CENTER;
 		altText.setLayoutData(gd);
-		altText.setText("   2500");
+		altText.setText("   " + defaultAlt);
 		//  Fix temporarily with lenient value
-		altText.setEditable(false);
+		//altText.setEditable(false);
 //		
 		Label zoomLabel = new Label(mainGroup, 0x0);
 		zoomLabel.setText("ZOOM: ");
