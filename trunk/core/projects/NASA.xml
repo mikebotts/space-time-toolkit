@@ -1182,6 +1182,7 @@
                   <name>NOAA-15 AMSU-A Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
+                        <baseTime>2006-12-27T23:59:59Z</baseTime>
                         <lagTime>900</lagTime>
                         <leadTime>900</leadTime>
                      </TimeExtent>
@@ -1222,6 +1223,7 @@
                   <name>NOAA-15 AVHRR Footprints</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent>
+                        
                         <lagTime>900</lagTime>
                         <leadTime>900</leadTime>
                      </TimeExtent>
