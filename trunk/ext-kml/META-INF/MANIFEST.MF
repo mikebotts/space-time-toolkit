@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: STT3 KML Plug-in
+Bundle-SymbolicName: org.vast.sttx.kml;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: UAH VAST
+Bundle-Activator: org.vast.sttx.kml.KMLPlugin
+Bundle-ClassPath: ., classes/,
+                  lib/stax-api-1.0.1.jar,
+                  lib/stax-1.2.0.jar
+Require-Bundle: org.vast.common,
+                org.vast.stt.main,
+                org.eclipse.ui,
+                org.eclipse.core.runtime
+Export-Package: org.vast.sttx.kml
