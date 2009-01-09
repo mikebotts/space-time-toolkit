@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: STT3 JPIP Plug-in
+Bundle-SymbolicName: org.vast.sttx.jpip
+Bundle-Version: 1.0.0
+Bundle-Vendor: UAH VAST
+Require-Bundle: org.vast.common,
+ org.vast.jpip,
+ org.vast.stt.main,
+ org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-Activator: org.vast.sttx.jpip.JpipPlugin
