@@ -5,8 +5,16 @@ Bundle-SymbolicName: org.vast.sttx.jpip
 Bundle-Version: 1.0.0
 Bundle-Vendor: UAH VAST
 Require-Bundle: org.vast.common,
- org.vast.jpip,
  org.vast.stt.main,
  org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-Activator: org.vast.sttx.jpip.JpipPlugin
+Export-Package: org.vast.jpip,
+ org.vast.jpip.cache,
+ org.vast.jpip.message,
+ org.vast.jpip.network
+Bundle-ClassPath: lib/commons-codec-1.3.jar,
+ lib/commons-httpclient-3.1.jar,
+ lib/commons-logging-1.1.jar,
+ lib/jj2000-5.1.jar,
+ .
