@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <!--~~~~~~~~~~~~~~~~~~~-->
+   <!-- Action Extensions -->
+   <!--~~~~~~~~~~~~~~~~~~~-->
+   <extension point="org.eclipse.ui.actionSets">
+      <actionSet id="STT.KMLMenu" label="KML" visible="true">
+         <action class="org.vast.sttx.kml.actions.KMLMenu" id="STT.ExportKML" label="&amp;Export to KML..." menubarPath="STT.FileMenu/group1"/>
+      </actionSet>
+   </extension>
+</plugin>
