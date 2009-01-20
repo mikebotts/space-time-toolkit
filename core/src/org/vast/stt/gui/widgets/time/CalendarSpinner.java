@@ -140,6 +140,7 @@ public class CalendarSpinner extends TimeSpinner implements SelectionListener{
         gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
         //gridData.horizontalSpan = 2;
         rtBtn.setLayoutData(gridData);
+        rtBtn.setEnabled(false);
         
         tzCombo = new TimeZoneCombo(mainGroup);
 		gridData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
