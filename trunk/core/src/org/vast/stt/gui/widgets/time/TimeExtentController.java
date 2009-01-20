@@ -69,7 +69,10 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		extentWidget.stepSpinner.setValue(timeExtent.getTimeStep());
 		//  Is an updater enabled?  If so, disable controls
 		boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
-		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getDefaultBaseTime());
+		if(useAutoTime)
+			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
+		else	
+			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getDefaultBaseTime());
 
         extentWidget.manualTimeWidget.setEnabled(!useAutoTime);
         extentWidget.overrideTimeBtn.setSelection(!useAutoTime);
@@ -110,7 +113,8 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		
 		// switch between RealTime or SceneTime updater
 		if(b){
-			timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+//			timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
+			timeExtent.setBaseTime(timeExtent.getDefaultBaseTime());
 			if (extentWidget.manualTimeWidget.absTimeSpinner.rtBtn.getSelection()) {
 				RealTimeUpdater rtu = createRealtimeUpdater();
 				rtu.setEnabled(true);
