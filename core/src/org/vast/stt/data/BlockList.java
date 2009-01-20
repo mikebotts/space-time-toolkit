@@ -86,8 +86,14 @@ public class BlockList
     
     public void remove(BlockListItem item)
     {
-        boolean endItem = false;
+        // special case when list has only one item!
+        if (item == firstItem && item == lastItem)
+        {
+            size--;
+            return;
+        }
         
+        // quit here if item is not connected
         if (item.nextItem == null && item.prevItem == null)
             return;
         
@@ -97,20 +103,18 @@ public class BlockList
             firstItem = item.nextItem;
             if (firstItem != null)
                 firstItem.prevItem = null;
-            endItem = true;
         }
         
         // if item is last in list
-        if (item == lastItem)
+        else if (item == lastItem)
         {
             lastItem = item.prevItem;
             if (lastItem != null)
                 lastItem.nextItem = null;
-            endItem = true;
         }
         
         // if item is in middle of list
-        if (!endItem)
+        else
         {
             // connect previous to next
             item.prevItem.nextItem = item.nextItem;
@@ -148,6 +152,7 @@ public class BlockList
     
     public void add(BlockListItem newItem)
     {
+        // first remove if block is already in there!
         this.remove(newItem);
         
         newItem.prevItem = lastItem;

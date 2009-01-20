@@ -8,18 +8,15 @@
  Software distributed under the License is distributed on an "AS IS" basis,
  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
  for the specific language governing rights and limitations under the License.
+
+ The Original Code is the "Space Time Toolkit Cache Engine".
  
- The Original Code is the "Space Time Toolkit".
- 
- The Initial Developer of the Original Code is the VAST team at the
- University of Alabama in Huntsville (UAH). <http://vast.uah.edu>
- Portions created by the Initial Developer are Copyright (C) 2007
+ The Initial Developer of the Original Code is Sensia Software LLC.
+ Portions created by the Initial Developer are Copyright (C) 2008
  the Initial Developer. All Rights Reserved.
  
- Please Contact Mike Botts <mike.botts@uah.edu> for more information.
- 
  Contributor(s): 
-    Alexandre Robin <robin@nsstc.uah.edu>
+    Alexandre Robin <alex.robin@sensiasoftware.com>
  
 ******************************* END LICENSE BLOCK ***************************/
 

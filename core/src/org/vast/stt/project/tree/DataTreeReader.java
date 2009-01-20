@@ -330,6 +330,8 @@ public class DataTreeReader extends XMLReader
             
             // wrap provider with cached provider
             cachedProvider.setSubProvider(provider);
+            cachedProvider.setTimeExtent(provider.getTimeExtent());
+            provider.setTimeExtent(new STTTimeExtent());          
             provider = cachedProvider;
         }
                 
