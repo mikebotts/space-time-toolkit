@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:gml="http://www.opengis.net/gml"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd"
-   version="1.0.1">
+   xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 http://schemas.opengis.net/sensorML/1.0/sensorML.xsd"
+   version="1.0">
    <sml:member>
       <sml:ProcessChain gml:id="DOPPLER_PROCESS">
          <sml:inputs>
@@ -124,18 +124,28 @@
                                  <swe:field name="data">
                                     <swe:DataArray>  
                                        <swe:elementCount ref="NUM_BINS"/>
+                                       <swe:elementType name="reflectivity"> 
+                                          <swe:Quantity definition="urn:ogc:phenomenon:returnedPower">
+                                             <!--<swe:uom code="dB"></swe:uom> No code for dbZ -->
+                                          </swe:Quantity> 
+                                       </swe:elementType>
+                                    </swe:DataArray>
+                                 </swe:field>
+<!--                                 <swe:field name="data">
+                                    <swe:DataArray>  
+                                       <swe:elementCount ref="NUM_BINS"/>
                                        <swe:elementType name="bin">
                                           <swe:DataRecord>
-                                             <swe:field name="reflectivity"> <!-- or velocity/sw  -->
+                                             <swe:field name="reflectivity">  or velocity/sw  
                                                 <swe:Quantity definition="urn:ogc:phenomenon:returnedPower">
-<!--                                                   <swe:uom code="dbZ"></swe:uom>   NOT SURE OF DB CODE HERE -->-->
+                                                   <swe:uom code="dbZ"></swe:uom>   NOT SURE OF DB CODE HERE 
                                                 </swe:Quantity> 
                                              </swe:field>
                                           </swe:DataRecord>
                                        </swe:elementType>
                                     </swe:DataArray>
                                  </swe:field>
-                              </swe:DataRecord>
+-->                              </swe:DataRecord>
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
@@ -204,7 +214,7 @@
                                  </swe:field>
                                  <swe:field name="stepSize">
                                     <swe:Quantity>
-                                       <swe:value>0</swe:value>
+                                       <swe:value>4</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
                               </swe:DataRecord>
