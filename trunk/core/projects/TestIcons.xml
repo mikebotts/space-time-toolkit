@@ -102,43 +102,22 @@
                   </member>     
                   <member visible="false">
                      <DataItem>
-                        <name>AL Interstates</name>
+                        <name>Station Locations</name>
                         <dataProvider>
-                           <SWEDataProvider id="AL_INTERSTATES_DATA">
-                              <name>Alabama interstates</name>
-                              <description>Alabama Interstate data</description>
+                           <SWEDataProvider>
+                              <name>Station Locations</name>
                               <format>SWE</format>
-                              <sweData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/interstate.xml"/>
-                              <rawData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/AL_interstates.swe"/>
+                              <sweData xlink:href="http://vast.uah.edu/SWEData/test-data/TestIconsData.xml"/>
                            </SWEDataProvider>
                         </dataProvider>
-                        <style>
-                           <sld:LineSymbolizer enabled="true">
-                              <sld:Geometry>
-                                 <sld:CssParameter name="geometry-breaks">
-                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
-                                 </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
-                                 </sld:CssParameter>
-                              </sld:Geometry>
-                              <sld:Stroke>
-                                 <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
-                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
-                              </sld:Stroke>
-                           </sld:LineSymbolizer>
-                        </style>
                         <style>
                            <sld:PointSymbolizer enabled="true">
                               <sld:Geometry>
                                  <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                    <ogc:PropertyName>stationData/location/lon</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                    <ogc:PropertyName>stationData/location/lat</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
                               <sld:Graphic>
@@ -146,16 +125,23 @@
                                     <sld:Format>image/png</sld:Format>
                                     <sld:OnlineResource>
                                        <CategoryLookUpTable>
-                                          <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
-                                          <Mapping key="I-65">icons/radio1.png</Mapping>
-                                          <Mapping key="I-565">icons/chemical1.png</Mapping>
-                                          <Mapping key="I-20">icons/chemical2.png</Mapping>
-                                          <Mapping key="I-85">icons/video.jpg</Mapping>
+                                          <ogc:PropertyName>stationData/type</ogc:PropertyName>
+                                          <Mapping key="NUKE">icons/radio1.png</Mapping>
+                                          <Mapping key="CHEM">icons/chemical1.png</Mapping>
+                                          <Mapping key="CAM">icons/video.png</Mapping>
                                           <Default>icons/thermo1.png</Default>
                                        </CategoryLookUpTable>
                                     </sld:OnlineResource>
                                  </sld:ExternalGraphic>
-                                 <sld:Size>0.5</sld:Size>
+                                 <sld:Size>
+                                    <CategoryLookUpTable>
+                                       <ogc:PropertyName>stationData/type</ogc:PropertyName>
+                                       <Mapping key="NUKE">0.8</Mapping>
+                                       <Mapping key="CHEM">0.7</Mapping>
+                                       <Mapping key="CAM">1.0</Mapping>
+                                       <Default>0.5</Default>
+                                    </CategoryLookUpTable>
+                                 </sld:Size>
                                  <sld:Spacing>100</sld:Spacing>
                               </sld:Graphic>
                            </sld:PointSymbolizer>
@@ -164,17 +150,17 @@
                            <sld:TextSymbolizer enabled="false">
                               <sld:Geometry>
                                  <sld:CssParameter name="geometry-x">
-                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                    <ogc:PropertyName>stationData/location/lon</ogc:PropertyName>
                                  </sld:CssParameter>
                                  <sld:CssParameter name="geometry-y">
-                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                    <ogc:PropertyName>stationData/location/lat</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
                               <sld:Label>
-                                 <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
+                                 <ogc:PropertyName>stationData/name</ogc:PropertyName>
                               </sld:Label>
                               <sld:Fill>
-                                 <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                                 <sld:CssParameter name="fill">#000000</sld:CssParameter>
                               </sld:Fill>
                            </sld:TextSymbolizer>
                         </style>

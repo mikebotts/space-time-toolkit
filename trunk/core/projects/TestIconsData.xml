@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ResourceData xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:swe="http://www.opengis.net/swe"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <swe:dataComponents name="stationData">
+        <swe:DataGroup>
+            <swe:component name="name">
+                <swe:Category definition="urn:ogc:def:identifier:name"/>
+            </swe:component>
+            <swe:component name="type">
+                <swe:Category definition="urn:ogc:def:identifier:roadCode"/>
+            </swe:component>
+            <swe:component name="location">
+                <swe:DataGroup>
+                    <swe:component name="lat">
+                        <swe:Quantity definition="urn:ogc:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                    </swe:component>
+                    <swe:component name="lon">
+                        <swe:Quantity definition="urn:ogc:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                    </swe:component>
+                </swe:DataGroup>
+            </swe:component>
+        </swe:DataGroup>
+    </swe:dataComponents>
+    <swe:encoding>
+        <swe:AsciiBlock tokenSeparator="," tupleSeparator=" " decimalSeparator="."/>
+    </swe:encoding>
+    <swe:data>
+        US_EAST,CAM,40.75,-74 
+        US_WEST,CAM,34,-118 
+        US_SOUTH,NUKE,29.75,-95.4
+        FRANCE,NUKE,43.5,1.5 
+        SOUTH_AFRICA,CHEM,-34,18.5 
+        SOUTH_AMERICA,CAM,-0.2,-78.5 
+        SOUTH_ASIA,NUKE,+14.5,121 
+        AUSTRALIA,CHEM,-34,151.1 
+    </swe:data>
+</ResourceData>
