@@ -254,7 +254,9 @@ public class KMLExporter implements StylerVisitor
                         // default img if no icon specified
                         String iconUrl = null;
                         Icon icon = IconManager.getInstance().getIcon(p.iconId);
-                        if (icon == null)
+                        if (icon != null)
+                            iconUrl = icon.url;
+                        else
                         {
                             iconUrl = "D:/Projects/NSSTC/STT3-KMLAddOn/icons/itemVis.png";
                             p.size /= 6.0f;
