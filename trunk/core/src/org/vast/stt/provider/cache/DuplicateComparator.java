@@ -44,7 +44,6 @@ public class DuplicateComparator implements Comparator<byte[]>, Serializable
     private static final long serialVersionUID = 8578434210346032681L;
 
     
-    @Override
     public int compare(byte[] o1, byte[] o2)
     {
         return (o1[0] - o2[0]);
