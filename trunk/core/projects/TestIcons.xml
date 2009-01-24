@@ -136,10 +136,10 @@
                                  <sld:Size>
                                     <CategoryLookUpTable>
                                        <ogc:PropertyName>stationData/type</ogc:PropertyName>
-                                       <Mapping key="NUKE">0.8</Mapping>
-                                       <Mapping key="CHEM">0.7</Mapping>
-                                       <Mapping key="CAM">1.0</Mapping>
-                                       <Default>0.5</Default>
+                                       <Mapping key="NUKE">0.6</Mapping>
+                                       <Mapping key="CHEM">0.5</Mapping>
+                                       <Mapping key="CAM">0.8</Mapping>
+                                       <Default>0.6</Default>
                                     </CategoryLookUpTable>
                                  </sld:Size>
                                  <sld:Spacing>100</sld:Spacing>
@@ -147,7 +147,7 @@
                            </sld:PointSymbolizer>
                         </style>
                         <style>
-                           <sld:TextSymbolizer enabled="false">
+                           <sld:TextSymbolizer enabled="true">
                               <sld:Geometry>
                                  <sld:CssParameter name="geometry-x">
                                     <ogc:PropertyName>stationData/location/lon</ogc:PropertyName>
