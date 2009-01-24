@@ -51,7 +51,7 @@ public class PointGraphic extends PrimitiveGraphic
 	public float size = 1.0f;	
     public boolean smooth = false;
     public ShapeType shape = ShapeType.SQUARE;
-    public int iconId;
+    public int iconId = -1;
     public int iconOffsetX = 0;
     public int iconOffsetY = 0;
     
