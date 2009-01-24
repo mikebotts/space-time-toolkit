@@ -209,14 +209,12 @@ public class IconManager implements StringIdProvider
     }
 
 
-    @Override
     public int getStringId(String text)
     {
         return addIcon(urlBase + text);
     }
     
     
-    @Override
     public void setPrefix(String prefix)
     {
         urlBase = prefix;

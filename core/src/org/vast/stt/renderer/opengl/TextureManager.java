@@ -258,7 +258,7 @@ public class TextureManager
             else if ((symTexturePoolSizeReachedTable != null) || symTexturePoolSizeReachedTable.containsKey(sym))
             {
             	LinkedList<Integer> stack = symTextureStackTable.get(sym);
-	           	id[0] = stack.pollFirst();
+	           	id[0] = stack.poll();//.pollFirst(); pollFirst method does not exist on Mac!!??
 	           	stack.addLast(id[0]);        	 
             }
             
