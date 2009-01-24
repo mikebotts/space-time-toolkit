@@ -53,19 +53,11 @@ public class GenericTimeMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.t = mappingFunction.compute(val);
-        }
-        else
-            graphic.t = data.getDoubleValue();     
+        graphic.t = getMappedValueAsDouble(data);
     }    
 }

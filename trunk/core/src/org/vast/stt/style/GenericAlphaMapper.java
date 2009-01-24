@@ -53,19 +53,11 @@ public class GenericAlphaMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.a = (float)mappingFunction.compute(val);
-        }
-        else
-            graphic.a = data.getFloatValue();
+        graphic.a = getMappedValueAsFloat(data);
     }    
 }

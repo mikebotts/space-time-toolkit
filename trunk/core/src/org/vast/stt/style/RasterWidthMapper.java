@@ -54,20 +54,12 @@ public class RasterWidthMapper extends DimensionMapper
         this.dimensionIndex = dimensionIndex;
         this.raster = raster;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            raster.width = (int)mappingFunction.compute(val);
-        }
-        else
-            raster.width = data.getIntValue();
+        raster.width = getMappedValueAsInt(data);
     }
     
     

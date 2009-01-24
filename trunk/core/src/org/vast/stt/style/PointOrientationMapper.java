@@ -53,19 +53,11 @@ public class PointOrientationMapper extends PropertyMapper
     {
         this.point = point;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            point.orientation = (float)mappingFunction.compute(val);
-        }
-        else
-            point.orientation = data.getFloatValue();
+        point.orientation = getMappedValueAsFloat(data);
     }    
 }

@@ -53,19 +53,11 @@ public class LabelTextMapper extends PropertyMapper
     {
         this.label = label;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            label.text = String.valueOf(mappingFunction.compute(val));
-        }
-        else
-            label.text = data.getStringValue();
+        label.text = getMappedValueAsString(data);
     }    
 }

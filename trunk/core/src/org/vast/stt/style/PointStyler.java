@@ -239,14 +239,14 @@ public class PointStyler extends AbstractStyler implements DataStyler1D
                 if (param.isConstant())
                 {
                     value = param.getConstantValue();
-                    point.iconUrl = ((GraphicImage)glyph).getBaseFolder() + (String)value;
+                    point.iconId = IconManager.getInstance().addIcon(((GraphicImage)glyph).getBaseFolder() + (String)value);
                 }
                 else
                 {
                     propertyName = param.getPropertyName();
                     if (propertyName != null)
                     {
-                        addPropertyMapper(propertyName, new IconUrlMapper(point, param.getMappingFunction()));
+                        addPropertyMapper(propertyName, new IconIdMapper(point, param.getMappingFunction()));
                     }
                 }
                 

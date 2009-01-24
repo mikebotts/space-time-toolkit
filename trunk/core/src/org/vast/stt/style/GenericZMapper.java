@@ -53,19 +53,11 @@ public class GenericZMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
 
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.z = mappingFunction.compute(val);
-        }
-        else
-            graphic.z = data.getDoubleValue();  
+        graphic.z = getMappedValueAsDouble(data);
     }    
 }

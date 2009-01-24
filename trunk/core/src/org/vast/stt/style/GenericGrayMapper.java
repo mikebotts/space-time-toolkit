@@ -53,27 +53,14 @@ public class GenericGrayMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            float grayVal = (float)mappingFunction.compute(val);
-            graphic.r = grayVal;
-            graphic.g = grayVal;
-            graphic.b = grayVal;
-        }
-        else
-        {
-            float val = data.getFloatValue();
-            graphic.r = val;
-            graphic.g = val;
-            graphic.b = val;
-        }
+        float grayVal = getMappedValueAsFloat(data);
+        graphic.r = grayVal;
+        graphic.g = grayVal;
+        graphic.b = grayVal;
     }    
 }

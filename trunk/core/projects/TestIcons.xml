@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <Identification>
+      <name>Test Project for changing icons</name>
+      <author>Alex Robin</author>
+      <dateCreated>2009-01-23T10:06:00</dateCreated>
+      <description>Test for mapping numerical and categorical values to icons</description>
+   </Identification>
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>3D LLA View</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2004-01-01T12:00:00Z</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+               <ViewSettings>
+                  <backgroundColor>#FFFFFF</backgroundColor>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>0 0 10</cameraPos>
+                  <targetPos>0 0 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>4</orthoWidth>
+                  <orthoHeight>1.67</orthoHeight>
+                  <nearClip>0</nearClip>
+                  <farClip>1e7</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList id="GIS">
+                  <name>GIS Data</name>
+                  <member visible="true">
+                     <DataItem>
+                        <name>Coast Lines</name>
+                        <dataProvider>
+                           <SWEDataProvider id="WORLD_COASTLINES_DATA">
+                              <name>World Coast Lines - 13</name>
+                              <description>World Coast Lines</description>
+                              <format>SWE</format>
+                              <sweData href="http://vast.uah.edu/SWEData/coastlines/mapcil13.xml"/>
+                           </SWEDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>      
+                  <member visible="false">
+                     <DataItem>
+                        <name>AL State Boundaries</name>
+                        <dataProvider>
+                           <SWEDataProvider id="AL_STATE_BOUNDARIES_DATA">
+                              <name>Alabama borders</name>
+                              <description>Alabama border data</description>
+                              <format>SWE</format>
+                              <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
+                              <rawData xlink:href="http://vast.uah.edu/SWEData/states/AL_state.swe"/>
+                           </SWEDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FFB521</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>     
+                  <member visible="false">
+                     <DataItem>
+                        <name>AL Interstates</name>
+                        <dataProvider>
+                           <SWEDataProvider id="AL_INTERSTATES_DATA">
+                              <name>Alabama interstates</name>
+                              <description>Alabama Interstate data</description>
+                              <format>SWE</format>
+                              <sweData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/interstate.xml"/>
+                              <rawData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/AL_interstates.swe"/>
+                           </SWEDataProvider>
+                        </dataProvider>
+                        <style>
+                           <sld:LineSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-breaks">
+                                    <ogc:PropertyName>lineData/segmentSize</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Stroke>
+                                 <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                 <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                              </sld:Stroke>
+                           </sld:LineSymbolizer>
+                        </style>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:ExternalGraphic>
+                                    <sld:Format>image/png</sld:Format>
+                                    <sld:OnlineResource>
+                                       <CategoryLookUpTable>
+                                          <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
+                                          <Mapping key="I-65">icons/radio1.png</Mapping>
+                                          <Mapping key="I-565">icons/chemical1.png</Mapping>
+                                          <Mapping key="I-20">icons/chemical2.png</Mapping>
+                                          <Mapping key="I-85">icons/video.jpg</Mapping>
+                                          <Default>icons/thermo1.png</Default>
+                                       </CategoryLookUpTable>
+                                    </sld:OnlineResource>
+                                 </sld:ExternalGraphic>
+                                 <sld:Size>0.5</sld:Size>
+                                 <sld:Spacing>100</sld:Spacing>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style>
+                        <style>
+                           <sld:TextSymbolizer enabled="false">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>lineData/segment/point/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>lineData/segment/point/lat</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Label>
+                                 <ogc:PropertyName>lineData/roadName</ogc:PropertyName>
+                              </sld:Label>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#CC6600</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:TextSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>      
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>

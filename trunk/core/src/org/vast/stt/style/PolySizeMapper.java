@@ -53,20 +53,12 @@ public class PolySizeMapper extends DimensionMapper
     	this.dimensionIndex = dimensionIndex;
     	this.poly = poly;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-    	if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            poly.numPoints = (int)mappingFunction.compute(val);
-        }
-        else
-        	poly.numPoints = data.getIntValue();
+    	poly.numPoints = getMappedValueAsInt(data);
     }
 
 

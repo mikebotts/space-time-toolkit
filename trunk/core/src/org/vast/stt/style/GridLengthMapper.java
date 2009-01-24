@@ -54,20 +54,12 @@ public class GridLengthMapper extends DimensionMapper
         this.dimensionIndex = dimensionIndex;
         this.patch = patch;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            patch.length = (int)mappingFunction.compute(val);
-        }
-        else
-            patch.length = data.getIntValue();
+        patch.length = (int)getMappedValueAsInt(data);
     }
     
     

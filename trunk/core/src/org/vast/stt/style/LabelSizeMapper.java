@@ -53,19 +53,11 @@ public class LabelSizeMapper extends PropertyMapper
     {
         this.label = label;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            label.size = (int)mappingFunction.compute(val);
-        }
-        else
-            label.size = data.getIntValue();
+        label.size = (int)getMappedValueAsInt(data);
     }    
 }

@@ -53,19 +53,11 @@ public class PointSizeMapper extends PropertyMapper
     {
         this.point = point;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            point.size = (float)mappingFunction.compute(val);
-        }
-        else
-            point.size = data.getFloatValue();
+        point.size = getMappedValueAsInt(data);
     }    
 }

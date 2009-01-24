@@ -86,6 +86,13 @@ public class TimeCache extends AbstractProvider implements CachedProvider
     protected boolean needsClear;
     
     
+    public TimeCache()
+    {
+        super();
+        //this.dataNode = new DataNodeBDB();
+    }
+    
+    
     @Override
     public void init() throws DataException
     {

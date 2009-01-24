@@ -53,19 +53,11 @@ public class LabelOrientationMapper extends PropertyMapper
     {
         this.label = label;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            label.orientation = (float)mappingFunction.compute(val);
-        }
-        else
-            label.orientation = data.getFloatValue();
+        label.orientation = getMappedValueAsFloat(data);
     }    
 }

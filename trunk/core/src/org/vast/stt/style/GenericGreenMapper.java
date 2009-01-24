@@ -53,19 +53,11 @@ public class GenericGreenMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
 
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.g = (float)mappingFunction.compute(val);
-        }
-        else
-            graphic.g = data.getFloatValue();
+        graphic.g = getMappedValueAsFloat(data);
     }    
 }

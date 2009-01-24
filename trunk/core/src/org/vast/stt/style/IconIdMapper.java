@@ -31,11 +31,12 @@ import org.vast.ows.sld.MappingFunction;
 
 /**
  * <p><b>Title:</b><br/>
- * Icon Url Mapper
+ * Icon ID Mapper
  * </p>
  *
  * <p><b>Description:</b><br/>
- * This transfers a value from the DataNode and use it as a an icon url.
+ * This transfers a value from the DataNode and use it as a an icon id.
+ * The icon id should have been previsouly reserved with the IconManager.
  * It will use a mapping function if provided.
  * </p>
  *
@@ -44,28 +45,20 @@ import org.vast.ows.sld.MappingFunction;
  * @date Apr 3, 2006
  * @version 1.0
  */
-public class IconUrlMapper extends PropertyMapper
+public class IconIdMapper extends PropertyMapper
 {
     PointGraphic point;
     
     
-    public IconUrlMapper(PointGraphic point, MappingFunction mappingFunction)
+    public IconIdMapper(PointGraphic point, MappingFunction mappingFunction)
     {
         this.point = point;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            //double val = data.getDoubleValue();
-            point.iconUrl = null; //TODO map icon url
-        }
-        else
-            point.iconUrl = data.getStringValue();
+        point.iconId = (int)getMappedValueAsInt(data);
     }    
 }

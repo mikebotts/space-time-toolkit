@@ -54,20 +54,12 @@ public class GridDepthMapper extends DimensionMapper
         this.dimensionIndex = dimensionIndex;
         this.patch = patch;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            patch.depth = (int)mappingFunction.compute(val);
-        }
-        else
-            patch.depth = data.getIntValue();
+        patch.depth = (int)getMappedValueAsInt(data);
     } 
     
     
