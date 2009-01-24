@@ -46,6 +46,7 @@ import org.vast.stt.project.world.Projection_LLA;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.style.*;
+import org.vast.stt.style.IconManager.Icon;
 
 
 /**
@@ -239,7 +240,7 @@ public class KMLExporter implements StylerVisitor
                 {
                     // if style has changed start a new PlaceMark
                     if (first || p.r != ps.r || p.g != ps.g || p.b != ps.b || p.a != ps.a || p.size != ps.size ||
-                                 p.orientation != ps.orientation || p.iconUrl != ps.iconUrl)
+                                 p.orientation != ps.orientation || p.iconId != ps.iconId)
                     {
                         // only if this is not the 1st point
                         if (!first)
@@ -251,13 +252,15 @@ public class KMLExporter implements StylerVisitor
                         kmlWriter.startPlacemark("G" + Integer.toString(groupCount), null, true);
                         
                         // default img if no icon specified
-                        if (p.iconUrl == null)
+                        String iconUrl = null;
+                        Icon icon = IconManager.getInstance().getIcon(p.iconId);
+                        if (icon == null)
                         {
-                            p.iconUrl = "D:/Projects/NSSTC/STT3-KMLAddOn/icons/itemVis.png";
+                            iconUrl = "D:/Projects/NSSTC/STT3-KMLAddOn/icons/itemVis.png";
                             p.size /= 6.0f;
                         }
                         
-                        kmlWriter.writeIconStyle(p.r, p.g, p.b, p.a, p.size, p.orientation, p.iconUrl, true);
+                        kmlWriter.writeIconStyle(p.r, p.g, p.b, p.a, p.size, p.orientation, iconUrl, true);
                         kmlWriter.startMultiGeometry();
                         groupCount++;
                         
