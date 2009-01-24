@@ -58,6 +58,6 @@ public class PointSizeMapper extends PropertyMapper
     
     public void mapData(DataBlock data)
     {
-        point.size = getMappedValueAsInt(data);
+        point.size = getMappedValueAsFloat(data);
     }    
 }
