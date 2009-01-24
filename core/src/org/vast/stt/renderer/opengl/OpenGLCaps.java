@@ -26,6 +26,7 @@
 package org.vast.stt.renderer.opengl;
 
 import javax.media.opengl.GL;
+import org.vast.stt.style.RasterTileGraphic.BufferType;
 
 
 /**
@@ -46,4 +47,41 @@ import javax.media.opengl.GL;
 public class OpenGLCaps
 {
     public static int TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;//0x84F5;//;
+    
+    
+    public static int getGLBufferType(BufferType bufferType)
+    {
+        switch (bufferType)
+        {
+            case LUM:
+                return GL.GL_LUMINANCE;
+                
+            case LUMA:
+                return GL.GL_LUMINANCE_ALPHA;
+            
+            case RGB:
+                return GL.GL_RGB;
+                
+            case RGBA:    
+                return GL.GL_RGBA;
+                
+            case BGR:
+                return GL.GL_BGR;
+                
+            case BGRA:    
+                return GL.GL_BGRA;
+                
+            case R:
+                return GL.GL_RED;
+                
+            case G:
+                return GL.GL_GREEN;
+                
+            case B:
+                return GL.GL_BLUE;
+                
+            default:
+                return GL.GL_RGB;
+        }
+    }
 }

@@ -51,7 +51,7 @@ public class PointGraphic extends PrimitiveGraphic
 	public float size = 1.0f;	
     public boolean smooth = false;
     public ShapeType shape = ShapeType.SQUARE;
-    public String iconUrl;
+    public int iconId;
     public int iconOffsetX = 0;
     public int iconOffsetY = 0;
     
@@ -67,7 +67,7 @@ public class PointGraphic extends PrimitiveGraphic
         p.size = this.size;
         p.smooth = this.smooth;
         p.shape = this.shape;
-        p.iconUrl = this.iconUrl;
+        p.iconId = this.iconId;
         p.iconOffsetX = this.iconOffsetX;
         p.iconOffsetY = this.iconOffsetY;
         

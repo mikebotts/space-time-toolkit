@@ -54,20 +54,12 @@ public class GridWidthMapper extends DimensionMapper
         this.dimensionIndex = dimensionIndex;
         this.patch = patch;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            patch.width = (int)mappingFunction.compute(val);
-        }
-        else
-            patch.width = data.getIntValue();
+        patch.width = (int)getMappedValueAsInt(data);
     }
     
     

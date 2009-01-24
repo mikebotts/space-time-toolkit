@@ -53,19 +53,11 @@ public class GenericBreakMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.graphBreak = (mappingFunction.compute(val) != 0.0);
-        }
-        else
-            graphic.graphBreak = data.getBooleanValue();        
+        graphic.graphBreak = getMappedValueAsBoolean(data);
     }    
 }

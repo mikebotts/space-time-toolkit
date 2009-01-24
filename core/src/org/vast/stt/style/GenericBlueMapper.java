@@ -53,19 +53,11 @@ public class GenericBlueMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
    
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.b = (float)mappingFunction.compute(val);
-        }
-        else
-            graphic.b = data.getFloatValue();     
+        graphic.b = getMappedValueAsFloat(data);     
     }    
 }

@@ -54,20 +54,12 @@ public class RasterHeightMapper extends DimensionMapper
         this.dimensionIndex = dimensionIndex;
         this.raster = raster;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            raster.height = (int)mappingFunction.compute(val);
-        }
-        else
-            raster.height = data.getIntValue();
+        raster.height = getMappedValueAsInt(data);
     }
     
     

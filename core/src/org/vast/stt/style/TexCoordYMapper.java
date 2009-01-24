@@ -53,19 +53,11 @@ public class TexCoordYMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }    
 
 
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.ty = mappingFunction.compute(val);
-        }
-        else
-            graphic.ty = data.getDoubleValue();     
+        graphic.ty = getMappedValueAsInt(data);     
     }    
 }

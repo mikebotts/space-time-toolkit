@@ -53,20 +53,12 @@ public class LineSizeMapper extends DimensionMapper
     	this.dimensionIndex = dimensionIndex;
     	this.lineSeg = lineSeg;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-    	if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            lineSeg.segmentSize = (int)mappingFunction.compute(val);
-        }
-        else
-        	lineSeg.segmentSize = data.getIntValue();
+    	lineSeg.segmentSize = getMappedValueAsInt(data);
     }
 
 

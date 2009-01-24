@@ -23,7 +23,7 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.stt.renderer;
+package org.vast.stt.style;
 
 import java.awt.image.DataBufferByte;
 import java.awt.image.RenderedImage;
@@ -31,9 +31,12 @@ import java.awt.image.renderable.ParameterBlock;
 import java.net.URL;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Stack;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+import org.vast.ows.sld.functions.StringIdProvider;
 import org.vast.stt.style.RasterTileGraphic.BufferType;
 import org.vast.util.MessageSystem;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
@@ -55,31 +58,54 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  * @date Dec 5, 2006
  * @version 1.0
  */
-public class IconManager
+public class IconManager implements StringIdProvider
 {
+    protected static IconManager managerInstance;
+    protected ArrayList<Icon> iconList;
+    protected Stack<Integer> emptyIndexList;
+    protected Hashtable<String, Integer> urlTable;
+    protected String urlBase = "";
+    
+    
     public class Icon
     {
+        public String url;
+        public BufferType pixelFormat;
         public Buffer data;
-        public BufferType imgType;
         public int width;
         public int height;
     }
     
-    protected Hashtable<String, Icon> iconTable;
     
-    
-    public IconManager()
+    protected IconManager()
     {
-        iconTable = new Hashtable<String, Icon>();
+        iconList = new ArrayList<Icon>();
+        emptyIndexList = new Stack<Integer>();
+        urlTable = new Hashtable<String, Integer>();
     }
     
     
-    public Icon getIcon(String url)
+    public static IconManager getInstance()
     {
-        Icon icon = iconTable.get(url);
-        if (icon == null)
-            icon = loadIcon(url);
+        if (managerInstance == null)
+            managerInstance = new IconManager();
         
+        return managerInstance;
+    }
+    
+    
+    public Icon getIcon(int iconId)
+    {
+        if (iconId < 0)
+            return null;
+        
+        Icon icon = iconList.get(iconId);
+        
+        // load image data the first time its use
+        if (icon.data == null)
+            loadIconData(icon);
+        
+        // if data wasn't read correctly
         if (icon.data != null)
             return icon;
         else
@@ -87,21 +113,45 @@ public class IconManager
     }
     
     
-    protected Icon loadIcon(String urlText)
+    public int addIcon(String urlText)
     {
+        // if icon url is already registered
+        if (urlTable.containsKey(urlText))
+            return urlTable.get(urlText);
+                
+        // otherwise add a new icon
         Icon icon = new Icon();
+        icon.url = urlText;
+        int iconIndex;
         
+        if (emptyIndexList.isEmpty())
+        {
+            iconList.add(icon);
+            iconIndex = iconList.size() - 1;                       
+        }
+        else
+        {
+            iconIndex = emptyIndexList.pop();
+            iconList.set(iconIndex, icon);
+        }
+        
+        urlTable.put(urlText, iconIndex);
+        return iconIndex;
+    }
+    
+    
+    public void loadIconData(Icon icon)
+    {
         MemoryCacheSeekableStream dataStream;
         try
         {
-            URL url = new URL(urlText);
+            URL url = new URL(icon.url);
             dataStream = new MemoryCacheSeekableStream(url.openStream());
         }
         catch (Exception e)
         {
-            MessageSystem.display("Icon " + urlText + " not found", true);
-            iconTable.put(urlText, icon);
-            return icon;
+            MessageSystem.display("Icon " + icon.url + " not found", true);
+            return;
         }
 
         // Create the ParameterBlock and add the SeekableStream to it.
@@ -109,7 +159,7 @@ public class IconManager
         pb.add(dataStream);
         
         // add PNG params
-        if (urlText.endsWith(".png"))
+        if (icon.url.endsWith(".png"))
         {
             PNGDecodeParam pngParams = new PNGDecodeParam();
             pngParams.setExpandPalette(true);
@@ -123,14 +173,52 @@ public class IconManager
         {
             RenderedImage renderedImage = rop.createInstance();
 
-            // put data buffer in output datablock
+            // put data buffer in byte array
             byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
             icon.data = ByteBuffer.wrap(data);
             icon.width = renderedImage.getWidth();
-            icon.height = renderedImage.getHeight();            
+            icon.height = renderedImage.getHeight();
+            
+            // set buffer data type
+            switch (renderedImage.getColorModel().getNumComponents())
+            {
+                case 1:
+                    icon.pixelFormat = BufferType.LUM;
+                    break;
+                    
+                case 2:
+                    icon.pixelFormat = BufferType.LUMA;
+                    break;
+                    
+                case 3:
+                    icon.pixelFormat = BufferType.RGB;
+                    break;
+                    
+                case 4:
+                    icon.pixelFormat = BufferType.RGBA;
+                    break;
+            }
         }
-        
-        iconTable.put(urlText, icon);
-        return icon;
+    }
+    
+    
+    public void removeIcon(int iconId)
+    {
+        iconList.set(iconId, null);
+        emptyIndexList.push(iconId);
+    }
+
+
+    @Override
+    public int getStringId(String text)
+    {
+        return addIcon(urlBase + text);
+    }
+    
+    
+    @Override
+    public void setPrefix(String prefix)
+    {
+        urlBase = prefix;
     }
 }

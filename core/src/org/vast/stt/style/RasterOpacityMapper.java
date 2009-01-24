@@ -53,19 +53,11 @@ public class RasterOpacityMapper extends PropertyMapper
     {
         this.graphic = graphic;
         this.mappingFunction = mappingFunction;
-        if (mappingFunction != null)
-            this.useMappingFunction = true;
     }
 
     
     public void mapData(DataBlock data)
     {
-        if (useMappingFunction)
-        {
-            double val = data.getDoubleValue();
-            graphic.opacity = (float)mappingFunction.compute(val);
-        }
-        else
-            graphic.opacity = data.getFloatValue();
+        graphic.opacity = getMappedValueAsFloat(data);
     }    
 }

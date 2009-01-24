@@ -25,6 +25,7 @@
 
 package org.vast.stt.style;
 
+import org.vast.cdm.common.DataBlock;
 import org.vast.data.DataVisitor;
 import org.vast.ows.sld.MappingFunction;
 
@@ -47,7 +48,75 @@ import org.vast.ows.sld.MappingFunction;
 public abstract class PropertyMapper implements DataVisitor
 {
     protected MappingFunction mappingFunction = null;
-    protected boolean useMappingFunction = false;
+    
+    
+    protected double getMappingFunctionOutput(DataBlock data)
+    {
+        if (mappingFunction.hasCategoricalInput())
+        {
+            String val = data.getStringValue();
+            return mappingFunction.compute(val);
+        }
+        else
+        {
+            double val = data.getDoubleValue();
+            return mappingFunction.compute(val);
+        }
+    }
+    
+    
+    protected double getMappedValueAsDouble(DataBlock data)
+    {
+        if (mappingFunction != null)
+            return getMappingFunctionOutput(data);
+        else
+            return data.getDoubleValue();
+    }
+    
+    
+    protected float getMappedValueAsFloat(DataBlock data)
+    {
+        if (mappingFunction != null)
+            return (float)getMappingFunctionOutput(data);
+        else
+            return data.getFloatValue();
+    }
+    
+    
+    protected int getMappedValueAsInt(DataBlock data)
+    {
+        if (mappingFunction != null)
+        {
+            double val = getMappingFunctionOutput(data);
+            return (Double.isNaN(val) ? -1 : (int)val);
+        }
+        else
+            return data.getIntValue();
+    }
+    
+    
+    protected boolean getMappedValueAsBoolean(DataBlock data)
+    {
+        if (mappingFunction != null)
+        {
+            double val = getMappingFunctionOutput(data);
+            return (val == 0.0 || Double.isNaN(val) ? false : true);
+        }
+        else
+            return data.getBooleanValue();
+    }
+    
+    
+    protected String getMappedValueAsString(DataBlock data)
+    {
+        if (mappingFunction != null)
+        {
+            double val = getMappingFunctionOutput(data);
+            return Double.toString(val);
+        }
+        else
+            return data.getStringValue();
+    }
 }
 
 

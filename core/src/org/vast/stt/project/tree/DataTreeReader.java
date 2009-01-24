@@ -41,6 +41,7 @@ import org.vast.stt.provider.ExtentReader;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.STTTimeExtent;
 import org.vast.stt.provider.tiling.SpatialTilingProvider;
+import org.vast.stt.style.IconManager;
 import org.w3c.dom.*;
 
 
@@ -69,7 +70,7 @@ public class DataTreeReader extends XMLReader
 	
 	public DataTreeReader()
 	{
-        sldReader = new SLDReader();
+        sldReader = new SLDReader(IconManager.getInstance());
         extentReader = new ExtentReader();
         actionReader = new ItemActionReader();
 	}
