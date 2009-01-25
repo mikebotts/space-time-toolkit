@@ -33,11 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.FileDialog;
@@ -83,7 +80,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
                         WorldScene scene = (WorldScene)nextDisplay;
                         
                         // keep list of providers we did so we don't do them twice
-                        List processedProviders = new ArrayList<DataProvider>(20);
+                        List<DataProvider> processedProviders = new ArrayList<DataProvider>(20);
                         
                         // add job progress listener to all providers
                         DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();
