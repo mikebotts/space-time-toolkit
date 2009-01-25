@@ -64,7 +64,7 @@ public class STTPlugin extends AbstractUIPlugin
         try
         {
             String fileLocation = null;
-            Enumeration<Object> e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
+            Enumeration<?> e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
             if (e.hasMoreElements())
                 fileLocation = (String)e.nextElement().toString();
             ProcessLoader.reloadMaps(fileLocation);
