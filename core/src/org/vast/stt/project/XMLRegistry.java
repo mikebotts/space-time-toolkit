@@ -30,20 +30,20 @@ import java.util.Hashtable;
 
 public class XMLRegistry
 {
-    private static Hashtable<String, Class> registeredReaders = new Hashtable<String, Class>(); 
-    private static Hashtable<String, Class> registeredWriters = new Hashtable<String, Class>();
+    private static Hashtable<String, Class<?>> registeredReaders = new Hashtable<String, Class<?>>(); 
+    private static Hashtable<String, Class<?>> registeredWriters = new Hashtable<String, Class<?>>();
     
     
     public static XMLModuleReader createReader(String ns, String eltName)
     {
-        Class readerClass = registeredReaders.get(ns + eltName);
+        Class<?> readerClass = registeredReaders.get(ns + eltName);
         return (XMLModuleReader)createInstance(readerClass);
     }
     
     
     public static XMLModuleReader createReader(String eltName)
     {
-        Class readerClass = registeredReaders.get(eltName);
+        Class<?> readerClass = registeredReaders.get(eltName);
         if (readerClass == null)
             return null;
         else
@@ -53,43 +53,43 @@ public class XMLRegistry
     
     public static XMLModuleWriter createWriter(String ns, String eltName)
     {
-        Class writerClass = registeredWriters.get(ns + eltName);
+        Class<?> writerClass = registeredWriters.get(ns + eltName);
         return (XMLModuleWriter)createInstance(writerClass);
     }
     
     
     public static XMLModuleWriter createWriter(String eltName)
     {
-        Class writerClass = registeredWriters.get(eltName);
+        Class<?> writerClass = registeredWriters.get(eltName);
         return (XMLModuleWriter)createInstance(writerClass);
     }
     
     
-    public static void registerReader(String ns, String eltName, Class readerClass)
+    public static void registerReader(String ns, String eltName, Class<?> readerClass)
     {
         registeredReaders.put(ns + eltName, readerClass);
     }
     
     
-    public static void registerReader(String eltName, Class readerClass)
+    public static void registerReader(String eltName, Class<?> readerClass)
     {
         registeredReaders.put(eltName, readerClass);
     }
     
     
-    public static void registerWriter(String ns, String eltName, Class writerClass)
+    public static void registerWriter(String ns, String eltName, Class<?> writerClass)
     {
         registeredWriters.put(ns + eltName, writerClass);
     }
     
     
-    public static void registerWriter(String eltName, Class writerClass)
+    public static void registerWriter(String eltName, Class<?> writerClass)
     {
         registeredWriters.put(eltName, writerClass);
     }
     
     
-    private static Object createInstance(Class objClass)
+    private static Object createInstance(Class<?> objClass)
     {
         try
         {

@@ -108,7 +108,7 @@ public class ChartXYDataset implements XYDataset
     }
 
 
-    public Comparable getSeriesKey(int series)
+    public Comparable<?> getSeriesKey(int series)
     {
         return name;
     }
@@ -122,13 +122,13 @@ public class ChartXYDataset implements XYDataset
 
     public void addChangeListener(DatasetChangeListener arg0)
     {
-        // TODO Auto-generated method stub        
+       
     }
 
 
     public void removeChangeListener(DatasetChangeListener arg0)
     {
-        // TODO Auto-generated method stub        
+       
     }
 
 

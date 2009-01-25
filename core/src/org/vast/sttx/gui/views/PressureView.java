@@ -28,7 +28,6 @@ package org.vast.sttx.gui.views;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.DataItemView;
-import org.vast.stt.gui.widgets.catalog.CatalogWidget;
 import org.vast.sttx.gui.widgets.smart.PressureWidget;
 
 
@@ -52,7 +51,7 @@ public class PressureView extends DataItemView
 	@Override
 	public void createPartControl(Composite parent)
     {
-		PressureWidget pressureWidget = new PressureWidget(parent);
+		new PressureWidget(parent);
         super.createPartControl(parent);
 	}
 
