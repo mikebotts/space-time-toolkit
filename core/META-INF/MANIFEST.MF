@@ -3,9 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: STT Plug-in
 Bundle-SymbolicName: org.vast.stt.main; singleton:=true
 Bundle-Version: 3.0.1
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Activator: org.vast.stt.apps.STTPlugin
-Eclipse-BuddyPolicy: global
-Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,15 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.update.core,
  org.vast.common,
  org.apache.xerces
-Bundle-ClassPath: classes/,
- lib/jogl.jar,
- lib/gluegen-rt.jar,
- lib/jai_core.jar,
- lib/jai_codec.jar,
- lib/jcommon-1.0.5.jar,
- lib/jfreechart-1.0.2.jar,
- lib/je-3.3.74.jar,
- .
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,
@@ -55,3 +45,12 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.renderer.JFreeChart,
  org.vast.stt.renderer.opengl,
  org.vast.stt.style
+Bundle-ClassPath: lib/gluegen-rt.jar,
+ lib/itext-1.4.3.jar,
+ lib/jai_codec.jar,
+ lib/jai_core.jar,
+ lib/jcommon-1.0.5.jar,
+ lib/je-3.3.74.jar,
+ lib/jfreechart-1.0.2.jar,
+ lib/jogl.jar,
+ .
