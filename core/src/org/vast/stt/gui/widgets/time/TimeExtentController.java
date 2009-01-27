@@ -67,16 +67,14 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		extentWidget.leadSpinner.setValue(timeExtent.getLeadTimeDelta());
 		extentWidget.lagSpinner.setValue(timeExtent.getLagTimeDelta());
 		extentWidget.stepSpinner.setValue(timeExtent.getTimeStep());
+		
 		//  Is an updater enabled?  If so, disable controls
 		boolean useAutoTime = (timeExtent.getUpdater() != null) && timeExtent.getUpdater().isEnabled();
-		if(useAutoTime)
-			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
-		else	
-			extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getDefaultBaseTime());
-
+		extentWidget.manualTimeWidget.absTimeSpinner.setValue(timeExtent.getBaseTime());
         extentWidget.manualTimeWidget.setEnabled(!useAutoTime);
         extentWidget.overrideTimeBtn.setSelection(!useAutoTime);
-//		//  Fix for baseAtNow btn
+        
+		//  Fix for baseAtNow btn
 		if(timeExtent.isBaseAtNow()) {
 			extentWidget.manualTimeWidget.baseAtNowBtn.setSelection(true);
 			//  disable masterTimeWidget???
@@ -113,8 +111,10 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		
 		// switch between RealTime or SceneTime updater
 		if(b){
-//			timeExtent.setBaseTime(extentWidget.manualTimeWidget.absTimeSpinner.getValue());
-			timeExtent.setBaseTime(timeExtent.getDefaultBaseTime());
+			// revert to override value if it was specified
+		    if (timeExtent.getDefaultBaseTime() != Double.NaN)
+			    timeExtent.setBaseTime(timeExtent.getDefaultBaseTime());
+			
 			if (extentWidget.manualTimeWidget.absTimeSpinner.rtBtn.getSelection()) {
 				RealTimeUpdater rtu = createRealtimeUpdater();
 				rtu.setEnabled(true);
@@ -126,7 +126,9 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 			SceneTimeUpdater sceneUpdater = createSceneTimeUpdater();
 			sceneUpdater.setEnabled(true);
             timeExtent.setUpdater(sceneUpdater);
-//            extentWidget.manualTimeWidget.removeListeners(this, this);
+            
+            // backup override value
+            timeExtent.setDefaultBaseTime(timeExtent.getBaseTime());
 		}
 		timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
 	}
