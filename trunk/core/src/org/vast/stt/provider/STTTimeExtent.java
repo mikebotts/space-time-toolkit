@@ -51,8 +51,9 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
 {
     protected STTEventListeners listeners;
     protected TimeExtentUpdater updater;
-    protected double defaultBaseTime;
+    protected double defaultBaseTime = Double.NaN;
   
+    
 	public STTTimeExtent()
     {
         listeners = new STTEventListeners(1);
@@ -109,12 +110,14 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
     }
     
     
-    public double getDefaultBaseTime() {
+    public double getDefaultBaseTime()
+    {
 		return defaultBaseTime;
 	}
 
 
-	public void setDefaultBaseTime(double defaultBaseTime) {
+	public void setDefaultBaseTime(double defaultBaseTime)
+	{
 		this.defaultBaseTime = defaultBaseTime;
 	}
 
