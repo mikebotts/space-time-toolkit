@@ -103,7 +103,7 @@ public class CameraControl_Map implements CameraControl
             Vector3d pos = viewSettings.getCameraPos();
             Vector3d target = viewSettings.getTargetPos();
             
-            // ge actual viewport dimensions
+            // get actual viewport dimensions
             int viewHeight = renderer.getViewHeight();
             int viewWidth = renderer.getViewWidth();
             
