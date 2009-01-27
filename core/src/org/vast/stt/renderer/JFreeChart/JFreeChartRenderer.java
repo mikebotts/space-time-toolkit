@@ -82,7 +82,7 @@ public class JFreeChartRenderer extends ChartSceneRenderer implements PaintListe
     @Override
     public void init()
     {
-        swt_awt = new Composite(composite, SWT.EMBEDDED);
+        swt_awt = new Composite(composite, SWT.EMBEDDED | SWT.DOUBLE_BUFFERED);
         Frame rootFrame = SWT_AWT.new_Frame(swt_awt);
         swt_awt.setBounds(0, 0, composite.getClientArea().width, composite.getClientArea().height);
         chartPanel = new ChartPanel(null);
