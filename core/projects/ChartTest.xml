@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject
+   xmlns="http://vast.uah.edu/stt/v3"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc"
+   xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe"
+   xmlns:sldx="http://vast.uah.edu/sldx"
+   xsi:schemaLocation="http://vast.uah.edu/stt/v3 ./ProjectFile.xsd">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>Greensburg, KS F5 project</name>
+      <author>Tony Cook</author>
+      <dateCreated>2007-07-31</dateCreated>
+      <description></description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>World View</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2004-04-01T05:00:00Z</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-1.7191 0.6632 10</cameraPos>
+                  <targetPos>-1.7191 0.6632 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>0.01</orthoWidth>
+                  <orthoHeight>0.01</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member>
+                     <DataList>
+                        <name>Chart Folder</name>
+                        <member>
+                           <ChartScene>
+                              <name>Chart Test</name>
+                              <contents>
+                                 <DataList>
+                                    <member visible="false">
+                                       <DataItem>
+                                          <name>Wx SOS Data</name>
+                                          <dataProvider href="#WX_SOS"/>
+                                          <style>
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-breaks">
+                                                      <ogc:PropertyName>/</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>weatherObs/time</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>weatherObs/temperature</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>
+                                          <style>
+                                             <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>weatherObs/time</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>weatherObs/temperature</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                   <sld:Mark>
+                                                      <sld:WellKnownName>square</sld:WellKnownName>
+                                                      <sld:Fill>
+                                                         <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                                                      </sld:Fill>
+                                                   </sld:Mark>
+                                                   <sld:Size>8</sld:Size>
+                                                </sld:Graphic>
+                                             </sld:PointSymbolizer>
+                                          </style>                                         
+                                       </DataItem>
+                                    </member>                                    
+                                 </DataList>
+                              </contents>
+                           </ChartScene>
+                        </member>
+                     </DataList>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            
+            <member>
+               <OWSDataProvider id="WX_SOS">
+                  <name>Wx SOS DP</name>
+                  <layerId>WEATHER_DATA</layerId>
+                  <request postUrl="http://vastserver.nsstc.uah.edu/vast/weather">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>WEATHER_DATA</offering>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2004-04-01T05:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2004-04-01T06:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <!--                        <procedure>urn:vast:sensor:plumeModel</procedure>-->
+                        <observedProperty>WEATHER_OBSERVABLES</observedProperty>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <!--                        <resultModel>swe:DataValueType</resultModel>-->
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
