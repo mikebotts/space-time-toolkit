@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <Identification>
+      <name>Empire Challenge 08 Project</name>
+      <author>Gregoire Berthiau</author>
+      <dateCreated>2008-07-08T09:23:00</dateCreated>
+      <description>Project for Huntsville Webcams</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>Huntsville Project</name>
+          <time>
+               <TimeExtent>
+                  <baseTime>2008-07-21T17:38:00Z</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time> 
+        <!--   <time updatePeriod="3">
+               <TimeExtent>
+                  <baseTime>2008-07-21T17:39:00Z</baseTime>
+                  <stepTime>10</stepTime>
+               </TimeExtent>
+            </time>      -->     
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-1.5122368651990576 0.6060725640720389 5</cameraPos>
+                  <targetPos>-1.5122368651990576 0.6060725640720389 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>6.0</orthoWidth>
+                  <orthoHeight>4.0</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>Huntsville Project</name>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/> 
+                  <member xlink:href="./DopplerRadar.xml#Radar"/> 
+                  <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
+                  <member xlink:href="./GAMMA.xml#GAMMA"/> 
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>
