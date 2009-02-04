@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0"
+   xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 file:///C:\eclipse_workspace\schema\sensorML\sensorML.xsd"
+   version="1.0">
+   <sml:member>
+      <sml:ProcessChain gml:id="GEOLOCATION">
+         <gml:description> This process chain determines the NSSTC roof camera position vector and
+            the ECEF view vector. </gml:description>
+         <gml:name>Camera</gml:name>
+         <sml:inputs>
+            <sml:InputList>
+               <sml:input name="xPixel">
+                  <swe:Quantity/>
+               </sml:input>
+               <sml:input name="yPixel">
+                  <swe:Quantity/>
+               </sml:input>
+               <sml:input name="zeroHeading">
+                  <swe:Quantity>
+                     <swe:value>4.6202355958793892560323942023431</swe:value> <!-- 264.72 or 274.9842 or 254.4488 -->
+                  </swe:Quantity>
+               </sml:input>
+               <sml:input name="navigationData">
+                  <swe:DataRecord gml:id="NAV_DATA">
+                     <swe:field name="systemTime">
+                        <swe:Time definition="urn:ogc:def:property:OGC:1.0:time"
+                           referenceTime="1970-01-01T00:00:00.000Z" gml:id="SYSTEM_CLOCK">
+                           <swe:uom code="ms"/>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="Zoom">
+                        <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:zoom"
+                           gml:id="ZOOMFACTOR">
+                           <gml:description>The current absolute zoom setting.</gml:description>
+                           <swe:uom xlink:href="urn:ogc:def:uom:OGC:1.0:Camera:Steps"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="Gimbal">
+                        <swe:Vector>
+                           <swe:coordinate name="tilt">
+                              <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:tilt"
+                                 gml:id="TILT">
+                                 <gml:description>The tilt setting.</gml:description>
+                                 <swe:uom code="rad"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                           <swe:coordinate name="pan">
+                              <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:pan"
+                                 gml:id="PAN">
+                                 <gml:description>The pan setting.</gml:description>
+                                 <swe:uom code="rad"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                        </swe:Vector>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:input>
+               <sml:input name="position">
+                  <swe:DataRecord>
+                     <swe:field name="latitude">
+                        <swe:Quantity>
+                           <swe:uom code="rad"/>
+                           <swe:value>0.6060706442098617291425246980609</swe:value>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="longitude">
+                        <swe:Quantity>
+                           <swe:uom code="rad"/>
+                           <swe:value>-1.5122366906661324744004626342373</swe:value>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="altitude">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                           <swe:value>223</swe:value>
+                        </swe:Quantity>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:input>
+            </sml:InputList>
+         </sml:inputs>
+         <sml:outputs>
+            <sml:OutputList>
+               <sml:output name="ECEF_location">
+                  <swe:Vector definition="urn:ogc:def:data:locationVector"
+                     referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                     <swe:coordinate name="x">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="y">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="z">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:output>
+               <sml:output name="ECEF_view_vector">
+                  <swe:Vector definition="urn:ogc:def:data:viewVector"
+                     referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                     <swe:coordinate name="x">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="y">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="z">
+                        <swe:Quantity>
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:output>
+            </sml:OutputList>
+         </sml:outputs>
+         <sml:components>
+            <sml:ComponentList>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- LUT along-scan angle-->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="LUTxFOV">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="Zoom">
+                              <swe:Quantity definition="urn:ogc:def:data:normalizedIndex"/>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="xFOV">
+                              <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                 <swe:uom code="rad"/>
+                              </swe:Quantity>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="interpolationMethod">
+                              <swe:Category>
+                                 <swe:value>linear</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                           <sml:parameter name="table">
+                              <swe:Curve>
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>14</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType>
+                                    <swe:SimpleDataRecord>
+                                       <swe:field name="Zoom">
+                                          <swe:Quantity/>
+                                       </swe:field>
+                                       <swe:field name="xFOV">
+                                          <swe:Quantity/>
+                                       </swe:field>
+                                    </swe:SimpleDataRecord>
+                                 </swe:elementType>
+                                 <swe:encoding>
+                                    <swe:TextBlock tokenSeparator="," blockSeparator=" "
+                                       decimalSeparator="."/>
+                                 </swe:encoding>
+                                 <swe:values>1,0.982253087 81,0.841955671 205,0.64380847
+                                    298,0.507277076 399,0.457038489 597,0.352850296 919,0.26634455
+                                    1397,0.19898833 1997,0.149312146 3054,0.106456723
+                                    3986,0.083967025 6074,0.05940875 7940,0.049170419
+                                    9999,0.047122426</swe:values>
+                              </swe:Curve>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:LUT1D:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Binary arithmeric to get along-scan FOV -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="Binary_along_y_FOV">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="operand1">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="operand2">
+                              <swe:Quantity>
+                                 <swe:value>0.6827880512091038406827880512091</swe:value>
+                              </swe:Quantity>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="result">
+                              <swe:Quantity/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="operator">
+                              <swe:Category>
+                                 <swe:value>multiplication</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:binaryOperation:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Binary arithmeric to get along-scan FOV -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="equationSolverOnX">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="V1">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="V2">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="V3">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="V4">
+                              <swe:Quantity/>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="result">
+                              <swe:Quantity/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="equation">
+                              <swe:Category>
+                                 <swe:value>x=V1/702*V2-176/351*V1+V3+V4</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:equationSolver:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Binary arithmeric to get along-scan FOV -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="equationSolverOnY">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="V1">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="V2">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="V3">
+                              <swe:Quantity/>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="result">
+                              <swe:Quantity/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="equation">
+                              <swe:Category>
+                                 <swe:value>x=-V1/479*V2+481/958+V3</swe:value><!--  x=V1/702*V2-176/351*V1+V3swe:value-->
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:equationSolver:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- Actual chain doing the geolocation job -->
+               <sml:component name="doppler" xlink:href="./Doppler_GeoLocation_for_Cam2.xml#DOPPLER_GEOLOCATION_CHAIN"/>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- LLA to ECEF -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="LLAtoECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="LLA_location">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
+                                 <swe:coordinate name="latitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="longitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="altitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="ECEF_location">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ecef_wgs84">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:LLAtoECEF:2.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+            </sml:ComponentList>
+         </sml:components>
+         <!--~~~~~~~~~~~~~-->
+         <!-- Connections -->
+         <!--~~~~~~~~~~~~~-->
+         <sml:connections>
+            <sml:ConnectionList>
+               <!-- chain inputs to processes inputs -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/Zoom"/>
+                     <sml:destination ref="LUTxFOV/inputs/Zoom"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="LUTxFOV/outputs/xFOV"/>
+                     <sml:destination ref="equationSolverOnX/inputs/V1"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/xPixel"/>
+                     <sml:destination ref="equationSolverOnX/inputs/V2"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/Gimbal/pan"/>
+                     <sml:destination ref="equationSolverOnX/inputs/V3"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/zeroHeading"/>
+                     <sml:destination ref="equationSolverOnX/inputs/V4"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="LUTxFOV/outputs/xFOV"/>
+                     <sml:destination ref="Binary_along_y_FOV/inputs/operand1"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="Binary_along_y_FOV/outputs/result"/>
+                     <sml:destination ref="equationSolverOnY/inputs/V1"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/yPixel"/>
+                     <sml:destination ref="equationSolverOnY/inputs/V2"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/Gimbal/tilt"/>
+                     <sml:destination ref="equationSolverOnY/inputs/V3"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="equationSolverOnX/outputs/result"/>
+                     <sml:destination ref="doppler/inputs/azimuth"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="equationSolverOnY/outputs/result"/>
+                     <sml:destination ref="doppler/inputs/elevation"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="doppler/outputs/geoLocation/longitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/longitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="doppler/outputs/geoLocation/latitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/latitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="doppler/outputs/geoLocation/altitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/altitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="LLAtoECEF/outputs/ECEF_location"/>
+                     <sml:destination ref="this/outputs/ECEF_location"/>
+                  </sml:Link>
+               </sml:connection>
+            </sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>

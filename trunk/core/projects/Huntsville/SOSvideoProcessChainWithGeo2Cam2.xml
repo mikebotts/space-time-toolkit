@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0"
+   xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 file:///C:\Data\SensorMLschema\sensorML\1.0\base\sensorML.xsd"
+   version="1.0">
+   <sml:member>
+      <sml:ProcessChain gml:id="PROCESS">
+         <sml:inputs>
+            <sml:InputList>
+               <sml:input name="time">
+                  <swe:DataRecord gml:id="INPUT_TIME">
+                     <swe:field name="start">
+                        <swe:Time definition="urn:ogc:def:phenomenon:time"
+                           referenceFrame="urn:ogc:def:crs:julianTime">
+                           <swe:uom code="s"/>
+                           <swe:value>0</swe:value>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="stop">
+                        <swe:Time definition="urn:ogc:def:phenomenon:time"
+                           referenceFrame="urn:ogc:def:crs:julianTime">
+                           <swe:uom code="s"/>
+                           <swe:value>0</swe:value>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="step">
+                        <swe:Quantity definition="urn:ogc:def:phenomenon:duration">
+                           <swe:uom code="s"/>
+                           <swe:value>0</swe:value>
+                        </swe:Quantity>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:input>
+            </sml:InputList>
+         </sml:inputs>
+         <sml:outputs>
+            <sml:OutputList>
+               <sml:output name="video" xlink:href="#DATA"/>
+               <sml:output name="grid">
+                  <swe:DataArray>
+                     <swe:elementCount>
+                        <swe:Count>
+                           <swe:value>30</swe:value>
+                        </swe:Count>
+                     </swe:elementCount>
+                     <swe:elementType name="acrossTrackPoints">
+                        <swe:DataArray>
+                           <swe:elementCount>
+                              <swe:Count>
+                                 <swe:value>30</swe:value>
+                              </swe:Count>
+                           </swe:elementCount>
+                           <swe:elementType name="groundPoint">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector"
+                                 referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </swe:elementType>
+                        </swe:DataArray>
+                     </swe:elementType>
+                  </swe:DataArray>
+               </sml:output>
+            </sml:OutputList>
+         </sml:outputs>
+         <sml:components>
+            <sml:ComponentList>
+               <!-- SOS call to get scanner data -->
+               <sml:component name="navSos">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="time" xlink:href="#INPUT_TIME"/>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="observationInfo">
+                              <swe:DataRecord>
+                                 <swe:field name="name">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="procedure">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="location">
+                                    <swe:Vector referenceFrame="urn:ogc:def:crs:EPSG:6.1:4329">
+                                       <swe:coordinate name="lat">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="lon">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="alt">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="observationData">
+                              <swe:DataRecord gml:id="NAV_DATA">
+                                 <swe:field name="systemTime">
+                                    <swe:Time definition="urn:ogc:def:property:OGC:1.0:time" referenceTime="1970-01-01T00:00:00.000Z" gml:id="SYSTEM_CLOCK">
+                                       <swe:uom code="ms"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="Zoom">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:zoom" gml:id="ZOOMFACTOR">
+                                       <gml:description>The current absolute zoom setting.</gml:description>
+                                       <swe:uom xlink:href="urn:ogc:def:uom:OGC:1.0:Camera:Steps"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="Gimbal">
+                                    <swe:Vector>
+                                       <swe:coordinate name="Tilt Angle">
+                                          <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:tilt" gml:id="TILT">
+                                             <gml:description>The tilt setting.</gml:description>
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="Pan Angle">
+                                          <swe:Quantity definition="urn:ogc:def:property:OGC:1.0:pan" gml:id="PAN">
+                                             <gml:description>The pan setting.</gml:description>
+                                             <swe:uom code="deg"/>
+                                          </swe:Quantity>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="sosOptions">
+                              <swe:DataRecord fixed="true">
+                                 <swe:field name="endPoint">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>http://vast1:8080/VideoSOS/sos</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="requestMethod">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>POST</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="version">
+                                    <swe:Category definition="urn:ogc:def:identifier:version">
+                                       <swe:value>1.0.0</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="offering">
+                                    <swe:Category>
+                                       <swe:value>CAMERAS</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="observables">
+                                    <swe:Category>
+                                       <swe:value>AXIS_CAMERA_PROPERTIES</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="procedures">
+                                    <swe:Category>
+                                       <swe:value>urn:ogc:object:sensor:VAST:vastcam2</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="format">
+                                    <swe:Category definition="urn:ogc:def:identifier:mimeType">
+                                       <swe:value>text/xml;subtype="om/1.0.0"</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- SOS call to get scanner data -->
+               <sml:component name="videoSos">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="time" xlink:href="#INPUT_TIME"/>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="observationInfo">
+                              <swe:DataRecord>
+                                 <swe:field name="name">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="procedure">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="location">
+                                    <swe:Vector referenceFrame="urn:ogc:def:crs:EPSG:6.1:4329">
+                                       <swe:coordinate name="lat">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="lon">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="alt">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="observationData">
+                              <swe:DataRecord gml:id="DATA">
+                                 <swe:field name="SamplingTime">
+                                    <swe:Time referenceTime="1970-01-01T00:00:00.000Z">
+                                       <swe:uom code="ms"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="numRows">
+                                    <swe:Count gml:id="nRows"
+                                       definition="urn:ogc:def:property:OGC:numberOfRow"/>
+                                 </swe:field>
+                                 <swe:field name="numCols">
+                                    <swe:Count gml:id="nCols"
+                                       definition="urn:ogc:def:property:OGC:numberOfColumn"/>
+                                 </swe:field>
+                                 <swe:field name="Image">
+                                    <swe:DataArray gml:id="VIDEO_FRAME"
+                                       definition="urn:ogc:def:data:OGC:image:row">
+                                       <swe:elementCount ref="nRows"/>
+                                       <swe:elementType name="scanLine">
+                                          <swe:DataArray
+                                             definition="urn:ogc:def:data:OGC:image:column">
+                                             <swe:elementCount ref="nCols"/>
+                                             <swe:elementType name="pixel">
+                                                <!--does it make sense to split the radiance up??-->
+                                                <!--is that the correct uom?? can we even define a uom here??-->
+                                                <swe:SimpleDataRecord
+                                                  definition="urn:ogc:def:data:OGC:image:pixel">
+                                                  <swe:field name="red">
+                                                  <swe:Quantity
+                                                  definition="urn:ogc:def:property:OGC:radianceRed">
+                                                  <gml:description>Radiance measured on band1
+                                                  and assigned to red
+                                                  channel</gml:description>
+                                                  </swe:Quantity>
+                                                  </swe:field>
+                                                  <swe:field name="green">
+                                                  <swe:Quantity
+                                                  definition="urn:ogc:def:property:OGC:radianceGreen">
+                                                  <gml:description>Radiance measured on band2
+                                                  and assigned to green
+                                                  channel</gml:description>
+                                                  </swe:Quantity>
+                                                  </swe:field>
+                                                  <swe:field name="blue">
+                                                  <swe:Quantity
+                                                  definition="urn:ogc:def:property:OGC:radianceBlue">
+                                                  <gml:description>Radiance measured on band3
+                                                  and assigned to blue
+                                                  channel</gml:description>
+                                                  </swe:Quantity>
+                                                  </swe:field>
+                                                </swe:SimpleDataRecord>
+                                             </swe:elementType>
+                                          </swe:DataArray>
+                                       </swe:elementType>
+                                    </swe:DataArray>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="sosOptions">
+                              <swe:DataRecord fixed="true">
+                                 <swe:field name="endPoint">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>http://vast1:8080/VideoSOS/sos</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="requestMethod">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>POST</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="version">
+                                    <swe:Category definition="urn:ogc:def:identifier:version">
+                                       <swe:value>1.0.0</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="offering">
+                                    <swe:Category>
+                                       <swe:value>CAMERAS</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="observables">
+                                    <swe:Category>
+                                       <swe:value>urn:ogc:def:property:OGC:radiance</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="procedures">
+                                    <swe:Category>
+                                       <swe:value>urn:ogc:object:sensor:VAST:vastcam2</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="format">
+                                    <swe:Category definition="urn:ogc:def:identifier:mimeType">
+                                       <swe:value>text/xml;subtype="om/1.0.0"</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- DualStream Time Synchronizer/Interpolator -->
+               <sml:component name="timeSync">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="masterTime">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="slaveTime">
+                              <swe:Quantity/>
+                           </sml:input>
+                           <sml:input name="dataInSlave" xlink:href="#NAV_DATA"/>  
+                           <sml:input name="dataInMaster" xlink:href="#DATA"/>                         
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="dataOutSlave" xlink:href="#NAV_DATA"/>
+                           <sml:input name="dataOutMaster" xlink:href="#DATA"/>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="computationalMethod">
+                              <swe:Category>
+                                 <swe:constraint>
+                                    <swe:AllowedTokens>
+                                       <swe:valueList>linearInterpolation quadraticInterpolation step</swe:valueList>
+                                    </swe:AllowedTokens>
+                                 </swe:constraint>
+                                 <swe:value>step</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:timeSync:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- FOR loop for along scan steps -->
+               <sml:component name="asCounter">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="nav" xlink:href="#NAV_DATA"/>
+                              </swe:DataRecord>
+                           </sml:input>
+                           <sml:input name="countingRange">
+                              <swe:DataRecord>
+                                 <swe:field name="start">
+                                    <swe:Quantity>
+                                       <swe:value>1</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stop">
+                                    <swe:Quantity>
+                                       <swe:value>703</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stepCount">
+                                    <swe:Quantity>
+                                       <swe:value>30</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="nav" xlink:href="#NAV_DATA"/>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="count">
+                              <swe:DataRecord>
+                                 <swe:field name="variable">
+                                    <swe:Quantity gml:id="AS_PIXEL"/>
+                                 </swe:field>
+                                 <swe:field name="index">
+                                    <swe:Count/>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="stepCount">
+                              <swe:Count/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!-- FOR loop for across track steps -->
+               <sml:component name="atCounter">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="nav" xlink:href="#NAV_DATA"/>
+                                 <swe:field name="Along_scan_pixel" xlink:href="#AS_PIXEL"/>
+                              </swe:DataRecord>
+                           </sml:input>
+                           <sml:input name="countingRange">
+                              <swe:DataRecord>
+                                 <swe:field name="start">
+                                    <swe:Quantity>
+                                       <swe:value>1</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stop">
+                                    <swe:Quantity>
+                                       <swe:value>480</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="stepCount">
+                                    <swe:Quantity>
+                                       <swe:value>30</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="pass-through">
+                              <swe:DataRecord>
+                                 <swe:field name="nav" xlink:href="#NAV_DATA"/>
+                                 <swe:field name="Along_scan_pixel" xlink:href="#AS_PIXEL"/>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="count">
+                              <swe:DataRecord>
+                                 <swe:field name="variable">
+                                    <swe:Quantity/>
+                                 </swe:field>
+                                 <swe:field name="index">
+                                    <swe:Count/>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="stepCount">
+                              <swe:Count/>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>       
+               <!-- Actual chain doing the geolocation job -->
+               <sml:component name="lookVectorChain" xlink:href="./NsstcCameraFrameGeolocation_withDopplerGeo2Cam2.xml#GEOLOCATION"/>
+               <!-- array reconstruction -->
+               <sml:component name="gridBuilder">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="groundPoint">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity>
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>                         
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="grid">
+                              <swe:DataArray>
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>30</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="acrossTrackPoints">
+                                    <swe:DataArray>
+                                       <swe:elementCount>
+                                          <swe:Count>
+                                             <swe:value>30</swe:value>
+                                          </swe:Count>
+                                       </swe:elementCount>
+                                       <swe:elementType name="groundPoint">
+                                          <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                                             <swe:coordinate name="x">
+                                                <swe:Quantity>
+                                                   <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                             </swe:coordinate>
+                                             <swe:coordinate name="y">
+                                                <swe:Quantity>
+                                                   <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                             </swe:coordinate>
+                                             <swe:coordinate name="z">
+                                                <swe:Quantity>
+                                                   <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                             </swe:coordinate>
+                                          </swe:Vector>
+                                       </swe:elementType>                                      
+                                    </swe:DataArray>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:gridBuilder:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>        
+               <!-- connection -->
+            </sml:ComponentList>
+         </sml:components>
+         <sml:connections>
+            <sml:ConnectionList>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="navSos/inputs/time"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="videoSos/inputs/time"/>
+                  </sml:Link>
+               </sml:connection>          
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="navSos/outputs/observationData"/>
+                     <sml:destination ref="timeSync/inputs/dataInSlave"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="navSos/outputs/observationData/systemTime"/>
+                     <sml:destination ref="timeSync/inputs/slaveTime"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="videoSos/outputs/observationData/SamplingTime"/>
+                     <sml:destination ref="timeSync/inputs/masterTime"/>
+                  </sml:Link>
+               </sml:connection>           
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="timeSync/outputs/dataOutSlave"/>
+                     <sml:destination ref="asCounter/inputs/pass-through/nav"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/pass-through/nav"/>
+                     <sml:destination ref="atCounter/inputs/pass-through/nav"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="asCounter/outputs/count/variable"/>
+                     <sml:destination ref="atCounter/inputs/pass-through/Along_scan_pixel"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/nav"/>
+                     <sml:destination ref="lookVectorChain/inputs/navigationData"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/Along_scan_pixel"/>
+                     <sml:destination ref="lookVectorChain/inputs/xPixel"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/count/variable"/>
+                     <sml:destination ref="lookVectorChain/inputs/yPixel"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- -->               
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="lookVectorChain/outputs/ECEF_location"/>
+                     <sml:destination ref="gridBuilder/inputs/groundPoint"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="gridBuilder/outputs/grid"/>
+                     <sml:destination ref="this/outputs/grid"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="videoSos/outputs/observationData"/>
+                     <sml:destination ref="timeSync/inputs/dataInMaster"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="timeSync/outputs/dataOutMaster"/>
+                     <sml:destination ref="this/outputs/video"/>
+                  </sml:Link>
+               </sml:connection>
+            </sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>
