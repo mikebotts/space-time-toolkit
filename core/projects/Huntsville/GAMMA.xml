@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="GAMMA">
+      <name>Gamma Detector SAS</name>
+      <member visible="false">
+                     <DataItem>
+                        <name>Gamma Detector Real-Time Alert</name>
+                        <dataProvider>
+                                <SensorMLProvider>
+                 					<name>Gamma SAS XMPP Process Chain</name>
+                 					<timeExtent>
+                     					<TimeExtent>
+                      					 <baseTime>now</baseTime>
+                  					     <lagTime>0</lagTime>
+                  				         <leadTime>300</leadTime>
+                   					     <stepTime>0</stepTime>
+                 					    </TimeExtent>
+              					    </timeExtent>
+              					    <process xlink:href="./GammaXMPP.xml#GAMMA_XMPP"/>
+                  				</SensorMLProvider>
+              			</dataProvider>
+                        <style>
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>alert/location/longitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>alert/location/latitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>alert/location/altitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:ExternalGraphic>
+                                    <sld:Format>image/png</sld:Format>
+                                    <sld:OnlineResource>
+                                       <CategoryLookUpTable>
+                                          <ogc:PropertyName>alert/AlertType</ogc:PropertyName>
+                                          <Mapping key="HI_ALARM">icons/radioactiveAlert.png</Mapping>
+                                          <Default>icons/radioactiveNormal.png</Default>
+                                       </CategoryLookUpTable>
+                                    </sld:OnlineResource>
+                                 </sld:ExternalGraphic>
+                                 <sld:Size>
+                                    <CategoryLookUpTable>
+                                       <ogc:PropertyName>alert/AlertType</ogc:PropertyName>
+                                       <Mapping key="HI_ALARM">0.3</Mapping>
+                                       <Default>0.3</Default>
+                                    </CategoryLookUpTable>
+                                 </sld:Size>
+                                 <sld:Spacing>100</sld:Spacing>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style>
+                        <style>
+                           <sld:TextSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>alert/location/longitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>alert/location/latitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>alert/location/altitude</ogc:PropertyName>
+                                 </sld:CssParameter>
+                              </sld:Geometry>
+                              <sld:Label>
+                                 <ogc:PropertyName>toDisplay</ogc:PropertyName>
+                              </sld:Label>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:TextSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
+                     <DataList>
+                        <name>Chart Folder</name>
+                        <member>
+                           <ChartScene>
+                              <name>Gamma Observation Chart</name>
+                              <contents>
+                                 <DataList>
+                                    <member visible="false">
+                                       <DataItem>
+                                          <name>Gamma SOS Data</name>
+                                          <dataProvider>
+                                          <OWSDataProvider id="WX_SOS">
+                  <name>Gamma SOS</name>
+                  <layerId>WEATHER_DATA</layerId>
+                  <request postUrl="http://naauah2:8080/vast/gamma">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>GAMMA2070_DATA</offering>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2009-01-19T05:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2009-01-31T06:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <!--                        <procedure>urn:vast:sensor:plumeModel</procedure>
+                        <observedProperty>WEATHER_OBSERVABLES</observedProperty>-->
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <!--                        <resultModel>swe:DataValueType</resultModel>-->
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+                                          </dataProvider>
+                                          <style>
+                                             <sld:LineSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-breaks">
+                                                      <ogc:PropertyName>/</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>gammaObs/time</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>gammaObs/averageRadiation</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Stroke>
+                                                   <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                                                   <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                                                </sld:Stroke>
+                                             </sld:LineSymbolizer>
+                                          </style>
+                                          <style>
+                                             <sld:PointSymbolizer enabled="true">
+                                                <sld:Geometry>
+                                                   <sld:CssParameter name="geometry-x">
+                                                      <ogc:PropertyName>gammaObs/time</ogc:PropertyName>
+                                                   </sld:CssParameter>
+                                                   <sld:CssParameter name="geometry-y">
+                                                      <ogc:PropertyName>gammaObs/averageRadiation</ogc:PropertyName>
+                                                   </sld:CssParameter>                                       
+                                                </sld:Geometry>
+                                                <sld:Graphic>
+                                                   <sld:Mark>
+                                                      <sld:WellKnownName>square</sld:WellKnownName>
+                                                      <sld:Fill>
+                                                         <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                                                      </sld:Fill>
+                                                   </sld:Mark>
+                                                   <sld:Size>8</sld:Size>
+                                                </sld:Graphic>
+                                             </sld:PointSymbolizer>
+                                          </style>                                         
+                                       </DataItem>
+                                    </member>                                    
+                                 </DataList>
+                              </contents>
+                           </ChartScene>
+                        </member>
+                     </DataList>
+                  </member>
+   </DataList>
+</STTProject>

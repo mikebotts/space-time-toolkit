@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:gml="http://www.opengis.net/gml"
+	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ism="urn:us:gov:ic:ism:v2"
+	xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd"
+	version="1.0.1">
+	<sml:member>
+      <sml:ProcessChain gml:id="DOPPLER_GEOLOCATION_CHAIN">
+		<!--~~~~~~~~~~~~~~~~~~-->
+		<!-- Inputs & Outputs -->
+		<!--~~~~~~~~~~~~~~~~~~-->
+		<sml:inputs>
+			<sml:InputList>
+				<sml:input name="sphereRadius">
+					<swe:Quantity>
+						<swe:value>1500</swe:value>
+					</swe:Quantity>
+				</sml:input>
+				<sml:input name="azimuth">
+					<swe:Quantity definition="urn:ogc:phenomenon:angle"/>
+				</sml:input>
+				<sml:input name="elevation"> 
+					<swe:Quantity definition="urn:ogc:phenomenon:angle"/>
+				</sml:input>
+				<sml:input name="radarLocation">
+				   <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
+				      <swe:coordinate name="latitude">
+				      	<swe:Quantity definition="urn:ogc:def:phenomenon:latitude">
+				      		<swe:value>0.6060694224793853</swe:value>
+				      	</swe:Quantity>
+				      </swe:coordinate>
+				      <swe:coordinate name="longitude">
+				      	<swe:Quantity definition="urn:ogc:def:phenomenon:longitude">
+				      		<swe:value>-1.5122368651990576</swe:value>
+				      	</swe:Quantity>
+				      </swe:coordinate>
+				      <swe:coordinate name="altitude">
+				      	<swe:Quantity definition="urn:ogc:def:phenomenon:altitude">
+				      		<swe:value>223</swe:value>
+				      	</swe:Quantity>
+				      </swe:coordinate>
+				   </swe:Vector>
+				</sml:input>
+			</sml:InputList>
+		</sml:inputs>
+		<sml:outputs>
+			<sml:OutputList>
+				<sml:output name="geoLocation">
+				   <swe:Vector referenceFrame="urn:ogc:crs:epsg4329">
+				   	<swe:coordinate name="latitude">
+				         <swe:Quantity definition="urn:ogc:phenomenon:latitude"/>
+				   	</swe:coordinate>
+				   	<swe:coordinate name="longitude">
+				         <swe:Quantity definition="urn:ogc:phenomenon:longitude"/>
+				   	</swe:coordinate>
+				   	<swe:coordinate name="altitude">
+				         <swe:Quantity definition="urn:ogc:phenomenon:altitude"/>
+				   	</swe:coordinate>
+				   </swe:Vector>
+				</sml:output>
+			</sml:OutputList>
+		</sml:outputs>
+		<sml:components>
+			<sml:ComponentList>  
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!-- LLA,PRY to ECEF position -->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<sml:component name="llaToEcef">
+				   <sml:ProcessModel>
+				      <sml:inputs>
+				         <sml:InputList>
+				            <sml:input name="geoLocation">
+				               <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
+				                  <swe:coordinate name="latitude">
+				                     <swe:Quantity definition="urn:ogc:def:phenomenon:latitude"/>
+				                  </swe:coordinate>
+				                  <swe:coordinate name="longitude">
+				                     <swe:Quantity definition="urn:ogc:def:phenomenon:longitude"/>
+				                  </swe:coordinate>
+				                  <swe:coordinate name="altitude">
+				                     <swe:Quantity definition="urn:ogc:def:phenomenon:altitude"/>
+				                  </swe:coordinate>
+				               </swe:Vector>
+				            </sml:input>
+				            <sml:input name="localOrientation">
+				               <swe:Vector definition="urn:ogc:def:data:orientationVector" referenceFrame="urn:ogc:def:crs:ENU">
+				                  <swe:coordinate name="x">
+				                     <swe:Quantity definition="urn:ogc:phenomenon:angle"/>
+				                  </swe:coordinate>
+				                  <swe:coordinate name="y">
+				                     <swe:Quantity definition="urn:ogc:phenomenon:angle"/>
+				                  </swe:coordinate>
+				                  <swe:coordinate name="z">
+				                     <swe:Quantity definition="urn:ogc:phenomenon:angle"/>
+				                  </swe:coordinate>
+				               </swe:Vector>
+				            </sml:input>
+				            <sml:input name="rotationOrder">
+				               <swe:Category>
+				               <swe:value>ZYX</swe:value>
+				               </swe:Category>
+				            </sml:input>
+				         </sml:InputList>
+				      </sml:inputs>
+				      <sml:outputs>
+				         <sml:OutputList>
+				            <sml:output name="ecefPosition">
+				               <swe:DataArray>
+				               	<swe:elementCount>
+				               		<swe:Count>
+				               			<swe:value>16</swe:value>
+				               		</swe:Count>
+				               	</swe:elementCount>
+				               	<swe:elementType name="value">
+				               		<swe:Quantity/>
+				               	</swe:elementType>
+				               </swe:DataArray>				               
+				            </sml:output>
+				         </sml:OutputList>
+				      </sml:outputs>
+						<sml:parameters>
+							<sml:ParameterList>
+								<sml:parameter name="datum">
+									<swe:Category>
+										<swe:value>urn:ogc:datum:wgs84</swe:value>
+									</swe:Category>
+								</sml:parameter>
+							</sml:ParameterList>
+						</sml:parameters>
+				      <sml:method xlink:href="urn:ogc:def:process:LLAToECEF:1.0"/>
+				   </sml:ProcessModel>
+				</sml:component>
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!-- Sensor CRS to ECEF Coordinate Transform -->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<sml:component name="sensorToEcef">
+				   <sml:ProcessModel>
+						<sml:inputs>
+							<sml:InputList>
+								<sml:input name="referencePosition">
+									<swe:DataArray>
+										<swe:elementCount>
+											<swe:Count>
+												<swe:value>16</swe:value>
+											</swe:Count>
+										</swe:elementCount>
+										<swe:elementType name="value">
+											<swe:Quantity/>
+										</swe:elementType>
+									</swe:DataArray>
+								</sml:input>
+								<sml:input name="location">
+								   <swe:Vector>
+								      <swe:coordinate name="x">
+								      	<swe:Quantity>
+								      		<swe:value>0.0</swe:value>
+								      	</swe:Quantity>
+								      </swe:coordinate>
+								      <swe:coordinate name="y">
+								         <swe:Quantity/>
+								      </swe:coordinate>
+								      <swe:coordinate name="z">
+								         <swe:Quantity>
+								         	<swe:value>0.0</swe:value>
+								         </swe:Quantity>
+								      </swe:coordinate>
+								   </swe:Vector>
+								</sml:input>
+							</sml:InputList>
+						</sml:inputs>
+						<sml:outputs>
+							<sml:OutputList>
+								<sml:output name="location">
+								   <swe:Vector>
+								      <swe:coordinate name="x">
+								         <swe:Quantity/>
+								      </swe:coordinate>
+								      <swe:coordinate name="y">
+								         <swe:Quantity/>
+								      </swe:coordinate>
+								      <swe:coordinate name="z">
+								         <swe:Quantity/>
+								      </swe:coordinate>
+								   </swe:Vector>
+								</sml:output>
+							</sml:OutputList>
+						</sml:outputs>
+				      <sml:method xlink:href="urn:ogc:def:process:locationTransform:1.0"/>
+				   </sml:ProcessModel>
+				</sml:component>
+				<!--~~~~~~~~~~~~~~~~~~~~~~-->
+				<!-- ECEF to LLA location -->
+				<!--~~~~~~~~~~~~~~~~~~~~~~-->
+				<sml:component name="ecefToLLA">
+				   <sml:ProcessModel>
+						<sml:inputs>
+							<sml:InputList>
+							   <sml:input name="ecefLocation">
+							      <swe:Vector>
+							         <swe:coordinate name="x">
+							            <swe:Quantity/>
+							         </swe:coordinate>
+							         <swe:coordinate name="y">
+							            <swe:Quantity/>
+							         </swe:coordinate>
+							         <swe:coordinate name="z">
+							            <swe:Quantity/>
+							         </swe:coordinate>
+							      </swe:Vector>
+								</sml:input>								
+							</sml:InputList>
+						</sml:inputs>
+						<sml:outputs>
+							<sml:OutputList>
+								<sml:output name="geoLocation">
+								   <swe:Vector>
+								      <swe:coordinate name="latitude">
+											<swe:Quantity definition="urn:ogc:phenomenon:latitude"/>
+								      </swe:coordinate>
+								      <swe:coordinate name="longitude">
+											<swe:Quantity definition="urn:ogc:phenomenon:longitude"/>
+								      </swe:coordinate>
+								      <swe:coordinate name="altitude">
+											<swe:Quantity definition="urn:ogc:phenomenon:altitude"/>
+								      </swe:coordinate>
+								   </swe:Vector>
+								</sml:output>
+							</sml:OutputList>
+						</sml:outputs>
+						<sml:parameters>
+							<sml:ParameterList>
+								<sml:parameter name="datum">
+									<swe:Category>
+										<swe:value>urn:ogc:datum:wgs84</swe:value>
+									</swe:Category>
+								</sml:parameter>
+							</sml:ParameterList>
+						</sml:parameters>
+				      <sml:method xlink:href="urn:ogc:def:process:ECEFToLLA:1.0"/>
+				   </sml:ProcessModel>
+				</sml:component>
+			</sml:ComponentList>
+		</sml:components>
+		<!--~~~~~~~~~~~~~-->
+		<!-- Connections -->
+		<!--~~~~~~~~~~~~~-->
+		<sml:connections>
+			<sml:ConnectionList>
+				<!-- llaToEcef inputs -->
+				<sml:connection>
+					<sml:Link>
+						<sml:source ref="this/inputs/azimuth"/>
+						<sml:destination ref="llaToEcef/inputs/localOrientation/z"/>
+					</sml:Link>
+				</sml:connection>
+				<sml:connection>
+					<sml:Link>
+						<sml:source ref="this/inputs/elevation"/>
+						<sml:destination ref="llaToEcef/inputs/localOrientation/x"/>
+					</sml:Link>
+				</sml:connection>
+			   <sml:connection>
+			      <sml:Link>
+			         <sml:source ref="this/inputs/radarLocation"/>
+			         <sml:destination ref="llaToEcef/inputs/geoLocation"/>
+			      </sml:Link>
+			   </sml:connection>
+				<!-- location transform inputs -->
+				<sml:connection>
+					<sml:Link>
+						<sml:source ref="llaToEcef/outputs/ecefPosition"/>
+						<sml:destination ref="sensorToEcef/inputs/referencePosition"/>
+					</sml:Link>
+				</sml:connection>
+			   <sml:connection>
+			      <sml:Link>
+			         <sml:source ref="this/inputs/sphereRadius"/>
+			         <sml:destination ref="sensorToEcef/inputs/location/y"/>
+			      </sml:Link>
+			   </sml:connection>
+				<!-- ecefToLLA inputs -->
+				<sml:connection>
+					<sml:Link>
+						<sml:source ref="sensorToEcef/outputs/location"/>
+						<sml:destination ref="ecefToLLA/inputs/ecefLocation"/>
+					</sml:Link>
+				</sml:connection>
+				<!-- chain output -->
+				<sml:connection>
+					<sml:Link>
+						<sml:source ref="ecefToLLA/outputs/geoLocation"/>
+						<sml:destination ref="this/outputs/geoLocation"/>
+					</sml:Link>
+				</sml:connection>
+			</sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>
