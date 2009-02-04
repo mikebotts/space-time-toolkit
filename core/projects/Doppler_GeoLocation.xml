@@ -155,17 +155,20 @@
 										<swe:Vector definition="urn:ogc:def:data:orientationVector" referenceFrame="urn:ogc:def:crs:ENU" >
 											<swe:coordinate name="x">
 												<swe:Quantity definition="urn:ogc:phenomenon:angle">
-													<swe:uom code="deg"></swe:uom>
-													</swe:Quantity>
+													<swe:uom code="deg"/>
+													<swe:value>0.0</swe:value>
+												</swe:Quantity>
 											</swe:coordinate>
 											<swe:coordinate name="y">
 												<swe:Quantity definition="urn:ogc:phenomenon:angle">
-													<swe:uom code="deg"></swe:uom>
+													<swe:uom code="deg"/>
+													<swe:value>0.0</swe:value>
 												</swe:Quantity>
 											</swe:coordinate>
 											<swe:coordinate name="z">
 												<swe:Quantity definition="urn:ogc:phenomenon:angle">
-													<swe:uom code="deg"></swe:uom>
+													<swe:uom code="deg"/>
+													<swe:value>0.0</swe:value>
 												</swe:Quantity>
 											</swe:coordinate>
 										</swe:Vector>
@@ -223,20 +226,20 @@
 										<swe:Vector>
 											<swe:coordinate name="x">
 												<swe:Quantity>
-													<swe:uom code="m"></swe:uom>
-													<swe:value/>
+													<swe:uom code="m"/>
+													<swe:value>0.0</swe:value>
 												</swe:Quantity>
 											</swe:coordinate>
 											<swe:coordinate name="y">
 												<swe:Quantity>
-													<swe:uom code="m"></swe:uom>
-													<swe:value/>
+													<swe:uom code="m"/>
+													<swe:value>0.0</swe:value>
 												</swe:Quantity>
 											</swe:coordinate>
 											<swe:coordinate name="z">
 												<swe:Quantity>
-													<swe:uom code="m"></swe:uom>
-													<swe:value/>
+													<swe:uom code="m"/>
+													<swe:value>0.0</swe:value>
 												</swe:Quantity>
 											</swe:coordinate>
 										</swe:Vector>

@@ -46,6 +46,7 @@
             </view>
             <contents>
                <DataList>
+                  <name>TestChart</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member>
                      <DataList>
@@ -86,11 +87,11 @@
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
                                                       <ogc:PropertyName>weatherObs/temperature</ogc:PropertyName>
-                                                   </sld:CssParameter>                                       
+                                                   </sld:CssParameter>
                                                 </sld:Geometry>
                                                 <sld:Graphic>
                                                    <sld:Mark>
-                                                      <sld:WellKnownName>square</sld:WellKnownName>
+                                                      <sld:WellKnownName>triangle</sld:WellKnownName>
                                                       <sld:Fill>
                                                          <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
                                                       </sld:Fill>
@@ -134,10 +135,10 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <!--                        <procedure>urn:vast:sensor:plumeModel</procedure>-->
+<!--                        <procedure>urn:vast:sensor:plumeModel</procedure>-->
                         <observedProperty>WEATHER_OBSERVABLES</observedProperty>
                         <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
-                        <!--                        <resultModel>swe:DataValueType</resultModel>-->
+<!--                        <resultModel>swe:DataValueType</resultModel>-->
                      </GetObservation>
                   </request>
                </OWSDataProvider>
