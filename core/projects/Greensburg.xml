@@ -23,7 +23,7 @@
             <name>World View</name>
             <time>
                <TimeExtent>
-                  <baseTime>2007-05-05T01:00:00Z</baseTime>
+                  <baseTime>2009-05-05T01:00:00Z</baseTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
                   <stepTime>60</stepTime>
