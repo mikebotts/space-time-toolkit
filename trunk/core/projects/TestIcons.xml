@@ -127,7 +127,7 @@
                                        <CategoryLookUpTable>
                                           <ogc:PropertyName>stationData/type</ogc:PropertyName>
                                           <Mapping key="NUKE">icons/radio1.png</Mapping>
-                                          <Mapping key="CHEM">icons/chemical1.png</Mapping>
+                                          <Mapping key="CHEM">icons/chemical1-green.png</Mapping>
                                           <Mapping key="CAM">icons/video.png</Mapping>
                                           <Default>icons/thermo1.png</Default>
                                        </CategoryLookUpTable>
