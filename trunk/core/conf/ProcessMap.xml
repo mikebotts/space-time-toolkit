@@ -6,6 +6,16 @@
    </ProcessPackage>
    
    <Process>
+      <uri>urn:ogc:def:process:gammaSpecific:1.0</uri>
+      <class>org.sensorML.process.GammaSpecific_Process</class>
+   </Process>
+   
+   <Process>
+      <uri>urn:ogc:def:process:XMPP:1.0</uri>
+      <class>org.sensorML.process.XMPP_Process</class>
+   </Process>
+   
+   <Process>
       <uri>urn:vast:def:process:equationSolver:1.0</uri>
       <class>org.sensorML.process.EquationSolver_Process</class>
    </Process>
