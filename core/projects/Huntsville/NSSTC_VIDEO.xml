@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="NSSTC_VIDEO">
+      <name>NSSTC Video Cams</name>
+      <member>
+         <DataItem>
+            <name>NSSTC Camera 1 Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="16">
+                  <name>NSSTC Camera Lookrays Process Chain</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSvideoProcessChainLRWithGeo2Cam1.xml#PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NSSTC Video Camera 1 - Streaming</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="1">
+                  <name>Video Camera Streaming SOS</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSvideoProcessChainWithGeo2Cam1.xml#PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>video/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>video/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                     <sld:RasterPoolSize>3</sld:RasterPoolSize>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>                        
+            <style>
+               <sld:GridMeshSymbolizer id="GRID_MESH" enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member>
+         <DataItem>
+            <name>NSSTC Camera 2 Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="16">
+                  <name>NSSTC Camera Lookrays Process Chain</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSvideoProcessChainLRWithGeo2Cam2.xml#PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NSSTC Video Camera 2 - Streaming</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="1">
+                  <name>Video Camera Streaming SOS</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSvideoProcessChainWithGeo2Cam2.xml#PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>video/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>video/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>video/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                     <sld:RasterPoolSize>3</sld:RasterPoolSize>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>                        
+            <style>
+               <sld:GridMeshSymbolizer id="GRID_MESH" enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+   </DataList>
+</STTProject>
