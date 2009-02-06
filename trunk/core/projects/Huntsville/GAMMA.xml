@@ -31,7 +31,7 @@
                                  <sld:CssParameter name="geometry-y">
                                     <ogc:PropertyName>alert/location/latitude</ogc:PropertyName>
                                  </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
+                                 <sld:CssParameter name="geometry-z">
                                     <ogc:PropertyName>alert/location/altitude</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
@@ -41,8 +41,8 @@
                                     <sld:OnlineResource>
                                        <CategoryLookUpTable>
                                           <ogc:PropertyName>alert/AlertType</ogc:PropertyName>
-                                          <Mapping key="HI_ALARM">icons/radioactiveAlert.png</Mapping>
-                                          <Default>icons/radioactiveNormal.png</Default>
+                                          <Mapping key="HI_ALARM">icons/radio1.png</Mapping>
+                                          <Default>icons/radio1.png</Default>
                                        </CategoryLookUpTable>
                                     </sld:OnlineResource>
                                  </sld:ExternalGraphic>
@@ -66,7 +66,7 @@
                                  <sld:CssParameter name="geometry-y">
                                     <ogc:PropertyName>alert/location/latitude</ogc:PropertyName>
                                  </sld:CssParameter>
-                                 <sld:CssParameter name="geometry-y">
+                                 <sld:CssParameter name="geometry-z">
                                     <ogc:PropertyName>alert/location/altitude</ogc:PropertyName>
                                  </sld:CssParameter>
                               </sld:Geometry>
@@ -74,16 +74,13 @@
                                  <ogc:PropertyName>toDisplay</ogc:PropertyName>
                               </sld:Label>
                               <sld:Fill>
-                                 <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                                 <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
                               </sld:Fill>
                            </sld:TextSymbolizer>
                         </style>
                      </DataItem>
                   </member>
                   <member>
-                     <DataList>
-                        <name>Chart Folder</name>
-                        <member>
                            <ChartScene>
                               <name>Gamma Observation Chart</name>
                               <contents>
@@ -92,29 +89,19 @@
                                        <DataItem>
                                           <name>Gamma SOS Data</name>
                                           <dataProvider>
-                                          <OWSDataProvider id="WX_SOS">
+               <SensorMLProvider>
                   <name>Gamma SOS</name>
-                  <layerId>WEATHER_DATA</layerId>
-                  <request postUrl="http://naauah2:8080/vast/gamma">
-                     <GetObservation service="SOS" version="1.0">
-                        <offering>GAMMA2070_DATA</offering>
-                        <eventTime>
-                           <ogc:TM_During>
-                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2009-01-19T05:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2009-01-31T06:00:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:TM_During>
-                        </eventTime>
-                        <!--                        <procedure>urn:vast:sensor:plumeModel</procedure>
-                        <observedProperty>WEATHER_OBSERVABLES</observedProperty>-->
-                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
-                        <!--                        <resultModel>swe:DataValueType</resultModel>-->
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
-                                          </dataProvider>
+                  <timeExtent>
+                  <TimeExtent>
+                     <baseTime>2009-02-05T00:00:02Z</baseTime>
+                     <leadTime>151000</leadTime>
+                     <lagTime>0</lagTime>
+                     <stepTime>0</stepTime>
+                  </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SOSGAMMA.xml#GAMMA"/>
+               </SensorMLProvider>
+            </dataProvider>
                                           <style>
                                              <sld:LineSymbolizer enabled="true">
                                                 <sld:Geometry>
@@ -122,10 +109,10 @@
                                                       <ogc:PropertyName>/</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>gammaObs/time</ogc:PropertyName>
+                                                      <ogc:PropertyName>data/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>gammaObs/averageRadiation</ogc:PropertyName>
+                                                      <ogc:PropertyName>data/averageRadiation</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Stroke>
@@ -138,10 +125,10 @@
                                              <sld:PointSymbolizer enabled="true">
                                                 <sld:Geometry>
                                                    <sld:CssParameter name="geometry-x">
-                                                      <ogc:PropertyName>gammaObs/time</ogc:PropertyName>
+                                                      <ogc:PropertyName>data/time</ogc:PropertyName>
                                                    </sld:CssParameter>
                                                    <sld:CssParameter name="geometry-y">
-                                                      <ogc:PropertyName>gammaObs/averageRadiation</ogc:PropertyName>
+                                                      <ogc:PropertyName>data/averageRadiation</ogc:PropertyName>
                                                    </sld:CssParameter>                                       
                                                 </sld:Geometry>
                                                 <sld:Graphic>
@@ -160,8 +147,6 @@
                                  </DataList>
                               </contents>
                            </ChartScene>
-                        </member>
-                     </DataList>
                   </member>
    </DataList>
 </STTProject>
