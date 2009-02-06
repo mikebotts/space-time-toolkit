@@ -160,12 +160,12 @@
                   </swe:field>
                   <swe:field name="login">
                      <swe:Category>
-                     	<swe:value>stt</swe:value>
+                     	<swe:value>stt2</swe:value>
                      </swe:Category>
                   </swe:field>
                   <swe:field name="serverPassword">
                      <swe:Category>
-                     	<swe:value>stt</swe:value>
+                     	<swe:value>stt2</swe:value>
                      </swe:Category>
                  </swe:field>
                   <swe:field name="roomPassword">
