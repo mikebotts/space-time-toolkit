@@ -33,6 +33,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.text.NumberFormat;
 import java.util.Hashtable;
+
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
@@ -40,8 +41,22 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
+import org.vast.stt.project.chart.ChartScene;
 import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.style.*;
+import org.vast.stt.style.DataStyler;
+import org.vast.stt.style.GridBorderStyler;
+import org.vast.stt.style.GridFillStyler;
+import org.vast.stt.style.GridMeshStyler;
+import org.vast.stt.style.LabelStyler;
+import org.vast.stt.style.LinePointGraphic;
+import org.vast.stt.style.LineStyler;
+import org.vast.stt.style.PointGraphic;
+import org.vast.stt.style.PointStyler;
+import org.vast.stt.style.PolygonStyler;
+import org.vast.stt.style.RasterStyler;
+import org.vast.stt.style.StylerVisitor;
+import org.vast.stt.style.TextureStyler;
+import org.vast.stt.style.VectorStyler;
 
 
 /**
@@ -61,12 +76,12 @@ import org.vast.stt.style.*;
  */
 public class XYPlotBuilder implements StylerVisitor
 {
+	protected ChartScene scene; 
     protected XYPlot plot;
     protected int datasetCount = 0;
     protected int rangeAxisCount = 0;
     protected Hashtable<DataItem, Integer> axisTable;
     protected DataItem currentItem;
-    
     
     public XYPlotBuilder()
     {
@@ -86,18 +101,23 @@ public class XYPlotBuilder implements StylerVisitor
         String axisName = item.getName();
         NumberAxis rangeAxis = new NumberAxis(axisName);
         rangeAxis.setAutoRangeIncludesZero(false);
+        rangeAxis.setAutoRange(false);
         NumberFormat format = NumberFormat.getNumberInstance();
         format.setMaximumFractionDigits(2);
         rangeAxis.setNumberFormatOverride(format);
+        rangeAxis.setLowerBound(scene.getRangeMin());
+        rangeAxis.setUpperBound(scene.getRangeMax());
         plot.setRangeAxis(rangeAxisCount, rangeAxis);
         axisTable.put(item, rangeAxisCount);
         rangeAxisCount++;
     }
     
     
-    public void createPlot()
+    public void createPlot(ChartScene scene)
     {
-        datasetCount = 0;
+    	this.scene = scene; //  scene contains the axis info, so passing it in here for now
+    	
+    	datasetCount = 0;
         rangeAxisCount = 0;
         currentItem = null;
         axisTable.clear();
@@ -110,19 +130,24 @@ public class XYPlotBuilder implements StylerVisitor
         String axisName = "Time (s)";
         NumberAxis domainAxis = new NumberAxis(axisName);
         domainAxis.setAutoRangeIncludesZero(false);
+        domainAxis.setAutoRange(false);
         domainAxis.setNumberFormatOverride(new DateFormat());
         domainAxis.setTickLabelInsets(new RectangleInsets(0, 30, 0, 30));
+        domainAxis.setLowerBound(scene.getDomainMin());
+        domainAxis.setUpperBound(scene.getDomainMax());
         plot.setDomainAxis(datasetCount, domainAxis);
     }
     
     
     protected void addDataSet(XYDataset dataset, XYItemRenderer renderer)
     {
-        XYPlot plot = (XYPlot)this.plot;
+        //XYPlot plot = (XYPlot)this.plot;
         plot.setRenderer(datasetCount, renderer);
         plot.setDataset(datasetCount, dataset);        
         int rangeAxisID = axisTable.get(currentItem);
         plot.mapDatasetToRangeAxis(datasetCount, rangeAxisID);
+//    	System.err.println("Range: " + plot.getRangeAxis().getRange().getLength());
+//    	System.err.println("Domain: " + plot.getDomainAxis().getRange().getLength());
         datasetCount++;
     }
     
