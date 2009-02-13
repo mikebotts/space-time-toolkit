@@ -100,7 +100,7 @@ public class JFreeChartRenderer extends ChartSceneRenderer implements PaintListe
             return;
         
         // initialize plot builder
-        plotBuilder.createPlot();
+        plotBuilder.createPlot(sc);
         
         // draw all items
         ChartScene scene = (ChartScene)sc;
