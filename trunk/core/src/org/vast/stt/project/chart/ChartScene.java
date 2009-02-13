@@ -45,16 +45,54 @@ import org.vast.stt.style.DataStyler;
  */
 public class ChartScene extends Scene
 {
-    
+    //  variables added for finer control of axis behavior
+    protected boolean domainAxisAutoRange = false;
+    protected boolean rangeAxisAutoRange = false;
+    protected double rangeMin;
+	protected double rangeMax;
+    protected double domainMin;
+    protected double domainMax;
+
     public ChartScene()
     {
         super();
     }
-
     
     @Override
     protected void prepareStyler(DataStyler styler)
     {
        
-    }	
+    }
+
+    public double getRangeMin() {
+		return rangeMin;
+	}
+
+	public void setRangeMin(double val) {
+		this.rangeMin = val;
+	}
+
+	public double getRangeMax() {
+		return rangeMax;
+	}
+
+	public void setRangeMax(double val) {
+		this.rangeMax = val;
+	}
+
+	public double getDomainMin() {
+		return domainMin;
+	}
+
+	public void setDomainMin(double val) {
+		this.domainMin = val;
+	}
+
+	public double getDomainMax() {
+		return domainMax;
+	}
+
+	public void setDomainMax(double val) {
+		this.domainMax = val;
+	}	
 }

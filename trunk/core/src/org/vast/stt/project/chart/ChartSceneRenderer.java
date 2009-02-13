@@ -44,5 +44,4 @@ import org.vast.stt.renderer.SceneRenderer;
  */
 public abstract class ChartSceneRenderer extends SceneRenderer<ChartScene>
 {
-
 }

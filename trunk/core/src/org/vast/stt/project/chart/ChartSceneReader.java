@@ -75,22 +75,45 @@ public class ChartSceneReader extends XMLReader implements XMLModuleReader
         // set scene properties
         scene.setName(dom.getElementValue(sceneElt, "name"));
         
-        // read time settings
-        //Element timeSettingsElt = dom.getElement(sceneElt, "time/TimeSettings");
-        //TimeSettings timeSettings = readTimeSettings(dom, timeSettingsElt);
-        //scene.setTimeSettings(timeSettings);
-        
-        // read view settings
-        //Element viewSettingsElt = dom.getElement(sceneElt, "view/ViewSettings");
-        //ViewSettings viewSettings = readViewSettings(dom, viewSettingsElt);
-        //scene.setViewSettings(viewSettings);
-        
         // read data item list
         Element listElt = dom.getElement(sceneElt, "contents/DataList");
         dataTreeReader.setParentScene(scene);
         DataTree dataTree = dataTreeReader.readDataTree(dom, listElt);
         scene.setDataTree(dataTree);
         
+        //  read domainAxis
+        Element domainElt = dom.getElement(sceneElt, "domainAxis");
+        if(domainElt != null) {
+        	double [] domainMinMax = readAxisElement(dom, domainElt);
+        	scene.setDomainMin(domainMinMax[0]);
+        	scene.setDomainMax(domainMinMax[1]);
+        }
+        //  else
+        //     set autoDomain
+        
+        //  read rangeAxis
+        Element rangeElt = dom.getElement(sceneElt, "rangeAxis");
+        if(rangeElt != null) {
+        	double [] rangeMinMax = readAxisElement(dom, rangeElt);
+        	scene.setRangeMin(rangeMinMax[0]);
+        	scene.setRangeMax(rangeMinMax[1]);
+        }
+        //  else
+        //     set autoRange
+        
         return scene;
+    }
+    
+    public double[] readAxisElement(DOMHelper dom, Element axisElt){
+    	Element rangeElt = dom.getElement(axisElt, "Range");
+    	Element minElt = dom.getElement(rangeElt, "min");
+    	Element maxElt = dom.getElement(rangeElt, "max");
+    	
+        String minText = dom.getElementValue(minElt);
+        String maxText = dom.getElementValue(maxElt);
+        double min = Double.parseDouble(minText);
+        double max = Double.parseDouble(maxText);
+        
+        return new double[] {min, max};
     }
 }
