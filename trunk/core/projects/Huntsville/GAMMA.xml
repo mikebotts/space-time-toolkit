@@ -4,7 +4,7 @@
    xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
    xmlns:swe="http://www.opengis.net/swe">
    <DataList id="GAMMA">
-      <name>Gamma Detector SAS</name>
+      <name>Gamma Radiation Detector</name>
       <member visible="false">
          <DataItem>
             <name>Gamma Detector Real-Time Alert</name>

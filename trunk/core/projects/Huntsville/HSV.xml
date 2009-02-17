@@ -48,6 +48,7 @@
                   <member xlink:href="./DopplerRadar.xml#Radar"/> 
                   <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
                   <member xlink:href="./GAMMA.xml#GAMMA"/> 
+                  <member xlink:href="./WEATHER_STATION.xml#WEATHER_STATION"/>  
                </DataList>
             </contents>
          </Scene>
