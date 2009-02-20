@@ -38,31 +38,25 @@
                         <swe:uom code="s"/>
                      </swe:Time>
                </swe:output>
-               <swe:output name="alert">
+                 <swe:output name="alert">
                  <swe:DataRecord>
-                    <swe:field name="location">
-                       <swe:Vector referenceFrame="urn:ogc:def:crs:ESPG::4329">
-           				   <swe:coordinate name="longitude">
-           				      <swe:Quantity>
-            	 			      <swe:uom code="deg"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-            			   <swe:coordinate name="latitude">
-            			      <swe:Quantity>
-            			         <swe:uom code="deg"/>
-           				      </swe:Quantity>
-            			   </swe:coordinate>
-           				   <swe:coordinate name="altitude">
-           				      <swe:Quantity>
-          				         <swe:uom code="m"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-           			  </swe:Vector>
-         		    </swe:field>
+           			<swe:field name="longitude">
+           			  <swe:Quantity>
+            	 	      <swe:uom code="deg"/>
+            		  </swe:Quantity>
+           			</swe:field>
+            		<swe:field name="latitude">
+            		  <swe:Quantity>
+            		      <swe:uom code="deg"/>
+           			  </swe:Quantity>
+            		</swe:field>
+           			<swe:field name="altitude">
+           			  <swe:Quantity>
+          			      <swe:uom code="m"/>
+            		  </swe:Quantity>
+           			</swe:field>
         			<swe:field name="AverageGammaDose">
-        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAveDose">
-           			    <swe:uom code="A/kg"/>
-          			  </swe:Quantity>
+        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAverageDose"/>
         		    </swe:field>
           			<swe:field name="AlertType">
         			   <swe:Category definition="urn:ogc:def:property:OGC:ThresholdAlertType"/>
@@ -71,7 +65,7 @@
        		  </swe:output>
        		  <swe:output name="toDisplay">
                  <swe:Category/>
-               </swe:output>
+              </swe:output>
             </sml:OutputList>
          </sml:outputs>
          <sml:components>
@@ -113,29 +107,23 @@
                </swe:output>
                <swe:output name="alert">
                  <swe:DataRecord>
-                    <swe:field name="location">
-                       <swe:Vector referenceFrame="urn:ogc:def:crs:ESPG::4329">
-           				   <swe:coordinate name="longitude">
-           				      <swe:Quantity>
-            	 			      <swe:uom code="deg"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-            			   <swe:coordinate name="latitude">
-            			      <swe:Quantity>
-            			         <swe:uom code="deg"/>
-           				      </swe:Quantity>
-            			   </swe:coordinate>
-           				   <swe:coordinate name="altitude">
-           				      <swe:Quantity>
-          				         <swe:uom code="m"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-           			  </swe:Vector>
-         		    </swe:field>
+           			<swe:field name="longitude">
+           			  <swe:Quantity>
+            	 	      <swe:uom code="deg"/>
+            		  </swe:Quantity>
+           			</swe:field>
+            		<swe:field name="latitude">
+            		  <swe:Quantity>
+            		      <swe:uom code="deg"/>
+           			  </swe:Quantity>
+            		</swe:field>
+           			<swe:field name="altitude">
+           			  <swe:Quantity>
+          			      <swe:uom code="m"/>
+            		  </swe:Quantity>
+           			</swe:field>
         			<swe:field name="AverageGammaDose">
-        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAveDose">
-           			    <swe:uom code="A/kg"/>
-          			  </swe:Quantity>
+        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAverageDose"/>
         		    </swe:field>
           			<swe:field name="AlertType">
         			   <swe:Category definition="urn:ogc:def:property:OGC:ThresholdAlertType"/>
@@ -198,31 +186,30 @@
                   <sml:ProcessModel>
                      <sml:inputs>
             <sml:InputList>
+               <swe:input name="timestamp">
+                     <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                        <swe:uom code="s"/>
+                     </swe:Time>
+               </swe:input>
                  <sml:input name="alert">
                  <swe:DataRecord>
-                    <swe:field name="location">
-                       <swe:Vector referenceFrame="urn:ogc:def:crs:ESPG::4329">
-           				   <swe:coordinate name="longitude">
-           				      <swe:Quantity>
-            	 			      <swe:uom code="deg"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-            			   <swe:coordinate name="latitude">
-            			      <swe:Quantity>
-            			         <swe:uom code="deg"/>
-           				      </swe:Quantity>
-            			   </swe:coordinate>
-           				   <swe:coordinate name="altitude">
-           				      <swe:Quantity>
-          				         <swe:uom code="m"/>
-            			      </swe:Quantity>
-           				   </swe:coordinate>
-           			  </swe:Vector>
-         		    </swe:field>
+           			<swe:field name="longitude">
+           			  <swe:Quantity>
+            	 	      <swe:uom code="deg"/>
+            		  </swe:Quantity>
+           			</swe:field>
+            		<swe:field name="latitude">
+            		  <swe:Quantity>
+            		      <swe:uom code="deg"/>
+           			  </swe:Quantity>
+            		</swe:field>
+           			<swe:field name="altitude">
+           			  <swe:Quantity>
+          			      <swe:uom code="m"/>
+            		  </swe:Quantity>
+           			</swe:field>
         			<swe:field name="AverageGammaDose">
-        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAveDose">
-           			    <swe:uom code="A/kg"/>
-          			  </swe:Quantity>
+        		      <swe:Quantity definition="urn:ogc:def:property:OGC:gammaAverageDose"/>
         		    </swe:field>
           			<swe:field name="AlertType">
         			   <swe:Category definition="urn:ogc:def:property:OGC:ThresholdAlertType"/>
@@ -266,6 +253,12 @@
           </sml:connection>
           <sml:connection>
               <sml:Link>
+                 <sml:source ref="XMPPGamma/outputs/timestamp"/>
+                 <sml:destination ref="toDisplay/inputs/timestamp"/>
+              </sml:Link>
+          </sml:connection>
+          <sml:connection>
+              <sml:Link>
                  <sml:source ref="XMPPGamma/outputs/alert"/>
                  <sml:destination ref="toDisplay/inputs/alert"/>
               </sml:Link>
@@ -274,12 +267,6 @@
               <sml:Link>
                  <sml:source ref="toDisplay/outputs/toDisplay"/>
                  <sml:destination ref="this/outputs/toDisplay"/>
-              </sml:Link>
-          </sml:connection>
-          <sml:connection>
-              <sml:Link>
-                 <sml:source ref="XMPPGamma/outputs/alert"/>
-                 <sml:destination ref="this/outputs/alert"/>
               </sml:Link>
           </sml:connection>
       </sml:ConnectionList>
