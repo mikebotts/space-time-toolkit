@@ -31,6 +31,8 @@ import java.awt.image.renderable.ParameterBlock;
 import java.net.URL;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
@@ -39,8 +41,11 @@ import javax.media.jai.RenderedOp;
 import org.vast.ows.sld.functions.StringIdProvider;
 import org.vast.stt.style.RasterTileGraphic.BufferType;
 import org.vast.util.MessageSystem;
+
+import com.sun.media.jai.codec.JPEGDecodeParam;
 import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.PNGDecodeParam;
+import com.sun.media.jai.codec.TIFFDecodeParam;
 
 
 /**
@@ -166,6 +171,21 @@ public class IconManager implements StringIdProvider
             pb.add(pngParams);
         }
         
+        // add PNG params
+        if (icon.url.endsWith(".tif") || icon.url.endsWith(".tiff"))
+        {
+            TIFFDecodeParam tiffParams = new TIFFDecodeParam();
+            tiffParams.setDecodePaletteAsShorts(true);
+            pb.add(tiffParams);
+        }
+        
+        // add JPEG params
+        if (icon.url.endsWith(".jpg") || icon.url.endsWith(".jpeg"))
+        {
+            JPEGDecodeParam jpegParams = new JPEGDecodeParam();
+            pb.add(jpegParams);
+        }
+        
         // decode image using JAI
         RenderedOp rop = JAI.create("stream", pb);
         
@@ -175,6 +195,7 @@ public class IconManager implements StringIdProvider
 
             // put data buffer in byte array
             byte[] data = ((DataBufferByte)renderedImage.getData().getDataBuffer()).getData();
+
             icon.data = ByteBuffer.wrap(data);
             icon.width = renderedImage.getWidth();
             icon.height = renderedImage.getHeight();
