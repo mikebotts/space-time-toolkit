@@ -78,7 +78,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.465m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.465m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
@@ -172,7 +172,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.549m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.549m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -186,7 +186,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.655m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.655m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -200,7 +200,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.702m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.702m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -214,7 +214,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.743m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.743m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -228,7 +228,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.825m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.825m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -242,7 +242,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.867m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.867m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -256,7 +256,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.907m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.907m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -270,7 +270,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">0.948m</value>
+                  <value process="sosScan" path="sosOptions/observables">P0.948m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -284,7 +284,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.619m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.619m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -298,7 +298,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.675m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.675m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -312,7 +312,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.727m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.727m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -326,7 +326,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.778m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.778m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -340,7 +340,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.832m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.832m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -354,7 +354,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.881m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.881m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -368,7 +368,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.932m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.932m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -382,7 +382,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">1.982m</value>
+                  <value process="sosScan" path="sosOptions/observables">P1.982m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -396,7 +396,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.032m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.032m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -410,7 +410,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.081m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.081m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -424,7 +424,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.130m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.130m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -438,7 +438,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.179m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.179m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -452,7 +452,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.229m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.229m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -466,7 +466,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.279m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.279m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -481,7 +481,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.328m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.328m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -495,7 +495,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">2.378m</value>
+                  <value process="sosScan" path="sosOptions/observables">P2.378m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -509,7 +509,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.134m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.134m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -523,7 +523,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.296m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.296m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -537,7 +537,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.448m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.448m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -551,7 +551,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.609m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.609m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -565,7 +565,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.760m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.760m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -579,7 +579,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">3.922m</value>
+                  <value process="sosScan" path="sosOptions/observables">P3.922m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -593,7 +593,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.086m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.086m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -607,7 +607,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.185m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.185m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -621,7 +621,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.418m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.418m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -635,7 +635,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.555m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.555m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -649,7 +649,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.713m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.713m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -663,7 +663,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">4.869m</value>
+                  <value process="sosScan" path="sosOptions/observables">P4.869m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -677,7 +677,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">5.018m</value>
+                  <value process="sosScan" path="sosOptions/observables">P5.018m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -691,7 +691,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">5.174m</value>
+                  <value process="sosScan" path="sosOptions/observables">P5.174m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -705,7 +705,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">5.323m</value>
+                  <value process="sosScan" path="sosOptions/observables">P5.323m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -719,7 +719,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">5.413m</value>
+                  <value process="sosScan" path="sosOptions/observables">P5.413m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -733,7 +733,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">8.537m</value>
+                  <value process="sosScan" path="sosOptions/observables">P8.537m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -747,7 +747,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">9.722m</value>
+                  <value process="sosScan" path="sosOptions/observables">P9.722m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -761,7 +761,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10.507m</value>
+                  <value process="sosScan" path="sosOptions/observables">P10.507m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -775,7 +775,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">11.012m</value>
+                  <value process="sosScan" path="sosOptions/observables">P11.012m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -789,7 +789,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">11.986m</value>
+                  <value process="sosScan" path="sosOptions/observables">P11.986m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -803,7 +803,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">12.901m</value>
+                  <value process="sosScan" path="sosOptions/observables">P12.901m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -817,7 +817,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">13.270m</value>
+                  <value process="sosScan" path="sosOptions/observables">P13.270m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -831,7 +831,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">13.808m</value>
+                  <value process="sosScan" path="sosOptions/observables">P13.808m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
@@ -845,7 +845,7 @@
                   <name>MAS Data Process Chain</name>
                   <timeExtent xlink:href="#MAS_TIME"/>
                   <process xlink:href="../process/MAS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">14.240m</value>
+                  <value process="sosScan" path="sosOptions/observables">P14.240m</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#MAS_TEXTURE"/>
