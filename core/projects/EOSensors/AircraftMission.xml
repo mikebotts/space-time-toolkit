@@ -6,7 +6,7 @@
    <DataList id="AircraftMission">
       <name>Aircrafts</name>
       <member xlink:href="./AMPRmission.xml#AMPRmission"/>
-      <member xlink:href="./MASmission.xml#MASmission"/>
+      <!-- <member xlink:href="./MASmission.xml#MASmission"/>  
       <member>
          <DataItem>
             <name>Aerosonde</name>
@@ -39,7 +39,7 @@
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
-                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <responseFormat>application/com-xml</responseFormat>
                      </GetObservation>
                   </request>
                </OWSDataProvider>
@@ -97,6 +97,6 @@
                </sld:LineSymbolizer>
             </style>
          </DataItem>
-      </member>
+      </member> -->
    </DataList>
 </STTProject>

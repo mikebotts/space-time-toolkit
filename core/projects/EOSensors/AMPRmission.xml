@@ -78,7 +78,7 @@
                   <name>AMPR Data Process Chain</name>
                   <timeExtent xlink:href="#AMPR_TIME"/>
                   <process xlink:href="../process/AMPR_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">10GHz</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_10GHz</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery">
@@ -172,7 +172,7 @@
                   <name>AMPR Data Process Chain</name>
                   <timeExtent xlink:href="#AMPR_TIME"/>
                   <process xlink:href="../process/AMPR_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">19GHz</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_19GHz</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
@@ -186,7 +186,7 @@
                   <name>AMPR Data Process Chain</name>
                   <timeExtent xlink:href="#AMPR_TIME"/>
                   <process xlink:href="../process/AMPR_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">37GHz</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_37GHz</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
@@ -200,7 +200,7 @@
                   <name>AMPR Data Process Chain</name>
                   <timeExtent xlink:href="#AMPR_TIME"/>
                   <process xlink:href="../process/AMPR_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">85GHz</value>
+                  <value process="sosScan" path="sosOptions/observables">BAND_85GHz</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Imagery" xlink:href="#AMPR_TEXTURE"/>
