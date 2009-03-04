@@ -1,0 +1,1162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="SatelliteObs2">
+      <name>Satellite Tracks and Footprints</name>
+      <member visible="false">
+         <DataItem>
+            <name>HYPERION Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>HYPERION Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="HYPERION_TIME">
+                        <baseTime>2005-08-28T16:00:00</baseTime>
+                        <leadTime>600</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./HYPERION_Process.xml#LOOKRAY_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>EO1 Hyperion Footprint at Nadir pointing</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>EO-1 Hyperion Footprints</name>
+                  <timeExtent xlink:href="#HYPERION_TIME"/>
+                  <layerId>EO1-Hyperion-NADIR</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>EO1-Hyperion-NADIR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>EO1 Hyperion Potential Pointing Footprint</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>EO1 Hyperion Potential Pointing Footprint</name>
+                  <timeExtent xlink:href="#HYPERION_TIME"/>
+                  <layerId>EO1-Hyperion-Potential</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>EO1-Hyperion-Potential</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TMI Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="TMI_TIME">
+                        <baseTime>2007-05-03T02:00:00</baseTime>
+                        <leadTime>600</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./TMI_Process.xml#LOOKRAY_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>TMI Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>TRMM TMI Footprints</name>
+                  <timeExtent xlink:href="#TMI_TIME"/>
+                  <layerId>TRMM-TMI</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>TRMM-TMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>PR Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>PR Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="PR_TIME">
+                        <baseTime>2007-05-03T02:00:00</baseTime>
+                        <leadTime>600</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./PR_Process.xml#LOOKRAY_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>PR Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>TRMM PR Footprints</name>
+                  <timeExtent xlink:href="#PR_TIME"/>
+                  <layerId>TRMM-PR</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>TRMM-PR</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>AMSR-E Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>AMSR-E Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="AMSRE_TIME">
+                        <baseTime>2007-04-30T23:43:00</baseTime>
+                        <leadTime>900</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./AMSR-E_Process.xml#LOOKRAY_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>AMSR-E Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>AQUA AMSRE Footprints</name>
+                  <timeExtent xlink:href="#AMSRE_TIME"/>
+                  <layerId>AQUA-AMSRE</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>AQUA-AMSRE</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MODIS on AQUA Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>AQUA MODIS Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="AQUA_MODIS_TIME">
+                        <baseTime>2007-04-30T23:43:00</baseTime>
+                        <leadTime>900</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./MODIS_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/MODIS_generic/tle" path="tleDataUrl"
+                  >aqua.txt</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MODIS on AQUA Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>AQUA MODIS Footprints</name>
+                  <timeExtent xlink:href="#AQUA_MODIS_TIME"/>
+                  <layerId>AQUA-MODIS</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>AQUA-MODIS</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MODIS on TERRA Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>TERRA MODIS Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="TERRA_MODIS_TIME">
+                        <baseTime>2007-04-29T23:43:00</baseTime>
+                        <leadTime>900</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./MODIS_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/MODIS_generic/tle" path="tleDataUrl"
+                  >terra.txt</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>MODIS on TERRA Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>TERRA MODIS Footprints</name>
+                  <timeExtent xlink:href="#TERRA_MODIS_TIME"/>
+                  <layerId>TERRA-MODIS</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>TERRA-MODIS</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F13 Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="SSMIF13_TIME">
+                        <baseTime>2006-04-30T11:23:00</baseTime>
+                        <leadTime>1800</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="../process/SSMI_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F13 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>DMSP-F13 SSMI Footprints</name>
+                  <timeExtent xlink:href="#SSMIF13_TIME"/>
+                  <layerId>DMSP-F13-SSMI</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>DMSP-F13-SSMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F14 Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="SSMIF14_TIME">
+                        <baseTime>2008-05-02T14:23:00</baseTime>
+                        <leadTime>1800</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SSMI_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f14.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F14 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>DMSP-F14 SSMI Footprints</name>
+                  <timeExtent xlink:href="#SSMIF14_TIME"/>
+                  <layerId>DMSP-F14-SSMI</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>DMSP-F14-SSMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F15 Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="SSMIF15_TIME">
+                        <baseTime>2006-04-30T11:23:00</baseTime>
+                        <leadTime>1800</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./SSMI_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f15.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI on DMSP-F15 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>DMSP-F15 SSMI Footprints</name>
+                  <timeExtent xlink:href="#SSMIF15_TIME"/>
+                  <layerId>DMSP-F15-SSMI</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>DMSP-F15-SSMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member xlink:href="./OtherSwaths.xml#FOOTPRINT"/>
+   </DataList>
+</STTProject>
