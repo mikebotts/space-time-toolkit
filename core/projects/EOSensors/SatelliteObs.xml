@@ -7,11 +7,11 @@
       <name>Satellites</name>
       <member xlink:href="./TMIsensor.xml#TMIsensor"/>
       <member xlink:href="./AMSREsensor.xml#AMSREsensor"/>
-      <member xlink:href="./LISsensor.xml#LISsensor"/>
+   <!--   <member xlink:href="./LISsensor.xml#LISsensor"/>  -->
    <!--   <member xlink:href="./PRsensor.xml#PRsensor"/>   -->
-      <member xlink:href="./SSMIsensor.xml#SSMIsensor"/>
+    <!--  <member xlink:href="./SSMIsensor.xml#SSMIsensor"/> -->
    <!--   <member xlink:href="./HYPERIONsensor4.xml#HYPERIONsensor"/> -->
-      <member xlink:href="./HYPERIONsensor4.xml#HYPERIONsensor"/> 
-      <member xlink:href="./otherUnfinished.xml#otherUnfinished"/>
+   <!--   <member xlink:href="./HYPERIONsensor4.xml#HYPERIONsensor"/> -->
+   <!--   <member xlink:href="./otherUnfinished.xml#otherUnfinished"/> -->
    </DataList>
 </STTProject>
