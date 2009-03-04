@@ -41,6 +41,7 @@
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
                   <member xlink:href="./EOSensors/AircraftMission.xml#AircraftMission"/>
                   <member xlink:href="./EOSensors/SatelliteObs.xml#SatelliteObs"/>
+                  <member xlink:href="./EOSensors/SatelliteNadirAndFootprint.xml#SatelliteObs2"/> 
      <!--             <member visible="false">
                      <DataItem>
                         <name>MODIS Lookrays</name>
@@ -162,7 +163,6 @@
                         </style>
                      </DataItem>
                   </member>
-
                   <member visible="false">
                      <DataItem>
                         <name>HYPERION Lookrays</name>
@@ -458,8 +458,7 @@
                            </sld:GridFillSymbolizer>
                         </style>
                      </DataItem>
-                  </member>  -->
-                                                                                                                                                                                                                                    
+                  </member>  -->                                                                                                                                                                                                                            
                </DataList>
             </contents>
          </Scene>
