@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject
+   xmlns="http://vast.uah.edu/stt/v3"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc"
+   xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe"
+   xmlns:sldx="http://vast.uah.edu/sldx"
+   xsi:schemaLocation="http://vast.uah.edu/stt/v3 ./ProjectFile.xsd">
+   <!-- Global metadata about the project -->
+   <Identification>
+      <name>MVCO Quick Demo</name>
+      <author>Tony Cook</author>
+      <dateCreated>2009-03-11</dateCreated>
+      <description></description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>World View</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2009-05-05T01:00:00Z</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-1.232 0.7226 10</cameraPos>
+                  <targetPos>-1.232 0.7226 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>0.01</orthoWidth>
+                  <orthoHeight>0.01</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>MVCO Quick Demo</name>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/>
+                  <member>
+                     <DataItem>
+                        <name>MVCO SOS Text</name>
+                        <dataProvider xlink:href="#MVCO_PROV_LATEST"/>
+                        <style> 
+                           <sld:TextSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>adcpObs/sysInfo/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>adcpObs/sysInfo/lat</ogc:PropertyName>
+                                 </sld:CssParameter>  
+                              </sld:Geometry>
+                              <sld:Label>
+                                 <ogc:PropertyName>adcpObs/velocityObsChainOutputs/waveHeightAll</ogc:PropertyName>
+                              </sld:Label>
+                              <sld:Fill>
+                                 <sld:CssParameter name="fill">#dddddd</sld:CssParameter>
+                              </sld:Fill>
+                           </sld:TextSymbolizer>
+                        </style>
+                     </DataItem>
+                  </member>
+                  <member>
+                     <ChartScene>
+                        <name>MVCO ADCP Measurements Graph</name>
+                        <domainAxis>
+                           <name></name>
+                           <Range>
+                              <min>1208710800</min>
+                              <max>1208970000</max>
+                           </Range>
+                        </domainAxis>
+                        <rangeAxis>
+                           <name>Pressure</name>
+                           <Range>
+                              <min>1000</min>
+                              <max>1150</max>
+                           </Range>
+                        </rangeAxis>
+                        <contents>
+                           <DataList>
+                              <member visible="true">
+                                 <DataItem>
+                                    <name>MVCO ADCP SOS</name>
+                                    <dataProvider xlink:href="#MVCO_PROV"/>
+                                    <style>
+                                       <sld:LineSymbolizer enabled="true">
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-breaks">
+                                                <ogc:PropertyName>/</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>adcpObs/sysInfo/time</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>adcpObs/velocityObsChainOutputs/waveHeightAll</ogc:PropertyName>
+                                             </sld:CssParameter>                                       
+                                          </sld:Geometry>
+                                          <sld:Stroke>
+                                             <sld:CssParameter name="stroke">#3333AA</sld:CssParameter>
+                                             <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                                          </sld:Stroke>
+                                       </sld:LineSymbolizer>
+                                    </style>
+                                    
+                                    <style>
+                                       <sld:PointSymbolizer id="PTSYMS" enabled="true">
+                                          <sld:Geometry>
+                                             <sld:CssParameter name="geometry-x">
+                                                <ogc:PropertyName>adcpObs/sysInfo/time</ogc:PropertyName>
+                                             </sld:CssParameter>
+                                             <sld:CssParameter name="geometry-y">
+                                                <ogc:PropertyName>adcpObs/velocityObsChainOutputs/waveHeightAll</ogc:PropertyName>
+                                             </sld:CssParameter>                                       
+                                          </sld:Geometry>
+                                          <sld:Graphic>
+                                             <sld:Mark>
+                                                <sld:WellKnownName>square</sld:WellKnownName>
+                                                <sld:Fill>
+                                                   <sld:CssParameter name="fill">#DD33DD</sld:CssParameter>
+                                                   <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                                </sld:Fill>
+                                             </sld:Mark>
+                                             <sld:Size>4</sld:Size>
+                                          </sld:Graphic>
+                                       </sld:PointSymbolizer>
+                                       
+                                    </style>                               
+                                 </DataItem>
+                              </member>                                    
+                           </DataList>
+                        </contents>
+                     </ChartScene>
+                  </member>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+   <!-- List of data resources -->
+   <ResourceList>
+      <member>
+         <ResourceList>
+            <name>Base DataSets</name>
+            
+            <member>
+               <OWSDataProvider id="MVCO_PROV">
+                  <name>MVCO</name>
+                  <layerId></layerId>
+                  <request getUrl="http://vastserver.nsstc.uah.edu/vastGC/adcp?">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>ADCP_DATA</offering>
+                        <observedProperty>ALL_DATA</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2008-04-20T10:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2008-04-23T20:00:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            
+            <member>
+               <OWSDataProvider id="MVCO_PROV_LATEST"> <!-- Well, almost -->
+                  <name>MVCO</name>
+                  <layerId></layerId>
+                  <request getUrl="http://vastserver.nsstc.uah.edu/vastGC/adcp?">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>ADCP_DATA</offering>
+                        <observedProperty>ALL_DATA</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2009-03-11T23:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2009-03-11T23:19:00Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </member>
+            
+         </ResourceList>
+      </member>
+   </ResourceList>
+</STTProject>
