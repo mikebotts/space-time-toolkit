@@ -49,6 +49,7 @@ import org.vast.ows.OWSException;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.OWSServiceCapabilities;
 import org.vast.ows.OWSUtils;
+import org.vast.stt.gui.dialogs.ExceptionPopup;
 
 
 /**
@@ -225,10 +226,10 @@ public class CapabilitiesWidget implements SelectionListener
 		List<OWSLayerCapabilities> caps = runnable.getLayerCaps();
 		if (caps != null)
 			layerTree.setInput(caps);
-		else
-		{
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "STT Error", "Error reading caps from " + server);
-		}
+//		else
+//		{
+//			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "STT Error", "Error reading caps from " + server);
+//		}
 	}
 
 
@@ -245,6 +246,8 @@ public class CapabilitiesWidget implements SelectionListener
 		}
 		catch (OWSException e)
 		{
+			ExceptionPopup ep = new ExceptionPopup();
+			ep.handleException(e, false);
 			return null;
 		}
 		return caps.getLayers();
