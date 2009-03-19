@@ -75,7 +75,7 @@
           <sml:parameter name="heightAboveEllipsoid">
                <swe:Quantity>
                   <swe:uom code="m"/>
-                  <swe:value>400</swe:value>
+                  <swe:value>0</swe:value>
                </swe:Quantity>
             </sml:parameter>
          </sml:ParameterList>
