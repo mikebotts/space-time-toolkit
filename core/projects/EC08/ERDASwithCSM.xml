@@ -5,7 +5,7 @@
    xmlns:swe="http://www.opengis.net/swe">
    <DataList id="ERDASwithCSM">
       <name>Erdas UAS TigerShark with CSM</name>
-      <!--   <member visible="false">
+      <!-- <member visible="false">
          <DataItem>
             <name>TigerShark Track</name>
             <dataProvider>
@@ -14,7 +14,7 @@
                   <timeExtent autoUpdate="#SCENE_01">
                   <TimeExtent id="ERDAS_TIME4">
                      <baseTime>2008-07-21T17:40:02</baseTime>
-                     <leadTime>60</leadTime>
+                     <leadTime>20</leadTime>
                      <lagTime>20</lagTime>
                      <stepTime>0</stepTime>
                   </TimeExtent>
@@ -42,7 +42,7 @@
                </sld:LineSymbolizer>
             </style>
          </DataItem>
-      </member>  -->
+      </member> -->
       <member>
          <DataItem>
             <name>KCM-HD Lookrays</name>
@@ -51,8 +51,8 @@
                   <name>KCM-HD Lookrays Process Chain</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME4">
-                        <baseTime>2008-07-21T17:38:00</baseTime>
-                        <leadTime>20</leadTime>
+                        <baseTime>2008-07-21T17:40:02</baseTime>
+                        <leadTime>09</leadTime>
                         <lagTime>0</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
@@ -120,8 +120,8 @@
                   <name>KCM-HD Footprint Process Chain</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME4">
-                        <baseTime>2008-07-21T17:38:00</baseTime>
-                        <leadTime>20</leadTime>
+                        <baseTime>2008-07-21T17:40:02</baseTime>
+                        <leadTime>09</leadTime>
                         <lagTime>0</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
@@ -220,8 +220,8 @@
                   <name>KCM-HD Process</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME5">
-                        <baseTime>2008-07-21T17:38:00</baseTime>
-                        <leadTime>20</leadTime>
+                        <baseTime>2008-07-21T17:40:02</baseTime>
+                        <leadTime>09</leadTime>
                         <lagTime>0</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>

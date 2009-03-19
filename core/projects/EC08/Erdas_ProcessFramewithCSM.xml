@@ -113,7 +113,7 @@
                                     <swe:DataArray gml:id="IMAGE" definition="urn:ogc:def:property:frame">
                                        <swe:elementCount>
                                           <swe:Count definition="urn:ogc:def:property:row">
-                                             <swe:value>270</swe:value>
+                                             <swe:value>1080</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
                                        <swe:elementType name="acrossTrackLine">
@@ -121,7 +121,7 @@
                                              definition="urn:ogc:def:property:horizontalLine">
                                              <swe:elementCount>
                                                 <swe:Count definition="urn:ogc:def:property:column">
-                                                   <swe:value>480</swe:value>
+                                                   <swe:value>1920</swe:value>
                                                 </swe:Count>
                                              </swe:elementCount>
                                              <swe:elementType name="radiance">
@@ -485,11 +485,12 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
+                     <!-- set height above ellipsoid for ray intersect ellipsoid -->
                      <sml:parameters>
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
                               <swe:Quantity>
-                                 <swe:value>400</swe:value>
+                                 <swe:value>595</swe:value>
                                  <swe:uom code="m"/>
                               </swe:Quantity>
                            </sml:parameter>

@@ -368,11 +368,12 @@
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
-                    <sml:parameters>
+                     <!-- adjust ray intersect ellipsoid height -->
+                     <sml:parameters>
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
                               <swe:Quantity>
-                                 <swe:value>400</swe:value>
+                                 <swe:value>595</swe:value>
                                  <swe:uom code="m"/>
                               </swe:Quantity>
                            </sml:parameter>

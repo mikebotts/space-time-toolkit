@@ -13,7 +13,7 @@
             <name>Empire Challenge 08</name>
           <time>
                <TimeExtent>
-                  <baseTime>2008-07-21T17:38:00Z</baseTime>
+                  <baseTime>2008-07-21T17:40:02Z</baseTime>
                   <lagTime>3600</lagTime>
                   <leadTime>3600</leadTime>
                   <stepTime>30</stepTime>
@@ -43,13 +43,19 @@
             <contents>
                <DataList>
                   <name>Empire Challenge 08</name>
+                  <!--
                   <member xlink:href="./BaseLayers.xml#GIS"/> 
+                   -->
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
+                  <!--
                   <member xlink:href="./SatelliteNadirAndFootprint.xml#SatelliteObs"/>   
                   <member xlink:href="./DopplerRadar.xml#Radar"/> 
+                  -->
                   <!-- <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> -->
                   <!-- <member xlink:href="./SAIC.xml#SAIC"/> -->
+                  <!--
                   <member xlink:href="./NORTHROPGRUNMAN.xml#NORTHROPGRUNMAN"/>
+                  -->
                   <!--      <member xlink:href="./ERDAS.xml#ERDAS"/> -->
                   <member xlink:href="./ERDASwithCSM.xml#ERDASwithCSM"/>
                </DataList>
