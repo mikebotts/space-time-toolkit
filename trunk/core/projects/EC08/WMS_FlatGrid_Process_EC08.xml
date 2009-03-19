@@ -178,7 +178,7 @@
                            <swe:Count>10</swe:Count>
                         </sml:parameter>
                         <sml:parameter name="heightAboveEllipsoid">
-                           <swe:Quantity>400</swe:Quantity>
+                           <swe:Quantity>0</swe:Quantity>
                         </sml:parameter>  
                      </sml:ParameterList>
                   </sml:parameters>
