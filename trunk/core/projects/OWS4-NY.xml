@@ -724,7 +724,7 @@
                                           <stepTime>0</stepTime>
                                        </TimeExtent>
                                     </timeExtent>
-                                    <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                                    <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                                     <value path="sosOptions/offering">gatton-SOIL_TEMP</value>
                                     <value path="sosOptions/observables">urn:ogc:def:phenomenon:CSIRO:SOIL_TEMP</value>
                                     <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-8-10</value>
@@ -748,7 +748,7 @@
                                           <stepTime>0</stepTime>
                                        </TimeExtent>
                                     </timeExtent>
-                                    <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                                    <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                                     <value path="sosOptions/offering">gatton-SOIL_TEMP</value>
                                     <value path="sosOptions/observables">urn:ogc:def:phenomenon:CSIRO:SOIL_TEMP</value>
                                     <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-7-10</value>
@@ -772,7 +772,7 @@
                                           <stepTime>0</stepTime>
                                        </TimeExtent>
                                     </timeExtent>
-                                    <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                                    <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                                     <value path="sosOptions/offering">belmont-SOLAR_VOLTAGE</value>
                                     <value path="sosOptions/observables">urn:ogc:def:phenomenon:CSIRO:SOLAR_VOLTAGE</value>
                                     <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:belmont-101-2</value>
@@ -1240,7 +1240,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsIFGI_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKNYC</value>
                </SensorMLProvider>
             </member>
@@ -1255,7 +1255,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsIFGI_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKLGA</value>
                </SensorMLProvider>
             </member>
@@ -1270,7 +1270,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsIFGI_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKJFK</value>
                </SensorMLProvider>
             </member>
@@ -1285,7 +1285,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsIFGI_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKEWR</value>
                </SensorMLProvider>
             </member>
@@ -1300,7 +1300,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsIFGI_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsIFGI_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/procedures">urn:x-ogc:object:sensor:NationalWeatherService:ASOSKTEB</value>
                </SensorMLProvider>
             </member>
@@ -1315,7 +1315,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
                   <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-1-25</value>
                </SensorMLProvider>
@@ -1331,7 +1331,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
                   <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-2-25</value>
                </SensorMLProvider>
@@ -1347,7 +1347,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/offering">gatton-HUMIDITY_TEMP</value>
                   <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-4-25</value>
                </SensorMLProvider>
@@ -1363,7 +1363,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./SensorsCSIRO_Process.xml#SOS_PROCESS"/>
+                  <process xlink:href="process/SensorsCSIRO_Process.xml#SOS_PROCESS"/>
                   <value path="sosOptions/offering">gatton-SOIL_TEMP</value>
                   <value path="sosOptions/observables">urn:ogc:def:phenomenon:CSIRO:SOIL_TEMP</value>
                   <value path="sosOptions/procedures">urn:ogc:def:procedure:CSIRO:gatton-10-10</value>
