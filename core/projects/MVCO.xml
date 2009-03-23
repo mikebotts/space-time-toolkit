@@ -71,6 +71,28 @@
                               </sld:Fill>
                            </sld:TextSymbolizer>
                         </style>
+                        <style> 
+                           <sld:PointSymbolizer enabled="true">
+                              <sld:Geometry>
+                                 <sld:CssParameter name="geometry-x">
+                                    <ogc:PropertyName>adcpObs/sysInfo/lon</ogc:PropertyName>
+                                 </sld:CssParameter>
+                                 <sld:CssParameter name="geometry-y">
+                                    <ogc:PropertyName>adcpObs/sysInfo/lat</ogc:PropertyName>
+                                 </sld:CssParameter>                                       
+                              </sld:Geometry>
+                              <sld:Graphic>
+                                 <sld:Mark>
+                                    <sld:WellKnownName>square</sld:WellKnownName>
+                                    <sld:Fill>
+                                       <sld:CssParameter name="fill">#dddddd</sld:CssParameter>
+                                       <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                                    </sld:Fill>
+                                 </sld:Mark>
+                                 <sld:Size>4</sld:Size>
+                              </sld:Graphic>
+                           </sld:PointSymbolizer>
+                        </style>
                      </DataItem>
                   </member>
                   <member>
@@ -192,8 +214,8 @@
                            <ogc:TM_During>
                               <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
                               <gml:TimePeriod>
-                                 <gml:beginPosition>2009-03-11T23:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2009-03-11T23:19:00Z</gml:endPosition>
+                                 <gml:beginPosition>2009-03-12T14:00:00Z</gml:beginPosition>
+                                 <gml:endPosition>2009-03-12T14:19:00Z</gml:endPosition>
                               </gml:TimePeriod>
                            </ogc:TM_During>
                         </eventTime>
