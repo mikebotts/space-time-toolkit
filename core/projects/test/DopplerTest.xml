@@ -532,7 +532,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KESX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -548,7 +548,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KHNX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -564,7 +564,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KHTX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>

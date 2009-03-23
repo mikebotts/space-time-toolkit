@@ -536,7 +536,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KDDC_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
