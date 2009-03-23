@@ -53,7 +53,7 @@
                         <name>Chart Folder</name>
                         <member>
                            <ChartScene>
-                              <name>Chart Test</name>
+                              <name>Chart View</name>
                               <contents>
                                  <DataList>
                                     <member visible="false">
