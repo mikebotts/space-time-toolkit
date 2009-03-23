@@ -1387,7 +1387,7 @@
                         <gml:coordinates>-89.9,15.4 -61.2,45.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href="Process/FlatGrid_Process.xml#GRID_GENERATOR"/>
+                  <process xlink:href="process/FlatGrid_Process.xml#GRID_GENERATOR"/>
                </SensorMLProvider>
             </member>
             <member>
@@ -1402,7 +1402,7 @@
                      </TimeExtent>
                   </timeExtent>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
                </SensorMLProvider>
             </member>
@@ -1412,7 +1412,7 @@
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <timeExtent xlink:href="#GOES_TIME"/>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
                </SensorMLProvider>
             </member>
@@ -1422,7 +1422,7 @@
                   <description>GOES Image and Grid in WCS Request/Swe Response/SML Process</description>
                   <timeExtent xlink:href="#GOES_TIME"/>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_CTP</value>
                </SensorMLProvider>
             </member>

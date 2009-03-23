@@ -470,7 +470,7 @@
                <SensorMLProvider id="LANDSAT_TOPO">
                   <name>Landsat WMS + SRTM Topo</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
-                  <process href="./WMS_SRTM_Process.xml#PROCESS"/>
+                  <process href="process/WMS_SRTM_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
            
@@ -512,7 +512,7 @@
                         <gml:coordinates>-83.0,35.0 -69.0,43.0</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
                </SensorMLProvider>
             </member>
@@ -536,7 +536,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KDDC_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
