@@ -1125,7 +1125,7 @@
                         <gml:coordinates>-83.0,35.0 -69.0,43.0</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_VIS</value>
                </SensorMLProvider>
             </member>
@@ -1134,7 +1134,7 @@
                   <name>GOES IR WCS</name>
                   <timeExtent xlink:href="#GOES_TIME"/>
                   <spatialExtent tiling="1x1" xlink:href="#ROI"/>
-                  <process xlink:href="./GOES_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="Process/Goes_Process.xml#WCS_PROCESS"/>
                   <value path="wcsOptions/layer">GOES12_CONUS_IR</value>
                </SensorMLProvider>
             </member>
@@ -1149,7 +1149,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KHTX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -1164,7 +1164,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KBMX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -1179,7 +1179,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KGWX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -1194,7 +1194,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KOKX_DOPPLER_TILT0</value>
                   <value process="sos" path="sosOptions/observables">urn:vast:phenomenon:reflectivity</value>
                </SensorMLProvider>
@@ -1210,7 +1210,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KDIX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
@@ -1225,7 +1225,7 @@
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
-                  <process xlink:href="./DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
+                  <process xlink:href="Process/DopplerWSR88_Process.xml#DOPPLER_PROCESS"/>
                   <value process="sos" path="sosOptions/offering">KENX_DOPPLER_TILT0</value>
                </SensorMLProvider>
             </member>
