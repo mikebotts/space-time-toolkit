@@ -43,8 +43,8 @@
             <contents>
                <DataList>
                   <name>Huntsville Project</name>
-                  <member xlink:href="./BaseLayers.xml#GIS"/>
-                  <member xlink:href="./BaseLayers.xml#MAPS"/> 
+                  <member xlink:href="../BaseLayers.xml#GIS"/>
+                  <member xlink:href="../BaseLayers.xml#MAPS"/> 
                   <member xlink:href="./DopplerRadar.xml#Radar"/> 
                   <member xlink:href="./NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
                   <member xlink:href="./GAMMA.xml#GAMMA"/> 
