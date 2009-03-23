@@ -1043,7 +1043,7 @@
                         <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href="./SRTM_Process.xml#WCS_PROCESS"/>
+                  <process xlink:href="Process/SRTM_Process.xml#WCS_PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>

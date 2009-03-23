@@ -1387,7 +1387,7 @@
                         <gml:coordinates>-89.9,15.4 -61.2,45.4</gml:coordinates>
                      </BoundingBox>
                   </spatialExtent>
-                  <process xlink:href=".Process/FlatGrid_Process.xml#GRID_GENERATOR"/>
+                  <process xlink:href="Process/FlatGrid_Process.xml#GRID_GENERATOR"/>
                </SensorMLProvider>
             </member>
             <member>
