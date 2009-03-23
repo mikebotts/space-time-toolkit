@@ -107,7 +107,7 @@
                            <SWEDataProvider>
                               <name>Station Locations</name>
                               <format>SWE</format>
-                              <sweData xlink:href="http://vast.uah.edu/SWEData/test-data/TestIconsData.xml"/>
+                              <sweData xlink:href="file:///C:/tcook/work/STT3/projects/TestIconsData.xml"/>
                            </SWEDataProvider>
                         </dataProvider>
                         <style>
@@ -126,11 +126,12 @@
                                     <sld:OnlineResource>
                                        <CategoryLookUpTable>
                                           <ogc:PropertyName>stationData/type</ogc:PropertyName>
-                                          <Mapping key="NUKE">icons/radio1.png</Mapping>
-                                          <Mapping key="CHEM">icons/chemical1-green.png</Mapping>
-                                          <Mapping key="CAM">icons/video.png</Mapping>
-                                          <Default>icons/thermo1.png</Default>
+                                          <Mapping key="NUKE">icons/radioactiveAlert2.png</Mapping>
+                                          <Mapping key="CHEM">icons/radioactiveAlert2.png</Mapping>
+<!--                                          <Mapping key="CAM">icons/video.png</Mapping>-->
+                                          <Default>icons/radio1.png</Default>
                                        </CategoryLookUpTable>
+
                                     </sld:OnlineResource>
                                  </sld:ExternalGraphic>
                                  <sld:Size>
@@ -162,6 +163,12 @@
                               <sld:Fill>
                                  <sld:CssParameter name="fill">#000000</sld:CssParameter>
                               </sld:Fill>
+                              <sld:Font>
+                                 <sld:CssParameter name="font-size">11</sld:CssParameter>
+                                 <sld:CssParameter name="font-family">times</sld:CssParameter>
+                                 <sld:CssParameter name="font-style">italic</sld:CssParameter>
+                                 <sld:CssParameter name="font-weight">bold</sld:CssParameter>
+                              </sld:Font>
                            </sld:TextSymbolizer>
                         </style>
                      </DataItem>
