@@ -22,7 +22,7 @@
                   <process xlink:href="./GammaXMPP.xml#GAMMA_XMPP"/>
                </SensorMLProvider>
             </dataProvider>
-            <style>
+       <!--      <style>
                <sld:PointSymbolizer enabled="true">
                   <sld:Geometry>
                      <sld:CssParameter name="geometry-x">
@@ -56,7 +56,7 @@
                      <sld:Spacing>100</sld:Spacing>
                   </sld:Graphic>
                </sld:PointSymbolizer>
-            </style>
+            </style> -->
      <!--        <style>
                <sld:TextSymbolizer enabled="true">
                   <sld:Geometry>
@@ -71,7 +71,7 @@
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Label>
-                     <ogc:PropertyName>toDisplay</ogc:PropertyName>
+                     <ogc:PropertyName>alert/averageGammaDose</ogc:PropertyName>
                   </sld:Label>
                   <sld:Fill>
                      <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
@@ -86,8 +86,8 @@
            <domainAxis>
                <name></name>
                <Range>
-                  <min>1234548000</min>
-                  <max>1234551400</max>
+                  <min>1234908000</min>
+                  <max>1234911400</max>
                </Range>
             </domainAxis>
             <rangeAxis>
@@ -107,7 +107,7 @@
                               <name>Gamma SOS</name>
                               <timeExtent>
                                  <TimeExtent>
-                                     <baseTime>2009-02-13T18:00:00Z</baseTime>
+                                     <baseTime>2009-02-17T22:00:00Z</baseTime>
 <!--                                    <baseTime>now</baseTime>-->
                                     <leadTime>3600</leadTime>
                                     <lagTime>0</lagTime>

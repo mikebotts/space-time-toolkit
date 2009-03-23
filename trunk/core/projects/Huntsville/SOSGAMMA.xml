@@ -38,16 +38,16 @@
             <sml:OutputList>
                <sml:output name="data">
                   <swe:DataRecord>
-								<swe:field name="time">
-									<swe:Time definition="urn:ogc:phenomenon:time:iso8601" /> 
-								</swe:field>
-								<swe:field name="averageRadiation">
-									<swe:Quantity definition="urn:ogc:property:OGC:averageRadiation" /> 
-								</swe:field>
-								<swe:field name="radiationDose">
-									<swe:Quantity definition="urn:ogc:property:OGC:radiationDose" /> 
-								</swe:field>
-							</swe:DataRecord>
+                     <swe:field name="time">
+                        <swe:Time definition="urn:ogc:phenomenon:time:iso8601" /> 
+                     </swe:field>
+                     <swe:field name="averageRadiation">
+                        <swe:Quantity definition="urn:ogc:property:OGC:averageRadiation" /> 
+                     </swe:field>
+                     <swe:field name="radiationDose">
+                        <swe:Quantity definition="urn:ogc:property:OGC:radiationDose" /> 
+                     </swe:field>
+                  </swe:DataRecord>
                </sml:output>
             </sml:OutputList>
          </sml:outputs>
@@ -88,16 +88,16 @@
                            </sml:output>
                            <sml:output name="observationData">
                               <swe:DataRecord>
-								<swe:field name="time">
-									<swe:Time definition="urn:ogc:phenomenon:time:iso8601" /> 
-								</swe:field>
-								<swe:field name="averageRadiation">
-									<swe:Quantity definition="urn:ogc:property:OGC:averageRadiation" /> 
-								</swe:field>
-								<swe:field name="radiationDose">
-									<swe:Quantity definition="urn:ogc:property:OGC:radiationDose" /> 
-								</swe:field>
-							</swe:DataRecord>
+                                 <swe:field name="time">
+                                    <swe:Time definition="urn:ogc:phenomenon:time:iso8601" /> 
+                                 </swe:field>
+                                 <swe:field name="averageRadiation">
+                                    <swe:Quantity definition="urn:ogc:property:OGC:averageRadiation" /> 
+                                 </swe:field>
+                                 <swe:field name="radiationDose">
+                                    <swe:Quantity definition="urn:ogc:property:OGC:radiationDose" /> 
+                                 </swe:field>
+                              </swe:DataRecord>
                            </sml:output>
                         </sml:OutputList>
                      </sml:outputs>
@@ -112,7 +112,7 @@
                                  </swe:field>
                                  <swe:field name="requestMethod">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>POST</swe:value>
+                                       <swe:value>GET</swe:value>
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="version">
@@ -130,11 +130,11 @@
                                        <swe:value>GAMMA2070_OBSERVABLES</swe:value>
                                     </swe:Category>
                                  </swe:field>
-                            <!--      <swe:field name="procedures">
+                                 <!--      <swe:field name="procedures">
                                     <swe:Category>
-                                       <swe:value>urn:ogc:object:sensor:VAST:vastcam1</swe:value>
+                                    <swe:value>urn:ogc:object:sensor:VAST:vastcam1</swe:value>
                                     </swe:Category>
-                                 </swe:field>  -->
+                                    </swe:field>  -->
                                  <swe:field name="format">
                                     <swe:Category definition="urn:ogc:def:identifier:mimeType">
                                        <swe:value>text/xml; subtype="om/1.0"</swe:value>
