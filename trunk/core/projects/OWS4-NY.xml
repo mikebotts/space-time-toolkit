@@ -1025,7 +1025,7 @@
                <SensorMLProvider id="LANDSAT_FLAT">
                   <name>Landsat WMS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
-                  <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <process href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                </SensorMLProvider>
             </member>
             <member>

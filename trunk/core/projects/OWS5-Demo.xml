@@ -57,7 +57,7 @@
                                           <gml:coordinates>-10,35 9,51</gml:coordinates>
                                        </BoundingBox>
                                     </maxSpatialExtent>
-                                    <process href="./WMS_FlatGrid_Process.xml#PROCESS"/>
+                                    <process href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                                     <value process="wmsProcess" path="wmsOptions/endPoint">http://www.datadoors.net/$_streaminguid.8f1946a6-e277-494c-b415-f869815a5db2/wms.ashx</value>
                                     <value process="wmsProcess" path="wmsOptions/layer">b801c045-0fdf-4a00-bf53-adcd2e7fe6dc</value>
                                  </SensorMLProvider>
