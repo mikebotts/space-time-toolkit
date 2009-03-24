@@ -56,7 +56,8 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		if (timeExtent!=null)
 		    timeExtent.removeListener(this);
 		
-		extentWidget.mainGroup.setText(item.getName());
+		extentWidget.setItemName(item.getName());
+	
 		//  get timeExtent from new dataItem
 		timeExtent = item.getDataProvider().getTimeExtent();
 		if(timeExtent == null)

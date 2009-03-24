@@ -72,6 +72,7 @@ public class TimeExtentWidget
 	protected TimeSpinner lagSpinner;
 	protected MasterTimeWidget manualTimeWidget;
 	protected Combo biasCombo;
+	//  Do I have to dispose of these colors. or does the workench take care of that?
 	static final Color BLUE = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
 	static final Color GREEN = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GREEN);
 	static final Color RED = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
@@ -81,6 +82,20 @@ public class TimeExtentWidget
 		init(parent);
 	}
 
+	public void setItemName(String name){
+		mainGroup.setText(name);
+//		Color col = mainGroup.getBackground();
+//		mainGroup.setBackground(RED);
+	//	mainGroup.redraw();
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		//mainGroup.setBackground(col);
+	}
+	
 	public void init(Composite parent){
 		//  Scrolled Composite to hold everything
 		ScrolledComposite scroller = 
