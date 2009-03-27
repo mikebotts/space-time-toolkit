@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Alex (UAH) -->
-<xs:schema xmlns="http://vast.uah.edu/stt/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sld="http://www.opengis.net/sld" targetNamespace="http://vast.uah.edu/stt/v3" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="http://vast.uah.edu/stt/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sld="http://www.opengis.net/sld" targetNamespace="http://vast.uah.edu/stt/v3" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://www.opengis.net/sld" schemaLocation="./SLDx.xsd"/>
 	<!-- Project Element (Root) -->
 	<xs:element name="STTProject">
@@ -10,8 +10,12 @@
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element ref="name"/>
-							<xs:element name="dateCreated" type="xs:dateTime"/>
 							<xs:element name="author" type="xs:token" minOccurs="0"/>
+							<xs:element name="dateCreated">
+								<xs:simpleType>
+									<xs:union memberTypes="xs:date xs:dateTime"/>
+								</xs:simpleType>
+							</xs:element>
 							<xs:element ref="description" minOccurs="0"/>
 						</xs:sequence>
 					</xs:complexType>
@@ -80,7 +84,7 @@
 				<xs:element name="time">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element ref="TimeSettings"/>
+							<xs:element ref="TimeExtent"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -102,20 +106,77 @@
 			<xs:attribute name="id" type="xs:ID" use="required"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="ViewSettings"/>
-	<xs:element name="TimeSettings"/>
+	<xs:element name="ViewSettings">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="backgroundColor">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:pattern value="#[0-9A-F]{6}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="projection">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:enumeration value="ECEF"/>
+							<xs:enumeration value="LLA"/>
+							<xs:enumeration value="MERC"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="cameraMode">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:enumeration value="ORTHO"/>
+							<xs:enumeration value="PERSPECTIVE"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="cameraPos" type="point3DType"/>
+				<xs:element name="targetPos" type="point3DType"/>
+				<xs:element name="upDirection" type="point3DType"/>
+				<xs:element name="orthoWidth" type="xs:double"/>
+				<xs:element name="orthoHeight" type="xs:double"/>
+				<xs:element name="nearClip" type="xs:double"/>
+				<xs:element name="farClip" type="xs:double"/>
+				<xs:element name="zFudgeFactor" type="xs:double"/>
+			</xs:sequence>
+			<xs:attribute name="showTripod" type="xs:boolean"/>
+			<xs:attribute name="showArcball" type="xs:boolean"/>
+			<xs:attribute name="showROI" type="xs:boolean"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="point3DType">
+		<xs:restriction>
+			<xs:simpleType>
+				<xs:list itemType="xs:double"/>
+			</xs:simpleType>
+			<xs:length value="3"/>
+		</xs:restriction>						
+	</xs:simpleType>
+	<xs:element name="TimeExtent">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="baseTime" type="xs:dateTime"/>
+				<xs:element name="lagTime" type="xs:double"/>
+				<xs:element name="leadTime" type="xs:double"/>
+				<xs:element name="stepTime" type="xs:double"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	<!--Scene Tree Elements-->
-	<xs:element name="_DataEntry" type="_DataEntryType" abstract="true"/>
-	<xs:complexType name="_DataEntryType" abstract="true">
+	<xs:element name="AbstractDataEntry" type="AbstractDataEntryType" abstract="true"/>
+	<xs:complexType name="AbstractDataEntryType" abstract="true">
 		<xs:sequence>
 			<xs:element ref="name"/>
 			<xs:element ref="description" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:ID" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="_DataItemType" abstract="true">
+	<xs:complexType name="AbstractDataItemType" abstract="true">
 		<xs:complexContent>
-			<xs:extension base="_DataEntryType">
+			<xs:extension base="AbstractDataEntryType">
 				<xs:sequence>
 					<xs:element ref="dataProvider"/>
 				</xs:sequence>
@@ -123,15 +184,15 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="DataList" substitutionGroup="_DataEntry">
+	<xs:element name="DataList" substitutionGroup="AbstractDataEntry">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="_DataEntryType">
+				<xs:extension base="AbstractDataEntryType">
 					<xs:sequence>
 						<xs:element name="member" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element ref="_DataEntry"/>
+									<xs:element ref="AbstractDataEntry"/>
 								</xs:sequence>
 								<xs:attribute name="visible" type="xs:boolean"/>
 							</xs:complexType>
@@ -141,10 +202,10 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="DataItem" substitutionGroup="_DataEntry">
+	<xs:element name="DataItem" substitutionGroup="AbstractDataEntry">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="_DataItemType">
+				<xs:extension base="AbstractDataItemType">
 					<xs:sequence>
 						<xs:element ref="style" maxOccurs="unbounded"/>
 						<xs:element ref="feedback" minOccurs="0" maxOccurs="unbounded"/>
@@ -153,10 +214,10 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="DataTable" substitutionGroup="_DataEntry">
+	<xs:element name="TableScene" substitutionGroup="AbstractDataEntry">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="_DataItemType">
+				<xs:extension base="AbstractDataItemType">
 					<xs:sequence>
 						<xs:element name="column" maxOccurs="unbounded">
 							<xs:complexType>
@@ -187,10 +248,10 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="DataChart" substitutionGroup="_DataEntry">
+	<xs:element name="ChartScene" substitutionGroup="AbstractDataEntry">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="_DataEntryType">
+				<xs:extension base="AbstractDataEntryType">
 					<xs:sequence>
 						<xs:element name="axis" minOccurs="2" maxOccurs="3">
 							<xs:complexType>
@@ -295,7 +356,7 @@
 						<xs:element name="time" minOccurs="0">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element ref="TimeSettings"/>
+									<xs:element ref="TimeExtent"/>
 								</xs:sequence>
 							</xs:complexType>
 						</xs:element>
