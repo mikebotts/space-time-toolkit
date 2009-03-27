@@ -5,17 +5,17 @@
    xmlns:swe="http://www.opengis.net/swe">
    <DataList id="ERDASwithCSM">
       <name>Erdas UAS TigerShark with CSM</name>
-      <!-- <member visible="false">
+      <member visible="false">
          <DataItem>
             <name>TigerShark Track</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>TigerShark Track Data</name>
-                  <timeExtent autoUpdate="#SCENE_01">
+                  <timeExtent>
                   <TimeExtent id="ERDAS_TIME4">
-                     <baseTime>2008-07-21T17:40:02</baseTime>
-                     <leadTime>20</leadTime>
-                     <lagTime>20</lagTime>
+                     <baseTime>2008-07-21T18:32:22</baseTime>
+                     <leadTime>15</leadTime>
+                     <lagTime>7</lagTime>
                      <stepTime>0</stepTime>
                   </TimeExtent>
                   </timeExtent>
@@ -42,21 +42,14 @@
                </sld:LineSymbolizer>
             </style>
          </DataItem>
-      </member> -->
+      </member>
       <member>
          <DataItem>
             <name>KCM-HD Lookrays</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>KCM-HD Lookrays Process Chain</name>
-                  <timeExtent autoUpdate="#SCENE_01">
-                     <TimeExtent id="ERDAS_TIME4">
-                        <baseTime>2008-07-21T17:40:02</baseTime>
-                        <leadTime>09</leadTime>
-                        <lagTime>0</lagTime>
-                        <stepTime>0</stepTime>
-                     </TimeExtent>
-                  </timeExtent>
+                  <timeExtent xlink:href="#ERDAS_TIME4"/>
                   <process xlink:href="./Erdas_ProcessLRwithCSM.xml#LOOKRAY_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -118,14 +111,7 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>KCM-HD Footprint Process Chain</name>
-                  <timeExtent autoUpdate="#SCENE_01">
-                     <TimeExtent id="ERDAS_TIME4">
-                        <baseTime>2008-07-21T17:40:02</baseTime>
-                        <leadTime>09</leadTime>
-                        <lagTime>0</lagTime>
-                        <stepTime>0</stepTime>
-                     </TimeExtent>
-                  </timeExtent>
+                  <timeExtent xlink:href="#ERDAS_TIME4"/>
                   <process xlink:href="./Erdas_ProcessFPwithCSM.xml#FOOTPRINT_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -220,9 +206,9 @@
                   <name>KCM-HD Process</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME5">
-                        <baseTime>2008-07-21T17:40:02</baseTime>
-                        <leadTime>09</leadTime>
-                        <lagTime>0</lagTime>
+                        <baseTime>2008-07-21T18:37:22</baseTime>
+                        <leadTime>15</leadTime>
+                        <lagTime>7</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
