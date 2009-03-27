@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <Identification>
+      <name>Empire Challenge 08 Project</name>
+      <author>Gregoire Berthiau</author>
+      <dateCreated>2008-07-08T09:23:00</dateCreated>
+      <description>Various Service from and for Empire Challenge 08</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>Empire Challenge 08</name>
+          <time>
+               <TimeExtent>
+                  <baseTime>2008-07-21T18:32:22Z</baseTime>
+                  <lagTime>7</lagTime>
+                  <leadTime>10</leadTime>
+                  <stepTime>0</stepTime>
+               </TimeExtent>
+            </time> 
+        <!--   <time updatePeriod="3">
+               <TimeExtent>
+                  <baseTime>2008-07-21T17:39:00Z</baseTime>
+                  <stepTime>10</stepTime>
+               </TimeExtent>
+            </time>      -->     
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>-2.0435292266730727 0.6200543967097655 10</cameraPos>
+                  <targetPos>-2.0435292266730727 0.6200543967097655 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>6.0</orthoWidth>
+                  <orthoHeight>4.0</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>100</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>Empire Challenge 08</name>
+                  <member xlink:href="../EC08/BaseLayers.xml#MAPS"/> 
+                  <member xlink:href="./EC08/ERDASwithCSM.xml#ERDASwithCSM"/>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>
