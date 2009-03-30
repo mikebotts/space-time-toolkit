@@ -10,9 +10,9 @@
                   <name>TRMM LIS Footprints</name>
                   <timeExtent>
                      <TimeExtent id="LIS_TIME">
-                        <baseTime>2005-08-28T16:00:00</baseTime>
-                        <leadTime>36000</leadTime>
-                        <stepTime>60</stepTime>
+                        <baseTime>2005-04-28T16:00:00</baseTime>
+                        <leadTime>86400</leadTime>
+                        <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
                   <layerId>TRMM-LIS</layerId>
@@ -69,20 +69,19 @@
                   <name>LIS Data Process Chain</name>
                   <timeExtent xlink:href="#LIS_TIME"/>
                   <process xlink:href="../process/LIS_Process_WithData.xml#PROCESS"/>
-                  <value process="sosScan" path="sosOptions/observables">RADIANCE</value>
                </SensorMLProvider>
             </dataProvider>
             <style name="Footprint Points">
                <sld:PointSymbolizer id="LIS_FOOTPRINT_POINTS" enabled="true">
                   <sld:Geometry srsName="ECEF">
                      <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-z">
-                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Graphic>
