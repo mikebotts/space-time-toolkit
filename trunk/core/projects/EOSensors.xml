@@ -41,7 +41,7 @@
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
                   <member xlink:href="./EOSensors/AircraftMission.xml#AircraftMission"/>
                   <member xlink:href="./EOSensors/SatelliteObs.xml#SatelliteObs"/>
-                  <member xlink:href="./EOSensors/SatelliteNadirAndFootprint.xml#SatelliteObs2"/> 
+                  <member xlink:href="./process/SatelliteNadirAndFootprint.xml#SatelliteObs2"/> 
      <!--             <member visible="false">
                      <DataItem>
                         <name>MODIS Lookrays</name>
