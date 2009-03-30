@@ -18,7 +18,9 @@
                   <swe:Quantity/>
                </sml:input>
                <sml:input name="Band_number">
-                  <swe:Quantity>1</swe:Quantity>
+                  <swe:Quantity>
+                     <swe:value>1</swe:value>
+                  </swe:Quantity>
                </sml:input>
             </sml:InputList>
          </sml:inputs>

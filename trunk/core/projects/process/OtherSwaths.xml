@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="FOOTPRINT">
+      <name>Other Satellite Swaths</name>
+      <member visible="false">
+         <DataItem>
+            <name>AMSU-A on NOAA-15 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_NOAA15_AMSUA">
+                  <name>NOAA-15 AMSU-A Footprints</name>
+                  <timeExtent>
+                     <TimeExtent id="OTHER_SAT">
+                        <baseTime>2006-11-30T11:23:00</baseTime>
+                        <leadTime>1800</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <layerId>NOAA15-AMSU-A</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>NOAA15-AMSU-A</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#00FF00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style>
+               <sld:GridMeshSymbolizer id="GRID_MESH" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#0000AA</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+            <style>
+               <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#0000ff</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridBorderSymbolizer>
+            </style>
+            <event type="left-click">
+               <ShowPopup autoClose="true">
+                  <title>My Popup</title>
+                  <content>
+                     <sld:TextSymbolizer>
+                        <sld:Label>NOAA-15</sld:Label>
+                     </sld:TextSymbolizer>
+                  </content>
+               </ShowPopup>
+            </event>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NOAA15 AVHRR Footprints</name>
+            <dataProvider>
+            <OWSDataProvider id="PROVIDER_NOAA15_AVHRR">
+               <name>NOAA-15 AVHRR Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>NOAA15-AVHRR</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>NOAA15-AVHRR</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer id="GRID_FILL" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+        <!--    <style href="#GRID_MESH"/> -->
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>AQUA AIRS Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_NOAA15_AVHRR">
+                  <name>AQUA AIRS Footprints</name>
+                  <timeExtent xlink:href="#OTHER_SAT"/>
+                  <layerId>AQUA-AIRS</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>AQUA-AIRS</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer id="GRID_FILL" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#AAAA00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <!--    <style href="#GRID_MESH"/> -->
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NOAA12 AMSU-A Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_NOAA12_AMSUA">
+               <name>NOAA12 AMSU-A Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>NOAA12-AMSU-A</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>NOAA12-AMSU-A</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NOAA12 AVHRR Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_NOAA12_AVHRR">
+               <name>NOAA12 AVHRR Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>NOAA12-AVHRR</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>NOAA12-AVHRR</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <!--    <style href="#GRID_MESH"/> -->
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SPOT-4 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_SPOT4">
+               <name>SPOT4 Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>SPOT4-HRVIR</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>SPOT4-HRVIR</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.7</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SPOT-4 Visibility Corridor</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_SPOT4P">
+               <name>SPOT4 Visibility Corridor</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>SPOT4-HRVIR-Potential</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>SPOT4-HRVIR-Potential</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#FFFF00</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SPOT-5 Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_SPOT5">
+               <name>SPOT5 Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>SPOT5-HRG</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>SPOT5-HRG</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#AA00AA</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SPOT-5 Visibility Corridor</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_SPOT5P">
+               <name>SPOT5 Visibility Corridor</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>SPOT5-HRG-Potential</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>SPOT5-HRG-Potential</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#AA00AA</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>METOP-A IASI Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_METOP">
+               <name>METOP-A IASI Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>METOP-A IASI</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>METOP-A-IASI</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#ED71F0</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">0.8</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style href="#GRID_MESH"/>
+            <style href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>CALIPSO - LIDAR Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_CALIPSO">
+               <name>CALIPSO LIDAR Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>CALIPSO-LIDAR</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>CALIPSO-LIDAR</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>CLOUDSAT - RADAR Footprints</name>
+            <dataProvider>
+               <OWSDataProvider id="PROVIDER_CLOUDSAT">
+               <name>CLOUDSAT RADAR Footprints</name>
+               <timeExtent xlink:href="#OTHER_SAT"/>
+               <layerId>CLOUDSAT-RADAR</layerId>
+               <request postUrl="http://vast.uah.edu/vast/footprint">
+                  <GetObservation service="SOS" version="1.0">
+                     <offering>CLOUDSAT-RADAR</offering>
+                     <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                     <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                     <resultModel>swe:DataValueType</resultModel>
+                  </GetObservation>
+               </request>
+            </OWSDataProvider>
+               </dataProvider>
+                  <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+   </DataList>
+</STTProject>
