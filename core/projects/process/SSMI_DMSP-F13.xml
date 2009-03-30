@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="SSMI_DMSP-F13">
+      <name>SSMI on dmsp-f13 Satellite</name> 
+      <member visible="false">
+         <DataItem>
+            <name>SSMI Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="SSMI_TIME">
+                        <baseTime>2006-04-30T11:23:00</baseTime>
+                        <leadTime>1800</leadTime>
+                        <stepTime>60</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="../process/SSMI_Process.xml#LOOKRAY_PROCESS"/>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF0000</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI Footprints</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <name>DMSP-F13 SSMI Footprints</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <layerId>DMSP-F13-SSMI</layerId>
+                  <request postUrl="http://vast.uah.edu/vast/footprint">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>DMSP-F13-SSMI</offering>
+                        <observedProperty>urn:ogc:sensor:satellite:footprint</observedProperty>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2005-08-28T16:00:00</gml:beginPosition>
+                                 <gml:endPosition>2005-08-28T17:00:00</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>footprint/grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>footprint/grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>footprint/grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>footprint/grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+         </DataItem>
+      </member> 
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 19GHz Vertical Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
+                  <value process="sosScan" path="sosOptions/observables">19GHzVP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery">
+               <sld:TextureSymbolizer id="SSMI_TEXTURE" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/array</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>/</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection normalizedColors="false">
+                        <sld:RedChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/dataRecord/data</ogc:PropertyName>
+                              <TableValues>75 0 100 247 125 135 150 255 175 000 200 000 225 000 250 255 275 255 300 255 325 135 350 127</TableValues>
+                           </LookUpTable1D>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/dataRecord/data</ogc:PropertyName>
+                              <TableValues>75 0 100 160 125 000 150 000 175 000 200 255 225 127 250 255 275 000 300 255 325 49 350 160</TableValues>
+                           </LookUpTable1D>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <LookUpTable1D>
+                              <ogc:PropertyName>imageData/scanLine/dataRecord/data</ogc:PropertyName>
+                              <TableValues>75 0 100 127 125 135 150 255 175 255 200 255 225 000 250 000 275 000 300 255 325 49 350 247</TableValues>
+                           </LookUpTable1D>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style name="Footprint Points">
+               <sld:PointSymbolizer id="SSMI_FOOTPRINT_POINTS" enabled="false">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>gridData/array/point/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>gridData/array/point/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>gridData/array/point/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>2</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 19GHz Horizontal Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
+                  <value process="sosScan" path="sosOptions/observables">19GHzHP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 22GHz Vertical Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
+                  <value process="sosScan" path="sosOptions/observables">22GHzVP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 37GHz Vertical Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
+                  <value process="sosScan" path="sosOptions/observables">37GHzVP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 37GHz Horizontal Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBL</value>
+                  <value process="sosScan" path="sosOptions/observables">37GHzHP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 85GHz Vertical Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
+                  <value process="sosScan" path="sosOptions/observables">85GHzVP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">6</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI 85GHz Horizontal Polarization Band</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithDataHighRes.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_TBH</value>
+                  <value process="sosScan" path="sosOptions/observables">85GHzHP</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">7</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>                 
+      <member visible="false">
+         <DataItem>
+            <name>SSMI Cloud Liquid Water Concentration</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_CLW</value>
+                  <value process="sosScan" path="sosOptions/observables">CLW</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>SSMI Oceanic Wind Speed</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_OWS</value>
+                  <value process="sosScan" path="sosOptions/observables">OWS</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>     
+      <member visible="false">
+         <DataItem>
+            <name>SSMI Integrated Water Vapor Concentration</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>SSMI Data Process Chain</name>
+                  <timeExtent xlink:href="#SSMI_TIME"/>
+                  <process xlink:href="../process/SSMI_Process_WithData.xml#PROCESS"/>
+                  <value process="sosScan" path="sosOptions/offering">SSMI_IWV</value>
+                  <value process="sosScan" path="sosOptions/observables">IWV</value>
+                  <value process="lookVectorChain/SSMI_generic/tle" path="tleDataUrl">dmsp-f13.txt</value>
+                  <value process="lookVectorChain" path="channelNumber">1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Imagery" xlink:href="#SSMI_TEXTURE"/>
+         </DataItem>
+      </member>                              
+   </DataList>   
+</STTProject>

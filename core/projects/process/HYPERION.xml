@@ -584,9 +584,10 @@
                   <sml:inputs>
                      <sml:InputList>
                         <sml:input name="julianTime">
-                           <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                              <swe:value>0</swe:value>
                               <swe:uom code="s"/>
-                           </swe:Time>
+                           </swe:Quantity>
                         </sml:input>
                      </sml:InputList>
                   </sml:inputs>
