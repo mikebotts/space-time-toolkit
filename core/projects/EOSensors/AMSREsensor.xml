@@ -11,7 +11,7 @@
                   <timeExtent>
                      <TimeExtent id="AMSRE_TIME">
                         <baseTime>2007-04-30T23:59:00</baseTime>
-                        <leadTime>60</leadTime>
+                        <leadTime>3600</leadTime>
                         <stepTime>60</stepTime>
                      </TimeExtent>
                   </timeExtent>

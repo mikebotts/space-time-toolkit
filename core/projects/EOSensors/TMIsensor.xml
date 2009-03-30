@@ -328,7 +328,7 @@
             <style name="Imagery" xlink:href="#TMI_TEXTURE"/>
          </DataItem>
       </member> 
-      <member visible="false">
+ <!--      <member visible="false">
          <DataItem>
             <name>TMI All Channel 10m Wind Speed</name>
             <dataProvider>
@@ -1141,7 +1141,7 @@
                </sld:PointSymbolizer>
             </style>
          </DataItem>
-      </member>
+      </member>  -->
 <!--      <member visible="false">
          <DataItem>
             <name>TMI 19-37GHz 10m Wind Speed</name>
