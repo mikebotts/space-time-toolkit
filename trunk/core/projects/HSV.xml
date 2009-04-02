@@ -43,12 +43,12 @@
             <contents>
                <DataList>
                   <name>Huntsville Project</name>
-                  <member xlink:href="../BaseLayers.xml#GIS"/>
-                  <member xlink:href="../BaseLayers.xml#MAPS"/> 
-                  <member xlink:href="./HSV/DopplerRadar.xml#Radar"/> 
-                  <member xlink:href="./HSV/NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
-                  <member xlink:href="./HSV/GAMMA.xml#GAMMA"/> 
-                  <member xlink:href="./HSV/WEATHER_STATION.xml#WEATHER_STATION"/>  
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/> 
+                  <member xlink:href="./Huntsville/DopplerRadar.xml#Radar"/> 
+                  <member xlink:href="./Huntsville/NSSTC_VIDEO.xml#NSSTC_VIDEO"/> 
+                  <member xlink:href="./Huntsville/GAMMA.xml#GAMMA"/> 
+                  <member xlink:href="./Huntsville/WEATHER_STATION.xml#WEATHER_STATION"/>  
                </DataList>
             </contents>
          </Scene>
