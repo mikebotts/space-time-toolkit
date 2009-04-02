@@ -110,7 +110,7 @@ public class SPSWidget implements SelectionListener, MouseListener, MouseMoveLis
 		scroller.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1));
 
 	    mainGroup = new Group(scroller, 0x0);
-		mainGroup.setText("itemName");
+		mainGroup.setText("SPS Camera Controller");
 		scroller.setContent(mainGroup);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -201,16 +201,8 @@ public class SPSWidget implements SelectionListener, MouseListener, MouseMoveLis
 		scroller.setMinSize(mainGroup.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	/**  FIX!!! **/
 	public void setDataItem(DataItem item){
-		this.dataItem = item;
-		mainGroup.setText(item.getName());
-		DataProvider prov = item.getDataProvider();
-		//  If provider isn't SPS/SML Process, this widget isn't supported.
-		//  Should catch this and never pop the widget up, actually.
-//		if(prov!=null) {
-//			STTSpatialExtent ext = prov.getSpatialExtent();
-//			this.setSpatialExtent(ext);
-//		}
 	}
 	
     public void setScene(WorldScene scene){
