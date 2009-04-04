@@ -35,15 +35,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
-import org.vast.stt.commands.OpenProject_NoMonitor;
 import org.vast.stt.commands.OpenProject;
-import org.vast.stt.commands.OpenProject_NoMonitor;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
@@ -70,22 +70,22 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         {
             FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
             String path = fileDialog.open();
-            if (path != null)
-                url = "file:///" + path.replace('\\', '/');
-            else return;
-        }
-        else if (actionId.endsWith("OpenTestProject"))
-        {
-        	//  NOTE: Remove this option
-            ;//testScreenCap();
+            if(path == null)
+            	return;
+            url = "file:///" + path.replace('\\', '/');
+
+            final OpenProject openProjectCmd = new OpenProject();
+            openProjectCmd.setUrl(url);
+            openProjectCmd.execute();
             return;
         }
+        
+        if(actionId.endsWith("SaveProject")) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Information", 
+					"Save Project not available");
+			return;
+        }
 
-        // launch OpenProject command in separate thread
-//        final OpenProject_ProgInd openProjectCmd = new OpenProject_ProgInd();
-        final OpenProject openProjectCmd = new OpenProject();
-        openProjectCmd.setUrl(url);
-        openProjectCmd.execute();
     }
 
 
