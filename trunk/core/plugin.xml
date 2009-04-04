@@ -45,7 +45,7 @@
             <separator name="group1"/>
          </menu>
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenProject" label="&amp;Open Project..." menubarPath="STT.ProjectMenu/group1"/>
-         <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenTestProject" label="&amp;Open Test Project..." menubarPath="STT.ProjectMenu/group1"/>
+         <!-- <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenTestProject" label="&amp;Open Test Project..." menubarPath="STT.ProjectMenu/group1"/> -->
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.SaveProject" label="&amp;Save Project..." menubarPath="STT.ProjectMenu/group1"/>
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.CloseProject" label="&amp;Close Project..." menubarPath="STT.ProjectMenu/group1"/>
          <!-- View Menu -->
@@ -69,6 +69,11 @@
    <extension id="STT3" point="org.eclipse.core.runtime.products">
       <product
             application="org.vast.stt.main.MainApp"
-            name="Space Time Toolkit v3.0.2"/>
+            name="Space Time Toolkit v3.1.0">
+         <property
+               name="appName"
+               value="Space Time Toolkit v3.1.0">
+         </property>
+      </product>
    </extension>
 </plugin>
