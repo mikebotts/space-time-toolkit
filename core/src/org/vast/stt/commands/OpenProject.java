@@ -31,7 +31,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.vast.stt.project.LoadProjectRunnable;
 import org.vast.stt.project.OpenPageRunnable;
 import org.vast.stt.project.Project;
@@ -46,7 +45,6 @@ public class OpenProject implements Command
 	
 	public void execute()
 	{
-		Display display = PlatformUI.getWorkbench().getDisplay();
 		Shell shell = Display.getDefault().getActiveShell();
 		
 		//  Two Progress Monitor Dialogs now used...
@@ -115,6 +113,4 @@ public class OpenProject implements Command
 	{
 		return isUpdating;
 	}
-
-	
 }
