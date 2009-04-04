@@ -31,9 +31,9 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.imageio.ImageIO;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Rectangle;
@@ -41,80 +41,13 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchException;
+import org.vast.stt.commands.OpenProject_NoMonitor;
 import org.vast.stt.commands.OpenProject;
-import org.vast.stt.gui.dialogs.DataProviderJob;
-import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.project.Project;
-import org.vast.stt.project.STTDisplay;
-import org.vast.stt.project.scene.Scene;
-import org.vast.stt.project.tree.DataItem;
-import org.vast.stt.project.tree.DataItemIterator;
-import org.vast.stt.project.world.WorldScene;
-import org.vast.stt.provider.DataProvider;
+import org.vast.stt.commands.OpenProject_NoMonitor;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
 {
-    class OpenPageRunnable implements Runnable
-    {
-        private Project project;
-        
-        public OpenPageRunnable(Project project)
-        {
-            this.project = project;
-        }
-        
-        public void run()
-        {
-            try
-            {
-                ArrayList<STTDisplay> displayList = project.getDisplayList();
-                for (int i=0; i<displayList.size(); i++)
-                {
-                    STTDisplay nextDisplay = displayList.get(i);
-                    
-                    // open a new page  a WorldScene
-                    if (nextDisplay instanceof WorldScene)
-                    {
-                        WorldScene scene = (WorldScene)nextDisplay;
-                        
-                        // keep list of providers we did so we don't do them twice
-                        List<DataProvider> processedProviders = new ArrayList<DataProvider>(20);
-                        
-                        // add job progress listener to all providers
-                        DataItemIterator it = ((Scene)nextDisplay).getDataTree().getItemIterator();
-                        while (it.hasNext())
-                        {
-                        	DataItem item = it.next();
-                            DataProvider provider = item.getDataProvider();
-                            if (!processedProviders.contains(provider))
-                            {
-                                if (provider.getSpatialExtent().getUpdater() == null)
-                                    new DataProviderJob(provider);
-                                processedProviders.add(provider);
-                            }
-                        }
-//                        
-                        // create scene page input and open new page
-                        ScenePageInput pageInput = new ScenePageInput(scene);
-                        IWorkbenchWindow oldWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-                        oldWindow.openPage("STT.Perspective", pageInput);
-                        
-                        // close empty page
-                        if (oldWindow.getActivePage().getInput() == null)
-                            oldWindow.close();
-                    }
-                }
-            }
-            catch (WorkbenchException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    };
-
-
     public ProjectMenu()
     {
     }
@@ -125,7 +58,6 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         String actionId = action.getId();
         String url = null;
 
-        
         // close project 
         if (actionId.endsWith("CloseProject"))
         {
@@ -144,29 +76,16 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
         }
         else if (actionId.endsWith("OpenTestProject"))
         {
-            testScreenCap();
+        	//  NOTE: Remove this option
+            ;//testScreenCap();
             return;
         }
 
         // launch OpenProject command in separate thread
-        final OpenProject command = new OpenProject();
-        command.setUrl(url);
-        Runnable readProject = new Runnable()
-        {
-            public void run()
-            {
-                // launch command to read project
-                command.execute();
-                Project newProject = command.getProject();
-                                
-                // open new GUI page asynchronously
-                Runnable openPage = new OpenPageRunnable(newProject);
-                PlatformUI.getWorkbench().getDisplay().asyncExec(openPage);
-            }
-        };
-
-        Thread thread = new Thread(readProject);
-        thread.start();
+//        final OpenProject_ProgInd openProjectCmd = new OpenProject_ProgInd();
+        final OpenProject openProjectCmd = new OpenProject();
+        openProjectCmd.setUrl(url);
+        openProjectCmd.execute();
     }
 
 
@@ -184,6 +103,9 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
     {
     }
     
+    /** TODO, add dialog for testScreenCap and move it to its own class 
+     * 
+     */
     int cnt=1;
     public void testScreenCap() {
     	
