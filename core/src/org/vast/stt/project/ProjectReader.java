@@ -54,13 +54,19 @@ public class ProjectReader extends XMLReader
 {
 	private DOMHelper dom;    
 	private DataTreeReader dataReader;
+    private Project project;
+	private boolean cancelled = false;
     
-	
 	public ProjectReader()
 	{
         objectIds = new Hashtable<String, Object>();
         dataReader = new DataTreeReader();
         dataReader.setObjectIds(objectIds);
+	}
+	
+	public void cancelRead(){
+		cancelled = true;
+		project = null;
 	}
 	
 	
@@ -69,22 +75,22 @@ public class ProjectReader extends XMLReader
 	 * @param url
 	 * @return Project object
 	 */
-	public Project readProject(String url)
+	public void readProject(String url)
 	{
 		try
 		{
             DOMHelper dom = new DOMHelper(url, false);
-			return readProject(dom, dom.getBaseElement());
+			project = readProject(dom, dom.getBaseElement());
+//			System.err.println("Project assigned in ProjectReader.readProject");
 		}
 		catch (DOMHelperException e)
 		{
 			e.printStackTrace();
-			return null;
 		}
 	}
 	
 	
-	public Project readProject(DOMHelper dom, Element projectElt)
+	private Project readProject(DOMHelper dom, Element projectElt)
 	{
 		Element listElt;
 		Project project = new Project();
@@ -319,4 +325,9 @@ public class ProjectReader extends XMLReader
                
         return display;
     }
+    
+    public Project getProject() {
+		return project;
+	}
+
 }
