@@ -199,7 +199,8 @@
                               <swe:DataRecord>
                                  <swe:field name="location" xlink:href="#OBS_LOC"/>
                                  <swe:field name="elevation" xlink:href="#OBS_ELEV"/>
-                                 <swe:field name="azimuth" xlink:href="#OBS_AZIM"/>                              
+                                 <swe:field name="azimuth" xlink:href="#OBS_AZIM"/> 
+                                 <swe:field name="numBins" xlink:href="#NUM_BINS"/>                             
                               </swe:DataRecord>
                            </sml:input>
                            <sml:input name="countingRange">
@@ -228,6 +229,7 @@
                                  <swe:field name="location" xlink:href="#OBS_LOC"/>
                                  <swe:field name="elevation" xlink:href="#OBS_ELEV"/>
                                  <swe:field name="azimuth" xlink:href="#OBS_AZIM"/>
+                                 <swe:field name="numBins" xlink:href="#NUM_BINS"/>
                               </swe:DataRecord>
                            </sml:output>
                            <sml:output name="count">
@@ -327,6 +329,12 @@
                      <sml:destination ref="binCounter/inputs/pass-through/azimuth"/>
                   </sml:Link>
                </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sos/outputs/observationData/numBins"/>
+                     <sml:destination ref="binCounter/inputs/pass-through/numBins"/>
+                  </sml:Link>
+               </sml:connection>
                <!-- binLocationChain inputs -->
                <sml:connection>
                   <sml:Link>
@@ -350,6 +358,12 @@
                   <sml:Link>
                      <sml:source ref="binCounter/outputs/count/variable"/>
                      <sml:destination ref="binLocationChain/inputs/binIndex"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="binCounter/outputs/pass-through/numBins"/>
+                     <sml:destination ref="binLocationChain/inputs/numberOfBins"/>
                   </sml:Link>
                </sml:connection>
                <!-- arrayBuilder inputs -->
