@@ -15,6 +15,9 @@
 					<sml:input name="binIndex">
 						<swe:Count definition="urn:ogc:data:index"/>
 					</sml:input>
+					<sml:input name="numberOfBins">
+						<swe:Count definition="urn:ogc:data:index"/>
+					</sml:input>
 					<sml:input name="azimuth">
 						<swe:Quantity definition="urn:ogc:phenomenon:angle"/>
 					</sml:input>
@@ -67,6 +70,40 @@
 			</sml:outputs>
 			<sml:components>
 				<sml:ComponentList>
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<!-- Bin Position in Sensor CRS -->
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<sml:component name="binDistanceNormalization">
+						<sml:ProcessModel>
+							<sml:inputs>
+								<sml:InputList>
+									<sml:input name="V1">
+										<swe:Quantity/>
+									</sml:input>
+									<sml:input name="V2">
+										<swe:Quantity/>
+									</sml:input>
+								</sml:InputList>
+							</sml:inputs>
+							<sml:outputs>
+								<sml:OutputList>
+									<sml:output name="result">
+										<swe:Quantity/>
+									</sml:output>
+								</sml:OutputList>
+							</sml:outputs>
+							<sml:parameters>
+								<sml:ParameterList>
+									<sml:parameter name="equation">
+										<swe:Category>
+											<swe:value>V1/V2</swe:value>
+										</swe:Category>
+									</sml:parameter>
+								</sml:ParameterList>
+							</sml:parameters>
+							<sml:method xlink:href="urn:vast:def:process:equationSolver:1.0"/>
+						</sml:ProcessModel>
+					</sml:component>
 					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 					<!-- Bin Position in Sensor CRS -->
 					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -117,7 +154,7 @@
 											<swe:encoding>
 												<swe:TextBlock tokenSeparator="," blockSeparator=" " decimalSeparator="."/>
 											</swe:encoding>
-											<swe:values>0,0 459,460000</swe:values>
+											<swe:values>0,0 1,460000</swe:values>
 										</swe:Curve>
 									</sml:parameter>
 								</sml:ParameterList>
@@ -352,6 +389,18 @@
 					<sml:connection>
 						<sml:Link>
 							<sml:source ref="this/inputs/binIndex"/>
+							<sml:destination ref="binDistanceNormalization/inputs/V1"/>
+						</sml:Link>
+					</sml:connection>
+					<sml:connection>
+						<sml:Link>
+							<sml:source ref="this/inputs/numberOfBins"/>
+							<sml:destination ref="binDistanceNormalization/inputs/V2"/>
+						</sml:Link>
+					</sml:connection>							
+					<sml:connection>
+						<sml:Link>
+							<sml:source ref="binDistanceNormalization/outputs/result"/>							
 							<sml:destination ref="binDistanceLUT/inputs/index"/>
 						</sml:Link>
 					</sml:connection>
