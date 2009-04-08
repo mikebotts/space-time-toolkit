@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <Identification>
+      <name>EO Sensors Test Project</name>
+      <author>Gregoire Berthiau, Alex Robin</author>
+      <dateCreated>2007-04-10T09:23:00</dateCreated>
+      <description>Geolocated Data from Various Earth Observations Sensors</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>World View</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2006-10-02T15:13:00Z</baseTime>
+                  <lagTime>3600</lagTime>
+                  <leadTime>3600</leadTime>
+                  <stepTime>60</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+               <ViewSettings showTripod="true" showArcball="false" showROI="true">
+                  <backgroundColor>#000000</backgroundColor>
+                  <projection>LLA</projection>
+                  <cameraMode>ORTHO</cameraMode>
+                  <cameraPos>0 0 10</cameraPos>
+                  <targetPos>0 0 0</targetPos>
+                  <upDirection>0 1 0</upDirection>
+                  <orthoWidth>6.0</orthoWidth>
+                  <orthoHeight>4.0</orthoHeight>
+                  <nearClip>1</nearClip>
+                  <farClip>100</farClip>
+                  <zFudgeFactor>1000</zFudgeFactor>
+               </ViewSettings>
+            </view>
+            <contents>
+               <DataList>
+                  <name>EO Sensors</name>
+                  <member xlink:href="./BaseLayers.xml#GIS"/>
+                  <member xlink:href="./BaseLayers.xml#MAPS"/>
+                  <member xlink:href="./Ocean/gomoos.xml#gomoos"/>   
+                  <member xlink:href="./Ocean/SouthFloridaShelf.xml#SouthFloridaShelf"/>                                                                                                                                                                                                                        
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>
