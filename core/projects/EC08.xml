@@ -43,7 +43,7 @@
             <contents>
                <DataList>
                   <name>Empire Challenge 08</name>
-                  <member xlink:href="../EC08/BaseLayers.xml#MAPS"/> 
+                  <member xlink:href="./BaseLayers.xml#MAPS"/> 
                   <member xlink:href="./EC08/ERDASwithCSM.xml#ERDASwithCSM"/>
                </DataList>
             </contents>
