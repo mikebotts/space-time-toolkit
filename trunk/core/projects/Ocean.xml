@@ -39,8 +39,8 @@
                   <name>EO Sensors</name>
                   <member xlink:href="./BaseLayers.xml#GIS"/>
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
-                  <member xlink:href="./Ocean/gomoos.xml#gomoos"/>   
-                  <member xlink:href="./Ocean/SouthFloridaShelf.xml#SouthFloridaShelf"/>                                                                                                                                                                                                                        
+                  <member xlink:href="./Ocean/gomoos2.xml#gomoos"/>   
+                  <member xlink:href="./Ocean/SouthFloridaShelf.xml#SouthFloridaShelf"/>                                                                                                                                                                                                                      
                </DataList>
             </contents>
          </Scene>
