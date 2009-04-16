@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0" xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 file:///C:\eclipse_workspace\schema\sensorML\sensorML.xsd" version="1.0">
+   <sml:member>
+      <sml:ProcessChain gml:id="OCEAN_SOS">
+         <sml:inputs>
+            <sml:InputList>
+               <sml:input name="time">
+                  <swe:DataRecord>
+                     <swe:field name="start">
+                        <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                           <swe:uom code="s"/>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="stop">
+                        <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                           <swe:uom code="s"/>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="step">
+                        <swe:Quantity definition="urn:ogc:def:phenomenon:duration">
+                           <swe:uom code="s"/>
+                        </swe:Quantity>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:input>
+            </sml:InputList>
+         </sml:inputs>
+         <sml:outputs>
+            <sml:OutputList>
+               <sml:output name="observationData">
+                         <swe:DataRecord>
+                                 <swe:field name="platformName">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="time">
+                                    <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="latitude">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="longitude">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="depth">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="observedProperty1">
+                                    <swe:Quantity/>
+                                 </swe:field>
+                        </swe:DataRecord>
+               </sml:output>
+            </sml:OutputList>
+         </sml:outputs>
+         <sml:components>
+            <sml:ComponentList>
+               <sml:component name="sos">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="time">
+                              <swe:DataRecord>
+                                 <swe:field name="start">
+                                    <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="stop">
+                                    <swe:Time definition="urn:ogc:def:phenomenon:time" referenceFrame="urn:ogc:def:crs:julianTime">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="step">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:duration">
+                                       <swe:uom code="s"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="observationInfo">
+                              <swe:DataRecord>
+                                 <swe:field name="name">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="procedure">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="location">
+                                    <swe:Vector referenceFrame="urn:ogc:def:crs:EPSG:6.1:4329">
+                                       <swe:coordinate name="lat">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="lon">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                       <swe:coordinate name="alt">
+                                          <swe:Quantity/>
+                                       </swe:coordinate>
+                                    </swe:Vector>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                           <sml:output name="observationData">
+                              <swe:DataRecord>
+                                 <swe:field name="platformName">
+                                    <swe:Category/>
+                                 </swe:field>
+                                 <swe:field name="time">
+                                    <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                                       <swe:uom code="s"/>
+                                    </swe:Time>
+                                 </swe:field>
+                                 <swe:field name="latitude">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="longitude">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="depth">
+                                    <swe:Quantity definition="urn:ogc:phenomenon:altitude:wgs84">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="observedProperty1">
+                                    <swe:Quantity/>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="sosOptions">
+                              <swe:DataRecord fixed="true">
+                                 <swe:field name="endPoint">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>http://vast.uah.edu/vast/amprSos</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="requestMethod">
+                                    <swe:Category definition="urn:ogc:def:identifier:URL">
+                                       <swe:value>GET</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="version">
+                                    <swe:Category definition="urn:ogc:def:identifier:version">
+                                       <swe:value>1.0</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="offering">
+                                    <swe:Category>
+                                       <swe:value>AMPR_NAV</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="observables">
+                                    <swe:Category>
+                                       <swe:value>LOCATION</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                                 <swe:field name="format">
+                                    <swe:Category definition="urn:ogc:def:identifier:mimeType">
+                                       <swe:value>text/xml; subtype="om/1.0"</swe:value>
+                                    </swe:Category>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+            </sml:ComponentList>
+         </sml:components>
+         <sml:connections>
+            <sml:ConnectionList>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/time"/>
+                     <sml:destination ref="sos/inputs/time"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sos/outputs/observationData"/>
+                     <sml:destination ref="this/outputs/observationData"/>
+                  </sml:Link>
+               </sml:connection>
+            </sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>
