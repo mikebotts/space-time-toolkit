@@ -6,774 +6,245 @@
          <DataItem>
             <name>A01 Buoy</name>
             <dataProvider>
-               <OWSDataProvider>
-                  <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
-                     <TimeExtent id="LIS_TIME">
-                         <baseTime>2005-04-28T16:00:00</baseTime>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                  <timeExtent>
+                     <TimeExtent id="GOMOOS">
+                        <baseTime>NOW-90000</baseTime>
                         <leadTime>86400</leadTime>
-                        <stepTime>0</stepTime>
+                        <lagTime>7200</lagTime>
                      </TimeExtent>
-                  </timeExtent>  -->
-                  <layerId>A01</layerId>
-                  <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
-                     <GetObservation service="SOS" version="1.0">
-                        <offering>A01</offering>
-                        <observedProperty>air_temperature,chlorophyll,direction_of_sea_water_velocity,dissolved_oxygen,oxygen_saturation,percent_oxygen_saturation,sea_level_pressure,sea_water_density,sea_water_electrical_conductivity,sea_water_speed,sea_water_temperature,significant_height_of_wind_and_swell_waves,visibility_in_air,wind_from_direction,wind_gust,wind_speed</observedProperty>
-                        <eventTime>
-                           <ogc:TM_During>
-                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2009-04-02T16:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2009-04-03T16:00:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:TM_During>
-                        </eventTime>
-                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
-                        <resultModel>swe:DataValueType</resultModel>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">A01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
             </dataProvider>
-            <style name="Air Temperature">
-               <sld:PointSymbolizer enabled="true">
+            <style name="Buoy Location">
+               <sld:PointSymbolizer id="LOCATION" enabled="true">
                   <sld:Geometry>
                      <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
+                        <ogc:PropertyName>observationData/longitude</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
+                        <ogc:PropertyName>observationData/latitude</ogc:PropertyName>
+                     </sld:CssParameter>  
                   </sld:Geometry>
                   <sld:Graphic>
                      <sld:Mark>
                         <sld:WellKnownName>square</sld:WellKnownName>
                         <sld:Fill>
-                           <sld:CssParameter name="fill">#FFFFFFS</sld:CssParameter>
-                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                           <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
                         </sld:Fill>
                      </sld:Mark>
-                     <sld:Size>2</sld:Size>
+                     <sld:Size>3</sld:Size>
                   </sld:Graphic>
                </sld:PointSymbolizer>
             </style>
-            <style name="Chlorophyll">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty2</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Direction Of Sea Water Velocity">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty3</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Dissolved Oxygen">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty4</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Oxygen Saturation">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty5</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Percent Oxygen Saturation">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty6</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Level Pressure">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty7</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Density">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty8</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Electrical Conductivity">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty9</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Speed">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty10</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Temperature">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty11</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Significant Height Of Wind And Swell Waves">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty12</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Visibility In Air">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty13</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind From Direction">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty14</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind Gust">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty15</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind Speed">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>A01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>A01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>A01Observations/observedProperty16</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
          </DataItem>
-      </member>
+       </member>
       <member visible="false">
          <DataItem>
             <name>B01 Buoy</name>
             <dataProvider>
-               <OWSDataProvider>
-                  <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
-                     <TimeExtent id="LIS_TIME">
-                         <baseTime>2005-04-28T16:00:00</baseTime>
-                        <leadTime>86400</leadTime>
-                        <stepTime>0</stepTime>
-                     </TimeExtent>
-                  </timeExtent>  -->
-                  <layerId>B01</layerId>
-                  <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
-                     <GetObservation service="SOS" version="1.0">
-                        <offering>B01</offering>
-                        <observedProperty>air_temperature,chlorophyll,direction_of_sea_water_velocity,dominant_wave_period,sea_level_pressure,sea_water_density,sea_water_electrical_conductivity,sea_water_speed,sea_water_temperature,significant_height_of_wind_and_swell_waves,visibility_in_air,wind_from_direction,wind_gust,wind_speed</observedProperty>
-                        <eventTime>
-                           <ogc:TM_During>
-                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
-                              <gml:TimePeriod>
-                                 <gml:beginPosition>2009-04-02T16:00:00Z</gml:beginPosition>
-                                 <gml:endPosition>2009-04-03T16:00:00Z</gml:endPosition>
-                              </gml:TimePeriod>
-                           </ogc:TM_During>
-                        </eventTime>
-                        <responseFormat>text/xml; subtype="om/1.0"</responseFormat>
-                        <resultModel>swe:DataValueType</resultModel>
-                     </GetObservation>
-                  </request>
-               </OWSDataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">B01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
             </dataProvider>
-            <style name="Air Temperature">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty1</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Chlorophyll">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty2</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Direction Of Sea Water Velocity">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty3</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Dominant Wave Period">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty4</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Level Pressure">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty5</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Density">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty6</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Electrical Conductivity">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty7</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Speed">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty8</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Sea Water Temperature">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty9</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Significant Height Of Wind And Swell Waves">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty10</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Visibility In Air">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                    
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty11</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind From Direction">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty12</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind Gust">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty13</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
-            <style name="Wind Speed">
-               <sld:LineSymbolizer enabled="false">
-                  <sld:Geometry>
-                     <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>B01Observations/longitude</ogc:PropertyName>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>B01Observations/latitude</ogc:PropertyName>
-                     </sld:CssParameter>                     
-                  </sld:Geometry>
-                  <sld:Stroke>
-                     <sld:CssParameter name="stroke-red">
-                        <LinearAdjustment>
-                           <ogc:PropertyName>B01Observations/observedProperty14</ogc:PropertyName>
-                           <Gain>0.34</Gain>
-                           <Offset>-2.4</Offset>
-                        </LinearAdjustment>
-                     </sld:CssParameter>
-                     <sld:CssParameter name="stroke-green">1.0</sld:CssParameter>
-                     <sld:CssParameter name="stroke-width">4</sld:CssParameter>
-                  </sld:Stroke>
-               </sld:LineSymbolizer>
-            </style>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
          </DataItem>
-      </member>  
+      </member>
+  <!--     <member visible="false">
+         <DataItem>
+            <name>C02 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">C02</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
       <member visible="false">
+         <DataItem>
+            <name>D01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">D01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>  -->
+      <member visible="false">
+         <DataItem>
+            <name>D02 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">D02</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>E01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">E01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>F01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">F01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>I01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">I01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+  <!--     <member visible="false">
+         <DataItem>
+            <name>J02 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">J02</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>L01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">L01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>  -->
+      <member visible="false">
+         <DataItem>
+            <name>M01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">M01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>N01 Buoy</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Buoy SOS</name>
+                   <timeExtent xlink:href="#GOMOOS">
+                  </timeExtent>
+                  <process xlink:href="../process/Ocean_SOS.xml#OCEAN_SOS"/>
+                  <value process="sos" path="sosOptions/endPoint">http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi</value>
+               	  <value process="sos" path="sosOptions/offering">N01</value>
+               	  <value process="sos" path="sosOptions/observables">air_temperature</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style name="Buoy Location" xlink:href="#LOCATION"/>
+         </DataItem>
+      </member>
+      <!-- <member visible="false">
          <DataItem>
             <name>C02 Buoy</name>
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>C02</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -1170,13 +641,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>D01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -1481,13 +952,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>D02</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -1861,13 +1332,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>E01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -2172,13 +1643,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>F01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -2483,13 +1954,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>I01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -2794,13 +2265,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>J02</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -3082,13 +2553,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>L01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -3370,13 +2841,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>M01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -3681,13 +3152,13 @@
             <dataProvider>
                <OWSDataProvider>
                   <name>Gomoos Buoy SOS</name>
-             <!--     <timeExtent>
+                  <timeExtent>
                      <TimeExtent id="LIS_TIME">
                          <baseTime>2005-04-28T16:00:00</baseTime>
                         <leadTime>86400</leadTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>  -->
+                  </timeExtent>  
                   <layerId>N01</layerId>
                   <request postUrl="http://www.gomoos.org/cgi-bin/sos/V1.0/oostethys_sos.cgi">
                      <GetObservation service="SOS" version="1.0">
@@ -3962,6 +3433,6 @@
                </sld:LineSymbolizer>
             </style>
          </DataItem>
-      </member>                   
+      </member>                  --> 
    </DataList>   
 </STTProject>
