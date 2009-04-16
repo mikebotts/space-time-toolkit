@@ -3,6 +3,9 @@
    <DataList id="SouthFloridaShelf">
       <name>Golf Of Mexico</name>
       <member visible="false">
+       <DataList>
+        <name>Buoy Positions</name>
+        <member visible="false">
          <DataItem>
             <name>8726384 Buoy</name>
             <dataProvider>
@@ -492,7 +495,12 @@
             </dataProvider>
             <style name="Buoy Location" xlink:href="#LOCATION"/>
          </DataItem>
+        </member>
+       </DataList>
       </member>
+      <member>
+       <DataList>
+       <name>Properties Plots</name>
       <member>
          <ChartScene>
             <name>Wind From Direction Chart</name>
@@ -500,7 +508,7 @@
                <name></name>
                <Range>
                   <min>1234908000</min>
-                  <max>1234911400</max>
+                  <max>1235512800</max>
                </Range>
             </domainAxis>
             <rangeAxis>
@@ -1134,6 +1142,8 @@
                </DataList>
             </contents>
          </ChartScene>
+      </member>
+      </DataList>
       </member>
    </DataList>   
 </STTProject>
