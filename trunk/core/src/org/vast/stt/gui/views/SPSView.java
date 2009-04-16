@@ -97,7 +97,7 @@ public class SPSView extends DataItemView
         if (pageInput != null)
         {
         	spsWidget.setScene((WorldScene)pageInput.getScene());        
-        	spsWidget.setDataItem(item);
+        	//spsWidget.setDataItem(item);
         }
     }
 
