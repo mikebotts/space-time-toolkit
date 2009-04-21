@@ -128,7 +128,7 @@ public class ExtentReader extends XMLReader
      * @param dom
      * @param spElt
      */
-    public STTTimeExtent readTimeExtent(DOMHelper dom, Element timeElt)
+    public STTTimeExtent readTimeExtent(DOMHelper dom, Element timeElt) throws NumberFormatException
     {
     	STTTimeExtent timeExtent = new STTTimeExtent();
     	
@@ -154,13 +154,6 @@ public class ExtentReader extends XMLReader
                     {
     	                if (val.equalsIgnoreCase("now"))
     	                    timeExtent.setBaseAtNow(true);
-    	                else if ((val.indexOf("now")!=-1 || val.indexOf("Now")!=-1 || val.indexOf("NOW")!=-1) && !val.equalsIgnoreCase("now"))
-    	                {
-    	                	
-    	                	double relativeTime = ((double)System.currentTimeMillis())/1000.0 + Double.parseDouble(val.substring(3));
-    	                	timeExtent.setBaseTime(relativeTime);
-    	                    timeExtent.setDefaultBaseTime(relativeTime);
-    	                }
     	                else
     	                {
     	                	double baseTime = DateTimeFormat.parseIso(val);
@@ -187,6 +180,10 @@ public class ExtentReader extends XMLReader
 	                if (val != null)
 	                    timeExtent.setTimeStep(Double.parseDouble(val));
 	                
+	                val = dom.getElementValue(extentElt, "timeBias");
+	                if (val != null) 
+	                    timeExtent.setTimeBias(Double.parseDouble(val));
+
 	                // store that in the hashtable
 	                registerObjectID(dom, extentElt, timeExtent);
 	            }
