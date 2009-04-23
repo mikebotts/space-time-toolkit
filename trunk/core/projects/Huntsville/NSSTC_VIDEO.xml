@@ -346,7 +346,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>NSSTC Video Camera 1 - Streaming in Window</name>
+            <name>NSSTC Video Camera 2 - Streaming in Window</name>
             <dataProvider>
                <SensorMLProvider dataPersistency="1">
                   <name>Video Camera Streaming SOS</name>
@@ -357,7 +357,7 @@
                    </TimeExtent>
                   </timeExtent> 
                   <process xlink:href="./SOSJustvideoProcessChainForBothCam.xml#PROCESS"/>
-                  <value process="sos" path="sosOptions/procedures">urn:ogc:object:sensor:VAST:vastcam1</value>
+                  <value process="sos" path="sosOptions/procedures">urn:ogc:object:sensor:VAST:vastcam2</value>
                </SensorMLProvider>
             </dataProvider>
             <style>
