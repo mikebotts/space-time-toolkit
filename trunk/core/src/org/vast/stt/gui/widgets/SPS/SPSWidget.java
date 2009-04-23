@@ -193,7 +193,7 @@ public class SPSWidget
 						autoSubmitBtn.setText("Auto Submit");
 						autoSubmitBtn.setToolTipText("Submit request automatically when choosing Lat/Lon from World View");
 						//  suspend for now until WOrldView mouse interaction fixed
-						autoSubmitBtn.setEnabled(false);
+//						autoSubmitBtn.setEnabled(false);
 					}
 				}
 			}
