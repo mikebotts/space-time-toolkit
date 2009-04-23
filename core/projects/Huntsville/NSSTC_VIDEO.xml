@@ -74,7 +74,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>NSSTC Video Camera 1 - Streaming</name>
+            <name>NSSTC Video Camera 1 - Streaming on Projected Screen</name>
             <dataProvider>
                <SensorMLProvider dataPersistency="1">
                   <name>Video Camera Streaming SOS</name>
@@ -164,6 +164,27 @@
             </style>
          </DataItem>
       </member>
+      <member visible="false">
+         <DataItem>
+            <name>NSSTC Video Camera 1 - Streaming in Window</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="1">
+                  <name>Video Camera Streaming SOS</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSJustvideoProcessChainForBothCam.xml#PROCESS"/>
+                  <value process="sos" path="sosOptions/procedures">urn:ogc:object:sensor:VAST:vastcam1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <!-- style to display in window -->
+            </style>
+         </DataItem>
+      </member>
       <member>
          <DataItem>
             <name>NSSTC Camera 2 Lookrays</name>
@@ -233,7 +254,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>NSSTC Video Camera 2 - Streaming</name>
+            <name>NSSTC Video Camera 2 - Streaming on Projected Screen</name>
             <dataProvider>
                <SensorMLProvider dataPersistency="1">
                   <name>Video Camera Streaming SOS</name>
@@ -320,6 +341,27 @@
                      <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                   </sld:Stroke>
                </sld:GridMeshSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>NSSTC Video Camera 1 - Streaming in Window</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="1">
+                  <name>Video Camera Streaming SOS</name>
+                  <timeExtent>
+                   <TimeExtent>
+                     <baseTime>now</baseTime>
+                     <stepTime>0</stepTime>
+                   </TimeExtent>
+                  </timeExtent> 
+                  <process xlink:href="./SOSJustvideoProcessChainForBothCam.xml#PROCESS"/>
+                  <value process="sos" path="sosOptions/procedures">urn:ogc:object:sensor:VAST:vastcam1</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <!-- style to display in window -->
             </style>
          </DataItem>
       </member>
