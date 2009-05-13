@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SPS Plug-in
+Bundle-SymbolicName: com.spotimage.stt.sps;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: SPOT IMAGE
+Bundle-Activator: com.spotimage.stt.sps.SPSPlugin
+Eclipse-LazyStart: true
+Bundle-ClassPath: ., classes/, ../SPOT-EOSPS/classes
+Require-Bundle: org.vast.common,
+ org.vast.stt.main,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.forms
+Export-Package: com.spotimage.stt.sps
