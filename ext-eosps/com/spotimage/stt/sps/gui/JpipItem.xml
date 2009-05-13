@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataItem enabled="false" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:sldx="http://vast.uah.edu/sldx">
+    <name>Spot Image JPIP Server</name>
+    <dataProvider>
+        <JPIPProvider>
+            <name>Spot Image JPIP Server</name>
+            <spatialExtent autoUpdate="#SCENE_01"/>
+            <server>http://localhost</server>
+            <target>RSA1.jp2</target>
+            <components>0 1 2</components>
+            <footprint>-23.171482 27.196035 -23.310563 27.951421 -23.839041 27.836929 -23.700150 27.078285</footprint>
+        </JPIPProvider>
+    </dataProvider>
+    <style>
+        <sld:TextureSymbolizer enabled="true">
+            <sld:Grid>
+                <sld:Dimensions>
+                    <sld:Axis name="width">
+                        <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                    </sld:Axis>
+                    <sld:Axis name="length">
+                        <ogc:PropertyName>grid/array</ogc:PropertyName>
+                    </sld:Axis>
+                </sld:Dimensions>
+                <sld:Geometry>
+                    <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                    </sld:CssParameter>
+                    <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                    </sld:CssParameter>
+                    <sld:CssParameter name="geometry-tx">
+                        <ogc:PropertyName>grid/array/row/point/imgX</ogc:PropertyName>
+                    </sld:CssParameter>
+                    <sld:CssParameter name="geometry-ty">
+                        <ogc:PropertyName>grid/array/row/point/imgY</ogc:PropertyName>
+                    </sld:CssParameter>
+                </sld:Geometry>
+            </sld:Grid>
+            <sld:Raster>
+                <sld:Opacity>1.0</sld:Opacity>
+                <sld:Dimensions>
+                    <sld:Axis name="width">
+                        <ogc:PropertyName>image/array/row</ogc:PropertyName>
+                    </sld:Axis>
+                    <sld:Axis name="height">
+                        <ogc:PropertyName>image/array</ogc:PropertyName>
+                    </sld:Axis>
+                </sld:Dimensions>
+                <sld:ChannelSelection>
+                    <sld:RedChannel>
+                        <sld:SourceChannelName>image/array/row/pixel/red</sld:SourceChannelName>
+                    </sld:RedChannel>
+                    <sld:GreenChannel>
+                        <sld:SourceChannelName>image/array/row/pixel/green</sld:SourceChannelName>
+                    </sld:GreenChannel>
+                    <sld:BlueChannel>
+                        <sld:SourceChannelName>image/array/row/pixel/blue</sld:SourceChannelName>
+                    </sld:BlueChannel>
+                </sld:ChannelSelection>
+            </sld:Raster>
+        </sld:TextureSymbolizer>
+    </style>                        
+    <style>
+        <sld:GridMeshSymbolizer enabled="false">
+            <sld:Dimensions>
+                <sld:Axis name="width">
+                    <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                </sld:Axis>
+                <sld:Axis name="length">
+                    <ogc:PropertyName>grid/array</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Stroke>
+                <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+            </sld:Stroke>
+        </sld:GridMeshSymbolizer>
+    </style>
+    <style>
+        <sld:GridBorderSymbolizer enabled="true">
+            <sld:Dimensions>
+                <sld:Axis name="width">
+                    <ogc:PropertyName>grid/array/row</ogc:PropertyName>
+                </sld:Axis>
+                <sld:Axis name="length">
+                    <ogc:PropertyName>grid/array</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <ogc:PropertyName>grid/array/row/point/lon</ogc:PropertyName>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <ogc:PropertyName>grid/array/row/point/lat</ogc:PropertyName>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Stroke>
+                <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+            </sld:Stroke>
+        </sld:GridBorderSymbolizer>
+    </style>
+</DataItem>
