@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataItem enabled="false" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:sldx="http://vast.uah.edu/sldx">
+    <name>SPOT EO-SPS</name>
+    <dataProvider>
+        <SPSFeasibilityProvider>
+            <name>SPOT EO-SPS</name>
+            <description>Spotimage EO-SPS</description>
+            <request postUrl="http://localhost:8080/axis2/services/SPSv20">
+                <DescribeTasking service="SPS" version="2.0">
+                    <sensorID>spot5</sensorID>
+                </DescribeTasking>
+            </request>
+        </SPSFeasibilityProvider>
+    </dataProvider>
+    <style name="Cells Fill">
+        <sld:PolygonSymbolizer enabled="true">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Cell/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Cell/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Cell/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Fill>
+                <sld:CssParameter name="fill-red">
+                    <LookUpTable1D>
+                        <ogc:PropertyName>Cell/SuccessRate</ogc:PropertyName>
+                        <TableValues>0 1.0 84.99 1.0 85 0.0</TableValues>
+                    </LookUpTable1D>
+                </sld:CssParameter>
+                <sld:CssParameter name="fill-green">
+                    <LookUpTable1D>
+                        <ogc:PropertyName>Cell/SuccessRate</ogc:PropertyName>
+                        <TableValues>0 0.0 50 0.0 50 0.7 84.99 0.7 85 1.0 100 1.0</TableValues>
+                    </LookUpTable1D>
+                </sld:CssParameter>
+                <sld:CssParameter name="fill-blue">0.0</sld:CssParameter>
+                <sld:CssParameter name="fill-opacity">0.8</sld:CssParameter>
+            </sld:Fill>
+        </sld:PolygonSymbolizer>
+    </style>
+    <style name="Cells Outline">
+        <sld:LineSymbolizer enabled="true">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Cell/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Cell/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Cell/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Stroke>
+                <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>                                 
+                <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                <sld:CssParameter name="stroke-smooth">true</sld:CssParameter>
+            </sld:Stroke>
+        </sld:LineSymbolizer>
+    </style>    
+    <style name="Segments Outline">
+        <sld:LineSymbolizer enabled="false">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Segment/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Stroke>
+                <sld:CssParameter name="stroke">#FFFF00</sld:CssParameter>                                 
+                <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+                <sld:CssParameter name="stroke-smooth">true</sld:CssParameter>
+            </sld:Stroke>
+        </sld:LineSymbolizer>
+    </style>
+    <style name="Segments Fill">
+        <sld:PolygonSymbolizer enabled="false">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Segment/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Fill>
+                <sld:CssParameter name="fill">#CCCCCC</sld:CssParameter>
+                <sld:CssParameter name="fill-opacity">0.2</sld:CssParameter>
+            </sld:Fill>
+        </sld:PolygonSymbolizer>
+    </style>    
+</DataItem>

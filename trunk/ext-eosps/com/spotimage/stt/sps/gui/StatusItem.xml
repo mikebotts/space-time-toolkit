@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataItem enabled="false" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:sldx="http://vast.uah.edu/sldx">
+    <name>Task Status</name>
+    <style name="Segments Outline">
+        <sld:LineSymbolizer enabled="true">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Segment/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Stroke>
+                <sld:CssParameter name="stroke-red">
+                    <sld:CategoryLookUpTable>
+                        <ogc:PropertyName>Segment/Status</ogc:PropertyName>
+                        <sld:Default>1.0</sld:Default>
+                        <sld:Mapping key="VALIDATED">0.0</sld:Mapping>
+                    </sld:CategoryLookUpTable>
+                </sld:CssParameter>
+                <sld:CssParameter name="stroke-green">
+                    <sld:CategoryLookUpTable>
+                        <ogc:PropertyName>Segment/Status</ogc:PropertyName>
+                        <sld:Default>0.0</sld:Default>
+                        <sld:Mapping key="VALIDATED">1.0</sld:Mapping>
+                    </sld:CategoryLookUpTable>
+                </sld:CssParameter>
+                <sld:CssParameter name="stroke-width">4</sld:CssParameter>
+                <sld:CssParameter name="stroke-smooth">true</sld:CssParameter>
+            </sld:Stroke>
+        </sld:LineSymbolizer>
+    </style>
+    <style name="Segments Fill">
+        <sld:PolygonSymbolizer enabled="false">
+            <sld:Dimensions>
+                <sld:Axis name="numPoints">
+                    <ogc:PropertyName>Segment/Footprint/Exterior</ogc:PropertyName>
+                </sld:Axis>
+            </sld:Dimensions>
+            <sld:Geometry>
+                <sld:CssParameter name="geometry-x">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lon</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+                <sld:CssParameter name="geometry-y">
+                    <sld:LinearAdjustment>
+                        <ogc:PropertyName>Segment/Footprint/Exterior/Point/Lat</ogc:PropertyName>
+                        <sld:Gain>0.017453292519943296</sld:Gain>
+                    </sld:LinearAdjustment>
+                </sld:CssParameter>
+            </sld:Geometry>
+            <sld:Fill>
+                <sld:CssParameter name="fill">#FFCCCC</sld:CssParameter>
+                <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+            </sld:Fill>
+        </sld:PolygonSymbolizer>
+    </style>
+    <style name="Preview Images">
+        <sld:TextureSymbolizer enabled="false">
+            <sld:Grid>
+                <sld:Dimensions>
+                    <sld:Axis name="width">
+                        <ogc:PropertyName>Quicklook/grid/row</ogc:PropertyName>
+                    </sld:Axis>
+                    <sld:Axis name="length">
+                        <ogc:PropertyName>Quicklook/grid</ogc:PropertyName>
+                    </sld:Axis>
+                </sld:Dimensions>
+                <sld:Geometry>
+                    <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>Quicklook/grid/row/point/lon</ogc:PropertyName>
+                    </sld:CssParameter>
+                    <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>Quicklook/grid/row/point/lat</ogc:PropertyName>
+                    </sld:CssParameter>
+                </sld:Geometry>
+            </sld:Grid>
+            <sld:Raster>
+                <sld:Dimensions>
+                    <sld:Axis name="width">
+                        <ogc:PropertyName>Quicklook/imagery/row</ogc:PropertyName>
+                    </sld:Axis>
+                    <sld:Axis name="height">
+                        <ogc:PropertyName>Quicklook/imagery</ogc:PropertyName>
+                    </sld:Axis>
+                </sld:Dimensions>
+                <sld:Opacity>1.0</sld:Opacity>
+                <sld:ChannelSelection>
+                    <sld:RedChannel>
+                        <ogc:PropertyName>Quicklook/imagery/row/pixel/red</ogc:PropertyName>                        
+                    </sld:RedChannel>
+                    <sld:GreenChannel>
+                        <ogc:PropertyName>Quicklook/imagery/row/pixel/green</ogc:PropertyName>                        
+                    </sld:GreenChannel>
+                    <sld:BlueChannel>
+                        <ogc:PropertyName>Quicklook/imagery/row/pixel/blue</ogc:PropertyName>                        
+                    </sld:BlueChannel>
+                </sld:ChannelSelection>
+            </sld:Raster>
+        </sld:TextureSymbolizer>
+    </style>
+</DataItem>
