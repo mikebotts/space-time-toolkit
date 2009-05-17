@@ -31,6 +31,7 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 
@@ -44,10 +45,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.commands.OpenProject;
+import org.vast.stt.project.Project;
+import org.vast.stt.project.ProjectWriter;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
 {
+	//  Temp handle to test ProjectWriting
+	Project project;
+	
     public ProjectMenu()
     {
     }
@@ -77,6 +83,7 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
             final OpenProject openProjectCmd = new OpenProject();
             openProjectCmd.setUrl(url);
             openProjectCmd.execute();
+            project = openProjectCmd.project;
             return;
         }
         
