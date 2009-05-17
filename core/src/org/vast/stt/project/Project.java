@@ -54,10 +54,11 @@ public class Project
 	protected DateTime date;
 
 	protected ArrayList<String> extensionList;
-	protected ArrayList<Service> serviceList;
+	protected ArrayList<Service> serviceList;  //  Not being used in current projects, all in resources?
 	protected ArrayList<DataProcess> processList;
-	protected ArrayList<STTDisplay> displayList;
-	protected ResourceList resourceList;
+	protected ArrayList<STTDisplay> displayList;  //  So far, contains only one STTDispaly object 
+	protected ResourceList resourceList; // loads resources okay, but currently after reading proj, this structure does 
+										 // not reflect the loaded resources (nesting/recursion problem?)
 	
 
     public Project()

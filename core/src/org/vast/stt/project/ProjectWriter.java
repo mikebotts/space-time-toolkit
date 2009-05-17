@@ -25,8 +25,10 @@
 
 package org.vast.stt.project;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import org.vast.xml.DOMHelper;
@@ -341,5 +343,25 @@ public class ProjectWriter
 //		
 //		return providerElt;
 		return null;
+	}
+	
+	//  Main stub for testing local project write
+	public static void main(String [] args) throws Exception {
+		ProjectReader reader = new ProjectReader();
+//		File file = new File("C:/tcook/work/STT3/projects/Greensburg.xml");
+//		reader.readProject("file:///C:/tcook/work/STT3/projects/Greensburg.xml");
+//		reader.readProject("file:///C:/tcook/work/STT3/projects/Hsv.xml");  //  use to test DataList refs...
+		reader.readProject("file:///C:/tcook/work/STT3/projects/Nasa.xml");
+		Project proj = reader.getProject();
+		File outFile = new File("C:/tcook/work/STT3/misc/testProjWrite.xml");
+    	String urlStr = null;
+		try {
+			urlStr = outFile.toURI().toURL().getPath();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ProjectWriter writer = new ProjectWriter();
+    	writer.writeProject(proj, urlStr);
 	}
 }
