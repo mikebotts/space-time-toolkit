@@ -26,15 +26,16 @@
 package org.vast.stt.gui.views;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.vast.stt.project.Project;
 import org.vast.stt.project.scene.Scene;
 
 
 public class ScenePageInput implements IAdaptable
 {
     protected Scene scene;
+    protected Project project;
     
-    
-    public ScenePageInput(Scene scene)
+	public ScenePageInput(Scene scene)
     {
         this.scene = scene;
     }
@@ -55,5 +56,14 @@ public class ScenePageInput implements IAdaptable
     public void setScene(Scene scene)
     {
         this.scene = scene;
-    }	
+    }
+    
+    public Project getProject() {
+		return project;
+	}
+
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }
