@@ -41,9 +41,6 @@ public class OpenProject implements Command
 {
 	private String url = null;
 	private boolean isUpdating = false;
-    //  Keep handle here to project for testsing ProjectWriter- not sure who
-	//  really should keep up with it, though/
-	public Project project;
 	
 	public void execute()
 	{
@@ -66,7 +63,7 @@ public class OpenProject implements Command
 			MessageDialog.openInformation(shell, "Information", "User cancelled Project Loading");
 			return;
 		}
-		project = reader.getProject();
+		Project project = reader.getProject();
 		if(project == null) {
 			MessageDialog.openError(shell, "Error", "Unknown error reading project");
 			return;
