@@ -25,35 +25,19 @@
 
 package org.vast.stt.actions;
 
-import java.awt.AWTException;
-import java.awt.HeadlessException;
-import java.awt.Robot;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.imageio.ImageIO;
-
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.vast.stt.commands.OpenProject;
-import org.vast.stt.project.Project;
-import org.vast.stt.project.ProjectWriter;
 
 
 public class ProjectMenu implements IWorkbenchWindowActionDelegate
 {
-	//  Temp handle to test ProjectWriting
-	Project project;
-	
     public ProjectMenu()
     {
     }
@@ -83,7 +67,6 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
             final OpenProject openProjectCmd = new OpenProject();
             openProjectCmd.setUrl(url);
             openProjectCmd.execute();
-            project = openProjectCmd.project;
             return;
         }
         
@@ -110,33 +93,4 @@ public class ProjectMenu implements IWorkbenchWindowActionDelegate
     {
     }
     
-    /** TODO, add dialog for testScreenCap and move it to its own class 
-     * 
-     */
-    int cnt=1;
-    public void testScreenCap() {
-    	
-    	try {
-			Robot robot = new Robot();
-			Rectangle appBounds = PlatformUI.getWorkbench().getDisplay().getActiveShell().getBounds();
-			java.awt.Rectangle appBoundsAwt = new java.awt.Rectangle();
-			appBoundsAwt.x = appBounds.x;
-			appBoundsAwt.y = appBounds.y;
-			appBoundsAwt.width = appBounds.width;
-			appBoundsAwt.height = appBounds.height;
-			
-			BufferedImage screenShot = robot.createScreenCapture(appBoundsAwt);
-			ImageIO.write(screenShot, "PNG", new File("C:/tcook/ows5/AMSR_anim/amsrE_" + cnt + ".png"));
-			cnt++;
-		} catch (HeadlessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
 }
