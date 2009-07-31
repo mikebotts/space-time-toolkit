@@ -98,6 +98,7 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     public abstract void createPartControl(Composite parent);
     public abstract void updateView();
     public abstract void clearView();
+    public abstract void handleEvent(STTEvent e);
     protected abstract void assignScene();
 
 
@@ -171,23 +172,12 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     public void setFocus()
     {       
     }
-
-
-    /**
-     * handle scene events
-     */
-    public void handleEvent(STTEvent e)
-    {
-        // by default the view will refresh on all events!!
-        // override this method to filter on event type
-        refreshViewAsync();
-    }
     
     
     public void paintControl(PaintEvent e)
     {
         if (scene != null)
-            updateView();
+            refreshView();
     }
 
 
