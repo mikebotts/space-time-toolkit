@@ -261,7 +261,7 @@ public class IndexerTreeBuilder
         else if (component instanceof DataArray)
         {
             if (count == 0)
-                return countDescendants(component.getComponent(0), 0);
+                return countDescendants(((DataArray)component).getArrayComponent(), 0);
             else
                 return 1;
         }

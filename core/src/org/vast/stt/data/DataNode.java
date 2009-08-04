@@ -135,7 +135,7 @@ public class DataNode
         if (component instanceof DataArray)
         {
             possibleBlockMappings.add(componentPath);
-            DataComponent childComponent = component.getComponent(0);
+            DataComponent childComponent = ((DataArray)component).getArrayComponent();
             String childPath = componentPath + '/' + childComponent.getName();
             findPossibleMappings(childComponent, childPath);
         }
