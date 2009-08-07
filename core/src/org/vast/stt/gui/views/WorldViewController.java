@@ -26,7 +26,6 @@
 package org.vast.stt.gui.views;
 
 import java.text.NumberFormat;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -34,10 +33,6 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.vast.math.Vector3d;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
@@ -275,6 +270,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 				if (onMap)
 				{
 					proj.unproject(Crs.EPSG4329, newPoint);
+					newPoint.x *= RTD;
+					newPoint.y *= RTD;
 					newPoint.z = 0;
 					((STTPolygonExtent)extent).addPoint(newPoint);
 					updateView();

@@ -126,6 +126,8 @@ public class GLRenderPolyBox
     protected void drawPoint(ViewSettings view, Vector3d point)
     {       
         point = point.copy();
+        point.x *= DTR;
+        point.y *= DTR;
     	view.getProjection().project(Crs.EPSG4329, point);
     	gl.glVertex3d(point.x, point.y, point.z);
     }

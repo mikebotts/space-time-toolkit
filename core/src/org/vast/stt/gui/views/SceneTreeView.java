@@ -455,7 +455,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
             boolean visible = parentScene.isItemVisible(item);
             parentScene.setItemVisibility(item, !visible);
             sceneTree.refresh(item, true);
-            //sceneTree.setSelection(sceneTree.getSelection());
+            sceneTree.setSelection(sceneTree.getSelection());
             parentScene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
         }
         
