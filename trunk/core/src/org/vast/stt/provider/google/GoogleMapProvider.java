@@ -52,10 +52,11 @@ import com.sun.media.jai.codec.PNGDecodeParam;
  *
  * <p><b>Description:</b><br/>
  * Requests Data from Google Map Keyhole servers
- * Ref: http://kh{x}.google.com/
- * Requests: http://kh0.google.com/kh?n=404&v=24&t=tsrrtqqttrtqrsq
- *           http://mt0.google.com/mt?n=404&v=w2.75&x=0&y=0&zoom=16
- *           http://mt0.google.com/mt?n=404&v=w2.75&x=0&y=0&zoom=16
+ * 
+ * Imagery Request: http://khm{x}.google.com/kh/v=48&x=133&y=93&z=8&s= G Ga Gal Gali Galil Galile Galileo
+ * Roads Request: http://mt{x}.google.com/vt/lyrs=h@112&hl=en&x=1&y=0&z=1&s= G Ga Gal Gali Galil Galile Galileo
+ * Map Request: http://mt{x}.google.com/vt/lyrs=m@112&hl=en&x=256&y=192&z=9&s= G Ga Gal Gali Galil Galile Galileo
+ *
  * </p>
  *
  * <p>Copyright (c) 2007</p>
@@ -67,7 +68,9 @@ public class GoogleMapProvider extends TiledMapProvider
 {
     protected String layerId = "roads";
     protected int serverNum = 0;
-        
+    protected int seqNumber = 0;
+    protected String seqString = "Galileo";
+    
     
     public GoogleMapProvider()
     {
@@ -110,13 +113,19 @@ public class GoogleMapProvider extends TiledMapProvider
                 BlockListItem[] blockArray = new BlockListItem[2];
                 String urlString = null;
                 
+                // update sequence string
+                String s = seqNumber == 0 ? "" : seqString.substring(0, seqNumber-1);
+                //seqNumber = seqNumber > seqString.length() ? 0 : seqNumber+1;
+                
                 if (layerId.startsWith("satellite"))
                 {
                     // build request URL for satellite data
-                    GoogleMapTileNumber tileNumberGen = new GoogleMapTileNumber();
-                    item.accept(tileNumberGen);
-                    String q = tileNumberGen.getTileNumber();
-                    urlString = "http://kh" + serverNum + ".google.com/kh?n=404&v=24&t=t" + q;
+                    GoogleMapTileXYZ tileXYZGen = new GoogleMapTileXYZ();
+                    item.accept(tileXYZGen);
+                    int x = tileXYZGen.getX();
+                    int y = tileXYZGen.getY();
+                    int z = tileXYZGen.getZ();                    
+                    urlString = "http://khm" + serverNum + ".google.com/kh/v=48&x=" + x + "&y=" + y + "&z=" + z + "&s=" + s;
                 }
                 else if (layerId.startsWith("roads"))
                 {
@@ -125,8 +134,8 @@ public class GoogleMapProvider extends TiledMapProvider
                     item.accept(tileXYZGen);
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
-                    int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2t.75&x=" + x + "&y=" + y + "&zoom=" + z;
+                    int z = tileXYZGen.getZ();
+                    urlString = "http://mt" + serverNum + ".google.com/vt/lyrs=h@112&hl=en&x=" + x + "&y=" + y + "&z=" + z + "&s=" + s;
                 }
                 else if (layerId.startsWith("map"))
                 {
@@ -135,8 +144,8 @@ public class GoogleMapProvider extends TiledMapProvider
                     item.accept(tileXYZGen);
                     int x = tileXYZGen.getX();
                     int y = tileXYZGen.getY();
-                    int z = tileXYZGen.getZoom();
-                    urlString = "http://mt" + serverNum + ".google.com/mt?n=404&v=w2.75&x=" + x + "&y=" + y + "&zoom=" + z;
+                    int z = tileXYZGen.getZ();
+                    urlString = "http://mt" + serverNum + ".google.com/vt/lyrs=m@112&hl=en&x=" + x + "&y=" + y + "&z=" + z + "&s=" + s;
                 }
                 
                 // increment server number
@@ -235,7 +244,7 @@ public class GoogleMapProvider extends TiledMapProvider
                     blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridBlock);
                     
                     // remove sub and super items now that we have the new tile
-                    removeChildrenData(item);
+                    removeHiddenChildren(item);
                     removeHiddenParent(item);
                     
                     // send event for redraw

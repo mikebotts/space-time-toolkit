@@ -56,7 +56,7 @@ public class BlockList
     
     public BlockList()
     {
-        this.clear();        
+        this.clear();
     }
     
     
@@ -76,41 +76,39 @@ public class BlockList
     
     public void clear()
     {
-        firstItem = null;
-        lastItem = null;
-        currentItem = null;
-        currentIndex = -1;
-        size = 0;
+        this.firstItem = null;
+        this.lastItem = null;
+        this.currentItem = null;
+        this.currentIndex = -1;
+        this.size = 0;
     }
     
     
-    public void remove(BlockListItem item)
+    public synchronized void remove(BlockListItem item)
     {
         // special case when list has only one item!
         if (item == firstItem && item == lastItem)
         {
-            size--;
-            return;
+            firstItem = null;
+            lastItem = null;
         }
         
         // quit here if item is not connected
-        if (item.nextItem == null && item.prevItem == null)
+        else if (item.nextItem == null && item.prevItem == null)
             return;
         
         // if item is first in list
-        if (item == firstItem)
+        else if (item == firstItem)
         {
             firstItem = item.nextItem;
-            if (firstItem != null)
-                firstItem.prevItem = null;
+            firstItem.prevItem = null;
         }
         
         // if item is last in list
         else if (item == lastItem)
         {
             lastItem = item.prevItem;
-            if (lastItem != null)
-                lastItem.nextItem = null;
+            lastItem.nextItem = null;
         }
         
         // if item is in middle of list
@@ -150,7 +148,7 @@ public class BlockList
     }
     
     
-    public void add(BlockListItem newItem)
+    public synchronized void add(BlockListItem newItem)
     {
         // first remove if block is already in there!
         this.remove(newItem);
@@ -165,6 +163,46 @@ public class BlockList
             firstItem = newItem;
         
         lastItem = newItem;
+        
+        size++;
+    }
+    
+    
+    public synchronized void insertBefore(BlockListItem newItem, BlockListItem existingItem)
+    {
+        // first remove if block is already in there!
+        this.remove(newItem);
+        
+        newItem.prevItem = existingItem.prevItem;
+        newItem.nextItem = existingItem;
+        
+        if (existingItem.prevItem != null)
+            existingItem.prevItem.nextItem = newItem;
+        
+        existingItem.prevItem = newItem;
+        
+        if (existingItem == firstItem)
+            firstItem = newItem;
+        
+        size++;
+    }
+    
+    
+    public synchronized void insertAfter(BlockListItem newItem, BlockListItem existingItem)
+    {
+        // first remove if block is already in there!
+        this.remove(newItem);
+        
+        newItem.prevItem = existingItem;
+        newItem.nextItem = existingItem.nextItem;
+        
+        if (existingItem.nextItem != null)
+            existingItem.nextItem.prevItem = newItem;
+        
+        existingItem.nextItem = newItem;
+        
+        if (existingItem == lastItem)
+            lastItem = newItem;
         
         size++;
     }
@@ -210,6 +248,42 @@ public class BlockList
         
         currentItem = item;
         return item.data;
+    }
+    
+    
+    public void checkConsistency()
+    {
+        int itemCount;        
+        BlockListItem item = firstItem;
+        if (firstItem == null)
+        {
+            if (lastItem != null || size > 0)
+                System.out.println("Error in BlockList");//throw new IllegalStateException();
+            return;
+        }
+        
+        // check consistency when iterating forward
+        itemCount = 1;
+        while (item.nextItem != null)
+        {
+            item = item.nextItem;
+            itemCount++;
+        }
+        
+        if (item != lastItem || size != itemCount)
+            System.out.println("Error in BlockList");//throw new IllegalStateException();
+        
+        // check consistency when iterating backward
+        itemCount = 1;
+        item = lastItem;        
+        while (item.prevItem != null)
+        {
+            item = item.prevItem;
+            itemCount++;
+        }
+        
+        if (item != firstItem || size != itemCount)
+            System.out.println("Error in BlockList");//throw new IllegalStateException();
     }
     
     

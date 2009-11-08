@@ -45,13 +45,13 @@ import org.vast.stt.provider.tiling.QuadTreeVisitor;
  */
 public class GoogleMapTileXYZ implements QuadTreeVisitor
 {
-    protected int x, y, zoom;
+    protected int x, y, z;
     protected int xMul, yMul;
     
     
     public GoogleMapTileXYZ()
     {
-        zoom = 0;
+        z = 0;
         xMul = 1;
         yMul = 1;
     }
@@ -83,7 +83,7 @@ public class GoogleMapTileXYZ implements QuadTreeVisitor
                 break;
         }
         
-        zoom++;
+        z++;
         xMul *= 2;
         yMul *= 2;
         
@@ -101,10 +101,16 @@ public class GoogleMapTileXYZ implements QuadTreeVisitor
     {
         return y;
     }
+    
+    
+    public int getZ()
+    {
+        return z;
+    }
 
 
     public int getZoom()
     {
-        return 17 - zoom;
+        return 17 - z;
     }
 }

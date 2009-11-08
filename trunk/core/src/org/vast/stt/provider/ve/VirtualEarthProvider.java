@@ -209,7 +209,7 @@ public class VirtualEarthProvider extends TiledMapProvider
                     blockArray[1] = blockLists[1].addBlock((AbstractDataBlock)gridBlock);
                     
                     // remove sub items now that we have the new tile
-                    removeChildrenData(item);
+                    removeHiddenChildren(item);
                     removeHiddenParent(item);
                     
                     // send event for redraw
