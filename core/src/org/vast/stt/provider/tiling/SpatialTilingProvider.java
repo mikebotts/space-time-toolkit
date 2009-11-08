@@ -136,7 +136,7 @@ public class SpatialTilingProvider extends TiledMapProvider
                     item.setData(blockArray);
                     
                     // remove sub items now that we have the new tile
-                    removeChildrenData(item);
+                    removeHiddenChildren(item);
                     removeHiddenParent(item);
                     
                     // send event for redraw

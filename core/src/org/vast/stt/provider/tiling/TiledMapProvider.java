@@ -138,6 +138,13 @@ public abstract class TiledMapProvider extends AbstractProvider
         // convert extent to mercator projection
         SpatialExtent newExtent = transformBbox(spatialExtent);
         
+        // print debug info
+        //System.out.println("List size = " + blockLists[0].getSize());
+        //QuadTreeItemCounter counter = new QuadTreeItemCounter();
+        //quadTree.accept(counter);
+        //System.out.println("quadtree size = " + counter.numItems + " ("
+        //                                      + counter.numItemsWithData + ")");
+        
         // query tree for matching and unused items 
         selectedItems.clear();
         deletedItems.clear();
@@ -148,35 +155,11 @@ public abstract class TiledMapProvider extends AbstractProvider
         tileSelector.setMaxDistance(Math.sqrt(tileRatio)*3);
         quadTree.accept(tileSelector);
         
-        // first round of cached background items to display
-        for (int i=0; i<selectedItems.size(); i++)
-        {
-            QuadTreeItem nextItem = selectedItems.get(i);
-            
-            if (canceled)
-                break;
-            
-            if (nextItem.getData() == null)
-            {
-                // find first parent ready to display
-                QuadTreeItem parentItem = nextItem.getParent();
-                while (parentItem != null && parentItem.getData() == null)
-                    parentItem = parentItem.getParent();
-                
-                // add parent to list if it's not already there
-                if (parentItem != null && parentItem.getData() != null)
-                {
-                    BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
-                    for (int b=0; b<blockArray.length; b++)
-                    {
-                        if (!blockLists[b].contains(blockArray[b]))
-                            blockLists[b].add(blockArray[b]);
-                    }
-                }
-            }
-        }
-        
-        // 2nd round of cached items to display
+        // save last items for reference
+        BlockListItem[] firstSelectedBlocks = new BlockListItem[2];
+                        
+        // append cached items at end of block lists
+        // insert first cached ancestor of non-cached items to block lists
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);
@@ -186,24 +169,54 @@ public abstract class TiledMapProvider extends AbstractProvider
             
             if (nextItem.getData() != null)
             {
-                BlockListItem[] blockArray = (BlockListItem[])nextItem.getData();
-                for (int b=0; b<blockArray.length; b++)
+                BlockListItem[] nextBlocks = (BlockListItem[])nextItem.getData();
+                for (int b=0; b<nextBlocks.length; b++)
                 {
-                    if (!blockLists[b].contains(blockArray[b]))
-                        blockLists[b].add(blockArray[b]);
+                    blockLists[b].add(nextBlocks[b]);
+                    if (firstSelectedBlocks[b] == null)
+                        firstSelectedBlocks[b] = nextBlocks[b];
                 }
                 
-                // remove children and parent of that item
-                removeChildrenData(nextItem);
-                removeHiddenParent(nextItem);
+                // remove hidden children                
+                removeHiddenChildren(nextItem);
+            }
+            else
+            {
+                // find first parent ready to display
+                QuadTreeItem parentItem = nextItem.getParent();
+                while (parentItem != null && parentItem.getData() == null)
+                    parentItem = parentItem.getParent();
+                
+                // add parent to list if it's not already there
+                if (parentItem != null && parentItem.getData() != null)
+                {
+                    if (!areAllChildrenLoaded(parentItem))
+                    {                    
+                        BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
+                        for (int b=0; b<blockArray.length; b++)
+                        {
+                            if (!blockLists[b].contains(blockArray[b]))
+                            {
+                                // append before selected items block if any have already been added
+                                // this is to ensure that they highest resolution is rendered last and thus on top
+                                if (firstSelectedBlocks[b] != null)
+                                    blockLists[b].insertBefore(blockArray[b], firstSelectedBlocks[b]);
+                                else
+                                    blockLists[b].add(blockArray[b]);
+                            }
+                        }
+                    }
+                }
             }
         }
+        
+        blockLists[0].checkConsistency();
         
         // send event for redraw
         if (!canceled)
             dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
 
-        // 3rd round of new items to load and display
+        // fetch items not in cache
         for (int i=0; i<selectedItems.size(); i++)
         {
             QuadTreeItem nextItem = selectedItems.get(i);
@@ -212,9 +225,7 @@ public abstract class TiledMapProvider extends AbstractProvider
             	break;
             
             if (nextItem.getData() == null)
-            {
                 getNewTile(nextItem);
-            }
         }
         
         // send event to cleanup stylers cache
@@ -227,11 +238,10 @@ public abstract class TiledMapProvider extends AbstractProvider
     
     
     /**
-     * Removes children data when lower level of details
-     * is shown.
+     * Remove all item descendants from target block lists.
      * @param item
      */
-    protected void removeChildrenData(QuadTreeItem item)
+    protected void removeHiddenChildren(QuadTreeItem item)
     {
         // loop through children
         for (byte i=0; i<4; i++)
@@ -244,10 +254,10 @@ public abstract class TiledMapProvider extends AbstractProvider
     
         
     /**
-     * Remove parent if all its children are shown
+     * Remove parent from target block lists if all its children are shown (recursively)
      * @param item
      */
-    protected void removeParent(QuadTreeItem item)
+    protected void removeHiddenParent(QuadTreeItem item)
     {
         boolean skip = false;
         QuadTreeItem parent = item.getParent();
@@ -255,15 +265,7 @@ public abstract class TiledMapProvider extends AbstractProvider
             return;        
         
         // skip if one of needed children is not loaded
-        for (int i=0; i<4; i++)
-        {
-            QuadTreeItem child = parent.getChild(i);
-            if (child != null && child.isNeeded())
-            {
-                if (child.getData() == null)
-                    skip = true;
-            }
-        }
+        skip = !areAllChildrenLoaded(parent);
         
         // remove parent blocks
         if (!skip)
@@ -282,31 +284,24 @@ public abstract class TiledMapProvider extends AbstractProvider
             parent.needed = false;
         }
         
-        //System.out.println("Item unselected " + item);
-        
-        removeParent(parent);
+        //System.out.println("Item unselected " + item);        
+        removeHiddenParent(parent);
     }
     
     
-    protected void removeHiddenParent(QuadTreeItem item)
+    public boolean areAllChildrenLoaded(QuadTreeItem item)
     {
-//        QuadTreeItem parent = item.getParent();
-//        if (parent == null)
-//            return;
-//        
-//        // skip if one of the children is not loaded
-//        for (int i=0; i<4; i++)
-//        {
-//            QuadTreeItem child = parent.getChild(i);
-//            
-//            if (child == null)
-//                return;
-//            
-//            if (child.getData() == null)
-//                return;
-//        }
+        for (int i=0; i<4; i++)
+        {
+            QuadTreeItem child = item.getChild(i);
+            if (child != null && child.isNeeded())
+            {
+                if (child.getData() == null)
+                    return false;
+            }
+        }
         
-        removeParent(item);
+        return true;
     }
     
     

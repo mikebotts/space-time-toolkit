@@ -112,10 +112,10 @@ public class TiledMapSelector extends ExtentSelector
                 item.setParent(null);
                 item.setData(null);
                 // System.out.println("Item deleted " + item);
-            }                
+            }
         }
         
-        // loop through children
+        // call recursively to remove all children
         for (byte i=0; i<4; i++)
         {
             QuadTreeItem childItem = item.getChild(i);
@@ -137,7 +137,7 @@ public class TiledMapSelector extends ExtentSelector
     protected void selectItem(QuadTreeItem item)
     {
         double distance = distanceTo(item);
-        item.setDistance(distance);
+        item.setScore((float)distance);
 
         if (selectedItems.isEmpty())
         {
@@ -148,7 +148,7 @@ public class TiledMapSelector extends ExtentSelector
             // find the position where to insert this (order by distance to roi)
             for (int i=0; i<selectedItems.size(); i++)
             {
-                if (selectedItems.get(i).getDistance() >= distance)
+                if (selectedItems.get(i).getScore() >= distance)
                 {
                     selectedItems.add(i, item);
                     //System.out.println("Item selected " + item);

@@ -24,7 +24,7 @@ public class LoadProjectRunnable implements  IRunnableWithProgress
 		{
 			monitor.beginTask(
 					msg, IProgressMonitor.UNKNOWN);
-			monitor.subTask("ReadingProject...");
+			monitor.subTask("Reading Project...");
 			reader.readProject(projectUrl);
 			while(isUpdating){
 				try {

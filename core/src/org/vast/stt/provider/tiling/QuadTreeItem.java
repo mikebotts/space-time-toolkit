@@ -54,7 +54,7 @@ public class QuadTreeItem extends SpatialExtent
     private final static int SW = S+W;
     
     protected double tileSize;
-    protected double distance;
+    protected float score;
     protected byte quadrant;
     protected Object data;
     protected QuadTreeItem parent;
@@ -352,15 +352,15 @@ public class QuadTreeItem extends SpatialExtent
     }
 
 
-    public double getDistance()
+    public float getScore()
     {
-        return distance;
+        return score;
     }
 
 
-    public void setDistance(double distance)
+    public void setScore(float score)
     {
-        this.distance = distance;
+        this.score = score;
     }
     
     
