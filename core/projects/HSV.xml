@@ -37,7 +37,7 @@
                   <orthoHeight>4.0</orthoHeight>
                   <nearClip>1</nearClip>
                   <farClip>100</farClip>
-                  <zFudgeFactor>1000</zFudgeFactor>
+                  <zFudgeFactor>100</zFudgeFactor>
                </ViewSettings>
             </view>
             <contents>
