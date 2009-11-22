@@ -113,7 +113,8 @@
                                     <swe:DataArray gml:id="IMAGE" definition="urn:ogc:def:property:frame">
                                        <swe:elementCount>
                                           <swe:Count definition="urn:ogc:def:property:row">
-                                             <swe:value>1080</swe:value>
+                                             <swe:value>270</swe:value>
+                                             <!-- <swe:value>1080</swe:value> -->
                                           </swe:Count>
                                        </swe:elementCount>
                                        <swe:elementType name="acrossTrackLine">
@@ -121,7 +122,8 @@
                                              definition="urn:ogc:def:property:horizontalLine">
                                              <swe:elementCount>
                                                 <swe:Count definition="urn:ogc:def:property:column">
-                                                   <swe:value>1920</swe:value>
+                                                   <swe:value>480</swe:value>
+                                                   <!-- <swe:value>1920</swe:value> -->
                                                 </swe:Count>
                                              </swe:elementCount>
                                              <swe:elementType name="radiance">
@@ -152,6 +154,7 @@
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
                                        <swe:value>http://vast.uah.edu/vastGC/tigersharkSos</swe:value>
+                                       <!-- <swe:value>http://sosdemos.appspot.com/tigershark</swe:value> -->
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -267,6 +270,7 @@
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
                                        <swe:value>http://vast.uah.edu/vastGC/tigersharkSos</swe:value>
+                                       <!-- <swe:value>http://sosdemos.appspot.com/tigershark</swe:value> -->
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -490,7 +494,7 @@
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
                               <swe:Quantity>
-                                 <swe:value>420</swe:value>
+                                 <swe:value>0</swe:value>
                                  <swe:uom code="m"/>
                               </swe:Quantity>
                            </sml:parameter>

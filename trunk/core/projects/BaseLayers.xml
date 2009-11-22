@@ -453,13 +453,185 @@
             <style xlink:href="#GRID_BORDER"/>
          </DataItem>
       </member>
-     
-      
+      <member visible="false">
+         <DataItem>
+            <name>Google Imagery</name>
+            <dataProvider>
+               <GoogleMapProvider id="GOOGLE_SAT_DATA">
+                  <name>Google Imagery</name>
+                  <layerId>satellite</layerId>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Google Maps</name>
+            <dataProvider>
+               <GoogleMapProvider id="GOOGLE_MAPS_DATA">
+                  <name>Google Maps</name>
+                  <layerId>map</layerId>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Google Roads</name>
+            <dataProvider>
+               <GoogleMapProvider id="GOOGLE_ROADS_DATA">
+                  <name>Google Maps</name>
+                  <layerId>roads</layerId>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <sld:SourceChannelName>image/row/pixel/alpha</sld:SourceChannelName>
+                        </sld:AlphaChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
       <member visible="false">
          <DataItem>
             <name>Landsat Imagery (Flat)</name>
             <dataProvider>
-               <SensorMLProvider id="WMS_LANDSAT_IMAGERY_DATA">
+               <SensorMLProvider id="WMS_LANDSAT_IMAGERY_DATA" quadTree="true">
                   <name>WMS</name>
                   <description>Landsat Data on top of flat grid</description>
                   <spatialExtent tiling="4x4">

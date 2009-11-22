@@ -150,6 +150,7 @@
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
                                        <swe:value>http://vast.uah.edu/vastGC/tigersharkSos</swe:value>
+                                       <!-- <swe:value>http://sosdemos.appspot.com/tigershark</swe:value> -->
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">
@@ -373,7 +374,7 @@
                         <sml:ParameterList>
                            <sml:parameter name="heightAboveEllipsoid">
                               <swe:Quantity>
-                                 <swe:value>420</swe:value>
+                                 <swe:value>0</swe:value>
                                  <swe:uom code="m"/>
                               </swe:Quantity>
                            </sml:parameter>
