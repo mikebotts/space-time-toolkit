@@ -131,6 +131,7 @@
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
                                        <swe:value>http://vast.uah.edu/vastGC/tigersharkSos</swe:value>
+                                       <!-- <swe:value>http://sosdemos.appspot.com/tigershark</swe:value> -->
                                     </swe:Category>
                                  </swe:field>
                                  <swe:field name="requestMethod">

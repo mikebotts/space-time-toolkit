@@ -13,9 +13,9 @@
                   <name>TigerShark Track Data</name>
                   <timeExtent>
                   <TimeExtent id="ERDAS_TIME4">
-                     <baseTime>2008-07-21T18:32:22</baseTime>
-                     <leadTime>15</leadTime>
-                     <lagTime>7</lagTime>
+                     <baseTime>2008-07-24T15:44:15</baseTime>
+                     <leadTime>10</leadTime>
+                     <lagTime>10</lagTime>
                      <stepTime>0</stepTime>
                   </TimeExtent>
                   </timeExtent>
@@ -43,7 +43,7 @@
             </style>
          </DataItem>
       </member>
-      <member>
+      <member visible="false">
          <DataItem>
             <name>KCM-HD Lookrays</name>
             <dataProvider>
@@ -199,19 +199,20 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem enabled="true">
+         <DataItem>
             <name>KCM-HD Frame Imagery</name>
             <dataProvider>
                <SensorMLProvider>
                   <name>KCM-HD Process</name>
-                  <timeExtent autoUpdate="#SCENE_01">
+                  <timeExtent xlink:href="#ERDAS_TIME4"/>
+                  <!--<timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME5">
                         <baseTime>2008-07-21T18:37:22</baseTime>
                         <leadTime>15</leadTime>
                         <lagTime>7</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
-                  </timeExtent>
+                  </timeExtent>-->
                   <process xlink:href="./Erdas_ProcessFramewithCSM.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
