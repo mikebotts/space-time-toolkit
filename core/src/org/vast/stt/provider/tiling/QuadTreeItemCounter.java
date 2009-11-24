@@ -47,6 +47,8 @@ public class QuadTreeItemCounter implements QuadTreeVisitor
         if (item.data != null)
             numItemsWithData++;
         
+        //System.out.println(item + " -> " + (item.data == null ? "no data" : ((Object[])item.data)[0]));
+        
         for (int i=0; i<4; i++)
         {
             QuadTreeItem child = item.getChild(i);

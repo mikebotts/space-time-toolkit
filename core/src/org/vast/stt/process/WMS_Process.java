@@ -113,7 +113,8 @@ public class WMS_Process extends DataProcess
             outputHeight = (DataValue)output.getComponent("height");
             
             // image data type
-            DataGroup pixelData = (DataGroup)outputImage.getComponent(0).getComponent(0);
+            DataArray imgRowData = (DataArray)outputImage.getArrayComponent();
+            DataGroup pixelData = (DataGroup)imgRowData.getArrayComponent();
             for (int i=0; i<pixelData.getComponentCount(); i++)
                 ((DataValue)pixelData.getComponent(i)).setDataType(DataType.BYTE);
         }

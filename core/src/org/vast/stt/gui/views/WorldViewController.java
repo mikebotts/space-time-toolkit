@@ -25,7 +25,6 @@
 
 package org.vast.stt.gui.views;
 
-import java.text.NumberFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -83,9 +82,6 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean dragged;
 	private boolean resizing;    
 	private final static double RTD = 180/Math.PI;
-// ***  Figure out where this should go- use page.findView(WorldView.ID) as in SPSWidget,
-	//  and this can be removed from this class
-	LatLonStatusLine llStatus;
 	
 
 	public WorldViewController()
@@ -93,42 +89,6 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		pickListener = new FeedbackEventListener();
 	}
 
-	public void setLatLonStatusLine(LatLonStatusLine llStatus){
-		this.llStatus = llStatus;
-	}
-
-	//  thrown in to report LLA temporarily for EC08- clean up SOON!
-	protected void reportLLTemp(int x1, int y1){
-		Vector3d P0 = getLatLon(x1, y1);
-		StringBuffer llStrBuff = new StringBuffer(40);
-		NumberFormat nf  = NumberFormat.getInstance();
-		nf.setMaximumIntegerDigits(3);
-		nf.setMinimumFractionDigits(4);
-		String lonStr = nf.format(P0.x);
-		String latStr = nf.format(P0.y);
-		llStrBuff.append("Lat: " + latStr + "   ");
-		llStrBuff.append("Lon: " + lonStr);
-		llStatus.setText(llStrBuff.toString());
-	}
-
-	//  Method to allow other classes to get Lat-Lon from this canvas based on mouse click
-	//  Used by SPSWidget only right now.  TC
-	public Vector3d getLatLon(int x1, int y1){
-//		System.err.println(x1 +  " " + y1);
-		Projection projection = scene.getViewSettings().getProjection();
-		boolean found = projection.pointOnMap(x1, scene.getRenderer().getViewHeight()-y1, scene, P0);
-
-		if (!found)
-			return new Vector3d();
-
-		// convert to LLA
-		projection.unproject(Crs.EPSG4329, P0);
-
-		P0.x *= RTD;
-		P0.y *= RTD;
-		
-		return P0;
-	}
 	
 	protected void doChangeROI(int x0, int y0, int x1, int y1)
 	{
@@ -197,7 +157,6 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
-		reportLLTemp(e.x,e.y);
 
 		// check if resizing ROI
 		if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
@@ -271,8 +230,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 				{
 					proj.unproject(Crs.EPSG4329, newPoint);
 					newPoint.x *= RTD;
-					newPoint.y *= RTD;
-					newPoint.z = 0;
+                    newPoint.y *= RTD;
+                    newPoint.z = 0;
 					((STTPolygonExtent)extent).addPoint(newPoint);
 					updateView();
 				}
@@ -331,13 +290,11 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	public void mouseMove(MouseEvent e)
 	{
 		dragged = true;
-		//  For now, reportLLTemp is reversing y convention to do computation.  Fix to be 
-		//  consistent later today...  T
-		reportLLTemp(e.x,e.y);
 
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
-//		System.err.println("MM: " + e.x + " " +e.y);
+		
+		//reportLLTemp(e.x,e.y);
 		
 		if (leftButtonDown)
 		{

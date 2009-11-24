@@ -116,13 +116,13 @@ public class MyTableRenderer extends TableSceneRenderer implements StylerVisitor
 
 
     @Override
-    public void cleanup(DataStyler styler, CleanupSection section)
+    public void cleanupSync(DataStyler styler, Object[] objects, CleanupSection section)
     {
     }
-
-
+    
+    
     @Override
-    public void cleanup(DataStyler styler, Object[] objects, CleanupSection section)
+    public void cleanupAsync(DataStyler styler, Object[] objects, CleanupSection section)
     {
     }
 

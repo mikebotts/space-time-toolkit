@@ -258,7 +258,7 @@ public class BlockList
         if (firstItem == null)
         {
             if (lastItem != null || size > 0)
-                System.out.println("Error in BlockList");//throw new IllegalStateException();
+                throw new IllegalStateException();
             return;
         }
         
@@ -271,7 +271,7 @@ public class BlockList
         }
         
         if (item != lastItem || size != itemCount)
-            System.out.println("Error in BlockList");//throw new IllegalStateException();
+            throw new IllegalStateException();
         
         // check consistency when iterating backward
         itemCount = 1;
@@ -283,7 +283,7 @@ public class BlockList
         }
         
         if (item != firstItem || size != itemCount)
-            System.out.println("Error in BlockList");//throw new IllegalStateException();
+            throw new IllegalStateException();
     }
     
     

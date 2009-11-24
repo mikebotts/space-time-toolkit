@@ -410,7 +410,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
         if (selection != null)
         {        
             // iterate through selection items
-            Iterator iterator = ((IStructuredSelection)selection).iterator();
+            Iterator<?> iterator = ((IStructuredSelection)selection).iterator();
             while (iterator.hasNext())
             {
                 DataEntry selectedEntry = (DataEntry)iterator.next();

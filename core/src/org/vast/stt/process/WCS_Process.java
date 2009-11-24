@@ -41,6 +41,7 @@ import org.vast.ows.wcs.GetCoverageRequest;
 import org.vast.ows.wcs.WCSResponseReader;
 import org.vast.process.DataProcess;
 import org.vast.process.ProcessException;
+import org.vast.util.Bbox;
 
 
 /**
@@ -74,6 +75,7 @@ public class WCS_Process extends DataProcess implements DataHandler
     public WCS_Process()
     {
         query = new GetCoverageRequest();
+        query.setBbox(new Bbox());
         owsUtils = new OWSUtils();
     }
 
@@ -125,9 +127,9 @@ public class WCS_Process extends DataProcess implements DataHandler
             String version = wcsParams.getComponent("version").getData().getStringValue();
             query.setVersion(version);
             
-            // layer ID
-            String layerID = wcsParams.getComponent("layer").getData().getStringValue();
-            query.setCoverage(layerID);
+            // coverage ID
+            String coverageID = wcsParams.getComponent("coverage").getData().getStringValue();
+            query.setCoverage(coverageID);
             
             // image format
             String format = wcsParams.getComponent("format").getData().getStringValue();
@@ -158,7 +160,6 @@ public class WCS_Process extends DataProcess implements DataHandler
             }
             
             // coverage and bbox crs 
-//            query.setSrs("EPSG:4329");
             query.getGridCrs().setBaseCrs("EPSG:4329");
         }
         catch (Exception e)
@@ -181,6 +182,7 @@ public class WCS_Process extends DataProcess implements DataHandler
             WCSResponseReader reader = new WCSResponseReader();
             //  Hardwired to KVP currently
             dataStream = owsUtils.sendGetRequest(query).getInputStream();
+            System.out.println(owsUtils.buildURLQuery(query));
             reader.parse(dataStream);
           
             dataParser = reader.getDataParser();

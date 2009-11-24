@@ -255,6 +255,13 @@ public class QuadTreeItem extends SpatialExtent
         return dir;
     }
     
+    
+    public void removeFromParent()
+    {
+        if (parent != null)
+            parent.removeChild(this.quadrant);
+    }
+    
 
     public Object getData()
     {
@@ -325,6 +332,23 @@ public class QuadTreeItem extends SpatialExtent
     public void setChild(int i, QuadTreeItem item)
     {
         this.children[i] = item;
+    }
+    
+    
+    public boolean hasChildren()
+    {
+        for (QuadTreeItem child: children)
+            if (child != null)
+                return true;
+        
+        return false;
+    }
+    
+    
+    public void removeChild(int i)
+    {
+        this.children[i].parent = null;
+        this.children[i] = null;
     }
 
 
