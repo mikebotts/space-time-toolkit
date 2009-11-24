@@ -25,35 +25,36 @@
 
 package org.vast.stt.provider.tiling;
 
-import java.util.ArrayList;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.provider.tiling.ExtentSelector;
 import org.vast.stt.provider.tiling.QuadTreeItem;
+import org.vast.util.SpatialExtent;
 
 
 public class TiledMapSelector extends ExtentSelector
 {
-    protected ArrayList<QuadTreeItem> selectedItems;
-    protected ArrayList<BlockListItem> deletedItems;
-    protected BlockList[] blockLists;
+    protected TiledMapProvider provider;
+    protected BlockListItem[] firstSelectedBlocks;
     protected double maxDistance2; // square of max distance in number of tiles
+    protected boolean hidePartiallyVisibleParents;
     
     
-    public TiledMapSelector(double sizeRatio, double maxDistance, int minLevel, int maxLevel)
+    public TiledMapSelector(int minLevel, int maxLevel, TiledMapProvider provider)
     {
-        super(sizeRatio, minLevel, maxLevel);
-        setMaxDistance(maxDistance);
+        super(minLevel, maxLevel);
+        this.provider = provider;
+        this.firstSelectedBlocks = new BlockListItem[provider.blockLists.length];
     }
     
     
-    public void setItemLists(ArrayList<QuadTreeItem> selectedItems,
-                             ArrayList<BlockListItem> deletedItems,
-                             BlockList[] blockLists)
+    @Override
+    public void setROI(SpatialExtent roi)
     {
-        this.selectedItems = selectedItems;
-        this.deletedItems = deletedItems;
-        this.blockLists = blockLists;
+        super.setROI(roi);
+        
+        // reset first block pointers to null
+        for (int i=0; i<firstSelectedBlocks.length; i++)
+            firstSelectedBlocks[i] = null;
     }
     
     
@@ -82,54 +83,126 @@ public class TiledMapSelector extends ExtentSelector
     
     
     /**
-     * Recursively remove data from blockLists
-     * but keep the underlying data in cache.
+     * Add item blocks to block lists
      * @param item
      */
-    public void removeFromList(QuadTreeItem item)
+    public void appendToBlockLists(QuadTreeItem item)
     {
-        BlockListItem[] blockArray = (BlockListItem[])item.getData();
+        BlockListItem[] itemBlocks = (BlockListItem[])item.getData();
         
-        // remove data blocks from list
-        if (blockArray != null)
-        {                
-            boolean tooFar = (distanceTo(item) > item.getTileSize()*maxDistance2);
-            
-            for (int b=0; b<blockArray.length; b++)
+        if (itemBlocks != null)
+        {
+            for (int b=0; b<itemBlocks.length; b++)
             {
-                // remove items from list
-                if (blockArray[b] != null)
-                    blockLists[b].remove(blockArray[b]);
-                
-                // add to deleted items list if too far from roi
-                if (tooFar)
-                    deletedItems.add(blockArray[b]);
-            }
-        
-            if (tooFar)
-            {
-                item.getParent().setChild(item.getQuadrant(), null);
-                item.setParent(null);
-                item.setData(null);
-                // System.out.println("Item deleted " + item);
+                provider.blockLists[b].add(itemBlocks[b]);
+                if (firstSelectedBlocks[b] == null)
+                    firstSelectedBlocks[b] = itemBlocks[b];
             }
         }
         
-        // call recursively to remove all children
+        // make sure item is not in discard list
+        provider.itemsToDiscard.remove(item);
+    }
+    
+    
+    /**
+     * Remove the item data from block lists
+     * @param item
+     */
+    public void removeFromBlockLists(QuadTreeItem item)
+    {
+        //System.out.println("Item removed " + item);
+        BlockListItem[] itemBlocks = (BlockListItem[])item.getData();
+                
+        // remove data blocks from lists
+        if (itemBlocks != null)
+        {                
+            for (int b=0; b<itemBlocks.length; b++)
+            {
+                // remove items from list
+                if (itemBlocks[b] != null)
+                    provider.blockLists[b].remove(itemBlocks[b]);
+            }
+        }
+        
+        // add to discard list if too far
+        boolean tooFar = (distanceTo(item) > item.getTileSize()*maxDistance2);
+        if (tooFar)
+            provider.itemsToDiscard.add(item);
+        
+        item.setNeeded(false);
+    }
+    
+    
+    /**
+     * Recursively remove children data from block lists
+     * @param item
+     */
+    public void removeDescendantsFromBlockLists(QuadTreeItem item)
+    {
         for (byte i=0; i<4; i++)
         {
             QuadTreeItem childItem = item.getChild(i);
             if (childItem != null)
-                removeFromList(childItem);
+            {
+                // remove child data from lists
+                removeFromBlockLists(childItem);
+                
+                // recursively remove children
+                removeDescendantsFromBlockLists(childItem);
+            }
         }
+    }
+    
+    
+    /**
+     * Recursively remove hidden ancestors data from block lists
+     * @param item
+     */
+    public void removeHiddenAncestorsFromBlockLists(QuadTreeItem item)
+    {
+        boolean doRemove = false;
+        QuadTreeItem parent = item.getParent();
+        if (parent == null)
+            return;
+        
+        // skip if one of needed children is not loaded
+        doRemove = areAllChildrenLoaded(parent) || hidePartiallyVisibleParents;
+        
+        // remove parent data from lists
+        if (doRemove)
+            removeFromBlockLists(parent);
+        
+        // recursively remove parents
+        removeHiddenAncestorsFromBlockLists(parent);
+    }
+    
+    
+    protected boolean areAllChildrenLoaded(QuadTreeItem item)
+    {
+        if (item == null)
+            return false;
+        
+        for (int i=0; i<4; i++)
+        {
+            QuadTreeItem child = item.getChild(i);
+            if (child != null && child.isNeeded())
+            {
+                if (child.getData() == null)
+                    return false;
+            }
+        }
+        
+        return true;
     }
     
     
     @Override
     protected void deselectItem(QuadTreeItem item)
     {
-        removeFromList(item);
         //System.out.println("Item unselected " + item);
+        removeFromBlockLists(item);
+        removeDescendantsFromBlockLists(item);
     }
     
 
@@ -137,35 +210,70 @@ public class TiledMapSelector extends ExtentSelector
     protected void selectItem(QuadTreeItem item)
     {
         double distance = distanceTo(item);
-        item.setScore((float)distance);
-
-        if (selectedItems.isEmpty())
+        item.setScore((float)(1./distance));
+        //System.out.println("Item selected " + item);
+        
+        // add blocks to list now if data is available in cache
+        if (item.data != null)
         {
-            selectedItems.add(item);
-        }
+            appendToBlockLists(item);
+            removeDescendantsFromBlockLists(item);
+            removeHiddenAncestorsFromBlockLists(item);
+        }       
+        
+        // otherwise display ancestor and add to load queue
         else
         {
-            // find the position where to insert this (order by distance to roi)
-            for (int i=0; i<selectedItems.size(); i++)
+            // find first cached ancestor
+            // except when hiding partially visible parents
+            if (!hidePartiallyVisibleParents)
             {
-                if (selectedItems.get(i).getScore() >= distance)
+                QuadTreeItem parentItem = item.getParent();
+                while (parentItem != null && parentItem.getData() == null)
+                    parentItem = parentItem.getParent();
+                
+                // add parent to list if it's not already there
+                if (parentItem != null && parentItem.getData() != null)
                 {
-                    selectedItems.add(i, item);
-                    //System.out.println("Item selected " + item);
-                    return;
+                    BlockListItem[] blockArray = (BlockListItem[])parentItem.getData();
+                    for (int b=0; b<blockArray.length; b++)
+                    {
+                        if (!provider.blockLists[b].contains(blockArray[b]))
+                        {
+                            // append before selected items block if any have already been added
+                            // this is to ensure that they highest resolution is rendered last and thus on top
+                            if (firstSelectedBlocks[b] != null)
+                                provider.blockLists[b].insertBefore(blockArray[b], firstSelectedBlocks[b]);
+                            else
+                                provider.blockLists[b].add(blockArray[b]);
+                        }
+                        
+                        // make sure item is not in discard list
+                        provider.itemsToDiscard.remove(parentItem);
+                    }
                 }
             }
             
-            // if we didn't add it yet, add at end of list
-            selectedItems.add(item);            
+            // add item to loading queue
+            // and notify tile loader threads
+            synchronized(provider.itemsToLoad)
+            {
+                provider.itemsToLoad.add(item);
+                provider.itemsToLoad.notify();
+                //System.out.println("Item in queue " + item);
+            }
         }
-        
-        //System.out.println("Item selected " + item);
     }
     
     
     public void setMaxDistance(double maxDistance)
     {
     	this.maxDistance2 = maxDistance * maxDistance;
+    }
+
+
+    public void setHidePartiallyVisibleParents(boolean alwaysRemoveParents)
+    {
+        this.hidePartiallyVisibleParents = alwaysRemoveParents;
     }
 }

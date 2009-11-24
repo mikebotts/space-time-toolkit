@@ -25,8 +25,6 @@
 
 package org.vast.stt.gui.views;
 
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -52,7 +50,7 @@ import org.vast.stt.project.scene.Scene;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public abstract class SceneView<SceneType extends Scene> extends ViewPart implements PaintListener, IPartListener2, STTEventListener
+public abstract class SceneView<SceneType extends Scene> extends ViewPart implements IPartListener2, STTEventListener
 {
     protected SceneType scene;
     protected boolean refreshThreadStarted = false;
@@ -65,35 +63,6 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
         public void run() {refreshView();}
     };
 
-    protected Thread refreshThread = new Thread()
-    {
-        @Override
-        public void run()
-        {
-            try
-            {
-                while (refreshThreadStarted)
-                {
-                    synchronized (lock)
-                    {
-                        while (!refreshRequested)
-                            lock.wait();
-
-                        if (!refreshThreadStarted)
-                            return;
-
-                        refreshRequested = false;
-                    }
-                    
-                    getSite().getShell().getDisplay().syncExec(runRefresh);
-                }
-            }
-            catch (InterruptedException e)
-            {
-            }
-        }
-    };
-
 
     public abstract void createPartControl(Composite parent);
     public abstract void updateView();
@@ -103,8 +72,8 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
 
 
     /**
-     * Method called when the view needs to be refreshed 
-     * (i.e. typically after a "CHANGE" event is received)
+     * Requests this view to refresh synchronously. This can only
+     * be called from SWT graphic thread or a SWTException is thrown.
      */
     public void refreshView()
     {
@@ -117,23 +86,17 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
         }
     }
 
-
+    
+    /**
+     * Requests this view to refresh asynchronously when the
+     * SWT graphic thread is available. This should be called by 
+     * any thread other than the graphic thread itself
+     */
     public void refreshViewAsync()
     {
         if (doRefresh)
         {
-            synchronized (lock)
-            {
-                if (!refreshThreadStarted)
-                {
-                    refreshThread.setName(this.getClass().getSimpleName() + " Refresh Thread");
-                    refreshThreadStarted = true;
-                    refreshThread.start();
-                }
-    
-                refreshRequested = true;
-                lock.notifyAll();
-            }
+            getSite().getShell().getDisplay().asyncExec(runRefresh);
         }
     }
 
@@ -159,11 +122,6 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
         if (scene != null)
             scene.removeListener(this);
 
-        synchronized (refreshThread)
-        {
-            refreshThread.interrupt();
-        }
-
         super.dispose();
     }
     
@@ -171,13 +129,6 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     @Override
     public void setFocus()
     {       
-    }
-    
-    
-    public void paintControl(PaintEvent e)
-    {
-        if (scene != null)
-            refreshView();
     }
 
 

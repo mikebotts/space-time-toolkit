@@ -29,10 +29,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.world.Projection;
-import org.vast.stt.project.world.Projection_ECEF;
-import org.vast.stt.project.world.Projection_LLA;
 import org.vast.stt.style.DataStyler;
 
 
@@ -53,11 +53,13 @@ import org.vast.stt.style.DataStyler;
  */
 public class DisplayListManager
 {
+    protected Log log = LogFactory.getLog(DisplayListManager.class);
+    
     protected static Hashtable<HashKey, GLDisplayListTable> DLTables
                = new Hashtable<HashKey, GLDisplayListTable>();
     protected GL gl;
     protected GLU glu;
-    protected int listCount = 0;
+
     
     // use to build a unique hash code for a combination of symbolizer/projection
     class HashKey
@@ -66,13 +68,10 @@ public class DisplayListManager
         
         public HashKey(DataStyler styler)
         {
-            hashCode = styler.getSymbolizer().hashCode();
-            
             Projection projection = styler.getProjection();
-            if (projection instanceof Projection_ECEF)
-                hashCode *= 1;
-            else if (projection instanceof Projection_LLA)
-                hashCode *= 2;
+            String className = projection.getClass().getSimpleName();
+            hashCode = styler.getSymbolizer().hashCode();
+            hashCode = (String.valueOf(hashCode) + className).hashCode();
         }
         
         @Override
@@ -159,6 +158,8 @@ public class DisplayListManager
             {
                 dlInfo.needsUpdate = false;
                 createDisplayList(dlInfo, renderRunnable);
+                log.debug("DL #" + dlInfo.id + " created for block " + block);
+                logStatistics();
             }
             
             // otherwise just call existing one
@@ -168,7 +169,7 @@ public class DisplayListManager
                 {
                     gl.glCallList(dlInfo.id);
                     styler.skipBlocks(dlInfo.blockCount-1);
-                    //System.err.println("DL #" + dlInfo.id + " called");
+                    //log.debug("DL #" + dlInfo.id + " called");
                 }
             }
         }
@@ -194,17 +195,12 @@ public class DisplayListManager
         dlInfo.id = newID;
         dlInfo.blockCount = renderRunnable.blockCount;
         
-        // delete previous texture if needed
+        // delete previous list if needed
         if (oldID > 0)
         {
             gl.glDeleteLists(oldID, 1);
-            //System.err.println("DL #" + oldID + " deleted");
+            log.debug("DL #" + oldID + " deleted");
         }
-        
-        //listCount++;
-        //System.out.println(listCount);
-        
-        //System.err.println("DL #" + dlInfo.id + " created");
     }
     
     
@@ -229,17 +225,17 @@ public class DisplayListManager
                     GLDisplayList nextDL = subLists.nextElement();
                     if (nextDL.id > 0)
                     {
-                        //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                         gl.glDeleteLists(nextDL.id, 1);
-                        //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
-                        //listCount--;
+                        log.debug("DL #" + nextDL.id + " deleted for styler " + styler);
                     }
                     
                     dlTable.remove(nextDL);
                 }
                 
                 DLTables.remove(hashKey);
-            }            
+            }
+            
+            logStatistics();
         }
     }
     
@@ -265,22 +261,35 @@ public class DisplayListManager
                     GLDisplayList nextDL = dlTable.get(objects[i]);
                     if (nextDL != null)
                     {
-                        dlTable.remove(nextDL);
+                        dlTable.remove(objects[i]);
                         
                         if (nextDL.id > 0)
                         {
-                            //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
                             gl.glDeleteLists(nextDL.id, 1);
-                            //System.out.println("DL# " + nextDL.id + " " + (gl.glIsList(nextDL.id) ? "on" : "off"));
-                            //listCount--;
+                            log.debug("DL #" + nextDL.id + " deleted for block " + objects[i]);
                         }
                     }
-                    
-                    
+                    else
+                        log.debug("DL not found for block " + objects[i]);
                 }
             }
             
-            //System.out.println(listCount);
+            logStatistics();
+        }
+    }
+    
+    
+    private void logStatistics()
+    {
+        if (log.isDebugEnabled())
+        {
+            int listCount = 0;
+            
+            for (int i=0; i<65535; i++)
+                if (gl.glIsList(i))
+                    listCount++;
+            
+            log.debug("Num DL = " + listCount);
         }
     }
 }

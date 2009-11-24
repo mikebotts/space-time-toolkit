@@ -26,12 +26,17 @@
 
 package org.vast.stt.gui.views;
 
+import java.text.NumberFormat;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
@@ -41,13 +46,14 @@ import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.scene.SceneItem;
+import org.vast.stt.project.world.Projection;
 import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneRenderer;
+import org.vast.stt.project.world.Projection.Crs;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTPolygonExtent;
 import org.vast.stt.provider.STTSpatialExtent;
-import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.renderer.opengl.JOGLRenderer;
 
 
@@ -66,12 +72,13 @@ import org.vast.stt.renderer.opengl.JOGLRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class WorldView extends SceneView<WorldScene> implements ControlListener
+public class WorldView extends SceneView<WorldScene> implements PaintListener, ControlListener, MouseMoveListener
 {
 	public static final String ID = "STT.WorldView";
     private Composite parent;
     private WorldViewController controller;
-    
+    private LatLonStatusLine llStatus;
+
    
 	public WorldView()
     {
@@ -123,6 +130,7 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         descriptor = STTPlugin.getImageDescriptor("icons/select_point.gif");
         selectPolygonAction.setImageDescriptor(descriptor);
         site.getActionBars().getToolBarManager().add(selectPolygonAction);
+        
         // add show target action to toolbar
 		IAction showTargetAction = new Action("Toggle Target Tripod")
 		{
@@ -167,8 +175,9 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         descriptor = STTPlugin.getImageDescriptor("icons/bbox.gif");
         showROIAction.setImageDescriptor(descriptor);
         site.getActionBars().getToolBarManager().add(showROIAction);
-        LatLonStatusLine llStatus = new LatLonStatusLine();
-        controller.setLatLonStatusLine(llStatus);
+        
+        // add lat/lon position to status bar
+        llStatus = new LatLonStatusLine();
 		site.getActionBars().getStatusLineManager().add(llStatus);
 	}
 	
@@ -214,7 +223,7 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
             setPartName(scene.getName());
             
             // init the renderer
-            SceneRenderer renderer = new JOGLRenderer(); // TODO open renderer specified in project file??
+            WorldSceneRenderer renderer = new JOGLRenderer(); // TODO open renderer specified in project file??
             scene.setRenderer(renderer);
             renderer.setParent(parent);
             renderer.init();
@@ -230,6 +239,7 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
             controller.setScene(scene);
             canvas.addMouseListener(controller);
             canvas.addMouseMoveListener(controller);
+            canvas.addMouseMoveListener(this);
             canvas.addListener(SWT.MouseWheel , controller);
             canvas.addControlListener(this);
             canvas.addPaintListener(this);
@@ -239,24 +249,34 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         }
     }
     
-    //  Remove these if not needed for SPSWidget
-    public void removeMouseListeners(){
-    	 parent.removeMouseListener(controller);
-         parent.removeMouseMoveListener(controller);
-         parent.removeListener(SWT.MouseWheel , controller);
-    }
     
-    public void restoreMouseListeners(){
-    	 parent.addMouseListener(controller);
-         parent.addMouseMoveListener(controller);
-         parent.addListener(SWT.MouseWheel , controller);
+    // TODO should use WorldViewController point selection feature instead
+    public Vector3d getProjectedPosition(int x, int y)
+    {
+        Vector3d P0 = new Vector3d();
+        Projection projection = scene.getViewSettings().getProjection();
+        boolean found = projection.pointOnMap(x, y, scene, P0);
+
+        if (!found)
+            return new Vector3d();
+
+        // convert to LLA
+        projection.unproject(Crs.EPSG4329, P0);
+
+        double RTD = 180/Math.PI;
+        P0.x *= RTD;
+        P0.y *= RTD;
+        
+        return P0;
     }
+
     
     @Override
     public void updateView()
     {
-        // render whole scene tree
-        ((WorldSceneRenderer)scene.getRenderer()).drawScene(scene);
+        // trigger repaint
+        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().redraw();
+        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().update();
     }
     
     
@@ -272,6 +292,37 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
     }
     
     
+    public void paintControl(PaintEvent e)
+    {
+        //System.out.println("Paint Event");
+        if (scene != null)
+            ((WorldSceneRenderer)scene.getRenderer()).drawScene(scene);
+    }
+    
+    
+    protected void reportLLStatus(int x, int y)
+    {
+        Vector3d P0 = getProjectedPosition(x, y);
+        StringBuffer llStrBuff = new StringBuffer(40);
+        NumberFormat nf  = NumberFormat.getInstance();
+        nf.setMaximumIntegerDigits(3);
+        nf.setMinimumFractionDigits(4);
+        String lonStr = nf.format(P0.x);
+        String latStr = nf.format(P0.y);
+        llStrBuff.append("Lat: " + latStr + "   ");
+        llStrBuff.append("Lon: " + lonStr);
+        llStatus.setText(llStrBuff.toString());
+    }
+    
+    
+    public void mouseMove(MouseEvent e)
+    {
+        int viewHeight = scene.getRenderer().getViewHeight();
+        e.y = viewHeight - e.y;
+        reportLLStatus(e.x, e.y);
+    }
+    
+    
     @Override
     public void handleEvent(STTEvent e)
     {       
@@ -281,6 +332,7 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
             case SCENE_VIEW_CHANGED:
             case SCENE_ITEM_CHANGED:
             case ITEM_VISIBILITY_CHANGED:
+                //System.out.println(e);
                 refreshViewAsync();
                 break;
                 
@@ -307,7 +359,7 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
         if (scene != null)
         {
             // redraw the whole scene
-            updateView();
+            refreshView();
             scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
         }
     }
@@ -315,12 +367,5 @@ public class WorldView extends SceneView<WorldScene> implements ControlListener
 	
 	public void controlMoved(ControlEvent e)
 	{
-	}
-	
-	//  Added so SPSWidget can convert from canvas x,y to lat,lon
-	//  Probably a cleaner way to do this would be to have listeners on the canvas,
-	//  and have canvas publish "position" events based on mouse click and move  
-	public Vector3d getProjectedPosition(int x, int y) {
-		return controller.getLatLon(x, y);
 	}
 }

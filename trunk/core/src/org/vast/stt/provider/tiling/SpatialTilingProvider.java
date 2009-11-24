@@ -27,15 +27,12 @@ package org.vast.stt.provider.tiling;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import org.vast.cdm.common.DataComponent;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SpatialExtentUpdater;
-import org.vast.stt.event.EventType;
-import org.vast.stt.event.STTEvent;
 import org.vast.stt.provider.DataProvider;
 import org.vast.stt.provider.STTSpatialExtent;
 import org.vast.stt.provider.tiling.QuadTreeItem;
@@ -87,68 +84,8 @@ public class SpatialTilingProvider extends TiledMapProvider
         maxExtent.setMinY(-90);
         maxExtent.setMaxY(+90);
         tileSelector.setMaxExtent(maxExtent);
-    }
-    
-    
-    class GetTileRunnable implements Runnable
-    {
-        protected QuadTreeItem item;
         
-        public GetTileRunnable(QuadTreeItem item)
-        {
-            this.item = item;
-        }
-                
-        public void run()
-        {
-            try
-            {
-                // run sub provider with item extent
-            	STTSpatialExtent tileExtent = subProvider.getSpatialExtent();
-            	tileExtent.setMinX(item.getMinX());
-            	tileExtent.setMinY(item.getMinY());
-            	tileExtent.setMaxX(item.getMaxX());
-            	tileExtent.setMaxY(item.getMaxY());
-            	tileExtent.setTilingEnabled(false);
-                subProvider.updateData();
-                
-                // add blocks to dataNode
-                if (!canceled)
-                {
-                    BlockListItem[] blockArray = new BlockListItem[blockLists.length];
-                    
-                    // get blocks from underlying provider
-                    ArrayList<BlockList> subProviderLists = subProvider.getDataNode().getListArray();
-                    for (int i=0; i<blockLists.length; i++)
-                    {
-                        Iterator<BlockListItem> it = subProviderLists.get(i).getIterator();
-                        if (it.hasNext())
-                        {
-                            blockArray[i] = it.next();
-                            subProviderLists.get(i).remove(blockArray[i]);
-                            blockLists[i].add(blockArray[i]);
-                        }
-                        else
-                            return;
-                    }
-                    
-                    // add blocks to data node
-                    item.setData(blockArray);
-                    
-                    // remove sub items now that we have the new tile
-                    removeHiddenChildren(item);
-                    removeHiddenParent(item);
-                    
-                    // send event for redraw
-                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-                }
-            }
-            catch (DataException e)
-            {
-                if (!canceled)
-                    e.printStackTrace();
-            }
-        }        
+        initThreadPool(4);
     }
     
     
@@ -165,7 +102,7 @@ public class SpatialTilingProvider extends TiledMapProvider
             DataComponent blockStructure = subProviderLists.get(i).getBlockStructure();
             blockLists[i] = dataNode.createList(blockStructure.copy());
         }
-        tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
+        
         dataNode.setNodeStructureReady(true);
         
         // set tile sizes in updater
@@ -189,10 +126,45 @@ public class SpatialTilingProvider extends TiledMapProvider
     @Override
     protected void getNewTile(QuadTreeItem item)
     {
-        GetTileRunnable getTile = new GetTileRunnable(item);
-        //Thread newThread = new Thread(getTile, item.toString());
-        //newThread.start();
-        getTile.run();
+        try
+        {
+            // run sub provider with item extent
+            STTSpatialExtent tileExtent = subProvider.getSpatialExtent();
+            tileExtent.setMinX(item.getMinX());
+            tileExtent.setMinY(item.getMinY());
+            tileExtent.setMaxX(item.getMaxX());
+            tileExtent.setMaxY(item.getMaxY());
+            tileExtent.setTilingEnabled(false);
+            subProvider.updateData();
+            
+            // add blocks to dataNode
+            if (!canceled)
+            {
+                BlockListItem[] blockArray = new BlockListItem[blockLists.length];
+                
+                // get blocks from underlying provider
+                ArrayList<BlockList> subProviderLists = subProvider.getDataNode().getListArray();
+                for (int i=0; i<blockLists.length; i++)
+                {
+                    Iterator<BlockListItem> it = subProviderLists.get(i).getIterator();
+                    if (it.hasNext())
+                    {
+                        blockArray[i] = it.next();
+                        subProviderLists.get(i).remove(blockArray[i]);
+                    }
+                    else
+                        return;
+                }
+                
+                // add blocks to quad tree cache
+                item.setData(blockArray);
+            }
+        }
+        catch (DataException e)
+        {
+            if (!canceled)
+                e.printStackTrace();
+        }
     }
     
     
@@ -202,6 +174,34 @@ public class SpatialTilingProvider extends TiledMapProvider
     	
     	// set quad tree root extent (= max request)
         quadTree.init(spatialExtent);
+    }
+    
+    
+    @Override
+    public String getDescription()
+    {
+        return subProvider.getDescription();
+    }
+
+
+    @Override
+    public String getName()
+    {
+        return subProvider.getName();
+    }
+
+
+    @Override
+    public void setDescription(String description)
+    {
+        subProvider.setDescription(description);
+    }
+
+
+    @Override
+    public void setName(String name)
+    {
+        subProvider.setName(name);
     }
 
 

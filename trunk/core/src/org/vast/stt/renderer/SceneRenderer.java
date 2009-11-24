@@ -67,12 +67,12 @@ public abstract class SceneRenderer<SceneType extends Scene>
     public abstract void drawScene(SceneType scene);
        
     
-    public abstract void cleanup(DataStyler styler, CleanupSection section);
+    public abstract void cleanupSync(DataStyler styler, Object[] objects, CleanupSection section);
     
     
-    public abstract void cleanup(DataStyler styler, Object[] objects, CleanupSection section);
-
-
+    public abstract void cleanupAsync(DataStyler styler, Object[] objects, CleanupSection section);
+    
+    
     public abstract void project(double worldX, double worldY, double worldZ, Vector3d viewPos);
 
 

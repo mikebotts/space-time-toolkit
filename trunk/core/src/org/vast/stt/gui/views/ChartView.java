@@ -27,13 +27,15 @@ package org.vast.stt.gui.views;
 
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.project.chart.ChartScene;
 import org.vast.stt.project.chart.ChartSceneRenderer;
-import org.vast.stt.renderer.SceneRenderer;
+import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.renderer.JFreeChart.JFreeChartRenderer;
 
 
@@ -51,7 +53,7 @@ import org.vast.stt.renderer.JFreeChart.JFreeChartRenderer;
  * @date Jul 10, 2006
  * @version 1.0
  */
-public class ChartView extends SceneView<ChartScene> implements ControlListener
+public class ChartView extends SceneView<ChartScene> implements PaintListener, ControlListener
 {
 	public static final String ID = "STT.ChartView";
     private Composite composite;
@@ -76,6 +78,13 @@ public class ChartView extends SceneView<ChartScene> implements ControlListener
 	{
 		super.init(site);		
 	}
+	
+	
+	public void paintControl(PaintEvent e)
+    {
+        if (scene != null)
+            ((ChartSceneRenderer)scene.getRenderer()).drawScene(scene);
+    }
 	
 	
 	@Override
@@ -119,7 +128,7 @@ public class ChartView extends SceneView<ChartScene> implements ControlListener
             setPartName(scene.getName());
             
             // init the renderer
-            SceneRenderer renderer = new JFreeChartRenderer(); // TODO open renderer specified in project file??
+            ChartSceneRenderer renderer = new JFreeChartRenderer(); // TODO open renderer specified in project file??
             scene.setRenderer(renderer);
             renderer.setParent(composite);
             renderer.init();
@@ -138,8 +147,9 @@ public class ChartView extends SceneView<ChartScene> implements ControlListener
     @Override
     public void updateView()
     {
-        // render whole scene tree
-        ((ChartSceneRenderer)scene.getRenderer()).drawScene(scene);
+        // trigger repaint
+        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().redraw();
+        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().update();
     }
     
     

@@ -31,14 +31,13 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLContext;
-//import javax.media.opengl.GLDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.GLDrawableFactory;
-//import javax.media.opengl.DebugGL;
-//import javax.media.opengl.TraceGL;
 import com.sun.opengl.util.GLUT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
@@ -93,6 +92,8 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     protected int[] boolResult = new int[1];
     protected TextureManager textureManager;
     protected DisplayListManager displayListManager;
+    protected Queue<CleaningList> texturesToClean;
+    protected Queue<CleaningList> displayListsToClean;
     protected GLBlockFilter blockFilter;
     protected float zBufferOffset;
     protected float oldZBufferOffset;
@@ -113,9 +114,24 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     protected GLRenderPolyBox polyBoxRenderer;
     
     
+    protected class CleaningList
+    {
+        protected DataStyler styler;
+        protected Object[] objects;
+        
+        protected CleaningList(DataStyler styler, Object[] objects)
+        {
+            this.styler = styler;
+            this.objects = objects;
+        }
+    }
+    
+    
     public JOGLRenderer()
     {
         selectableItems = new Hashtable<Integer, SceneItem>();
+        texturesToClean = new ConcurrentLinkedQueue<CleaningList>();
+        displayListsToClean = new ConcurrentLinkedQueue<CleaningList>();
     }
     
     
@@ -158,69 +174,78 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     
     
     @Override
-    public void cleanup(final DataStyler styler, final CleanupSection section)
+    public void cleanupSync(final DataStyler styler, final Object[] objects, final CleanupSection section)
     {
+        Runnable doCleanup = new Runnable()
+        {
+            public void run()
+            {
+                switch (section)
+                {
+                    case ALL:
+                        texturesToClean.add(new CleaningList(styler, null));
+                        displayListsToClean.add(new CleaningList(styler, null));
+                        break;
+                        
+                    case TEXTURES:
+                        texturesToClean.add(new CleaningList(styler, null));
+                        break;
+                        
+                    case GEOMETRY:
+                        displayListsToClean.add(new CleaningList(styler, null));
+                        break;
+                }
+                
+                doCleanup();
+            }
+        };
         
-    	Runnable doCleanup = new Runnable()
-    	{
-    		public void run()
-    		{
-    			getContext();
-    	        
-    	        switch (section)
-    	        {
-    	            case ALL:
-    	                textureManager.clearTextures(styler);
-    	                displayListManager.clearDisplayLists(styler);
-    	                break;
-    	                
-    	            case TEXTURES:
-    	                textureManager.clearTextures(styler);
-    	                break;
-    	                
-    	            case GEOMETRY:
-    	                displayListManager.clearDisplayLists(styler);
-    	                break;
-    	        }
-    	        
-    	        releaseContext();
-    		}
-    	};
-    	
-    	canvas.getDisplay().asyncExec(doCleanup);
+        canvas.getDisplay().syncExec(doCleanup);
     }
     
     
     @Override
-    public void cleanup(final DataStyler styler, final Object[] objects, final CleanupSection section)
+    public void cleanupAsync(final DataStyler styler, final Object[] objects, final CleanupSection section)
     {
-    	Runnable doCleanup = new Runnable()
-    	{
-    		public void run()
-    		{
-    			getContext();
-    			
-    			switch (section)
-    	        {
-    	            case ALL:
-    	                textureManager.clearTextures(styler, objects);
-    	                displayListManager.clearDisplayLists(styler, objects);
-    	                break;
-    	                
-    	            case TEXTURES:
-    	                textureManager.clearTextures(styler, objects);
-    	                break;
-    	                
-    	            case GEOMETRY:
-    	                displayListManager.clearDisplayLists(styler, objects);
-    	                break;
-    	        }
-    	        
-    	        releaseContext();
-    		}
-    	};
+        switch (section)
+        {
+            case ALL:
+                texturesToClean.add(new CleaningList(styler, objects));
+                displayListsToClean.add(new CleaningList(styler, objects));
+                break;
+                
+            case TEXTURES:
+                texturesToClean.add(new CleaningList(styler, objects));
+                break;
+                
+            case GEOMETRY:
+                displayListsToClean.add(new CleaningList(styler, objects));
+                break;
+        }
+    }
+    
+    
+    protected void doCleanup()
+    {
+        // clear all unused textures
+        while (!texturesToClean.isEmpty())
+        {
+            CleaningList nextList = texturesToClean.poll();
+            if (nextList.objects == null)
+                textureManager.clearTextures(nextList.styler);
+            else
+                textureManager.clearTextures(nextList.styler, nextList.objects);                
+        }
         
-        canvas.getDisplay().asyncExec(doCleanup);
+        // clear all unused display lists
+        while (!displayListsToClean.isEmpty())
+        {
+            CleaningList nextList = displayListsToClean.poll();
+            if (nextList.objects == null)
+                displayListManager.clearDisplayLists(nextList.styler);
+            else
+                displayListManager.clearDisplayLists(nextList.styler, nextList.objects);
+        }
     }
     
     
@@ -415,6 +440,10 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         
         // swap buffers        
         canvas.swapBuffers();
+        
+        // remove unused display lists and textures
+        doCleanup();
+        
         releaseContext();
     }
     
@@ -618,7 +647,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         glData.depthSize = 24;
         glData.stencilSize = 1;
         glData.doubleBuffer = true;
-        canvas = new GLCanvas(composite, SWT.NO_REDRAW_RESIZE, glData);
+        canvas = new GLCanvas(composite, SWT.NO_BACKGROUND, glData);
         canvas.setCurrent();
         
         // create JOGL context
@@ -636,8 +665,8 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         contextList.add(joglContext);
         joglContext.makeCurrent();
         
-        //context.setGL(new DebugGL(JOGLContext.getGL()));
-        //context.setGL(new TraceGL(JOGLContext.getGL(), System.err));
+        //joglContext.setGL(new DebugGL(joglContext.getGL()));
+        //joglContext.setGL(new TraceGL(joglContext.getGL(), System.err));
 
         gl = joglContext.getGL();
         glu = new GLU();

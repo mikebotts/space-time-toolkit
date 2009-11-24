@@ -173,9 +173,9 @@ public class SceneItem implements STTEventListener
     {
         for (int i = 0; i < stylers.size(); i++)
         {
-            DataStyler nextStyler = stylers.get(i);
-            parentScene.getRenderer().cleanup(stylers.get(i), CleanupSection.GEOMETRY);
-            nextStyler.setProjection(projection);
+            DataStyler styler = stylers.get(i);
+            parentScene.getRenderer().cleanupSync(styler, null, CleanupSection.GEOMETRY);
+            styler.setProjection(projection);
         }
         
         // also reproject all masks
@@ -192,7 +192,7 @@ public class SceneItem implements STTEventListener
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler styler = stylers.get(i);
-            parentScene.getRenderer().cleanup(styler, CleanupSection.ALL);
+            parentScene.getRenderer().cleanupAsync(styler, null, CleanupSection.ALL);
             styler.resetBoundingBox();
         }
     }
@@ -206,7 +206,7 @@ public class SceneItem implements STTEventListener
         for (int i = 0; i < stylers.size(); i++)
         {
             DataStyler styler = stylers.get(i);
-            parentScene.getRenderer().cleanup(styler, deletedObjects, CleanupSection.ALL);
+            parentScene.getRenderer().cleanupAsync(styler, deletedObjects, CleanupSection.ALL);
             styler.resetBoundingBox();
         }
     }
@@ -251,7 +251,8 @@ public class SceneItem implements STTEventListener
         // otherwise update existing one
         else
         {
-            parentScene.getRenderer().cleanup(styler, CleanupSection.ALL);
+            // clear cached rendering data
+            parentScene.getRenderer().cleanupAsync(styler, null, CleanupSection.ALL);
             
             if (sym.isEnabled())
             {

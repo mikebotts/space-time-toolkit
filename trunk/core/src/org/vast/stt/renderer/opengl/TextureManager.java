@@ -31,10 +31,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridPatchGraphic;
@@ -63,6 +63,8 @@ import org.vast.util.MessageSystem;
  */
 public class TextureManager
 {
+    protected Log log = LogFactory.getLog(TextureManager.class);
+    
     protected static Hashtable<Symbolizer, GLTextureTable> symTextureTables
                = new Hashtable<Symbolizer, GLTextureTable>();
     protected Hashtable<Symbolizer, Boolean> symTexturePoolSizeReachedTable = new Hashtable<Symbolizer, Boolean>();
@@ -72,7 +74,6 @@ public class TextureManager
     protected boolean forceNoExt = false;
     protected boolean npotSupported;
     protected boolean normalizationRequired;
-    protected int texCount = 0;
     protected int maxSize = 512;
     protected int maxWastedPixels = 100;
     
@@ -84,12 +85,6 @@ public class TextureManager
         protected int widthPadding;
         protected int heightPadding;
         protected List<GLTexture> tiles;
-    }
-    
-    
-    class GLTextureTiles
-    {
-        
     }
     
     
@@ -173,7 +168,9 @@ public class TextureManager
             if (texInfo.needsUpdate || force)
             {
                 texInfo.needsUpdate = false;
-                createTexture(styler, tex, texInfo);
+                createTexture(styler, tex, texInfo);                
+                log.debug("Tex #" + texInfo.id + " created for block " + tex.block);
+                logStatistics();  
             }
             
             return texInfo;
@@ -191,8 +188,10 @@ public class TextureManager
         // otherwise just bind existing one
         if (texInfo.id > 0)
         {
+            if (!gl.glIsTexture(texInfo.id))
+                log.debug("Tex #" + texInfo.id + " DOESN'T EXIST for block " + tex.block);
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.id);
-            //System.err.println("Tex #" + texInfo.id + " used");
+            //log.debug("Tex #" + texInfo.id + " used");
         }
         
         // transfer padding info to RasterTileGraphic
@@ -258,7 +257,7 @@ public class TextureManager
             else if ((symTexturePoolSizeReachedTable != null) || symTexturePoolSizeReachedTable.containsKey(sym))
             {
             	LinkedList<Integer> stack = symTextureStackTable.get(sym);
-	           	id[0] = stack.poll();//.pollFirst(); pollFirst method does not exist on Mac!!??
+	           	id[0] = stack.poll();
 	           	stack.addLast(id[0]);        	 
             }
             
@@ -266,9 +265,9 @@ public class TextureManager
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, id[0]);
             
             // set texture parameters
-            //  TODO:  Allow user to select between Linear (smoothed) and nearest-neighbor interp
-//            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-//            gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+            // TODO:  Allow user to select between Linear (smoothed) and nearest-neighbor interp
+            // gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+            // gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
             gl.glTexParameteri(OpenGLCaps.TEXTURE_2D_TARGET, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
@@ -300,8 +299,7 @@ public class TextureManager
             
             gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
             
-            // create texture in GL memory
-            
+            // create texture in GL memory            
             if(!symTexturePoolSizeReachedTable.containsKey(sym) || lastNewTexture)
             {
             	
@@ -330,13 +328,8 @@ public class TextureManager
             if (oldID > 0)
             {
                 gl.glDeleteTextures(1, new int[] {oldID}, 0);
-                System.err.println("Tex #" + oldID + " deleted");
-            }
-            
-            //texCount++;
-            //System.out.println(texCount);
-            
-            //System.err.println("Tex #" + texInfo.id + " created");
+                //System.err.println("Tex #" + oldID + " deleted");
+            }      
         }
     }
     
@@ -360,10 +353,8 @@ public class TextureManager
                     GLTexture texInfo = textureEnum.nextElement();
                     if (texInfo.id > 0)
                     {
-                        // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                        // System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
-                        //texCount--;
+                        log.debug("Tex #" + texInfo.id + " deleted for styler " + styler);
                     }
                     
                     textureTable.remove(texInfo);
@@ -371,13 +362,15 @@ public class TextureManager
                 
                 symTextureTables.remove(sym);
             }
+            
+            logStatistics();
         }
     }
     
     
     /**
      * Clears texture used by this symbolizer and
-     * associatd with the given objects
+     * associated with the given objects
      * @param sym
      * @param obj
      */
@@ -395,21 +388,19 @@ public class TextureManager
                     GLTexture texInfo = textureTable.get(objects[i]);
                     if (texInfo != null)
                     {
-                        textureTable.remove(texInfo);                        
+                        textureTable.remove(objects[i]);
                         if (texInfo.id > 0)
                         {
-                            //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
                             gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                            //System.out.println("Tex# " + texInfo.id + " " + (gl.glIsTexture(texInfo.id) ? "on" : "off"));
-                            //texCount--;
+                            log.debug("Tex #" + texInfo.id + " deleted for block " + objects[i]);
                         }
                     }
-                    
-                    
+                    else
+                        log.debug("Texture not found for block " + objects[i]);
                 }
             }
             
-            //System.out.println(texCount);
+            logStatistics();
         }
     }
     
@@ -444,11 +435,12 @@ public class TextureManager
                 texInfo.widthPadding = paddedWidth - initialWidth;
                 texInfo.heightPadding = paddedHeight - initialHeight;
             }
+            
+            log.debug("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
         }
         
         // create byte buffer of the right size
         ByteBuffer buffer = ByteBuffer.allocateDirect(paddedWidth*paddedHeight*tex.bands);
-        //System.err.println("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
         int index = 0;
         
         for (int j=0; j<initialHeight; j++)
@@ -474,8 +466,6 @@ public class TextureManager
                     buffer.put(index, (byte)pixel.a);
                     index++;
                 }
-                
-                //System.out.println(i + "," + j + ": " + pixel.r + "," + pixel.g + "," + pixel.b);
             }
             
             // skip padding bytes
@@ -551,9 +541,10 @@ public class TextureManager
             RasterTileGraphic t = tileList.get(i);
             //GridPatchGraphic g = gridList.get(i);
             
-            System.out.println("Tile: " + t.width + "x" + t.height + " @ " +
-                                          t.xPos + "," + t.yPos + " pad " +
-                                          t.widthPadding + "x" + t.heightPadding);
+            if (log.isDebugEnabled())
+                log.debug("Tile: " + t.width + "x" + t.height + " @ " +
+                                     t.xPos + "," + t.yPos + " pad " +
+                                     t.widthPadding + "x" + t.heightPadding);
         }
         
         return tileList;
@@ -644,5 +635,20 @@ public class TextureManager
     public boolean isNormalizationRequired()
     {
         return normalizationRequired;
+    }
+    
+    
+    private void logStatistics()
+    {
+        if (log.isDebugEnabled())
+        {
+            int texCount = 0;
+            
+            for (int i=0; i<65535; i++)
+                if (gl.glIsTexture(i))
+                    texCount++;
+            
+            log.debug("Num Tex = " + texCount);
+        }
     }
 }

@@ -59,9 +59,8 @@ public abstract class ExtentSelector implements QuadTreeVisitor
     protected int maxLevel, minLevel, currentLevel;
     
     
-    public ExtentSelector(double sizeRatio, int minLevel, int maxLevel)
+    public ExtentSelector(int minLevel, int maxLevel)
     {
-        this.sizeRatio = sizeRatio;
         this.maxLevel = maxLevel;
         this.minLevel = minLevel;
         this.maxExtent = new SpatialExtent();
