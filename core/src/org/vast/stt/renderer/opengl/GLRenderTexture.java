@@ -78,7 +78,6 @@ public class GLRenderTexture extends GLRunnable
         float vScale = 1.0f;
         float eX, eY;
         int count = 0;
-        float dz;
         
         RasterTileGraphic tex = patch.getTexture();
         GridPatchGraphic grid = patch.getGrid();
@@ -125,11 +124,6 @@ public class GLRenderTexture extends GLRunnable
                             break;
                         }
                         
-                        if (p>0)
-                            dz = zOffset + 1e-7f;
-                        else
-                            dz = zOffset;
-                        
                         // clamp to edge
                         if (normalizeCoords)
                         {
@@ -149,7 +143,7 @@ public class GLRenderTexture extends GLRunnable
                         point.ty *= vScale;
                         
                         gl.glTexCoord2f((float)point.tx, (float)point.ty);                        
-                        gl.glVertex3d(point.x, point.y, point.z + dz);
+                        gl.glVertex3d(point.x, point.y, point.z);
                     }
                 }                
                 
