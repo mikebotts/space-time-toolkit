@@ -30,6 +30,7 @@ import org.vast.physics.MapProjection;
 import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
+import org.vast.util.Bbox;
 import org.vast.util.SpatialExtent;
 
 
@@ -236,37 +237,33 @@ public class Projection_LLA implements Projection
     
     
     public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
-    {
-        ViewSettings view = scene.getViewSettings();
+    {        
         SceneRenderer<?> renderer = scene.getRenderer();
+        int width = renderer.getViewWidth();
+        int height = renderer.getViewHeight();
         
-        Vector3d targetPos = view.getTargetPos();
-        Vector3d cameraPos = view.getCameraPos();
+        // compute intersection of 4 screen corners with map plane
+        Vector3d ul = new Vector3d();
+        this.pointOnMap(0, 0, scene, ul);        
+        Vector3d ur = new Vector3d();
+        this.pointOnMap(width, 0, scene, ur);        
+        Vector3d ll = new Vector3d();
+        this.pointOnMap(0, height, scene, ll);
+        Vector3d lr = new Vector3d();
+        this.pointOnMap(width, height, scene, lr);
         
-        double centerX = targetPos.x * RTD;
-        double centerY = targetPos.y * RTD;
-        double dX = view.getOrthoWidth()/2 * RTD;
-        double dY = dX * renderer.getViewHeight()/ renderer.getViewWidth();
+        // compute enclosing bbox
+        Bbox tmpBox = new Bbox();
+        tmpBox.resizeToContain(ul.x, ul.y, ul.z);
+        tmpBox.resizeToContain(ur.x, ur.y, ur.z);
+        tmpBox.resizeToContain(ll.x, ll.y, ll.z);
+        tmpBox.resizeToContain(lr.x, lr.y, lr.z);
         
-        // calculate secante (see http://fr.wikipedia.org/wiki/Fonction_trigonométrique)
-        Vector3d diff = cameraPos.copy();
-        diff.sub(targetPos);
-        diff.normalize();
-        double secante = 8;
-        if (diff.z != 0)
-        {
-        	secante = 1 / diff.z;
-        	secante = Math.min(secante, 8);
-        }        
-        
-        // scale bbox size
-	    dX = dX * secante;
-	    dY = dY * secante;
-        
-        bbox.setMinX(Math.max(centerX - dX, -180));
-        bbox.setMaxX(Math.min(centerX + dX, +180));
-        bbox.setMinY(Math.max(centerY - dY, -90));
-        bbox.setMaxY(Math.min(centerY + dY, +90));
+        // set bbox after clamping        
+        bbox.setMinX(Math.max(tmpBox.getMinX()*RTD, -180));
+        bbox.setMaxX(Math.min(tmpBox.getMaxX()*RTD, +180));
+        bbox.setMinY(Math.max(tmpBox.getMinY()*RTD, -90));
+        bbox.setMaxY(Math.min(tmpBox.getMaxY()*RTD, +90));
     }
     
     
