@@ -105,7 +105,7 @@ public class BasicLineController extends OptionController // implements Selectio
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			lineOptionHelper.setLineWidth(w);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 		
 		// line color
@@ -118,7 +118,7 @@ public class BasicLineController extends OptionController // implements Selectio
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			lineOptionHelper.setLineColor(sldColor);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 		
 		// line opacity
@@ -126,14 +126,14 @@ public class BasicLineController extends OptionController // implements Selectio
 			Spinner widthSpinner = (Spinner)control;
 			float opacity = new Float(widthSpinner.getSelection()).floatValue();
 			lineOptionHelper.getLineColor().setAlphaValue((float)opacity / 100.0f);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 		
 		// line smooth
 		else if(control == optionControls[3].getControl()) {
 			Button smoothCheckbox = (Button)control;
 			lineOptionHelper.setLineSmooth(smoothCheckbox.getSelection());
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 	

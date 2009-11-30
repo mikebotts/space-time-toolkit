@@ -54,5 +54,5 @@ public interface STTEventProducer
     public boolean hasListeners();
     
     
-    public void dispatchEvent(STTEvent event);
+    public void dispatchEvent(STTEvent event, boolean merge);
 }

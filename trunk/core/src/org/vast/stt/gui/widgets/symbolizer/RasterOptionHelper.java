@@ -84,9 +84,9 @@ public class RasterOptionHelper implements SelectionListener
 		OptionControl[] optionControls = optionController.getControls();
 
 		if(control == optionControls[0].getControl()) {
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else if(control == optionControls[1].getControl()) {
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 

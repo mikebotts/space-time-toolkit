@@ -139,7 +139,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
 				boolean targetShown = scene.getViewSettings().isShowCameraTarget();
 				this.setChecked(!targetShown);
                 scene.getViewSettings().setShowCameraTarget(!targetShown);
-                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
 			}
 		};        
         descriptor = STTPlugin.getImageDescriptor("icons/tripod.gif");
@@ -154,7 +154,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
                 boolean arcballShown = scene.getViewSettings().isShowArcball();
                 this.setChecked(!arcballShown);
                 scene.getViewSettings().setShowArcball(!arcballShown);
-                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
             }
         };
         descriptor = STTPlugin.getImageDescriptor("icons/arcball.gif");
@@ -169,7 +169,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
                 boolean roiShown = scene.getViewSettings().isShowItemROI();
                 this.setChecked(!roiShown);
                 scene.getViewSettings().setShowItemROI(!roiShown);
-                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+                scene.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
             }
         };
         descriptor = STTPlugin.getImageDescriptor("icons/bbox.gif");
@@ -359,8 +359,8 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
         if (scene != null)
         {
             // redraw the whole scene
-            refreshView();
-            scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+        	refreshView();
+            scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
         }
     }
 	

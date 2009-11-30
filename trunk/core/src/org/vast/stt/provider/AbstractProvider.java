@@ -115,7 +115,7 @@ public abstract class AbstractProvider implements DataProvider
             {
                 try
                 {
-                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_START));
+                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_START), false);
                     
                     do
                     {
@@ -142,14 +142,14 @@ public abstract class AbstractProvider implements DataProvider
                             error = true;
                             redoUpdate = false;
                             ExceptionSystem.display(e);
-                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR), false);
                         }
                         catch (Exception e)
                         {
                             error = true;
                             redoUpdate = false;
                             e.printStackTrace();
-                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR));
+                            dispatchEvent(new STTEvent(e, EventType.PROVIDER_ERROR), false);
                         }
                     }
                     while (redoUpdate);
@@ -158,9 +158,9 @@ public abstract class AbstractProvider implements DataProvider
                     
                     // send event
                     if (canceled)
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_CANCELED));
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_CANCELED), false);
                     else
-                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_DONE));
+                        dispatchEvent(new STTEvent(this, EventType.PROVIDER_UPDATE_DONE), false);
                 }
                 catch (Exception e)
                 {
@@ -187,7 +187,7 @@ public abstract class AbstractProvider implements DataProvider
         if (dataNode != null)
 		{
             dataNode.clearAll();
-            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED));
+            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CLEARED), false);
 		}		
 	}
 	
@@ -375,9 +375,9 @@ public abstract class AbstractProvider implements DataProvider
     }
 
 
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
         event.producer = this;
-        listeners.dispatchEvent(event);
+        listeners.dispatchEvent(event, merge);
     }
 }

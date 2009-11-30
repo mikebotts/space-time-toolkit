@@ -103,10 +103,10 @@ public class STTTimeExtent extends TimeExtent implements STTEventProducer
     }
 
 
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
         event.producer = this;
-        listeners.dispatchEvent(event);
+        listeners.dispatchEvent(event, merge);
     }
     
     

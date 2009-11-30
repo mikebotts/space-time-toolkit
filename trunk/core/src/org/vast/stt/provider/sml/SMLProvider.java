@@ -192,13 +192,13 @@ public class SMLProvider extends AbstractProvider
                                 blockList.remove(item);
                                 
                                 // send event to clear rendering cache
-                                dispatchEvent(new STTEvent(new Object[] {item}, EventType.PROVIDER_DATA_REMOVED));
+                                dispatchEvent(new STTEvent(new Object[] {item}, EventType.PROVIDER_DATA_REMOVED), false);
                             }
                         }
                         
                         // send event for redraw
                         if (count == 0)
-                        	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                        	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
                         
                         // count++;
                         // if (count == 50)

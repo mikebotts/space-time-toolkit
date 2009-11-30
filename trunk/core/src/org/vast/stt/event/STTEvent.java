@@ -62,6 +62,21 @@ public class STTEvent
     }
     
     
+    public boolean equals(STTEvent e)
+    {
+        if (e.producer != this.producer)
+        	return false;
+        
+        if (e.source != this.source)
+        	return false;
+        
+        if (e.type != this.type)
+        	return false;
+                
+        return true;
+    }
+    
+    
 	public String toString()
 	{
 		return "Event: " + this.type;

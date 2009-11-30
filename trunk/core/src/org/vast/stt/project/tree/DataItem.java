@@ -215,12 +215,12 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
     }
 
 
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
         if (enabled)
         {
             event.producer = this;
-            listeners.dispatchEvent(event);
+            listeners.dispatchEvent(event, merge);
         }
     }
     
@@ -232,12 +232,12 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
             case PROVIDER_DATA_CHANGED:
             case PROVIDER_DATA_CLEARED:
             case PROVIDER_DATA_REMOVED:
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
                 
             case PROVIDER_ERROR:
                 this.enabled = false;
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
         }        
     }

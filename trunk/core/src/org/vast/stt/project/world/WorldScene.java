@@ -137,15 +137,15 @@ public class WorldScene extends Scene
             case SCENE_PROJECTION_CHANGED:
                 setProjection(viewSettings.getProjection());         
                 // forward event for scene fit and redraw
-                dispatchEvent(event.copy());                
+                dispatchEvent(event.copy(), false);                
                 break;
                 
             case SCENE_VIEW_CHANGED:
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
                 
             case TIME_EXTENT_CHANGED:
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
         }
     }

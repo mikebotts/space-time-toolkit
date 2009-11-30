@@ -103,7 +103,7 @@ public class BasicPolygonController extends OptionController
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[0].setColorLabelColor(sldColor); 
 			polygonOptionHelper.setFillColor(sldColor);
-			dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+			dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 	

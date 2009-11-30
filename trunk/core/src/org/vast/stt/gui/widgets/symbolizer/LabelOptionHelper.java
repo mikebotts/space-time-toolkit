@@ -111,7 +111,7 @@ public class LabelOptionHelper implements SelectionListener {
 			if(fontData == null)
 				return;
 			setFont(fontData);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else if (control == optionControl[2].getControl()) { // Label Color
 			ColorDialog colorChooser = new ColorDialog(control.getShell());
 			RGB rgb = colorChooser.open();
@@ -121,7 +121,7 @@ public class LabelOptionHelper implements SelectionListener {
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControl[2].setColorLabelColor(sldColor); 
 			setLabelColor(sldColor);
-            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            optionController.getDataItem().dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 }

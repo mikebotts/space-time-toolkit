@@ -327,13 +327,13 @@ public class BboxWidget implements SelectionListener, KeyListener
             bbox.setMinY(slat);
             bbox.setXTiles(lonTiles);
             bbox.setYTiles(latTiles);
-            bbox.dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));            
+            bbox.dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED), false);            
         }
         else if(e.widget == fitBtn){
             STTSpatialExtent bbox = this.dataItem.getDataProvider().getSpatialExtent();
             scene.getViewSettings().getProjection().fitBboxToView(bbox, scene);
             setSpatialExtent(bbox);
-            bbox.dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));
+            bbox.dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED), false);
 		} else if (e.widget == formatCombo){
 			//System.err.println("Selection Index = " + formatCombo.getSelectionIndex());
 			this.setFormat(formatCombo.getSelectionIndex());

@@ -428,7 +428,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
         
         // send redraw events to all affected scenes
         for (int i=0; i<allScenes.size(); i++)
-            allScenes.get(i).dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+            allScenes.get(i).dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
     }
 
 
@@ -445,7 +445,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
             boolean visibility = parentScene.isItemVisible(folder);
             parentScene.setItemVisibility(folder, !visibility);
             sceneTree.refresh(folder, true);
-            parentScene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
+            parentScene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED), false);
         }
         
         // if it's a single item, change its visibility
@@ -456,7 +456,7 @@ public class SceneTreeView extends SceneView<WorldScene> implements ISelectionCh
             parentScene.setItemVisibility(item, !visible);
             sceneTree.refresh(item, true);
             sceneTree.setSelection(sceneTree.getSelection());
-            parentScene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
+            parentScene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED), false);
         }
         
         // if it's a World, open WorldView

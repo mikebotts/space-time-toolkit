@@ -152,7 +152,7 @@ public class SymbolizerWidget extends CheckOptionTable
         //  e.getElement returns checked Styler
         Symbolizer symbolizer = (Symbolizer) e.getElement();
         symbolizer.setEnabled(e.getChecked());
-        dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+        dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
     }
 
 
@@ -212,7 +212,7 @@ public class SymbolizerWidget extends CheckOptionTable
             if (dataItem != null)
             {
                 dataItem.setEnabled(enabledButton.getSelection());
-                dataItem.dispatchEvent(new STTEvent(activeSymbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+                dataItem.dispatchEvent(new STTEvent(activeSymbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
             }
         }
         else if (control == advancedButton)

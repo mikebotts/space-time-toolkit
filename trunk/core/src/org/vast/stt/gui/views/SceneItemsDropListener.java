@@ -70,7 +70,7 @@ public class SceneItemsDropListener extends ViewerDropAdapter
         scene.getSceneItems().remove(data);
         scene.getSceneItems().add(targetPos, (SceneItem)data);
         viewer.refresh();
-        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED), false);
         return true;
     }
 

@@ -60,7 +60,7 @@ public class RealTimeUpdater extends TimeExtentUpdater
                 {
                     DateTime now = new DateTime();
                     timeExtent.setBaseTime(now.getJulianTime());
-                    timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
+                    timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), true);
                     Thread.sleep((long)updatePeriod*1000);
                 }
             }

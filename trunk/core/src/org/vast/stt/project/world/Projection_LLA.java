@@ -30,7 +30,6 @@ import org.vast.physics.MapProjection;
 import org.vast.stt.project.world.ViewSettings.MotionConstraint;
 import org.vast.stt.renderer.SceneRenderer;
 import org.vast.stt.style.PrimitiveGraphic;
-import org.vast.util.Bbox;
 import org.vast.util.SpatialExtent;
 
 
@@ -253,7 +252,7 @@ public class Projection_LLA implements Projection
         this.pointOnMap(width, height, scene, lr);
         
         // compute enclosing bbox
-        Bbox tmpBox = new Bbox();
+        SpatialExtent tmpBox = new SpatialExtent();
         tmpBox.resizeToContain(ul.x, ul.y, ul.z);
         tmpBox.resizeToContain(ur.x, ur.y, ur.z);
         tmpBox.resizeToContain(ll.x, ll.y, ll.z);
