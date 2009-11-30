@@ -94,7 +94,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
                 if (enabled)
                 {
                 	update();
-                	spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED));
+                	spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED), true);
                 }
                 break;
         }

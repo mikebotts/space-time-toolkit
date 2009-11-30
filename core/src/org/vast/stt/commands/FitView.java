@@ -69,7 +69,7 @@ public class FitView implements Command
         //view.setArcballRadius(bbox.getMaxDistance()/2);
         
         // send event to redraw
-        view.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+        view.dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), false);
     }
 
 

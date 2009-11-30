@@ -302,11 +302,11 @@ public abstract class Scene extends AbstractDisplay
         switch (event.type)
         {
             case SCENE_VIEW_CHANGED:
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
                 
             case TIME_EXTENT_CHANGED:
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
         }
     }

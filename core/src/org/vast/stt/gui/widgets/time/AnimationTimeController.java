@@ -72,7 +72,7 @@ public class AnimationTimeController implements SelectionListener, TimeSpinnerLi
 		if (scene == null)
 			return;
 		scene.getTimeExtent().setBaseTime(newTime);
-		scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
+		scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), false);
 	}
 
 	public void setScene(WorldScene scene) {

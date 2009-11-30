@@ -154,7 +154,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 		//  If target is a folder, drop into folder and open it
 		if (dropTarget instanceof DataFolder) {
 			((DataFolder) dropTarget).add(item);
-			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
+			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED), false);
 			//		   vwr.reveal(item);  //  vwr.reveal() does not work as advertised in Eclipse 3.1!!!
 			vwr.expandToLevel(dropTarget, 2); //  ensure dropped item is visible
 			vwr.refresh();
@@ -165,7 +165,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 		if (dropTarget instanceof WorldScene) {
 			tree = ((WorldScene) dropTarget).getDataTree();
 			tree.add(0, item);
-			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
+			item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED), false);
 			vwr.expandToLevel(2); //  ensure dropped item is visible
 			vwr.refresh();
 			return true;
@@ -195,7 +195,7 @@ public class SceneTreeDropListener extends ViewerDropAdapter
 			}
 			index++;
 		}
-		item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED));
+		item.dispatchEvent(new STTEvent(item, EventType.SCENE_TREE_CHANGED), false);
 		vwr.refresh();
 		return true;
 	}

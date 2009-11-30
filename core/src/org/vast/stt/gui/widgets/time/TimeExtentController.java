@@ -131,7 +131,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
             // backup override value
             timeExtent.setDefaultBaseTime(timeExtent.getBaseTime());
 		}
-		timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
+		timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), false);
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -143,7 +143,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 		if(e.widget == extentWidget.overrideTimeBtn){
             setOverrideSceneTime(extentWidget.overrideTimeBtn.getSelection()); 
 		} else if(e.widget == extentWidget.updateNowBtn){
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), false);
 		} else if(e.widget == extentWidget.manualTimeWidget.absTimeSpinner.rtBtn){
 			boolean rt = extentWidget.manualTimeWidget.absTimeSpinner.rtBtn.getSelection();
 			if (rt) {
@@ -155,20 +155,20 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
 				RealTimeUpdater rtu = createRealtimeUpdater();
 				rtu.setEnabled(true);
 				timeExtent.setUpdater(rtu);
-				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
+				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED), false);
 			} else {
 				extentWidget.manualTimeWidget.absTimeSpinner.setEnabled(true);
 				//   disable old updater (this should ensure old updater Thread terminates)
 				timeExtent.getUpdater().setEnabled(false);
-				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
+				timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED), false);
 			}       
         } else if(e.widget == extentWidget.biasCombo){
 			timeExtent.setTimeBias(Math.abs(timeExtent.getTimeBias()) * extentWidget.getBiasSense());
-			timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
+			timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED), false);
         } else if(e.widget == extentWidget.continuousUpdateBtn){
         	extentWidget.updateNowBtn.setEnabled(!extentWidget.continuousUpdateBtn.getSelection());
         	if(extentWidget.continuousUpdateBtn.getSelection())
-        		timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
+        		timeExtent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED), false);
         } else if(e.widget == extentWidget.manualTimeWidget.baseAtNowBtn){
         	timeExtent.setBaseAtNow(extentWidget.continuousUpdateBtn.getSelection());
         	//  How to interact with manual time controls/RT..etc...
@@ -208,7 +208,7 @@ public class TimeExtentController implements SelectionListener, TimeSpinnerListe
         timeExtent.setTimeStep(extentWidget.stepSpinner.getValue());
         timeExtent.setTimeBias(extentWidget.biasSpinner.getValue() * extentWidget.getBiasSense());
         if (extentWidget.continuousUpdateBtn.getSelection() == true)
-            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));            
+            timeExtent.dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), false);            
     }
 
 	/**

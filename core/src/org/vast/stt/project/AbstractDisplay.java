@@ -120,10 +120,10 @@ public abstract class AbstractDisplay implements STTDisplay
     }
 
 
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
         event.producer = this;
-        listeners.dispatchEvent(event);
+        listeners.dispatchEvent(event, merge);
     }
     
 

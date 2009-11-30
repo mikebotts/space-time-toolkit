@@ -128,7 +128,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_ECEF());
-                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED), false);
             }
         }
         else if (action.isChecked() && actionID.endsWith("ProjectLLA"))
@@ -137,7 +137,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_LLA());
-                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED), false);
             }
         }
         else if (action.isChecked() && actionID.endsWith("ProjectMERC"))
@@ -146,7 +146,7 @@ public class ViewMenu implements IWorkbenchWindowActionDelegate, IPartListener
             {
                 ViewSettings viewSettings = ((WorldScene)currentScene).getViewSettings();
                 viewSettings.setProjection(new Projection_Mercator());
-                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED));
+                viewSettings.dispatchEvent(new STTEvent(viewSettings, EventType.SCENE_PROJECTION_CHANGED), false);
             }
         }
         else if (actionID.startsWith("STT.Show"))

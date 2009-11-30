@@ -57,10 +57,15 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     protected boolean refreshRequested = false;
     protected boolean doRefresh = true;
     protected Object lock = new Object();
-
+    protected int remainingRefresh = 0;
+    
     protected Runnable runRefresh = new Runnable()
     {
-        public void run() {refreshView();}
+        public void run()
+        {
+        	refreshView();
+        	remainingRefresh--;
+        }
     };
 
 
@@ -96,7 +101,11 @@ public abstract class SceneView<SceneType extends Scene> extends ViewPart implem
     {
         if (doRefresh)
         {
-            getSite().getShell().getDisplay().asyncExec(runRefresh);
+            if (remainingRefresh <= 1)
+            {
+            	remainingRefresh++;
+            	getSite().getShell().getDisplay().asyncExec(runRefresh);
+            }
         }
     }
 

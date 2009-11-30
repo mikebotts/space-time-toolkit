@@ -218,6 +218,6 @@ public class SceneItemsView extends SceneView<Scene> implements IDoubleClickList
         SceneItem sceneItem = (SceneItem)selection.getFirstElement();        
         sceneItem.setVisible(!sceneItem.isVisible());        
         updateView();
-        scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
+        scene.dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED), false);
     }
 }

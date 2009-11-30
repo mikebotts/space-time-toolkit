@@ -91,9 +91,9 @@ public class DataTree extends DataFolder implements STTEventProducer
     }
 
 
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
         event.producer = this;
-        listeners.dispatchEvent(event);
+        listeners.dispatchEvent(event, merge);
     }
 }

@@ -71,10 +71,10 @@ public class STTEventListeners extends ArrayList<STTEventListener>
     /**
      * Dispatch event to all listeners in the list except the one
      * specified as the source. (to avoid event loops)
-     * @param sender
      * @param event
+     * @param merge set to true for merging event w/ previous ones of the same kind
      */
-    public void dispatchEvent(STTEvent event)
+    public void dispatchEvent(STTEvent event, boolean merge)
     {
 //        for (int i=0; i<this.size(); i++)
 //        {
@@ -83,6 +83,9 @@ public class STTEventListeners extends ArrayList<STTEventListener>
 //                next.handleEvent(event);
 //        }
         //System.out.println("Received: " + event + " from " + event.source);
-        STTEventManager.getInstance().dispatchEvent(event, this);
+        if (merge)
+        	STTEventManager.getInstance().mergeEvent(event, this);
+        else
+        	STTEventManager.getInstance().dispatchEvent(event, this);
     }
 }

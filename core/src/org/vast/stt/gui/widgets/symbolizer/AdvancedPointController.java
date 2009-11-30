@@ -153,7 +153,7 @@ public class AdvancedPointController extends AdvancedOptionController
 			Spinner sizeSpinner = (Spinner)control;
 			float size = (float)sizeSpinner.getSelection();
 			pointOptionHelper.setPointSize(size);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else if(control == optionControls[1].getControl()) {
 			Button colorButton = (Button)control;
 			ColorDialog colorChooser = new ColorDialog(colorButton.getShell());
@@ -163,7 +163,7 @@ public class AdvancedPointController extends AdvancedOptionController
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			pointOptionHelper.setPointColor(sldColor);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 

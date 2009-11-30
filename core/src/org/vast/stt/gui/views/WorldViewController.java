@@ -80,7 +80,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 	private boolean rightButtonDown;
 	private boolean midButtonDown;
 	private boolean dragged;
-	private boolean resizing;    
+	private boolean resizing;
 	private final static double RTD = 180/Math.PI;
 	
 
@@ -273,7 +273,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		{
 			// trigger provider refresh when button is released
 			DataProvider provider = scene.getSelectedItems().get(0).getDataItem().getDataProvider();
-			provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED));
+			provider.getSpatialExtent().dispatchEvent(new STTEvent(this, EventType.SPATIAL_EXTENT_CHANGED), true);
 		}
 
 		// resets all flags to false
@@ -357,7 +357,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 	protected void updateView()
 	{
-		scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED));
+		scene.getViewSettings().dispatchEvent(new STTEvent(this, EventType.SCENE_VIEW_CHANGED), true);
 	}
 
 

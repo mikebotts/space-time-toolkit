@@ -100,7 +100,7 @@ public class SWEDataHandler implements DataHandler
         }        
         
         blockList.addBlock((AbstractDataBlock)data);
-        provider.dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+        provider.dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
 	}
 
 

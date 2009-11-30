@@ -68,7 +68,7 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 				updater.setUpdatePeriod(widget.stepTimeSpinner.getValue());
 				updater.setEnabled(true);
 				extent.setUpdater(updater);
-				extent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED));
+				extent.dispatchEvent(new STTEvent(this,	EventType.TIME_EXTENT_CHANGED), false);
 			} else {
 				STTTimeExtent extent = scene.getTimeExtent();
 				extent.getUpdater().setEnabled(false);
@@ -93,7 +93,7 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 		if (scene == null)
 			return;
 		scene.getTimeExtent().setBaseTime(newTime);
-		scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED));
+		scene.getTimeExtent().dispatchEvent(new STTEvent(this, EventType.TIME_EXTENT_CHANGED), false);
 	}
 
 	public void setScene(WorldScene scene) {

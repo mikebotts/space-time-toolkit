@@ -89,7 +89,7 @@ public class BasicGridFillController extends OptionController {
 				fval = 0.0f;
 			}
 			gridOptionHelper.setGridFillOpacity(fval);
-			dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+			dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class BasicGridFillController extends OptionController {
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[0].setColorLabelColor(sldColor); 
 			gridOptionHelper.setGridFillColor(sldColor);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 		
 		// fill opacity
@@ -113,7 +113,7 @@ public class BasicGridFillController extends OptionController {
 			Spinner widthSpinner = (Spinner)control;
 			float opacity = new Float(widthSpinner.getSelection()).floatValue();
 			gridOptionHelper.setGridFillOpacity((float)opacity / 100.0f);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 }

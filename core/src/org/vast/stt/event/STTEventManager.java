@@ -112,6 +112,29 @@ public class STTEventManager implements Runnable
     }
     
     
+    public synchronized void mergeEvent(STTEvent event, List<STTEventListener> listeners)
+    {
+    	boolean found = false;
+    	
+    	// look for similar event
+    	DispatchJob nextJob = firstJob;
+    	while (nextJob != null)
+    	{
+    		STTEvent e = nextJob.event;
+    		if (e.equals(event))
+    		{
+    			found = true;
+    			break;
+    		}
+    		nextJob = nextJob.nextJob;
+    	}
+    	
+    	// dispatch only if queue doesn't have an event of this kind
+    	if (!found)
+    		this.dispatchEvent(event, listeners);
+    }
+    
+    
     public void start()
     {
         if (!started)

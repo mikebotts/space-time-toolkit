@@ -80,7 +80,7 @@ public class BasicGridBorderController extends OptionController{
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			gridOptionHelper.setGridBorderWidth(w);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else if (control == optionControls[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
@@ -91,7 +91,7 @@ public class BasicGridBorderController extends OptionController{
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			gridOptionHelper.setGridBorderColor(sldColor);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else {
 			//TODO:  support mesh opacity
 		}

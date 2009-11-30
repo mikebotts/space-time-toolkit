@@ -295,7 +295,7 @@ public class SceneItem implements STTEventListener
         }
         
         if (visible)
-            parentScene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED));
+            parentScene.dispatchEvent(new STTEvent(this, EventType.SCENE_ITEM_CHANGED), false);
     }
 
 }

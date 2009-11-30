@@ -94,7 +94,7 @@ public class BasicVectorController extends OptionController // implements Select
 			Spinner widthSpinner = (Spinner)control;
 			float w = new Float(widthSpinner.getSelection()).floatValue();
 			vectorOptionHelper.setLineWidth(w);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		} else if (control == optionControls[1].getControl()) {
 			ColorDialog colorChooser = 
 				new ColorDialog(control.getShell());
@@ -105,7 +105,7 @@ public class BasicVectorController extends OptionController // implements Select
 			Color sldColor = new Color(rgb.red, rgb.green, rgb.blue, 255);
 			optionControls[1].setColorLabelColor(sldColor); 
 			vectorOptionHelper.setLineColor(sldColor);
-            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED));
+            dataItem.dispatchEvent(new STTEvent(symbolizer, EventType.ITEM_SYMBOLIZER_CHANGED), false);
 		}
 	}
 	

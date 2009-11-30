@@ -346,7 +346,7 @@ public class TimeCache extends AbstractProvider implements CachedProvider
                         }
                     }
                     
-                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
                 }
                 
                 // init writers
@@ -453,7 +453,7 @@ public class TimeCache extends AbstractProvider implements CachedProvider
             System.out.println("Block @ " + DateTimeFormat.formatIso(blockTime, 0));
         }
         
-        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
         System.out.println("Tile Loaded\n");
     }
        
@@ -600,7 +600,7 @@ public class TimeCache extends AbstractProvider implements CachedProvider
                 
             case PROVIDER_ERROR:
                 this.enabled = false;
-                dispatchEvent(event.copy());
+                dispatchEvent(event.copy(), false);
                 break;
                 
             case TIME_EXTENT_CHANGED:
