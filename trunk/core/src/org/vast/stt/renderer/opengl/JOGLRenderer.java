@@ -997,7 +997,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         {
             // get existing or create GL texture(s)
             GLTexture texture = textureManager.getTexture(styler, patch.getTexture(), patch.updated);
-            gl.glPolygonOffset(0.5f, zBufferOffset*1);
+            gl.glPolygonOffset(0.5f, zBufferOffset*100);
             
             if (texture.tiles == null)
             {
