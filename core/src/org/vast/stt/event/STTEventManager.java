@@ -75,6 +75,7 @@ public class STTEventManager implements Runnable
                         wait();
                     currentJob = firstJob;
                     firstJob = firstJob.nextJob;
+                    currentJob.nextJob = null;
                 }
                 
                 for (int i=0; i<currentJob.listeners.size(); i++)
