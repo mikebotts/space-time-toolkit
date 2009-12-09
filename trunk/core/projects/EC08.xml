@@ -45,6 +45,8 @@
                   <name>Empire Challenge 08</name>
                   <member xlink:href="./BaseLayers.xml#MAPS"/> 
                   <member xlink:href="./EC08/ERDASwithCSM.xml#ERDASwithCSM"/>
+                  <member xlink:href="./EC08/CoT.xml#CoT"/>
+                  <member xlink:href="./EC08/UGS.xml#UGS"/>
                </DataList>
             </contents>
          </Scene>
