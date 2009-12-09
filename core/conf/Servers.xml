@@ -86,4 +86,8 @@
     <Server name="UAH SAS Server" type="SAS" version="0.0">
         <URL>http://smartdev.itsc.uah.edu/smartSAS/sas</URL>
     </Server>
+       <Server name="EC08 Cursor On Target" type="SOS" version="0.0">
+        <URL>http://ww6.geoenterpriselab.com:8080/SOS_CoT/sos</URL>
+    </Server>
+    
 </ServerList>
