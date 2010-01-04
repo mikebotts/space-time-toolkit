@@ -31,7 +31,7 @@ import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.process.FlatGridGenerator_Process;
+import org.sensorML.process.FlatGridGenerator_Process;
 
 /**
  * <p><b>Title:</b><br/>
