@@ -37,7 +37,7 @@ import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.vast.stt.gui.widgets.OptionController;
 import org.vast.stt.gui.widgets.OptionParams;
-import org.vast.stt.process.WMS_Process;
+import org.sensorML.process.WMS_Process;
 import org.vast.stt.provider.sml.SMLProvider;
 
 /**

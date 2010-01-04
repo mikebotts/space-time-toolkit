@@ -36,9 +36,9 @@ import org.vast.data.DataGroup;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
-import org.vast.stt.process.FlatGridGenerator_Process;
+import org.sensorML.process.FlatGridGenerator_Process;
 import org.vast.stt.process.WCS_Process;
-import org.vast.stt.process.WMS_Process;
+import org.sensorML.process.WMS_Process;
 
 /**
  * <p><b>Title:</b><br/>

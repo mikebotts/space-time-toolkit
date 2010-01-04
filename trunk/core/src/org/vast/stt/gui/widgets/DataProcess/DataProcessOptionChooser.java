@@ -29,9 +29,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
-import org.vast.stt.process.FlatGridGenerator_Process;
+import org.sensorML.process.FlatGridGenerator_Process;
 import org.vast.stt.process.WCS_Process;
-import org.vast.stt.process.WMS_Process;
+import org.sensorML.process.WMS_Process;
 
 /**
  * <p><b>Title:</b><br/>

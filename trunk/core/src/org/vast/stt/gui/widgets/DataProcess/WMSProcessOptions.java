@@ -31,7 +31,7 @@ import org.vast.data.DataBlockBoolean;
 import org.vast.data.DataBlockString;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
-import org.vast.stt.process.WMS_Process;
+import org.sensorML.process.WMS_Process;
 
 /**
  * <p><b>Title:</b>
