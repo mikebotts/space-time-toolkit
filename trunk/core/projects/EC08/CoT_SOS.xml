@@ -22,11 +22,6 @@
 									<swe:uom code="s" />
 								</swe:Time>
 							</swe:field>
-							<swe:field name="step">
-								<swe:Quantity definition="urn:ogc:def:phenomenon:duration">
-									<swe:uom code="s" />
-								</swe:Quantity>
-							</swe:field>
 						</swe:DataRecord>
 					</sml:input>
 				</sml:InputList>
