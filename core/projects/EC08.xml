@@ -13,7 +13,7 @@
             <name>Empire Challenge 08</name>
           <time>
                <TimeExtent>
-                  <baseTime>2008-07-24T15:44:15</baseTime>
+                  <baseTime>2008-07-24T15:44:15Z</baseTime>
                   <lagTime>10</lagTime>
                   <leadTime>10</leadTime>
                   <stepTime>0</stepTime>
@@ -47,6 +47,7 @@
                   <member xlink:href="./EC08/ERDASwithCSM.xml#ERDASwithCSM"/>
                   <member xlink:href="./EC08/CoT.xml#CoT"/>
                   <member xlink:href="./EC08/UGS.xml#UGS"/>
+                  <member xlink:href="./EC08/Weather_Stations.xml#Weather"/>
                </DataList>
             </contents>
          </Scene>
