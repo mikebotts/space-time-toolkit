@@ -29,8 +29,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.project.world.Projection;
 import org.vast.stt.style.DataStyler;
@@ -53,7 +53,7 @@ import org.vast.stt.style.DataStyler;
  */
 public class DisplayListManager
 {
-    protected Log log = LogFactory.getLog(DisplayListManager.class);
+    //protected Log log = LogFactory.getLog(DisplayListManager.class);
     
     protected static Hashtable<HashKey, GLDisplayListTable> DLTables
                = new Hashtable<HashKey, GLDisplayListTable>();
@@ -158,7 +158,7 @@ public class DisplayListManager
             {
                 dlInfo.needsUpdate = false;
                 createDisplayList(dlInfo, renderRunnable);
-                log.debug("DL #" + dlInfo.id + " created for block " + block);
+                System.out.println("DL #" + dlInfo.id + " created for block " + block);
                 logStatistics();
             }
             
@@ -199,7 +199,7 @@ public class DisplayListManager
         if (oldID > 0)
         {
             gl.glDeleteLists(oldID, 1);
-            log.debug("DL #" + oldID + " deleted");
+            System.out.println("DL #" + oldID + " deleted");
         }
     }
     
@@ -226,7 +226,7 @@ public class DisplayListManager
                     if (nextDL.id > 0)
                     {
                         gl.glDeleteLists(nextDL.id, 1);
-                        log.debug("DL #" + nextDL.id + " deleted for styler " + styler);
+                        System.out.println("DL #" + nextDL.id + " deleted for styler " + styler);
                     }
                     
                     dlTable.remove(nextDL);
@@ -266,11 +266,11 @@ public class DisplayListManager
                         if (nextDL.id > 0)
                         {
                             gl.glDeleteLists(nextDL.id, 1);
-                            log.debug("DL #" + nextDL.id + " deleted for block " + objects[i]);
+                            System.out.println("DL #" + nextDL.id + " deleted for block " + objects[i]);
                         }
                     }
                     else
-                        log.debug("DL not found for block " + objects[i]);
+                    	System.out.println("DL not found for block " + objects[i]);
                 }
             }
             
@@ -281,7 +281,7 @@ public class DisplayListManager
     
     private void logStatistics()
     {
-        if (log.isDebugEnabled())
+        //if (log.isDebugEnabled())
         {
             int listCount = 0;
             
@@ -289,7 +289,7 @@ public class DisplayListManager
                 if (gl.glIsList(i))
                     listCount++;
             
-            log.debug("Num DL = " + listCount);
+            System.out.println("Num DL = " + listCount);
         }
     }
 }

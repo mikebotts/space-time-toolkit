@@ -33,8 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridPatchGraphic;
@@ -63,7 +63,7 @@ import org.vast.util.MessageSystem;
  */
 public class TextureManager
 {
-    protected Log log = LogFactory.getLog(TextureManager.class);
+    //protected Log log = LogFactory.getLog(TextureManager.class);
     
     protected static Hashtable<Symbolizer, GLTextureTable> symTextureTables
                = new Hashtable<Symbolizer, GLTextureTable>();
@@ -169,7 +169,7 @@ public class TextureManager
             {
                 texInfo.needsUpdate = false;
                 createTexture(styler, tex, texInfo);                
-                log.debug("Tex #" + texInfo.id + " created for block " + tex.block);
+                System.out.println("Tex #" + texInfo.id + " created for block " + tex.block);
                 logStatistics();  
             }
             
@@ -189,7 +189,7 @@ public class TextureManager
         if (texInfo.id > 0)
         {
             if (!gl.glIsTexture(texInfo.id))
-                log.debug("Tex #" + texInfo.id + " DOESN'T EXIST for block " + tex.block);
+            	System.out.println("Tex #" + texInfo.id + " DOESN'T EXIST for block " + tex.block);
             gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.id);
             //log.debug("Tex #" + texInfo.id + " used");
         }
@@ -354,7 +354,7 @@ public class TextureManager
                     if (texInfo.id > 0)
                     {
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                        log.debug("Tex #" + texInfo.id + " deleted for styler " + styler);
+                        System.out.println("Tex #" + texInfo.id + " deleted for styler " + styler);
                     }
                     
                     textureTable.remove(texInfo);
@@ -392,11 +392,11 @@ public class TextureManager
                         if (texInfo.id > 0)
                         {
                             gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                            log.debug("Tex #" + texInfo.id + " deleted for block " + objects[i]);
+                            System.out.println("Tex #" + texInfo.id + " deleted for block " + objects[i]);
                         }
                     }
                     else
-                        log.debug("Texture not found for block " + objects[i]);
+                    	System.out.println("Texture not found for block " + objects[i]);
                 }
             }
             
@@ -436,7 +436,7 @@ public class TextureManager
                 texInfo.heightPadding = paddedHeight - initialHeight;
             }
             
-            log.debug("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
+            System.out.println("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
         }
         
         // create byte buffer of the right size
@@ -541,8 +541,8 @@ public class TextureManager
             RasterTileGraphic t = tileList.get(i);
             //GridPatchGraphic g = gridList.get(i);
             
-            if (log.isDebugEnabled())
-                log.debug("Tile: " + t.width + "x" + t.height + " @ " +
+            //if (log.isDebugEnabled())
+            System.out.println("Tile: " + t.width + "x" + t.height + " @ " +
                                      t.xPos + "," + t.yPos + " pad " +
                                      t.widthPadding + "x" + t.heightPadding);
         }
@@ -640,7 +640,7 @@ public class TextureManager
     
     private void logStatistics()
     {
-        if (log.isDebugEnabled())
+        //if (log.isDebugEnabled())
         {
             int texCount = 0;
             
@@ -648,7 +648,7 @@ public class TextureManager
                 if (gl.glIsTexture(i))
                     texCount++;
             
-            log.debug("Num Tex = " + texCount);
+            System.out.println("Num Tex = " + texCount);
         }
     }
 }
