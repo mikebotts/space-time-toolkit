@@ -36,7 +36,7 @@ import org.vast.process.ProcessChain;
 import org.vast.process.ProcessException;
 import org.vast.stt.apps.STTPlugin;
 import org.vast.stt.gui.widgets.DataProcess.WMSProcessOptions;
-import org.vast.stt.process.WMS_Process;
+import org.sensorML.process.WMS_Process;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.tree.DataTreeReader;
 import org.vast.stt.provider.STTSpatialExtent;
