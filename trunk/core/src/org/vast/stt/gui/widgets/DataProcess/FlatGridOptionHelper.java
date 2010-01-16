@@ -27,18 +27,14 @@ package org.vast.stt.gui.widgets.DataProcess;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.vast.cdm.common.DataComponent;
 import org.vast.data.DataGroup;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionControl;
 import org.sensorML.process.FlatGridGenerator_Process;
-import org.vast.stt.process.WCS_Process;
-import org.sensorML.process.WMS_Process;
+
 
 /**
  * <p><b>Title:</b><br/>

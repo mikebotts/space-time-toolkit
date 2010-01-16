@@ -189,12 +189,12 @@
    
    <Process>
       <uri>urn:ogc:def:process:WCS:1.0</uri>
-      <class>org.vast.stt.process.WCS_Process</class>
+      <class>org.sensorML.process.WCS_Process</class>
    </Process>
    
    <Process>
       <uri>urn:ogc:def:process:WCS:2.0</uri>
-      <class>org.vast.stt.process.WCS_Process2</class>
+      <class>org.sensorML.process.WCS_Process2</class>
    </Process>
    
    <Process>
