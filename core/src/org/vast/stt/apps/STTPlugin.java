@@ -25,7 +25,9 @@
 
 package org.vast.stt.apps;
 
+import java.net.URL;
 import java.util.Enumeration;
+import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
@@ -59,6 +61,10 @@ public class STTPlugin extends AbstractUIPlugin
 	{
 		super.start(context);
         STTPlugin.ID = context.getBundle().getSymbolicName();
+        
+        // setup log4j
+        URL confFile = this.getClass().getResource("/log4j.stt.properties");
+        PropertyConfigurator.configure(confFile);
         
         // preload process map file
         try

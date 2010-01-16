@@ -62,7 +62,7 @@ public class SpatialTilingProvider extends TiledMapProvider
     
     public SpatialTilingProvider(DataProvider subProvider)
     {
-        super(256, 256, 12);
+        super(256, 256, 18);
         
     	this.subProvider = subProvider;
         this.setSpatialExtent(subProvider.getSpatialExtent());

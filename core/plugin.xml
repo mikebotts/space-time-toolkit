@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension id="STT3" point="org.eclipse.core.runtime.products">
+      <product
+            application="org.vast.stt.main.MainApp"
+            name="Space Time Toolkit v3.1">
+         <property
+               name="appName"
+               value="Space Time Toolkit v3.1">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="10,225,380,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
    <extension id="MainApp" point="org.eclipse.core.runtime.applications">
       <application>
          <run class="org.vast.stt.apps.Application"/>
@@ -65,15 +83,5 @@
          </menu>
          <action class="org.vast.stt.actions.FileMenu" id="STT.Exit" label="&amp;Exit" menubarPath="STT.FileMenu/group1"/>
       </actionSet>
-   </extension>
-   <extension id="STT3" point="org.eclipse.core.runtime.products">
-      <product
-            application="org.vast.stt.main.MainApp"
-            name="Space Time Toolkit v3.1.0">
-         <property
-               name="appName"
-               value="Space Time Toolkit v3.1.0">
-         </property>
-      </product>
-   </extension>
+   </extension>   
 </plugin>

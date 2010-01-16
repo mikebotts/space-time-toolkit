@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.sensorML.process.FlatGridGenerator_Process;
-import org.vast.stt.process.WCS_Process;
+import org.sensorML.process.WCS_Process;
 import org.sensorML.process.WMS_Process;
 
 /**

@@ -85,7 +85,7 @@ public class VirtualEarthProvider extends TiledMapProvider
         maxExtent.setMaxY(+Math.PI);
         tileSelector.setMaxExtent(maxExtent);
         
-        initThreadPool(1);
+        initThreadPool(4);
     }
     
     

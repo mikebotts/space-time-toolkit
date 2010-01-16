@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: STT Plug-in
 Bundle-SymbolicName: org.vast.stt.main; singleton:=true
-Bundle-Version: 3.0.1
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Version: 3.1
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Activator: org.vast.stt.apps.STTPlugin
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.update.ui,
  org.eclipse.update.core,
- org.vast.common,
- org.apache.xerces
+ org.vast.common;visibility:=reexport,
+ org.apache.xerces;visibility:=reexport
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,
@@ -19,9 +19,12 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.data,
  org.vast.stt.dynamics,
  org.vast.stt.event,
+ org.vast.stt.gui,
+ org.vast.stt.gui.dialogs,
  org.vast.stt.gui.views,
  org.vast.stt.gui.widgets,
  org.vast.stt.gui.widgets.DataProcess,
+ org.vast.stt.gui.widgets.WCST,
  org.vast.stt.gui.widgets.bbox,
  org.vast.stt.gui.widgets.catalog,
  org.vast.stt.gui.widgets.symbolizer,
@@ -35,6 +38,7 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.project.tree,
  org.vast.stt.project.world,
  org.vast.stt.provider,
+ org.vast.stt.provider.cache,
  org.vast.stt.provider.google,
  org.vast.stt.provider.ows,
  org.vast.stt.provider.sml,
@@ -47,8 +51,6 @@ Export-Package: org.vast.stt.actions,
  org.vast.stt.style
 Bundle-ClassPath: lib/gluegen-rt.jar,
  lib/itext-1.4.3.jar,
- lib/jai_codec.jar,
- lib/jai_core.jar,
  lib/jcommon-1.0.5.jar,
  lib/je-3.3.74.jar,
  lib/jfreechart-1.0.2.jar,
