@@ -198,7 +198,7 @@ public class SMLProvider extends AbstractProvider
                         
                         // send event for redraw
                         if (count == 0)
-                        	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
+                        	dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
                         
                         // count++;
                         // if (count == 50)

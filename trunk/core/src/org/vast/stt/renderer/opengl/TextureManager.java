@@ -33,8 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.style.DataStyler;
 import org.vast.stt.style.GridPatchGraphic;
@@ -63,7 +63,7 @@ import org.vast.util.MessageSystem;
  */
 public class TextureManager
 {
-    //protected Log log = LogFactory.getLog(TextureManager.class);
+    protected Log log = LogFactory.getLog(TextureManager.class);
     
     protected static Hashtable<Symbolizer, GLTextureTable> symTextureTables
                = new Hashtable<Symbolizer, GLTextureTable>();
@@ -105,15 +105,14 @@ public class TextureManager
             glu.gluCheckExtension("GL_EXT_texture_rectangle", glExtensions))
         {
             OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_RECTANGLE_EXT;
-            MessageSystem.display("--> NPOT textures supported <--", false);
+            log.info("NPOT textures supported");
             npotSupported = true;
             normalizationRequired = false;
         }
         else
         {
             OpenGLCaps.TEXTURE_2D_TARGET = GL.GL_TEXTURE_2D;
-            MessageSystem.display("--> NPOT textures NOT supported <--", false);
-            MessageSystem.display("--> Textures will be padded with transparent pixels or resampled <--", false);
+            log.info("NPOT textures NOT supported. Textures will be padded with transparent pixels");
             npotSupported = false;
             normalizationRequired = true;
         }
@@ -124,8 +123,8 @@ public class TextureManager
         // Display max texture size
         int[] size = new int[1];
         gl.glGetIntegerv(GL.GL_MAX_TEXTURE_SIZE, size, 0);
-        MessageSystem.display("--> Maximum texture size is " + size[0] + " <--", false);
-        //maxSize = size[0];
+        log.info("Maximum texture size is " + size[0]);
+        this.maxSize = size[0];
     }
     
     
@@ -168,9 +167,10 @@ public class TextureManager
             if (texInfo.needsUpdate || force)
             {
                 texInfo.needsUpdate = false;
-                createTexture(styler, tex, texInfo);                
-                System.out.println("Tex #" + texInfo.id + " created for block " + tex.block);
-                logStatistics();  
+                createTexture(styler, tex, texInfo);
+                if (log.isDebugEnabled())
+                    log.debug("Tex #" + texInfo.id + " created for block " + tex.block);
+                logStatistics();
             }
             
             return texInfo;
@@ -189,9 +189,12 @@ public class TextureManager
         if (texInfo.id > 0)
         {
             if (!gl.glIsTexture(texInfo.id))
-            	System.out.println("Tex #" + texInfo.id + " DOESN'T EXIST for block " + tex.block);
-            gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.id);
-            //log.debug("Tex #" + texInfo.id + " used");
+            	log.debug("Tex #" + texInfo.id + " DOESN'T EXIST for block " + tex.block);
+            else
+            {
+                gl.glBindTexture(OpenGLCaps.TEXTURE_2D_TARGET, texInfo.id);
+                //log.debug("Tex #" + texInfo.id + " used");
+            }
         }
         
         // transfer padding info to RasterTileGraphic
@@ -328,7 +331,8 @@ public class TextureManager
             if (oldID > 0)
             {
                 gl.glDeleteTextures(1, new int[] {oldID}, 0);
-                //System.err.println("Tex #" + oldID + " deleted");
+                if (log.isDebugEnabled())
+                    log.debug("Tex #" + oldID + " deleted and replaced by " + texInfo.id);
             }      
         }
     }
@@ -354,7 +358,8 @@ public class TextureManager
                     if (texInfo.id > 0)
                     {
                         gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                        System.out.println("Tex #" + texInfo.id + " deleted for styler " + styler);
+                        if (log.isDebugEnabled())
+                            log.debug("Tex #" + texInfo.id + " deleted for styler " + styler);
                     }
                     
                     textureTable.remove(texInfo);
@@ -392,11 +397,12 @@ public class TextureManager
                         if (texInfo.id > 0)
                         {
                             gl.glDeleteTextures(1, new int[] {texInfo.id}, 0);
-                            System.out.println("Tex #" + texInfo.id + " deleted for block " + objects[i]);
+                            if (log.isDebugEnabled())
+                                log.debug("Tex #" + texInfo.id + " deleted for block " + objects[i]);
                         }
                     }
                     else
-                    	System.out.println("Texture not found for block " + objects[i]);
+                    	log.debug("Texture not found for block " + objects[i]);
                 }
             }
             
@@ -436,7 +442,8 @@ public class TextureManager
                 texInfo.heightPadding = paddedHeight - initialHeight;
             }
             
-            System.out.println("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
+            if (log.isDebugEnabled())
+                log.debug("Creating " + paddedWidth + " x " + paddedHeight + " Texture with " + tex.bands + " bands");
         }
         
         // create byte buffer of the right size
@@ -541,10 +548,12 @@ public class TextureManager
             RasterTileGraphic t = tileList.get(i);
             //GridPatchGraphic g = gridList.get(i);
             
-            //if (log.isDebugEnabled())
-            System.out.println("Tile: " + t.width + "x" + t.height + " @ " +
-                                     t.xPos + "," + t.yPos + " pad " +
-                                     t.widthPadding + "x" + t.heightPadding);
+            if (log.isDebugEnabled())
+            {
+                log.debug("Tile: " + t.width + "x" + t.height + " @ " +
+                                   t.xPos + "," + t.yPos + " pad " +
+                                   t.widthPadding + "x" + t.heightPadding);
+            }
         }
         
         return tileList;
@@ -640,7 +649,7 @@ public class TextureManager
     
     private void logStatistics()
     {
-        //if (log.isDebugEnabled())
+        if (log.isDebugEnabled())
         {
             int texCount = 0;
             
@@ -648,7 +657,7 @@ public class TextureManager
                 if (gl.glIsTexture(i))
                     texCount++;
             
-            System.out.println("Num Tex = " + texCount);
+            log.debug("Num Tex = " + texCount);
         }
     }
 }

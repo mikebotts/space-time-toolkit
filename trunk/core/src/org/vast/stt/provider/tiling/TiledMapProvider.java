@@ -99,7 +99,7 @@ public abstract class TiledMapProvider extends AbstractProvider
                 //System.out.println(itemBlocks[0] + " added to block list");
                 
                 // send event for redraw
-                dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
+                dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
             }
                         
             
@@ -252,7 +252,7 @@ public abstract class TiledMapProvider extends AbstractProvider
 
         // send event for redraw
         if (!canceled)
-            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
+            dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
         
         // discard items
         if (itemsToDiscard.size() > 0)
