@@ -101,7 +101,7 @@ public class TimeTilingProvider extends AbstractProvider
                 subProvider.getSpatialExtent().setMaxY(nextItem.getMaxY());
                 subProvider.updateData();
                 //System.out.println(nextItem);
-                dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), false);
+                dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
             }
         }
     }
