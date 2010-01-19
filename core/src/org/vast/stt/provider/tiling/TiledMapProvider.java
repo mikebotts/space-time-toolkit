@@ -27,6 +27,8 @@ package org.vast.stt.provider.tiling;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vast.cdm.common.DataType;
 import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
@@ -46,6 +48,8 @@ import org.vast.util.SpatialExtent;
 
 public abstract class TiledMapProvider extends AbstractProvider
 {
+    protected Log log = LogFactory.getLog(TiledMapProvider.class);
+    
     protected final static double DTR = Math.PI/180;
     protected double fixedAltitude = 0.0;
     protected QuadTree quadTree;
@@ -55,6 +59,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     protected SpatialExtent maxBbox;
     protected TiledMapSelector tileSelector;
     protected LinkedList<QuadTreeItem> itemsToLoad;
+    protected LinkedList<QuadTreeItem> itemsToHide;
     protected LinkedList<QuadTreeItem> itemsToDiscard;
     protected int tileWidth, tileHeight;
     protected TileThread[] threadPool;
@@ -156,6 +161,7 @@ public abstract class TiledMapProvider extends AbstractProvider
     {
     	quadTree = new QuadTree();
     	itemsToLoad = new LinkedList<QuadTreeItem>();
+    	itemsToHide = new LinkedList<QuadTreeItem>();
     	itemsToDiscard = new LinkedList<QuadTreeItem>();
     }
     
@@ -236,11 +242,12 @@ public abstract class TiledMapProvider extends AbstractProvider
         if (!dataNode.isNodeStructureReady())
             init();
         
-        // convert extent to mercator projection
+        // convert extent to tile system projection
         SpatialExtent newExtent = transformBbox(spatialExtent);
         
         // query tree for matching and unused items 
         itemsToLoad.clear();
+        itemsToHide.clear();
         itemsToDiscard.clear();
         tileSelector.setROI(newExtent);
         tileSelector.setCurrentLevel(0);
@@ -249,6 +256,16 @@ public abstract class TiledMapProvider extends AbstractProvider
         tileSelector.setMaxDistance(Math.sqrt(tileRatio));
         tileSelector.setHidePartiallyVisibleParents(useAlpha);
         quadTree.accept(tileSelector);
+        
+        // remove hidden items from block lists
+        while (!itemsToHide.isEmpty())
+        {
+            QuadTreeItem item = itemsToHide.poll();
+            BlockListItem[] itemBlocks = (BlockListItem[])item.getData();
+            if (itemBlocks != null)
+                for (int b=0; b<itemBlocks.length; b++)
+                    blockLists[b].remove(itemBlocks[b]);
+        }
 
         // send event for redraw
         if (!canceled)
@@ -266,13 +283,11 @@ public abstract class TiledMapProvider extends AbstractProvider
                 BlockListItem[] itemBlocks = (BlockListItem[])item.getData();
                 
                 if (itemBlocks != null && blockLists[0].contains(itemBlocks[0]))
-                    System.out.println(">>>>" + itemBlocks[0] + " STILL IN LIST !!");
+                    log.debug(">>>>" + itemBlocks[0] + " STILL IN LIST !!");
                 
-                if (itemBlocks != null && !blockLists[0].contains(itemBlocks[0]))
-                {
+                if (itemBlocks != null)// && !blockLists[0].contains(itemBlocks[0]))
                     for (int b=0; b<itemBlocks.length; b++)
                         blocksToDiscard.add(itemBlocks[b]);
-                }
                 
                 item.setData(null);
                 
@@ -288,15 +303,20 @@ public abstract class TiledMapProvider extends AbstractProvider
                 dispatchEvent(new STTEvent(blocksToDiscard.toArray(), EventType.PROVIDER_DATA_REMOVED), false);
         }
         
-        threadPool[0].run();
+        // run synchronously for now
+        if (!canceled)
+            threadPool[0].run();
         
         // print debug info
-        //blockLists[0].checkConsistency();
-        //System.out.println("Lists size = " + blockLists[0].getSize() + ", " + blockLists[1].getSize());
-        //QuadTreeItemCounter counter = new QuadTreeItemCounter();
-        //quadTree.accept(counter);
-        //System.out.println("quadtree size = " + counter.numItems + " ("
-        //                                      + counter.numItemsWithData + ")");
+        if (log.isDebugEnabled())
+        {
+            //blockLists[0].checkConsistency();
+            log.debug("Block lists size = " + blockLists[0].getSize() + ", " + blockLists[1].getSize());
+            //QuadTreeItemCounter counter = new QuadTreeItemCounter();
+            //quadTree.accept(counter);
+            //System.out.println("quadtree size = " + counter.numItems + " ("
+            //                                      + counter.numItemsWithData + ")");
+        }
     }
     
     
@@ -305,10 +325,10 @@ public abstract class TiledMapProvider extends AbstractProvider
     {
         super.cancelUpdate();
         
-        /*synchronized(itemsToLoad)
+        synchronized(itemsToLoad)
         {
             itemsToLoad.clear();
-        }*/
+        }
     }
     
     
