@@ -272,11 +272,7 @@ public class Projection_Mercator implements Projection
     public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos)
     {
         ViewSettings view = scene.getViewSettings();
-        
-        Vector3d cameraPos = view.getCameraPos();
-        Vector3d winPos = new Vector3d();
-        scene.getRenderer().project(cameraPos.x, cameraPos.y, cameraPos.z, winPos);
-        scene.getRenderer().unproject(x, y, winPos.z, pos);
+        scene.getRenderer().unproject(x, y, 0.0, pos);
         
         Vector3d viewDir = view.getTargetPos().copy();
         viewDir.sub(view.getCameraPos());

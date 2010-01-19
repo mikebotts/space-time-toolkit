@@ -99,7 +99,7 @@ public class Projection_LLA implements Projection
     
     protected void project(Crs sourceCrs, PrimitiveGraphic point)
     {
-    	point.toVector3d(tempPoint);    	
+    	point.toVector3d(tempPoint);
     	project(sourceCrs, tempPoint);
     	point.fromVector3d(tempPoint);
     }
@@ -115,14 +115,14 @@ public class Projection_LLA implements Projection
                 lla = MapProjection.ECFtoLLA(point.x, point.y, point.z, null);
                 point.x = lla[0];
                 point.y = lla[1];
-                point.z = lla[2];                
+                point.z = lla[2];
                 break;
                 
             case MERC:
                 lla = MapProjection.MerctoLLA(point.x, point.y, point.z);
                 point.x = lla[0];
                 point.y = lla[1];
-                point.z = lla[2];                
+                point.z = lla[2];
                 break;
         }
         
@@ -142,14 +142,14 @@ public class Projection_LLA implements Projection
             	double[] ecf = MapProjection.LLAtoECF(point.x, point.y, point.z, null);
                 point.x = ecf[0];
                 point.y = ecf[1];
-                point.z = ecf[2];                
+                point.z = ecf[2];
                 break;
                 
             case MERC:
             	double[] merc = MapProjection.LLAtoMerc(point.x, point.y, point.z);
                 point.x = merc[0];
                 point.y = merc[1];
-                point.z = merc[2];                
+                point.z = merc[2];
                 break;
         }
     }
@@ -196,7 +196,7 @@ public class Projection_LLA implements Projection
         // compute bbox 3D diagonal distance
         double dist = bbox.getDiagonalDistance();
         
-        // change camera target to center of bbox on XY plane       
+        // change camera target to center of bbox on XY plane
         Vector3d center = bbox.getCenter();
         view.getTargetPos().x = center.x;
         view.getTargetPos().y = center.y;
@@ -210,7 +210,7 @@ public class Projection_LLA implements Projection
         if (adjustZRange)
         {
             view.getCameraPos().z = dist*10;
-            view.setNearClip(dist);            
+            view.setNearClip(dist);
             view.setFarClip(dist*20);
         }
         
@@ -235,6 +235,10 @@ public class Projection_LLA implements Projection
     }
     
     
+    /*
+     * This algorithm seems to cause problems when tilting because
+     * bbox is sometimes not calculated properly...
+     * This seems to happen
     public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
     {        
         SceneRenderer<?> renderer = scene.getRenderer();
@@ -243,12 +247,12 @@ public class Projection_LLA implements Projection
         
         // compute intersection of 4 screen corners with map plane
         Vector3d ul = new Vector3d();
-        this.pointOnMap(0, 0, scene, ul);        
         Vector3d ur = new Vector3d();
-        this.pointOnMap(width, 0, scene, ur);        
         Vector3d ll = new Vector3d();
-        this.pointOnMap(0, height, scene, ll);
         Vector3d lr = new Vector3d();
+        this.pointOnMap(0, 0, scene, ul);
+        this.pointOnMap(width, 0, scene, ur);
+        this.pointOnMap(0, height, scene, ll);
         this.pointOnMap(width, height, scene, lr);
         
         // compute enclosing bbox
@@ -258,27 +262,56 @@ public class Projection_LLA implements Projection
         tmpBox.resizeToContain(ll.x, ll.y, ll.z);
         tmpBox.resizeToContain(lr.x, lr.y, lr.z);
         
-        // set bbox after clamping        
+        // set bbox after clamping
         bbox.setMinX(Math.max(tmpBox.getMinX()*RTD, -180));
         bbox.setMaxX(Math.min(tmpBox.getMaxX()*RTD, +180));
         bbox.setMinY(Math.max(tmpBox.getMinY()*RTD, -90));
         bbox.setMaxY(Math.min(tmpBox.getMaxY()*RTD, +90));
+    }*/
+    public void fitBboxToView(SpatialExtent bbox, WorldScene scene)
+    {
+        ViewSettings view = scene.getViewSettings();
+        SceneRenderer<?> renderer = scene.getRenderer();
+        
+        Vector3d targetPos = view.getTargetPos();
+        Vector3d cameraPos = view.getCameraPos();
+        
+        double centerX = targetPos.x * RTD;
+        double centerY = targetPos.y * RTD;
+        double dX = view.getOrthoWidth()/2 * RTD;
+        double dY = dX * renderer.getViewHeight()/ renderer.getViewWidth();
+        
+        // calculate secante (see http://fr.wikipedia.org/wiki/Fonction_trigonométrique)
+        Vector3d diff = cameraPos.copy();
+        diff.sub(targetPos);
+        diff.normalize();
+        double secante = 8;
+        if (diff.z != 0)
+        {
+            secante = 1 / diff.z;
+            secante = Math.min(secante, 8);
+        }        
+        
+        // scale bbox size
+        dX = dX * secante;
+        dY = dY * secante;
+        
+        bbox.setMinX(Math.max(centerX - dX, -180));
+        bbox.setMaxX(Math.min(centerX + dX, +180));
+        bbox.setMinY(Math.max(centerY - dY, -90));
+        bbox.setMaxY(Math.min(centerY + dY, +90));
     }
     
     
     public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos)
     {
-        ViewSettings view = scene.getViewSettings();
-        
-        Vector3d cameraPos = view.getCameraPos();
-        Vector3d winPos = new Vector3d();
-        scene.getRenderer().project(cameraPos.x, cameraPos.y, cameraPos.z, winPos);
-        scene.getRenderer().unproject(x, y, winPos.z, pos);
+        ViewSettings view = scene.getViewSettings();        
+        scene.getRenderer().unproject(x, y, 0, pos);
         
         Vector3d viewDir = view.getTargetPos().copy();
         viewDir.sub(view.getCameraPos());
         
-        double s = -pos.z / viewDir.z;        
+        double s = -pos.z / viewDir.z;
         pos.x += viewDir.x * s;
         pos.y += viewDir.y * s;
         pos.z = 0.0;
