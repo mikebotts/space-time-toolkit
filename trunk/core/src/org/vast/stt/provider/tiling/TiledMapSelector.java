@@ -25,6 +25,8 @@
 
 package org.vast.stt.provider.tiling;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.provider.tiling.ExtentSelector;
 import org.vast.stt.provider.tiling.QuadTreeItem;
@@ -33,6 +35,8 @@ import org.vast.util.SpatialExtent;
 
 public class TiledMapSelector extends ExtentSelector
 {
+    protected Log log = LogFactory.getLog(TiledMapSelector.class);
+    
     protected TiledMapProvider provider;
     protected BlockListItem[] firstSelectedBlocks;
     protected double maxDistance2; // square of max distance in number of tiles
@@ -111,21 +115,13 @@ public class TiledMapSelector extends ExtentSelector
      */
     public void removeFromBlockLists(QuadTreeItem item)
     {
-        //System.out.println("Item removed " + item);
-        BlockListItem[] itemBlocks = (BlockListItem[])item.getData();
-                
-        // remove data blocks from lists
-        if (itemBlocks != null)
-        {                
-            for (int b=0; b<itemBlocks.length; b++)
-            {
-                // remove items from list
-                if (itemBlocks[b] != null)
-                    provider.blockLists[b].remove(itemBlocks[b]);
-            }
-        }
+        if (log.isDebugEnabled())
+            log.debug("Item removed " + item);
         
-        // add to discard list if too far
+        // add to hidden list
+        provider.itemsToHide.add(item);
+        
+        // also add to discard list if too far
         boolean tooFar = (distanceTo(item) > item.getTileSize()*maxDistance2);
         if (tooFar)
             provider.itemsToDiscard.add(item);
@@ -200,7 +196,9 @@ public class TiledMapSelector extends ExtentSelector
     @Override
     protected void deselectItem(QuadTreeItem item)
     {
-        //System.out.println("Item unselected " + item);
+        if (log.isDebugEnabled())
+            log.debug("Item unselected " + item);
+        
         removeFromBlockLists(item);
         removeDescendantsFromBlockLists(item);
     }
@@ -211,7 +209,9 @@ public class TiledMapSelector extends ExtentSelector
     {
         double distance = distanceTo(item);
         item.setScore((float)(1./distance));
-        //System.out.println("Item selected " + item);
+        
+        if (log.isDebugEnabled())
+            log.debug("Item selected " + item);
         
         // add blocks to list now if data is available in cache
         if (item.data != null)
@@ -260,7 +260,9 @@ public class TiledMapSelector extends ExtentSelector
             {
                 provider.itemsToLoad.add(item);
                 provider.itemsToLoad.notify();
-                //System.out.println("Item in queue " + item);
+                
+                if (log.isDebugEnabled())
+                    log.debug("Item in queue " + item);
             }
         }
     }
