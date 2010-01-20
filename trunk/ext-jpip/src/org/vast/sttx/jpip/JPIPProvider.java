@@ -25,15 +25,7 @@
 
 package org.vast.sttx.jpip;
 
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.ParameterBlock;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import jj2000.j2k.codestream.HeaderInfo;
 import jj2000.j2k.codestream.PrecInfo;
 import jj2000.j2k.codestream.reader.HeaderDecoder;
 import jj2000.j2k.decoder.Decoder;
@@ -43,13 +35,10 @@ import jj2000.j2k.image.BlkImgDataSrc;
 import jj2000.j2k.image.DataBlkInt;
 import jj2000.j2k.image.ImgDataConverter;
 import jj2000.j2k.image.invcomptransf.InvCompTransf;
-import jj2000.j2k.io.RandomAccessIO;
 import jj2000.j2k.quantization.dequantizer.Dequantizer;
 import jj2000.j2k.util.ParameterList;
 import jj2000.j2k.wavelet.synthesis.InverseWT;
-import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataType;
-import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataArray;
 import org.vast.data.DataBlockByte;
 import org.vast.data.DataBlockFactory;
@@ -59,7 +48,6 @@ import org.vast.data.DataBlockMixed;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.jpip.JPIPBitstreamReader;
-import org.vast.jpip.JPIPHttpClient;
 import org.vast.jpip.JPIPListener;
 import org.vast.jpip.message.ViewWindowField;
 import org.vast.math.Matrix3d;
@@ -67,16 +55,12 @@ import org.vast.math.Vector3d;
 import org.vast.util.Bbox;
 import org.vast.util.SpatialExtent;
 import org.vast.sensorML.ProcessLoader;
-import org.vast.stt.data.BlockList;
 import org.vast.stt.data.BlockListItem;
 import org.vast.stt.data.DataException;
 import org.vast.stt.dynamics.SceneBboxUpdater;
 import org.vast.stt.dynamics.SpatialExtentUpdater;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
-import org.vast.stt.provider.AbstractProvider;
-import org.vast.stt.provider.google.GoogleMapTileNumber;
-import org.vast.stt.provider.google.GoogleMapTileXYZ;
 import org.vast.stt.provider.tiling.QuadTreeItem;
 import org.vast.stt.provider.tiling.TiledMapProvider;
 import org.vast.stt.provider.tiling.TiledMapSelector;
@@ -143,270 +127,7 @@ public class JPIPProvider extends TiledMapProvider implements JPIPListener
     	origin = new Vector3d(lon0, lat0, 0);
         mat = new Matrix3d(offULon, offVLon, 0, offULat, offVLat, 0, 0, 0, 1);
         mat.inverse();
-    }
-    
-    
-    class GetTileRunnable implements Runnable
-    {
-        protected QuadTreeItem item;
-        protected byte[] tileData;
-        
-        
-        public GetTileRunnable(QuadTreeItem item)
-        {
-            this.item = item;
-        }
-        
-        
-        public void run()
-        {
-            try
-            {
-                // create treeObject
-                BlockListItem[] blockArray = new BlockListItem[2];
-
-                // set resolution levels
-                int resLevel = item.getLevel();
-                inverseWT.setImgResLevel(resLevel);
-                inverseWT.setTile(0, 0);
-                
-                // prepare tile
-                int width = decodedImage.getImgWidth();
-                int height = decodedImage.getImgHeight();
-                int tileWidth = (int)(item.getSizeX() * width);
-                int tileHeight = (int)(item.getSizeY() * height);
-                int tileOX = (int)(item.getMinX() * width);
-                int tileOY = (int)(item.getMinY() * height);
-                tileData = new byte[tileWidth*tileHeight*3];
-                                
-                // retrieve jpip data and build image
-                int[] fsiz = new int[] { width, height, ViewWindowField.CLOSEST };
-                int[] rsiz = new int[] { tileWidth, tileHeight };
-                int[] roff = new int[] { tileOX, tileOY };
-                int[][] comps = new int[][] { { 0, 2 } };
-                int layers = 10;
-                jpipReader.requestData(fsiz, rsiz, roff, comps, layers);
-                refreshTile(decodedImage, tileOX, tileOY, tileWidth, tileHeight, 3);
-                DataBlockByte imageArrayBlock = DataBlockFactory.createBlock(tileData);
-                DataBlockInt imageWidthBlock = DataBlockFactory.createBlock(new int[] {tileWidth});
-                DataBlockInt imageHeightBlock = DataBlockFactory.createBlock(new int[] {tileHeight});
-                DataBlockMixed imageBlock = DataBlockFactory.createMixedBlock(imageWidthBlock, imageHeightBlock, imageArrayBlock);
-                
-                // build grid
-                int gridWidth = 10;
-                int gridLength = 10;
-                double minY = item.getMinY();
-                double maxY = item.getMaxY();
-                double minX = item.getMinX();
-                double maxX = item.getMaxX();
-                double dX = (maxX - minX) / (gridWidth - 1);
-                double dY = (maxY - minY) / (gridLength - 1);
-                DataBlockFloat gridArrayBlock = DataBlockFactory.createBlock(new float[gridLength*gridWidth*4]);
-                DataBlockInt gridWidthBlock = DataBlockFactory.createBlock(new int[] {10});
-                DataBlockInt gridHeightBlock = DataBlockFactory.createBlock(new int[] {10});
-                DataBlockMixed gridBlock = DataBlockFactory.createMixedBlock(gridWidthBlock, gridHeightBlock, gridArrayBlock);
-                
-                // compute data for grid block
-                int valCount = 0;
-                for (int v=0; v<gridLength; v++)
-                {
-                    for (int u=0; u<gridWidth; u++)
-                    {
-                        double x = lon0 + offULon * (minX + dX*u) + offVLon * (minY + dY*v);
-                    	double y = lat0 + offULat * (minX + dX*u) + offVLat * (minY + dY*v);
-                        x *= DTR;
-                        y *= DTR;
-                        
-                        // write lat and lon value
-                        gridArrayBlock.setDoubleValue(valCount, y);
-                        gridArrayBlock.setDoubleValue(valCount+1, x);
-                        gridArrayBlock.setDoubleValue(valCount+2, (float)u / ((float)gridWidth-1));
-                        gridArrayBlock.setDoubleValue(valCount+3, (float)v / ((float)gridLength-1));
-                        valCount += 4;
-                    }
-                }
-                
-                // add blocks to dataNode
-                if (!canceled)
-                {
-                    // add blocks to data node
-                    item.setData(blockArray);
-                    blockArray[0] = blockLists[0].addBlock(imageBlock);
-                    blockArray[1] = blockLists[1].addBlock(gridBlock);
-                    
-                    // remove sub and super items now that we have the new tile
-                    removeChildrenData(item);
-                    removeHiddenParent(item);
-                    
-                    // send event for redraw
-                    dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
-                }
-            }
-            catch (Exception e)
-            {
-                if (!canceled)
-                    e.printStackTrace();
-            }           
-        }
-        
-        
-        public void refreshTile(BlkImgDataSrc src, int ox, int oy, int width, int height, int numComps)
-        {
-            int tmp1, tmp2, tmp3, tmp4; // temporary storage for sample values
-            int mv1, mv2, mv3, mv4; // max value for each component
-            int ls1, ls2, ls3, ls4; // level shift for each component
-            int fb1, fb2, fb3, fb4; // fractional bits for each component
-            int[] data1, data2, data3, data4; // references to data buffers
-            DataBlkInt db1, db2, db3, db4; // data-blocks to request data from src
-            boolean prog; // Flag for progressive data
-
-            if (numComps < 0)
-                numComps = src.getNumComps();
-            
-            //System.out.println("Redrawing " + ox + "," + oy + " - " + (ox+width) + "," + (oy+height));
-            
-            // Check for image type
-            int type;
-            switch (numComps)
-            {
-                case 1:
-                    type = GRAY;
-                    break;
-                case 3:
-                    type = RGB;
-                    break;
-                case 4:
-                    type = RGBA;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Only 1, 3, and 4 components " + "supported");
-            }
-
-            // Initialize
-            ls2 = fb2 = mv2 = 0; // to keep compiler happy
-            ls3 = fb3 = mv3 = 0; // to keep compiler happy
-            ls4 = fb4 = mv4 = 0; // to keep compiler happy
-            db1 = db2 = db3 = db4 = null; // to keep compiler happy
-            
-            switch (type)
-            {
-                case RGBA:
-                    //db4 = new DataBlkInt(); // Alpha plane
-                    ls4 = 1 << (src.getNomRangeBits(3) - 1);
-                    mv4 = (1 << src.getNomRangeBits(3)) - 1;
-                    fb4 = src.getFixedPoint(3);
-                    
-                case RGB:
-                    //db3 = new DataBlkInt(); // Blue plane
-                    ls3 = 1 << (src.getNomRangeBits(2) - 1);
-                    mv3 = (1 << src.getNomRangeBits(2)) - 1;
-                    fb3 = src.getFixedPoint(2);
-                    //db2 = new DataBlkInt(); // Green plane
-                    ls2 = 1 << (src.getNomRangeBits(1) - 1);
-                    mv2 = (1 << src.getNomRangeBits(1)) - 1;
-                    fb2 = src.getFixedPoint(1);
-                    
-                case GRAY:
-                    //db1 = new DataBlkInt(); // Gray or Red plane
-                    ls1 = 1 << (src.getNomRangeBits(0) - 1);
-                    mv1 = (1 << src.getNomRangeBits(0)) - 1;
-                    fb1 = src.getFixedPoint(0);
-                    break;
-                    
-                default:
-                    throw new Error("Internal JJ2000 error");
-            }
-            
-            src.setTile(0, 0);
-            //int height = src.getImgHeight();
-            //int width = src.getImgWidth();
-            
-            // Request tile data
-            prog = false;
-            switch (type)
-            {
-                case RGBA:
-                    db4 = new DataBlkInt(ox, oy, width, height);
-                    src.getInternCompData(db4, 3);
-                    prog = prog || db4.progressive;
-                    
-                case RGB:
-                    db2 = new DataBlkInt(ox, oy, width, height);
-                    db3 = new DataBlkInt(ox, oy, width, height);
-                    src.getInternCompData(db3, 2);
-                    prog = prog || db3.progressive;
-                    src.getInternCompData(db2, 1);
-                    prog = prog || db2.progressive;
-                    
-                case GRAY:
-                    db1 = new DataBlkInt(ox, oy, width, height);
-                    src.getInternCompData(db1, 0);
-                    prog = prog || db1.progressive;
-                    break;
-            }
-            
-            // Put pixel data in buffer
-            switch (type)
-            {
-                case GRAY:
-                    data1 = db1.data;
-                    for (int i = 0; i < data1.length; i++)
-                    {
-                        tmp1 = (data1[i] >> fb1) + ls1;
-                        tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
-                        //int val = (0xFF << 24) | (tmp1 << 16) | (tmp1 << 8) | tmp1;
-                        tileData[i] = (byte)tmp1;
-                    }
-                    break;
-                    
-                case RGB:
-                    data1 = db1.data; // red
-                    data2 = db2.data; // green
-                    data3 = db3.data; // blue
-                    for (int i = 0; i < data1.length; i++)
-                    {
-                        tmp1 = (data1[i] >> fb1) + ls1;
-                        tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
-                        tmp2 = (data2[i] >> fb2) + ls2;
-                        tmp2 = (tmp2 < 0) ? 0 : ((tmp2 > mv2) ? mv2 : tmp2);
-                        tmp3 = (data3[i] >> fb3) + ls3;
-                        tmp3 = (tmp3 < 0) ? 0 : ((tmp3 > mv3) ? mv3 : tmp3);
-                        //int val = (0xFF << 24) | (tmp1 << 16) | (tmp2 << 8) | tmp3;
-                        int s = i * 3;
-                        tileData[s] = (byte)tmp1;
-                        tileData[s+1] = (byte)tmp2;
-                        tileData[s+2] = (byte)tmp3;
-                    }
-                    break;
-                    
-                case RGBA:
-                    data1 = db1.data; // red
-                    data2 = db2.data; // green
-                    data3 = db3.data; // blue
-                    data4 = db4.data; // alpha
-                    for (int i = 0; i < data1.length; i++)
-                    {
-                        tmp1 = (data1[i] >> fb1) + ls1;
-                        tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
-                        tmp2 = (data2[i] >> fb2) + ls2;
-                        tmp2 = (tmp2 < 0) ? 0 : ((tmp2 > mv2) ? mv2 : tmp2);
-                        tmp3 = (data3[i] >> fb3) + ls3;
-                        tmp3 = (tmp3 < 0) ? 0 : ((tmp3 > mv3) ? mv3 : tmp3);
-                        tmp4 = (data4[i] >> fb4) + ls4;
-                        tmp4 = (tmp4 < 0) ? 0 : ((tmp4 > mv4) ? mv4 : tmp4);
-                        //int val = (tmp4 << 24) | (tmp1 << 16) | (tmp2 << 8) | tmp3;
-                        //buffer[i + l*imgwidth] = val;
-                        int s = i * 4;
-                        tileData[s] = (byte)tmp1;
-                        tileData[s+1] = (byte)tmp2;
-                        tileData[s+2] = (byte)tmp3;
-                        tileData[s+3] = (byte)tmp4;
-                    }
-                    break;
-            }
-        }
-    }
-    
+    }   
     
     
     @Override
@@ -448,10 +169,237 @@ public class JPIPProvider extends TiledMapProvider implements JPIPListener
     @Override
     protected void getNewTile(QuadTreeItem item)
     {
-        GetTileRunnable getTile = new GetTileRunnable(item);
-        //Thread newThread = new Thread(getTile, nextItem.toString());
-        //newThread.start();
-        getTile.run();
+        try
+        {
+            // set resolution levels
+            int resLevel = item.getLevel();
+            inverseWT.setImgResLevel(resLevel);
+            inverseWT.setTile(0, 0);
+            
+            // prepare tile
+            int width = decodedImage.getImgWidth();
+            int height = decodedImage.getImgHeight();
+            int tileWidth = (int)(item.getSizeX() * width);
+            int tileHeight = (int)(item.getSizeY() * height);
+            int tileOX = (int)(item.getMinX() * width);
+            int tileOY = (int)(item.getMinY() * height);
+            byte[] tileData = new byte[tileWidth*tileHeight*3];
+                            
+            // retrieve jpip data and build image
+            int[] fsiz = new int[] { width, height, ViewWindowField.CLOSEST };
+            int[] rsiz = new int[] { tileWidth, tileHeight };
+            int[] roff = new int[] { tileOX, tileOY };
+            int[][] comps = new int[][] { { 0, 2 } };
+            int layers = 10;
+            jpipReader.requestData(fsiz, rsiz, roff, comps, layers);
+            refreshTile(decodedImage, tileData, tileOX, tileOY, tileWidth, tileHeight, 3);
+            DataBlockByte imageArrayBlock = DataBlockFactory.createBlock(tileData);
+            DataBlockInt imageWidthBlock = DataBlockFactory.createBlock(new int[] {tileWidth});
+            DataBlockInt imageHeightBlock = DataBlockFactory.createBlock(new int[] {tileHeight});
+            DataBlockMixed imageBlock = DataBlockFactory.createMixedBlock(imageWidthBlock, imageHeightBlock, imageArrayBlock);
+            
+            // build grid
+            int gridWidth = 10;
+            int gridLength = 10;
+            double minY = item.getMinY();
+            double maxY = item.getMaxY();
+            double minX = item.getMinX();
+            double maxX = item.getMaxX();
+            double dX = (maxX - minX) / (gridWidth - 1);
+            double dY = (maxY - minY) / (gridLength - 1);
+            DataBlockFloat gridArrayBlock = DataBlockFactory.createBlock(new float[gridLength*gridWidth*4]);
+            DataBlockInt gridWidthBlock = DataBlockFactory.createBlock(new int[] {10});
+            DataBlockInt gridHeightBlock = DataBlockFactory.createBlock(new int[] {10});
+            DataBlockMixed gridBlock = DataBlockFactory.createMixedBlock(gridWidthBlock, gridHeightBlock, gridArrayBlock);
+            
+            // compute data for grid block
+            int valCount = 0;
+            for (int v=0; v<gridLength; v++)
+            {
+                for (int u=0; u<gridWidth; u++)
+                {
+                    double x = lon0 + offULon * (minX + dX*u) + offVLon * (minY + dY*v);
+                    double y = lat0 + offULat * (minX + dX*u) + offVLat * (minY + dY*v);
+                    x *= DTR;
+                    y *= DTR;
+                    
+                    // write lat and lon value
+                    gridArrayBlock.setDoubleValue(valCount, y);
+                    gridArrayBlock.setDoubleValue(valCount+1, x);
+                    gridArrayBlock.setDoubleValue(valCount+2, (float)u / ((float)gridWidth-1));
+                    gridArrayBlock.setDoubleValue(valCount+3, (float)v / ((float)gridLength-1));
+                    valCount += 4;
+                }
+            }
+            
+            // add blocks to quad tree cache and to block lists
+            BlockListItem[] blockArray = new BlockListItem[2];
+            blockArray[0] = new BlockListItem(imageBlock, null, null);
+            blockArray[1] = new BlockListItem(gridBlock, null, null);
+            item.setData(blockArray); 
+        }
+        catch (Exception e)
+        {
+            if (!canceled)
+                e.printStackTrace();
+        }
+    }
+    
+    
+    protected void refreshTile(BlkImgDataSrc src, byte[] target, int ox, int oy, int width, int height, int numComps)
+    {
+        int tmp1, tmp2, tmp3, tmp4; // temporary storage for sample values
+        int mv1, mv2, mv3, mv4; // max value for each component
+        int ls1, ls2, ls3, ls4; // level shift for each component
+        int fb1, fb2, fb3, fb4; // fractional bits for each component
+        int[] data1, data2, data3, data4; // references to data buffers
+        DataBlkInt db1, db2, db3, db4; // data-blocks to request data from src
+        boolean prog; // Flag for progressive data
+
+        if (numComps < 0)
+            numComps = src.getNumComps();
+        
+        //System.out.println("Redrawing " + ox + "," + oy + " - " + (ox+width) + "," + (oy+height));
+        
+        // Check for image type
+        int type;
+        switch (numComps)
+        {
+            case 1:
+                type = GRAY;
+                break;
+            case 3:
+                type = RGB;
+                break;
+            case 4:
+                type = RGBA;
+                break;
+            default:
+                throw new IllegalArgumentException("Only 1, 3, and 4 components " + "supported");
+        }
+
+        // Initialize
+        ls2 = fb2 = mv2 = 0; // to keep compiler happy
+        ls3 = fb3 = mv3 = 0; // to keep compiler happy
+        ls4 = fb4 = mv4 = 0; // to keep compiler happy
+        db1 = db2 = db3 = db4 = null; // to keep compiler happy
+        
+        switch (type)
+        {
+            case RGBA:
+                //db4 = new DataBlkInt(); // Alpha plane
+                ls4 = 1 << (src.getNomRangeBits(3) - 1);
+                mv4 = (1 << src.getNomRangeBits(3)) - 1;
+                fb4 = src.getFixedPoint(3);
+                
+            case RGB:
+                //db3 = new DataBlkInt(); // Blue plane
+                ls3 = 1 << (src.getNomRangeBits(2) - 1);
+                mv3 = (1 << src.getNomRangeBits(2)) - 1;
+                fb3 = src.getFixedPoint(2);
+                //db2 = new DataBlkInt(); // Green plane
+                ls2 = 1 << (src.getNomRangeBits(1) - 1);
+                mv2 = (1 << src.getNomRangeBits(1)) - 1;
+                fb2 = src.getFixedPoint(1);
+                
+            case GRAY:
+                //db1 = new DataBlkInt(); // Gray or Red plane
+                ls1 = 1 << (src.getNomRangeBits(0) - 1);
+                mv1 = (1 << src.getNomRangeBits(0)) - 1;
+                fb1 = src.getFixedPoint(0);
+                break;
+                
+            default:
+                throw new Error("Internal JJ2000 error");
+        }
+        
+        src.setTile(0, 0);
+        //int height = src.getImgHeight();
+        //int width = src.getImgWidth();
+        
+        // Request tile data
+        prog = false;
+        switch (type)
+        {
+            case RGBA:
+                db4 = new DataBlkInt(ox, oy, width, height);
+                src.getInternCompData(db4, 3);
+                prog = prog || db4.progressive;
+                
+            case RGB:
+                db2 = new DataBlkInt(ox, oy, width, height);
+                db3 = new DataBlkInt(ox, oy, width, height);
+                src.getInternCompData(db3, 2);
+                prog = prog || db3.progressive;
+                src.getInternCompData(db2, 1);
+                prog = prog || db2.progressive;
+                
+            case GRAY:
+                db1 = new DataBlkInt(ox, oy, width, height);
+                src.getInternCompData(db1, 0);
+                prog = prog || db1.progressive;
+                break;
+        }
+        
+        // Put pixel data in buffer
+        switch (type)
+        {
+            case GRAY:
+                data1 = db1.data;
+                for (int i = 0; i < data1.length; i++)
+                {
+                    tmp1 = (data1[i] >> fb1) + ls1;
+                    tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
+                    //int val = (0xFF << 24) | (tmp1 << 16) | (tmp1 << 8) | tmp1;
+                    target[i] = (byte)tmp1;
+                }
+                break;
+                
+            case RGB:
+                data1 = db1.data; // red
+                data2 = db2.data; // green
+                data3 = db3.data; // blue
+                for (int i = 0; i < data1.length; i++)
+                {
+                    tmp1 = (data1[i] >> fb1) + ls1;
+                    tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
+                    tmp2 = (data2[i] >> fb2) + ls2;
+                    tmp2 = (tmp2 < 0) ? 0 : ((tmp2 > mv2) ? mv2 : tmp2);
+                    tmp3 = (data3[i] >> fb3) + ls3;
+                    tmp3 = (tmp3 < 0) ? 0 : ((tmp3 > mv3) ? mv3 : tmp3);
+                    //int val = (0xFF << 24) | (tmp1 << 16) | (tmp2 << 8) | tmp3;
+                    int s = i * 3;
+                    target[s] = (byte)tmp1;
+                    target[s+1] = (byte)tmp2;
+                    target[s+2] = (byte)tmp3;
+                }
+                break;
+                
+            case RGBA:
+                data1 = db1.data; // red
+                data2 = db2.data; // green
+                data3 = db3.data; // blue
+                data4 = db4.data; // alpha
+                for (int i = 0; i < data1.length; i++)
+                {
+                    tmp1 = (data1[i] >> fb1) + ls1;
+                    tmp1 = (tmp1 < 0) ? 0 : ((tmp1 > mv1) ? mv1 : tmp1);
+                    tmp2 = (data2[i] >> fb2) + ls2;
+                    tmp2 = (tmp2 < 0) ? 0 : ((tmp2 > mv2) ? mv2 : tmp2);
+                    tmp3 = (data3[i] >> fb3) + ls3;
+                    tmp3 = (tmp3 < 0) ? 0 : ((tmp3 > mv3) ? mv3 : tmp3);
+                    tmp4 = (data4[i] >> fb4) + ls4;
+                    tmp4 = (tmp4 < 0) ? 0 : ((tmp4 > mv4) ? mv4 : tmp4);
+                    //int val = (tmp4 << 24) | (tmp1 << 16) | (tmp2 << 8) | tmp3;
+                    //buffer[i + l*imgwidth] = val;
+                    int s = i * 4;
+                    target[s] = (byte)tmp1;
+                    target[s+1] = (byte)tmp2;
+                    target[s+2] = (byte)tmp3;
+                    target[s+3] = (byte)tmp4;
+                }
+                break;
+        }
     }
     
     
@@ -555,8 +503,7 @@ public class JPIPProvider extends TiledMapProvider implements JPIPListener
 			
 			// set tile selector res levels
 			int resLevels = (Integer)decSpec.dls.getTileDef(0);
-			tileSelector = new TiledMapSelector(3, 3, 0, resLevels);
-	        tileSelector.setItemLists(selectedItems, deletedItems, blockLists);
+			tileSelector = new TiledMapSelector(0, resLevels, this);
 	        
 	        // set quad tree root extent (= max request)
 	        SpatialExtent extent = new SpatialExtent();
@@ -608,7 +555,7 @@ public class JPIPProvider extends TiledMapProvider implements JPIPListener
         bounds.setMaxX(27.951421);
         bounds.setMaxY(-23.17148);
         rpcGridGen.setBounds(bounds);
-        DataBlock gridBlock = rpcGridGen.createGrid();
+        //DataBlock gridBlock = rpcGridGen.createGrid();
     }
     
     
@@ -892,7 +839,7 @@ public class JPIPProvider extends TiledMapProvider implements JPIPListener
         blockLists[0].addBlock(imageBlock);
         
         // redraw
-        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED));
+        dispatchEvent(new STTEvent(this, EventType.PROVIDER_DATA_CHANGED), true);
     }
     
     
