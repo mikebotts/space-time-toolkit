@@ -26,6 +26,11 @@
    </Process>
    
    <Process>
+      <uri>urn:ogc:def:process:CSM:frameSensorModel2</uri>
+      <class>org.sensorML.process.CSM_FrameCameraModel_Process2</class>
+   </Process>
+   
+   <Process>
       <uri>urn:ogc:def:process:gridBuilder:1.0</uri>
       <class>org.sensorML.process.GridBuilder_Process</class>
    </Process>
