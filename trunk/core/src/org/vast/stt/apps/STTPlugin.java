@@ -26,7 +26,6 @@
 package org.vast.stt.apps;
 
 import java.net.URL;
-import java.util.Enumeration;
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -69,18 +68,16 @@ public class STTPlugin extends AbstractUIPlugin
         // preload process map file
         try
         {
-            String fileLocation = null;
-            Enumeration<?> e = context.getBundle().findEntries("conf", "ProcessMap.xml", false);
-            if (e.hasMoreElements())
-                fileLocation = (String)e.nextElement().toString();
-            ProcessLoader.reloadMaps(fileLocation);
-            new ExceptionPopup();
+            URL processMapUrl = getClass().getClassLoader().getResource("org/sensorML/process/ProcessMap.xml");
+            ProcessLoader.reloadMaps(processMapUrl.toString());
         }
         catch (SMLException e)
         {
             e.printStackTrace();
         }
         
+        // init popup exception handler and modules
+        new ExceptionPopup();        
         STTConfig.loadDefaultModules();
 	}
 
