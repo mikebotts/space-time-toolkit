@@ -35,7 +35,7 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				<!--<style>
+				<style>
 					<sld:PointSymbolizer enabled="true">
 						<sld:Geometry>
 							<sld:CssParameter name="geometry-x">
@@ -46,20 +46,15 @@
 							</sld:CssParameter>
 						</sld:Geometry>
 						<sld:Graphic>
-							<sld:Mark>
-								<sld:WellKnownName>square</sld:WellKnownName>
-								<sld:Fill>
-									<sld:CssParameter name="fill">#0000FF
-									</sld:CssParameter>
-									<sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
-								</sld:Fill>
-							</sld:Mark>
-							<sld:Size>3</sld:Size>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
 						</sld:Graphic>
 					</sld:PointSymbolizer>
 				</style>
-
-				--><style>
+				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
 							<sld:CssParameter name="geometry-x">
@@ -113,8 +108,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
-
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>				
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -170,7 +182,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -225,7 +255,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -280,7 +328,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -335,7 +401,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -390,7 +474,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -446,7 +548,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -501,7 +621,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -556,7 +694,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -611,7 +767,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -666,7 +840,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -721,7 +913,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -776,7 +986,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -831,7 +1059,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -886,7 +1132,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -941,7 +1205,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -996,7 +1278,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1051,7 +1351,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1106,7 +1424,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1161,7 +1497,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1216,7 +1570,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1241,7 +1613,25 @@
 				</style>
 			</DataItem>
 		</member>
-		
+		<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 		<member visible="false">
 			<DataItem>
 				<name>KFUL</name>
@@ -1272,7 +1662,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1327,7 +1735,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1382,7 +1808,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1437,7 +1881,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1492,7 +1954,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1547,7 +2027,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1602,7 +2100,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1657,7 +2173,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1712,7 +2246,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1767,7 +2319,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1822,7 +2392,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1877,7 +2465,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1932,7 +2538,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -1987,7 +2611,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2042,7 +2684,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2097,7 +2757,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2152,7 +2830,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2207,7 +2903,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2262,7 +2976,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2317,7 +3049,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2372,7 +3122,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2427,7 +3195,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2482,7 +3268,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2537,7 +3341,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2592,7 +3414,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2647,7 +3487,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2702,7 +3560,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2757,7 +3633,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2812,7 +3706,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2867,7 +3779,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2922,7 +3852,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -2977,7 +3925,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3032,7 +3998,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3087,7 +4071,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3142,7 +4144,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3197,7 +4217,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3252,7 +4290,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3307,7 +4363,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3362,7 +4436,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3417,7 +4509,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3472,7 +4582,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3527,7 +4655,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3582,7 +4728,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3637,7 +4801,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3692,7 +4874,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3747,7 +4947,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3802,7 +5020,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3857,7 +5093,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3912,7 +5166,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -3967,7 +5239,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4022,7 +5312,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4077,7 +5385,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4132,7 +5458,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4187,7 +5531,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4242,7 +5604,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4297,7 +5677,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4352,7 +5750,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4407,7 +5823,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4462,7 +5896,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4517,7 +5969,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4572,7 +6042,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
@@ -4627,7 +6115,25 @@
 						</request>
 					</OWSDataProvider>
 				</dataProvider>
-				
+				<style>
+					<sld:PointSymbolizer enabled="true">
+						<sld:Geometry>
+							<sld:CssParameter name="geometry-x">
+								<ogc:PropertyName>Components/longitude</ogc:PropertyName>
+							</sld:CssParameter>
+							<sld:CssParameter name="geometry-y">
+								<ogc:PropertyName>Components/latitude</ogc:PropertyName>
+							</sld:CssParameter>
+						</sld:Geometry>
+						<sld:Graphic>
+							<sld:ExternalGraphic>
+								<sld:Format>image/png</sld:Format>
+								<sld:OnlineResource>icons/weatherStation.png</sld:OnlineResource>
+							</sld:ExternalGraphic>
+							<sld:Size>0.5</sld:Size>
+						</sld:Graphic>
+					</sld:PointSymbolizer>
+				</style>
 				<style>
 					<sld:TextSymbolizer enabled="true">
 						<sld:Geometry>
