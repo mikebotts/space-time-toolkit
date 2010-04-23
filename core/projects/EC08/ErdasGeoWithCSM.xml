@@ -569,7 +569,8 @@
                            <sml:input name="operand2">
                               <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
                                  <swe:uom code="m"/>
-                                 <swe:value>650</swe:value>
+                                 <!--<swe:value>650</swe:value>-->
+                                 <swe:value>0</swe:value>
                               </swe:Quantity>
                            </sml:input>
                         </sml:InputList>

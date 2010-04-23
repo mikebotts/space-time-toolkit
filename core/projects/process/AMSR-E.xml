@@ -914,17 +914,17 @@
                <swe:Vector definition="urn:ogc:def:data:orientationVector">
                   <swe:coordinate name="x">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                   <swe:coordinate name="y">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                   <swe:coordinate name="z">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                </swe:Vector>

@@ -40,18 +40,10 @@
                      <swe:field name="radial">
                         <swe:DataArray>  
                            <swe:elementCount ref="BIN_COUNT"/>
-                           <swe:elementType name="bin">
-                              <swe:DataRecord>
-                                 <swe:field name="data">
-                                    <swe:Count>
-                                       <swe:constraint>
-                                          <swe:AllowedValues>
-                                             <swe:interval>0 255</swe:interval>
-                                          </swe:AllowedValues>
-                                       </swe:constraint>
-                                    </swe:Count> 
-                                 </swe:field>
-                              </swe:DataRecord>
+                           <swe:elementType name="reflectivity"> 
+                              <swe:Quantity definition="urn:ogc:phenomenon:returnedPower">
+                                 <!--<swe:uom code="dB"></swe:uom> No code for dbZ -->
+                              </swe:Quantity> 
                            </swe:elementType>
                         </swe:DataArray>
                      </swe:field>
@@ -120,7 +112,7 @@
                                  </swe:field>
                                  <swe:field name="numBins">
                                     <swe:Count gml:id="NUM_BINS"/>
-                                 </swe:field>
+                                 </swe:field>                                 
                                  <swe:field name="data">
                                     <swe:DataArray>  
                                        <swe:elementCount ref="NUM_BINS"/>
@@ -386,6 +378,12 @@
                   </sml:Link>
                </sml:connection>
                <!-- imageData output -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="sos/outputs/observationData/numBins"/>
+                     <sml:destination ref="this/outputs/imageData/numBins"/>
+                  </sml:Link>
+               </sml:connection>
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sos/outputs/observationData/numBins"/>

@@ -380,7 +380,7 @@
                            </sml:parameter>
                         </sml:ParameterList>
                      </sml:parameters> 
-                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectTerrain:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
             </sml:ComponentList>

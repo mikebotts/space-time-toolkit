@@ -180,7 +180,7 @@
                               <swe:component name="requestMethod">
                                  <swe:Category definition="urn:ogc:def:identifier:URL">GET</swe:Category>
                               </swe:component>
-                              <swe:component name="layer">
+                              <swe:component name="coverage">
                                  <swe:Category>SRTM</swe:Category>
                               </swe:component>
                               <swe:component name="format">

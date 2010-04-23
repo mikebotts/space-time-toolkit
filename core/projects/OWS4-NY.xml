@@ -792,8 +792,8 @@
                               <name>Weather Charts</name>
                               <contents>
                                  <DataList>
-                                    <member visible="true">
-                                       <DataItem enabled="true">
+                                    <member visible="false">
+                                       <DataItem enabled="false">
                                           <name>Temperature (F)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
                                           <style>
@@ -814,8 +814,8 @@
                                           </style>
                                        </DataItem>
                                     </member>
-                                    <member visible="true">
-                                       <DataItem enabled="true">
+                                    <member visible="false">
+                                       <DataItem enabled="false">
                                           <name>Pressure (PSI)</name>
                                           <dataProvider href="#NY_KJFK_SOS"/>
                                           <style>
@@ -866,8 +866,8 @@
                               <name>Environmental Charts</name>
                               <contents>
                                  <DataList>
-                                    <member visible="true">
-                                       <DataItem>
+                                    <member visible="false">
+                                       <DataItem enabled="false">
                                           <name>Humidity (%)</name>
                                           <dataProvider href="#CSIRO_SOS_1"/>
                                           <style>
@@ -919,7 +919,7 @@
                      <DataList>
                         <name>Radiation Sensors</name>
                         <member visible="false">
-                           <DataItem>
+                           <DataItem enabled="false">
                               <name>Port Newark Radiation Sensor</name>
                               <dataProvider xlink:href="#RADIATION_SOS"/>
                               <style>
@@ -948,8 +948,8 @@
                               <name>Radiation Charts</name>
                               <contents>
                                  <DataList>
-                                    <member visible="true">
-                                       <DataItem>
+                                    <member visible="false">
+                                       <DataItem enabled="false">
                                           <name>Radiation (counts)</name>
                                           <dataProvider href="#RADIATION_SOS"/>
                                           <style>
@@ -1006,88 +1006,7 @@
    <ResourceList>
       <member>
          <ResourceList>
-            <name>Base DataSets</name>
-            <member>
-               <SWEDataProvider id="DATASET_03">
-                  <name>World Boundaries - 13</name>
-                  <format>SWE</format>
-                  <sweData href="http://vast.uah.edu/SWEData/countries/mapbdy13.xml"/>
-               </SWEDataProvider>
-            </member>
-            <member>
-               <SWEDataProvider id="DATASET_04">
-                  <name>World Coast Lines - 13</name>
-                  <format>SWE</format>
-                  <sweData href="http://vast.uah.edu/SWEData/coastlines/mapcil13.xml"/>
-               </SWEDataProvider>
-            </member>
-            <member>
-               <SensorMLProvider id="LANDSAT_FLAT">
-                  <name>Landsat WMS</name>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-                  <process href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
-               </SensorMLProvider>
-            </member>
-            <member>
-               <SensorMLProvider id="LANDSAT_TOPO">
-                  <name>Landsat WMS + SRTM Topo</name>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-                  <process href="./process/WMS_SRTM_Process.xml#PROCESS"/>
-               </SensorMLProvider>
-            </member>
-            <member>
-               <SensorMLProvider id="SRTM_CHAIN">
-                  <name>SRTM DEM</name>
-                  <spatialExtent tiling="5x5">
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-87.2,34.4 -86.3,35.0</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
-                  <process xlink:href="process/SRTM_Process.xml#WCS_PROCESS"/>
-               </SensorMLProvider>
-            </member>
-            <member>
-               <VirtualEarthProvider id="MS_ROADS">
-                  <name>World Roads</name>
-                  <layerId>roads</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </VirtualEarthProvider>
-            </member>
-            <member>
-               <VirtualEarthProvider id="MS_IMAGERY">
-                  <name>World Imagery</name>
-                  <layerId>aerial</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </VirtualEarthProvider>
-            </member>
-            <member>
-               <VirtualEarthProvider id="MS_HYBRID">
-                  <name>World Imagery</name>
-                  <layerId>hybrid</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </VirtualEarthProvider>
-            </member>
-            <member>
-               <GoogleMapProvider id="GOOGLE_MAP">
-                  <name>Google Map Imagery</name>
-                  <layerId>map</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </GoogleMapProvider>
-            </member>
-            <member>
-               <GoogleMapProvider id="GOOGLE_ROADS">
-                  <name>Google Map Imagery</name>
-                  <layerId>roads</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </GoogleMapProvider>
-            </member>
-            <member>
-               <GoogleMapProvider id="GOOGLE_SAT">
-                  <name>Google Map Imagery</name>
-                  <layerId>satellite</layerId>
-                  <spatialExtent autoUpdate="#SCENE_01"/>
-               </GoogleMapProvider>
-            </member>
+            <name>Data Sets</name>        
             <member>
                <OWSDataProvider id="PROVIDER_13">
                   <name>Forecast Temperature SOS</name>

@@ -11,20 +11,20 @@
                   <swe:component name="corner1">
                      <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4326">
                         <swe:coordinate name="lat">
-                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="deg"/>
                         </swe:coordinate>
                         <swe:coordinate name="lon">
-                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="deg"/>
                         </swe:coordinate>
                      </swe:Vector>
                   </swe:component>
                   <swe:component name="corner2">
                      <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4326">
                         <swe:coordinate name="lat">
-                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="deg"/>
                         </swe:coordinate>
                         <swe:coordinate name="lon">
-                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                           <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="deg"/>
                         </swe:coordinate>
                      </swe:Vector>
                   </swe:component>
@@ -151,10 +151,10 @@
                                           <swe:component name="point">
                                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
                                                 <swe:coordinate name="lon">
-                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:longitude" uom="deg"/>
                                                 </swe:coordinate>
                                                 <swe:coordinate name="lat">
-                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                                                   <swe:Quantity definition="urn:ogc:def:phenomenon:latitude" uom="deg"/>
                                                 </swe:coordinate>
                                                 <swe:coordinate name="alt">
                                                    <swe:Quantity definition="urn:ogc:def:phenomenon:altitude" uom="urn:ogc:def:unit:meter"/>
