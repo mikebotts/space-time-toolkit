@@ -86,6 +86,10 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 	public void setName(String name)
 	{
 		this.name = name;
+		
+		// use same name for data provider if it does not have one
+		if (dataProvider != null && dataProvider.getName() == null)
+		    dataProvider.setName(name);
 	}
     
     
@@ -121,7 +125,10 @@ public class DataItem implements DataEntry, STTEventListener, STTEventProducer
 
 	public void setDataProvider(DataProvider dataProvider)
 	{
-        if (this.dataProvider != dataProvider)
+	    if (dataProvider.getName() == null)
+            dataProvider.setName(this.name);
+	    
+	    if (this.dataProvider != dataProvider)
         {
             if (this.dataProvider != null)
                 this.dataProvider.removeListener(this);

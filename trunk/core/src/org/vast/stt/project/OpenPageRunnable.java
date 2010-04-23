@@ -49,12 +49,13 @@ public class OpenPageRunnable implements IRunnableWithProgress
 					while (it.hasNext() && !monitor.isCanceled())
 					{
 						DataItem item = it.next();
-						monitor.subTask("Loading... " + item.getName());
+						monitor.subTask("Loading... " + item.getName());						
 						DataProvider provider = item.getDataProvider();
+						
 						if (!processedProviders.contains(provider))
 						{
 							if (provider.getSpatialExtent().getUpdater() == null)
-								new DataProviderJob(provider);
+								new DataProviderJob(item.getName(), provider);
 							processedProviders.add(provider);
 						}
 						//  UPDATE PROG MON here- technically don't need this sleep call, but it enables DataItem 

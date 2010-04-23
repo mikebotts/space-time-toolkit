@@ -264,7 +264,6 @@
             <name>MS Roads Imagery (Flat)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Roads</name>
                   <layerId>roads</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
@@ -344,7 +343,6 @@
             <name>MS Aerial Imagery (Flat)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Imagery</name>
                   <layerId>aerial</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
@@ -401,7 +399,6 @@
             <name>MS Hybrid Imagery (Flat)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Imagery</name>
                   <layerId>hybrid</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
@@ -415,7 +412,6 @@
             <name>Google Imagery (Flat)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Imagery</name>
                   <layerId>satellite</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
@@ -429,7 +425,6 @@
             <name>Google Maps (Flat)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Maps</name>
                   <layerId>map</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
@@ -443,7 +438,6 @@
             <name>Google Roads (Flat)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Maps</name>
                   <layerId>roads</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
@@ -503,7 +497,6 @@
             <name>Worldwind Imagery (Flat)</name>
             <dataProvider>
                <WorldwindProvider>
-                  <name>Worldwind Imagery</name>
                   <layerId>roads</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </WorldwindProvider>
@@ -517,7 +510,6 @@
             <name>Global Landsat Imagery (Flat)</name>
             <dataProvider>
                <SensorMLProvider quadTree="true">
-                  <name>Global Mosaic WMS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                   <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                   <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
@@ -599,7 +591,6 @@
             <name>Blue Marble Imagery (Flat)</name>
             <dataProvider>
                <SensorMLProvider quadTree="true">
-                  <name>Blue Marble WMS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                   <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                   <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
@@ -615,7 +606,6 @@
             <name>Blue Marble NG Imagery (Flat)</name>
             <dataProvider>
                <SensorMLProvider quadTree="true">
-                  <name>Blue Marble NG WMS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                   <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                   <value process="wmsProcess" path="wmsOptions/endPoint">http://wms.jpl.nasa.gov/wms.cgi</value>
@@ -631,7 +621,6 @@
             <name>Daily Modis Imagery (Flat)</name>
             <dataProvider>
                <SensorMLProvider quadTree="true">
-                  <name>Daily Modis WMS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                   <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
                   <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
@@ -650,7 +639,6 @@
             <name>MS Roads Imagery (DEM)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Roads</name>
                   <layerId>roads</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -738,7 +726,6 @@
             <name>MS Aerial Imagery (DEM)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Imagery</name>
                   <layerId>aerial</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -799,7 +786,6 @@
             <name>MS Hybrid Imagery (DEM)</name>
             <dataProvider>
                <VirtualEarthProvider>
-                  <name>World Imagery</name>
                   <layerId>hybrid</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -814,7 +800,6 @@
             <name>Google Imagery (DEM)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Imagery</name>
                   <layerId>satellite</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -829,7 +814,6 @@
             <name>Google Maps (DEM)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Maps</name>
                   <layerId>map</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -844,7 +828,6 @@
             <name>Google Roads (DEM)</name>
             <dataProvider>
                <GoogleMapProvider>
-                  <name>Google Maps</name>
                   <layerId>roads</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -908,7 +891,6 @@
             <name>Worldwind Imagery (DEM)</name>
             <dataProvider>
                <WorldwindProvider>
-                  <name>Worldwind Imagery</name>
                   <layerId>roads</layerId>
                   <useDEM>true</useDEM>
                   <spatialExtent autoUpdate="#SCENE_01"/>
@@ -923,7 +905,6 @@
             <name>Blue Marble NG (DEM)</name>
             <dataProvider>
                <SensorMLProvider quadTree="true">
-                  <name>Blue Marble WMS + SRTM WCS</name>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                   <process xlink:href="process/WMS_SRTM_Process.xml#PROCESS"/>
                   <value process="wmsProcess" path="wmsOptions/endPoint">http://terraservice.net/ogcmap.ashx</value>

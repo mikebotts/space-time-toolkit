@@ -57,9 +57,9 @@ public class DataProviderJob extends Job implements STTEventListener
     protected IProgressMonitor monitor;
     
     
-    public DataProviderJob(DataProvider provider)
+    public DataProviderJob(String jobName, DataProvider provider)
     {
-        super(provider.getName());
+        super(jobName);
         this.provider = provider;
         this.provider.addListener(this);
     }
