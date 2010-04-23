@@ -823,17 +823,17 @@
                <swe:Vector definition="urn:ogc:def:data:orientationVector">
                   <swe:coordinate name="roll">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                   <swe:coordinate name="pitch">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                   <swe:coordinate name="yaw">
                      <swe:Quantity>
-                        <swe:uom code="m"/>
+                        <swe:uom code="rad"/>
                      </swe:Quantity>
                   </swe:coordinate>
                </swe:Vector>

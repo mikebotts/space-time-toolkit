@@ -13,7 +13,7 @@
                   <name>TigerShark Track Data</name>
                   <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="ERDAS_TIME4">
-                        <baseTime>2008-07-24T15:44:15</baseTime>
+                        <baseTime>2008-07-21T17:39:23</baseTime>
                         <leadTime>10</leadTime>
                         <lagTime>10</lagTime>
                         <stepTime>0</stepTime>
@@ -209,7 +209,7 @@
                </SensorMLProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true">
+               <sld:TextureSymbolizer enabled="true" id="ERDAS_IMAGERY_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -255,6 +255,25 @@
                   </sld:Raster>
                </sld:TextureSymbolizer>
             </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>KCM-HD Hi-Res Frame Imagery</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>KCM-HD Process</name>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent>
+                        <leadTime>1</leadTime>
+                        <lagTime>1</lagTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./Erdas_ProcessFramewithCSM_HiRes.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style xlink:href="#ERDAS_IMAGERY_STYLE"/>
          </DataItem>
       </member>
    </DataList>

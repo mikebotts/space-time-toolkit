@@ -30,15 +30,15 @@
                <sml:output name="grid">
                   <swe:DataArray>
                      <swe:elementCount>
-                        <swe:Count>
-                           <swe:value>4</swe:value>
+                        <swe:Count gml:id="ASC_COUNT">
+                           <swe:value>10</swe:value>
                         </swe:Count>
                      </swe:elementCount>
                      <swe:elementType name="acrossTrackPoints">
                         <swe:DataArray>
                            <swe:elementCount>
-                              <swe:Count>
-                                 <swe:value>4</swe:value>
+                              <swe:Count gml:id="ACT_COUNT">
+                                 <swe:value>10</swe:value>
                               </swe:Count>
                            </swe:elementCount>
                            <swe:elementType name="groundPoint">
@@ -327,11 +327,7 @@
                                        <swe:value>1920</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
-                                 <swe:field name="stepCount">
-                                    <swe:Quantity>
-                                       <swe:value>4</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
+                                 <swe:field name="stepCount" xlink:href="#ASC_COUNT"/>
                               </swe:DataRecord>
                            </sml:input>
                         </sml:InputList>
@@ -384,11 +380,7 @@
                                        <swe:value>1080</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
-                                 <swe:field name="stepCount">
-                                    <swe:Quantity>
-                                       <swe:value>4</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
+                                 <swe:field name="stepCount" xlink:href="#ACT_COUNT"/>
                               </swe:DataRecord>
                            </sml:input>
                         </sml:InputList>
@@ -500,7 +492,7 @@
                            </sml:parameter>
                         </sml:ParameterList>
                      </sml:parameters> 
-                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectEllipsoid:1.0"/>
+                     <sml:method xlink:href="urn:ogc:def:process:rayIntersectTerrain:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
                <!-- array reconstruction -->
@@ -533,18 +525,10 @@
                         <sml:OutputList>
                            <sml:output name="grid">
                               <swe:DataArray>
-                                 <swe:elementCount>
-                                    <swe:Count>
-                                       <swe:value>4</swe:value>
-                                    </swe:Count>
-                                 </swe:elementCount>
+                                 <swe:elementCount xlink:href="#ASC_COUNT"/>
                                  <swe:elementType name="acrossTrackPoints">
                                     <swe:DataArray>
-                                       <swe:elementCount>
-                                          <swe:Count>
-                                             <swe:value>4</swe:value>
-                                          </swe:Count>
-                                       </swe:elementCount>
+                                       <swe:elementCount xlink:href="#ACT_COUNT"/>
                                        <swe:elementType name="groundPoint">
                                           <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
                                              <swe:coordinate name="x">

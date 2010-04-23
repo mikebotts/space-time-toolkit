@@ -12,10 +12,10 @@
             <swe:component name="location">
                 <swe:DataGroup>
                     <swe:component name="lat">
-                        <swe:Quantity definition="urn:ogc:phenomenon:latitude" uom="urn:ogc:def:unit:degree"/>
+                        <swe:Quantity definition="urn:ogc:phenomenon:latitude" uom="deg"/>
                     </swe:component>
                     <swe:component name="lon">
-                        <swe:Quantity definition="urn:ogc:phenomenon:longitude" uom="urn:ogc:def:unit:degree"/>
+                        <swe:Quantity definition="urn:ogc:phenomenon:longitude" uom="deg"/>
                     </swe:component>
                 </swe:DataGroup>
             </swe:component>

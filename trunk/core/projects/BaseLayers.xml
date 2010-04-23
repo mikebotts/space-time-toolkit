@@ -3,10 +3,10 @@
    <DataList id="GIS">
       <name>GIS Data</name>
       <member visible="true">
-         <DataItem>
-            <name>Coast Lines</name>
+         <DataItem id="WORLD_COASTLINES">
+            <name>World Coast Lines</name>
             <dataProvider>
-               <SWEDataProvider id="WORLD_COASTLINES_DATA">
+               <SWEDataProvider>
                   <name>World Coast Lines - 13</name>
                   <description>World Coast Lines</description>
                   <format>SWE</format>
@@ -35,10 +35,10 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>Boundaries</name>
+         <DataItem id="WORLD_BOUNDARIES">
+            <name>World Boundaries</name>
             <dataProvider>
-               <SWEDataProvider id="WORLD_BOUNDARIES_DATA">
+               <SWEDataProvider>
                   <name>World Boundaries - 13</name>
                   <description>World Country Boundaries</description>
                   <format>SWE</format>
@@ -67,7 +67,7 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
+         <DataItem id="AL_STATE_BOUNDARIES">
             <name>AL State Boundaries</name>
             <dataProvider>
                <SWEDataProvider id="AL_STATE_BOUNDARIES_DATA">
@@ -100,10 +100,10 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
+         <DataItem id="AL_COUNTIES_BOUNDARIES">
             <name>AL County Boundaries</name>
             <dataProvider>
-               <SWEDataProvider id="AL_COUNTIES_BOUNDARIES_DATA">
+               <SWEDataProvider>
                   <name>Alabama counties</name>
                   <description>Alabama county border data</description>
                   <format>SWE</format>
@@ -133,10 +133,10 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
+         <DataItem id="AL_INTERSTATES">
             <name>AL Interstates</name>
             <dataProvider>
-               <SWEDataProvider id="AL_INTERSTATES_DATA">
+               <SWEDataProvider>
                   <name>Alabama interstates</name>
                   <description>Alabama Interstate data</description>
                   <format>SWE</format>
@@ -224,10 +224,10 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
+         <DataItem id="AL_HIGHWAYS">
             <name>AL Highways</name>
             <dataProvider>
-               <SWEDataProvider id="AL_HIGHWAYS_DATA">
+               <SWEDataProvider>
                   <name>Alabama highways</name>
                   <description>Alabama Interstate data</description>
                   <format>SWE</format>
@@ -258,19 +258,19 @@
       </member>
    </DataList>
    <DataList id="MAPS">
-      <name>Base Maps</name>
+      <name>2D Base Maps</name>
       <member visible="false">
-         <DataItem>
+         <DataItem id="MS_ROADS">
             <name>MS Roads Imagery (Flat)</name>
             <dataProvider>
-               <VirtualEarthProvider id="MS_ROADS_DATA">
+               <VirtualEarthProvider>
                   <name>World Roads</name>
                   <layerId>roads</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true">
+               <sld:TextureSymbolizer enabled="true" id="RGB_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -340,17 +340,17 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
+         <DataItem id="MS_IMAGERY">
             <name>MS Aerial Imagery (Flat)</name>
             <dataProvider>
-               <VirtualEarthProvider id="MS_IMAGERY_DATA">
+               <VirtualEarthProvider>
                   <name>World Imagery</name>
                   <layerId>aerial</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true">
+               <sld:TextureSymbolizer enabled="true" id="BGR_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -397,188 +397,59 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>MS Hybrid Imagery (Aerial + Roads)</name>
+         <DataItem id="MS_HYBRID">
+            <name>MS Hybrid Imagery (Flat)</name>
             <dataProvider>
-               <VirtualEarthProvider id="MS_HYBRID_DATA">
+               <VirtualEarthProvider>
                   <name>World Imagery</name>
                   <layerId>hybrid</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </VirtualEarthProvider>
             </dataProvider>
-            <style>
-               <sld:TextureSymbolizer enabled="true">
-                  <sld:Grid>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>grid/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="length">
-                           <ogc:PropertyName>grid</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Geometry>
-                        <sld:CssParameter name="geometry-x">
-                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
-                        </sld:CssParameter>
-                        <sld:CssParameter name="geometry-y">
-                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
-                        </sld:CssParameter>
-                     </sld:Geometry>
-                  </sld:Grid>
-                  <sld:Raster>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>image/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="height">
-                           <ogc:PropertyName>image</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Opacity>1.0</sld:Opacity>
-                     <sld:ChannelSelection>
-                        <sld:RedChannel>
-                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
-                        </sld:RedChannel>
-                        <sld:GreenChannel>
-                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
-                        </sld:GreenChannel>
-                        <sld:BlueChannel>
-                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
-                        </sld:BlueChannel>
-                     </sld:ChannelSelection>
-                  </sld:Raster>
-               </sld:TextureSymbolizer>
-            </style>
+            <style xlink:href="#BGR_STYLE"/>
             <style xlink:href="#GRID_BORDER"/>
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>Google Imagery</name>
+         <DataItem id="GOOGLE_IMAGERY">
+            <name>Google Imagery (Flat)</name>
             <dataProvider>
-               <GoogleMapProvider id="GOOGLE_SAT_DATA">
+               <GoogleMapProvider>
                   <name>Google Imagery</name>
                   <layerId>satellite</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </dataProvider>
-            <style>
-               <sld:TextureSymbolizer enabled="true">
-                  <sld:Grid>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>grid/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="length">
-                           <ogc:PropertyName>grid</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Geometry>
-                        <sld:CssParameter name="geometry-x">
-                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
-                        </sld:CssParameter>
-                        <sld:CssParameter name="geometry-y">
-                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
-                        </sld:CssParameter>
-                     </sld:Geometry>
-                  </sld:Grid>
-                  <sld:Raster>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>image/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="height">
-                           <ogc:PropertyName>image</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Opacity>1.0</sld:Opacity>
-                     <sld:ChannelSelection>
-                        <sld:RedChannel>
-                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
-                        </sld:RedChannel>
-                        <sld:GreenChannel>
-                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
-                        </sld:GreenChannel>
-                        <sld:BlueChannel>
-                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
-                        </sld:BlueChannel>
-                     </sld:ChannelSelection>
-                  </sld:Raster>
-               </sld:TextureSymbolizer>
-            </style>
+            <style xlink:href="#BGR_STYLE"/>
             <style xlink:href="#GRID_BORDER"/>
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>Google Maps</name>
+         <DataItem id="GOOGLE_MAPS">
+            <name>Google Maps (Flat)</name>
             <dataProvider>
-               <GoogleMapProvider id="GOOGLE_MAPS_DATA">
+               <GoogleMapProvider>
                   <name>Google Maps</name>
                   <layerId>map</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </dataProvider>
-            <style>
-               <sld:TextureSymbolizer enabled="true">
-                  <sld:Grid>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>grid/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="length">
-                           <ogc:PropertyName>grid</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Geometry>
-                        <sld:CssParameter name="geometry-x">
-                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
-                        </sld:CssParameter>
-                        <sld:CssParameter name="geometry-y">
-                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
-                        </sld:CssParameter>
-                     </sld:Geometry>
-                  </sld:Grid>
-                  <sld:Raster>
-                     <sld:Dimensions>
-                        <sld:Axis name="width">
-                           <ogc:PropertyName>image/row</ogc:PropertyName>
-                        </sld:Axis>
-                        <sld:Axis name="height">
-                           <ogc:PropertyName>image</ogc:PropertyName>
-                        </sld:Axis>
-                     </sld:Dimensions>
-                     <sld:Opacity>1.0</sld:Opacity>
-                     <sld:ChannelSelection>
-                        <sld:RedChannel>
-                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
-                        </sld:RedChannel>
-                        <sld:GreenChannel>
-                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
-                        </sld:GreenChannel>
-                        <sld:BlueChannel>
-                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
-                        </sld:BlueChannel>
-                     </sld:ChannelSelection>
-                  </sld:Raster>
-               </sld:TextureSymbolizer>
-            </style>
+            <style xlink:href="#RGB_STYLE"/>
             <style xlink:href="#GRID_BORDER"/>
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>Google Roads</name>
+         <DataItem id="GOOGLE_ROADS">
+            <name>Google Roads (Flat)</name>
             <dataProvider>
-               <GoogleMapProvider id="GOOGLE_ROADS_DATA">
+               <GoogleMapProvider>
                   <name>Google Maps</name>
                   <layerId>roads</layerId>
                   <spatialExtent autoUpdate="#SCENE_01"/>
                </GoogleMapProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true">
+               <sld:TextureSymbolizer id="RGBA_STYLE" enabled="true">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -628,22 +499,33 @@
          </DataItem>
       </member>
       <member visible="false">
-         <DataItem>
-            <name>Landsat Imagery (Flat)</name>
+         <DataItem id="WORLDWIND_IMAGERY">
+            <name>Worldwind Imagery (Flat)</name>
             <dataProvider>
-               <SensorMLProvider id="WMS_LANDSAT_IMAGERY_DATA" quadTree="true">
-                  <name>WMS</name>
-                  <description>Landsat Data on top of flat grid</description>
-                  <spatialExtent tiling="4x4">
-                     <BoundingBox srsName="EPSG:4326">
-                        <gml:coordinates>-180,-90 180,90</gml:coordinates>
-                     </BoundingBox>
-                  </spatialExtent>
-                  <process href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+               <WorldwindProvider>
+                  <name>Worldwind Imagery</name>
+                  <layerId>roads</layerId>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </WorldwindProvider>
+            </dataProvider>
+            <style xlink:href="#RGB_STYLE"/>
+            <style xlink:href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="LANDSAT_IMAGERY">
+            <name>Global Landsat Imagery (Flat)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <name>Global Mosaic WMS</name>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">global_mosaic</value>
                </SensorMLProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true">
+               <sld:TextureSymbolizer enabled="true" id="WMS_RGB_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -687,7 +569,7 @@
                </sld:TextureSymbolizer>
             </style>
             <style>
-               <sld:GridBorderSymbolizer enabled="false">
+               <sld:GridBorderSymbolizer enabled="false" id="WMS_GRID_BORDER">
                   <sld:Dimensions>
                      <sld:Axis name="width">
                         <ogc:PropertyName>gridData/grid/row</ogc:PropertyName>
@@ -703,14 +585,405 @@
                      <sld:CssParameter name="geometry-y">
                         <ogc:PropertyName>gridData/grid/row/point/lat</ogc:PropertyName>
                      </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridBorderSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="BLUE_MARBLE_IMAGERY">
+            <name>Blue Marble Imagery (Flat)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <name>Blue Marble WMS</name>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">modis</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style xlink:href="#WMS_RGB_STYLE"/>
+            <style xlink:href="#WMS_GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="BLUE_MARBLE_NG_IMAGERY">
+            <name>Blue Marble NG Imagery (Flat)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <name>Blue Marble NG WMS</name>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://wms.jpl.nasa.gov/wms.cgi</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">BMNG</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style xlink:href="#WMS_RGB_STYLE"/>
+            <style xlink:href="#WMS_GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="DAILY_MODIS_IMAGERY">
+            <name>Daily Modis Imagery (Flat)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <name>Daily Modis WMS</name>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://onearth.jpl.nasa.gov/wms.cgi</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">daily_planet</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style xlink:href="#WMS_RGB_STYLE"/>
+            <style xlink:href="#WMS_GRID_BORDER"/>
+         </DataItem>
+      </member>
+   </DataList>
+   <DataList id="MAPS_3D">
+      <name>3D Base Maps</name>
+      <member visible="false">
+         <DataItem id="MS_ROADS_DEM">
+            <name>MS Roads Imagery (DEM)</name>
+            <dataProvider>
+               <VirtualEarthProvider>
+                  <name>World Roads</name>
+                  <layerId>roads</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </VirtualEarthProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="RGB_STYLE_3D">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style>
+               <sld:GridBorderSymbolizer enabled="false" id="GRID_BORDER_3D">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/row</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry>
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
                      <sld:CssParameter name="geometry-z">
-                        <ogc:PropertyName>gridData/grid/row/point/alt</ogc:PropertyName>
+                        <ogc:PropertyName>grid/row/point/alt</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
-                     <sld:CssParameter name="stroke">#CCCCCC</sld:CssParameter>
+                     <sld:CssParameter name="stroke">#cccccc</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
                   </sld:Stroke>
                </sld:GridBorderSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="MS_IMAGERY_DEM">
+            <name>MS Aerial Imagery (DEM)</name>
+            <dataProvider>
+               <VirtualEarthProvider>
+                  <name>World Imagery</name>
+                  <layerId>aerial</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </VirtualEarthProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="BGR_STYLE_3D">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="MS_HYBRID_DEM">
+            <name>MS Hybrid Imagery (DEM)</name>
+            <dataProvider>
+               <VirtualEarthProvider>
+                  <name>World Imagery</name>
+                  <layerId>hybrid</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </VirtualEarthProvider>
+            </dataProvider>
+            <style xlink:href="#BGR_STYLE_3D"/>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="GOOGLE_IMAGERY_DEM">
+            <name>Google Imagery (DEM)</name>
+            <dataProvider>
+               <GoogleMapProvider>
+                  <name>Google Imagery</name>
+                  <layerId>satellite</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style xlink:href="#BGR_STYLE_3D"/>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="GOOGLE_MAPS_DEM">
+            <name>Google Maps (DEM)</name>
+            <dataProvider>
+               <GoogleMapProvider>
+                  <name>Google Maps</name>
+                  <layerId>map</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style xlink:href="#RGB_STYLE_3D"/>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="GOOGLE_ROADS_DEM">
+            <name>Google Roads (DEM)</name>
+            <dataProvider>
+               <GoogleMapProvider>
+                  <name>Google Maps</name>
+                  <layerId>roads</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </GoogleMapProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer id="RGBA_STYLE_3D" enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/row/point/lon</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/row/point/lat</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/row/point/alt</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>image/row/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                        <sld:AlphaChannel>
+                           <sld:SourceChannelName>image/row/pixel/alpha</sld:SourceChannelName>
+                        </sld:AlphaChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="WORLDWIND_IMAGERY_DEM">
+            <name>Worldwind Imagery (DEM)</name>
+            <dataProvider>
+               <WorldwindProvider>
+                  <name>Worldwind Imagery</name>
+                  <layerId>roads</layerId>
+                  <useDEM>true</useDEM>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+               </WorldwindProvider>
+            </dataProvider>
+            <style xlink:href="#RGB_STYLE_3D"/>
+            <style xlink:href="#GRID_BORDER_3D"/>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem id="BLUE_MARBLE_NG_IMAGERY_DEM">
+            <name>Blue Marble NG (DEM)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <name>Blue Marble WMS + SRTM WCS</name>
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_SRTM_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://terraservice.net/ogcmap.ashx</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">DOQ</value>                  
+                  <value process="wcsProcess" path="wcsOptions/endPoint">http://vast.uah.edu/vastGC/srtm</value>
+                  <value process="wcsProcess" path="wcsOptions/coverage">SRTM</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>gridData/coverage/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>gridData/coverage</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry>
+                        <sld:CssParameter name="geometry-x">
+                           <LinearAdjustment>
+                              <ogc:PropertyName>gridData/coverage/row/point/longitude</ogc:PropertyName>
+                              <Gain>0.017453292519943295769236907684886</Gain>
+                           </LinearAdjustment>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <LinearAdjustment>
+                              <ogc:PropertyName>gridData/coverage/row/point/latitude</ogc:PropertyName>
+                              <Gain>0.017453292519943295769236907684886</Gain>
+                           </LinearAdjustment>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>gridData/coverage/row/point/elevation</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>imageData/image/row</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>imageData/image</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>imageData/image/row/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>imageData/image/row/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>imageData/image/row/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
             </style>
          </DataItem>
       </member>
