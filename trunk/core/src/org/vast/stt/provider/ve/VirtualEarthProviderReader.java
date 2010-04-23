@@ -27,16 +27,15 @@ package org.vast.stt.provider.ve;
 
 import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
-import org.vast.stt.project.XMLReader;
+import org.vast.stt.provider.tiling.TiledMapProviderReader;
 import org.w3c.dom.Element;
 
 
-public class VirtualEarthProviderReader extends XMLReader implements XMLModuleReader
+public class VirtualEarthProviderReader extends TiledMapProviderReader implements XMLModuleReader
 {
 
     public VirtualEarthProviderReader()
     {
-
     }
 
 
@@ -47,6 +46,8 @@ public class VirtualEarthProviderReader extends XMLReader implements XMLModuleRe
         String layerId = dom.getElementValue(providerElt, "layerId");
         if (layerId != null)
             ((VirtualEarthProvider)provider).setLayer(layerId);
+        
+        super.readTiledMapOptions(dom, providerElt, provider);
         
         return provider;
     }

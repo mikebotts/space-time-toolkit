@@ -50,12 +50,15 @@ public abstract class TiledMapProvider extends AbstractProvider
 {
     protected Log log = LogFactory.getLog(TiledMapProvider.class);
     
-    protected final static double DTR = Math.PI/180;
+    protected final static double DTR = Math.PI/180.;
+    protected final static double RTD = 180./Math.PI;
+    
     protected double fixedAltitude = 0.0;
     protected QuadTree quadTree;
     protected BlockList[] blockLists = new BlockList[2]; // 0 for imagery, 1 for grid
     protected DataArray gridData;
     protected boolean useAlpha = false;
+    protected boolean useDEM = false;
     protected SpatialExtent maxBbox;
     protected TiledMapSelector tileSelector;
     protected LinkedList<QuadTreeItem> itemsToLoad;
@@ -213,6 +216,9 @@ public abstract class TiledMapProvider extends AbstractProvider
         pointData.setName("point");
         pointData.addComponent("lat", new DataValue(DataType.FLOAT));
         pointData.addComponent("lon", new DataValue(DataType.FLOAT));
+        if (useDEM)
+            pointData.addComponent("alt", new DataValue(DataType.FLOAT));
+        
         rowData = new DataArray(10);
         rowData.addComponent(pointData);
         rowData.setName("row");
@@ -376,5 +382,17 @@ public abstract class TiledMapProvider extends AbstractProvider
     public boolean isTimeSubsetSupported()
     {
         return false;
+    }
+    
+    
+    public boolean isUseDEM()
+    {
+        return useDEM;
+    }
+    
+    
+    public void setUseDEM(boolean useDEM)
+    {
+        this.useDEM = useDEM;
     }
 }

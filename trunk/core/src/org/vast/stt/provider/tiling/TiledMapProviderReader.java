@@ -23,32 +23,26 @@
  
 ******************************* END LICENSE BLOCK ***************************/
 
-package org.vast.sttx.provider.worldwind;
+package org.vast.stt.provider.tiling;
 
 import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
-import org.vast.stt.provider.tiling.TiledMapProviderReader;
+import org.vast.stt.project.XMLReader;
 import org.w3c.dom.Element;
 
 
-public class WorldwindMapProviderReader extends TiledMapProviderReader implements XMLModuleReader
+public abstract class TiledMapProviderReader extends XMLReader implements XMLModuleReader
 {
 
-    public WorldwindMapProviderReader()
+    public TiledMapProviderReader()
     {
     }
 
 
-    public Object read(DOMHelper dom, Element providerElt)
+    protected void readTiledMapOptions(DOMHelper dom, Element providerElt, TiledMapProvider provider)
     {
-        WorldwindMapProvider provider = new WorldwindMapProvider();
-        
-        String layerId = dom.getElementValue(providerElt, "layerId");
-        if (layerId != null)
-            ((WorldwindMapProvider)provider).setLayer(layerId);
-        
-        super.readTiledMapOptions(dom, providerElt, provider);
-        
-        return provider;
+        String useDEM = dom.getElementValue(providerElt, "useDEM");
+        if (useDEM != null && useDEM.equalsIgnoreCase("true"))
+            provider.setUseDEM(true);
     }
 }

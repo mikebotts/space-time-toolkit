@@ -169,6 +169,20 @@ public class ViewSettings implements STTEventProducer
 	{
 		this.cameraPos = cameraPos;
 	}
+	
+	
+	public double getCameraDistance()
+	{
+	    Vector3d diff = targetPos.copy();
+	    diff.subtract(cameraPos);
+	    return diff.length();
+	}
+	
+	
+	public double getCameraIncidence()
+	{
+	    return projection.getCameraIncidence(this);
+	}
 
 
 	public double getFarClip()

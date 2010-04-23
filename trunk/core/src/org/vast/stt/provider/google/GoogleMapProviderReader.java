@@ -27,16 +27,15 @@ package org.vast.stt.provider.google;
 
 import org.vast.xml.DOMHelper;
 import org.vast.stt.project.XMLModuleReader;
-import org.vast.stt.project.XMLReader;
+import org.vast.stt.provider.tiling.TiledMapProviderReader;
 import org.w3c.dom.Element;
 
 
-public class GoogleMapProviderReader extends XMLReader implements XMLModuleReader
+public class GoogleMapProviderReader extends TiledMapProviderReader implements XMLModuleReader
 {
 
     public GoogleMapProviderReader()
     {
-
     }
 
 
@@ -47,6 +46,8 @@ public class GoogleMapProviderReader extends XMLReader implements XMLModuleReade
         String layerId = dom.getElementValue(providerElt, "layerId");
         if (layerId != null)
             ((GoogleMapProvider)provider).setLayer(layerId);
+        
+        super.readTiledMapOptions(dom, providerElt, provider);
         
         return provider;
     }
