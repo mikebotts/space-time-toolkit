@@ -40,6 +40,7 @@ import org.vast.stt.project.feedback.FeedbackEventListener;
 import org.vast.stt.project.feedback.FeedbackEvent.FeedbackType;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.Projection;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.stt.project.world.WorldSceneRenderer;
 import org.vast.stt.project.world.Projection.Crs;
@@ -281,7 +282,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		rightButtonDown = false;
 		midButtonDown = false;
 		resizing = false;
-		dragged = false;        
+		dragged = false;
 
 		((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 	}
@@ -293,31 +294,45 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 		int viewHeight = scene.getRenderer().getViewHeight();
 		e.y = viewHeight - e.y;
-		
-		//reportLLTemp(e.x,e.y);
+		ViewSettings viewSettings = scene.getViewSettings();
 		
 		if (leftButtonDown)
 		{
 			((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-			scene.getCameraController().doLeftDrag(xOld, yOld, e.x, e.y);
-			xOld = e.x;
-			yOld = e.y;
+			
+			synchronized(viewSettings)
+            {
+			    scene.getCameraController().doLeftDrag(xOld, yOld, e.x, e.y);
+            }
+			
+    		xOld = e.x;
+    		yOld = e.y;
 			updateView();
 		}
 
 		else if (rightButtonDown)
 		{
-			((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-			scene.getCameraController().doRightDrag(xOld, yOld, e.x, e.y);
-			xOld = e.x;
-			yOld = e.y;
+		    ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+		    
+		    synchronized(viewSettings)
+            {
+                scene.getCameraController().doRightDrag(xOld, yOld, e.x, e.y);
+            }
+		    
+            xOld = e.x;
+            yOld = e.y;
 			updateView();
 		}
 
 		else if (midButtonDown)
 		{
-			((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
-			scene.getCameraController().doMiddleDrag(xOld, yOld, e.x, e.y);
+		    ((Control) e.widget).setCursor(e.widget.getDisplay().getSystemCursor(SWT.CURSOR_SIZEALL));
+			
+		    synchronized(viewSettings)
+            {
+		        scene.getCameraController().doMiddleDrag(xOld, yOld, e.x, e.y);
+            }
+		    
 			xOld = e.x;
 			yOld = e.y;
 			updateView();

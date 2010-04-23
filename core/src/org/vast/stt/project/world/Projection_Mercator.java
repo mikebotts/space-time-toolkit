@@ -55,7 +55,7 @@ public class Projection_Mercator implements Projection
     protected final static double RTD = 180 / Math.PI;
     
     protected double centerLongitude = 0.0;
-    protected double altitudeDamping = 1e-6;
+    protected double altitudeDamping = 1./6378137.;
     protected double xSav = Double.NaN;
     protected double ySav = Double.NaN;
     protected Vector3d tempPoint = new Vector3d();
@@ -185,27 +185,26 @@ public class Projection_Mercator implements Projection
     {
         ViewSettings view = scene.getViewSettings();
         
-        // compute bbox 3D diagonal distance
-        double dist = bbox.getDiagonalDistance();
-        
         // change camera target to center of bbox on XY plane       
         Vector3d center = bbox.getCenter();
-        center.z = 0.0;
-        view.setTargetPos(center);
+        view.getTargetPos().x = center.x;
+        view.getTargetPos().y = center.y;
         
         // change camera pos
-        Vector3d newCameraPos = new Vector3d(center.x, center.y, dist*10);
-        view.setCameraPos(newCameraPos);
+        double dist = view.getCameraDistance();
+        view.getCameraPos().x = center.x;
+        view.getCameraPos().y = center.y;
+        view.getCameraPos().z = dist;
         
-        // change camera up direction
-        view.getUpDirection().set(0, 1, 0);
-        
-        // adjust z range        
-        if (adjustZRange)
+        // adjust z range and camera distance
+        /*if (adjustZRange)
         {
             view.setFarClip(dist*20);
             view.setNearClip(dist);
-        }
+        }*/
+        
+        // change camera up direction
+        view.getUpDirection().set(0, 1, 0);
                 
         // get dimensions of projection of bbox
         double dx = Math.abs(bbox.getMaxX() - bbox.getMinX());
@@ -277,10 +276,11 @@ public class Projection_Mercator implements Projection
         Vector3d viewDir = view.getTargetPos().copy();
         viewDir.sub(view.getCameraPos());
         
-        double s = -pos.z / viewDir.z;
+        double groundZ = view.getTargetPos().z;
+        double s = (groundZ - pos.z) / viewDir.z;
         pos.x += viewDir.x * s;
         pos.y += viewDir.y * s;
-        pos.z = 0.0;
+        pos.z = groundZ;
         
         if (pos.x > getMaxX() || pos.x < getMinX())
             return false;
@@ -289,6 +289,15 @@ public class Projection_Mercator implements Projection
             return false;
 
         return true;
+    }
+    
+    
+    public double getCameraIncidence(ViewSettings viewSettings)
+    {
+        Vector3d look = viewSettings.getCameraPos().copy();
+        look.sub(viewSettings.getTargetPos());
+        look.normalize();
+        return Math.atan2(look.z, Math.sqrt(look.x*look.x + look.y*look.y));
     }
     
     

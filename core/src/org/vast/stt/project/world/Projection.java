@@ -76,6 +76,9 @@ public interface Projection
     public boolean pointOnMap(int x, int y, WorldScene scene, Vector3d pos);
     
     
+    public double getCameraIncidence(ViewSettings viewSettings);
+    
+    
     public MotionConstraint getDefaultTranslationConstraint();
     
     

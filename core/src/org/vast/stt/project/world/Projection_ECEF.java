@@ -244,6 +244,17 @@ public class Projection_ECEF implements Projection
     }
     
     
+    public double getCameraIncidence(ViewSettings viewSettings)
+    {
+        Vector3d look = viewSettings.getCameraPos().copy();
+        look.sub(viewSettings.getTargetPos());
+        look.normalize();        
+        Vector3d normal = viewSettings.getTargetPos().copy();
+        normal.normalize();
+        return Math.acos(look.dot(normal));
+    }
+    
+    
     public Vector3d getDefaultCameraUpDirection(Vector3d targetPos)
     {
         // get the up vector so that the earth z is going up on the screen

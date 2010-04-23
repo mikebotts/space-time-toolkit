@@ -25,9 +25,11 @@
 
 package org.vast.stt.dynamics;
 
+import org.vast.math.Vector3d;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
+import org.vast.stt.project.world.ViewSettings;
 import org.vast.stt.project.world.WorldScene;
 
 
@@ -69,12 +71,30 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
     
     public void update()
     {
-        scene.getViewSettings().getProjection().fitBboxToView(spatialExtent, scene);
+        double tiltFactor = 1.;
+        
+        //synchronized (scene.getViewSettings())
+        {
+            ViewSettings viewSettings = scene.getViewSettings();
+            viewSettings.getProjection().fitBboxToView(spatialExtent, scene);
+            
+            // compute factor to increase the number of tiles when view is tilted
+            Vector3d diff = viewSettings.getCameraPos().copy();
+            diff.sub(viewSettings.getTargetPos());
+            diff.normalize();
+            if (diff.z != 0)
+            {
+                tiltFactor = 1. / diff.z;
+                tiltFactor = Math.min(tiltFactor, 2);
+            }
+            
+            tiltFactor *= 1.1;
+        }
         
         if (spatialExtent.isTilingEnabled())
         {
-            spatialExtent.setXTiles((float)scene.getRenderer().getViewWidth() / (float)tileSizeX);
-            spatialExtent.setYTiles((float)scene.getRenderer().getViewHeight() / (float)tileSizeY);
+            spatialExtent.setXTiles((float)scene.getRenderer().getViewWidth() / (float)tileSizeX * (float)tiltFactor);
+            spatialExtent.setYTiles((float)scene.getRenderer().getViewHeight() / (float)tileSizeY * (float)tiltFactor);
         }
     }
     
@@ -93,7 +113,7 @@ public class SceneBboxUpdater extends SpatialExtentUpdater implements STTEventLi
             case SCENE_VIEW_CHANGED:
                 if (enabled)
                 {
-                	update();
+                    update();
                 	spatialExtent.dispatchEvent(new STTEvent(spatialExtent, EventType.SPATIAL_EXTENT_CHANGED), true);
                 }
                 break;

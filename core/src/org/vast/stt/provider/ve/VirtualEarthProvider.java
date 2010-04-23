@@ -32,6 +32,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+import org.sensorML.process.SRTMUtil;
 import org.vast.data.AbstractDataBlock;
 import org.vast.data.DataBlockFactory;
 import org.vast.stt.data.BlockListItem;
@@ -67,7 +68,7 @@ public class VirtualEarthProvider extends TiledMapProvider
     
     public VirtualEarthProvider()
     {
-        super(256, 256, 19);
+        super(256, 256, 18);
                 
         // set quad tree root extent (= max request)
         maxBbox = new SpatialExtent();
@@ -170,9 +171,11 @@ public class VirtualEarthProvider extends TiledMapProvider
             double maxX = item.getMaxX();
             double dX = (maxX - minX) / (gridWidth-1);
             double dY = (maxY - minY) / (gridLength-1);
-            AbstractDataBlock gridBlock = DataBlockFactory.createBlock(new double[gridLength*gridWidth*2]);
+            int numCoords = useDEM ? 3 : 2;
+            AbstractDataBlock gridBlock = DataBlockFactory.createBlock(new double[gridLength*gridWidth*numCoords]);
             
             // compute data for grid block
+            SRTMUtil srtm = new SRTMUtil();
             int valCount = 0;
             for (int v=0; v<gridLength; v++)
             {
@@ -182,9 +185,19 @@ public class VirtualEarthProvider extends TiledMapProvider
                     double y = maxY - dY * v;
                     
                     // write lat and lon value
-                    gridBlock.setDoubleValue(valCount, yToLat(y));
-                    gridBlock.setDoubleValue(valCount+1, x);
-                    valCount += 2;
+                    double lat = yToLat(y);
+                    double lon = x;
+                    gridBlock.setDoubleValue(valCount, lat);
+                    gridBlock.setDoubleValue(valCount+1, lon);
+                    
+                    // get altitude from SRTM if selected
+                    if (useDEM)
+                    {
+                        double alt = srtm.getInterpolatedElevation(lat*RTD, lon*RTD);                    
+                        gridBlock.setDoubleValue(valCount+2, alt);                        
+                    }
+                    
+                    valCount += numCoords;
                 }
             }
             
