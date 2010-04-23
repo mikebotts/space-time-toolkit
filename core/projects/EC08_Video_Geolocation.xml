@@ -13,7 +13,8 @@
             <name>Empire Challenge 08</name>
             <time>
                <TimeExtent>
-                  <baseTime>2008-07-24T15:44:18</baseTime>
+                  <!--<baseTime>2008-07-24T15:44:18</baseTime>-->
+                  <baseTime>2008-07-21T17:39:00Z</baseTime>
                   <lagTime>10</lagTime>
                   <leadTime>10</leadTime>
                   <stepTime>0</stepTime>
@@ -40,7 +41,7 @@
                   <member xlink:href="./BaseLayers.xml#MAPS"/>
                   <member xlink:href="./BaseLayers.xml#MAPS_3D"/>
                   <member xlink:href="./EC08/ERDASwithCSM.xml#ERDASwithCSM"/>
-                  <!--<member xlink:href="./ScanEagle/ScanEagle_DataItems.xml#SCAN_EAGLE_FOLDER"/>-->
+                  <member xlink:href="./ScanEagle/ScanEagle_DataItems.xml#SCAN_EAGLE_FOLDER"/>
                </DataList>
             </contents>
          </Scene>
