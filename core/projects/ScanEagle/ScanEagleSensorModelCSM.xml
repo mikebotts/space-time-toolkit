@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0.1" xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0.1 http://schemas.opengis.net/sensorML/1.0.1/sensorML.xsd" version="1.0.1">
+   <sml:member>
+      <sml:ProcessChain gml:id="GEOLOCATION">
+         <gml:description>This process chain computes Scan Eagle look vectors and sensor position in ECEF.</gml:description>
+         <gml:name>Scan Eagle Geolocation</gml:name>
+         <!-- -->
+         <sml:inputs>
+            <sml:InputList>
+               <sml:input name="pixelGridCoordinates">
+                  <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:CSM:1.0:PixelGridCRS">
+                     <gml:name>Pixel Coordinates</gml:name>
+                     <swe:coordinate name="r">
+                        <swe:Quantity axisID="Y">
+                           <swe:uom xlink:href="urn:ogc:def:unit:CSM:1.0:Pixel"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="c">
+                        <swe:Quantity axisID="X">
+                           <swe:uom xlink:href="urn:ogc:def:unit:CSM:1.0:Pixel"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:input>               
+            </sml:InputList>
+         </sml:inputs>
+         <sml:outputs>
+            <sml:OutputList>
+               <sml:output name="ECEFLocation">
+                  <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:OGC::ECEF_WGS84">
+                     <gml:name>Look Origin</gml:name>
+                     <swe:coordinate name="x">
+                        <swe:Quantity axisID="X">
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="y">
+                        <swe:Quantity axisID="Y">
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="z">
+                        <swe:Quantity axisID="Z">
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:output>
+               <sml:output name="ECEFViewVector">
+                  <swe:Vector definition="urn:ogc:def:property:CSM:1.0:DirectionVector" referenceFrame="urn:ogc:def:crs:OGC::ECEF_WGS84">
+                     <gml:name>Look Vector</gml:name>
+                     <swe:coordinate name="x">
+                        <swe:Quantity axisID="X">
+                           <swe:uom code="1"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="y">
+                        <swe:Quantity axisID="Y">
+                           <swe:uom code="1"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="z">
+                        <swe:Quantity axisID="Z">
+                           <swe:uom code="1"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:output>
+            </sml:OutputList>
+         </sml:outputs>
+         <sml:parameters>
+            <sml:ParameterList>
+               <sml:parameter name="platformLocation">
+                  <swe:Vector definition="urn:ogc:def:property:CSM:1.0:PLATFORM_LOCATION" referenceFrame="urn:ogc:def:crs:EPSG:6.9:4979">
+                     <gml:name>Platform Location</gml:name>
+                     <swe:coordinate name="lat">
+                        <swe:Quantity definition="urn:ogc:property:OGC::GeodeticLatitude" axisID="Lat">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="lon">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Longitude" axisID="Long">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="alt">
+                        <swe:Quantity definition="urn:ogc:property:OGC::HeightAboveEllipsoid" axisID="h">
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:parameter>
+               <sml:parameter name="platformAttitude">
+                  <swe:Vector definition="urn:ogc:def:property:CSM:1.0:PLATFORM_ATTITUDE" referenceFrame="urn:ogc:def:crs:OGC::ENU">
+                     <gml:name>Platform Attitude</gml:name>
+                     <swe:coordinate name="trueHeading">
+                        <swe:Quantity definition="urn:ogc:property:OGC::AngleToNorth" axisID="Z">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="pitch">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Pitch" axisID="X">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="roll">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Roll" axisID="Y">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:parameter>
+               <sml:parameter name="sensorLocation">
+                  <swe:Vector definition="urn:ogc:def:property:CSM:1.0:SENSOR_LOCATION" referenceFrame="urn:ogc:def:crs:OGC::PlatformFrame">
+                     <gml:name>Sensor Location</gml:name>
+                     <swe:coordinate name="x">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Distance" axisID="X">
+                           <swe:uom code="m"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="y">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Distance" axisID="Y">
+                           <swe:uom code="m"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="z">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Distance" axisID="Z">
+                           <swe:uom code="m"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:parameter>
+               <sml:parameter name="sensorAttitude">
+                  <swe:Vector definition="urn:ogc:def:property:CSM:1.0:SENSOR_ATTITUDE" referenceFrame="urn:ogc:def:crs:OGC::PlatformFrame">
+                     <gml:name>Sensor Attitude</gml:name>
+                     <swe:coordinate name="heading">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Angle" axisID="Z">
+                           <swe:uom code="deg"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="pitch">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Angle" axisID="X">
+                           <swe:uom code="deg"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                     <swe:coordinate name="roll">
+                        <swe:Quantity definition="urn:ogc:property:OGC::Angle" axisID="Y">
+                           <swe:uom code="deg"/>
+                           <swe:value>0.0</swe:value>
+                        </swe:Quantity>
+                     </swe:coordinate>
+                  </swe:Vector>
+               </sml:parameter>
+               <sml:parameter name="focalLength">
+                  <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:FOCAL_LENGTH">
+                     <swe:uom code="mm"/>
+                     <swe:value>50.0</swe:value>
+                  </swe:Quantity>
+               </sml:parameter>
+            </sml:ParameterList>
+         </sml:parameters>
+         <sml:components>
+            <sml:ComponentList>
+               <!-- CSM sensor view vector model -->
+               <sml:component name="csm">
+                  <sml:ProcessModel>
+                     <gml:description>CSM Frame Sensor Model for the EO-Zoom camera</gml:description>
+                     <gml:name>EO-Zoom Sensor Model</gml:name>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="pixelGridCoordinates">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:CSM:1.0:PixelGridCRS">
+                                 <gml:name>Pixel Coordinates</gml:name>
+                                 <swe:coordinate name="r">
+                                    <swe:Quantity axisID="Y">
+                                       <swe:uom xlink:href="urn:ogc:def:unit:CSM:1.0:Pixel"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="c">
+                                    <swe:Quantity axisID="X">
+                                       <swe:uom xlink:href="urn:ogc:def:unit:CSM:1.0:Pixel"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="viewVector">
+                              <swe:Vector definition="urn:ogc:def:property:CSM:1.0:LookVector" referenceFrame="urn:ogc:def:crs:OGC::SensorFrame">
+                                 <gml:name>Look Vector</gml:name>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity axisID="X">
+                                       <swe:uom code="1"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity axisID="Y">
+                                       <swe:uom code="1"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity axisID="Z">
+                                       <swe:uom code="1"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="focalLength">
+                              <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:FOCAL_LENGTH">
+                                 <swe:uom code="mm"/>
+                                 <swe:quality>
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::StandardError">
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:quality>
+                               <swe:value>50.0</swe:value>
+                              </swe:Quantity>
+                           </sml:parameter>
+                           <sml:parameter name="pixelGridCharacteristics">
+                              <swe:DataRecord>
+                                 <swe:field name="numberOfRowsInImage">
+                                    <swe:Count definition="urn:ogc:def:property:CSM:1.0:NROWS">
+                                       <swe:value>480</swe:value>
+                                    </swe:Count>
+                                 </swe:field>
+                                 <swe:field name="numberOfColumnsInImage">
+                                    <swe:Count definition="urn:ogc:def:property:CSM:1.0:NCOLS">
+                                       <swe:value>720</swe:value>
+                                    </swe:Count>
+                                 </swe:field>
+                                 <swe:field name="rowSpacing">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:ROW_SPACING">
+                                       <swe:uom code="mm"/>
+                                       <swe:value>1.398577e-5</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="columnSpacing">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:COL_SPACING">
+                                       <swe:uom code="mm"/>
+                                       <swe:value>1.2615438e-5</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                           <sml:parameter name="principalPointCoordinates">
+                              <swe:Vector referenceFrame="urn:ogc:def:crs:CSM:1.0:ImagePlaneCRS">
+                                 <swe:coordinate name="x0">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:PRIN_OFFSETX">
+                                       <swe:uom code="mm"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y0">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:PRIN_OFFSETY">
+                                       <swe:uom code="mm"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>                                       
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:parameter>
+                           <sml:parameter name="affineDistortionCoefficients">
+                              <swe:DataRecord>
+                                 <swe:field name="a1">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_A1">
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="b1">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_B1">
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>1.419e-016</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="c1">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_C1">
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="a2">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_A2">
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="b2">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_B2">
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="c2">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_C2">
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                           <sml:parameter name="radialDistortionCoefficients">
+                              <swe:DataRecord>
+                                 <swe:field name="k1">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_RAD1">
+                                       <swe:uom code="mm-2"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="k2">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_RAD2">
+                                       <swe:uom code="mm-2"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="k3">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DISTOR_RAD3">
+                                       <swe:uom code="mm-2"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                           <sml:parameter name="decenteringCoefficients">
+                              <swe:DataRecord>
+                                 <swe:field name="p1">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DECEN_LENS1">
+                                       <swe:uom code="mm-1"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                                 <swe:field name="p2">
+                                    <swe:Quantity definition="urn:ogc:def:property:CSM:1.0:DECEN_LENS2">
+                                       <swe:uom code="mm-1"/>
+                                       <swe:quality>
+                                          <swe:Quantity
+                                             definition="urn:ogc:def:property:OGC::StandardError">
+                                             <swe:value>0.0</swe:value>
+                                          </swe:Quantity>
+                                       </swe:quality>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:field>
+                              </swe:DataRecord>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:ogc:def:process:CSM:1.0:FrameSensorModel"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder Sensor to Platform -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilder_SensorToPlatform">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="orientation">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::OrientationVector">
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>                                 
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:pos2Matrix3:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Transform vectors from sensor to platform -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="SensorToPlatform">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder Platform to ENU -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilder_PlatformToENU">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="orientation">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::OrientationVector">
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>                                 
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:pos2Matrix3:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Transform vectors from platform to ENU -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="PlatformToENU">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder ENU to ECEF  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilder_ENUToECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="location">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:EPSG:6.9:4326">
+                                 <swe:coordinate name="longitude">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle" axisID="Long">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="latitude">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Angle" axisID="Lat">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:ENUPointing3:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Transform vectors from ENU to ECEF -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="ENUToECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:property:OGC::RotationMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector>
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- LLA to ECEF -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="LLAtoECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="LLA_location">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:EPSG:6.9:4979">
+                                 <swe:coordinate name="latitude">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::GeodeticLatitude" axisID="Lat">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="longitude">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Longitude" axisID="Long">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="altitude">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::HeightAboveEllipsoid" axisID="h">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="ECEF_location">
+                              <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:OGC::ECEF_WGS84">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:property:OGC::Distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:LLAtoECEF:2.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+            </sml:ComponentList>
+         </sml:components>
+         <!--~~~~~~~~~~~~~-->
+         <!-- Connections -->
+         <!--~~~~~~~~~~~~~-->
+         <sml:connections>
+            <sml:ConnectionList>
+               <!-- CSM sensor model -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/pixelGridCoordinates/r"/>
+                     <sml:destination ref="csm/inputs/pixelGridCoordinates/r"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/pixelGridCoordinates/c"/>
+                     <sml:destination ref="csm/inputs/pixelGridCoordinates/c"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/focalLength"/>
+                     <sml:destination ref="csm/parameters/focalLength"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="csm/outputs/viewVector"/>
+                     <sml:destination ref="SensorToPlatform/inputs/vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- sensor to platform -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/sensorAttitude/roll"/>
+                     <sml:destination ref="MatrixBuilder_SensorToPlatform/inputs/orientation/y"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/sensorAttitude/pitch"/>
+                     <sml:destination ref="MatrixBuilder_SensorToPlatform/inputs/orientation/x"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/sensorAttitude/heading"/>
+                     <sml:destination ref="MatrixBuilder_SensorToPlatform/inputs/orientation/z"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilder_SensorToPlatform/outputs/posMatrix"/>
+                     <sml:destination ref="SensorToPlatform/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="SensorToPlatform/outputs/newVector"/>
+                     <sml:destination ref="PlatformToENU/inputs/vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- platform to ENU -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformAttitude/roll"/>
+                     <sml:destination ref="MatrixBuilder_PlatformToENU/inputs/orientation/y"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformAttitude/pitch"/>
+                     <sml:destination ref="MatrixBuilder_PlatformToENU/inputs/orientation/x"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformAttitude/trueHeading"/>
+                     <sml:destination ref="MatrixBuilder_PlatformToENU/inputs/orientation/z"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilder_PlatformToENU/outputs/posMatrix"/>
+                     <sml:destination ref="PlatformToENU/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="PlatformToENU/outputs/newVector"/>
+                     <sml:destination ref="ENUToECEF/inputs/vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- ENU to ECEF -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformLocation/latitude"/>
+                     <sml:destination ref="MatrixBuilder_ENUToECEF/inputs/location/latitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformLocation/longitude"/>
+                     <sml:destination ref="MatrixBuilder_ENUToECEF/inputs/location/longitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilder_ENUToECEF/outputs/posMatrix"/>
+                     <sml:destination ref="ENUToECEF/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="ENUToECEF/outputs/newVector"/>
+                     <sml:destination ref="this/outputs/ECEFViewVector"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- LLA to ECEF -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformLocation/latitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/latitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformLocation/longitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/longitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/parameters/platformLocation/altitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/altitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="LLAtoECEF/outputs/ECEFLocation"/>
+                     <sml:destination ref="this/outputs/ECEFlocation"/>
+                  </sml:Link>
+               </sml:connection>
+            </sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>
