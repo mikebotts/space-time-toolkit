@@ -10,11 +10,11 @@
             <name>Scan Eagle Track</name>
             <dataProvider>
                <SensorMLProvider>
-                  <timeExtent autoUpdate="#SCENE_01">
+                  <timeExtent> <!-- autoUpdate="#SCENE_01"> -->
                      <TimeExtent id="SCAN_EAGLE_TIME">
-                        <baseTime>2008-07-21T17:39:23</baseTime>
-                        <leadTime>10</leadTime>
-                        <lagTime>10</lagTime>
+                        <baseTime>2008-07-24T17:23:15.300Z</baseTime>
+                        <leadTime>20</leadTime>
+                        <lagTime>0</lagTime>
                         <stepTime>0</stepTime>
                      </TimeExtent>
                   </timeExtent>
@@ -42,7 +42,6 @@
             </style>
          </DataItem>
       </member>
-      <!--
       <member visible="false">
          <DataItem>
             <name>EO-Zoom Lookrays</name>
@@ -117,21 +116,21 @@
                <sld:GridFillSymbolizer enabled="false">
                   <sld:Dimensions>
                      <sld:Axis name="width">
-                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        <ogc:PropertyName>grid</ogc:PropertyName>
                      </sld:Axis>
                      <sld:Axis name="length">
-                        <ogc:PropertyName>grid</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints</ogc:PropertyName>
                      </sld:Axis>
                   </sld:Dimensions>
                   <sld:Geometry srsName="ECEF">
                      <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/x</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/y</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-z">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/z</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Fill>
@@ -144,21 +143,21 @@
                <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
                   <sld:Dimensions>
                      <sld:Axis name="width">
-                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        <ogc:PropertyName>grid</ogc:PropertyName>
                      </sld:Axis>
                      <sld:Axis name="length">
-                        <ogc:PropertyName>grid</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints</ogc:PropertyName>
                      </sld:Axis>
                   </sld:Dimensions>
                   <sld:Geometry srsName="ECEF">
                      <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/x</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/y</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-z">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/z</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
@@ -171,21 +170,21 @@
                <sld:GridMeshSymbolizer id="GRID_MESH" enabled="false">
                   <sld:Dimensions>
                      <sld:Axis name="width">
-                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        <ogc:PropertyName>grid</ogc:PropertyName>
                      </sld:Axis>
                      <sld:Axis name="length">
-                        <ogc:PropertyName>grid</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints</ogc:PropertyName>
                      </sld:Axis>
                   </sld:Dimensions>
                   <sld:Geometry srsName="ECEF">
                      <sld:CssParameter name="geometry-x">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/x</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-y">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/y</ogc:PropertyName>
                      </sld:CssParameter>
                      <sld:CssParameter name="geometry-z">
-                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/z</ogc:PropertyName>
                      </sld:CssParameter>
                   </sld:Geometry>
                   <sld:Stroke>
@@ -198,9 +197,52 @@
       </member>
       <member visible="false">
          <DataItem>
+            <name>EO-Zoom Footprint (Server)</name>
+            <dataProvider>
+               <OWSDataProvider>
+                  <layerId>SCAN_EAGLE_FOOTPRINT</layerId>
+                  <request postUrl="http://www.botts-inc.com:8080/ScanEagleSos/sos">
+                     <GetObservation service="SOS" version="1.0">
+                        <offering>SCAN_EAGLE_FOOTPRINT</offering>
+                        <eventTime>
+                           <ogc:TM_During>
+                              <ogc:PropertyName>om:samplingTime</ogc:PropertyName>
+                              <gml:TimePeriod>
+                                 <gml:beginPosition>2008-07-24T17:23:15Z</gml:beginPosition>
+                                 <gml:endPosition>2008-07-24T17:23:35Z</gml:endPosition>
+                              </gml:TimePeriod>
+                           </ogc:TM_During>
+                        </eventTime>
+                        <observedProperty>urn:ogc:def:property:OGC::GeoPositioningData</observedProperty>
+                        <responseFormat>application/om+xml</responseFormat>
+                        <resultModel>swe:DataValueType</resultModel>
+                     </GetObservation>
+                  </request>
+               </OWSDataProvider>
+            </dataProvider>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="LLA">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>navigation/frame_corners/ground_point/long</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>navigation/frame_corners/ground_point/lat</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
             <name>EO-Zoom Frame Imagery</name>
             <dataProvider>
-               <SensorMLProvider>
+               <SensorMLProvider dataPersistency="1">
                   <timeExtent xlink:href="#SCAN_EAGLE_TIME"/>                  
                   <process xlink:href="./ScanEagleVideoFrames_Process.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
@@ -210,50 +252,76 @@
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
-                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                           <ogc:PropertyName>grid</ogc:PropertyName>
                         </sld:Axis>
                         <sld:Axis name="length">
-                           <ogc:PropertyName>grid</ogc:PropertyName>
+                           <ogc:PropertyName>grid/alongTrackPoints</ogc:PropertyName>
                         </sld:Axis>
                      </sld:Dimensions>
                      <sld:Geometry srsName="ECEF">
                         <sld:CssParameter name="geometry-x">
-                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                           <ogc:PropertyName>grid/alongTrackPoints/groundPoint/x</ogc:PropertyName>
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-y">
-                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                           <ogc:PropertyName>grid/alongTrackPoints/groundPoint/y</ogc:PropertyName>
                         </sld:CssParameter>
                         <sld:CssParameter name="geometry-z">
-                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                           <ogc:PropertyName>grid/alongTrackPoints/groundPoint/z</ogc:PropertyName>
                         </sld:CssParameter>
                      </sld:Geometry>
                   </sld:Grid>
                   <sld:Raster>
                      <sld:Dimensions>
                         <sld:Axis name="width">
-                           <ogc:PropertyName>frameData/frame</ogc:PropertyName>
+                           <ogc:PropertyName>frameData/frame/row</ogc:PropertyName>
                         </sld:Axis>
                         <sld:Axis name="height">
-                           <ogc:PropertyName>frameData/frame/acrossTrackLine</ogc:PropertyName>
+                           <ogc:PropertyName>frameData/frame</ogc:PropertyName>
                         </sld:Axis>
                      </sld:Dimensions>
                      <sld:Opacity>1.0</sld:Opacity>
                      <sld:ChannelSelection>
                         <sld:RedChannel>
-                           <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/red</sld:SourceChannelName>
+                           <sld:SourceChannelName>frameData/frame/row/pixel/red</sld:SourceChannelName>
                         </sld:RedChannel>
                         <sld:GreenChannel>
-                           <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/green</sld:SourceChannelName>
+                           <sld:SourceChannelName>frameData/frame/row/pixel/green</sld:SourceChannelName>
                         </sld:GreenChannel>
                         <sld:BlueChannel>
-                           <sld:SourceChannelName>frameData/frame/acrossTrackLine/radiance/blue</sld:SourceChannelName>
+                           <sld:SourceChannelName>frameData/frame/row/pixel/blue</sld:SourceChannelName>
                         </sld:BlueChannel>
                      </sld:ChannelSelection>
                   </sld:Raster>
                </sld:TextureSymbolizer>
             </style>
+            <style>
+               <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid/alongTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/alongTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF7E00</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridBorderSymbolizer>
+            </style>
          </DataItem>
       </member>
-      -->
    </DataList>
 </STTProject>
