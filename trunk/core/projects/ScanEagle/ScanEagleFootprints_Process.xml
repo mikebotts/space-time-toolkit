@@ -27,43 +27,7 @@
          </sml:inputs>
          <sml:outputs>
             <sml:OutputList>
-               <sml:output name="grid">
-                  <swe:DataArray>
-                     <swe:elementCount>
-                        <swe:Count>
-                           <swe:value>4</swe:value>
-                        </swe:Count>
-                     </swe:elementCount>
-                     <swe:elementType name="acrossTrackPoints">
-                        <swe:DataArray>
-                           <swe:elementCount>
-                              <swe:Count>
-                                 <swe:value>4</swe:value>
-                              </swe:Count>
-                           </swe:elementCount>
-                           <swe:elementType name="groundPoint">
-                              <swe:Vector definition="urn:ogc:def:property:OGC::LocationVector" referenceFrame="urn:ogc:def:crs:OGC::ECEF_WGS84">
-                                 <swe:coordinate name="x">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="y">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                                 <swe:coordinate name="z">
-                                    <swe:Quantity>
-                                       <swe:uom code="m"/>
-                                    </swe:Quantity>
-                                 </swe:coordinate>
-                              </swe:Vector>
-                           </swe:elementType>
-                        </swe:DataArray>
-                     </swe:elementType>
-                   </swe:DataArray>
-               </sml:output>
+               <sml:output name="grid" xlink:href="#GRID_DATA"/>
             </sml:OutputList>
          </sml:outputs>
          <sml:components>
@@ -137,17 +101,17 @@
                                        <swe:coordinate name="heading">
                                           <swe:Quantity definition="urn:ogc:def:property:OGC::HeadingToNorth" axisID="Z">
                                              <gml:name>Heading</gml:name>
-                                             <swe:uom code="deg"/>
+                                             <swe:uom code="-1.deg"/>
                                           </swe:Quantity>
                                        </swe:coordinate>
                                        <swe:coordinate name="pitch">
-                                          <swe:Quantity definition="urn:ogc:def:property:OGC::PitchAngle" axisID="X">
+                                          <swe:Quantity definition="urn:ogc:def:property:OGC::Pitch" axisID="X">
                                              <gml:name>Pitch</gml:name>
                                              <swe:uom code="deg"/>
                                           </swe:Quantity>                     
                                        </swe:coordinate>
                                        <swe:coordinate name="roll">
-                                          <swe:Quantity definition="urn:ogc:def:property:OGC::RollAngle" axisID="Y">
+                                          <swe:Quantity definition="urn:ogc:def:property:OGC::Roll" axisID="Y">
                                              <gml:name>Roll</gml:name>
                                              <swe:uom code="deg"/>
                                           </swe:Quantity>
@@ -155,11 +119,11 @@
                                     </swe:Vector>
                                  </swe:field>                     
                                  <swe:field name="sensor_attitude">
-                                    <swe:Vector definition="urn:ogc:def:property:OGC::SensorOrientation" referenceFrame="#AircraftFrame" localFrame="#SensorFrame">
+                                    <swe:Vector definition="urn:ogc:def:property:OGC::SensorOrientation" referenceFrame="urn:ogc:def:crs:OGC::ENU" localFrame="#SensorFrame">
                                        <swe:coordinate name="heading">
-                                          <swe:Quantity definition="urn:ogc:def:property:OGC::Heading" axisID="Z">
+                                          <swe:Quantity definition="urn:ogc:def:property:OGC::HeadingToNorth" axisID="Z">
                                              <gml:name>Heading</gml:name>
-                                             <swe:uom code="deg"/>
+                                             <swe:uom code="-1.deg"/>
                                           </swe:Quantity>
                                        </swe:coordinate>
                                        <swe:coordinate name="pitch">
@@ -237,7 +201,7 @@
                      <sml:method xlink:href="urn:ogc:def:process:SOS:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
-               <!-- FOR loop for along scan steps -->
+               <!-- FOR loop for along scan (across track) steps -->
                <sml:component name="asCounter">
                   <sml:ProcessModel>
                      <sml:inputs>
@@ -259,11 +223,7 @@
                                        <swe:value>720</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
-                                 <swe:field name="stepCount">
-                                    <swe:Quantity>
-                                       <swe:value>4</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
+                                 <swe:field name="stepCount" xlink:href="#AS_COUNT"/>
                               </swe:DataRecord>
                            </sml:input>
                         </sml:InputList>
@@ -293,7 +253,7 @@
                      <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
-               <!-- FOR loop for across track steps -->
+               <!-- FOR loop for along track steps -->
                <sml:component name="atCounter">
                   <sml:ProcessModel>
                      <sml:inputs>
@@ -316,11 +276,7 @@
                                        <swe:value>480</swe:value>
                                     </swe:Quantity>
                                  </swe:field>
-                                 <swe:field name="stepCount">
-                                    <swe:Quantity>
-                                       <swe:value>4</swe:value>
-                                    </swe:Quantity>
-                                 </swe:field>
+                                 <swe:field name="stepCount" xlink:href="#AT_COUNT"/>
                               </swe:DataRecord>
                            </sml:input>
                         </sml:InputList>
@@ -351,10 +307,43 @@
                      <sml:method xlink:href="urn:ogc:def:process:counter:1.0"/>
                   </sml:ProcessModel>
                </sml:component>
+               <!-- Convert FOV to focal length -->
+               <sml:component name="FOVToFocal">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="fov">
+                              <swe:Quantity>
+                                 <swe:uom code="deg"/>
+                              </swe:Quantity>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="result">
+                              <swe:Quantity>
+                                 <swe:uom code="mm"/>
+                              </swe:Quantity>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="equation">
+                              <swe:Category>
+                                 <swe:value>f=3.3565845/TAN(fov/2*PI/180)</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:equationSolver:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
                <!-- Actual chain doing the geolocation job -->
                <sml:component name="sensorModel" xlink:href="./ScanEagleSensorModelCSM.xml#GEOLOCATION"/>
                <!-- Intersection w/ Ellipsoid -->
-               <sml:component name="rayIntersectEllipsoid">
+               <sml:component name="rayIntersectTerrain">
                   <sml:ProcessModel>
                      <sml:inputs>
                         <sml:InputList>
@@ -381,17 +370,17 @@
                               <swe:Vector definition="urn:ogc:def:property:OGC::DirectionVector">
                                  <swe:coordinate name="x">
                                     <swe:Quantity>
-                                       <swe:uom code="1"/>
+                                       <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
                                  <swe:coordinate name="y">
                                     <swe:Quantity>
-                                       <swe:uom code="1"/>
+                                       <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
                                  <swe:coordinate name="z">
                                     <swe:Quantity>
-                                       <swe:uom code="1"/>
+                                       <swe:uom code="m"/>
                                     </swe:Quantity>
                                  </swe:coordinate>
                               </swe:Vector>
@@ -424,7 +413,7 @@
                      <!-- adjust ray intersect ellipsoid height -->
                      <sml:parameters>
                         <sml:ParameterList>
-                           <sml:parameter name="heightAboveEllipsoid">
+                           <sml:parameter name="heightAdjustment">
                               <swe:Quantity>
                                  <swe:uom code="m"/>
                                  <swe:value>0</swe:value>
@@ -464,17 +453,17 @@
                      <sml:outputs>
                         <sml:OutputList>
                            <sml:output name="grid">
-                              <swe:DataArray>
+                              <swe:DataArray gml:id="GRID_DATA">
                                  <swe:elementCount>
-                                    <swe:Count>
-                                       <swe:value>4</swe:value>
+                                    <swe:Count gml:id="AS_COUNT">
+                                       <swe:value>5</swe:value>
                                     </swe:Count>
                                  </swe:elementCount>
-                                 <swe:elementType name="acrossTrackPoints">
+                                 <swe:elementType name="alongTrackPoints">
                                     <swe:DataArray>
                                        <swe:elementCount>
-                                          <swe:Count>
-                                             <swe:value>4</swe:value>
+                                          <swe:Count gml:id="AT_COUNT">
+                                             <swe:value>5</swe:value>
                                           </swe:Count>
                                        </swe:elementCount>
                                        <swe:elementType name="groundPoint">
@@ -560,35 +549,61 @@
                      <sml:destination ref="sensorModel/parameters/platformLocation"/>
                   </sml:Link>
                </sml:connection>
-               <sml:connection>
-                  <sml:Link>
+               <!-- sensor attitude is given relative to ENU directly, so no need for platform attitude -->
+               <!--<sml:connection>
+                  <sml:Link>                     
                      <sml:source ref="atCounter/outputs/pass-through/nav/aircraft_attitude"/>
                      <sml:destination ref="sensorModel/parameters/platformAttitude"/>
                   </sml:Link>
-               </sml:connection>
-               <sml:connection>
+                  </sml:connection>-->
+               <!--<sml:connection>
                   <sml:Link>
                      <sml:source ref="atCounter/outputs/pass-through/nav/sensor_attitude"/>
                      <sml:destination ref="sensorModel/parameters/sensorAttitude"/>
                   </sml:Link>
+                  </sml:connection>-->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/nav/sensor_attitude/heading"/>
+                     <sml:destination ref="sensorModel/parameters/sensorAttitude/heading"/>
+                  </sml:Link>
                </sml:connection>
-               <!-- Sensor model -->               
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/nav/sensor_attitude/pitch"/>
+                     <sml:destination ref="sensorModel/parameters/sensorAttitude/pitch"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/nav/sensor_zoom/hfov"/>
+                     <sml:destination ref="FOVToFocal/inputs/fov"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- FOV to Focal -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="FOVToFocal/outputs/result"/>
+                     <sml:destination ref="sensorModel/parameters/focalLength"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- Sensor model -->
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sensorModel/outputs/ECEFViewVector"/>
-                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayDirection"/>
+                     <sml:destination ref="rayIntersectTerrain/inputs/rayDirection"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
                   <sml:Link>
                      <sml:source ref="sensorModel/outputs/ECEFLocation"/>
-                     <sml:destination ref="rayIntersectEllipsoid/inputs/rayOrigin"/>
+                     <sml:destination ref="rayIntersectTerrain/inputs/rayOrigin"/>
                   </sml:Link>
                </sml:connection>
                <!-- Ray intersect ellipsoid -->
                <sml:connection>
                   <sml:Link>
-                     <sml:source ref="rayIntersectEllipsoid/outputs/intersection"/>
+                     <sml:source ref="rayIntersectTerrain/outputs/intersection"/>
                      <sml:destination ref="gridBuilder/inputs/groundPoint"/>
                   </sml:Link>
                </sml:connection>
