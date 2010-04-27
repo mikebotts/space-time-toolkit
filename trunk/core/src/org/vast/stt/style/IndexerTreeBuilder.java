@@ -101,13 +101,6 @@ public class IndexerTreeBuilder
             //}
             //else
             //    indexer = parentIndexer;
-            
-            // if end of path, just add the visitor here
-            if (pathPosition == componentNames.length-1)
-            {
-                indexer.addVisitor(visitor);
-                return;
-            }
         }
         
         // case of DataChoice
@@ -157,42 +150,6 @@ public class IndexerTreeBuilder
                 }
             }
             
-            // if end of path, just add the visitor here
-            if (pathPosition == componentNames.length-1)
-            {
-                if (visitor instanceof DimensionMapper)
-                {
-                    DataArrayIndexer arrayIndexer = ((DataArrayIndexer)indexer);
-                    int dimIndex = ((DimensionMapper)visitor).getDimensionIndex();
-                    arrayIndexer.setIndexOffset(dimIndex);
-                    
-                    if (arrayIndexer.getVarSizeIndexer() == null)
-                    {
-                        // case of implicit variable size
-                    	if (((DataArray)component).isVariableSize())
-                        {
-                    		arrayIndexer.setVarSizeVisitor(visitor);
-                        }
-                    	
-                    	// case of fixed size
-                        else
-                        {
-                        	int arraySize = arrayIndexer.getArraySize();
-                        	((DimensionMapper)visitor).setDimensionSize(arraySize);
-                        }                        
-                    }
-                    else
-                    {
-                        DataIndexer varSizeIndexer = arrayIndexer.getVarSizeIndexer();
-                        varSizeIndexer.addVisitor(visitor);
-                    }
-                }
-                else
-                    indexer.addVisitor(visitor);
-                
-                return;
-            }
-            
             // reset current index
             currentIndex = 0;
         }
@@ -211,33 +168,63 @@ public class IndexerTreeBuilder
                 if (parentIndexer != null)
                     parentIndexer.addChildIndexer(indexer);
             }
-            
-            // if end of path, just add the visitor here
-            if (pathPosition == componentNames.length-1)
-            {
-                indexer.addVisitor(visitor);
-                return;
-            }
-        }
+        }        
         
-        // if a child component has the desired name, apply recursively
-        int newPathPos = pathPosition+1;
-        DataComponent childComponent = component.getComponent(componentNames[newPathPos]);
-        if (childComponent != null)
-        {            
-            int newIndex = component.getComponentIndex(componentNames[newPathPos]);            
-            this.addVisitor(componentNames, newPathPos, indexer, childComponent, newIndex, visitor);
+        // if end of path, just add the visitor here
+        if (pathPosition == componentNames.length-1)
+        {
+            // special case for array dimensions mappers
+            if (visitor instanceof DimensionMapper)
+            {
+                DataArrayIndexer arrayIndexer = ((DataArrayIndexer)indexer);
+                int dimIndex = ((DimensionMapper)visitor).getDimensionIndex();
+                arrayIndexer.setIndexOffset(dimIndex);
+                
+                if (arrayIndexer.getVarSizeIndexer() == null)
+                {
+                    // case of implicit variable size
+                    if (((DataArray)component).isVariableSize())
+                    {
+                        arrayIndexer.setVarSizeVisitor(visitor);
+                    }
+                    
+                    // case of fixed size
+                    else
+                    {
+                        int arraySize = arrayIndexer.getArraySize();
+                        ((DimensionMapper)visitor).setDimensionSize(arraySize);
+                    }                        
+                }
+                else
+                {
+                    DataIndexer varSizeIndexer = arrayIndexer.getVarSizeIndexer();
+                    varSizeIndexer.addVisitor(visitor);
+                }
+            }
+            else
+                indexer.addVisitor(visitor);
         }
         else
         {
-            StringBuffer buf = new StringBuffer();
-            for (int i=0; i<componentNames.length; i++)
-            {
-                if (i != 0)
-                    buf.append('/');
-                buf.append(componentNames[i]);                
+            // if a child component has the desired name, apply recursively
+            int newPathPos = pathPosition+1;
+            DataComponent childComponent = component.getComponent(componentNames[newPathPos]);
+            if (childComponent != null)
+            {            
+                int newIndex = component.getComponentIndex(componentNames[newPathPos]);            
+                this.addVisitor(componentNames, newPathPos, indexer, childComponent, newIndex, visitor);
             }
-            throw new IllegalStateException("Component " + buf.toString() + " not found");
+            else
+            {
+                StringBuffer buf = new StringBuffer();
+                for (int i=0; i<componentNames.length; i++)
+                {
+                    if (i != 0)
+                        buf.append('/');
+                    buf.append(componentNames[i]);                
+                }
+                throw new IllegalStateException("Component " + buf.toString() + " not found");
+            }
         }
         
         // if first level, set rootIndexer

@@ -166,7 +166,7 @@ public class SMLProvider extends AbstractProvider
                         if (canceled)
                             return;
                         
-                        process.createNewOutputBlocks();                        
+                        process.createNewOutputBlocks();
                         process.execute();
                         
                         // break if no output was generated!
@@ -186,7 +186,8 @@ public class SMLProvider extends AbstractProvider
                             BlockList blockList = blockListArray.get(c);
                             blockList.addBlock((AbstractDataBlock)outputs.getComponent(c).getData());
                             
-                            if (persistency > 0 && blockList.getSize() >= persistency + 1)
+                            // remove blocks if num blocks > persistency limit
+                            if (persistency > 0 && blockList.getSize() > persistency)
                             {
                                 BlockListItem item = blockList.getFirstItem();
                                 blockList.remove(item);
