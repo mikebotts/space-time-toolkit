@@ -89,13 +89,13 @@
                                              </swe:elementCount>
                                              <swe:elementType name="pixel">
                                                 <swe:DataRecord>
-                                                   <swe:field name="red">
+                                                   <swe:field name="blue">
                                                       <swe:Count definition="urn:ogc:def:property:OGC::PixelValue"/>
                                                    </swe:field>
                                                    <swe:field name="green">
                                                       <swe:Count definition="urn:ogc:def:property:OGC::PixelValue"/>
                                                    </swe:field>
-                                                   <swe:field name="blue">
+                                                   <swe:field name="red">
                                                       <swe:Count definition="urn:ogc:def:property:OGC::PixelValue"/>
                                                    </swe:field>
                                                 </swe:DataRecord>
@@ -252,7 +252,7 @@
                                        <swe:coordinate name="roll">
                                           <swe:Quantity definition="urn:ogc:def:property:OGC::Roll" axisID="Y">
                                              <gml:name>Roll</gml:name>
-                                             <swe:uom code="-1.deg"/>
+                                             <swe:uom code="deg"/>
                                           </swe:Quantity>
                                        </swe:coordinate>
                                     </swe:Vector>
