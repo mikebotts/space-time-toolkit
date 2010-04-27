@@ -25,7 +25,7 @@
                   <backgroundColor>#000000</backgroundColor>
                   <projection>LLA</projection>
                   <cameraMode>ORTHO</cameraMode>
-                  <cameraPos>-2.0435292266730727 0.6200543967097655 10</cameraPos>
+                  <cameraPos>-2.0435292266730727 0.6200543967097655 1</cameraPos>
                   <targetPos>-2.0435292266730727 0.6200543967097655 1.089e-4</targetPos>
                   <upDirection>0 1 0</upDirection>
                   <orthoWidth>0.05</orthoWidth>

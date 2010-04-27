@@ -332,7 +332,7 @@
                         <sml:ParameterList>
                            <sml:parameter name="equation">
                               <swe:Category>
-                                 <swe:value>f=3.3565845/TAN(fov/2*PI/180)</swe:value>
+                                 <swe:value>f=9.72/TAN(fov/2*PI/180)</swe:value>
                               </swe:Category>
                            </sml:parameter>
                         </sml:ParameterList>
@@ -572,6 +572,12 @@
                   <sml:Link>
                      <sml:source ref="atCounter/outputs/pass-through/nav/sensor_attitude/pitch"/>
                      <sml:destination ref="sensorModel/parameters/sensorAttitude/pitch"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="atCounter/outputs/pass-through/nav/sensor_attitude/roll"/>
+                     <sml:destination ref="sensorModel/parameters/sensorAttitude/roll"/>
                   </sml:Link>
                </sml:connection>
                <sml:connection>
