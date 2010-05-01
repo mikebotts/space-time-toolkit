@@ -282,6 +282,14 @@ public class Projection_ECF_GE implements Projection
     }
     
     
+    @Override
+    public double getCameraIncidence(ViewSettings viewSettings)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+    
     public MotionConstraint getDefaultRotationConstraint()
     {
         return MotionConstraint.XYZ;
