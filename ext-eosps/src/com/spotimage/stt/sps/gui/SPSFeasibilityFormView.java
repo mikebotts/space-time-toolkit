@@ -298,8 +298,7 @@ public class SPSFeasibilityFormView extends DataItemView
 		
 		// get component type and constraint
 		QName compQName = (QName)dataValue.getProperty(SweConstants.COMP_QNAME);
-		ConstraintList constraintList = 
-			(ConstraintList)dataValue.getProperty(SweConstants.CONSTRAINTS);
+		ConstraintList constraintList = dataValue.getConstraints();
 		
 		final DataBlock data = dataValue.getData();
 		if (constraintList != null)

@@ -337,7 +337,7 @@ public class SPSFeasibilityResultView extends DataItemView
 					newProvider.setServer(dtRequest.getGetServer(), dtRequest.getVersion());
 					newProvider.setSensorID(dtRequest.getSensorID());
 					newProvider.setName(providerName);
-					new DataProviderJob(newProvider);
+					new DataProviderJob(providerName, newProvider);
 					
 					// submit task and retrieve task ID
 					StatusReport report = newProvider.submitTask(thisProv.getGetFeasibilityRequest().getParameters());
@@ -378,7 +378,7 @@ public class SPSFeasibilityResultView extends DataItemView
 						view.refreshView();
 						ScenePageInput pageInput = (ScenePageInput)page.getInput();
 						pageInput.getScene().setItemVisibility(newItem, true);
-						pageInput.getScene().dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED));
+						pageInput.getScene().dispatchEvent(new STTEvent(this, EventType.ITEM_VISIBILITY_CHANGED), false);
 						
 						// pop up status view
 						String viewID = SPSStatusView.ID;
