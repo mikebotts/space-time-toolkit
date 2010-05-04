@@ -115,7 +115,7 @@ public class AddSPSWizard extends Wizard
 			provider.setServer(server, "2.0");
 			provider.setSensorID(sensorID);
 			provider.setName(itemName);
-			new DataProviderJob(provider);
+			new DataProviderJob(itemName, provider);
 			
 			// insert in tree (next to select item or in selected folder)
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

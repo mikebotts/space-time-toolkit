@@ -89,8 +89,8 @@ public class WizardPageServer extends WizardPage
 		{
 			{"Spotimage EO SPS (Local)", "http://localhost:8080/axis2/services/SPSv20"},
 			{"Spotimage EO SPS (Online)", "http://ws.spotimage.com/axis2/services/SPSv20"},
-			{"Deimos EO SPS", "http://www.deimos-space.es/ogc/eoSPS"},
-			{"Pléiades EO SPS", "http://www.cnes.fr/ogc/eoSPS"}
+			{"ESRIN EO SPS", "http://ssews1.esrin.esa.int/HMA-SPS/services/HMA-SPS"},
+			{"Pléiades EO SPS", "http://10.69.164.157:8080/axis2/services/SPSPrototype.SPSPrototypeHttpSoap11Endpoint/"}
 		};
 		for (int s=0; s<servers.length; s++)
 		{
