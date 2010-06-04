@@ -2,7 +2,7 @@
 <STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
    <DataList id="GIS">
       <name>GIS Data</name>
-      <member visible="true">
+      <member visible="false">
          <DataItem id="WORLD_COASTLINES">
             <name>World Coast Lines</name>
             <dataProvider>
@@ -10,7 +10,7 @@
                   <name>World Coast Lines - 13</name>
                   <description>World Coast Lines</description>
                   <format>SWE</format>
-                  <sweData href="http://vast.uah.edu/SWEData/coastlines/mapcil13.xml"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/coastlines/mapcil13.xml"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
@@ -42,7 +42,7 @@
                   <name>World Boundaries - 13</name>
                   <description>World Country Boundaries</description>
                   <format>SWE</format>
-                  <sweData href="http://vast.uah.edu/SWEData/countries/mapbdy13.xml"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/countries/mapbdy13.xml"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
@@ -74,8 +74,8 @@
                   <name>Alabama borders</name>
                   <description>Alabama border data</description>
                   <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/states/stateSwe.xml"/>
-                  <rawData xlink:href="http://vast.uah.edu/SWEData/states/AL_state.swe"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/states/stateSwe.xml"/>
+                  <rawData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/states/AL_state.swe"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
@@ -99,7 +99,7 @@
             </style>
          </DataItem>
       </member>
-      <member visible="false">
+      <member visible="true">
          <DataItem id="AL_COUNTIES_BOUNDARIES">
             <name>AL County Boundaries</name>
             <dataProvider>
@@ -107,8 +107,8 @@
                   <name>Alabama counties</name>
                   <description>Alabama county border data</description>
                   <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/counties/countySwe.xml"/>
-                  <rawData xlink:href="http://vast.uah.edu/SWEData/counties/AL_county.swe"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/counties/countySwe.xml"/>
+                  <rawData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/counties/AL_county.swe"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
@@ -140,8 +140,8 @@
                   <name>Alabama interstates</name>
                   <description>Alabama Interstate data</description>
                   <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/interstate.xml"/>
-                  <rawData xlink:href="http://vast.uah.edu/SWEData/roads/interstates/AL_interstates.swe"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/roads/interstates/interstate.xml"/>
+                  <rawData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/roads/interstates/AL_interstates.swe"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
@@ -231,8 +231,8 @@
                   <name>Alabama highways</name>
                   <description>Alabama Interstate data</description>
                   <format>SWE</format>
-                  <sweData xlink:href="http://vast.uah.edu/SWEData/roads/highways/highway.xml"/>
-                  <rawData xlink:href="http://vast.uah.edu/SWEData/roads/highways/AL_highways.swe"/>
+                  <sweData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/roads/highways/highway.xml"/>
+                  <rawData xlink:href="http://vastserver.nsstc.uah.edu/downloads/SWEData/roads/highways/AL_highways.swe"/>
                </SWEDataProvider>
             </dataProvider>
             <style>
