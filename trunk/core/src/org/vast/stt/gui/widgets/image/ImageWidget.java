@@ -24,6 +24,7 @@ import org.vast.stt.event.STTEvent;
 import org.vast.stt.event.STTEventListener;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.provider.DataProvider;
+import org.vast.util.DateTimeFormat;
 
 
 
@@ -89,12 +90,16 @@ public class ImageWidget implements DisposeListener, STTEventListener
 		list.get(0);
 		BlockListItem bli = it.next();
 		DataBlock block = bli.getData();
+		long time = block.getLongValue(0);
 		int height = block.getIntValue(2);
 		int width = block.getIntValue(3);
 		DataBlockMixed dbm = (DataBlockMixed)block;
 		AbstractDataBlock [] adb = dbm.getUnderlyingObject();
 		byte [] data = (byte [])adb[4].getUnderlyingObject();
 		imCanvas[canvasNum].createImage(width, height, data);
+		//  setTime 
+		String timeStr = DateTimeFormat.formatIso(time/1000.0, 0);
+		timeLabels[canvasNum].setText(timeStr);
 	}
 	
 	public void getChangedImage(DataItem item, int canvasNum){
@@ -149,9 +154,9 @@ public class ImageWidget implements DisposeListener, STTEventListener
 			imCanvas[i].setLayoutData(gd);
 
 			timeLabels[i] = new Label(imGroups[i], 0x0);
-			gd = new GridData(SWT.CENTER, SWT.CENTER, false, false);
+			gd = new GridData(SWT.CENTER, SWT.CENTER, true, false);
 			timeLabels[i].setLayoutData(gd);
-			timeLabels[i].setText("Time i goes here");
+			timeLabels[i].setText("2010-01-01T00:00:00.0000Z");
 
 			imLabels[i] = new Label(imGroups[i], 0x0);
 			gd = new GridData(SWT.CENTER, SWT.CENTER, false, false);
