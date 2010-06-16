@@ -27,6 +27,7 @@ package org.vast.stt.apps;
 
 import org.eclipse.ui.*;
 import org.vast.stt.gui.views.*;
+import org.vast.sttx.gui.views.WPS_DemoView;
 
 
 public class Perspective implements IPerspectiveFactory
@@ -60,6 +61,9 @@ public class Perspective implements IPerspectiveFactory
         sceneFolder.addPlaceholder(CatalogView.ID);
         
         sceneOptFolder.addView(SceneTimeView.ID);
+        sceneOptFolder.addView(ImageView.ID);
+        sceneOptFolder.addView(WPS_DemoView.ID);
+
         sceneOptFolder.addView("org.eclipse.ui.views.ProgressView");
 	}
 
