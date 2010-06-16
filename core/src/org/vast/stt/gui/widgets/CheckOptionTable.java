@@ -76,11 +76,14 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
     protected String checkboxTableLabel;
 
     protected boolean allowAddRemove = true;
-    protected Button deleteButton;
+    protected boolean showImagePopup = true;
+   
+	protected Button deleteButton;
     protected Button addButton;
     protected Button enabledButton;
     protected Button advancedButton;
     protected int span = 3;
+	protected Button popupImageBtn;
 
     abstract public OptionChooser createOptionChooser(Composite parent);
 
@@ -120,10 +123,12 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
         GridData gridData = new GridData();
         gridData.verticalIndent = 7;
         gridData.horizontalAlignment = GridData.BEGINNING;
-        gridData.horizontalSpan = span;
+       	gridData.horizontalSpan = span;
         enabledButton.setLayoutData(gridData);
         enabledButton.setText("enabled");
 
+       
+        
         // Styles Label
         final Label stylesLabel = new Label(mainGroup, SWT.RIGHT);
         stylesLabel.setText(checkboxTableLabel);
@@ -186,10 +191,23 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
         // OptionsChooser
         optionChooser = createOptionChooser(mainGroup);
 
+        if(showImagePopup) {
+        	popupImageBtn = new Button(mainGroup, SWT.PUSH);
+        	gridData = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+        	gridData.horizontalSpan = 1;
+        	popupImageBtn.setLayoutData(gridData);
+        	popupImageBtn.setText("Image Viewer");
+        	popupImageBtn.setToolTipText("Popup Image Viewer for this item");
+        	popupImageBtn.addSelectionListener(this);
+        }
+        
         // Advanced Button
         advancedButton = new Button(mainGroup, SWT.NONE);
         final GridData gridData_7 = new GridData();
-        gridData_7.horizontalSpan = span;
+        if(showImagePopup)
+        	gridData_7.horizontalSpan = span-1;
+        else 
+        	gridData_7.horizontalSpan = span;
         gridData_7.horizontalAlignment = GridData.END;
         advancedButton.setLayoutData(gridData_7);
         advancedButton.setText("Advanced...");
@@ -251,4 +269,8 @@ abstract public class CheckOptionTable implements ICheckStateListener, ISelectio
     {
         checkboxTableViewer.setLabelProvider(tableLabelProv);
     }
+    
+    public void setShowImagePopup(boolean showImagePopup) {
+		this.showImagePopup = showImagePopup;
+	}
 }
