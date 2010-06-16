@@ -76,7 +76,7 @@ public class ImageCanvas extends Canvas implements PaintListener
 				imData.setPixel(x, y, pixValue);
 			}
 		};
-		image = new Image(display,imData. scaledTo((int)(w * 0.5), (int)(h * 0.5)));
+		image = new Image(display,imData. scaledTo((int)(w * scaleFac), (int)(h * scaleFac)));
 		long t2 = System.currentTimeMillis();
 		System.err.println("Image create time: " + (t2-t1));
 		this.redraw();
