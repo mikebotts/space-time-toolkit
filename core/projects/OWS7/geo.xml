@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sml:SensorML xmlns:gml="http://www.opengis.net/gml" xmlns:sml="http://www.opengis.net/sensorML/1.0" xmlns:swe="http://www.opengis.net/swe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/sensorML/1.0 file:///C:\eclipse_workspace\schema\sensorML\sensorML.xsd" version="1.0">
+   <sml:member>
+      <sml:ProcessChain gml:id="GEOLOCATION">
+         <gml:description> This process chain determines axis camera position vector and the ECEF view vector. </gml:description>
+         <gml:name>geo</gml:name>
+         <sml:inputs>
+            <sml:InputList>
+               <sml:input name="alongScanAngle">
+                  <swe:Quantity>
+                  	<swe:uom code="rad"/>
+                  </swe:Quantity>
+               </sml:input>
+               <sml:input name="alongTrackAngle">
+                  <swe:Quantity>
+                  	<swe:uom code="rad"/>
+                  </swe:Quantity>
+               </sml:input>
+               <sml:input name="navigationData">
+                  <swe:DataRecord>
+                     <swe:field name="time">
+                        <swe:Time definition="urn:ogc:phenomenon:time" referenceTime="1970-01-01T00:00:00Z">
+                           <swe:uom code="s"/>
+                        </swe:Time>
+                     </swe:field>
+                     <swe:field name="latitude">
+                        <swe:Quantity definition="urn:ogc:phenomenon:latitude:wgs84">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="longitude">
+                        <swe:Quantity definition="urn:ogc:phenomenon:longitude:wgs84">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="trueHeading">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="pitch">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="roll">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="derivedTH">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="groundElevation">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="m"/>
+                        </swe:Quantity>
+                     </swe:field>
+                     <swe:field name="derivedPitch">
+                        <swe:Quantity definition="urn:ogc:phenomenon:angle">
+                           <swe:uom code="deg"/>
+                        </swe:Quantity>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:input>
+            </sml:InputList>
+         </sml:inputs>
+         <sml:outputs>
+            <sml:OutputList>
+               <sml:output name="terrainElevation">
+                  <swe:Quantity>
+                      <swe:uom code="m"/>
+                  </swe:Quantity>
+			   </sml:output>
+               <sml:output name="geolocationData">
+                  <swe:DataRecord>
+                     <swe:field name="ECEF_location">
+                        <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                           <swe:coordinate name="x">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                           <swe:coordinate name="y">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                           <swe:coordinate name="z">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                        </swe:Vector>
+                     </swe:field>
+                     <swe:field name="ECEF_view_vector">
+                        <swe:Vector definition="urn:ogc:def:data:viewVector" referenceFrame="urn:ogc:def:crs:ECEF_wgs84">
+                           <swe:coordinate name="x">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                           <swe:coordinate name="y">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                           <swe:coordinate name="z">
+                              <swe:Quantity>
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </swe:coordinate>
+                        </swe:Vector>
+                     </swe:field>
+                  </swe:DataRecord>
+               </sml:output>
+            </sml:OutputList>
+         </sml:outputs>
+         <sml:components>
+            <sml:ComponentList>
+            <!--~~~~~~~~~~~~~~~~~~~~-->
+            <!-- SRTM Elevation -->
+            <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="terrainElevation">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="CoverageIn">
+                             <swe:DataRecord>
+                                <swe:field name="lat">
+                           			<swe:Quantity>
+                                 		<swe:uom code="deg"/>
+                             		</swe:Quantity>
+                           		</swe:field>
+                           		<swe:field name="lon">
+                           			<swe:Quantity>
+                                 		<swe:uom code="deg"/>
+                             		</swe:Quantity>
+                           		</swe:field>
+                              </swe:DataRecord>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                          <sml:output name="CoverageOut">
+                             <swe:DataRecord>
+                                <swe:field name="lat">
+                           			<swe:Quantity>
+                                 		<swe:uom code="deg"/>
+                             		</swe:Quantity>
+                           		</swe:field>
+                           		<swe:field name="lon">
+                           			<swe:Quantity>
+                                 		<swe:uom code="deg"/>
+                             		</swe:Quantity>
+                           		</swe:field>
+                           		<swe:field name="alt">
+                           		   <swe:Quantity>
+                                  		<swe:uom code="m"/>
+                                   </swe:Quantity>
+                           		</swe:field>
+                              </swe:DataRecord>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:SRTMElevation:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Binary Operation -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="altitudeOffset">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="operand1">
+                              <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </sml:input>
+                           <sml:input name="operand2">
+                              <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                 <swe:uom code="m"/>
+                                 <swe:value>1.181</swe:value>
+                              </swe:Quantity>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="result">
+                              <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                 <swe:uom code="m"/>
+                              </swe:Quantity>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:parameters>
+                        <sml:ParameterList>
+                           <sml:parameter name="operator">
+                              <swe:Category definition="urn:ogc:def:phenomenon:distance">
+                                 <swe:value>addition</swe:value>
+                              </swe:Category>
+                           </sml:parameter>
+                        </sml:ParameterList>
+                     </sml:parameters>
+                     <sml:method xlink:href="urn:vast:def:process:binaryOperation:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder from sample 2 airplane  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilderToAirplane">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="orientation">
+                              <swe:Vector definition="urn:ogc:def:data:orientationVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:pos2Matrix3:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!--transformation from sample to airplane view vector  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="VectorMatrixMultiplierToAirplane">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                       <swe:value>-1.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder from airplane 2 nadir plane  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilderToNadirPlane">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="orientation">
+                              <swe:Vector definition="urn:ogc:def:data:orientationVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:pos2Matrix3:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!--transformation from airplane to nadir plane view vector  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="VectorMatrixMultiplierToNadirPlane">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!-- Matrix builder from airplane 2 ECEF  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="MatrixBuilderToECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="lonLatTrueHeading">
+                              <swe:Vector definition="urn:ogc:def:data:orientationVector">
+                                 <swe:coordinate name="longitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="latitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                       <swe:value>0.0</swe:value>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="trueHeading">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                    <swe:value>0.0</swe:value>
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="posMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:trueHeadingTransform:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <!--transformation from airplane to ECEF view vector  -->
+               <!--~~~~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="VectorMatrixMultiplierToECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="vector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                           <sml:input name="transformMatrix">
+                              <swe:DataArray definition="urn:ogc:def:data:positionMatrix">
+                                 <swe:elementCount>
+                                    <swe:Count>
+                                       <swe:value>9</swe:value>
+                                    </swe:Count>
+                                 </swe:elementCount>
+                                 <swe:elementType name="element">
+                                    <swe:Quantity/>
+                                 </swe:elementType>
+                              </swe:DataArray>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="newVector">
+                              <swe:Vector definition="urn:ogc:def:data:viewVector">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:vectorMatrixMultiplication:1.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <!-- LLA to ECEF -->
+               <!--~~~~~~~~~~~~~~~~~~~~-->
+               <sml:component name="LLAtoECEF">
+                  <sml:ProcessModel>
+                     <sml:inputs>
+                        <sml:InputList>
+                           <sml:input name="LLA_location">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:epsg4329">
+                                 <swe:coordinate name="latitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="longitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:angle">
+                                       <swe:uom code="rad"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="altitude">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:input>
+                        </sml:InputList>
+                     </sml:inputs>
+                     <sml:outputs>
+                        <sml:OutputList>
+                           <sml:output name="ECEF_location">
+                              <swe:Vector definition="urn:ogc:def:data:locationVector" referenceFrame="urn:ogc:def:crs:ecef_wgs84">
+                                 <swe:coordinate name="x">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="y">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                                 <swe:coordinate name="z">
+                                    <swe:Quantity definition="urn:ogc:def:phenomenon:distance">
+                                       <swe:uom code="m"/>
+                                    </swe:Quantity>
+                                 </swe:coordinate>
+                              </swe:Vector>
+                           </sml:output>
+                        </sml:OutputList>
+                     </sml:outputs>
+                     <sml:method xlink:href="urn:ogc:def:process:LLAtoECEF:2.0"/>
+                  </sml:ProcessModel>
+               </sml:component>
+            </sml:ComponentList>
+         </sml:components>
+         <!--~~~~~~~~~~~~~-->
+         <!-- Connections -->
+         <!--~~~~~~~~~~~~~-->
+         <sml:connections>
+            <sml:ConnectionList>
+               <!-- chain inputs to processes inputs -->
+           <!--     <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/roll"/>
+                     <sml:destination ref="MatrixBuilderToNadirPlane/inputs/orientation/x"/>
+                  </sml:Link>
+               </sml:connection>  
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/derivedPitch"/>
+                     <sml:destination ref="MatrixBuilderToNadirPlane/inputs/orientation/y"/>
+                  </sml:Link>
+               </sml:connection>  -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/latitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/latitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/longitude"/>
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/longitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/latitude"/>
+                     <sml:destination ref="terrainElevation/inputs/CoverageIn/lat"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/longitude"/>
+                     <sml:destination ref="terrainElevation/inputs/CoverageIn/lon"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="terrainElevation/outputs/CoverageOut/alt"/>
+                     <sml:destination ref="altitudeOffset/inputs/operand1"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="terrainElevation/outputs/CoverageOut/alt"/>
+                     <sml:destination ref="this/outputs/terrainElevation"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="altitudeOffset/outputs/result"/>      
+                     <sml:destination ref="LLAtoECEF/inputs/LLA_location/altitude"/>
+                  </sml:Link>
+               </sml:connection>
+                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/latitude"/>
+                     <sml:destination ref="MatrixBuilderToECEF/inputs/lonLatTrueHeading/latitude"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/longitude"/>
+                     <sml:destination ref="MatrixBuilderToECEF/inputs/lonLatTrueHeading/longitude"/>
+                  </sml:Link>
+               </sml:connection> 
+                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/navigationData/derivedTH"/>
+                     <sml:destination ref="MatrixBuilderToECEF/inputs/lonLatTrueHeading/trueHeading"/>
+                  </sml:Link>
+               </sml:connection> 
+               <!-- processes outputs to other processes inputs -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/alongScanAngle"/>
+                     <sml:destination ref="MatrixBuilderToAirplane/inputs/orientation/x"/>
+                  </sml:Link>
+               </sml:connection> 
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="this/inputs/alongTrackAngle"/>
+                     <sml:destination ref="MatrixBuilderToAirplane/inputs/orientation/y"/> 
+                  </sml:Link>  
+               </sml:connection> 
+                <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilderToAirplane/outputs/posMatrix"/>
+                     <sml:destination ref="VectorMatrixMultiplierToAirplane/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>  
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilderToNadirPlane/outputs/posMatrix"/>
+                     <sml:destination ref="VectorMatrixMultiplierToNadirPlane/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="VectorMatrixMultiplierToAirplane/outputs/newVector"/>
+                     <sml:destination ref="VectorMatrixMultiplierToNadirPlane/inputs/vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="MatrixBuilderToECEF/outputs/posMatrix"/>
+                     <sml:destination ref="VectorMatrixMultiplierToECEF/inputs/transformMatrix"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="VectorMatrixMultiplierToNadirPlane/outputs/newVector"/>
+                     <sml:destination ref="VectorMatrixMultiplierToECEF/inputs/vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <!-- processes outputs to chain outputs -->
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="VectorMatrixMultiplierToECEF/outputs/newVector"/>
+                     <sml:destination ref="this/outputs/geolocationData/ECEF_view_vector"/>
+                  </sml:Link>
+               </sml:connection>
+               <sml:connection>
+                  <sml:Link>
+                     <sml:source ref="LLAtoECEF/outputs/ECEF_location"/>
+                     <sml:destination ref="this/outputs/geolocationData/ECEF_location"/>
+                  </sml:Link>
+               </sml:connection>
+            </sml:ConnectionList>
+         </sml:connections>
+      </sml:ProcessChain>
+   </sml:member>
+</sml:SensorML>

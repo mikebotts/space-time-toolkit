@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld" xmlns:swe="http://www.opengis.net/swe">
+   <Identification>
+      <name>OWS Project</name>
+      <author>Gregoire Berthiau</author>
+      <dateCreated>2010-05-01T09:23:00</dateCreated>
+      <description>Various Service from and for Empire OWS 7</description>
+   </Identification>
+   <!-- List of scenes (separate 2d or 3D view windows) -->
+   <SceneList>
+      <member>
+         <Scene id="SCENE_01">
+            <name>OWS 7</name>
+            <time>
+               <TimeExtent>
+                  <baseTime>2010-04-13T22:08:47Z</baseTime>
+                  <leadTime>15</leadTime>
+                  <lagTime>0</lagTime>
+                  <stepTime>0</stepTime>
+               </TimeExtent>
+            </time>
+            <view>
+				<ViewSettings showTripod="true" showArcball="false" showROI="true">
+  				<backgroundColor>#FFFFFF</backgroundColor> 
+  				<projection>LLA</projection> 
+  				<cameraMode>ORTHO</cameraMode> 
+  				<cameraPos>-1.5137735010190638 0.6063815675066916 10.129800245533815</cameraPos> 
+  				<targetPos>-1.5137735010190638 0.6063815675066916 0.0</targetPos> 
+  				<upDirection>0 1 0</upDirection> 
+  				<orthoWidth>0.000819079314</orthoWidth> 
+  				<orthoHeight>4.0</orthoHeight> 
+  				<nearClip>1</nearClip> 
+  				<farClip>100</farClip> 
+  				<zFudgeFactor>1000</zFudgeFactor> 
+  				</ViewSettings>
+  			</view>
+            <contents>
+               <DataList>
+                  <name>OWS 7 Car-Mounted Camera Geolocation</name>
+               <!--     <member xlink:href="./BaseLayers.xml#MAPS"/> -->
+                  <member xlink:href="./BaseLayers.xml#MAPS_3D"/>
+                  <member xlink:href="./OWS7/CameraOnCar.xml#CAMERAonCAR"/>
+               </DataList>
+            </contents>
+         </Scene>
+      </member>
+   </SceneList>
+</STTProject>
