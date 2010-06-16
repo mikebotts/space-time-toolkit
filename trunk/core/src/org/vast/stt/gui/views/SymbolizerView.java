@@ -50,12 +50,11 @@ public class SymbolizerView extends DataItemView
 {
 	public static final String ID = "STT.SymbolizerView";
 	protected SymbolizerWidget symbolizerWidget;
-	
     
 	@Override
 	public void createPartControl(Composite parent)
     {
-        symbolizerWidget = new SymbolizerWidget(parent);
+        symbolizerWidget = new SymbolizerWidget(parent, this);
         super.createPartControl(parent);
 	}
 
