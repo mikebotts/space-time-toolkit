@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STTProject xmlns="http://vast.uah.edu/stt/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+   xmlns:ogc="http://www.opengis.net/ogc" xmlns:sld="http://www.opengis.net/sld"
+   xmlns:swe="http://www.opengis.net/swe">
+   <DataList id="CAMERAonCAR">
+      <name>Car-Mounted Camera</name>
+      <member visible="false">
+         <DataItem>
+            <name>Car Old Track</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Car Track Data</name>
+                  <timeExtent>
+                     <TimeExtent id="OLD">
+                        <baseTime>2010-04-13T22:02:00Z</baseTime>
+                        <leadTime>1680</leadTime>
+                        <lagTime>0</lagTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./Car_ProcessTrack.xml#TRACK_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#DB7093</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+            <style name="PointSymbolizer">
+               <sld:PointSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#B0171F</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">1</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>3</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Car New Track</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Car Track Data</name>
+                  <timeExtent>
+                     <TimeExtent id="NEW">
+                        <baseTime>2010-04-14T22:02:00Z</baseTime>
+                        <leadTime>949</leadTime>
+                        <lagTime>0</lagTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./Car_ProcessTrack.xml#TRACK_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#836FFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+            <style name="PointSymbolizer">
+               <sld:PointSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Graphic>
+                     <sld:Mark>
+                        <sld:WellKnownName>square</sld:WellKnownName>
+                        <sld:Fill>
+                           <sld:CssParameter name="fill">#9400D3</sld:CssParameter>
+                           <sld:CssParameter name="fill-opacity">0.5</sld:CssParameter>
+                        </sld:Fill>
+                     </sld:Mark>
+                     <sld:Size>3</sld:Size>
+                  </sld:Graphic>
+               </sld:PointSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Camera Lookrays</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Camera Lookrays Process Chain</name>
+                  <timeExtent>
+                     <TimeExtent id="DATA">
+                        <baseTime>2010-04-14T22:02:00Z</baseTime>
+                        <leadTime>5</leadTime>
+                        <lagTime>0</lagTime>
+                        <stepTime>0</stepTime>
+                     </TimeExtent>
+                  </timeExtent>
+                  <process xlink:href="./Car_ProcessLR.xml#LR_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:VectorSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Direction srsName="ECEF" type="ABS">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_ground/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_ground/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_ground/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-length">2e6</sld:CssParameter>
+                     <sld:CssParameter name="vector-steps">2</sld:CssParameter>
+                  </sld:Direction>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#00FF00</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:VectorSymbolizer>
+            </style>
+            <style>
+               <sld:LineSymbolizer enabled="true">
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>ECEF_location/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>ECEF_location/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>ECEF_location/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FFFFFF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:LineSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Camera Footprint</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Camera Footprint Process Chain</name>
+                  <timeExtent xlink:href="#DATA"/>
+                  <process xlink:href="./Car_ProcessFP.xml#FOOTPRINT_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:GridFillSymbolizer enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Fill>
+                     <sld:CssParameter name="fill">#E1E718</sld:CssParameter>
+                     <sld:CssParameter name="fill-opacity">1.0</sld:CssParameter>
+                  </sld:Fill>
+               </sld:GridFillSymbolizer>
+            </style>
+            <style>
+               <sld:GridBorderSymbolizer id="GRID_BORDER" enabled="true">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#FF7E00</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridBorderSymbolizer>
+            </style>
+            <style>
+               <sld:GridMeshSymbolizer id="GRID_MESH" enabled="false">
+                  <sld:Dimensions>
+                     <sld:Axis name="width">
+                        <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                     </sld:Axis>
+                     <sld:Axis name="length">
+                        <ogc:PropertyName>grid</ogc:PropertyName>
+                     </sld:Axis>
+                  </sld:Dimensions>
+                  <sld:Geometry srsName="ECEF">
+                     <sld:CssParameter name="geometry-x">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-y">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                     </sld:CssParameter>
+                     <sld:CssParameter name="geometry-z">
+                        <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                     </sld:CssParameter>
+                  </sld:Geometry>
+                  <sld:Stroke>
+                     <sld:CssParameter name="stroke">#0000FF</sld:CssParameter>
+                     <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                  </sld:Stroke>
+               </sld:GridMeshSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Car Frame Imagery</name>
+            <dataProvider>
+               <SensorMLProvider>
+                  <name>Imagery Process</name>
+                  <timeExtent xlink:href="#DATA"/>                  
+                  <process xlink:href="./Car_ProcessImagery.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>frameData/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>frameData/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Car Video</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="6">
+                  <name>Video Process</name>
+                  <timeExtent xlink:href="#DATA"/>                 
+                  <process xlink:href="./Car_ProcessVideo.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>frameData/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>frameData/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                     <sld:RasterPoolSize>5</sld:RasterPoolSize>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Car Video Frame by Frame</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="12">
+                  <name>Video Process</name>
+                  <timeExtent xlink:href="#DATA"/>                  
+                  <process xlink:href="./Car_ProcessVideoFrameByFrame.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>frameData/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>frameData/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                     <sld:RasterPoolSize>20</sld:RasterPoolSize>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+      <member visible="false">
+         <DataItem>
+            <name>Changed Imagery</name>
+            <dataProvider>
+               <SensorMLProvider dataPersistency="12">
+                  <name>Video Process</name>
+                  <timeExtent xlink:href="#DATA"/>                  
+                  <process xlink:href="./Car_ChangedImagery.xml#FRAME_PROCESS"/>
+               </SensorMLProvider>
+            </dataProvider>
+            <style>
+               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+                  <sld:Grid>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>grid/acrossTrackPoints</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="length">
+                           <ogc:PropertyName>grid</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Geometry srsName="ECEF">
+                        <sld:CssParameter name="geometry-x">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/x</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-y">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/y</ogc:PropertyName>
+                        </sld:CssParameter>
+                        <sld:CssParameter name="geometry-z">
+                           <ogc:PropertyName>grid/acrossTrackPoints/groundPoint/z</ogc:PropertyName>
+                        </sld:CssParameter>
+                     </sld:Geometry>
+                  </sld:Grid>
+                  <sld:Raster>
+                     <sld:Dimensions>
+                        <sld:Axis name="width">
+                           <ogc:PropertyName>frameData/Image</ogc:PropertyName>
+                        </sld:Axis>
+                        <sld:Axis name="height">
+                           <ogc:PropertyName>frameData/Image/scanLine</ogc:PropertyName>
+                        </sld:Axis>
+                     </sld:Dimensions>
+                     <sld:Opacity>1.0</sld:Opacity>
+                     <sld:ChannelSelection>
+                        <sld:RedChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/red</sld:SourceChannelName>
+                        </sld:RedChannel>
+                        <sld:GreenChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/green</sld:SourceChannelName>
+                        </sld:GreenChannel>
+                        <sld:BlueChannel>
+                           <sld:SourceChannelName>frameData/Image/scanLine/pixel/blue</sld:SourceChannelName>
+                        </sld:BlueChannel>
+                     </sld:ChannelSelection>
+                     <sld:RasterPoolSize>20</sld:RasterPoolSize>
+                  </sld:Raster>
+               </sld:TextureSymbolizer>
+            </style>
+         </DataItem>
+      </member>
+   </DataList>
+</STTProject>
