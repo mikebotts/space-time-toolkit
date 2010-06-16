@@ -1,0 +1,63 @@
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0"  xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0
+    http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd ">
+    <ows:Identifier>gmu.csiss.wps.server.algorithm.VideoChangeDetectionAlgorithm</ows:Identifier>
+    <wps:DataInputs>
+        <wps:Input>
+            <ows:Identifier>oldVideoData</ows:Identifier>
+            <wps:Reference schema="http://schemas.opengis.net/sos/1.0.0/sosGetObservation.xsd" xlink:href="http://www.botts-inc.com:8080/IED_VID/sos">
+                <wps:Body>
+                    <sos:GetObservation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:sos="http://www.opengis.net/sos/1.0" xmlns:om="http://www.opengis.net/om/1.0"
+                        xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"
+                        service="SOS" version="1.0.0">
+                        <sos:offering>axiscam.video</sos:offering>
+                        <sos:eventTime>
+                            <ogc:TM_During>
+                                <ogc:PropertyName>samplingTime</ogc:PropertyName>
+                                <gml:TimePeriod>
+                                    <gml:beginPosition>2010-04-13T17:20:53.000-05:00</gml:beginPosition>
+                                    <gml:endPosition>2010-04-13T17:21:23.000-05:00</gml:endPosition>
+                                </gml:TimePeriod>
+                            </ogc:TM_During>
+                        </sos:eventTime>
+                        <sos:procedure>urn:ogc:object:sensor:BOTTS-INC:bottsCam0</sos:procedure>
+                        <sos:observedProperty>urn:ogc:def:property:OGC:radiance</sos:observedProperty>
+                        <sos:responseFormat>text/xml; subtype="om/1.0.0"</sos:responseFormat>
+                    </sos:GetObservation>
+                </wps:Body>
+            </wps:Reference>
+        </wps:Input>		
+        <wps:Input>
+            <ows:Identifier>newVideoData</ows:Identifier>
+            <wps:Reference schema="http://schemas.opengis.net/sos/1.0.0/sosGetObservation.xsd" xlink:href="http://www.botts-inc.com:8080/IED_VID/sos">
+                <wps:Body>
+                    <sos:GetObservation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:sos="http://www.opengis.net/sos/1.0" xmlns:om="http://www.opengis.net/om/1.0"
+                        xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"
+                        service="SOS" version="1.0.0">
+                        <sos:offering>axiscam.video</sos:offering>
+                        <sos:eventTime>
+                            <ogc:TM_During>
+                                <ogc:PropertyName>samplingTime</ogc:PropertyName>
+                                <gml:TimePeriod>
+                                    <gml:beginPosition>2010-04-14T17:12:11.000-05:00</gml:beginPosition>
+                                    <gml:endPosition>2010-04-14T17:12:51.000-05:00</gml:endPosition>
+                                </gml:TimePeriod>
+                            </ogc:TM_During>
+                        </sos:eventTime>
+                        <sos:procedure>urn:ogc:object:sensor:BOTTS-INC:bottsCam0</sos:procedure>
+                        <sos:observedProperty>urn:ogc:def:property:OGC:radiance</sos:observedProperty>
+                        <sos:responseFormat>text/xml; subtype="om/1.0.0"</sos:responseFormat>
+                    </sos:GetObservation>
+                </wps:Body>
+            </wps:Reference>
+        </wps:Input>
+    </wps:DataInputs>
+    <wps:ResponseForm>
+        <wps:ResponseDocument storeExecuteResponse="true" status="true">
+            <wps:Output asReference="true">
+                <ows:Identifier>changeVideo</ows:Identifier>
+            </wps:Output>
+        </wps:ResponseDocument>
+    </wps:ResponseForm>
+</wps:Execute>											
