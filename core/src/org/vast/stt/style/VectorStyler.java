@@ -53,7 +53,7 @@ public class VectorStyler extends AbstractStyler
     protected int[] pointIndex = new int[1];
     protected boolean useIcons;
     protected double vectorLength = 1.0;
-    protected double steps = 10;
+    protected float steps;
     protected double currentStep = 0;
 	
     
@@ -90,6 +90,7 @@ public class VectorStyler extends AbstractStyler
         LinePointGraphic p1 = vector.point1;
         LinePointGraphic p2 = vector.point2;
         
+        steps = ((Float)this.symbolizer.getNumberOfSteps().getConstantValue());
         double ratio = currentStep / (steps - 1.0);
         point.x = p1.x + (p2.x - p1.x)*ratio;
         point.y = p1.y + (p2.y - p1.y)*ratio;
