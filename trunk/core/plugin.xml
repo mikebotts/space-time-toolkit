@@ -40,6 +40,8 @@
       <view name="Pressure" class="org.vast.sttx.gui.views.PressureView" id="STT.PressureView"/>
       <view name="Running Jobs" class="org.eclipse.ui.ExtensionFactory:progressView" id="org.eclipse.ui.views.ProgressView"/>
       <view name="SPS" class="org.vast.stt.gui.views.SPSView" id="STT.SPSView"/>
+      <view name="WPS_Demo" class="org.vast.sttx.gui.views.WPS_DemoView" id="STT.WPS_DemoView"/>
+      <view name="Image" class="org.vast.stt.gui.views.ImageView" id="STT.ImageView"/>
       <!-- -->
       <view name="Table" class="org.vast.stt.gui.views.TableView" id="STT.TableView" allowMultiple="true"/>
       <view name="Chart" class="org.vast.stt.gui.views.ChartView" id="STT.ChartView" allowMultiple="true"/>
