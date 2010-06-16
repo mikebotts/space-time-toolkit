@@ -38,7 +38,7 @@ import org.vast.util.DateTimeFormat;
 public class ImageWidget implements DisposeListener, STTEventListener
 {
 	//Display display;
-	int defaultWidth = 256, defaultHeight = 256;
+	int defaultWidth = 352, defaultHeight = 250;
 	int numImages = 3;
 	Composite parent;
 	int orientation = SWT.HORIZONTAL;  // may add support for vert or in future
@@ -147,7 +147,7 @@ public class ImageWidget implements DisposeListener, STTEventListener
 			imGroups[i].setLayoutData(gd);
 
 			imCanvas[i] = new ImageCanvas(imGroups[i], 0x0);
-			imCanvas[i].setBackground(display.getSystemColor(SWT.COLOR_DARK_CYAN));
+			imCanvas[i].setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 			gd = new GridData(SWT.CENTER, SWT.CENTER, true, true);
 			gd.widthHint = defaultWidth;
 			gd.heightHint = defaultHeight;
