@@ -25,11 +25,14 @@
 
 package org.vast.stt.gui.views;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.vast.stt.event.STTEvent;
+import org.vast.stt.event.STTEventListener;
 import org.vast.stt.gui.widgets.image.ImageWidget;
 import org.vast.stt.project.tree.DataItem;
 
@@ -49,11 +52,10 @@ import org.vast.stt.project.tree.DataItem;
  * @date Jun 10, 2010
  * @version 1.0
  */
-public class ImageView  extends ViewPart // DataItemView
+public class ImageView  extends ViewPart //implements STTEventListener
 {
 	public static final String ID = "STT.ImageView";
 	protected ImageWidget widget;
-	protected List<DataItem> dataItems;
     
 	@Override
 	public void createPartControl(Composite parent)
@@ -72,30 +74,12 @@ public class ImageView  extends ViewPart // DataItemView
     public void addDataItem(DataItem dataItem)
     {
     	widget.addDataItem(dataItem);
-    	
-//        if (item != dataItem)
-//        {
-//            if (item != null)
-//            {
-//                item.removeListener(this);
-//                item.getDataProvider().getSpatialExtent().removeListener(this);
-//            }
-//            
-//            item = dataItem;
-//            
-//            if (item != null)
-//            {
-//                item.addListener(this);
-//                item.getDataProvider().getSpatialExtent().addListener(this);
-//            }
-//        }
     }
 
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-		
 	}
+
    
 }
