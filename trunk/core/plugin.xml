@@ -65,7 +65,6 @@
             <separator name="group1"/>
          </menu>
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenProject" label="&amp;Open Project..." menubarPath="STT.ProjectMenu/group1"/>
-         <!-- <action class="org.vast.stt.actions.ProjectMenu" id="STT.OpenTestProject" label="&amp;Open Test Project..." menubarPath="STT.ProjectMenu/group1"/> -->
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.SaveProject" label="&amp;Save Project..." menubarPath="STT.ProjectMenu/group1"/>
          <action class="org.vast.stt.actions.ProjectMenu" id="STT.CloseProject" label="&amp;Close Project..." menubarPath="STT.ProjectMenu/group1"/>
          <!-- View Menu -->
