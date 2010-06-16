@@ -46,6 +46,8 @@ import org.vast.ows.sld.Geometry;
 import org.vast.ows.sld.Symbolizer;
 import org.vast.stt.event.EventType;
 import org.vast.stt.event.STTEvent;
+import org.vast.stt.gui.views.ImageView;
+import org.vast.stt.gui.views.SymbolizerView;
 import org.vast.stt.gui.widgets.CheckOptionTable;
 import org.vast.stt.gui.widgets.OptionChooser;
 import org.vast.stt.project.tree.DataItem;
@@ -71,9 +73,15 @@ import org.vast.stt.style.SymbolizerFactory;
 public class SymbolizerWidget extends CheckOptionTable
 {
     Symbolizer activeSymbolizer;
-
-    public SymbolizerWidget(Composite parent)
+    SymbolizerView view; 
+    String imageViewId = "STT.ImageView";
+    
+    //  NOTE:  adding view parent to this class for OWS7 demo- I need it to 
+    //  feed dataItems to this view. There may be a better way to do it though.
+    //  If so, remove
+    public SymbolizerWidget(Composite parent, SymbolizerView view)
     {
+    	this.view = view;
         checkboxTableLabel = "Graphics:";
         init(parent);
         setCheckboxTableContentProvider(new StyleTableContentProvider());
@@ -218,6 +226,16 @@ public class SymbolizerWidget extends CheckOptionTable
         else if (control == advancedButton)
         {
             createAdvancedSymDialog();
+        } 
+        else if (control == popupImageBtn) {
+//        	if(dataItem == null)
+//        		return;
+//        	ImagePopup ip = new ImagePopup(PlatformUI.getWorkbench().getDisplay());
+//        	ip.setDataItem(dataItem);
+//        	PlatformUI.getWorkbench().getDisplay().findWidget(handle);
+        	
+        	ImageView imView = (ImageView)(view.getSite().getPage().findView(imageViewId));
+        	imView.addDataItem(dataItem);
         }
        
     }
