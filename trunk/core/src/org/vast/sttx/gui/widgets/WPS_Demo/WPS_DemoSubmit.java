@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.vast.sensorML.SMLException;
+import org.vast.util.DateTimeFormat;
 import org.vast.xml.DOMHelper;
 import org.vast.xml.DOMHelperException;
 import org.w3c.dom.Element;
@@ -14,52 +15,41 @@ import org.w3c.dom.Element;
 
 public class WPS_DemoSubmit 
 {
-	private String statusUrl;
-
-	public WPS_DemoSubmit(String cameraEndPoint)
+	protected String statusUrl;
+	String defaultServerURL = "http://data.laits.gmu.edu:8091/wpsr3/WebProcessingService";
+	String oldBegin, oldEnd, newBegin, newEnd;
+	
+	public WPS_DemoSubmit()
 	{
 	}
 
 	//  Request from precanned template
-	public boolean invokeWPS(double startTime, double stopTime) {
+	public boolean invokeWPS() {
+//		if(oldBegin== null || newBegin == null || oldEnd == null || newEnd == null) {
+//			System.err.println("WPS_DemoSubmit.invokeWPS(): not all times are present.  Request aborted.");
+//			return false;
+//		}
 		InputStream response = null;
 		try {
-
 			URL templateUrl = WPS_DemoSubmit.class.getResource("WPS_DemoSubmitTemplate2.xml");
 			DOMHelper dom = new DOMHelper(templateUrl.toString(), false);
 //			Element rootElt = dom.getRootElement();
-//			NodeList inputNodes = dom.getAllElements("InputParameter");  //rootElt.getElementsByTagName("sensorParam");
-//			int numNodes = inputNodes.getLength();
-//			for(int i=0; i<numNodes; i++){
-//				Element eltTmp = (Element)inputNodes.item(i);
-//				String paramId = eltTmp.getAttribute("parameterID");
-//				if(paramId.equalsIgnoreCase("AOV")){
-//					Element aovValElt = dom.getElement(eltTmp, "value/Quantity/value");
-//					aovValElt.setTextContent(zoom + "");
-////					System.err.println(aovValElt);
-//				} else if (paramId.equalsIgnoreCase("PositionToPointAt")){
-//					Element vectorElt = dom.getElement(eltTmp, "value/Position/location/Vector");
-//					NodeList coords = dom.getChildElements(vectorElt);
-//					Element coordElt, coordValElt;
-//					for(int j=0; j<coords.getLength(); j++){
-//						coordElt = (Element)coords.item(j);
-//						coordValElt = dom.getElement(coordElt, "Quantity/value");
-//						switch(j){
-//						case 0:
-//							coordValElt.setTextContent(lat + "");
-//							break;
-//						case 1:
-//							coordValElt.setTextContent(lon + "");
-//							break;
-//						case 2:
-//							coordValElt.setTextContent(alt + "");
-//							break;
-//						}
-//					}
-//				}
-//			}
-//			//dom.serialize(rootElt, System.out, true);
-//			String response = sendPOSTRequest(dom);
+//			Element inputsElt = dom.getElement(rootElt, "DataInputs");
+//			NodeList inputList = dom.getAllChildElements(inputsElt);
+//			Element oldInputElt = (Element)inputList.item(0);
+//			Element newInputElt = (Element)inputList.item(1);
+//			Element timeElt = dom.getElement(oldInputElt, "Reference/Body/GetObservation/eventTime/TM_During/TimePeriod");
+//			Element beginElt = dom.getElement(timeElt,"beginPosition");
+//			Element endElt = dom.getElement(timeElt,"endPosition");
+//			dom.setElementValue(beginElt, oldBegin);
+//			dom.setElementValue(endElt, oldEnd);
+//			timeElt = dom.getElement(newInputElt, "Reference/Body/GetObservation/eventTime/TM_During/TimePeriod");
+//			beginElt = dom.getElement(timeElt,"beginPosition");
+//			endElt = dom.getElement(timeElt,"endPosition");
+//			dom.setElementValue(beginElt, newBegin);
+//			dom.setElementValue(endElt, newEnd);
+//			
+//			dom.serialize(rootElt, System.out, true);
 			response = sendPOSTRequest(dom);
 			if(response == null)
 				return false;
@@ -67,6 +57,8 @@ public class WPS_DemoSubmit
 			statusUrl = parseWPSResponse(response);
 			if(statusUrl == null)
 				return false;
+			System.err.println(statusUrl);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -81,15 +73,17 @@ public class WPS_DemoSubmit
 		return false;
 	}   
 
-	public String parseWPSResponse(InputStream resp) throws DOMHelperException, Exception {
+	public String parseWPSResponse_rootElt(InputStream resp) throws DOMHelperException, Exception {
 		DOMHelper dom = new DOMHelper(resp, false);
+		System.err.println("Response:");
 		Element rootElt = dom.getRootElement();
+		dom.serialize(rootElt, System.err, true);
 		String statusUrl = dom.getAttributeValue(rootElt, "statusLocation");
 		
 		return statusUrl;
 	}
 	
-	public String parseWPSResponse_ProcMDStatus(InputStream resp) throws DOMHelperException, Exception {
+	public String parseWPSResponse(InputStream resp) throws DOMHelperException, Exception {
 		DOMHelper dom = new DOMHelper(resp, false);
 //		InputStream is = new FileInputStream("C:/tcook/work/bir/src/test/WPS_GMU_resp.xml");
 //		DOMHelper dom = new DOMHelper(is, false);
@@ -101,7 +95,7 @@ public class WPS_DemoSubmit
 	}
 	
 	//  May need more params than this...
-	public String [] getVideoTimes () throws IOException, DOMHelperException {
+	public String [] pollStatus () throws IOException, DOMHelperException {
 		String [] times = new String[2];
 		InputStream response = null;
 
@@ -109,6 +103,9 @@ public class WPS_DemoSubmit
 		Element rootElt = dom.getRootElement();
 		times[0] = dom.getElementValue(rootElt, "VideoStartTime");
 		times[1] = dom.getElementValue(rootElt, "VideoEndTime");
+		
+		if(times[0].trim().length() == 0 || times[1].trim().length() == 0)
+			return null;
 		
 		return times;
 	}
@@ -119,7 +116,7 @@ public class WPS_DemoSubmit
 		OutputStream out = null;
 		try {
 			// send Request to URL
-			URL url = new URL("http://data.laits.gmu.edu:8091/wpsr3/WebProcessingService");
+			URL url = new URL(defaultServerURL	);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setDoOutput(true);
@@ -148,23 +145,43 @@ public class WPS_DemoSubmit
 		}
 		return null;
 	}
-
+	
+	public void setOldVideoTimes(double startT, double endT) {
+		if(startT > endT) {
+			double tempT = endT;
+			endT = startT;
+			startT = tempT;
+		}
+		oldBegin = DateTimeFormat.formatIso(startT, 0);
+		oldEnd = DateTimeFormat.formatIso(endT, 0);
+	}
+	
+	public void setNewVideoTimes(double startT, double endT) {
+		if(startT > endT) {
+			double tempT = endT;
+			endT = startT;
+			startT = tempT;
+		}
+		newBegin = DateTimeFormat.formatIso(startT, 0);
+		newEnd = DateTimeFormat.formatIso(endT, 0);
+	}
+	
 	public static void main(String [] args) throws SMLException, Exception {
 		//  First, define the URI for SPS Process.  If you don't have it, you can use this:
 		// <Process>
 		//    <uri>urn:ogc:def:process:SPS:1.0</uri>
 		//    <class>org.sensorML.process.SPS_Process</class>
 		//  </Process>
-		WPS_DemoSubmit wpsReq = new WPS_DemoSubmit("http://data.laits.gmu.edu:8091/wpsr3/WebProcessingService");
+		WPS_DemoSubmit wpsReq = new WPS_DemoSubmit();
 
-		boolean ok = wpsReq.invokeWPS(0.0,0.0);
+		boolean ok = wpsReq.invokeWPS();
 		System.err.println("StatusUrl: " + wpsReq.statusUrl);
 		Thread.sleep(5000);
 		System.err.println("Begin polling...");
 //		
 //		wpsReq.statusUrl = "http://data.laits.gmu.edu:8091/wpsr3/Databases/FlatFile/1276131130827changeVideoresult.XML";
 		while(true) {
-			String [] times = wpsReq.getVideoTimes();
+			String [] times = wpsReq.pollStatus();
 			System.err.println("Times: " + times[0] + ", " + times[1]);
 			if(times[1] != null && times[1].trim().length() > 0 )
 				break;
