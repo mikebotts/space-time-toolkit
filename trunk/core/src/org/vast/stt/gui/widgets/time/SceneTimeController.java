@@ -112,8 +112,9 @@ public class SceneTimeController implements SelectionListener, TimeSpinnerListen
 			} else {
 				widget.absTimeSpinner.rtBtn.setSelection(false);
 				widget.setEnabled(true);
-				double stepTime = extent.getTimeStep();
-				widget.stepTimeSpinner.setValue(stepTime);
+				//  temporarily commenting out- this is causing timeStep to get reset when Widget gets refreshed- TC, 6/16/2010
+//				double stepTime = extent.getTimeStep();
+//				widget.stepTimeSpinner.setValue(stepTime);
 			}
 		}
 	}
