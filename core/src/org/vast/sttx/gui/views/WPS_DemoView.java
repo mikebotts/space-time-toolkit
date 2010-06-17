@@ -26,6 +26,9 @@ public class WPS_DemoView extends DataItemView
 	public void createPartControl(Composite parent)
     {
 		wpsWidget = new WPS_DemoWidget(parent);
+        ScenePageInput pageInput = (ScenePageInput)getSite().getPage().getInput();
+		if(pageInput != null)
+			wpsWidget.setScene((WorldScene)pageInput.getScene());   
 		super.createPartControl(parent);
 	}
 
@@ -41,22 +44,24 @@ public class WPS_DemoView extends DataItemView
     @Override
     public void setDataItem(DataItem dataItem)
     {
-        if (item != dataItem)
-        {
-            if (item != null)
-            {
-                item.removeListener(this);
-                item.getDataProvider().getSpatialExtent().removeListener(this);
-            }
-            
-            item = dataItem;
-            
-            if (item != null)
-            {
-                item.addListener(this);
-                item.getDataProvider().getSpatialExtent().addListener(this);
-            }
-        }
+    	//  Better to make this NOT extend DataItemView and assocaite the items
+    	//  via Project file or some other way (like the Image Viewer works)
+//        if (item != dataItem)
+//        {
+//            if (item != null)
+//            {
+//                item.removeListener(this);
+//                item.getDataProvider().getSpatialExtent().removeListener(this);
+//            }
+//            
+//            item = dataItem;
+//            
+//            if (item != null)
+//            {
+//                item.addListener(this);
+//                item.getDataProvider().getSpatialExtent().addListener(this);
+//            }
+//        }
     }
 
 
@@ -67,7 +72,6 @@ public class WPS_DemoView extends DataItemView
         if (pageInput != null)
         {
         	wpsWidget.setScene((WorldScene)pageInput.getScene());        
-        	wpsWidget.setDataItem(item);
         }
     }
 
