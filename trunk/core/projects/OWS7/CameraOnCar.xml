@@ -81,7 +81,7 @@
                         <leadTime>0</leadTime>
                         <lagTime>60</lagTime>
                         <stepTime>0</stepTime>
-                        <timeBias>-146</timeBias>
+                        <timeBias>-151</timeBias>
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Car_ProcessTrack.xml#TRACK_PROCESS"/>
@@ -145,7 +145,7 @@
                         <leadTime>1</leadTime>
                         <lagTime>1</lagTime>
                         <stepTime>0</stepTime>
-                        <timeBias>-146</timeBias>
+                        <timeBias>-151</timeBias>
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Car_ProcessLR.xml#LR_PROCESS"/>
