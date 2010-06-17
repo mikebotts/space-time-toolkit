@@ -113,9 +113,12 @@ public class ImageWidget implements DisposeListener, STTEventListener
 		DataBlock block = bli.getData();
 		DataBlockMixed dbm = (DataBlockMixed)block;
 		AbstractDataBlock [] adb = dbm.getUnderlyingObject();
+		double time = block.getDoubleValue(0);
 		byte [] data = (byte [])adb[1].getUnderlyingObject();
 		int width = 704, height = 464;
 		imCanvas[canvasNum].createImage(width, height, data);
+		String timeStr = DateTimeFormat.formatIso(time, 0);
+		timeLabels[canvasNum].setText(timeStr);
 	}
 
 	public void initGui(Composite parent)
