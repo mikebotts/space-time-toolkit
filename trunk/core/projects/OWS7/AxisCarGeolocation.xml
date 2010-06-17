@@ -19,7 +19,8 @@
                </sml:input>
                <sml:input name="zoom">
                   <swe:Quantity>
-                  <swe:value>1020</swe:value>
+                     <!-- <swe:value>1020</swe:value> -->
+                     <swe:value>600</swe:value>
                   </swe:Quantity>
                </sml:input>
                <sml:input name="pan">

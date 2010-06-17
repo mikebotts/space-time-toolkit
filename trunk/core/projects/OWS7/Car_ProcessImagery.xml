@@ -284,7 +284,7 @@
                               <swe:DataRecord fixed="true">
                                  <swe:field name="endPoint">
                                     <swe:Category definition="urn:ogc:def:identifier:URL">
-                                       <swe:value>http://localhost:8080/OWS7/IED_VID</swe:value>
+                                       <swe:value>http://www.botts-inc.com:8080/OWS7/IED_VID</swe:value>
                                        <!-- <swe:value>http://sosdemos.appspot.com/tigershark</swe:value> -->
                                     </swe:Category>
                                  </swe:field>
