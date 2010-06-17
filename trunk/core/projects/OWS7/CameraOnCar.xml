@@ -304,7 +304,7 @@
                <SensorMLProvider>
                   <name>Imagery Process</name>
                   <timeExtent xlink:href="#DATA1"/>                  
-                  <process xlink:href="./Car_ProcessImagery.xml#FRAME_PROCESS"/>
+                  <process xlink:href="./Car_ProcessImagery2.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
