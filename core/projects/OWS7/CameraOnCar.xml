@@ -74,12 +74,14 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>Car Track Data</name>
-                  <timeExtent>
+                  <timeExtent autoUpdate="#SCENE_01">
                      <TimeExtent id="NEW">
-                        <baseTime>2010-04-14T22:02:00Z</baseTime>
-                        <leadTime>949</leadTime>
-                        <lagTime>0</lagTime>
+                        <baseTime>2010-04-14T22:07:00Z</baseTime>
+                        <!-- <baseTime>2010-04-14T22:02:00Z</baseTime> -->
+                        <leadTime>0</leadTime>
+                        <lagTime>60</lagTime>
                         <stepTime>0</stepTime>
+                        <timeBias>-146</timeBias>
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Car_ProcessTrack.xml#TRACK_PROCESS"/>
@@ -137,12 +139,13 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>Camera Lookrays Process Chain</name>
-                  <timeExtent>
-                     <TimeExtent id="DATA">
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent id="DATA1">
                         <baseTime>2010-04-14T22:02:00Z</baseTime>
-                        <leadTime>5</leadTime>
-                        <lagTime>0</lagTime>
+                        <leadTime>1</leadTime>
+                        <lagTime>1</lagTime>
                         <stepTime>0</stepTime>
+                        <timeBias>-146</timeBias>
                      </TimeExtent>
                   </timeExtent>
                   <process xlink:href="./Car_ProcessLR.xml#LR_PROCESS"/>
@@ -207,7 +210,7 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>Camera Footprint Process Chain</name>
-                  <timeExtent xlink:href="#DATA"/>
+                  <timeExtent xlink:href="#DATA1"/>
                   <process xlink:href="./Car_ProcessFP.xml#FOOTPRINT_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -300,7 +303,7 @@
             <dataProvider>
                <SensorMLProvider>
                   <name>Imagery Process</name>
-                  <timeExtent xlink:href="#DATA"/>                  
+                  <timeExtent xlink:href="#DATA1"/>                  
                   <process xlink:href="./Car_ProcessImagery.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
@@ -371,7 +374,7 @@
                </SensorMLProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+               <sld:TextureSymbolizer enabled="false" id="CAR_IMAGERY_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
@@ -426,19 +429,20 @@
             <dataProvider>
                <SensorMLProvider dataPersistency="6">
                   <name>Video Process</name>
-                  <timeExtent>
-                     <TimeExtent>
+                  <timeExtent autoUpdate="#SCENE_01">
+                     <TimeExtent id="DATA2">
                         <baseTime>2010-04-14T22:02:00Z</baseTime>
-                        <leadTime>2</leadTime>
-                        <lagTime>0</lagTime>
+                        <leadTime>1</leadTime>
+                        <lagTime>1</lagTime>
                         <stepTime>0</stepTime>
+                        <timeBias>0</timeBias>
                      </TimeExtent>
-                  </timeExtent>                 
+                  </timeExtent>
                   <process xlink:href="./Car_ProcessVideo.xml#FRAME_PROCESS"/>
                </SensorMLProvider>
             </dataProvider>
             <style>
-               <sld:TextureSymbolizer enabled="true" id="CAR_IMAGERY_STYLE">
+               <sld:TextureSymbolizer enabled="false" id="CAR_IMAGERY_STYLE">
                   <sld:Grid>
                      <sld:Dimensions>
                         <sld:Axis name="width">
