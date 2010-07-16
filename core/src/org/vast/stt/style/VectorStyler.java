@@ -90,7 +90,6 @@ public class VectorStyler extends AbstractStyler
         LinePointGraphic p1 = vector.point1;
         LinePointGraphic p2 = vector.point2;
         
-        steps = ((Float)this.symbolizer.getNumberOfSteps().getConstantValue());
         double ratio = currentStep / (steps - 1.0);
         point.x = p1.x + (p2.x - p1.x)*ratio;
         point.y = p1.y + (p2.y - p1.y)*ratio;
@@ -240,6 +239,10 @@ public class VectorStyler extends AbstractStyler
                 }
             }
         }
+        
+        // number of steps (only constant for now)
+        param = this.symbolizer.getNumberOfSteps();
+        steps = (Float)param.getConstantValue();        
         
         dataLists[0].indexOffset = 0;
         mappingsUpdated = true;
