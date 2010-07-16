@@ -4,7 +4,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.vast.stt.event.STTEvent;
 import org.vast.stt.gui.views.DataItemView;
 import org.vast.stt.gui.views.ScenePageInput;
-import org.vast.stt.gui.widgets.SPS.SPSWidget;
 import org.vast.stt.project.tree.DataItem;
 import org.vast.stt.project.world.WorldScene;
 import org.vast.sttx.gui.widgets.WPS_Demo.WPS_DemoWidget;
