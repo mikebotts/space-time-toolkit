@@ -131,6 +131,21 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
         selectPolygonAction.setImageDescriptor(descriptor);
         site.getActionBars().getToolBarManager().add(selectPolygonAction);
         
+        // add select object action to toolbar
+        IAction selectObjectAction = new Action("Select Object", IAction.AS_CHECK_BOX)
+        {
+            public void run()
+            {
+                if (this.isChecked())
+                    controller.setObjectSelectionMode(true);
+                else
+                    controller.setObjectSelectionMode(false);
+            }
+        };
+        descriptor = STTPlugin.getImageDescriptor("icons/select_object.gif");
+        selectObjectAction.setImageDescriptor(descriptor);
+        site.getActionBars().getToolBarManager().add(selectObjectAction);
+        
         // add show target action to toolbar
 		IAction showTargetAction = new Action("Toggle Target Tripod")
 		{
@@ -274,9 +289,8 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     @Override
     public void updateView()
     {
-        // trigger repaint
-        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().redraw();
-        ((WorldSceneRenderer)scene.getRenderer()).getCanvas().update();
+        if (scene != null)
+            ((WorldSceneRenderer)scene.getRenderer()).drawScene(scene);
     }
     
     
@@ -295,8 +309,7 @@ public class WorldView extends SceneView<WorldScene> implements PaintListener, C
     public void paintControl(PaintEvent e)
     {
         //System.out.println("Paint Event");
-        if (scene != null)
-            ((WorldSceneRenderer)scene.getRenderer()).drawScene(scene);
+        refreshView();
     }
     
     
