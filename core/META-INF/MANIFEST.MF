@@ -10,8 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.update.ui,
  org.eclipse.update.core,
- org.vast.common;visibility:=reexport,
- org.apache.xerces;visibility:=reexport
+ org.apache.xerces;visibility:=reexport,
+ org.vast.common;bundle-version="0.8.3"
 Bundle-Vendor: UAH VAST
 Export-Package: org.vast.stt.actions,
  org.vast.stt.apps,

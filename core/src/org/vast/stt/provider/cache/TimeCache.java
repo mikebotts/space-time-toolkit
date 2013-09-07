@@ -25,11 +25,11 @@ package org.vast.stt.provider.cache;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.vast.cdm.common.BinaryEncoding;
-import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.data.AbstractDataBlock;
 import org.vast.stt.data.BlockList;
@@ -263,13 +263,9 @@ public class TimeCache extends AbstractProvider implements CachedProvider
                 }
             }
         }
-        catch (DatabaseException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
-        }
-        catch (CDMException e)
-        {
-            e.printStackTrace();
+            throw new DataException("Error while updating data in DB", e);
         }
         finally
         {
@@ -288,7 +284,7 @@ public class TimeCache extends AbstractProvider implements CachedProvider
     }
         
         
-    protected void writeBlocksToDB(Cursor dbCursor, double firstTile, double lastTile) throws CDMException
+    protected void writeBlocksToDB(Cursor dbCursor, double firstTile, double lastTile) throws IOException
     {
         double endTile = firstTile;
         boolean isFirstTile = true;
@@ -398,7 +394,7 @@ public class TimeCache extends AbstractProvider implements CachedProvider
     }
     
     
-    protected void readBlocksFromDB(Cursor dbCursor, DatabaseEntry key, DatabaseEntry data) throws CDMException, DatabaseException
+    protected void readBlocksFromDB(Cursor dbCursor, DatabaseEntry key, DatabaseEntry data) throws IOException, DatabaseException
     {
         ArrayList<BlockList> blockLists = dataNode.getListArray();
         ByteArrayInputStream[] inputStreams = new ByteArrayInputStream[blockLists.size()];

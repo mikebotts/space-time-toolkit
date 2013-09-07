@@ -53,10 +53,10 @@ public class SMLProviderReader extends XMLReader implements XMLModuleReader
         try
         {
             // read process chain using SML SystemReader
-            Element processElt = dom.getElement(providerElt, "process");
+            Element processElt = dom.getElement(providerElt, "process/*");
             smlUtils.setReadMetadata(true);
             smlUtils.setCreateExecutableProcess(true);
-            DataProcess rootProcess = smlUtils.readProcessProperty(dom, processElt);
+            DataProcess rootProcess = smlUtils.readProcess(dom, processElt);
             provider.setProcess(rootProcess);
             
             // read persistency of data

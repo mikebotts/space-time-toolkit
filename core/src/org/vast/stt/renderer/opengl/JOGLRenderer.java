@@ -99,6 +99,7 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
     protected float oldZBufferOffset;
     protected boolean resetZOffset;
     protected boolean contextInUse;
+    protected boolean selectMode;
     protected Hashtable<Integer, SceneItem> selectableItems;
     protected PopupRenderer popupRenderer;
 
@@ -285,7 +286,9 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         Vector3d center = view.getTargetPos();
         Vector3d up = view.getUpDirection();
         glu.gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
-
+        //lookAt(eye, center, up);        
+        //gl.glLoadMatrixd(modelViewMatrix, 0);
+        
         // save projection matrices
         gl.glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelM, 0);
         gl.glGetDoublev(GL.GL_PROJECTION_MATRIX, projM, 0);
@@ -294,17 +297,52 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         zBufferOffset = 100.0f;
     }
     
+    //Experiment to improve precision of points at high res -> not working
+    /*protected Vector3d f = new Vector3d();
+    protected Vector3d s = new Vector3d();
+    protected Vector3d u = new Vector3d();
+    protected Matrix4d a = new Matrix4d();
+    protected Matrix4d b = new Matrix4d();
+    protected Matrix4d result = new Matrix4d();
+    double[] modelViewMatrix = new double[16];
+    
+    protected void lookAt(Vector3d eye, Vector3d center, Vector3d up)
+    {
+        f.set(center.x - eye.x, center.y - eye.y, center.z - eye.z);
+        s.cross(f, up);
+        u.cross(s, f);
+        f.normalize();
+        s.normalize();
+        u.normalize();
+        
+        a.setRow(0,  s.x,  s.y,  s.z, 0.0);
+        a.setRow(1,  u.x,  u.y,  u.z, 0.0);
+        a.setRow(2, -f.x, -f.y, -f.z, 0.0);
+        a.setRow(3,  0.0,  0.0,  0.0, 1.0);
+        
+        b.setRow(0,  1.0, 0.0, 0.0, -eye.x);
+        b.setRow(1,  0.0, 1.0, 0.0, -eye.y);
+        b.setRow(2,  0.0, 0.0, 1.0, -eye.z);
+        b.setRow(3,  0.0, 0.0, 0.0, 1.0);
+        
+        result.mul(a, b);
+        result.transpose();
+        for (int i=0; i<16; i++)
+            modelViewMatrix[i] = result.getElement(i%4, i/4);
+    }*/
+    
     
     @Override
     public PickedObject pick(WorldScene sc, PickFilter filter)
     {
         WorldScene scene = (WorldScene)sc;
         ViewSettings view = scene.getViewSettings();
-                
+        selectMode = true;
+        
         getContext();
         
         // prepare selection buffer and switch to GL_SELECT mode
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4*5);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         IntBuffer selectBuffer = buffer.asIntBuffer();
         gl.glSelectBuffer(selectBuffer.capacity(), selectBuffer);
@@ -329,10 +367,11 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         Vector3d center = view.getTargetPos();
         Vector3d up = view.getUpDirection();
         glu.gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
+        //lookAt(eye, center, up);        
+        //gl.glLoadMatrixd(modelViewMatrix, 0);
         
         // init name stack
         gl.glInitNames();
-        gl.glPushName(0);
         
         // draw pickable items
         selectableItems.clear();
@@ -341,8 +380,9 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         {
             SceneItem selectedItem = scene.getSelectedItems().get(0);
             selectableItems.put(selectedItem.hashCode(), selectedItem);
-            gl.glLoadName(selectedItem.hashCode());
+            gl.glPushName(selectedItem.hashCode());
             this.drawROI(scene, true);
+            gl.glPopName();
         }
         else
         {
@@ -372,10 +412,15 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
             }
         }
         
-        gl.glRenderMode(GL.GL_RENDER);
+        int hits = gl.glRenderMode(GL.GL_RENDER);
         releaseContext();
+        selectMode = false;
         
         // read selection buffer
+        /*System.out.println(hits + " hits");
+        for (int i=0; i<50; i++)
+            System.out.print(selectBuffer.get(i) + " ");
+        System.out.println();*/
         SceneItem selectedItem = selectableItems.get(selectBuffer.get(3));
         if (selectedItem != null)
         {
@@ -456,15 +501,21 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         if (sceneItem.getDataItem().hasMask())
             drawMasks(scene, sceneItem);
             
-        gl.glLoadName(sceneItem.hashCode());
+        gl.glPushName(sceneItem.hashCode());
         
         // loop through all stylers for this item
         for (int i = 0; i < sceneItem.getStylers().size(); i++)
         {
             DataStyler nextStyler = sceneItem.getStylers().get(i);
             if (nextStyler.getSymbolizer().isEnabled())
+            {
+                gl.glPushName(i);
                 nextStyler.accept(this);
+                gl.glPopName();
+            }
         }
+        
+        gl.glPopName();
         
         // disable stencil after mask is used
         if (sceneItem.getDataItem().hasMask())
@@ -778,7 +829,11 @@ public class JOGLRenderer extends WorldSceneRenderer implements StylerVisitor
         while ((segment = styler.nextLineBlock()) != null)
         { 
             lineRenderer.blockCount = 10000;
-            displayListManager.useDisplayList(styler, segment.block, lineRenderer, false);
+            
+            if (selectMode)
+                lineRenderer.run();
+            else
+                displayListManager.useDisplayList(styler, segment.block, lineRenderer, false);
         }
     }
 

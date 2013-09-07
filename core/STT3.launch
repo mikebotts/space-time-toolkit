@@ -5,6 +5,7 @@
 <booleanAttribute key="automaticAdd" value="false"/>
 <booleanAttribute key="automaticValidate" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="checked" value="[NONE]"/>
 <booleanAttribute key="clearConfig" value="false"/>
 <booleanAttribute key="clearws" value="false"/>
 <booleanAttribute key="clearwslog" value="false"/>
@@ -12,7 +13,7 @@
 <booleanAttribute key="default" value="false"/>
 <booleanAttribute key="includeFragments" value="false"/>
 <booleanAttribute key="includeOptional" value="true"/>
-<stringAttribute key="location" value="c:\temp\workspace-STT3"/>
+<stringAttribute key="location" value="/home/alex/workspace-STT3"/>
 <stringAttribute key="location1" value="c:\temp\workspace-STT3"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 <stringAttribute key="org.eclipse.debug.core.source_locator_memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;sourceLookupDirector&gt;&#13;&#10;&lt;sourceContainers duplicates=&quot;false&quot;&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;javaProject name=&amp;quot;Common&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.jdt.launching.sourceContainer.javaProject&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;packageFragmentRoot handle=&amp;quot;=Common/D:\/Projects\/NSSTC\/Common\/lib\/xercesImpl.jar&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.jdt.launching.sourceContainer.packageFragmentRoot&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;packageFragmentRoot handle=&amp;quot;=Common/D:\/Projects\/NSSTC\/Common\/lib\/jxpath-1.2.jar&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.jdt.launching.sourceContainer.packageFragmentRoot&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;packageFragmentRoot handle=&amp;quot;=Common/D:\/Projects\/NSSTC\/Common\/lib\/log4j-1.2.11.jar&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.jdt.launching.sourceContainer.packageFragmentRoot&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;default/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.debug.core.containerType.default&quot;/&gt;&#13;&#10;&lt;/sourceContainers&gt;&#13;&#10;&lt;/sourceLookupDirector&gt;&#13;&#10;"/>
@@ -35,10 +36,11 @@
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms128M -Xmx256M"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.vast.stt.main.STT3"/>
-<stringAttribute key="selected_target_plugins" value="com.ibm.icu,org.eclipse.core.runtime.compatibility.registry,org.eclipse.update.core.win32,org.eclipse.help,org.eclipse.update.configurator,org.eclipse.ui,org.eclipse.equinox.preferences,org.eclipse.core.contenttype,org.eclipse.jface,org.eclipse.core.jobs,org.eclipse.equinox.security,org.eclipse.core.net.win32.x86,org.eclipse.osgi.services,javax.xml,org.eclipse.equinox.common,org.eclipse.swt.win32.win32.x86,org.eclipse.ui.forms,org.apache.xml.resolver,org.eclipse.core.net,org.eclipse.swt,org.eclipse.core.expressions,org.apache.xml.serializer,org.eclipse.core.commands,org.eclipse.ui.workbench,org.eclipse.core.runtime,org.eclipse.osgi,org.eclipse.update.core,org.apache.xerces,javax.servlet,org.eclipse.update.ui,org.eclipse.equinox.security.win32.x86,org.eclipse.core.runtime.compatibility.auth,org.eclipse.equinox.registry,org.eclipse.equinox.app,org.eclipse.core.databinding,org.eclipse.jface.databinding"/>
-<stringAttribute key="selected_workspace_plugins" value="org.vast.stt.main,org.vast.common"/>
+<stringAttribute key="selected_target_plugins" value="org.eclipse.ui@default:default,org.eclipse.core.net.linux.x86@default:false,javax.servlet@default:default,org.eclipse.update.core.linux@default:false,org.eclipse.equinox.app@default:default,org.eclipse.core.runtime@default:true,org.apache.xerces@default:default,org.eclipse.core.commands@default:default,org.eclipse.core.databinding@default:default,org.eclipse.jface@default:default,org.eclipse.osgi.services@default:default,org.eclipse.update.core@default:default,org.eclipse.swt@default:default,org.eclipse.jface.databinding@default:default,org.eclipse.update.ui@default:default,javax.xml@default:default,org.eclipse.osgi@-1:true,org.eclipse.ui.workbench@default:default,org.eclipse.core.runtime.compatibility.registry@default:false,org.eclipse.core.net@default:default,org.eclipse.core.jobs@default:default,org.eclipse.core.expressions@default:default,org.eclipse.ui.forms@default:default,org.eclipse.core.runtime.compatibility.auth@default:default,org.eclipse.equinox.security@default:default,org.apache.xml.serializer@default:default,org.eclipse.help@default:default,org.eclipse.core.databinding.observable@default:default,org.eclipse.equinox.common@2:true,org.eclipse.swt.gtk.linux.x86@default:false,org.eclipse.equinox.preferences@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.update.configurator@3:true,org.apache.xml.resolver@default:default,org.eclipse.core.databinding.property@default:default,com.ibm.icu@default:default"/>
+<stringAttribute key="selected_workspace_plugins" value="org.vast.stt.main@default:default,org.vast.common@default:default"/>
 <booleanAttribute key="show_selected_only" value="false"/>
 <booleanAttribute key="tracing" value="false"/>
+<booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfig" value="true"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
 <booleanAttribute key="useProduct" value="true"/>

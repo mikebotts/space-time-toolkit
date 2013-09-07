@@ -26,7 +26,6 @@
 package org.vast.stt.provider.swe;
 
 import java.io.*;
-import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataHandler;
 import org.vast.sweCommon.SWEFilter;
 import org.vast.sweCommon.SWEReader;
@@ -34,6 +33,7 @@ import org.vast.sweCommon.SWECommonUtils;
 import org.vast.sweCommon.URIStreamHandler;
 import org.vast.xml.DOMHelper;
 import org.vast.xml.DOMHelperException;
+import org.vast.xml.XMLReaderException;
 import org.w3c.dom.*;
 
 
@@ -43,7 +43,7 @@ public class SWEResourceReader extends SWEReader
     protected SWEFilter streamFilter;
 	
 	
-	public void parse(InputStream inputStream, DataHandler handler) throws CDMException
+	public void parse(InputStream inputStream, DataHandler handler) throws IOException
 	{
 		try
 		{
@@ -77,12 +77,12 @@ public class SWEResourceReader extends SWEReader
 		}
 		catch (DOMHelperException e)
 		{
-			throw new CDMException("Error while parsing Observation XML", e);
+			throw new XMLReaderException("Error while parsing Observation XML", e);
 		}
 	}
 	
 	
-	public InputStream getDataStream() throws CDMException
+	public InputStream getDataStream() throws IOException
 	{
 		if (resultUri != null)
 		{

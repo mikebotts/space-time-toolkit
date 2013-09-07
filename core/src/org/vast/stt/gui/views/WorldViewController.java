@@ -160,7 +160,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 		e.y = viewHeight - e.y;
 
 		// check if resizing ROI
-		if (scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
+		if (!pointSelectionMode && !objectSelectionMode &&
+		     scene.getViewSettings().isShowItemROI() && !scene.getSelectedItems().isEmpty())
 		{
 			WorldSceneRenderer renderer = (WorldSceneRenderer)scene.getRenderer();
 			PickFilter pickFilter = new PickFilter();
@@ -249,7 +250,7 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 			pickFilter.y = e.y;
 			pickFilter.dX = 5;
 			pickFilter.dY = 5;
-			pickFilter.onlyBoundingBox = true;
+			pickFilter.onlySelectedItems = true;
 			PickedObject obj = renderer.pick(scene, pickFilter);
 
 			// case of object selected
@@ -266,6 +267,8 @@ public class WorldViewController implements MouseListener, MouseMoveListener, Li
 
 				FeedbackEvent event = new FeedbackEvent(feedbackType);
 				event.setSourceScene(scene);
+				event.setSourceItem(obj.item.getDataItem());
+				event.setDataIndices(obj.indices);
 				pickListener.handleEvent(event);
 			}
 		}

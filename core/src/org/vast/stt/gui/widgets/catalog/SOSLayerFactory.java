@@ -44,7 +44,8 @@ import org.vast.stt.provider.ows.SOSProvider;
 import org.vast.stt.provider.sml.SMLProvider;
 import org.vast.stt.style.SymbolizerFactory;
 import org.vast.util.Bbox;
-import org.vast.util.TimeInfo;
+import org.vast.util.TimeExtent;
+
 
 /**
  * <p><b>Title:</b>
@@ -60,7 +61,6 @@ import org.vast.util.TimeInfo;
  * @date Apr 4, 2007
  * @version 1.0
  */
-
 public class SOSLayerFactory 
 {
 	public static void setSOSProcedure(DataItem item, String procedure){
@@ -118,8 +118,8 @@ public class SOSLayerFactory
 //		provider.setProcess(process);
 		item.setDataProvider(provider);
 		//provider.setEnabled(true);
-		List<TimeInfo> times = caps.getTimeList();
-		TimeInfo t0 = times.get(0);
+		List<TimeExtent> times = caps.getTimeList();
+		TimeExtent t0 = times.get(0);
 		//  Copy this time extent to provider time extent
 		//  NOTE:  I need to set this extent to the actual time I want requested 
 		//         intially (should come from where?).  Then, provider.initRequest()

@@ -45,14 +45,14 @@ import org.vast.data.DataArray;
 import org.vast.data.DataGroup;
 import org.vast.data.DataValue;
 import org.vast.math.Vector3d;
-import org.vast.ogc.om.ObservationStreamReaderV0;
 import org.vast.ogc.om.ObservationStreamReaderV10;
 import org.vast.ows.OWSUtils;
 import org.vast.ows.sos.GetObservationRequest;
 import org.vast.ows.sos.SOSLayerCapabilities;
 import org.vast.stt.data.DataException;
 import org.vast.stt.gui.widgets.symbolizer.AdvancedGeometryTab;
-import org.vast.util.TimeInfo;
+import org.vast.util.TimeExtent;
+
 
 /**
  * <p><b>Title:</b>
@@ -184,8 +184,8 @@ public class SOSMappingPage extends WizardPage implements SelectionListener
 		query.setService("SOS");
 		caps.getParent().getGetServers();
 		//  TimeInfo kludge
-		TimeInfo capsTime = caps.getTimeList().get(0);
-		TimeInfo requestTime = capsTime.copy();
+		TimeExtent capsTime = caps.getTimeList().get(0);
+		TimeExtent requestTime = capsTime.copy();
 		//  if this is a realtime dataset, mod the requestTime
 		//  to request some data for a short period
 		if(capsTime.isEndNow() == true)

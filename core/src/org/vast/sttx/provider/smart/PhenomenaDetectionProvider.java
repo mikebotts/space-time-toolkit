@@ -31,7 +31,7 @@ import java.net.URL;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataStreamParser;
 import org.vast.ogc.om.ObservationStreamReader;
-import org.vast.ogc.om.ObservationStreamReaderV0;
+import org.vast.ogc.om.ObservationStreamReaderV10;
 import org.vast.stt.data.BlockList;
 import org.vast.stt.data.DataException;
 import org.vast.stt.provider.AbstractProvider;
@@ -127,7 +127,7 @@ public class PhenomenaDetectionProvider extends AbstractProvider
                 
             // parse response
             dataHandler.reset();
-            ObservationStreamReader reader = new ObservationStreamReaderV0();
+            ObservationStreamReader reader = new ObservationStreamReaderV10();
             reader.parse(dataStream, null);
             
             // create block list if not done yet

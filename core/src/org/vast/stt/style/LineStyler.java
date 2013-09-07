@@ -92,6 +92,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         
         if (breakBtwBlocks)
         	point.graphBreak = true;
+        point.index = -1;
         
         return segment;
     }
@@ -102,6 +103,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
         while (dataLists[0].blockIndexer.hasNext())
         {
             // reset point values
+            point.index++;
             point.x = constantX;
             point.y = constantY;
             point.z = constantZ;
@@ -135,6 +137,7 @@ public class LineStyler extends AbstractStyler implements DataStyler1D
     public LinePointGraphic getPoint(int u)
     {
         // reset point values
+        point.index = u;
         point.x = constantX;
         point.y = constantY;
         point.z = constantZ;

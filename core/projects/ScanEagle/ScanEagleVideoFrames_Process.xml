@@ -331,7 +331,7 @@
                            <sml:input name="operand2">
                               <swe:Quantity definition="urn:ogc:def:property:OGC::Time">
                                  <swe:uom code="s"/>
-                                 <swe:value>1.6</swe:value>
+                                 <swe:value>1.2</swe:value>
                               </swe:Quantity>
                            </sml:input>
                         </sml:InputList>
