@@ -27,7 +27,6 @@ package org.vast.stt.provider.swe;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.vast.cdm.common.CDMException;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataEncoding;
 import org.vast.stt.data.DataException;
@@ -86,7 +85,7 @@ public class SWEProvider extends AbstractProvider
             dataNode.createList(dataInfo.copy());
             dataNode.setNodeStructureReady(true);
         }
-        catch (CDMException e)
+        catch (IOException e)
         {
             throw new DataException("Error while parsing resource stream: " + sweDataUrl, e);
         }
@@ -130,7 +129,7 @@ public class SWEProvider extends AbstractProvider
 			if (!canceled)
 			    reader.parse(dataStream, dataHandler);
 		}
-		catch (CDMException e)
+		catch (IOException e)
 		{
 			throw new DataException("Error while parsing resource stream: " + sweDataUrl, e);
 		}

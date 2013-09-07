@@ -26,7 +26,6 @@
 package org.vast.stt.gui.widgets.catalog;
 
 import java.util.List;
-
 import org.eclipse.jface.viewers.LabelProvider;
 import org.vast.ows.OWSLayerCapabilities;
 import org.vast.ows.sas.SASLayerCapabilities;
@@ -36,7 +35,8 @@ import org.vast.ows.wfs.WFSLayerCapabilities;
 import org.vast.ows.wms.WMSLayerCapabilities;
 import org.vast.util.Bbox;
 import org.vast.util.DateTimeFormat;
-import org.vast.util.TimeInfo;
+import org.vast.util.TimeExtent;
+
 
 /**
  * <p><b>Title:</b>
@@ -111,8 +111,8 @@ public class LayerLabelProvider extends LabelProvider {
 				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
 			return ((OWSLayerCapabilities)element).getIdentifier();
-		} else if(element instanceof TimeInfo) {
-			return getTimeText((TimeInfo)element);
+		} else if(element instanceof TimeExtent) {
+			return getTimeText((TimeExtent)element);
 		} else
 			return element.toString();
 	}	
@@ -137,8 +137,8 @@ public class LayerLabelProvider extends LabelProvider {
 				return "Unknown";
 		} else if (element instanceof OWSLayerCapabilities) {
 			return ((OWSLayerCapabilities)element).getTitle();
-		} else if(element instanceof TimeInfo) {
-			return getTimeText((TimeInfo)element);
+		} else if(element instanceof TimeExtent) {
+			return getTimeText((TimeExtent)element);
 		} else if(element instanceof Bbox) {
 			Bbox bbox = (Bbox)element;
 			return bbox.getMinX() + "," + bbox.getMinY() + " - " + bbox.getMaxX() + "," + bbox.getMaxY(); 
@@ -157,7 +157,7 @@ public class LayerLabelProvider extends LabelProvider {
 		return element.toString();
 	}
 
-	public String getTimeText(TimeInfo ti){
+	public String getTimeText(TimeExtent ti){
 		String isoStart = DateTimeFormat.formatIso(ti.getStartTime(), 0); 
 		String isoStop = DateTimeFormat.formatIso(ti.getStopTime(), 0); 
 		return isoStart + "/" + isoStop + "/" + ti.getTimeStep();

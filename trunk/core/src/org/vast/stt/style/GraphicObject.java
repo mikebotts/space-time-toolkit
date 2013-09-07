@@ -49,6 +49,7 @@ public class GraphicObject
     public BlockListItem block;
     public boolean discard;
     public boolean updated;
+    public int index = -1;
     
     
     protected GraphicObject copy(GraphicObject g)

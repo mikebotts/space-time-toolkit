@@ -105,7 +105,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>EO-Zoom Footprint</name>
+            <name>EO-Zoom Footprints</name>
             <dataProvider>
                <SensorMLProvider>
                   <timeExtent xlink:href="#SCAN_EAGLE_TIME"/>
@@ -197,7 +197,7 @@
       </member>
       <member visible="false">
          <DataItem>
-            <name>EO-Zoom Footprint (Server)</name>
+            <name>EO-Zoom Footprints (Server)</name>
             <dataProvider>
                <OWSDataProvider>
                   <layerId>SCAN_EAGLE_FOOTPRINT</layerId>

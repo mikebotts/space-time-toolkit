@@ -28,7 +28,6 @@ package org.vast.stt.process;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-
 import org.vast.cdm.common.DataBlock;
 import org.vast.cdm.common.DataComponent;
 import org.vast.cdm.common.DataHandler;
@@ -44,7 +43,6 @@ import org.vast.unit.UnitConversion;
 import org.vast.unit.UnitConverter;
 import org.vast.util.Bbox;
 import org.vast.util.TimeExtent;
-import org.vast.util.TimeInfo;
 
 
 /**
@@ -276,9 +274,9 @@ public class WCS_Image_Process extends DataProcess implements DataHandler
             
             //  Ensure at least one time extent exists in query, or NP gets thrown by 
             //  query.getTime().set*() below
-            TimeInfo time = query.getTime();
+            TimeExtent time = query.getTime();
             if(time == null) {
-            	time = new TimeInfo();
+            	time = new TimeExtent();
             	query.setTime(time);
             }
             

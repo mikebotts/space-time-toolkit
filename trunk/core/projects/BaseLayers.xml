@@ -631,6 +631,21 @@
             <style xlink:href="#WMS_GRID_BORDER"/>
          </DataItem>
       </member>
+      <member visible="false">
+         <DataItem id="SPOTLIVE_IMAGERY">
+            <name>Spot Live Imagery (Flat)</name>
+            <dataProvider>
+               <SensorMLProvider quadTree="true">
+                  <spatialExtent autoUpdate="#SCENE_01"/>
+                  <process xlink:href="process/WMS_FlatGrid_Process.xml#PROCESS"/>
+                  <value process="wmsProcess" path="wmsOptions/endPoint">http://ws.spotimage.com/spotlive/wms</value>
+                  <value process="wmsProcess" path="wmsOptions/layer">spotlive</value>
+               </SensorMLProvider>
+            </dataProvider>
+            <style xlink:href="#WMS_RGB_STYLE"/>
+            <style xlink:href="#WMS_GRID_BORDER"/>
+         </DataItem>
+      </member>
    </DataList>
    <DataList id="MAPS_3D">
       <name>3D Base Maps</name>
